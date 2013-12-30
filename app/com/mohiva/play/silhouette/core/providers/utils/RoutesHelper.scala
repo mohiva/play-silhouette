@@ -16,6 +16,7 @@
  */
 package com.mohiva.play.silhouette.core.providers.utils
 
+import scala.language.reflectiveCalls
 import play.api.mvc.Call
 import play.Play
 import play.Logger
