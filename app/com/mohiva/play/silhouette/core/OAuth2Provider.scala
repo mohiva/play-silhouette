@@ -27,6 +27,7 @@ import Play.current
 import play.api.mvc.{Results, Result, Request}
 import play.api.libs.ws.{Response, WS}
 import scala.concurrent.TimeoutException
+import com.mohiva.play.silhouette.core.providers.utils.RoutesHelper
 
 /**
  * Base class for all OAuth2 providers

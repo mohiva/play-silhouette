@@ -23,6 +23,7 @@ import play.api.mvc.{Request, Result}
 import play.api.{Play, Application, Logger, Plugin}
 import concurrent.{Await, Future}
 import play.api.libs.ws.Response
+import com.mohiva.play.silhouette.core.providers.utils.RoutesHelper
 
 /**
  * Base class for all Identity Providers.  All providers are plugins and are loaded
@@ -79,7 +80,7 @@ abstract class IdentityProvider(application: Application) extends Plugin with Re
       u =>
       {
         val user = fillProfile(u)
-        val saved = IdentityService.save(user)
+        val saved = UserService.save(user)
         Right(saved)
       }
     )
