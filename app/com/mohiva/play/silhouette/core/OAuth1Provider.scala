@@ -26,6 +26,7 @@ import play.api.{Application, Logger, Play}
 import play.api.mvc.{Request, Result}
 import play.api.mvc.Results.Redirect
 import Play.current
+import com.mohiva.play.silhouette.core.providers.utils.RoutesHelper
 
 
 /**

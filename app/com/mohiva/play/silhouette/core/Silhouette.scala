@@ -28,6 +28,7 @@ import scala.concurrent.Future
 import scala.Some
 import play.api.mvc.SimpleResult
 import play.api.libs.oauth.ServiceInfo
+import com.mohiva.play.silhouette.core.providers.utils.RoutesHelper
 
 /**
  * A request that adds the User for the current call.
@@ -115,7 +116,7 @@ trait Silhouette extends Controller {
    * @tparam T
    */
   class SecuredActionBuilder[T](ajaxCall: Boolean = false, authorize: Option[Authorization] = None)
-    extends ActionBuilder[({ type R[F] = SecuredRequest[T] })#R] {
+    extends ActionBuilder[({ type R[T] = SecuredRequest[T] })#R] {
 
     def invokeSecuredBlock[A](
       ajaxCall: Boolean,
@@ -126,7 +127,7 @@ trait Silhouette extends Controller {
       implicit val req = request
       val result = for (
         authenticator <- Silhouette.authenticatorFromRequest ;
-        user <- IdentityService.find(authenticator.identityId)
+        user <- UserService.find(authenticator.identityId)
       ) yield {
         touch(authenticator)
         if ( authorize.isEmpty || authorize.get.isAuthorized(user)) {
@@ -173,7 +174,7 @@ trait Silhouette extends Controller {
       implicit val req = request
       val user = for (
         authenticator <- Silhouette.authenticatorFromRequest;
-        user <- IdentityService.find(authenticator.identityId)
+        user <- UserService.find(authenticator.identityId)
       ) yield {
         touch(authenticator)
         user
@@ -223,7 +224,7 @@ object Silhouette {
   def currentUser(implicit request: RequestHeader): Option[Identity] = {
     for (
       authenticator <- authenticatorFromRequest ;
-      user <- IdentityService.find(authenticator.identityId)
+      user <- UserService.find(authenticator.identityId)
     ) yield {
       user
     }

@@ -47,7 +47,7 @@ class UsernamePasswordProvider(application: Application) extends IdentityProvide
       credentials => {
         val userId = IdentityId(credentials._1, id)
         val result = for (
-          user <- IdentityService.find(userId) ;
+          user <- UserService.find(userId) ;
           pinfo <- user.passwordInfo ;
           hasher <- Registry.hashers.get(pinfo.hasher) if hasher.matches(pinfo, credentials._2)
         ) yield (
@@ -61,7 +61,7 @@ class UsernamePasswordProvider(application: Application) extends IdentityProvide
   }
 
   private def badRequest[A](f: Form[(String,String)], request: Request[A], msg: Option[String] = None): SimpleResult = {
-    Results.BadRequest(use[TemplatesPlugin].getLoginPage(request, f, msg))
+    Results.BadRequest("")
   }
 
   def fillProfile(user: SocialUser) = {
@@ -78,6 +78,7 @@ object UsernamePasswordProvider {
   private val SendWelcomeEmailKey = "silhouette.userpass.sendWelcomeEmail"
   private val EnableGravatarKey = "silhouette.userpass.enableGravatarSupport"
   private val Hasher = "silhouette.userpass.hasher"
+  private val EnableTokenJob = "silhouette.userpass.enableTokenJob"
   private val SignupSkipLogin = "silhouette.userpass.signupSkipLogin"
 
   val loginForm = Form(
@@ -91,6 +92,7 @@ object UsernamePasswordProvider {
   lazy val sendWelcomeEmail = current.configuration.getBoolean(SendWelcomeEmailKey).getOrElse(true)
   lazy val enableGravatar = current.configuration.getBoolean(EnableGravatarKey).getOrElse(true)
   lazy val hasher = current.configuration.getString(Hasher).getOrElse(PasswordHasher.BCryptHasher)
+  lazy val enableTokenJob = current.configuration.getBoolean(EnableTokenJob).getOrElse(true)
   lazy val signupSkipLogin = current.configuration.getBoolean(SignupSkipLogin).getOrElse(false)
 }
 
