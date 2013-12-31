@@ -22,58 +22,55 @@ package com.mohiva.play.silhouette.core.providers
 import play.api.data.Form
 import play.api.data.Forms._
 import com.mohiva.play.silhouette.core._
-import play.api.mvc.{SimpleResult, Results, Result, Request}
-import utils.{GravatarHelper, PasswordHasher}
-import play.api.{Play, Application}
+import play.api.mvc.{ SimpleResult, Results, Result, Request }
+import utils.{ GravatarHelper, PasswordHasher }
+import play.api.{ Play, Application }
 import Play.current
 import com.typesafe.plugin._
 import org.joda.time.DateTime
 
 /**
- * A username password provider
+ * A provider for authenticating credentials.
  */
-class UsernamePasswordProvider(application: Application) extends IdentityProvider(application) {
+class CredentialsProvider(application: Application) extends IdentityProvider(application) {
 
-  override def id = UsernamePasswordProvider.UsernamePassword
+  override def id = CredentialsProvider.ProviderId
 
   def authMethod = AuthenticationMethod.UserPassword
 
   val InvalidCredentials = "silhouette.login.invalidCredentials"
 
   def doAuth[A]()(implicit request: Request[A]): Either[Result, SocialUser] = {
-    val form = UsernamePasswordProvider.loginForm.bindFromRequest()
+    val form = CredentialsProvider.loginForm.bindFromRequest()
     form.fold(
       errors => Left(badRequest(errors, request)),
       credentials => {
         val userId = IdentityId(credentials._1, id)
         val result = for (
-          user <- UserService.find(userId) ;
-          pinfo <- user.passwordInfo ;
+          user <- UserService.find(userId);
+          pinfo <- user.passwordInfo;
           hasher <- Registry.hashers.get(pinfo.hasher) if hasher.matches(pinfo, credentials._2)
         ) yield (
-          Right(SocialUser(user))
-        )
+          Right(SocialUser(user)))
         result.getOrElse(
-          Left(badRequest(UsernamePasswordProvider.loginForm, request, Some(InvalidCredentials)))
-        )
-      }
-    )
+          Left(badRequest(CredentialsProvider.loginForm, request, Some(InvalidCredentials))))
+      })
   }
 
-  private def badRequest[A](f: Form[(String,String)], request: Request[A], msg: Option[String] = None): SimpleResult = {
+  private def badRequest[A](f: Form[(String, String)], request: Request[A], msg: Option[String] = None): SimpleResult = {
     Results.BadRequest("")
   }
 
   def fillProfile(user: SocialUser) = {
     GravatarHelper.avatarFor(user.email.get) match {
-      case Some(url) if url != user.avatarUrl => user.copy( avatarUrl = Some(url))
+      case Some(url) if url != user.avatarUrl => user.copy(avatarUrl = Some(url))
       case _ => user
     }
   }
 }
 
-object UsernamePasswordProvider {
-  val UsernamePassword = "userpass"
+object CredentialsProvider {
+  val ProviderId = "credentials"
   private val Key = "silhouette.userpass.withUserNameSupport"
   private val SendWelcomeEmailKey = "silhouette.userpass.sendWelcomeEmail"
   private val EnableGravatarKey = "silhouette.userpass.enableGravatarSupport"
@@ -84,9 +81,7 @@ object UsernamePasswordProvider {
   val loginForm = Form(
     tuple(
       "username" -> nonEmptyText,
-      "password" -> nonEmptyText
-    )
-  )
+      "password" -> nonEmptyText))
 
   lazy val withUserNameSupport = current.configuration.getBoolean(Key).getOrElse(false)
   lazy val sendWelcomeEmail = current.configuration.getBoolean(SendWelcomeEmailKey).getOrElse(true)
@@ -97,14 +92,14 @@ object UsernamePasswordProvider {
 }
 
 /**
-  * A token used for reset password and sign up operations
+ * A token used for reset password and sign up operations.
  *
-  * @param uuid the token id
-  * @param email the user email
-  * @param creationTime the creation time
-  * @param expirationTime the expiration time
-  * @param isSignUp a boolean indicating wether the token was created for a sign up action or not
-  */
+ * @param uuid the token id
+ * @param email the user email
+ * @param creationTime the creation time
+ * @param expirationTime the expiration time
+ * @param isSignUp a boolean indicating whether the token was created for a sign up action or not
+ */
 case class Token(uuid: String, email: String, creationTime: DateTime, expirationTime: DateTime, isSignUp: Boolean) {
   def isExpired = expirationTime.isBeforeNow
 }

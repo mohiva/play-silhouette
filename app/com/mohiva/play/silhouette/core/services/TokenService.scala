@@ -24,7 +24,7 @@ import com.mohiva.play.silhouette.core.providers.Token
 
 /**
  * A trait that provides the means to find and save tokens for the Silhouette module if
- * the UsernamePassword provider is enabled.
+ * the Credentials provider is enabled.
  *
  * Tokens are needed for users that are creating an account in the system instead of using
  * one in a 3rd party system.
