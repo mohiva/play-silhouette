@@ -21,7 +21,7 @@ package com.mohiva.play.silhouette.core.providers.utils
 
 import java.security.MessageDigest
 import play.api.libs.ws.WS
-import com.mohiva.play.silhouette.core.providers.UsernamePasswordProvider
+import com.mohiva.play.silhouette.core.providers.CredentialsProvider
 import play.api.Logger
 import concurrent.Await
 import scala.concurrent.duration._
@@ -31,7 +31,7 @@ object GravatarHelper {
   val Md5 = "MD5"
 
   def avatarFor(email: String): Option[String] = {
-    if ( UsernamePasswordProvider.enableGravatar ) {
+    if (CredentialsProvider.enableGravatar) {
       hash(email).map( hash => {
 
         val url = GravatarUrl.format(hash)

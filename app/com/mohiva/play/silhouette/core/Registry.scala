@@ -20,7 +20,7 @@
 package com.mohiva.play.silhouette.core
 
 import play.api.Logger
-import providers.UsernamePasswordProvider
+import providers.CredentialsProvider
 import providers.utils.PasswordHasher
 import scala.None
 
@@ -60,7 +60,7 @@ class PluginRegistry[T <: Registrable](label: String) {
 object Registry {
   lazy val providers = new PluginRegistry[IdentityProvider]("provider")
   lazy val hashers = new PluginRegistry[PasswordHasher]("password hasher") {
-    lazy val currentHasher: PasswordHasher = get(UsernamePasswordProvider.hasher).get
+    lazy val currentHasher: PasswordHasher = get(CredentialsProvider.hasher).get
   }
   lazy val eventListeners = new PluginRegistry[EventListener]("listener")
 }

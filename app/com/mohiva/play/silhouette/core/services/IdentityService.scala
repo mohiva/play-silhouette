@@ -50,7 +50,7 @@ trait IdentityService[T <: Identity] {
   /**
    * Finds an identity by email and provider ID.
    *
-   * Note: If you do not plan to use the UsernamePassword provider just provide an empty
+   * Note: If you do not plan to use the Credentials provider just provide an empty
    * implementation.
    *
    * @param email The user email.
