@@ -17,7 +17,7 @@
 package com.mohiva.play.silhouette.core
 
 import play.api.{Logger, Plugin, Application}
-import providers.{UsernamePasswordProvider, Token}
+import providers.{CredentialsProvider, Token}
 import play.api.libs.concurrent.Akka
 import akka.actor.Cancellable
 
@@ -40,7 +40,7 @@ trait UserService {
   /**
    * Finds a Social user by email and provider id.
    *
-   * Note: If you do not plan to use the UsernamePassword provider just provide en empty
+   * Note: If you do not plan to use the Credentials provider just provide en empty
    * implementation.
    *
    * @param email - the user email
@@ -60,7 +60,7 @@ trait UserService {
    * Saves a token.  This is needed for users that
    * are creating an account in the system instead of using one in a 3rd party system.
    *
-   * Note: If you do not plan to use the UsernamePassword provider just provide en empty
+   * Note: If you do not plan to use the Credentials provider just provide en empty
    * implementation
    *
    * @param token The token to save
@@ -72,7 +72,7 @@ trait UserService {
   /**
    * Finds a token
    *
-   * Note: If you do not plan to use the UsernamePassword provider just provide en empty
+   * Note: If you do not plan to use the Credentials provider just provide en empty
    * implementation
    *
    * @param token the token id
@@ -83,7 +83,7 @@ trait UserService {
   /**
    * Deletes a token
    *
-   * Note: If you do not plan to use the UsernamePassword provider just provide en empty
+   * Note: If you do not plan to use the Credentials provider just provide en empty
    * implementation
    *
    * @param uuid the token id
@@ -93,7 +93,7 @@ trait UserService {
   /**
    * Deletes all expired tokens
    *
-   * Note: If you do not plan to use the UsernamePassword provider just provide en empty
+   * Note: If you do not plan to use the Credentials provider just provide en empty
    * implementation
    *
    */
@@ -125,9 +125,9 @@ abstract class UserServicePlugin(application: Application) extends Plugin with U
     import play.api.libs.concurrent.Execution.Implicits._
     val i = application.configuration.getInt(DeleteIntervalKey).getOrElse(DefaultInterval)
 
-    cancellable = if ( UsernamePasswordProvider.enableTokenJob ) {
+    cancellable = if ( CredentialsProvider.enableTokenJob ) {
       Some(
-        Akka.system.scheduler.schedule(0 seconds, i minutes) {
+        Akka.system.scheduler.schedule(0.seconds, i.minutes) {
           if ( Logger.isDebugEnabled ) {
             Logger.debug("[securesocial] calling deleteExpiredTokens()")
           }

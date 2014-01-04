@@ -24,3 +24,9 @@ publishTo <<= (version) { v: String =>
 }
 
 playScalaSettings
+
+scalacOptions ++= Seq(
+  "-deprecation",
+  "-feature",
+  "-unchecked"
+)
