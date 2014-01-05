@@ -29,8 +29,6 @@ import play.api.libs.oauth.ServiceInfo
 /**
  * Base class for all Identity Providers.  All providers are plugins and are loaded
  * automatically at application start time.
- *
- *
  */
 abstract class IdentityProvider(application: Application) extends Plugin with Registrable {
   val SilhouetteKey = "silhouette."
