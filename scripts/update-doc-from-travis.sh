@@ -22,6 +22,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+set -o nounset -o errexit
 
 if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
 
@@ -31,11 +32,14 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
   git config --global user.name "travis-ci"
 
   echo "Cloning gh-pages branch"
-  git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/$TRAVIS_REPO_SLUG.git gh-pages > /dev/null
+  git clone --quiet --branch=gh-pages https://${GH_PAGES}@github.com/$TRAVIS_REPO_SLUG.git gh-pages > /dev/null
+  cd gh-pages
+
+  echo "Removing previous documentation"
+  mkdir -p ./api
+  git rm -rf ./api
 
   echo "Copying documentation"
-  cd gh-pages
-  git rm -rf ./api
   cp -Rf $HOME/build/$TRAVIS_REPO_SLUG/target/scala-2.10/api ./api
 
   echo "Committing updated documentation"
