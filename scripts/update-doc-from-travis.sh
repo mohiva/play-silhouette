@@ -48,6 +48,4 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
   git commit -m "Update documentation from Travis build $TRAVIS_BUILD_NUMBER"
   git push -q origin gh-pages > /dev/null
   git log --name-status HEAD^..HEAD
-
-  echo "Documentation updated"
 fi
