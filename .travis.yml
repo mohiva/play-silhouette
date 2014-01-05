@@ -7,6 +7,7 @@ env:
   global:
   - secure: NgwjQcTdK79PbCLn+kfqdlib6RWaLjHBLp8BgI51tZqFHrpBdJ4PDoMv0YOWsT+9mwjMvZknXf+c3mEe0mXsu/Q0JzWmT3ZJo+v4X1yluuNoPvRmE3X+BoULVu+Ur5t5xz4A9GnuWgkf2ynU3t52TEM3W0UUod2/pAIwDAN+nmI=
 before_script:
+- echo "TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG, TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST, TRAVIS_BRANCH=$TRAVIS_BRANCH"
 - wget http://downloads.typesafe.com/play/${PLAY_VERSION}/play-${PLAY_VERSION}.zip
 - unzip -q play-${PLAY_VERSION}.zip
 script: play-${PLAY_VERSION}/play coveralls doc

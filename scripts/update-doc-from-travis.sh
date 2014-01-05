@@ -23,8 +23,6 @@
 # limitations under the License.
 #
 
-set -o nounset -o errexit
-
 if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
 
   echo "Starting documentation update process"
