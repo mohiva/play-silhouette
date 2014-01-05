@@ -18,21 +18,21 @@ resolvers ++= Seq(
 
 publishMavenStyle := false
 
+publishArtifact in Test := false
+
+parallelExecution in Test := false
+
 publishTo <<= (version) { v: String =>
   val status = if(v.trim.endsWith("-SNAPSHOT")) "snapshots" else "releases"
   Some(Resolver.sbtPluginRepo(status))
 }
 
-publishArtifact in Test := false
-
-parallelExecution in Test := false
+playScalaSettings ++ ScoverageSbtPlugin.instrumentSettings
 
 scalacOptions ++= Seq(
   "-deprecation",
   "-feature",
   "-unchecked"
 )
-
-ScoverageSbtPlugin.instrumentSettings
 
 CoverallsPlugin.singleProject
