@@ -29,7 +29,7 @@ trait BeforeWithinAround extends Around {
 }
 
 /**
- * Executes a after method in the context of the around method.
+ * Executes an after method in the context of the around method.
  */
 trait AfterWithinAround extends Around {
   def after: Any

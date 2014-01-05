@@ -73,9 +73,9 @@ case class Authenticator(
   def timedOut = lastUsedDate.plusMinutes(Authenticator.idleTimeout).isBeforeNow
 
   /**
-   * Checks if the validator isn't expired and isn't timed out.
+   * Checks if the authenticator isn't expired and isn't timed out.
    *
-   * @return True if the validator isn't expired and isn't timed out.
+   * @return True if the authenticator isn't expired and isn't timed out.
    */
   def isValid = !expired && !timedOut
 
@@ -121,7 +121,5 @@ object Authenticator {
   lazy val absoluteTimeoutInSeconds = absoluteTimeout * 60
   lazy val makeTransient = Play.application.configuration.getBoolean(TransientKey).getOrElse(true)
 
-  val discardingCookie: DiscardingCookie = {
-    DiscardingCookie(cookieName, cookiePath, cookieDomain, cookieSecure)
-  }
+  val discardingCookie = DiscardingCookie(cookieName, cookiePath, cookieDomain, cookieSecure)
 }

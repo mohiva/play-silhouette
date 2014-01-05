@@ -59,7 +59,7 @@ trait Silhouette[I <: Identity] extends Controller {
   protected def authenticatorService: AuthenticatorService
 
   /**
-   * Implement this if a user isn't authenticated.
+   * Implement this to return a result when the user isn't authenticated.
    *
    * @param request The request header.
    * @return The result to send to the client.
@@ -67,7 +67,7 @@ trait Silhouette[I <: Identity] extends Controller {
   protected def notAuthenticated(request: RequestHeader): Option[Future[SimpleResult]] = None
 
   /**
-   * Implement this if a user isn't authorized.
+   * Implement this to return a result when the user isn't authorized.
    *
    * @param request The request header.
    * @return The result to send to the client.
@@ -113,7 +113,7 @@ trait Silhouette[I <: Identity] extends Controller {
   }
 
   /**
-   * A request that allows only access is a user is authorized.
+   * A request that only allows access if a user is authorized.
    */
   case class SecuredRequest[A](identity: I, request: Request[A]) extends WrappedRequest(request)
 
@@ -140,12 +140,12 @@ trait Silhouette[I <: Identity] extends Controller {
   object SecuredAction extends SecuredActionBuilder {
 
     /**
-     * Creates a secured action,
+     * Creates a secured action.
      */
     def apply() = new SecuredActionBuilder(None)
 
     /**
-     * Creates a secured action,
+     * Creates a secured action.
      *
      * @param authorize An Authorize object that checks if the user is authorized to invoke the action.
      */
