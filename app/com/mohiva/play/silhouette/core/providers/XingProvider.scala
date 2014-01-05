@@ -34,7 +34,7 @@ class XingProvider(application: Application) extends OAuth1Provider(application)
   override  def fillProfile(user: SocialUser): SocialUser = {
     val oauthInfo = user.oAuth1Info.get
     val call = WS.url(XingProvider.VerifyCredentials).sign(
-      OAuthCalculator(Silhouette.serviceInfoFor(user).get.key,
+      OAuthCalculator(serviceInfoFor(user).get.key,
       RequestToken(oauthInfo.token, oauthInfo.secret))
     ).get()
 

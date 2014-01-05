@@ -24,6 +24,7 @@ import play.api.{Play, Application, Logger, Plugin}
 import concurrent.{Await, Future}
 import play.api.libs.ws.Response
 import com.mohiva.play.silhouette.core.providers.utils.RoutesHelper
+import play.api.libs.oauth.ServiceInfo
 
 /**
  * Base class for all Identity Providers.  All providers are plugins and are loaded
@@ -141,6 +142,19 @@ abstract class IdentityProvider(application: Application) extends Plugin with Re
 
   protected def awaitResult(future: Future[Response]) = {
     Await.result(future, IdentityProvider.secondsToWait)
+  }
+
+  /**
+   * Returns the ServiceInfo needed to sign OAuth1 requests.
+   *
+   * @param user The user for which the serviceInfo is needed.
+   * @return An optional service info.
+   */
+  def serviceInfoFor(user: Identity): Option[ServiceInfo] = {
+    Registry.providers.get(user.identityId.providerId) match {
+      case Some(p: OAuth1Provider) if p.authMethod == AuthenticationMethod.OAuth1 => Some(p.serviceInfo)
+      case _ => None
+    }
   }
 }
 
