@@ -30,6 +30,7 @@ import com.mohiva.play.silhouette.core.services.{AuthenticatorService, IdentityS
  * Provides the actions that can be used to protect controllers and retrieve the current user
  * if available.
  *
+ * {{{
  * class MyController(
  *     val identityService: IdentityService[User],
  *     val authenticatorService: AuthenticatorService
@@ -39,6 +40,7 @@ import com.mohiva.play.silhouette.core.services.{AuthenticatorService, IdentityS
  *     Ok("Hello %s".format(request.identity.fullName))
  *   }
  * }
+ * }}}
  *
  * @tparam I The type of the identity.
  */
