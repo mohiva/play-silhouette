@@ -1,4 +1,4 @@
 Silhouette Website
 ==================
 
-[[http://mohiva.github.io/play-silhouette]]
+[mohiva.github.io/play-silhouette](http://mohiva.github.io/play-silhouette)
