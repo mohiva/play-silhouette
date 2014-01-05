@@ -36,8 +36,10 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
   cd gh-pages
 
   echo "Copying documentation"
-  git rm -rf ./api || echo "No files to remove"
-  cp -Rf $HOME/build/$TRAVIS_REPO_SLUG/target/scala-2.10/api ./api
+  local target_dir="./api/master"
+  mkdir -p "$target_dir"
+  git rm -rf "$target_dir" || echo "No files to remove"
+  cp -Rf $HOME/build/$TRAVIS_REPO_SLUG/target/scala-2.10/api "$target_dir"
 
   echo "Committing updated documentation"
   git add -f .
