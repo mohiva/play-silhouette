@@ -147,17 +147,6 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       contentAsString(result) must contain(Messages("silhouette.not.authenticated"))
     }
 
-    "display fallback if user isn't authenticated" in new WithDefaultGlobal {
-      authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
-      identityService.findByID(identity.identityId) returns Future.successful(None)
-
-      val controller = new SecuredController(identityService, authenticatorService)
-      val result = controller.protectedAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
-
-      status(result) must equalTo(FORBIDDEN)
-      contentAsString(result) must contain(Messages("silhouette.not.authenticated"))
-    }
-
     "display local not-authorized result if user isn't authorized" in new WithSecuredGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
       identityService.findByID(identity.identityId) returns Future.successful(Some(identity))
