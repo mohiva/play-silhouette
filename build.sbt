@@ -23,7 +23,9 @@ publishTo <<= (version) { v: String =>
   Some(Resolver.sbtPluginRepo(status))
 }
 
-playScalaSettings
+publishArtifact in Test := false
+
+parallelExecution in Test := false
 
 scalacOptions ++= Seq(
   "-deprecation",
@@ -31,6 +33,6 @@ scalacOptions ++= Seq(
   "-unchecked"
 )
 
-seq(ScctPlugin.instrumentSettings : _*)
+ScoverageSbtPlugin.instrumentSettings
 
-seq(com.github.theon.coveralls.CoverallsPlugin.coverallsSettings: _*)
+CoverallsPlugin.singleProject
