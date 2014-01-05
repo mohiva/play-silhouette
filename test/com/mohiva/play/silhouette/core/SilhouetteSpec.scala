@@ -463,9 +463,6 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      * @tparam I The type of the identity.
      * @return True if the user is authorized, false otherwise.
      */
-    def isAuthorized[I <: Identity](identity: I): Boolean = {
-      println(isAuthorized)
-      isAuthorized
-    }
+    def isAuthorized[I <: Identity](identity: I): Boolean = isAuthorized
   }
 }
