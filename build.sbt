@@ -31,4 +31,6 @@ scalacOptions ++= Seq(
   "-unchecked"
 )
 
-seq(CoverallsPlugin.singleProject: _*)
+seq(ScctPlugin.instrumentSettings : _*)
+
+seq(com.github.theon.coveralls.CoverallsPlugin.coverallsSettings: _*)

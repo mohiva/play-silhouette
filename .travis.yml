@@ -4,7 +4,7 @@ env:
 before_script:
   - wget http://downloads.typesafe.com/play/${PLAY_VERSION}/play-${PLAY_VERSION}.zip
   - unzip -q play-${PLAY_VERSION}.zip
+  - sbt coveralls
 script: play-${PLAY_VERSION}/play test
-script: sbt coveralls
 notifications:
   email: false
