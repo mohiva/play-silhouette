@@ -30,3 +30,5 @@ scalacOptions ++= Seq(
   "-feature",
   "-unchecked"
 )
+
+seq(CoverallsPlugin.singleProject: _*)
