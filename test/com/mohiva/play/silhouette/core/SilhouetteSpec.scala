@@ -17,6 +17,7 @@ package com.mohiva.play.silhouette.core
 
 import org.joda.time.DateTime
 import org.specs2.specification.Scope
+import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import com.mohiva.play.silhouette.core.services.{AuthenticatorService, IdentityService}
 import scala.concurrent.Future
@@ -26,11 +27,12 @@ import play.api.i18n.{Messages, Lang}
 import play.api.mvc.{Cookie, RequestHeader, SimpleResult}
 import play.api.mvc.Results._
 import play.api.test.FakeApplication
+import play.api.libs.json.Json
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.core.Silhouette]] base controller.
  */
-class SilhouetteSpec extends PlaySpecification with Mockito {
+class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
   "The SecuredAction action" should {
     "restrict access if no authenticator cookie exists" in new WithDefaultGlobal {
@@ -214,6 +216,21 @@ class SilhouetteSpec extends PlaySpecification with Mockito {
 
       status(result) must equalTo(OK)
       cookies(result).get(authenticatorID) should beNone
+    }
+
+    "handle an Ajax request" in new WithSecuredGlobal {
+      authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
+      identityService.findByID(identity.identityId) returns Future.successful(Some(identity))
+
+      val controller = new SecuredController(identityService, authenticatorService)
+      val result = controller.protectedAction(FakeRequest()
+        .withCookies(Cookie(Authenticator.cookieName, authenticatorID))
+        .withHeaders("X-AJAX" -> "true")
+      )
+
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      contentAsString(result) must /("result" -> "full.access")
     }
   }
 
@@ -402,7 +419,11 @@ class SilhouetteSpec extends PlaySpecification with Mockito {
      * @return The result to send to the client.
      */
     def protectedAction = SecuredAction { implicit request =>
-      Ok("full.access")
+      if (request.headers.get("X-AJAX").isDefined) {
+        Ok(Json.obj("result" -> "full.access"))
+      } else {
+        Ok("full.access")
+      }
     }
 
     /**
