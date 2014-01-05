@@ -136,6 +136,17 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       contentAsString(result) must contain("global.not.authenticated")
     }
 
+    "display fallback message if user isn't authenticated and fallback methods aren't implemented" in new WithDefaultGlobal {
+      authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
+      identityService.findByID(identity.identityId) returns Future.successful(None)
+
+      val controller = new SecuredController(identityService, authenticatorService)
+      val result = controller.protectedAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
+
+      status(result) must equalTo(FORBIDDEN)
+      contentAsString(result) must contain(Messages("silhouette.not.authenticated"))
+    }
+
     "display fallback if user isn't authenticated" in new WithDefaultGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
       identityService.findByID(identity.identityId) returns Future.successful(None)
@@ -174,7 +185,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       contentAsString(result) must contain("global.not.authorized")
     }
 
-    "display fallback if user isn't authorized" in new WithDefaultGlobal {
+    "display fallback message if user isn't authorized and fallback methods aren't implemented" in new WithDefaultGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
       identityService.findByID(identity.identityId) returns Future.successful(Some(identity))
 
@@ -378,8 +389,8 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      * @param lang The current selected lang.
      * @return The result to send to the client.
      */
-    def onNotAuthenticated(request: RequestHeader, lang: Lang): Future[SimpleResult] = {
-      Future.successful(Forbidden("global.not.authenticated"))
+    override def onNotAuthenticated(request: RequestHeader, lang: Lang) = {
+      Some(Future.successful(Forbidden("global.not.authenticated")))
     }
 
     /**
@@ -389,8 +400,8 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      * @param lang The current selected lang.
      * @return The result to send to the client.
      */
-    def onNotAuthorized(request: RequestHeader, lang: Lang): Future[SimpleResult] = {
-      Future.successful(Unauthorized("global.not.authorized"))
+    override def onNotAuthorized(request: RequestHeader, lang: Lang) = {
+      Some(Future.successful(Unauthorized("global.not.authorized")))
     }
 
   }))) with Context
