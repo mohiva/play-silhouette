@@ -166,12 +166,12 @@ trait Silhouette[I <: Identity] extends Controller {
      * @return The result to send to the client if the user isn't authorized.
      */
     def handleNotAuthorized(implicit request: RequestHeader): Future[SimpleResult] = {
-      notAuthorized(request).getOrElse {
+      notAuthorized(request).orElse {
         Play.current.global match {
           case s: SecuredSettings => s.onNotAuthorized(request, lang)
-          case _ => Future.successful(Unauthorized(Messages("silhouette.not.authorized")))
+          case _ => None
         }
-      }
+      }.getOrElse(Future.successful(Unauthorized(Messages("silhouette.not.authorized"))))
     }
 
     /**
@@ -185,12 +185,12 @@ trait Silhouette[I <: Identity] extends Controller {
         Logger.debug("[silhouette] anonymous user trying to access : '%s'".format(request.uri))
       }
 
-      notAuthenticated(request).getOrElse {
+      notAuthenticated(request).orElse {
         Play.current.global match {
           case s: SecuredSettings => s.onNotAuthenticated(request, lang)
-          case _ => Future.successful(Forbidden(Messages("silhouette.not.authenticated")))
+          case _ => None
         }
-      }
+      }.getOrElse(Future.successful(Forbidden(Messages("silhouette.not.authenticated"))))
     }
 
     /**

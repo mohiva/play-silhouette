@@ -34,7 +34,7 @@ trait SecuredSettings {
    * @param lang The current selected lang.
    * @return The result to send to the client.
    */
-  def onNotAuthenticated(request: RequestHeader, lang: Lang): Future[SimpleResult]
+  def onNotAuthenticated(request: RequestHeader, lang: Lang): Option[Future[SimpleResult]] = None
 
   /**
    * Called when a user isn't authorized.
@@ -43,5 +43,5 @@ trait SecuredSettings {
    * @param lang The current selected lang.
    * @return The result to send to the client.
    */
-  def onNotAuthorized(request: RequestHeader, lang: Lang): Future[SimpleResult]
+  def onNotAuthorized(request: RequestHeader, lang: Lang): Option[Future[SimpleResult]] = None
 }
