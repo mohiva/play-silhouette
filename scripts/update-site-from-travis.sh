@@ -1,6 +1,12 @@
 #!/bin/bash
 #
-# Updates the documentation in the project's GitHub Pages website from a Travis CI build.
+# Updates the project's website from a Travis CI build.
+#
+# The contents of the 'gh-pages' branch will be replaced with the content of
+# the 'site' directory of the 'master' branch.
+#
+# Additionally, the API documentation will be generated and stored in the
+# 'api/master' directory of the 'gh-pages' branch.
 #
 # Original work:
 # Copyright 2013 Xiaohao Ma (maxiaohao) - https://github.com/treelogic-swe/aws-mock/blob/master/.utility/push-to-gh-pages.sh
@@ -27,25 +33,30 @@ set -o nounset -o errexit
 if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
 
   echo "Starting documentation update process"
-  cd $HOME
+  source_dir="$HOME/build/$TRAVIS_REPO_SLUG"
+  target_dir="$HOME/gh-pages"
   git config --global user.email "travis@travis-ci.org"
   git config --global user.name "travis-ci"
+  git clone --quiet --branch=gh-pages https://${GH_PAGES}@github.com/$TRAVIS_REPO_SLUG.git "$target_dir" > /dev/null
+  cd "$target_dir"
 
-  echo "Cloning gh-pages branch"
-  git clone --quiet --branch=gh-pages https://${GH_PAGES}@github.com/$TRAVIS_REPO_SLUG.git gh-pages > /dev/null
-  cd gh-pages
-
-  echo "Removing previous files"
-  target_dir="./api/master"
-  git rm --quiet -rf "$target_dir" || echo "No files to remove"
-
-  echo "Copying documentation from $HOME/build/$TRAVIS_REPO_SLUG/target/scala-2.10/api/ to $target_dir"
-  mkdir -p "$target_dir"
-  cp -Rf $HOME/build/$TRAVIS_REPO_SLUG/target/scala-2.10/api/* "$target_dir"
-
-  echo "Committing updated documentation"
-  git add -f .
-  git commit -m "Update documentation from Travis build $TRAVIS_BUILD_NUMBER"
+  echo "Updating site contents"
+  rm -Rf !(api)
+  cp -R "$source_dir/site/*" "$target_dir"
+  original_commit=`git rev-parse HEAD`
+  git add -all .
+  git commit -m "Update website from Travis build $TRAVIS_BUILD_NUMBER"
   git push -q origin gh-pages > /dev/null
-  git log --name-status HEAD^..HEAD
+  git log --name-status $original_commit..HEAD
+
+  echo "Updating API documentation"
+  api_master_dir="$target_dir/api/master"
+  rm -Rf "$api_master_dir"
+  mkdir -p "$api_master_dir"
+  cp -Rf "$source_dir/target/scala-2.10/api/*" "$api_master_dir"
+  original_commit=`git rev-parse HEAD`
+  git add -all .
+  git commit -m "Update API documentation from Travis build $TRAVIS_BUILD_NUMBER"
+  git push -q origin gh-pages > /dev/null
+  git log --name-status $original_commit..HEAD
 fi

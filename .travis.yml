@@ -12,6 +12,6 @@ before_script:
 - unzip -q play-${PLAY_VERSION}.zip
 script: play-${PLAY_VERSION}/play coveralls doc
 after_success:
-- scripts/update-doc-from-travis.sh
+- scripts/update-site-from-travis.sh
 notifications:
   email: false
