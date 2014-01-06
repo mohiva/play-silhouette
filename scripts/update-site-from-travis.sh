@@ -29,6 +29,7 @@
 # limitations under the License.
 #
 set -o nounset -o errexit
+set -x
 
 if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
   echo "Starting documentation update process"
@@ -78,7 +79,7 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
 
   echo ""
   echo "executing rm -Rf $target_dir/*"
-  rm -Rf "$target_dir/*"
+  rm -Rf $target_dir/*
   echo "exit code: $?"
 
   echo ""
@@ -100,7 +101,8 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
 
   echo ""
   echo "copying $source_dir/site/* to $target_dir"
-  cp -R "$source_dir/site/*" "$target_dir"
+  echo "executing cp -R $source_dir/site/* $target_dir"
+  cp -R $source_dir/site/* "$target_dir"
   echo "exit code: $?"
 
   echo ""
@@ -117,7 +119,7 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
   api_master_dir="$target_dir/api/master"
   rm -Rf "$api_master_dir"
   mkdir -p "$api_master_dir"
-  cp -Rf "$source_dir/target/scala-2.10/api/*" "$api_master_dir"
+  cp -Rf $source_dir/target/scala-2.10/api/* "$api_master_dir"
   original_commit=`git rev-parse HEAD`
   git add -all .
   git commit -m "Update API documentation from Travis build $TRAVIS_BUILD_NUMBER"
