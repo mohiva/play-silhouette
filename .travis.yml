@@ -5,7 +5,7 @@ env:
   matrix:
   - PLAY_VERSION=2.2.1
   global:
-  - secure: NgwjQcTdK79PbCLn+kfqdlib6RWaLjHBLp8BgI51tZqFHrpBdJ4PDoMv0YOWsT+9mwjMvZknXf+c3mEe0mXsu/Q0JzWmT3ZJo+v4X1yluuNoPvRmE3X+BoULVu+Ur5t5xz4A9GnuWgkf2ynU3t52TEM3W0UUod2/pAIwDAN+nmI=
+  - secure: D67lbC+UaIrlmL9KC7eegzw5i0xeRI+L99iUenR5krhfCOZtKX1VcJtR4fl+YXYQ6QJwJbAx1N5RkjshZcR/v9iD8++9E8KkhixF3n1fHmeQa61AQ1GpQTPv2PiEIxvnf0qJNfjsc14Kcp5lgXd9ZtDSxLVrjsR5mJO2JyVkHqk=
 before_script:
 - echo "TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG, TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST, TRAVIS_BRANCH=$TRAVIS_BRANCH"
 - wget http://downloads.typesafe.com/play/${PLAY_VERSION}/play-${PLAY_VERSION}.zip
