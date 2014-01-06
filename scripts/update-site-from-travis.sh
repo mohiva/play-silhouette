@@ -31,7 +31,8 @@
 set -o nounset -o errexit
 
 if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
-  echo "Starting documentation update process"
+  echo ""
+  echo "Starting website update process"
   source_dir="$HOME/build/$TRAVIS_REPO_SLUG"
   target_dir="$HOME/gh-pages"
   git config --global user.email "travis@travis-ci.org"
@@ -39,6 +40,7 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
   git clone --quiet --branch=gh-pages https://${GH_PAGES}@github.com/$TRAVIS_REPO_SLUG.git "$target_dir" > /dev/null
   cd "$target_dir"
 
+  echo ""
   echo "Updating site contents"
   mkdir -p "$HOME/tmp"
   mv api "$HOME/tmp"
@@ -51,6 +53,7 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
   git push -q origin gh-pages > /dev/null
   git log --name-status $original_commit..HEAD
 
+  echo ""
   echo "Updating API documentation"
   api_master_dir="$target_dir/api/master"
   rm -Rf "$api_master_dir"
@@ -61,4 +64,7 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
   git commit -m "Update API documentation from Travis build $TRAVIS_BUILD_NUMBER"
   git push -q origin gh-pages > /dev/null
   git log --name-status $original_commit..HEAD
+
+  echo ""
+  echo "Finished website update process"
 fi
