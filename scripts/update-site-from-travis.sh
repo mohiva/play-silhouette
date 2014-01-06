@@ -31,7 +31,6 @@
 set -o nounset -o errexit
 
 if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
-
   echo "Starting documentation update process"
   source_dir="$HOME/build/$TRAVIS_REPO_SLUG"
   target_dir="$HOME/gh-pages"
@@ -41,6 +40,7 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
   cd "$target_dir"
 
   echo "Updating site contents"
+  shopt -s extglob
   rm -Rf !(api)
   cp -R "$source_dir/site/*" "$target_dir"
   original_commit=`git rev-parse HEAD`
