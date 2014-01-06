@@ -49,15 +49,21 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
   echo "Updating site contents"
   mkdir -p "$HOME/tmp"
   mv api "$HOME/tmp"
+  echo "$target_dir:"
+  ls -la "$target_dir"
+  echo "erasing $target_dir/*"
   rm -Rf "$target_dir/*"
+  echo "$target_dir:"
+  ls -la "$target_dir"
   mv "$HOME/tmp/api" .
   echo "$source_dir:"
   ls -la "$source_dir"
+  echo "$source_dir/site:"
+  ls -la "$source_dir/site"
+  echo "copying $source_dir/site/* to $target_dir"
+  cp -R "$source_dir/site/*" "$target_dir"
   echo "$target_dir:"
   ls -la "$target_dir"
-  pwd
-  ls -la
-  cp -R "$source_dir/site/*" "$target_dir"
   original_commit=`git rev-parse HEAD`
   git add -all .
   git commit -m "Update website from Travis build $TRAVIS_BUILD_NUMBER"
