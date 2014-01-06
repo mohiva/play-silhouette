@@ -35,13 +35,14 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Authorization</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">Authorization</span><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A trait to define Authorization objects that let you hook
 an authorization implementation in SecuredActions.
-</p></div><div class="toggleContainer block">
+</p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.
+</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -86,19 +87,19 @@ an authorization implementation in SecuredActions.
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="com.mohiva.play.silhouette.core.Authorization#isAuthorized" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="isAuthorized[I&lt;:com.mohiva.play.silhouette.core.Identity](identity:I):Boolean"></a>
-      <a id="isAuthorized[I&lt;:Identity](I):Boolean"></a>
+      <a id="isAuthorized(identity:I):Boolean"></a>
+      <a id="isAuthorized(I):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isAuthorized</span><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.core.Authorization.isAuthorized.I">I</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isAuthorized</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.core.Authorization.I">I</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Checks whether the user is authorized to execute an action or not.</p><div class="fullcomment"><div class="comment cmt"><p>Checks whether the user is authorized to execute an action or not.
-</p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The identity to check for.</p></dd><dt>returns</dt><dd class="cmt"><p>True if the user is authorized, false otherwise.
+</p></div><dl class="paramcmts block"><dt class="param">identity</dt><dd class="cmt"><p>The identity to check for.</p></dd><dt>returns</dt><dd class="cmt"><p>True if the user is authorized, false otherwise.
 </p></dd></dl></div>
     </li></ol>
             </div>
