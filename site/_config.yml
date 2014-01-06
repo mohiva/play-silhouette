@@ -1,0 +1,4 @@
+name: Silhouette
+markdown: redcarpet
+pygments: true
+exclude: ['api']
