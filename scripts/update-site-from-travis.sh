@@ -33,17 +33,30 @@ set -o nounset -o errexit
 if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
   echo "Starting documentation update process"
   source_dir="$HOME/build/$TRAVIS_REPO_SLUG"
+  cd "$source_dir"
+  pwd
+  ls -la
+  echo "$source_dir/site:"
+  ls -la "$source_dir/site"
   target_dir="$HOME/gh-pages"
   git config --global user.email "travis@travis-ci.org"
   git config --global user.name "travis-ci"
   git clone --quiet --branch=gh-pages https://${GH_PAGES}@github.com/$TRAVIS_REPO_SLUG.git "$target_dir" > /dev/null
   cd "$target_dir"
+  pwd
+  ls -la
 
   echo "Updating site contents"
   mkdir -p "$HOME/tmp"
   mv api "$HOME/tmp"
-  rm -Rf ./*
+  rm -Rf "$target_dir/*"
   mv "$HOME/tmp/api" .
+  echo "$source_dir:"
+  ls -la "$source_dir"
+  echo "$target_dir:"
+  ls -la "$target_dir"
+  pwd
+  ls -la
   cp -R "$source_dir/site/*" "$target_dir"
   original_commit=`git rev-parse HEAD`
   git add -all .
