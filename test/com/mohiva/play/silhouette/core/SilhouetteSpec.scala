@@ -409,7 +409,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
   class SecuredController(
       val identityService: IdentityService[SocialUser],
       val authenticatorService: AuthenticatorService,
-      val authorization: Authorization =  SimpleAuthorization()
+      val authorization: Authorization[SocialUser] =  SimpleAuthorization()
     )
     extends Silhouette[SocialUser] {
 
@@ -454,15 +454,14 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
    *
    * @param isAuthorized True if the access is authorized, false otherwise.
    */
-  case class SimpleAuthorization(isAuthorized: Boolean = true) extends Authorization {
+  case class SimpleAuthorization(isAuthorized: Boolean = true) extends Authorization[SocialUser] {
 
     /**
      * Checks whether the user is authorized to execute an action or not.
      *
      * @param identity The identity to check for.
-     * @tparam I The type of the identity.
      * @return True if the user is authorized, false otherwise.
      */
-    def isAuthorized[I <: Identity](identity: I): Boolean = isAuthorized
+    def isAuthorized(identity: SocialUser): Boolean = isAuthorized
   }
 }
