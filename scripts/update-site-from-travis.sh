@@ -40,8 +40,10 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
   cd "$target_dir"
 
   echo "Updating site contents"
-  shopt -s extglob
-  rm -Rf !(api)
+  mkdir -p "$HOME/tmp"
+  mv api "$HOME/tmp"
+  rm -Rf ./*
+  mv "$HOME/tmp/api" .
   cp -R "$source_dir/site/*" "$target_dir"
   original_commit=`git rev-parse HEAD`
   git add -all .
