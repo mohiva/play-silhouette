@@ -151,7 +151,7 @@ trait Silhouette[I <: Identity] extends Controller {
      *
      * @param authorize An Authorize object that checks if the user is authorized to invoke the action.
      */
-    def apply(authorize: Authorization) = new SecuredActionBuilder(Some(authorize))
+    def apply(authorize: Authorization[I]) = new SecuredActionBuilder(Some(authorize))
   }
 
   /**
@@ -159,7 +159,7 @@ trait Silhouette[I <: Identity] extends Controller {
    *
    * @param authorize An Authorize object that checks if the user is authorized to invoke the action.
    */
-  class SecuredActionBuilder(authorize: Option[Authorization] = None) extends ActionBuilder[SecuredRequest] {
+  class SecuredActionBuilder(authorize: Option[Authorization[I]] = None) extends ActionBuilder[SecuredRequest] {
 
     /**
      * Handles the not-authorized result.
