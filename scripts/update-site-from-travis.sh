@@ -34,36 +34,79 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
   echo "Starting documentation update process"
   source_dir="$HOME/build/$TRAVIS_REPO_SLUG"
   cd "$source_dir"
+
+  echo ""
   pwd
   ls -la
+
+  echo ""
   echo "$source_dir/site:"
   ls -la "$source_dir/site"
+
   target_dir="$HOME/gh-pages"
   git config --global user.email "travis@travis-ci.org"
   git config --global user.name "travis-ci"
   git clone --quiet --branch=gh-pages https://${GH_PAGES}@github.com/$TRAVIS_REPO_SLUG.git "$target_dir" > /dev/null
   cd "$target_dir"
+  echo ""
   pwd
   ls -la
 
   echo "Updating site contents"
+
+  echo ""
+  echo "executing mkdir -p $HOME/tmp"
   mkdir -p "$HOME/tmp"
+  echo "exit code: $?"
+
+  echo ""
+  echo "before move: $HOME/tmp"
+  ls -la "$HOME/tmp"
+
+  echo ""
+  echo "executing mv api $HOME/tmp"
   mv api "$HOME/tmp"
+  echo "exit code: $?"
+
+  echo ""
+  echo "after move: $HOME/tmp"
+  ls -la "$HOME/tmp"
+
+  echo ""
   echo "$target_dir:"
   ls -la "$target_dir"
-  echo "erasing $target_dir/*"
+
+  echo ""
+  echo "executing rm -Rf $target_dir/*"
   rm -Rf "$target_dir/*"
+  echo "exit code: $?"
+
+  echo ""
   echo "$target_dir:"
   ls -la "$target_dir"
+
+  echo ""
+  echo "executing mv $HOME/tmp/api" .
   mv "$HOME/tmp/api" .
+  echo "exit code: $?"
+
+  echo ""
   echo "$source_dir:"
   ls -la "$source_dir"
+
+  echo ""
   echo "$source_dir/site:"
   ls -la "$source_dir/site"
+
+  echo ""
   echo "copying $source_dir/site/* to $target_dir"
   cp -R "$source_dir/site/*" "$target_dir"
+  echo "exit code: $?"
+
+  echo ""
   echo "$target_dir:"
   ls -la "$target_dir"
+
   original_commit=`git rev-parse HEAD`
   git add -all .
   git commit -m "Update website from Travis build $TRAVIS_BUILD_NUMBER"
