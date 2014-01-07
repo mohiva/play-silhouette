@@ -225,7 +225,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.protectedAction(FakeRequest()
         .withCookies(Cookie(Authenticator.cookieName, authenticatorID))
-        .withHeaders("X-AJAX" -> "true")
+        .withHeaders("Accept" -> "application/json")
       )
 
       status(result) must equalTo(OK)
@@ -419,10 +419,9 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      * @return The result to send to the client.
      */
     def protectedAction = SecuredAction { implicit request =>
-      if (request.headers.get("X-AJAX").isDefined) {
-        Ok(Json.obj("result" -> "full.access"))
-      } else {
-        Ok("full.access")
+      render {
+        case Accepts.Json() => Ok(Json.obj("result" -> "full.access"))
+        case Accepts.Html() => Ok("full.access")
       }
     }
 
