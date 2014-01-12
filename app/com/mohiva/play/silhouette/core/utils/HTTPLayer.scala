@@ -13,24 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.core
+package com.mohiva.play.silhouette.core.utils
+
+import play.api.libs.ws.WS
 
 /**
- * A marker interface for all providers.
+ * A trait which provides a mockable implementation for the HTTP layer.
  */
-trait Provider {
+trait HTTPLayer {
 
   /**
-   * Gets the provider ID.
+   * Prepare a new request. You can then construct it by chaining calls.
    *
-   * @return The provider ID.
+   * @param url the URL to request
    */
-  def id: String
-
-  /**
-   * Subclasses need to implement this to specify the authentication method.
-   *
-   * @return The authentication method.
-   */
-  def authMethod: AuthenticationMethod
+  def url(url: String): WS.WSRequestHolder
 }

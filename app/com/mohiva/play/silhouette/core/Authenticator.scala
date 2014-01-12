@@ -36,7 +36,7 @@ import Authenticator._
  */
 case class Authenticator(
   id: String,
-  identityID: IdentityId,
+  identityID: IdentityID,
   creationDate: DateTime,
   lastUsedDate: DateTime,
   expirationDate: DateTime) {
@@ -95,6 +95,7 @@ object Authenticator {
   val CookieNameKey = "silhouette.cookie.name"
   val CookiePathKey = "silhouette.cookie.path"
   val CookieDomainKey = "silhouette.cookie.domain"
+  val CookieSecureKey = "silhouette.cookie.secure"
   val CookieHttpOnlyKey = "silhouette.cookie.httpOnly"
   val ApplicationContext = "application.context"
   val IdleTimeoutKey = "silhouette.cookie.idleTimeoutInMinutes"
@@ -114,7 +115,7 @@ object Authenticator {
     Play.configuration.getString(ApplicationContext).getOrElse(DefaultCookiePath)
   )
   lazy val cookieDomain = Play.application.configuration.getString(CookieDomainKey)
-  lazy val cookieSecure = IdentityProvider.sslEnabled
+  lazy val cookieSecure = Play.application.configuration.getBoolean(CookieSecureKey).getOrElse(true)
   lazy val cookieHttpOnly = Play.application.configuration.getBoolean(CookieHttpOnlyKey).getOrElse(DefaultCookieHttpOnly)
   lazy val idleTimeout = Play.application.configuration.getInt(IdleTimeoutKey).getOrElse(DefaultIdleTimeout)
   lazy val absoluteTimeout = Play.application.configuration.getInt(AbsoluteTimeoutKey).getOrElse(DefaultAbsoluteTimeout)

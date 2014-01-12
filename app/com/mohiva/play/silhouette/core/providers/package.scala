@@ -16,7 +16,7 @@
 package com.mohiva.play.silhouette.core
 
 /**
- * Contains [[IdentityProvider]] implementations that provide authentication
+ * Contains [[com.mohiva.play.silhouette.core.Provider]] implementations that provide authentication
  * for different schemes and services.
  */
 package object providers { }

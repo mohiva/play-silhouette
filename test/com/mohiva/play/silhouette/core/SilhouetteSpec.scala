@@ -28,6 +28,7 @@ import play.api.mvc.{Cookie, RequestHeader, SimpleResult}
 import play.api.mvc.Results._
 import play.api.test.FakeApplication
 import play.api.libs.json.Json
+import com.mohiva.play.silhouette.contrib.User
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.core.Silhouette]] base controller.
@@ -90,7 +91,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "restrict access if no identity could be found for an authenticator" in new WithDefaultGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
-      identityService.findByID(identity.identityId) returns Future.successful(None)
+      identityService.findByID(identity.identityID) returns Future.successful(None)
 
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.protectedAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
@@ -101,7 +102,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "touch an authenticator if an identity could be found for it" in new WithDefaultGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
-      identityService.findByID(identity.identityId) returns Future.successful(Some(identity))
+      identityService.findByID(identity.identityID) returns Future.successful(Some(identity))
 
       val controller = new SecuredController(identityService, authenticatorService)
       await(controller.protectedAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID))))
@@ -111,7 +112,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "display local not-authenticated result if user isn't authenticated" in new WithSecuredGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
-      identityService.findByID(identity.identityId) returns Future.successful(None)
+      identityService.findByID(identity.identityID) returns Future.successful(None)
 
       val controller = new SecuredController(identityService, authenticatorService) {
         override def notAuthenticated(request: RequestHeader): Option[Future[SimpleResult]] = {
@@ -127,7 +128,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "display global not-authenticated result if user isn't authenticated" in new WithSecuredGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
-      identityService.findByID(identity.identityId) returns Future.successful(None)
+      identityService.findByID(identity.identityID) returns Future.successful(None)
 
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.protectedAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
@@ -138,7 +139,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "display fallback message if user isn't authenticated and fallback methods aren't implemented" in new WithDefaultGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
-      identityService.findByID(identity.identityId) returns Future.successful(None)
+      identityService.findByID(identity.identityID) returns Future.successful(None)
 
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.protectedAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
@@ -149,7 +150,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "display local not-authorized result if user isn't authorized" in new WithSecuredGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
-      identityService.findByID(identity.identityId) returns Future.successful(Some(identity))
+      identityService.findByID(identity.identityID) returns Future.successful(Some(identity))
 
       val controller = new SecuredController(identityService, authenticatorService, SimpleAuthorization(isAuthorized = false)) {
         override def notAuthorized(request: RequestHeader): Option[Future[SimpleResult]] = {
@@ -165,7 +166,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "display global not-authorized result if user isn't authorized" in new WithSecuredGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
-      identityService.findByID(identity.identityId) returns Future.successful(Some(identity))
+      identityService.findByID(identity.identityID) returns Future.successful(Some(identity))
 
       val controller = new SecuredController(identityService, authenticatorService, SimpleAuthorization(isAuthorized = false))
       val result = controller.protectedActionWithAuthorization(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
@@ -176,7 +177,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "display fallback message if user isn't authorized and fallback methods aren't implemented" in new WithDefaultGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
-      identityService.findByID(identity.identityId) returns Future.successful(Some(identity))
+      identityService.findByID(identity.identityID) returns Future.successful(Some(identity))
 
       val controller = new SecuredController(identityService, authenticatorService, SimpleAuthorization(isAuthorized = false))
       val result = controller.protectedActionWithAuthorization(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
@@ -187,7 +188,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "invoke action without authorization if user is authorized" in new WithSecuredGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
-      identityService.findByID(identity.identityId) returns Future.successful(Some(identity))
+      identityService.findByID(identity.identityID) returns Future.successful(Some(identity))
 
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.protectedAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
@@ -198,7 +199,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "invoke action with authorization if user is authorized" in new WithSecuredGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
-      identityService.findByID(identity.identityId) returns Future.successful(Some(identity))
+      identityService.findByID(identity.identityID) returns Future.successful(Some(identity))
 
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.protectedActionWithAuthorization(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
@@ -209,7 +210,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "discard authentication cookie" in new WithSecuredGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
-      identityService.findByID(identity.identityId) returns Future.successful(Some(identity))
+      identityService.findByID(identity.identityID) returns Future.successful(Some(identity))
 
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.protectedAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
@@ -220,7 +221,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "handle an Ajax request" in new WithSecuredGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
-      identityService.findByID(identity.identityId) returns Future.successful(Some(identity))
+      identityService.findByID(identity.identityID) returns Future.successful(Some(identity))
 
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.protectedAction(FakeRequest()
@@ -290,7 +291,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "restrict access if no identity could be found for an authenticator" in new WithDefaultGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
-      identityService.findByID(identity.identityId) returns Future.successful(None)
+      identityService.findByID(identity.identityID) returns Future.successful(None)
 
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.userAwareAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
@@ -301,7 +302,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "touch an authenticator if an identity could be found for it" in new WithDefaultGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
-      identityService.findByID(identity.identityId) returns Future.successful(Some(identity))
+      identityService.findByID(identity.identityID) returns Future.successful(Some(identity))
 
       val controller = new SecuredController(identityService, authenticatorService)
       await(controller.userAwareAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID))))
@@ -311,7 +312,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "grant access if an identity could be found" in new WithDefaultGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
-      identityService.findByID(identity.identityId) returns Future.successful(Some(identity))
+      identityService.findByID(identity.identityID) returns Future.successful(Some(identity))
 
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.userAwareAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
@@ -329,7 +330,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     /**
      * The identity service implementation.
      */
-    lazy val identityService: IdentityService[SocialUser] = mock[IdentityService[SocialUser]]
+    lazy val identityService: IdentityService[User] = mock[IdentityService[User]]
 
     /**
      * The authenticator service implementation.
@@ -344,13 +345,13 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     /**
      * An identity.
      */
-    lazy val identity = new SocialUser(
-      identityId = IdentityId("1", "test"),
+    lazy val identity = new User(
+      identityID = IdentityID("1", "test"),
       firstName = "Christian",
       lastName = "Kaps",
       fullName = "Christian Kaps",
       email = None,
-      avatarUrl = None,
+      avatarURL = None,
       authMethod = AuthenticationMethod.OAuth1
     )
 
@@ -359,7 +360,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      */
     lazy val authenticator = new Authenticator(
       id = authenticatorID,
-      identityID = IdentityId("1", "test"),
+      identityID = IdentityID("1", "test"),
       creationDate = DateTime.now,
       lastUsedDate = DateTime.now,
       expirationDate = DateTime.now.plusMinutes(12 * 60)
@@ -407,11 +408,11 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
    * @param authenticatorService The authenticator service implementation.
    */
   class SecuredController(
-      val identityService: IdentityService[SocialUser],
+      val identityService: IdentityService[User],
       val authenticatorService: AuthenticatorService,
-      val authorization: Authorization[SocialUser] =  SimpleAuthorization()
+      val authorization: Authorization[User] =  SimpleAuthorization()
     )
-    extends Silhouette[SocialUser] {
+    extends Silhouette[User] {
 
     /**
      * A protected action.
@@ -453,7 +454,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
    *
    * @param isAuthorized True if the access is authorized, false otherwise.
    */
-  case class SimpleAuthorization(isAuthorized: Boolean = true) extends Authorization[SocialUser] {
+  case class SimpleAuthorization(isAuthorized: Boolean = true) extends Authorization[User] {
 
     /**
      * Checks whether the user is authorized to execute an action or not.
@@ -461,6 +462,6 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      * @param identity The identity to check for.
      * @return True if the user is authorized, false otherwise.
      */
-    def isAuthorized(identity: SocialUser): Boolean = isAuthorized
+    def isAuthorized(identity: User): Boolean = isAuthorized
   }
 }

@@ -26,32 +26,31 @@ import play.api.mvc.{ SimpleResult, Results, Result, Request }
 import utils.{ GravatarHelper, PasswordHasher }
 import play.api.{ Play, Application }
 import Play.current
-import com.typesafe.plugin._
 import org.joda.time.DateTime
+import com.mohiva.play.silhouette.contrib.User
 
 /**
  * A provider for authenticating credentials.
  */
-class CredentialsProvider(application: Application) extends IdentityProvider(application) {
+class CredentialsProvider(application: Application)  {
 
-  override def id = CredentialsProvider.ProviderId
+  def id = CredentialsProvider.ProviderId
 
   def authMethod = AuthenticationMethod.UserPassword
 
   val InvalidCredentials = "silhouette.login.invalidCredentials"
 
-  def doAuth[A]()(implicit request: Request[A]): Either[Result, SocialUser] = {
+  def doAuth[A]()(implicit request: Request[A]): Either[Result, User] = {
     val form = CredentialsProvider.loginForm.bindFromRequest()
     form.fold(
       errors => Left(badRequest(errors, request)),
       credentials => {
-        val userId = IdentityId(credentials._1, id)
+        val userId = IdentityID(credentials._1, id)
         val result = for (
-          user <- UserService.find(userId);
+          user <- UserService.find(userId).asInstanceOf[Option[User]];
           pinfo <- user.passwordInfo;
           hasher <- Registry.hashers.get(pinfo.hasher) if hasher.matches(pinfo, credentials._2)
-        ) yield (
-          Right(SocialUser(user)))
+        ) yield Right(user)
         result.getOrElse(
           Left(badRequest(CredentialsProvider.loginForm, request, Some(InvalidCredentials))))
       })
@@ -61,9 +60,9 @@ class CredentialsProvider(application: Application) extends IdentityProvider(app
     Results.BadRequest("")
   }
 
-  def fillProfile(user: SocialUser) = {
+  def fillProfile(user: User) = {
     GravatarHelper.avatarFor(user.email.get) match {
-      case Some(url) if url != user.avatarUrl => user.copy(avatarUrl = Some(url))
+      case Some(url) if url != user.avatarURL => user.copy(avatarURL = Some(url))
       case _ => user
     }
   }
@@ -103,3 +102,13 @@ object CredentialsProvider {
 case class Token(uuid: String, email: String, creationTime: DateTime, expirationTime: DateTime, isSignUp: Boolean) {
   def isExpired = expirationTime.isBeforeNow
 }
+
+
+/**
+ * The password details
+ *
+ * @param hasher the id of the hasher used to hash this password
+ * @param password the hashed password
+ * @param salt the optional salt used when hashing
+ */
+case class PasswordInfo(hasher: String, password: String, salt: Option[String] = None)

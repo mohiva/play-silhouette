@@ -20,7 +20,7 @@ import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import scala.concurrent.Future
 import play.api.test.PlaySpecification
-import com.mohiva.play.silhouette.core.{Authenticator, AuthenticationMethod, IdentityId, SocialUser}
+import com.mohiva.play.silhouette.core.{Identity, Authenticator, AuthenticationMethod, IdentityID}
 import com.mohiva.play.silhouette.core.utils.{Clock, IDGenerator, CacheLayer}
 
 /**
@@ -170,22 +170,17 @@ class CacheAuthenticatorServiceSpec extends PlaySpecification with Mockito {
     /**
      * An identity.
      */
-    lazy val identity = new SocialUser(
-      identityId = IdentityId("1", "test"),
-      firstName = "Christian",
-      lastName = "Kaps",
-      fullName = "Christian Kaps",
-      email = None,
-      avatarUrl = None,
-      authMethod = AuthenticationMethod.OAuth1
-    )
+    lazy val identity = new Identity {
+      val identityID = IdentityID("1", "test")
+      val authMethod = AuthenticationMethod.OAuth1
+    }
 
     /**
      * An authenticator.
      */
     lazy val authenticator = new Authenticator(
       id = "test-id",
-      identityID = IdentityId("1", "test"),
+      identityID = IdentityID("1", "test"),
       creationDate = DateTime.now,
       lastUsedDate = DateTime.now,
       expirationDate = DateTime.now.plusMinutes(12 * 60)
