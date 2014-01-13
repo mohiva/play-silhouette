@@ -47,6 +47,16 @@ abstract class OAuth2Provider[I <: Identity](
   extends SocialProvider[I, OAuth2Info] {
 
   /**
+   * Converts the JSON into a [[com.mohiva.play.silhouette.core.providers.OAuth2Info]] object.
+   */
+  implicit val infoReads = (
+    (__ \ AccessToken).read[String] and
+    (__ \ TokenType).readNullable[String]and
+    (__ \ ExpiresIn).readNullable[Int] and
+    (__ \ RefreshToken).readNullable[String]
+    )(OAuth2Info.apply _)
+
+  /**
    * Gets the auth method.
    *
    * @return The auth method.
@@ -218,22 +228,6 @@ case class OAuth2Info(
   tokenType: Option[String] = None,
   expiresIn: Option[Int] = None,
   refreshToken: Option[String] = None)
-
-/**
- * The companion object of the OAuth2 info class.
- */
-object OAuth2Info {
-
-  /**
-   * Converts the JSON into a [[com.mohiva.play.silhouette.core.providers.OAuth2Info]] object.
-   */
-  implicit val jsonReads = (
-    (__ \ AccessToken).read[String] and
-    (__ \ TokenType).readNullable[String]and
-    (__ \ ExpiresIn).readNullable[Int] and
-    (__ \ RefreshToken).readNullable[String]
-    )(OAuth2Info.apply _)
-}
 
 /**
  * The base trait for all OAuth2 identities.
