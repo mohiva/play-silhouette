@@ -69,17 +69,17 @@ abstract class OAuth1Provider[I <: Identity](
     request.queryString.get(OAuthVerifier) match {
       // Second step in the oauth flow, we have the access token in the cache, we need to
       // swap it for the access token
-      case Some(seq) => cachedToken.map { case (cacheID, requestToken) =>
-        service.retrieveAccessToken(RequestToken(requestToken.token, requestToken.secret), seq.head).fold(
+      case Some(seq) => cachedToken.flatMap { case (cacheID, requestToken) =>
+        Future(service.retrieveAccessToken(RequestToken(requestToken.token, requestToken.secret), seq.head)).map(_.fold(
           exception => throw new AuthenticationException(ErrorAccessToken.format(id), exception),
           token => {
             cacheLayer.remove(cacheID)
             Right(OAuth1Info(token.token, token.secret))
-          })
+          }))
       }
       // The oauth_verifier field is not in the request, this is the first step in the auth flow.
       // we need to get the request tokens
-      case _ => service.retrieveRequestToken(settings.callbackURL).fold(
+      case _ => Future(service.retrieveRequestToken(settings.callbackURL)).map(_.fold(
         exception => throw new AuthenticationException(ErrorRequestToken.format(id), exception),
         token => {
           val cacheID = UUID.randomUUID().toString
@@ -89,8 +89,8 @@ abstract class OAuth1Provider[I <: Identity](
             Logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
           }
           cacheLayer.set(cacheID, token, 600) // set it for 10 minutes, plenty of time to log in
-          Future.successful(Left(redirect))
-        })
+          Left(redirect)
+        }))
     }
   }
 
