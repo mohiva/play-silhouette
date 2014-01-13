@@ -145,7 +145,7 @@ object OAuth1Provider {
 }
 
 /**
- * The OAuth2 settings.
+ * The OAuth1 settings.
  *
  * @param requestTokenURL The request token URL.
  * @param accessTokenURL The access token URL.
