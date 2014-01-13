@@ -38,7 +38,7 @@ trait UserService {
    * @param id the user id
    * @return an optional user
    */
-  def find(id: IdentityId):Option[Identity]
+  def find(id: IdentityID):Option[Identity]
 
   /**
    * Finds a Social user by email and provider id.
@@ -154,7 +154,7 @@ object UserService {
     delegate = Some(service)
   }
 
-  def find(id: IdentityId):Option[Identity] = {
+  def find(id: IdentityID):Option[Identity] = {
     delegate.map( _.find(id) ).getOrElse {
       notInitialized()
       None

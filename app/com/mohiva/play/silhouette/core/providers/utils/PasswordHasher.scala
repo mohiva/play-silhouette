@@ -19,9 +19,10 @@
  */
 package com.mohiva.play.silhouette.core.providers.utils
 
-import com.mohiva.play.silhouette.core.{Registry, Registrable, PasswordInfo}
+import com.mohiva.play.silhouette.core.{Registry, Registrable}
 import play.api.{Logger, Plugin, Application}
 import org.mindrot.jbcrypt._
+import com.mohiva.play.silhouette.core.providers.PasswordInfo
 
 /**
  * A trait that defines the password hasher interface

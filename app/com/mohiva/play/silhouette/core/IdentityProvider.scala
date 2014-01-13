@@ -25,6 +25,8 @@ import concurrent.{Await, Future}
 import play.api.libs.ws.Response
 import com.mohiva.play.silhouette.core.providers.utils.RoutesHelper
 import play.api.libs.oauth.ServiceInfo
+import com.mohiva.play.silhouette.core.providers.OAuth1Provider
+import com.mohiva.play.silhouette.contrib.User
 
 /**
  * Base class for all Identity Providers.  All providers are plugins and are loaded
@@ -121,7 +123,7 @@ abstract class IdentityProvider(application: Application) extends Plugin with Re
    * @tparam A
    * @return Either a Result or a User
    */
-  def doAuth[A]()(implicit request: Request[A]):Either[Result, SocialUser]
+  def doAuth[A]()(implicit request: Request[A]):Either[Result, User]
 
   /**
    * Subclasses need to implement this method to populate the User object with profile
@@ -130,7 +132,7 @@ abstract class IdentityProvider(application: Application) extends Plugin with Re
    * @param user The user object to be populated
    * @return A copy of the user object with the new values set
    */
-  def fillProfile(user: SocialUser):SocialUser
+  def fillProfile(user: User):User
 
   protected def throwMissingPropertiesException() {
     val msg = "[silhouette] Missing properties for provider '%s'. Verify your configuration file is properly set.".format(id)
@@ -141,23 +143,10 @@ abstract class IdentityProvider(application: Application) extends Plugin with Re
   protected def awaitResult(future: Future[Response]) = {
     Await.result(future, IdentityProvider.secondsToWait)
   }
-
-  /**
-   * Returns the ServiceInfo needed to sign OAuth1 requests.
-   *
-   * @param user The user for which the serviceInfo is needed.
-   * @return An optional service info.
-   */
-  def serviceInfoFor(user: Identity): Option[ServiceInfo] = {
-    Registry.providers.get(user.identityId.providerId) match {
-      case Some(p: OAuth1Provider) if p.authMethod == AuthenticationMethod.OAuth1 => Some(p.serviceInfo)
-      case _ => None
-    }
-  }
 }
 
 object IdentityProvider {
-  val SessionId = "sid"
+  val SessionID = "sid"
 
   val sslEnabled: Boolean = {
     import Play.current

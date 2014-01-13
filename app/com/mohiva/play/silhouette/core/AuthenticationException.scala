@@ -19,7 +19,21 @@
  */
 package com.mohiva.play.silhouette.core
 
+import play.api.Logger
+
 /**
  * An exception thrown when there is an error in the authentication flow.
+ *
+ * @param msg The exception message.
+ * @param cause The exception cause.
  */
-case class AuthenticationException() extends Exception
+case class AuthenticationException(msg: String, cause: Throwable) extends Exception(msg, cause) {
+  Logger.error(msg, cause)
+
+  /**
+   * Constructs an exception with only a message.
+   *
+   * @param msg The exception message.
+   */
+  def this(msg: String) = this(msg, null)
+}

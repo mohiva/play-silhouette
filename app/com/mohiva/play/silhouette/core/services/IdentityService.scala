@@ -20,7 +20,7 @@
 package com.mohiva.play.silhouette.core.services
 
 import scala.concurrent.Future
-import com.mohiva.play.silhouette.core.{Identity, IdentityId}
+import com.mohiva.play.silhouette.core.{Identity, IdentityID}
 
 /**
  * A trait that provides the means to find and save identities
@@ -45,7 +45,7 @@ trait IdentityService[T <: Identity] {
    * @param id The ID to find an identity.
    * @return The found identity or None if no identity could be found for the given ID.
    */
-  def findByID(id: IdentityId): Future[Option[T]]
+  def findByID(id: IdentityID): Future[Option[T]]
 
   /**
    * Finds an identity by email and provider ID.
