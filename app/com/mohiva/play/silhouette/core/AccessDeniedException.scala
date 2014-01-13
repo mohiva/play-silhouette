@@ -29,7 +29,7 @@ import play.api.Logger
  * @param cause The exception cause.
  */
 case class AccessDeniedException(msg: String, cause: Throwable) extends Exception(msg, cause) {
-  Logger.error(msg)
+  Logger.info(msg)
 
   /**
    * Constructs an exception with only a message.
