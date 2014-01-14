@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.core.utils
+package com.mohiva.play.silhouette.contrib.utils
 
 import play.api.test.PlaySpecification
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.core.utils.SecureRandomIDGenerator]] class.
+ * Test case for the [[com.mohiva.play.silhouette.contrib.utils.SecureRandomIDGenerator]] class.
  */
 class SecureRandomIDGeneratorSpec extends PlaySpecification {
 

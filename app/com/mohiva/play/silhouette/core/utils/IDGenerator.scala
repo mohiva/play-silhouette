@@ -20,9 +20,6 @@
 package com.mohiva.play.silhouette.core.utils
 
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
-import play.api.libs.Codecs
-import java.security.SecureRandom
 
 /**
  * An generator which creates an ID.
@@ -38,40 +35,4 @@ trait IDGenerator {
    * @return The generated ID.
    */
   def generate: Future[String]
-}
-
-/**
- * An generator which uses SecureRandom to generate cryptographically strong ID's.
- *
- * @param idSizeInBytes The size of the ID length in bytes.
- */
-class SecureRandomIDGenerator(idSizeInBytes: Int = 128) extends IDGenerator {
-
-  /**
-   * Generates a new ID using SecureRandom.
-   *
-   * @return The generated ID.
-   */
-  def generate: Future[String] = {
-    val randomValue = new Array[Byte](idSizeInBytes)
-    Future(SecureRandomIDGenerator.random.nextBytes(randomValue)).map { _ =>
-      Codecs.toHexString(randomValue)
-    }
-  }
-}
-
-/**
- * The companion object.
- */
-object SecureRandomIDGenerator {
-
-  /**
-   * A cryptographically strong random number generator (RNG).
-   *
-   * There is a cost of getting a secure random instance for its initial seeding, so it's recommended you use
-   * a singleton style so you only create one for all of your usage going forward.
-   *
-   * On Linux systems SecureRandom uses /dev/random and it can block waiting for sufficient entropy to build up.
-   */
-  val random = new SecureRandom()
 }

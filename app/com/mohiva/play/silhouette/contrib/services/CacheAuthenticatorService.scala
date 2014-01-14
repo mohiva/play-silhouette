@@ -17,11 +17,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.core.services
+package com.mohiva.play.silhouette.contrib.services
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core.utils.{Clock, IDGenerator, CacheLayer}
 import com.mohiva.play.silhouette.core.{Identity, Authenticator}
+import com.mohiva.play.silhouette.core.services.AuthenticatorService
 
 /**
  * A default implementation of the AuthenticatorService that uses a cache to store the authenticators.
