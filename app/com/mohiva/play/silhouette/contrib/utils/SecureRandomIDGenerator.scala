@@ -26,7 +26,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core.utils.IDGenerator
 
 /**
- * An generator which uses SecureRandom to generate cryptographically strong ID's.
+ * A generator which uses SecureRandom to generate cryptographically strong IDs.
  *
  * @param idSizeInBytes The size of the ID length in bytes.
  */
