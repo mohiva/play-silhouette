@@ -29,3 +29,19 @@ trait HTTPLayer {
    */
   def url(url: String): WS.WSRequestHolder
 }
+
+/**
+ * Implementation of the HTTP layer which uses the Play web service implementation.
+ *
+ * It makes no sense to move the HTTPLayer implementation to the contrib package, because the complete
+ * Silhouette module is bound to Play's HTTP implementation. So this layer exists only for mocking purpose.
+ */
+class PlayHTTPLayer extends HTTPLayer {
+
+  /**
+   * Prepare a new request. You can then construct it by chaining calls.
+   *
+   * @param url the URL to request
+   */
+  def url(url: String): WS.WSRequestHolder = WS.url(url)
+}

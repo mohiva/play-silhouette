@@ -19,7 +19,6 @@ import org.joda.time.DateTime
 import org.specs2.specification.Scope
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
-import com.mohiva.play.silhouette.core.services.{AuthenticatorService, IdentityService}
 import scala.concurrent.Future
 import play.api.test.{WithApplication, FakeRequest, PlaySpecification}
 import play.api.GlobalSettings
@@ -28,6 +27,7 @@ import play.api.mvc.{Cookie, RequestHeader, SimpleResult}
 import play.api.mvc.Results._
 import play.api.test.FakeApplication
 import play.api.libs.json.Json
+import com.mohiva.play.silhouette.core.services.{AuthenticatorService, IdentityService}
 import com.mohiva.play.silhouette.contrib.User
 
 /**

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.core.services
+package com.mohiva.play.silhouette.contrib.services
 
 import org.joda.time.DateTime
 import org.specs2.mock.Mockito
@@ -24,7 +24,7 @@ import com.mohiva.play.silhouette.core.{Identity, Authenticator, AuthenticationM
 import com.mohiva.play.silhouette.core.utils.{Clock, IDGenerator, CacheLayer}
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.core.services.CacheAuthenticatorService]] class.
+ * Test case for the [[com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService]] class.
  */
 class CacheAuthenticatorServiceSpec extends PlaySpecification with Mockito {
 

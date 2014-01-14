@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.core.utils
+package com.mohiva.play.silhouette.contrib.utils
 
 import scala.reflect.ClassTag
 import scala.concurrent.Future
 import play.api.cache.Cache
 import play.api.Play.current
+import com.mohiva.play.silhouette.core.utils.CacheLayer
 
 /**
  * Implementation of the cache layer which uses the default Play cache plugin.

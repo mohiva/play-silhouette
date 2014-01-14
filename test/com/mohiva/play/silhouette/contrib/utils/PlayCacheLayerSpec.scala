@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.core.utils
+package com.mohiva.play.silhouette.contrib.utils
 
 import test.AfterWithinAround
 import play.api.test.{WithApplication, PlaySpecification}
@@ -23,7 +23,7 @@ import org.joda.time.DateTime
 import org.specs2.specification.Scope
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.core.utils.PlayCacheLayer]] class.
+ * Test case for the [[com.mohiva.play.silhouette.contrib.utils.PlayCacheLayer]] class.
  */
 class PlayCacheLayerSpec extends PlaySpecification {
 
