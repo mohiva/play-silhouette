@@ -22,14 +22,14 @@ package com.mohiva.play.silhouette.core.utils
 import scala.concurrent.Future
 
 /**
- * An generator which creates an ID.
+ * A generator which creates an ID.
  */
 trait IDGenerator {
 
   /**
    * Generates an ID.
    *
-   * Generating secure ID's can block the application, while the system waits for resources. Therefore we
+   * Generating secure IDs can block the application, while the system waits for resources. Therefore we
    * return a future so that the application doesn't get blocked while waiting for the generated ID.
    *
    * @return The generated ID.
