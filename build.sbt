@@ -36,3 +36,5 @@ scalacOptions ++= Seq(
 )
 
 CoverallsPlugin.singleProject
+
+defaultScalariformSettings
