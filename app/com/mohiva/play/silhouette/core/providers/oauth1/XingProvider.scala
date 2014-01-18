@@ -20,29 +20,28 @@
 package com.mohiva.play.silhouette.core.providers.oauth1
 
 import play.api.libs.oauth.{RequestToken, OAuthCalculator}
-import play.api.mvc.RequestHeader
-import play.api.i18n.Lang
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{HTTPLayer, CacheLayer}
-import com.mohiva.play.silhouette.core.providers.{OAuth1Identity, OAuth1Info, OAuth1Settings, OAuth1Provider}
+import com.mohiva.play.silhouette.core.providers.{SocialProfile, OAuth1Info, OAuth1Settings, OAuth1Provider}
+import com.mohiva.play.silhouette.core.services.AuthInfoService
 import XingProvider._
 
 /**
  * A Xing OAuth1 Provider.
  *
- * @param settings The provider settings.
+ * @param authInfoService The auth info service.
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
- * @param identityBuilder The identity builder implementation.
+ * @param settings The provider settings.
  */
-class XingProvider[I <: Identity](
-    settings: OAuth1Settings,
+class XingProvider(
+    val authInfoService: AuthInfoService,
     cacheLayer: CacheLayer,
     httpLayer: HTTPLayer,
-    identityBuilder: IdentityBuilder[XingIdentity, I])
-  extends OAuth1Provider[I](settings, cacheLayer, httpLayer) {
+    settings: OAuth1Settings)
+  extends OAuth1Provider(settings, cacheLayer, httpLayer) {
 
   /**
    * Gets the provider ID.
@@ -52,33 +51,29 @@ class XingProvider[I <: Identity](
   def id = Xing
 
   /**
-   * Builds the identity.
+   * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
-   * @param request The request header.
-   * @param lang The current lang.
-   * @return The identity.
+   * @return The social profile.
    */
-  def buildIdentity(authInfo: OAuth1Info)(implicit request: RequestHeader, lang: Lang): Future[I] = {
+  def buildProfile(authInfo: OAuth1Info): Future[SocialProfile] = {
     val sign = OAuthCalculator(serviceInfo.key, RequestToken(authInfo.token, authInfo.secret))
     httpLayer.url(API).sign(sign).get().map { response =>
       val json = response.json
       val userID = (json \\ ID ).head.as[String]
-      val fullName = (json \\ Name).head.as[String]
-      val lastName = (json \\ LastName).head.as[String]
-      val firstName = (json \\ FirstName).head.as[String]
+      val fullName = (json \\ Name).head.asOpt[String]
+      val lastName = (json \\ LastName).head.asOpt[String]
+      val firstName = (json \\ FirstName).head.asOpt[String]
       val avatarURL = (json \\ Large ).head.asOpt[String]
       val email = (json \\ ActiveEmail).head.asOpt[String]
 
-      identityBuilder(XingIdentity(
-        identityID = IdentityID(userID, id),
+      SocialProfile(
+        loginInfo = LoginInfo(id, userID),
         firstName = firstName,
         lastName = lastName,
         fullName = fullName,
         avatarURL = avatarURL,
-        email = email,
-        authMethod = authMethod,
-        authInfo = authInfo))
+        email = email)
     }.recover { case e => throw new AuthenticationException(UnspecifiedProfileError.format(id), e) }
   }
 }
@@ -107,16 +102,3 @@ object XingProvider {
   val Large = "large"
   val ActiveEmail = "active_email"
 }
-
-/**
- * The Xing identity.
- */
-case class XingIdentity(
-  identityID: IdentityID,
-  firstName: String,
-  lastName: String,
-  fullName: String,
-  email: Option[String],
-  avatarURL: Option[String],
-  authMethod: AuthenticationMethod,
-  authInfo: OAuth1Info) extends OAuth1Identity

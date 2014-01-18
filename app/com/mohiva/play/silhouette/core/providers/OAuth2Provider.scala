@@ -38,13 +38,12 @@ import OAuth2Provider._
  * @param settings The provider settings.
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
- * @tparam I The type of the identity.
  */
-abstract class OAuth2Provider[I <: Identity](
+abstract class OAuth2Provider(
     settings: OAuth2Settings,
     cacheLayer: CacheLayer,
     httpLayer: HTTPLayer)
-  extends SocialProvider[I, OAuth2Info] {
+  extends SocialProvider[OAuth2Info] {
 
   /**
    * Converts the JSON into a [[com.mohiva.play.silhouette.core.providers.OAuth2Info]] object.
@@ -54,14 +53,7 @@ abstract class OAuth2Provider[I <: Identity](
     (__ \ TokenType).readNullable[String]and
     (__ \ ExpiresIn).readNullable[Int] and
     (__ \ RefreshToken).readNullable[String]
-    )(OAuth2Info.apply _)
-
-  /**
-   * Gets the auth method.
-   *
-   * @return The auth method.
-   */
-  def authMethod = AuthenticationMethod.OAuth2
+  )(OAuth2Info.apply _)
 
   /**
    * Starts the authentication process.
@@ -228,16 +220,3 @@ case class OAuth2Info(
   tokenType: Option[String] = None,
   expiresIn: Option[Int] = None,
   refreshToken: Option[String] = None)
-
-/**
- * The base trait for all OAuth2 identities.
- */
-trait OAuth2Identity extends Identity {
-
-  /**
-   * Gets the auth info.
-   *
-   * @return The auth info.
-   */
-  def authInfo: OAuth2Info
-}

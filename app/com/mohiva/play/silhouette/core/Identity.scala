@@ -19,52 +19,25 @@
  */
 package com.mohiva.play.silhouette.core
 
-import play.api.mvc.RequestHeader
-import play.api.i18n.Lang
-
 /**
  * This trait represents a user.
  */
 trait Identity {
 
   /**
-   * Gets the identity ID.
+   * Gets the linked login info for an identity.
    *
-   * @return The identity ID.
+   * @return The linked login info for an identity.
    */
-  def identityID: IdentityID
-
-  /**
-   * Gets the authentication method.
-   *
-   * @return The authentication method.
-   */
-  def authMethod: AuthenticationMethod
+  def loginInfo: LoginInfo
 }
 
 /**
- * The ID of an Identity.
+ * Represents a linked login for an identity (i.e. a local username/password or a facebook/google account.
  *
- * @param userID The user ID on the provider the user came from (eg: twitter, facebook).
- * @param providerID The provider used to sign in.
- */
-case class IdentityID(userID: String, providerID: String)
-
-/**
- * Builds an identity from another one.
+ * The login info contains the data about the provider that authenticated that identity.
  *
- * @tparam F The type of the identity to build from.
- * @tparam T The type of the identity to build to.
+ * @param providerID The ID of the provider.
+ * @param providerKey A unique key which identifies a user on this provider (userID, email, ...).
  */
-trait IdentityBuilder[F, T] {
-
-  /**
-   * Builds an identity from an other identity.
-   *
-   * @param from The identity to build from.
-   * @param request The request header.
-   * @param lang The current lang.
-   * @return The build identity instance.
-   */
-  def apply(from: F)(implicit request: RequestHeader, lang: Lang): T
-}
+case class LoginInfo(providerID: String, providerKey: String)

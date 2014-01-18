@@ -17,30 +17,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.core
+package com.mohiva.play.silhouette.core.services
+
+import scala.concurrent.Future
 
 /**
- * A class representing an authentication method.
+ * Service to retrieve avatar URLs from an avatar service such as Gravatar.
  */
-case class AuthenticationMethod(method: String) {
+trait AvatarService {
 
   /**
-   * Returns true if this authentication method equals another.
+   * Retrieves the URL for an identifier.
    *
-   * Eg: user.authMethod.is(AuthenticationMethod.OAuth1)
-   *
-   * @param m An Authentication Method (see constants).
-   * @return True if the method matches, false otherwise.
+   * @param id The identifier for the avatar.
+   * @return Maybe an avatar URL or None if no URL could be found for the given identifier.
    */
-  def is(m: AuthenticationMethod): Boolean = this == m
-}
-
-/**
- * Authentication methods used by the providers.
- */
-object AuthenticationMethod {
-  val OAuth1 = AuthenticationMethod("oauth1")
-  val OAuth2 = AuthenticationMethod("oauth2")
-  val OpenID = AuthenticationMethod("openId")
-  val UserPassword = AuthenticationMethod("userPassword")
+  def retrieveURL(id: String): Future[Option[String]]
 }

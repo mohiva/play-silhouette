@@ -29,14 +29,14 @@ import Authenticator._
  * An authenticator tracks an authenticated user.
  *
  * @param id The authenticator ID.
- * @param identityID The user ID.
+ * @param loginInfo The user ID.
  * @param creationDate The creation timestamp.
  * @param lastUsedDate The last used timestamp.
  * @param expirationDate The expiration time.
  */
 case class Authenticator(
   id: String,
-  identityID: IdentityID,
+  loginInfo: LoginInfo,
   creationDate: DateTime,
   lastUsedDate: DateTime,
   expirationDate: DateTime) {

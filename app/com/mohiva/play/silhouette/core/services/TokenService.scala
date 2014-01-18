@@ -20,7 +20,7 @@
 package com.mohiva.play.silhouette.core.services
 
 import scala.concurrent.Future
-import com.mohiva.play.silhouette.core.providers.Token
+import com.mohiva.play.silhouette.core.Token
 
 /**
  * A trait that provides the means to find and save tokens for the Silhouette module if
@@ -53,9 +53,4 @@ trait TokenService[T <: Token] {
    * @param id The ID of the token to delete.
    */
   def deleteByID(id: String)
-
-  /**
-   * Deletes all expired tokens.
-   */
-  def deleteExpired()
 }

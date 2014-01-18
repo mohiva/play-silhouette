@@ -21,30 +21,29 @@ package com.mohiva.play.silhouette.core.providers.oauth2
 
 import play.api.libs.ws.Response
 import play.api.libs.json.JsObject
-import play.api.mvc.RequestHeader
-import play.api.i18n.Lang
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{HTTPLayer, CacheLayer}
-import com.mohiva.play.silhouette.core.providers.{OAuth2Identity, OAuth2Info, OAuth2Settings, OAuth2Provider}
+import com.mohiva.play.silhouette.core.providers.{SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider}
+import com.mohiva.play.silhouette.core.services.AuthInfoService
 import FacebookProvider._
 import OAuth2Provider._
 
 /**
  * A Facebook OAuth2 Provider.
  *
- * @param settings The provider settings.
+ * @param authInfoService The auth info service.
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
- * @param identityBuilder The identity builder implementation.
+ * @param settings The provider settings.
  */
-class FacebookProvider[I <: Identity](
-    settings: OAuth2Settings,
+class FacebookProvider(
+    val authInfoService: AuthInfoService,
     cacheLayer: CacheLayer,
     httpLayer: HTTPLayer,
-    identityBuilder: IdentityBuilder[FacebookIdentity, I])
-  extends OAuth2Provider[I](settings, cacheLayer, httpLayer) {
+    settings: OAuth2Settings)
+  extends OAuth2Provider(settings, cacheLayer, httpLayer) {
 
   /**
    * Gets the provider ID.
@@ -54,14 +53,12 @@ class FacebookProvider[I <: Identity](
   def id = Facebook
 
   /**
-   * Builds the identity.
+   * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
-   * @param request The request header.
-   * @param lang The current lang.
-   * @return The identity.
+   * @return The social profile.
    */
-  def buildIdentity(authInfo: OAuth2Info)(implicit request: RequestHeader, lang: Lang): Future[I] = {
+  def buildProfile(authInfo: OAuth2Info): Future[SocialProfile] = {
     httpLayer.url(API.format(authInfo.accessToken)).get().map { response =>
       val json = response.json
       (json \ Error).asOpt[JsObject] match {
@@ -72,21 +69,19 @@ class FacebookProvider[I <: Identity](
           throw new AuthenticationException(SpecifiedProfileError.format(id, errorType, errorMsg))
         case _ =>
           val userID = (json \ ID).as[String]
-          val firstName = (json \ FirstName).as[String]
-          val lastName = (json \ LastName).as[String]
-          val fullName = (json \ Name).as[String]
+          val firstName = (json \ FirstName).asOpt[String]
+          val lastName = (json \ LastName).asOpt[String]
+          val fullName = (json \ Name).asOpt[String]
           val avatarURL = (json \ Picture \ Data \ URL).asOpt[String]
           val email = (json \ Email).asOpt[String]
 
-          identityBuilder(FacebookIdentity(
-            identityID = IdentityID(userID, id),
+          SocialProfile(
+            loginInfo = LoginInfo(id, userID),
             firstName = firstName,
             lastName = lastName,
             fullName = fullName,
             avatarURL = avatarURL,
-            email = email,
-            authMethod = authMethod,
-            authInfo = authInfo))
+            email = email)
       }
     }.recover { case e => throw new AuthenticationException(UnspecifiedProfileError.format(id), e) }
   }
@@ -136,16 +131,3 @@ object FacebookProvider {
   val Data = "data"
   val URL = "url"
 }
-
-/**
- * The Facebook identity.
- */
-case class FacebookIdentity(
-  identityID: IdentityID,
-  firstName: String,
-  lastName: String,
-  fullName: String,
-  email: Option[String],
-  avatarURL: Option[String],
-  authMethod: AuthenticationMethod,
-  authInfo: OAuth2Info) extends OAuth2Identity

@@ -47,7 +47,7 @@ class CacheAuthenticatorService(cacheLayer: CacheLayer, idGenerator: IDGenerator
     idGenerator.generate.map { id =>
       val now = clock.now
       val expirationDate = now.plusMinutes(expiry)
-      Authenticator(id, identity.identityID, now, now, expirationDate)
+      Authenticator(id, identity.loginInfo, now, now, expirationDate)
     }
   }
 
