@@ -19,29 +19,28 @@
  */
 package com.mohiva.play.silhouette.core.providers.oauth2
 
-import play.api.mvc.RequestHeader
-import play.api.i18n.Lang
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{HTTPLayer, CacheLayer}
-import com.mohiva.play.silhouette.core.providers.{OAuth2Identity, OAuth2Info, OAuth2Settings, OAuth2Provider}
+import com.mohiva.play.silhouette.core.providers.{SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider}
+import com.mohiva.play.silhouette.core.services.AuthInfoService
 import FoursquareProvider._
 
 /**
  * A Foursquare OAuth2 provider.
  *
- * @param settings The provider settings.
+ * @param authInfoService The auth info service.
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
- * @param identityBuilder The identity builder implementation.
+ * @param settings The provider settings.
  */
-class FoursquareProvider[I <: Identity](
-    settings: OAuth2Settings,
+class FoursquareProvider(
+    val authInfoService: AuthInfoService,
     cacheLayer: CacheLayer,
     httpLayer: HTTPLayer,
-    identityBuilder: IdentityBuilder[FoursquareIdentity, I])
-  extends OAuth2Provider[I](settings, cacheLayer, httpLayer) {
+    settings: OAuth2Settings)
+  extends OAuth2Provider(settings, cacheLayer, httpLayer) {
 
   /**
    * Gets the provider ID.
@@ -51,34 +50,30 @@ class FoursquareProvider[I <: Identity](
   def id = Foursquare
 
   /**
-   * Builds the identity.
+   * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
-   * @param request The request header.
-   * @param lang The current lang.
-   * @return The identity.
+   * @return The social profile.
    */
-  def buildIdentity(authInfo: OAuth2Info)(implicit request: RequestHeader, lang: Lang): Future[I] = {
+  def buildProfile(authInfo: OAuth2Info): Future[SocialProfile] = {
     httpLayer.url(API.format(authInfo.accessToken)).get().map { response =>
       val json = response.json
       (json \ Response \ User).asOpt[String] match {
         case Some(msg) => throw new AuthenticationException(SpecifiedProfileError.format(msg))
         case _ =>
           val userID = ( json \ Response \ User \ ID).asOpt[String]
-          val lastName = (json \ Response \ User \ LastName).asOpt[String].getOrElse("")
-          val firstName = (json \ Response \ User \ FirstName).asOpt[String].getOrElse("")
+          val lastName = (json \ Response \ User \ LastName).asOpt[String]
+          val firstName = (json \ Response \ User \ FirstName).asOpt[String]
           val avatarURLPart1  = (json \ Response \ User \ AvatarURL \ Prefix).asOpt[String]
           val avatarURLPart2 = (json \ Response \ User \ AvatarURL \ Suffix).asOpt[String]
           val email = (json \ Response \ User \ Contact \ Email).asOpt[String].filter( !_.isEmpty )
 
-          identityBuilder(FoursquareIdentity(
-            identityID = IdentityID(userID.get, id),
+          SocialProfile(
+            loginInfo = LoginInfo(id, userID.get),
             firstName = firstName,
             lastName = lastName,
             avatarURL = for (prefix <- avatarURLPart1; postfix <- avatarURLPart2) yield prefix + "100x100" + postfix,
-            email = email,
-            authMethod = authMethod,
-            authInfo = authInfo))
+            email = email)
       }
     }.recover { case e => throw new AuthenticationException(UnspecifiedProfileError.format(id), e) }
   }
@@ -111,15 +106,3 @@ object FoursquareProvider {
   val Prefix = "prefix"
   val Suffix = "suffix"
 }
-
-/**
- * The Foursquare identity.
- */
-case class FoursquareIdentity(
-  identityID: IdentityID,
-  firstName: String,
-  lastName: String,
-  email: Option[String],
-  avatarURL: Option[String],
-  authMethod: AuthenticationMethod,
-  authInfo: OAuth2Info) extends OAuth2Identity

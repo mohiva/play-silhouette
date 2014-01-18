@@ -13,9 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.core.providers
+package com.mohiva.play.silhouette.core
 
 /**
- * Provides supporting features used by the Identity Providers.
+ * A token used for reset password and sign up operations.
  */
-package object utils { }
+trait Token {
+
+  /**
+   * Gets the token ID.
+   *
+   * @return The token ID.
+   */
+  def id: String
+}

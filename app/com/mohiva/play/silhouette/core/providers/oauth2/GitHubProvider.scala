@@ -20,30 +20,29 @@
 package com.mohiva.play.silhouette.core.providers.oauth2
 
 import play.api.libs.ws.Response
-import play.api.mvc.RequestHeader
-import play.api.i18n.Lang
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{HTTPLayer, CacheLayer}
-import com.mohiva.play.silhouette.core.providers.{OAuth2Identity, OAuth2Info, OAuth2Settings, OAuth2Provider}
+import com.mohiva.play.silhouette.core.providers.{SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider}
+import com.mohiva.play.silhouette.core.services.AuthInfoService
 import GitHubProvider._
 import OAuth2Provider._
 
 /**
  * A GitHub OAuth2 Provider.
  *
- * @param settings The provider settings.
+ * @param authInfoService The auth info service.
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
- * @param identityBuilder The identity builder implementation.
+ * @param settings The provider settings.
  */
-class GitHubProvider[I <: Identity](
-    settings: OAuth2Settings,
+class GitHubProvider(
+    val authInfoService: AuthInfoService,
     cacheLayer: CacheLayer,
     httpLayer: HTTPLayer,
-    identityBuilder: IdentityBuilder[GitHubIdentity, I])
-  extends OAuth2Provider[I](settings, cacheLayer, httpLayer) {
+    settings: OAuth2Settings)
+  extends OAuth2Provider(settings, cacheLayer, httpLayer) {
 
   /**
    * Gets the provider ID.
@@ -53,31 +52,27 @@ class GitHubProvider[I <: Identity](
   def id = GitHub
 
   /**
-   * Builds the identity.
+   * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
-   * @param request The request header.
-   * @param lang The current lang.
-   * @return The identity.
+   * @return The social profile.
    */
-  def buildIdentity(authInfo: OAuth2Info)(implicit request: RequestHeader, lang: Lang): Future[I] = {
+  def buildProfile(authInfo: OAuth2Info): Future[SocialProfile] = {
     httpLayer.url(API.format(authInfo.accessToken)).get().map { response =>
       val json = response.json
       (json \ Message).asOpt[String] match {
         case Some(msg) => throw new AuthenticationException(SpecifiedProfileError.format(id, msg))
         case _ =>
           val userID = (json \ ID).as[Int]
-          val fullName = (json \ Name).asOpt[String].getOrElse("")
+          val fullName = (json \ Name).asOpt[String]
           val avatarUrl = (json \ AvatarURL).asOpt[String]
           val email = (json \ Email).asOpt[String].filter(!_.isEmpty)
 
-          identityBuilder(GitHubIdentity(
-            identityID = IdentityID(userID.toString, id),
+          SocialProfile(
+            loginInfo = LoginInfo(id, userID.toString),
             fullName = fullName,
             avatarURL = avatarUrl,
-            email = email,
-            authMethod = authMethod,
-            authInfo = authInfo))
+            email = email)
       }
     }.recover { case e => throw new AuthenticationException(UnspecifiedProfileError.format(id), e) }
   }
@@ -128,14 +123,3 @@ object GitHubProvider {
   val AvatarURL = "avatar_url"
   val Email = "email"
 }
-
-/**
- * The GitHub identity.
- */
-case class GitHubIdentity(
-  identityID: IdentityID,
-  fullName: String,
-  email: Option[String],
-  avatarURL: Option[String],
-  authMethod: AuthenticationMethod,
-  authInfo: OAuth2Info) extends OAuth2Identity

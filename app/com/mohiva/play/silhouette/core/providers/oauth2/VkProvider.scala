@@ -20,30 +20,29 @@
 package com.mohiva.play.silhouette.core.providers.oauth2
 
 import play.api.libs.json.JsObject
-import play.api.mvc.RequestHeader
-import play.api.i18n.Lang
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{HTTPLayer, CacheLayer}
-import com.mohiva.play.silhouette.core.providers.{OAuth2Identity, OAuth2Info, OAuth2Settings, OAuth2Provider}
+import com.mohiva.play.silhouette.core.providers.{SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider}
+import com.mohiva.play.silhouette.core.services.AuthInfoService
 import VkProvider._
 import OAuth2Provider._
 
 /**
  * A Vk OAuth 2 provider.
  *
- * @param settings The provider settings.
+ * @param authInfoService The auth info service.
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
- * @param identityBuilder The identity builder implementation.
+ * @param settings The provider settings.
  */
-class VkProvider[I <: Identity](
-    settings: OAuth2Settings,
+class VkProvider(
+    val authInfoService: AuthInfoService,
     cacheLayer: CacheLayer,
     httpLayer: HTTPLayer,
-    identityBuilder: IdentityBuilder[VKIdentity, I])
-  extends OAuth2Provider[I](settings, cacheLayer, httpLayer) {
+    settings: OAuth2Settings)
+  extends OAuth2Provider(settings, cacheLayer, httpLayer) {
 
   /**
    * Gets the provider ID.
@@ -53,14 +52,12 @@ class VkProvider[I <: Identity](
   def id = Vk
 
   /**
-   * Builds the identity.
+   * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
-   * @param request The request header.
-   * @param lang The current lang.
-   * @return The identity.
+   * @return The social profile.
    */
-  def buildIdentity(authInfo: OAuth2Info)(implicit request: RequestHeader, lang: Lang): Future[I] = {
+  def buildProfile(authInfo: OAuth2Info): Future[SocialProfile] = {
     httpLayer.url(API.format(authInfo.accessToken)).get().map { response =>
       val json = response.json
       (json \ Error).asOpt[JsObject] match {
@@ -72,17 +69,15 @@ class VkProvider[I <: Identity](
         case _ =>
           val me = (json \ Response).apply(0)
           val userId = (me \ ID).as[Long]
-          val firstName = (me \ FirstName).as[String]
-          val lastName = (me \ LastName).as[String]
+          val firstName = (me \ FirstName).asOpt[String]
+          val lastName = (me \ LastName).asOpt[String]
           val avatarURL = (me \ Photo).asOpt[String]
 
-          identityBuilder(VKIdentity(
-            identityID = IdentityID(userId.toString, id),
+          SocialProfile(
+            loginInfo = LoginInfo(id, userId.toString),
             firstName = firstName,
             lastName = lastName,
-            avatarURL = avatarURL,
-            authMethod = authMethod,
-            authInfo = authInfo))
+            avatarURL = avatarURL)
       }
     }.recover { case e => throw new AuthenticationException(UnspecifiedProfileError.format(id), e) }
   }
@@ -112,14 +107,3 @@ object VkProvider {
   val ErrorCode = "error_code"
   val ErrorMessage = "error_msg"
 }
-
-/**
- * The VK identity.
- */
-case class VKIdentity(
-  identityID: IdentityID,
-  firstName: String,
-  lastName: String,
-  avatarURL: Option[String],
-  authMethod: AuthenticationMethod,
-  authInfo: OAuth2Info) extends OAuth2Identity

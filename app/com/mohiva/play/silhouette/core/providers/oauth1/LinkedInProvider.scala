@@ -20,29 +20,28 @@
 package com.mohiva.play.silhouette.core.providers.oauth1
 
 import play.api.libs.oauth.{RequestToken, OAuthCalculator}
-import play.api.mvc.RequestHeader
-import play.api.i18n.Lang
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{HTTPLayer, CacheLayer}
-import com.mohiva.play.silhouette.core.providers.{OAuth1Identity, OAuth1Info, OAuth1Settings, OAuth1Provider}
+import com.mohiva.play.silhouette.core.providers.{SocialProfile, OAuth1Info, OAuth1Settings, OAuth1Provider}
+import com.mohiva.play.silhouette.core.services.AuthInfoService
 import LinkedInProvider._
 
 /**
  * A LinkedIn OAuth1 Provider.
  *
- * @param settings The provider settings.
+ * @param authInfoService The auth info service.
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
- * @param identityBuilder The identity builder implementation.
+ * @param settings The provider settings.
  */
-class LinkedInProvider[I <: Identity](
-    settings: OAuth1Settings,
+class LinkedInProvider(
+    val authInfoService: AuthInfoService,
     cacheLayer: CacheLayer,
     httpLayer: HTTPLayer,
-    identityBuilder: IdentityBuilder[LinkedInIdentity, I])
-  extends OAuth1Provider[I](settings, cacheLayer, httpLayer) {
+    settings: OAuth1Settings)
+  extends OAuth1Provider(settings, cacheLayer, httpLayer) {
 
   /**
    * Gets the provider ID.
@@ -52,14 +51,12 @@ class LinkedInProvider[I <: Identity](
   def id = LinkedIn
 
   /**
-   * Builds the identity.
+   * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
-   * @param request The request header.
-   * @param lang The current lang.
-   * @return The identity.
+   * @return The social profile.
    */
-  def buildIdentity(authInfo: OAuth1Info)(implicit request: RequestHeader, lang: Lang): Future[I] = {
+  def buildProfile(authInfo: OAuth1Info): Future[SocialProfile] = {
     val sign = OAuthCalculator(serviceInfo.key, RequestToken(authInfo.token, authInfo.secret))
     httpLayer.url(API).sign(sign).get().map { response =>
       val json = response.json
@@ -72,21 +69,19 @@ class LinkedInProvider[I <: Identity](
           throw new AuthenticationException(SpecifiedProfileError.format(error, message, requestId, timestamp))
         case _ =>
           val userID = (json \ ID).as[String]
-          val firstName = (json \ FirstName).asOpt[String].getOrElse("")
-          val lastName = (json \ LastName).asOpt[String].getOrElse("")
-          val fullName = (json \ FormattedName).asOpt[String].getOrElse("")
+          val firstName = (json \ FirstName).asOpt[String]
+          val lastName = (json \ LastName).asOpt[String]
+          val fullName = (json \ FormattedName).asOpt[String]
           val avatarURL = (json \ PictureUrl).asOpt[String]
           val email = (json \ EmailAddress).asOpt[String]
 
-          identityBuilder(LinkedInIdentity(
-            identityID = IdentityID(userID, id),
+          SocialProfile(
+            loginInfo = LoginInfo(id, userID),
             firstName = firstName,
             lastName = lastName,
             fullName = fullName,
             avatarURL = avatarURL,
-            email = email,
-            authMethod = authMethod,
-            authInfo = authInfo))
+            email = email)
       }
     }.recover { case e => throw new AuthenticationException(UnspecifiedProfileError.format(id), e) }
   }
@@ -119,16 +114,3 @@ object LinkedInProvider {
   val PictureUrl = "pictureUrl"
   val EmailAddress = "emailAddress"
 }
-
-/**
- * The LinkedIn identity.
- */
-case class LinkedInIdentity(
-  identityID: IdentityID,
-  firstName: String,
-  lastName: String,
-  fullName: String,
-  email: Option[String],
-  avatarURL: Option[String],
-  authMethod: AuthenticationMethod,
-  authInfo: OAuth1Info) extends OAuth1Identity

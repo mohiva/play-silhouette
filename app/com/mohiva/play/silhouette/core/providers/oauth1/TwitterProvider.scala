@@ -20,29 +20,28 @@
 package com.mohiva.play.silhouette.core.providers.oauth1
 
 import play.api.libs.oauth.{RequestToken, OAuthCalculator}
-import play.api.mvc.RequestHeader
-import play.api.i18n.Lang
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{HTTPLayer, CacheLayer}
-import com.mohiva.play.silhouette.core.providers.{OAuth1Identity, OAuth1Info, OAuth1Settings, OAuth1Provider}
+import com.mohiva.play.silhouette.core.providers.{SocialProfile, OAuth1Info, OAuth1Settings, OAuth1Provider}
+import com.mohiva.play.silhouette.core.services.AuthInfoService
 import TwitterProvider._
 
 /**
  * A Twitter OAuth1 Provider.
  *
- * @param settings The provider settings.
+ * @param authInfoService The auth info service.
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
- * @param identityBuilder The identity builder implementation.
+ * @param settings The provider settings.
  */
-class TwitterProvider[I <: Identity](
-    settings: OAuth1Settings,
+class TwitterProvider(
+    val authInfoService: AuthInfoService,
     cacheLayer: CacheLayer,
     httpLayer: HTTPLayer,
-    identityBuilder: IdentityBuilder[TwitterIdentity, I])
-  extends OAuth1Provider[I](settings, cacheLayer, httpLayer) {
+    settings: OAuth1Settings)
+  extends OAuth1Provider(settings, cacheLayer, httpLayer) {
 
   /**
    * Gets the provider ID.
@@ -52,27 +51,23 @@ class TwitterProvider[I <: Identity](
   def id = Twitter
 
   /**
-   * Builds the identity.
+   * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
-   * @param request The request header.
-   * @param lang The current lang.
-   * @return The identity.
+   * @return The social profile.
    */
-  def buildIdentity(authInfo: OAuth1Info)(implicit request: RequestHeader, lang: Lang): Future[I] = {
+  def buildProfile(authInfo: OAuth1Info): Future[SocialProfile] = {
     val sign = OAuthCalculator(serviceInfo.key, RequestToken(authInfo.token, authInfo.secret))
     httpLayer.url(API).sign(sign).get().map { response =>
       val json = response.json
       val userId = (json \ ID).as[Int]
-      val name = (json \ Name).as[String]
+      val name = (json \ Name).asOpt[String]
       val avatarURL = (json \ ProfileImage).asOpt[String]
 
-      identityBuilder(TwitterIdentity(
-        identityID = IdentityID(userId.toString, id),
+      SocialProfile(
+        loginInfo = LoginInfo(id, userId.toString),
         fullName = name,
-        avatarURL = avatarURL,
-        authMethod = authMethod,
-        authInfo = authInfo))
+        avatarURL = avatarURL)
     }.recover { case e => throw new AuthenticationException(UnspecifiedProfileError.format(id), e) }
   }
 }
@@ -96,13 +91,3 @@ object TwitterProvider {
   val Name = "name"
   val ProfileImage = "profile_image_url_https"
 }
-
-/**
- * The Twitter identity.
- */
-case class TwitterIdentity(
-  identityID: IdentityID,
-  fullName: String,
-  avatarURL: Option[String],
-  authMethod: AuthenticationMethod,
-  authInfo: OAuth1Info) extends OAuth1Identity

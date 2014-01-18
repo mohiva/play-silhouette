@@ -26,11 +26,4 @@ trait Provider {
    * @return The provider ID.
    */
   def id: String
-
-  /**
-   * Subclasses need to implement this to specify the authentication method.
-   *
-   * @return The authentication method.
-   */
-  def authMethod: AuthenticationMethod
 }

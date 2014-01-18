@@ -19,96 +19,70 @@
  */
 package com.mohiva.play.silhouette.core.providers
 
-import play.api.data.Form
-import play.api.data.Forms._
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
-import play.api.mvc.{ SimpleResult, Results, Result, Request }
-import utils.{ GravatarHelper, PasswordHasher }
-import play.api.{ Play, Application }
-import Play.current
-import org.joda.time.DateTime
-import com.mohiva.play.silhouette.contrib.User
+import com.mohiva.play.silhouette.core.services.AuthInfoService
+import com.mohiva.play.silhouette.core.utils.{PasswordHasher, PasswordInfo}
 
 /**
- * A provider for authenticating credentials.
+ * A provider for authenticating with credentials.
+ *
+ * The provider supports the change of password hashing algorithms on the fly. Sometimes it may be possible to change
+ * the hashing algorithm used by the application. But the hashes stored in the backing store can't be converted back
+ * into plain text passwords, to hash them again with the new algorithm. So if a user successfully authenticates after
+ * the application has changed the hashing algorithm, the provider hashes the entered password again with the new
+ * algorithm and stores the auth info in the backing store.
+ *
+ * @param authInfoService The auth info service.
+ * @param passwordHasher The default password hasher used by the application.
+ * @param passwordHasherList List of password hashers supported by the application.
  */
-class CredentialsProvider(application: Application)  {
+class CredentialsProvider(
+  authInfoService: AuthInfoService,
+  passwordHasher: PasswordHasher,
+  passwordHasherList: Seq[PasswordHasher]) extends Provider {
 
-  def id = CredentialsProvider.ProviderId
+  /**
+   * Gets the provider ID.
+   *
+   * @return The provider ID.
+   */
+  def id = CredentialsProvider.Credentials
 
-  def authMethod = AuthenticationMethod.UserPassword
-
-  val InvalidCredentials = "silhouette.login.invalidCredentials"
-
-  def doAuth[A]()(implicit request: Request[A]): Either[Result, User] = {
-    val form = CredentialsProvider.loginForm.bindFromRequest()
-    form.fold(
-      errors => Left(badRequest(errors, request)),
-      credentials => {
-        val userId = IdentityID(credentials._1, id)
-        val result = for (
-          user <- UserService.find(userId).asInstanceOf[Option[User]];
-          pinfo <- user.passwordInfo;
-          hasher <- Registry.hashers.get(pinfo.hasher) if hasher.matches(pinfo, credentials._2)
-        ) yield Right(user)
-        result.getOrElse(
-          Left(badRequest(CredentialsProvider.loginForm, request, Some(InvalidCredentials))))
-      })
-  }
-
-  private def badRequest[A](f: Form[(String, String)], request: Request[A], msg: Option[String] = None): SimpleResult = {
-    Results.BadRequest("")
-  }
-
-  def fillProfile(user: User) = {
-    GravatarHelper.avatarFor(user.email.get) match {
-      case Some(url) if url != user.avatarURL => user.copy(avatarURL = Some(url))
-      case _ => user
+  /**
+   * Authenticates a user with its credentials.
+   *
+   * @param credentials The credentials to authenticate with.
+   * @return The login info if the authentication was successful, otherwise None.
+   */
+  def authenticate(credentials: Credentials): Future[Option[LoginInfo]] = {
+    val loginInfo = new LoginInfo(id, credentials.identifier)
+    authInfoService.findByLoginInfo[PasswordInfo](loginInfo).map {
+      case Some(authInfo) => passwordHasherList.find(_.id == authInfo.hasher) match {
+        case Some(hasher) if hasher.matches(authInfo, credentials.password) =>
+          if (hasher != passwordHasher) {
+            authInfoService.save(loginInfo, passwordHasher.hash(credentials.password))
+          }
+          Some(loginInfo)
+        case _ => None
+      }
+      case None => None
     }
   }
 }
 
+/**
+ * The companion object.
+ */
 object CredentialsProvider {
-  val ProviderId = "credentials"
-  private val Key = "silhouette.userpass.withUserNameSupport"
-  private val SendWelcomeEmailKey = "silhouette.userpass.sendWelcomeEmail"
-  private val EnableGravatarKey = "silhouette.userpass.enableGravatarSupport"
-  private val Hasher = "silhouette.userpass.hasher"
-  private val EnableTokenJob = "silhouette.userpass.enableTokenJob"
-  private val SignupSkipLogin = "silhouette.userpass.signupSkipLogin"
-
-  val loginForm = Form(
-    tuple(
-      "username" -> nonEmptyText,
-      "password" -> nonEmptyText))
-
-  lazy val withUserNameSupport = current.configuration.getBoolean(Key).getOrElse(false)
-  lazy val sendWelcomeEmail = current.configuration.getBoolean(SendWelcomeEmailKey).getOrElse(true)
-  lazy val enableGravatar = current.configuration.getBoolean(EnableGravatarKey).getOrElse(true)
-  lazy val hasher = current.configuration.getString(Hasher).getOrElse(PasswordHasher.BCryptHasher)
-  lazy val enableTokenJob = current.configuration.getBoolean(EnableTokenJob).getOrElse(true)
-  lazy val signupSkipLogin = current.configuration.getBoolean(SignupSkipLogin).getOrElse(false)
+  val Credentials = "credentials"
 }
 
 /**
- * A token used for reset password and sign up operations.
+ * The credentials to authenticate with.
  *
- * @param uuid the token id
- * @param email the user email
- * @param creationTime the creation time
- * @param expirationTime the expiration time
- * @param isSignUp a boolean indicating whether the token was created for a sign up action or not
+ * @param identifier The unique identifier to authenticate with.
+ * @param password The password to authenticate with.
  */
-case class Token(uuid: String, email: String, creationTime: DateTime, expirationTime: DateTime, isSignUp: Boolean) {
-  def isExpired = expirationTime.isBeforeNow
-}
-
-
-/**
- * The password details
- *
- * @param hasher the id of the hasher used to hash this password
- * @param password the hashed password
- * @param salt the optional salt used when hashing
- */
-case class PasswordInfo(hasher: String, password: String, salt: Option[String] = None)
+case class Credentials(identifier: String, password: String)

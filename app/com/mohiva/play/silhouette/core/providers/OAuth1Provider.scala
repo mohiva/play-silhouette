@@ -35,25 +35,17 @@ import OAuth1Provider._
  * @param settings The provider settings.
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
- * @tparam I The type of the identity.
  */
-abstract class OAuth1Provider[I <: Identity](
+abstract class OAuth1Provider(
     settings: OAuth1Settings,
     cacheLayer: CacheLayer,
     httpLayer: HTTPLayer)
-  extends SocialProvider[I, OAuth1Info] {
+  extends SocialProvider[OAuth1Info] {
 
   /**
    * The OAuth1 service.
    */
   val service = OAuth(serviceInfo, use10a = true)
-
-  /**
-   * Gets the auth method.
-   *
-   * @return The auth method.
-   */
-  def authMethod = AuthenticationMethod.OAuth1
 
   /**
    * Starts the authentication process.
@@ -169,16 +161,3 @@ case class OAuth1Settings(
  * @param secret The consumer secret.
  */
 case class OAuth1Info(token: String, secret: String)
-
-/**
- * The base trait for all OAuth1 identities.
- */
-trait OAuth1Identity extends Identity {
-
-  /**
-   * Gets the auth info.
-   *
-   * @return The auth info.
-   */
-  def authInfo: OAuth1Info
-}

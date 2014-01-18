@@ -20,7 +20,6 @@
 package com.mohiva.play.silhouette.core
 
 import play.api.mvc.{Session, RequestHeader}
-import play.api.{Logger, Plugin}
 
 /**
  * A trait to model Silhouette events
@@ -60,17 +59,8 @@ case class PasswordResetEvent(user: Identity) extends Event
 /**
  * The event listener interface
  */
-abstract class EventListener extends Plugin with Registrable {
-  override def onStart() {
-    Logger.info("[silhouette] loaded event listener %s".format(id))
-    Registry.eventListeners.register(this)
-  }
+abstract class EventListener {
 
-
-  override def onStop() {
-    Logger.info("[silhouette] unloaded event listener %s".format(id))
-    Registry.eventListeners.unRegister(id)
-  }
   /**
    * The method that gets called when an event occurs.
    *
@@ -80,27 +70,4 @@ abstract class EventListener extends Plugin with Registrable {
    * @return can return an optional Session object.
    */
   def onEvent(event: Event, request: RequestHeader, session: Session): Option[Session]
-}
-
-/**
- * Helper object to fire events
- */
-object Events {
-
-  def doFire(list: List[EventListener], event: Event,
-             request: RequestHeader, session: Session): Session =
-  {
-    if ( list.isEmpty ) {
-      session
-    } else {
-      val newSession = list.head.onEvent(event, request, session)
-      doFire(list.tail, event, request, newSession.getOrElse(session))
-    }
-  }
-
-  def fire(event: Event)(implicit request: RequestHeader): Option[Session] = {
-    val listeners = Registry.eventListeners.all().toList.map(_._2)
-    val result = doFire(listeners, event, request, request.session)
-    if ( result == request.session ) None else Some(result)
-  }
 }

@@ -86,7 +86,7 @@ trait Silhouette[I <: Identity] extends Controller {
    */
   protected def currentIdentity(implicit request: RequestHeader): Future[Option[I]] = {
     authenticatorFromRequest.flatMap {
-      case Some(authenticator) => identityService.findByID(authenticator.identityID).map(_.map { identity =>
+      case Some(authenticator) => identityService.findByLoginInfo(authenticator.loginInfo).map(_.map { identity =>
         authenticatorService.update(authenticator.touch)
         identity
       })
