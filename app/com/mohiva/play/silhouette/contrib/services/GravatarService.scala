@@ -65,7 +65,7 @@ class GravatarService(httpLayer: HTTPLayer) extends AvatarService {
   private def hash(email: String): Option[String] = {
     val s = email.trim.toLowerCase
     if (s.length > 0) {
-      val out = MessageDigest.getInstance(Md5).digest(s.getBytes)
+      val out = MessageDigest.getInstance(MD5).digest(s.getBytes)
       Some(BigInt(1, out).toString(16))
     } else {
       None
@@ -78,5 +78,5 @@ class GravatarService(httpLayer: HTTPLayer) extends AvatarService {
  */
 object GravatarService {
   val URL = "http://www.gravatar.com/avatar/%s?d=404"
-  val Md5 = "MD5"
+  val MD5 = "MD5"
 }
