@@ -2,17 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Silhouette - com.mohiva.play.silhouette.core.Silhouette</title>
-          <meta name="description" content="Silhouette - com.mohiva.play.silhouette.core.Silhouette" />
-          <meta name="keywords" content="Silhouette com.mohiva.play.silhouette.core.Silhouette" />
+          <title>DefaultActionHandler - com.mohiva.play.silhouette.core.utils.DefaultActionHandler</title>
+          <meta name="description" content="DefaultActionHandler - com.mohiva.play.silhouette.core.utils.DefaultActionHandler" />
+          <meta name="keywords" content="DefaultActionHandler com.mohiva.play.silhouette.core.utils.DefaultActionHandler" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
-      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
       <script type="text/javascript">
          if(top === self) {
-            var url = '../../../../../index.html';
-            var hash = 'com.mohiva.play.silhouette.core.Silhouette';
+            var url = '../../../../../../index.html';
+            var hash = 'com.mohiva.play.silhouette.core.utils.DefaultActionHandler$';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -22,34 +22,25 @@
    	  </script>
     
         </head>
-        <body class="type">
+        <body class="value">
       <div id="definition">
-        <img src="../../../../../lib/trait_big.png" />
-        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.core">core</a></p>
-        <h1>Silhouette</h1>
+        <img src="../../../../../../lib/object_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.core">core</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.core.utils">utils</a></p>
+        <h1>DefaultActionHandler</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Silhouette</span><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>]</span><span class="result"> extends <span class="extype" name="play.api.mvc.Controller">Controller</span></span>
+        <span class="name">DefaultActionHandler</span><span class="result"> extends <span class="extype" name="play.api.mvc.Controller">Controller</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Provides the actions that can be used to protect controllers and retrieve the current user
-if available.</p><pre><span class="kw">class</span> MyController(
-  <span class="kw">val</span> identityService: IdentityService[User],
-  <span class="kw">val</span> authenticatorService: AuthenticatorService
-) <span class="kw">extends</span> Silhouette[User] {
-
-<span class="kw">def</span> protectedAction = SecuredAction { <span class="kw">implicit</span> request <span class="kw">=&gt;</span>
-  Ok(<span class="lit">"Hello %s"</span>.format(request.identity.fullName))
-}
-}</pre></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.
-</p></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Provides default actions used by the core as a last fallback.
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="play.api.mvc.Controller">Controller</span>, <span class="extype" name="play.api.mvc.Rendering">Rendering</span>, <span class="extype" name="play.api.mvc.RequestExtractors">RequestExtractors</span>, <span class="extype" name="play.api.mvc.AcceptExtractors">AcceptExtractors</span>, <span class="extype" name="play.api.http.ContentTypes">ContentTypes</span>, <span class="extype" name="play.api.http.HeaderNames">HeaderNames</span>, <span class="extype" name="play.api.http.Status">play.api.http.Status</span>, <span class="extype" name="play.api.http.HttpProtocol">HttpProtocol</span>, <span class="extype" name="play.api.mvc.BodyParsers">BodyParsers</span>, <span class="extype" name="play.api.mvc.Results">Results</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -69,7 +60,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.core.Silhouette"><span>Silhouette</span></li><li class="in" name="play.api.mvc.Controller"><span>Controller</span></li><li class="in" name="play.api.mvc.Rendering"><span>Rendering</span></li><li class="in" name="play.api.mvc.RequestExtractors"><span>RequestExtractors</span></li><li class="in" name="play.api.mvc.AcceptExtractors"><span>AcceptExtractors</span></li><li class="in" name="play.api.http.ContentTypes"><span>ContentTypes</span></li><li class="in" name="play.api.http.HeaderNames"><span>HeaderNames</span></li><li class="in" name="play.api.http.Status"><span>Status</span></li><li class="in" name="play.api.http.HttpProtocol"><span>HttpProtocol</span></li><li class="in" name="play.api.mvc.BodyParsers"><span>BodyParsers</span></li><li class="in" name="play.api.mvc.Results"><span>Results</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler"><span>DefaultActionHandler</span></li><li class="in" name="play.api.mvc.Controller"><span>Controller</span></li><li class="in" name="play.api.mvc.Rendering"><span>Rendering</span></li><li class="in" name="play.api.mvc.RequestExtractors"><span>RequestExtractors</span></li><li class="in" name="play.api.mvc.AcceptExtractors"><span>AcceptExtractors</span></li><li class="in" name="play.api.http.ContentTypes"><span>ContentTypes</span></li><li class="in" name="play.api.http.HeaderNames"><span>HeaderNames</span></li><li class="in" name="play.api.http.Status"><span>Status</span></li><li class="in" name="play.api.http.HttpProtocol"><span>HttpProtocol</span></li><li class="in" name="play.api.mvc.BodyParsers"><span>BodyParsers</span></li><li class="in" name="play.api.mvc.Results"><span>Results</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -91,46 +82,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.Silhouette.RequestWithUser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="RequestWithUser[A]extendsWrappedRequest[A]withProductwithSerializable"></a>
-      <a id="RequestWithUser[A]:RequestWithUser[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="Silhouette$RequestWithUser.html"><span class="name">RequestWithUser</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="com.mohiva.play.silhouette.core.Silhouette.I">I</span>]</span>, <span name="request">request: <span class="extype" name="play.api.mvc.Request">Request</span>[<span class="extype" name="com.mohiva.play.silhouette.core.Silhouette.RequestWithUser.A">A</span>]</span>)</span><span class="result"> extends <span class="extype" name="play.api.mvc.WrappedRequest">WrappedRequest</span>[<span class="extype" name="com.mohiva.play.silhouette.core.Silhouette.RequestWithUser.A">A</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">A request that adds the User for the current call.</p>
-    </li><li name="com.mohiva.play.silhouette.core.Silhouette.SecuredActionBuilder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SecuredActionBuilderextendsActionBuilder[Silhouette.this.SecuredRequest]"></a>
-      <a id="SecuredActionBuilder:SecuredActionBuilder"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="Silhouette$SecuredActionBuilder.html"><span class="name">SecuredActionBuilder</span></a><span class="result"> extends <span class="extype" name="play.api.mvc.ActionBuilder">ActionBuilder</span>[<a href="Silhouette$SecuredRequest.html" class="extype" name="com.mohiva.play.silhouette.core.Silhouette.SecuredRequest">SecuredRequest</a>]</span>
-      </span>
-      </h4>
-      <p class="comment cmt">A builder for secured actions.</p>
-    </li><li name="com.mohiva.play.silhouette.core.Silhouette.SecuredRequest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SecuredRequest[A]extendsWrappedRequest[A]withProductwithSerializable"></a>
-      <a id="SecuredRequest[A]:SecuredRequest[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="Silhouette$SecuredRequest.html"><span class="name">SecuredRequest</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.core.Silhouette.I">I</span></span>, <span name="request">request: <span class="extype" name="play.api.mvc.Request">Request</span>[<span class="extype" name="com.mohiva.play.silhouette.core.Silhouette.SecuredRequest.A">A</span>]</span>)</span><span class="result"> extends <span class="extype" name="play.api.mvc.WrappedRequest">WrappedRequest</span>[<span class="extype" name="com.mohiva.play.silhouette.core.Silhouette.SecuredRequest.A">A</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">A request that only allows access if a user is authorized.</p>
-    </li><li name="play.api.mvc.Results.Status" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="play.api.mvc.Results.Status" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="StatusextendsSimpleResult"></a>
       <a id="Status:Status"></a>
       <h4 class="signature">
@@ -146,43 +98,10 @@ if available.</p><pre><span class="kw">class</span> MyController(
     </li></ol>
             </div>
 
-        <div id="values" class="values members">
-              <h3>Abstract Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.Silhouette#authenticatorService" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="authenticatorService:com.mohiva.play.silhouette.core.services.AuthenticatorService"></a>
-      <a id="authenticatorService:AuthenticatorService"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">authenticatorService</span><span class="result">: <a href="services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Gets the authenticator service implementation.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the authenticator service implementation.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The authenticator service implementation.
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.Silhouette#identityService" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="identityService:com.mohiva.play.silhouette.core.services.IdentityService[I]"></a>
-      <a id="identityService:IdentityService[I]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">identityService</span><span class="result">: <a href="services/IdentityService.html" class="extype" name="com.mohiva.play.silhouette.core.services.IdentityService">IdentityService</a>[<span class="extype" name="com.mohiva.play.silhouette.core.Silhouette.I">I</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Gets the identity service implementation.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the identity service implementation.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The identity service implementation.
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li></ol>
-            </div>
+        
 
         <div id="values" class="values members">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
@@ -478,7 +397,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Accepted</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">Accepted</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -543,7 +462,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">BadGateway</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">BadGateway</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -556,7 +475,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">BadRequest</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">BadRequest</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -769,7 +688,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Status</dd></dl></div>
     </li><li name="play.api.http.ContentTypes#CSS" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="CSS(implicitcodec:play.api.mvc.Codec):String"></a>
+      <a id="CSS(implicitcodec:&lt;?&gt;):String"></a>
       <a id="CSS(Codec):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -790,7 +709,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Conflict</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">Conflict</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -803,7 +722,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Created</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">Created</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -834,7 +753,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>HeaderNames</dd></dl></div>
     </li><li name="play.api.http.ContentTypes#EVENT_STREAM" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="EVENT_STREAM(implicitcodec:play.api.mvc.Codec):String"></a>
+      <a id="EVENT_STREAM(implicitcodec:&lt;?&gt;):String"></a>
       <a id="EVENT_STREAM(Codec):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -894,7 +813,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">EntityTooLarge</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">EntityTooLarge</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -907,7 +826,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">ExpectationFailed</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">ExpectationFailed</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -938,7 +857,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Status</dd></dl></div>
     </li><li name="play.api.http.ContentTypes#FORM" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="FORM(implicitcodec:play.api.mvc.Codec):String"></a>
+      <a id="FORM(implicitcodec:&lt;?&gt;):String"></a>
       <a id="FORM(Codec):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -985,7 +904,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">FailedDependency</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">FailedDependency</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -998,12 +917,12 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Forbidden</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">Forbidden</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
     </li><li name="play.api.mvc.Results#Found" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Found(url:String):play.api.mvc.SimpleResult"></a>
+      <a id="Found(url:&lt;?&gt;):play.api.mvc.SimpleResult"></a>
       <a id="Found(String):SimpleResult"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1050,7 +969,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">GatewayTimeout</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">GatewayTimeout</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -1063,7 +982,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Gone</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">Gone</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -1141,7 +1060,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">HttpVersionNotSupported</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">HttpVersionNotSupported</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -1245,7 +1164,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">InsufficientStorage</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">InsufficientStorage</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -1258,12 +1177,12 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">InternalServerError</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">InternalServerError</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
     </li><li name="play.api.http.ContentTypes#JAVASCRIPT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="JAVASCRIPT(implicitcodec:play.api.mvc.Codec):String"></a>
+      <a id="JAVASCRIPT(implicitcodec:&lt;?&gt;):String"></a>
       <a id="JAVASCRIPT(Codec):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1276,7 +1195,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ContentTypes</dd></dl></div>
     </li><li name="play.api.http.ContentTypes#JSON" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="JSON(implicitcodec:play.api.mvc.Codec):String"></a>
+      <a id="JSON(implicitcodec:&lt;?&gt;):String"></a>
       <a id="JSON(Codec):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1349,7 +1268,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Locked</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">Locked</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -1427,12 +1346,12 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">MethodNotAllowed</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">MethodNotAllowed</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
     </li><li name="play.api.mvc.Results#MovedPermanently" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="MovedPermanently(url:String):play.api.mvc.SimpleResult"></a>
+      <a id="MovedPermanently(url:&lt;?&gt;):play.api.mvc.SimpleResult"></a>
       <a id="MovedPermanently(String):SimpleResult"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1453,7 +1372,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">MultiStatus</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">MultiStatus</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -1557,7 +1476,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">NonAuthoritativeInformation</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">NonAuthoritativeInformation</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -1570,7 +1489,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">NotAcceptable</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">NotAcceptable</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -1583,7 +1502,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">NotFound</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">NotFound</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -1596,7 +1515,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">NotImplemented</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">NotImplemented</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -1648,7 +1567,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Ok</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">Ok</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -1752,7 +1671,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">PartialContent</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">PartialContent</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -1765,7 +1684,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">PreconditionFailed</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">PreconditionFailed</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -1921,7 +1840,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">RequestTimeout</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">RequestTimeout</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -2016,21 +1935,8 @@ if available.</p><pre><span class="kw">class</span> MyController(
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Status</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.Silhouette.SecuredAction" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SecuredAction"></a>
-      <a id="SecuredAction:SecuredAction"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="Silhouette$SecuredAction$.html"><span class="name">SecuredAction</span></a><span class="result"> extends <a href="Silhouette$SecuredActionBuilder.html" class="extype" name="com.mohiva.play.silhouette.core.Silhouette.SecuredActionBuilder">SecuredActionBuilder</a></span>
-      </span>
-      </h4>
-      <p class="comment cmt">A secured action.</p>
     </li><li name="play.api.mvc.Results#SeeOther" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="SeeOther(url:String):play.api.mvc.SimpleResult"></a>
+      <a id="SeeOther(url:&lt;?&gt;):play.api.mvc.SimpleResult"></a>
       <a id="SeeOther(String):SimpleResult"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -2051,12 +1957,12 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">ServiceUnavailable</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">ServiceUnavailable</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
     </li><li name="play.api.mvc.Results#Status" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Status(code:Int):Results.this.Status"></a>
+      <a id="Status(code:&lt;?&gt;):Results.this.Status"></a>
       <a id="Status(Int):Status"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -2064,7 +1970,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">Status</span><span class="params">(<span name="code">code: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">Status</span><span class="params">(<span name="code">code: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -2095,7 +2001,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Status</dd></dl></div>
     </li><li name="play.api.http.ContentTypes#TEXT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="TEXT(implicitcodec:play.api.mvc.Codec):String"></a>
+      <a id="TEXT(implicitcodec:&lt;?&gt;):String"></a>
       <a id="TEXT(Codec):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -2160,7 +2066,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>HeaderNames</dd></dl></div>
     </li><li name="play.api.mvc.Results#TemporaryRedirect" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="TemporaryRedirect(url:String):play.api.mvc.SimpleResult"></a>
+      <a id="TemporaryRedirect(url:&lt;?&gt;):play.api.mvc.SimpleResult"></a>
       <a id="TemporaryRedirect(String):SimpleResult"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -2181,7 +2087,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">TooManyRequest</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">TooManyRequest</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -2272,7 +2178,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Unauthorized</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">Unauthorized</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -2285,7 +2191,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">UnprocessableEntity</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">UnprocessableEntity</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -2298,7 +2204,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">UnsupportedMediaType</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">UnsupportedMediaType</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
@@ -2311,23 +2217,10 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">UriTooLong</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette.Status">Status</a></span>
+        <span class="name">UriTooLong</span><span class="result">: <a href="#StatusextendsSimpleResult" class="extmbr" name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler.Status">Status</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.Silhouette.UserAwareAction" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="UserAwareAction"></a>
-      <a id="UserAwareAction:UserAwareAction"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="Silhouette$UserAwareAction$.html"><span class="name">UserAwareAction</span></a><span class="result"> extends <span class="extype" name="play.api.mvc.ActionBuilder">ActionBuilder</span>[<a href="Silhouette$RequestWithUser.html" class="extype" name="com.mohiva.play.silhouette.core.Silhouette.RequestWithUser">RequestWithUser</a>]</span>
-      </span>
-      </h4>
-      <p class="comment cmt">An action that adds the current user in the request if it's available.</p>
     </li><li name="play.api.http.HeaderNames#VARY" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="VARY:String"></a>
       <a id="VARY:String"></a>
@@ -2381,7 +2274,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>HeaderNames</dd></dl></div>
     </li><li name="play.api.http.ContentTypes#XML" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="XML(implicitcodec:play.api.mvc.Codec):String"></a>
+      <a id="XML(implicitcodec:&lt;?&gt;):String"></a>
       <a id="XML(Codec):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -2459,7 +2352,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="play.api.mvc.Results#chunk" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="chunk(trailers:Option[play.api.libs.iteratee.Iteratee[Array[Byte],Seq[(String,String)]]]):play.api.libs.iteratee.Enumeratee[Array[Byte],Array[Byte]]"></a>
+      <a id="chunk(trailers:&lt;?&gt;):play.api.libs.iteratee.Enumeratee[Array[Byte],Array[Byte]]"></a>
       <a id="chunk(Option[Iteratee[Array[Byte],Seq[(String,String)]]]):Enumeratee[Array[Byte],Array[Byte]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -2496,28 +2389,13 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.Silhouette#currentIdentity" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="currentIdentity(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Option[I]]"></a>
-      <a id="currentIdentity(RequestHeader):Future[Option[I]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">currentIdentity</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="com.mohiva.play.silhouette.core.Silhouette.I">I</span>]]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Gets the current logged in identity.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the current logged in identity.</p><p>This method can be used from public actions that need to access the current user if there's any.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The identity if any.
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="play.api.mvc.Results#dechunk" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="dechunk:play.api.libs.iteratee.Enumeratee[Array[Byte],Array[Byte]]"></a>
       <a id="dechunk:Enumeratee[Array[Byte],Array[Byte]]"></a>
@@ -2569,7 +2447,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="symbol">classOf[java.lang.Throwable]</span>
@@ -2602,6 +2480,38 @@ if available.</p><pre><span class="kw">class</span> MyController(
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler#handleForbidden" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="handleForbidden(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.SimpleResult]"></a>
+      <a id="handleForbidden(RequestHeader):Future[SimpleResult]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">handleForbidden</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Handles forbidden requests in a default way.</p><div class="fullcomment"><div class="comment cmt"><p>Handles forbidden requests in a default way.</p><p>The HTTP status code of the response will be 403 Forbidden, complying with
+<a href="https://tools.ietf.org/html/rfc2616#section-10.4.4" target="_blank">RFC 2616</a>.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>A response indicating that access is forbidden.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.utils.DefaultActionHandler#handleUnauthorized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="handleUnauthorized(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.SimpleResult]"></a>
+      <a id="handleUnauthorized(RequestHeader):Future[SimpleResult]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">handleUnauthorized</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Handles unauthorized requests in a default way.</p><div class="fullcomment"><div class="comment cmt"><p>Handles unauthorized requests in a default way.</p><p>The HTTP status code of the response will be 401 Unauthorized, complying with
+<a href="https://tools.ietf.org/html/rfc2616#section-10.4.2" target="_blank">RFC 2616</a>.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>A response indicating that user authentication is required.
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -2654,36 +2564,6 @@ if available.</p><pre><span class="kw">class</span> MyController(
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.Silhouette#notAuthenticated" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="notAuthenticated(request:play.api.mvc.RequestHeader):Option[scala.concurrent.Future[play.api.mvc.SimpleResult]]"></a>
-      <a id="notAuthenticated(RequestHeader):Option[Future[SimpleResult]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">notAuthenticated</span><span class="params">(<span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>]]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Implement this to return a result when the user is not authenticated.</p><div class="fullcomment"><div class="comment cmt"><p>Implement this to return a result when the user is not authenticated.</p><p>As defined by RFC 2616, the status code of the response should be 401 Unauthorized.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client.
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.Silhouette#notAuthorized" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="notAuthorized(request:play.api.mvc.RequestHeader):Option[scala.concurrent.Future[play.api.mvc.SimpleResult]]"></a>
-      <a id="notAuthorized(RequestHeader):Option[Future[SimpleResult]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">notAuthorized</span><span class="params">(<span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>]]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Implement this to return a result when the user is authenticated but not authorized.</p><div class="fullcomment"><div class="comment cmt"><p>Implement this to return a result when the user is authenticated but not authorized.</p><p>As defined by RFC 2616, the status code of the response should be 403 Forbidden.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client.
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
@@ -2820,7 +2700,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
               
         </dd></dl></div>
     </li><li name="play.api.http.ContentTypes#withCharset" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="withCharset(mimeType:String)(implicitcodec:play.api.mvc.Codec):String"></a>
+      <a id="withCharset(mimeType:&lt;?&gt;)(implicitcodec:&lt;?&gt;):String"></a>
       <a id="withCharset(String)(Codec):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -2840,7 +2720,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <div id="values" class="values members">
               <h3>Deprecated Value Members</h3>
               <ol><li name="play.api.mvc.Results#Async" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Async(promise:scala.concurrent.Future[play.api.mvc.Result]):play.api.mvc.AsyncResult"></a>
+      <a id="Async(promise:&lt;?&gt;):play.api.mvc.AsyncResult"></a>
       <a id="Async(Future[Result]):AsyncResult"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -2900,6 +2780,6 @@ if available.</p><pre><span class="kw">class</span> MyController(
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../lib/template.js"></script>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../../lib/template.js"></script>
     </body>
       </html>
