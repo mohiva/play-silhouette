@@ -27,30 +27,38 @@ import com.mohiva.play.silhouette.core.Token
  * the Credentials provider is enabled.
  *
  * Tokens are needed for users that are creating an account in the system instead of using
- * one in a 3rd party system.
+ * one in a third-party system.
  */
 trait TokenService[T <: Token] {
 
   /**
-   * Saves a token.
+   * Creates a new token.
    *
-   * @param token The token to save.
-   * @return The saved token or None if the token couldn't be saved.
+   * The new token will be persisted so that later it can be retrieved by its ID.
+   *
+   * @param token The token to create.
+   * @return The created token or None if the token couldn't be created.
    */
-  def save(token: T): Future[Option[T]]
+  def create(token: T): Future[Option[T]]
 
   /**
-   * Finds a token.
+   * Retrieves an available token.
    *
    * @param id The token ID.
    * @return The found token or None if no token couldn't be found for the given ID.
    */
-  def findByID(id: String): Future[Option[T]]
+  def retrieve(id: String): Future[Option[T]]
 
   /**
-   * Deletes a token.
+   * Consumes a token.
+   *
+   * This method makes the token unavailable for further use.
+   * It's up to implementation how to do that. For example, the token can be deleted,
+   * updated as "consumed", moved to another table, etc.
+   *
+   * Consumed tokens can't be retrieved.
    *
    * @param id The ID of the token to delete.
    */
-  def deleteByID(id: String)
+  def consume(id: String)
 }
