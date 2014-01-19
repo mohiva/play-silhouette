@@ -1,6 +1,5 @@
 package com.mohiva.play.silhouette.core.utils
 
-import play.api.{ Play, Logger }
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.mvc._
@@ -64,7 +63,7 @@ object DefaultActionHandler extends Controller {
     s"<html><head><title>$message</title></head><body>$message</body></html>"
 
   private def toJsonError(message: String) =
-    Json.toJson(Json.obj("success" -> false, "message" -> message))
+    Json.obj("success" -> false, "message" -> message)
 
   private def toXmlError(message: String) =
     <response><success>false</success><message>{ message }</message></response>
