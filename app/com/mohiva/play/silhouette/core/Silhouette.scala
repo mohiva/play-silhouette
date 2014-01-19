@@ -242,8 +242,8 @@ trait Silhouette[I <: Identity] extends Controller {
           handleNotAuthorized(request)
         // No user is authenticated. The request will ask for authentication.
         case None =>
-          handleNotAuthenticated(request)
-      }.map(_.discardingCookies(Authenticator.discardingCookie))
+          handleNotAuthenticated(request).map(_.discardingCookies(Authenticator.discardingCookie))
+      }
     }
   }
 
