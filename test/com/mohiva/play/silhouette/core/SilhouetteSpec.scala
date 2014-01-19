@@ -40,7 +40,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.protectedAction(FakeRequest())
 
-      status(result) must equalTo(FORBIDDEN)
+      status(result) must equalTo(UNAUTHORIZED)
       contentAsString(result) must contain(Messages("silhouette.not.authenticated"))
     }
 
@@ -50,7 +50,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.protectedAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
 
-      status(result) must equalTo(FORBIDDEN)
+      status(result) must equalTo(UNAUTHORIZED)
       contentAsString(result) must contain(Messages("silhouette.not.authenticated"))
     }
 
@@ -62,7 +62,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.protectedAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
 
-      status(result) must equalTo(FORBIDDEN)
+      status(result) must equalTo(UNAUTHORIZED)
       contentAsString(result) must contain(Messages("silhouette.not.authenticated"))
     }
 
@@ -74,7 +74,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.protectedAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
 
-      status(result) must equalTo(FORBIDDEN)
+      status(result) must equalTo(UNAUTHORIZED)
       contentAsString(result) must contain(Messages("silhouette.not.authenticated"))
     }
 
@@ -96,7 +96,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.protectedAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
 
-      status(result) must equalTo(FORBIDDEN)
+      status(result) must equalTo(UNAUTHORIZED)
       contentAsString(result) must contain(Messages("silhouette.not.authenticated"))
     }
 
@@ -116,13 +116,13 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
       val controller = new SecuredController(identityService, authenticatorService) {
         override def notAuthenticated(request: RequestHeader): Option[Future[SimpleResult]] = {
-          Some(Future.successful(Forbidden("local.not.authenticated")))
+          Some(Future.successful(Unauthorized("local.not.authenticated")))
         }
       }
 
       val result = controller.protectedAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
 
-      status(result) must equalTo(FORBIDDEN)
+      status(result) must equalTo(UNAUTHORIZED)
       contentAsString(result) must contain("local.not.authenticated")
     }
 
@@ -133,7 +133,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.protectedAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
 
-      status(result) must equalTo(FORBIDDEN)
+      status(result) must equalTo(UNAUTHORIZED)
       contentAsString(result) must contain("global.not.authenticated")
     }
 
@@ -144,7 +144,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.protectedAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
 
-      status(result) must equalTo(FORBIDDEN)
+      status(result) must equalTo(UNAUTHORIZED)
       contentAsString(result) must contain(Messages("silhouette.not.authenticated"))
     }
 
@@ -154,13 +154,13 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
       val controller = new SecuredController(identityService, authenticatorService, SimpleAuthorization(isAuthorized = false)) {
         override def notAuthorized(request: RequestHeader): Option[Future[SimpleResult]] = {
-          Some(Future.successful(Unauthorized("local.not.authorized")))
+          Some(Future.successful(Forbidden("local.not.authorized")))
         }
       }
 
       val result = controller.protectedActionWithAuthorization(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
 
-      status(result) must equalTo(UNAUTHORIZED)
+      status(result) must equalTo(FORBIDDEN)
       contentAsString(result) must contain("local.not.authorized")
     }
 
@@ -171,7 +171,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       val controller = new SecuredController(identityService, authenticatorService, SimpleAuthorization(isAuthorized = false))
       val result = controller.protectedActionWithAuthorization(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
 
-      status(result) must equalTo(UNAUTHORIZED)
+      status(result) must equalTo(FORBIDDEN)
       contentAsString(result) must contain("global.not.authorized")
     }
 
@@ -182,11 +182,11 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       val controller = new SecuredController(identityService, authenticatorService, SimpleAuthorization(isAuthorized = false))
       val result = controller.protectedActionWithAuthorization(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
 
-      status(result) must equalTo(UNAUTHORIZED)
+      status(result) must equalTo(FORBIDDEN)
       contentAsString(result) must contain(Messages("silhouette.not.authorized"))
     }
 
-    "invoke action without authorization if user is authorized" in new WithSecuredGlobal {
+    "invoke action without authorization if user is authenticated" in new WithSecuredGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
       identityService.findByLoginInfo(identity.loginInfo) returns Future.successful(Some(identity))
 
@@ -197,7 +197,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       contentAsString(result) must contain("full.access")
     }
 
-    "invoke action with authorization if user is authorized" in new WithSecuredGlobal {
+    "invoke action with authorization if user is authenticated but not authorized" in new WithSecuredGlobal {
       authenticatorService.findByID(authenticatorID) returns Future.successful(Some(authenticator))
       identityService.findByLoginInfo(identity.loginInfo) returns Future.successful(Some(identity))
 
@@ -240,7 +240,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.userAwareAction(FakeRequest())
 
-      status(result) must equalTo(FORBIDDEN)
+      status(result) must equalTo(UNAUTHORIZED)
       contentAsString(result) must contain(Messages("not.authenticated"))
     }
 
@@ -250,7 +250,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.userAwareAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
 
-      status(result) must equalTo(FORBIDDEN)
+      status(result) must equalTo(UNAUTHORIZED)
       contentAsString(result) must contain(Messages("not.authenticated"))
     }
 
@@ -262,7 +262,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.userAwareAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
 
-      status(result) must equalTo(FORBIDDEN)
+      status(result) must equalTo(UNAUTHORIZED)
       contentAsString(result) must contain(Messages("not.authenticated"))
     }
 
@@ -274,7 +274,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.userAwareAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
 
-      status(result) must equalTo(FORBIDDEN)
+      status(result) must equalTo(UNAUTHORIZED)
       contentAsString(result) must contain(Messages("not.authenticated"))
     }
 
@@ -296,7 +296,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       val controller = new SecuredController(identityService, authenticatorService)
       val result = controller.userAwareAction(FakeRequest().withCookies(Cookie(Authenticator.cookieName, authenticatorID)))
 
-      status(result) must equalTo(FORBIDDEN)
+      status(result) must equalTo(UNAUTHORIZED)
       contentAsString(result) must contain(Messages("not.authenticated"))
     }
 
@@ -379,7 +379,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      * @return The result to send to the client.
      */
     override def onNotAuthenticated(request: RequestHeader, lang: Lang) = {
-      Some(Future.successful(Forbidden("global.not.authenticated")))
+      Some(Future.successful(Unauthorized("global.not.authenticated")))
     }
 
     /**
@@ -390,7 +390,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      * @return The result to send to the client.
      */
     override def onNotAuthorized(request: RequestHeader, lang: Lang) = {
-      Some(Future.successful(Unauthorized("global.not.authorized")))
+      Some(Future.successful(Forbidden("global.not.authorized")))
     }
 
   }))) with Context
@@ -443,7 +443,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       if (request.identity.isDefined) {
         Ok("full.access")
       } else {
-        Forbidden("not.authenticated")
+        Unauthorized("not.authenticated")
       }
     }
   }
