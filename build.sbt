@@ -32,7 +32,8 @@ playScalaSettings ++ ScoverageSbtPlugin.instrumentSettings
 scalacOptions ++= Seq(
   "-deprecation",
   "-feature",
-  "-unchecked"
+  "-unchecked",
+  "-Xfatal-warnings"
 )
 
 CoverallsPlugin.singleProject
