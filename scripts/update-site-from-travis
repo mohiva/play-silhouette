@@ -62,7 +62,7 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
   git add --all .
   git commit -m "Update website from Travis build $TRAVIS_BUILD_NUMBER" || echo "No change to site contents."
   git push -q origin gh-pages > /dev/null || fail "Could not push site contents."
-  git log --name-status $original_commit..HEAD
+  git log --no-pager --color --name-status $original_commit..HEAD
 
   echo ""
   echo "Updating API documentation"
@@ -74,7 +74,7 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
   git add --all .
   git commit -m "Update API documentation from Travis build $TRAVIS_BUILD_NUMBER" || echo "No change to API documentation."
   git push -q origin gh-pages > /dev/null || fail "Could not push API documentation."
-  git log --name-status $original_commit..HEAD
+  git log --no-pager --color --name-status $original_commit..HEAD
 
   echo ""
   echo "Finished website update process"
