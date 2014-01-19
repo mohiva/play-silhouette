@@ -27,7 +27,7 @@ import BCryptPasswordHasher._
  * Implementation of the password hasher based on BCrypt.
  *
  * @param logRounds The log2 of the number of rounds of hashing to apply.
- * @see [[org.mindrot.jbcrypt.BCrypt.gensalt]]
+ * @see [[http://www.mindrot.org/files/jBCrypt/jBCrypt-0.2-doc/BCrypt.html#gensalt(int) gensalt]]
  */
 class BCryptPasswordHasher(logRounds: Int = 10) extends PasswordHasher {
 
