@@ -25,6 +25,7 @@ import play.api.i18n.Messages
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core.services.{ AuthenticatorService, IdentityService }
+import com.mohiva.play.silhouette.core.utils.DefaultActionHandler
 
 /**
  * Provides the actions that can be used to protect controllers and retrieve the current user
@@ -196,7 +197,7 @@ trait Silhouette[I <: Identity] extends Controller {
           case s: SecuredSettings => s.onNotAuthorized(request, lang)
           case _ => None
         }
-      }.getOrElse(Future.successful(Forbidden(Messages("silhouette.not.authorized"))))
+      }.getOrElse(DefaultActionHandler.handleForbidden)
     }
 
     /**
@@ -221,7 +222,7 @@ trait Silhouette[I <: Identity] extends Controller {
           case s: SecuredSettings => s.onNotAuthenticated(request, lang)
           case _ => None
         }
-      }.getOrElse(Future.successful(Unauthorized(Messages("silhouette.not.authenticated"))))
+      }.getOrElse(DefaultActionHandler.handleUnauthorized)
     }
 
     /**
