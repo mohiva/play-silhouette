@@ -188,7 +188,7 @@ trait Silhouette[I <: Identity] extends Controller {
      */
     def handleNotAuthorized(implicit request: RequestHeader): Future[SimpleResult] = {
       if (Logger.isDebugEnabled) {
-        Logger.debug("[silhouette] unauthorized user trying to access '%s'".format(request.uri))
+        Logger.debug("[Silhouette] Unauthorized user trying to access '%s'".format(request.uri))
       }
 
       notAuthorized(request).orElse {
@@ -213,7 +213,7 @@ trait Silhouette[I <: Identity] extends Controller {
      */
     def handleNotAuthenticated(implicit request: RequestHeader): Future[SimpleResult] = {
       if (Logger.isDebugEnabled) {
-        Logger.debug("[silhouette] unauthenticated user trying to access '%s'".format(request.uri))
+        Logger.debug("[Silhouette] Unauthenticated user trying to access '%s'".format(request.uri))
       }
 
       notAuthenticated(request).orElse {
