@@ -1,0 +1,7 @@
+#!/bin/bash
+#
+# Builds the project in the continuous integration environment.
+#
+set -o nounset -o errexit
+
+scripts/sbt -v -jvm-opts scripts/conf/jvm-opts clean coveralls doc
