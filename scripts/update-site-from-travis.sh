@@ -29,6 +29,17 @@
 # limitations under the License.
 #
 set -o nounset -o errexit
+set -x
+
+fail () {
+  local message=$1
+  echo "ERROR: $message"
+  exit 1
+}
+
+echo "TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG"
+echo "TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST"
+echo "TRAVIS_BRANCH=$TRAVIS_BRANCH"
 
 if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
   echo ""
@@ -49,8 +60,8 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
   cp -R $source_dir/site/* "$target_dir"
   original_commit=`git rev-parse HEAD`
   git add --all .
-  git commit -m "Update website from Travis build $TRAVIS_BUILD_NUMBER"
-  git push -q origin gh-pages > /dev/null
+  git commit -m "Update website from Travis build $TRAVIS_BUILD_NUMBER" || echo "No change to site contents."
+  git push -q origin gh-pages > /dev/null || fail "Could not push site contents."
   git log --name-status $original_commit..HEAD
 
   echo ""
@@ -61,10 +72,13 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
   cp -Rf $source_dir/target/scala-2.10/api/* "$api_master_dir"
   original_commit=`git rev-parse HEAD`
   git add --all .
-  git commit -m "Update API documentation from Travis build $TRAVIS_BUILD_NUMBER"
-  git push -q origin gh-pages > /dev/null
+  git commit -m "Update API documentation from Travis build $TRAVIS_BUILD_NUMBER" || echo "No change to API documentation."
+  git push -q origin gh-pages > /dev/null || fail "Could not push API documentation."
   git log --name-status $original_commit..HEAD
 
   echo ""
   echo "Finished website update process"
+else
+  echo ""
+  echo "Skipping website update"
 fi
