@@ -19,12 +19,12 @@
  */
 package com.mohiva.play.silhouette.core
 
-import play.api.{Play, Logger}
+import play.api.{ Play, Logger }
 import play.api.mvc._
 import play.api.i18n.Messages
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import com.mohiva.play.silhouette.core.services.{AuthenticatorService, IdentityService}
+import com.mohiva.play.silhouette.core.services.{ AuthenticatorService, IdentityService }
 
 /**
  * Provides the actions that can be used to protect controllers and retrieve the current user
@@ -61,7 +61,9 @@ trait Silhouette[I <: Identity] extends Controller {
   protected def authenticatorService: AuthenticatorService
 
   /**
-   * Implement this to return a result when the user isn't authenticated.
+   * Implement this to return a result when the user is not authenticated.
+   *
+   * As defined by RFC 2616, the status code of the response should be 401 Unauthorized.
    *
    * @param request The request header.
    * @return The result to send to the client.
@@ -69,7 +71,9 @@ trait Silhouette[I <: Identity] extends Controller {
   protected def notAuthenticated(request: RequestHeader): Option[Future[SimpleResult]] = None
 
   /**
-   * Implement this to return a result when the user isn't authorized.
+   * Implement this to return a result when the user is authenticated but not authorized.
+   *
+   * As defined by RFC 2616, the status code of the response should be 403 Forbidden.
    *
    * @param request The request header.
    * @return The result to send to the client.
@@ -127,7 +131,7 @@ trait Silhouette[I <: Identity] extends Controller {
   /**
    * A secured action.
    *
-   * If there is no identity in the session, the request is forwarded to
+   * If the user is not authenticated or not authorized, the request is forwarded to
    * the [[com.mohiva.play.silhouette.core.Silhouette.notAuthenticated]] or
    * the [[com.mohiva.play.silhouette.core.Silhouette.notAuthorized]] methods.
    *
@@ -157,34 +161,59 @@ trait Silhouette[I <: Identity] extends Controller {
   /**
    * A builder for secured actions.
    *
+   * Requests are subject to authentication logic and, optionally, authorization.
+   * HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when appropriate.
+   *
+   * For reference see:
+   * [[http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html RFC 2616]],
+   * [[http://danielirvine.com/blog/2011/07/18/understanding-403-forbidden/ Understanding 403 Forbidden]],
+   * [[http://stackoverflow.com/questions/3297048/403-forbidden-vs-401-unauthorized-http-responses/6937030#6937030 403 Forbidden vs 401 Unauthorized HTTP responses]].
+   *
    * @param authorize An Authorize object that checks if the user is authorized to invoke the action.
    */
   class SecuredActionBuilder(authorize: Option[Authorization[I]] = None) extends ActionBuilder[SecuredRequest] {
 
     /**
-     * Handles the not-authorized result.
+     * Produces a result indicating that the request will be forbidden
+     * because the authenticated user is not authorized to perform the requested action.
+     *
+     * This should be called when the user is authenticated but authorization failed.
+     * This indicates a permanent situation. Repeating the request with the same authenticated
+     * user will produce the same response.
+     *
+     * As defined by RFC 2616, the status code of the response will be 403 Forbidden.
      *
      * @param request The request header.
      * @return The result to send to the client if the user isn't authorized.
      */
     def handleNotAuthorized(implicit request: RequestHeader): Future[SimpleResult] = {
+      if (Logger.isDebugEnabled) {
+        Logger.debug("[silhouette] unauthorized user trying to access '%s'".format(request.uri))
+      }
+
       notAuthorized(request).orElse {
         Play.current.global match {
           case s: SecuredSettings => s.onNotAuthorized(request, lang)
           case _ => None
         }
-      }.getOrElse(Future.successful(Unauthorized(Messages("silhouette.not.authorized"))))
+      }.getOrElse(Future.successful(Forbidden(Messages("silhouette.not.authorized"))))
     }
 
     /**
-     * Handles the not-authenticated result.
+     * Produces a result indicating that the user must provide authentication before
+     * the requested action can be performed.
+     *
+     * This should be called when the user is not authenticated.
+     * This indicates a temporary condition. The user can authenticate and repeat the request.
+     *
+     * As defined by RFC 2616, the status code of the response will be 401 Unauthorized.
      *
      * @param request The request header.
      * @return The result to send to the client if the user isn't authenticated.
      */
     def handleNotAuthenticated(implicit request: RequestHeader): Future[SimpleResult] = {
       if (Logger.isDebugEnabled) {
-        Logger.debug("[silhouette] anonymous user trying to access : '%s'".format(request.uri))
+        Logger.debug("[silhouette] unauthenticated user trying to access '%s'".format(request.uri))
       }
 
       notAuthenticated(request).orElse {
@@ -192,11 +221,11 @@ trait Silhouette[I <: Identity] extends Controller {
           case s: SecuredSettings => s.onNotAuthenticated(request, lang)
           case _ => None
         }
-      }.getOrElse(Future.successful(Forbidden(Messages("silhouette.not.authenticated"))))
+      }.getOrElse(Future.successful(Unauthorized(Messages("silhouette.not.authenticated"))))
     }
 
     /**
-     * Invoke the block.
+     * Invokes the block.
      *
      * @param request The request.
      * @param block The block of code to invoke.
@@ -204,11 +233,16 @@ trait Silhouette[I <: Identity] extends Controller {
      */
     def invokeBlock[A](request: Request[A], block: SecuredRequest[A] => Future[SimpleResult]) = {
       currentIdentity(request).flatMap {
+        // A user is both authenticated and authorized. The request will be granted.
         case Some(identity) if authorize.isEmpty || authorize.get.isAuthorized(identity) => {
           block(SecuredRequest(identity, request))
         }
-        case Some(identity) => handleNotAuthorized(request)
-        case None => handleNotAuthenticated(request)
+        // A user is authenticated but not authorized. The request will be forbidden.
+        case Some(identity) =>
+          handleNotAuthorized(request)
+        // No user is authenticated. The request will ask for authentication.
+        case None =>
+          handleNotAuthenticated(request)
       }.map(_.discardingCookies(Authenticator.discardingCookie))
     }
   }

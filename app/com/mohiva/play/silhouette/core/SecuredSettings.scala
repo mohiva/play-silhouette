@@ -28,19 +28,23 @@ trait SecuredSettings {
   this: GlobalSettings =>
 
   /**
-   * Called when a user isn't authenticated.
+   * Called when a user is not authenticated.
+   *
+   * As defined by RFC 2616, the status code of the response should be 401 Unauthorized.
    *
    * @param request The request header.
-   * @param lang The current selected lang.
+   * @param lang The currently selected language.
    * @return The result to send to the client.
    */
   def onNotAuthenticated(request: RequestHeader, lang: Lang): Option[Future[SimpleResult]] = None
 
   /**
-   * Called when a user isn't authorized.
+   * Called when a user is authenticated but not authorized.
+   *
+   * As defined by RFC 2616, the status code of the response should be 403 Forbidden.
    *
    * @param request The request header.
-   * @param lang The current selected lang.
+   * @param lang The currently selected language.
    * @return The result to send to the client.
    */
   def onNotAuthorized(request: RequestHeader, lang: Lang): Option[Future[SimpleResult]] = None
