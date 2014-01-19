@@ -108,6 +108,19 @@
       </span>
       </h4>
       <p class="comment cmt">A trait which provides a mockable implementation for a DateTime instance.</p>
+    </li><li name="com.mohiva.play.silhouette.core.utils.HTTPLayer" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="HTTPLayerextendsAnyRef"></a>
+      <a id="HTTPLayer:HTTPLayer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="HTTPLayer.html"><span class="name">HTTPLayer</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A trait which provides a mockable implementation for the HTTP layer.</p>
     </li><li name="com.mohiva.play.silhouette.core.utils.IDGenerator" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="IDGeneratorextendsAnyRef"></a>
       <a id="IDGenerator:IDGenerator"></a>
@@ -120,33 +133,46 @@
         <a href="IDGenerator.html"><span class="name">IDGenerator</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <p class="comment cmt">An generator which creates an ID.</p>
-    </li><li name="com.mohiva.play.silhouette.core.utils.PlayCacheLayer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="PlayCacheLayerextendsCacheLayer"></a>
-      <a id="PlayCacheLayer:PlayCacheLayer"></a>
+      <p class="comment cmt">A generator which creates an ID.</p>
+    </li><li name="com.mohiva.play.silhouette.core.utils.PasswordHasher" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="PasswordHasherextendsAnyRef"></a>
+      <a id="PasswordHasher:PasswordHasher"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="PasswordHasher.html"><span class="name">PasswordHasher</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A trait that defines the password hasher interface.</p>
+    </li><li name="com.mohiva.play.silhouette.core.utils.PasswordInfo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PasswordInfoextendsProductwithSerializable"></a>
+      <a id="PasswordInfo:PasswordInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="PasswordInfo.html"><span class="name">PasswordInfo</span></a><span class="params">(<span name="hasher">hasher: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="password">password: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="salt">salt: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The password details.</p>
+    </li><li name="com.mohiva.play.silhouette.core.utils.PlayHTTPLayer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PlayHTTPLayerextendsHTTPLayer"></a>
+      <a id="PlayHTTPLayer:PlayHTTPLayer"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="PlayCacheLayer.html"><span class="name">PlayCacheLayer</span></a><span class="result"> extends <a href="CacheLayer.html" class="extype" name="com.mohiva.play.silhouette.core.utils.CacheLayer">CacheLayer</a></span>
+        <a href="PlayHTTPLayer.html"><span class="name">PlayHTTPLayer</span></a><span class="result"> extends <a href="HTTPLayer.html" class="extype" name="com.mohiva.play.silhouette.core.utils.HTTPLayer">HTTPLayer</a></span>
       </span>
       </h4>
-      <p class="comment cmt">Implementation of the cache layer which uses the default Play cache plugin.</p>
-    </li><li name="com.mohiva.play.silhouette.core.utils.SecureRandomIDGenerator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SecureRandomIDGeneratorextendsIDGenerator"></a>
-      <a id="SecureRandomIDGenerator:SecureRandomIDGenerator"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="SecureRandomIDGenerator.html"><span class="name">SecureRandomIDGenerator</span></a><span class="result"> extends <a href="IDGenerator.html" class="extype" name="com.mohiva.play.silhouette.core.utils.IDGenerator">IDGenerator</a></span>
-      </span>
-      </h4>
-      <p class="comment cmt">An generator which uses SecureRandom to generate cryptographically strong ID's.</p>
+      <p class="comment cmt">Implementation of the HTTP layer which uses the Play web service implementation.</p>
     </li></ol>
             </div>
 
@@ -167,19 +193,6 @@
       </span>
       </h4>
       <p class="comment cmt">Creates a clock implementation.</p>
-    </li><li name="com.mohiva.play.silhouette.core.utils.SecureRandomIDGenerator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SecureRandomIDGenerator"></a>
-      <a id="SecureRandomIDGenerator:SecureRandomIDGenerator"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="SecureRandomIDGenerator$.html"><span class="name">SecureRandomIDGenerator</span></a>
-      </span>
-      </h4>
-      <p class="comment cmt">The companion object.</p>
     </li></ol>
             </div>
 

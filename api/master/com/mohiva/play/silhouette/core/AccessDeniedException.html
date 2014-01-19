@@ -35,13 +35,14 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">AccessDeniedException</span><span class="params">()</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">AccessDeniedException</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An exception thrown when the user denies access to the application
 in the login page of the 3rd party service.
-</p></div><div class="toggleContainer block">
+</p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>The exception message.</p></dd><dt class="param">cause</dt><dd class="cmt"><p>The exception cause.
+</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="java.lang.Exception">Exception</span>, <span class="extype" name="java.lang.Throwable">Throwable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -81,8 +82,8 @@ in the login page of the 3rd party service.
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.AccessDeniedException#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;():com.mohiva.play.silhouette.core.AccessDeniedException"></a>
+              <ol><li name="com.mohiva.play.silhouette.core.AccessDeniedException#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(msg:String):com.mohiva.play.silhouette.core.AccessDeniedException"></a>
       <a id="&lt;init&gt;:AccessDeniedException"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -90,10 +91,26 @@ in the login page of the 3rd party service.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">AccessDeniedException</span><span class="params">()</span>
+        <span class="name">AccessDeniedException</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">Constructs an exception with only a message.</p><div class="fullcomment"><div class="comment cmt"><p>Constructs an exception with only a message.
+</p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>The exception message.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.AccessDeniedException#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(msg:String,cause:Throwable):com.mohiva.play.silhouette.core.AccessDeniedException"></a>
+      <a id="&lt;init&gt;:AccessDeniedException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">AccessDeniedException</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>The exception message.</p></dd><dt class="param">cause</dt><dd class="cmt"><p>The exception cause.
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -194,6 +211,19 @@ in the login page of the 3rd party service.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.AccessDeniedException#cause" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="cause:Throwable"></a>
+      <a id="cause:Throwable"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cause</span><span class="result">: <span class="extype" name="scala.Throwable">Throwable</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The exception cause.</p>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -362,6 +392,19 @@ in the login page of the 3rd party service.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.AccessDeniedException#msg" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="msg:String"></a>
+      <a id="msg:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">msg</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The exception message.</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

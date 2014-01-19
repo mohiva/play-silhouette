@@ -39,7 +39,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Contains <a href="../IdentityProvider.html" class="extype" name="com.mohiva.play.silhouette.core.IdentityProvider">IdentityProvider</a> implementations that provide authentication
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Contains <a href="../Provider.html" class="extype" name="com.mohiva.play.silhouette.core.Provider">com.mohiva.play.silhouette.core.Provider</a> implementations that provide authentication
 for different schemes and services.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
@@ -83,8 +83,21 @@ for different schemes and services.
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.providers.CredentialsProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="CredentialsProviderextendsIdentityProvider"></a>
+              <ol><li name="com.mohiva.play.silhouette.core.providers.Credentials" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CredentialsextendsProductwithSerializable"></a>
+      <a id="Credentials:Credentials"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Credentials.html"><span class="name">Credentials</span></a><span class="params">(<span name="identifier">identifier: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="password">password: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The credentials to authenticate with.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.CredentialsProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CredentialsProviderextendsProvider"></a>
       <a id="CredentialsProvider:CredentialsProvider"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -92,160 +105,114 @@ for different schemes and services.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="CredentialsProvider.html"><span class="name">CredentialsProvider</span></a><span class="result"> extends <a href="../IdentityProvider.html" class="extype" name="com.mohiva.play.silhouette.core.IdentityProvider">IdentityProvider</a></span>
+        <a href="CredentialsProvider.html"><span class="name">CredentialsProvider</span></a><span class="result"> extends <a href="../Provider.html" class="extype" name="com.mohiva.play.silhouette.core.Provider">Provider</a></span>
       </span>
       </h4>
-      <p class="comment cmt">A provider for authenticating credentials.</p>
-    </li><li name="com.mohiva.play.silhouette.core.providers.FacebookProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FacebookProviderextendsOAuth2Provider"></a>
-      <a id="FacebookProvider:FacebookProvider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="FacebookProvider.html"><span class="name">FacebookProvider</span></a><span class="result"> extends <a href="../OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.core.OAuth2Provider">OAuth2Provider</a></span>
-      </span>
-      </h4>
-      <p class="comment cmt">A Facebook Provider
-</p>
-    </li><li name="com.mohiva.play.silhouette.core.providers.FoursquareProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FoursquareProviderextendsOAuth2Provider"></a>
-      <a id="FoursquareProvider:FoursquareProvider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="FoursquareProvider.html"><span class="name">FoursquareProvider</span></a><span class="result"> extends <a href="../OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.core.OAuth2Provider">OAuth2Provider</a></span>
-      </span>
-      </h4>
-      <p class="comment cmt">A Foursquare provider</p>
-    </li><li name="com.mohiva.play.silhouette.core.providers.GitHubProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="GitHubProviderextendsOAuth2Provider"></a>
-      <a id="GitHubProvider:GitHubProvider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="GitHubProvider.html"><span class="name">GitHubProvider</span></a><span class="result"> extends <a href="../OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.core.OAuth2Provider">OAuth2Provider</a></span>
-      </span>
-      </h4>
-      <p class="comment cmt">A GitHub provider</p>
-    </li><li name="com.mohiva.play.silhouette.core.providers.GoogleProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="GoogleProviderextendsOAuth2Provider"></a>
-      <a id="GoogleProvider:GoogleProvider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="GoogleProvider.html"><span class="name">GoogleProvider</span></a><span class="result"> extends <a href="../OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.core.OAuth2Provider">OAuth2Provider</a></span>
-      </span>
-      </h4>
-      <p class="comment cmt">A Google OAuth2 Provider
-</p>
-    </li><li name="com.mohiva.play.silhouette.core.providers.InstagramProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="InstagramProviderextendsOAuth2Provider"></a>
-      <a id="InstagramProvider:InstagramProvider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="InstagramProvider.html"><span class="name">InstagramProvider</span></a><span class="result"> extends <a href="../OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.core.OAuth2Provider">OAuth2Provider</a></span>
-      </span>
-      </h4>
-      <p class="comment cmt">An Instagram provider</p>
-    </li><li name="com.mohiva.play.silhouette.core.providers.LinkedInOAuth2Provider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="LinkedInOAuth2ProviderextendsOAuth2Provider"></a>
-      <a id="LinkedInOAuth2Provider:LinkedInOAuth2Provider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="LinkedInOAuth2Provider.html"><span class="name">LinkedInOAuth2Provider</span></a><span class="result"> extends <a href="../OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.core.OAuth2Provider">OAuth2Provider</a></span>
-      </span>
-      </h4>
-      <p class="comment cmt">A LinkedIn Provider (OAuth2)
-</p>
-    </li><li name="com.mohiva.play.silhouette.core.providers.LinkedInProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="LinkedInProviderextendsOAuth1Provider"></a>
-      <a id="LinkedInProvider:LinkedInProvider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="LinkedInProvider.html"><span class="name">LinkedInProvider</span></a><span class="result"> extends <a href="../OAuth1Provider.html" class="extype" name="com.mohiva.play.silhouette.core.OAuth1Provider">OAuth1Provider</a></span>
-      </span>
-      </h4>
-      <p class="comment cmt">A LinkedIn Provider
-</p>
-    </li><li name="com.mohiva.play.silhouette.core.providers.Token" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="TokenextendsProductwithSerializable"></a>
-      <a id="Token:Token"></a>
+      <p class="comment cmt">A provider for authenticating with credentials.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth1Info" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OAuth1InfoextendsProductwithSerializable"></a>
+      <a id="OAuth1Info:OAuth1Info"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Token.html"><span class="name">Token</span></a><span class="params">(<span name="uuid">uuid: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="email">email: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="creationTime">creationTime: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="expirationTime">expirationTime: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="isSignUp">isSignUp: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="OAuth1Info.html"><span class="name">OAuth1Info</span></a><span class="params">(<span name="token">token: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="secret">secret: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
-      <p class="comment cmt">A token used for reset password and sign up operations.</p>
-    </li><li name="com.mohiva.play.silhouette.core.providers.TwitterProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="TwitterProviderextendsOAuth1Provider"></a>
-      <a id="TwitterProvider:TwitterProvider"></a>
+      <p class="comment cmt">The OAuth1 details.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth1Provider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="OAuth1ProviderextendsSocialProvider[com.mohiva.play.silhouette.core.providers.OAuth1Info]"></a>
+      <a id="OAuth1Provider:OAuth1Provider"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">abstract </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="TwitterProvider.html"><span class="name">TwitterProvider</span></a><span class="result"> extends <a href="../OAuth1Provider.html" class="extype" name="com.mohiva.play.silhouette.core.OAuth1Provider">OAuth1Provider</a></span>
+        <a href="OAuth1Provider.html"><span class="name">OAuth1Provider</span></a><span class="result"> extends <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider">SocialProvider</a>[<a href="OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Info">OAuth1Info</a>]</span>
       </span>
       </h4>
-      <p class="comment cmt">A Twitter Provider
-</p>
-    </li><li name="com.mohiva.play.silhouette.core.providers.VkProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="VkProviderextendsOAuth2Provider"></a>
-      <a id="VkProvider:VkProvider"></a>
+      <p class="comment cmt">Base class for all OAuth1 providers.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth1Settings" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OAuth1SettingsextendsProductwithSerializable"></a>
+      <a id="OAuth1Settings:OAuth1Settings"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="VkProvider.html"><span class="name">VkProvider</span></a><span class="result"> extends <a href="../OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.core.OAuth2Provider">OAuth2Provider</a></span>
+        <a href="OAuth1Settings.html"><span class="name">OAuth1Settings</span></a><span class="params">(<span name="requestTokenURL">requestTokenURL: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="accessTokenURL">accessTokenURL: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="authorizationURL">authorizationURL: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callbackURL">callbackURL: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="consumerKey">consumerKey: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="consumerSecret">consumerSecret: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
-      <p class="comment cmt">A Vk provider
-</p>
-    </li><li name="com.mohiva.play.silhouette.core.providers.XingProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="XingProviderextendsOAuth1Provider"></a>
-      <a id="XingProvider:XingProvider"></a>
+      <p class="comment cmt">The OAuth1 settings.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Info" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OAuth2InfoextendsProductwithSerializable"></a>
+      <a id="OAuth2Info:OAuth2Info"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="OAuth2Info.html"><span class="name">OAuth2Info</span></a><span class="params">(<span name="accessToken">accessToken: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="tokenType">tokenType: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="expiresIn">expiresIn: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>] = <span class="symbol">scala.None</span></span>, <span name="refreshToken">refreshToken: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The Oauth2 details.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="OAuth2ProviderextendsSocialProvider[com.mohiva.play.silhouette.core.providers.OAuth2Info]"></a>
+      <a id="OAuth2Provider:OAuth2Provider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="XingProvider.html"><span class="name">XingProvider</span></a><span class="result"> extends <a href="../OAuth1Provider.html" class="extype" name="com.mohiva.play.silhouette.core.OAuth1Provider">OAuth1Provider</a></span>
+        <a href="OAuth2Provider.html"><span class="name">OAuth2Provider</span></a><span class="result"> extends <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider">SocialProvider</a>[<a href="OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Info">OAuth2Info</a>]</span>
       </span>
       </h4>
-      <p class="comment cmt">A Xing Provider
-</p>
+      <p class="comment cmt">Base class for all OAuth2 providers.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Settings" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OAuth2SettingsextendsProductwithSerializable"></a>
+      <a id="OAuth2Settings:OAuth2Settings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="OAuth2Settings.html"><span class="name">OAuth2Settings</span></a><span class="params">(<span name="authorizationURL">authorizationURL: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="accessTokenURL">accessTokenURL: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="redirectURL">redirectURL: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="clientID">clientID: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="clientSecret">clientSecret: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="scope">scope: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The OAuth2 settings.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.SocialProfile" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SocialProfileextendsProductwithSerializable"></a>
+      <a id="SocialProfile:SocialProfile"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SocialProfile.html"><span class="name">SocialProfile</span></a><span class="params">(<span name="loginInfo">loginInfo: <a href="../LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="firstName">firstName: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="lastName">lastName: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="fullName">fullName: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="email">email: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="avatarURL">avatarURL: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The social profile contains all the data returned from the social providers after authentication.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.SocialProvider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SocialProvider[A]extendsProvider"></a>
+      <a id="SocialProvider[A]:SocialProvider[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SocialProvider.html"><span class="name">SocialProvider</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="../Provider.html" class="extype" name="com.mohiva.play.silhouette.core.Provider">Provider</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The base interface for all social providers.</p>
     </li></ol>
             </div>
 
@@ -265,150 +232,59 @@ for different schemes and services.
         <a href="CredentialsProvider$.html"><span class="name">CredentialsProvider</span></a>
       </span>
       </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.FacebookProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FacebookProvider"></a>
-      <a id="FacebookProvider:FacebookProvider"></a>
+      <p class="comment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth1Provider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OAuth1Provider"></a>
+      <a id="OAuth1Provider:OAuth1Provider"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="FacebookProvider$.html"><span class="name">FacebookProvider</span></a>
+        <a href="OAuth1Provider$.html"><span class="name">OAuth1Provider</span></a>
       </span>
       </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.FoursquareProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FoursquareProvider"></a>
-      <a id="FoursquareProvider:FoursquareProvider"></a>
+      <p class="comment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OAuth2Provider"></a>
+      <a id="OAuth2Provider:OAuth2Provider"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="FoursquareProvider$.html"><span class="name">FoursquareProvider</span></a>
+        <a href="OAuth2Provider$.html"><span class="name">OAuth2Provider</span></a>
       </span>
       </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.GitHubProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="GitHubProvider"></a>
-      <a id="GitHubProvider:GitHubProvider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="GitHubProvider$.html"><span class="name">GitHubProvider</span></a>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.GoogleProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="GoogleProvider"></a>
-      <a id="GoogleProvider:GoogleProvider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="GoogleProvider$.html"><span class="name">GoogleProvider</span></a>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.InstagramProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="InstagramProvider"></a>
-      <a id="InstagramProvider:InstagramProvider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="InstagramProvider$.html"><span class="name">InstagramProvider</span></a>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.LinkedInOAuth2Provider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="LinkedInOAuth2Provider"></a>
-      <a id="LinkedInOAuth2Provider:LinkedInOAuth2Provider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="LinkedInOAuth2Provider$.html"><span class="name">LinkedInOAuth2Provider</span></a>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.LinkedInProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="LinkedInProvider"></a>
-      <a id="LinkedInProvider:LinkedInProvider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="LinkedInProvider$.html"><span class="name">LinkedInProvider</span></a>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.TwitterProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="TwitterProvider"></a>
-      <a id="TwitterProvider:TwitterProvider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="TwitterProvider$.html"><span class="name">TwitterProvider</span></a>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.VkProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="VkProvider"></a>
-      <a id="VkProvider:VkProvider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="VkProvider$.html"><span class="name">VkProvider</span></a>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.XingProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="XingProvider"></a>
-      <a id="XingProvider:XingProvider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="XingProvider$.html"><span class="name">XingProvider</span></a>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.utils" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="utils"></a>
-      <a id="utils:utils"></a>
+      <p class="comment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.oauth1" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="oauth1"></a>
+      <a id="oauth1:oauth1"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a href="utils/package.html"><span class="name">utils</span></a>
+        <a href="oauth1/package.html"><span class="name">oauth1</span></a>
       </span>
       </h4>
-      <p class="comment cmt">Provides supporting features used by the Identity Providers.</p>
+      
+    </li><li name="com.mohiva.play.silhouette.core.providers.oauth2" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="oauth2"></a>
+      <a id="oauth2:oauth2"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="oauth2/package.html"><span class="name">oauth2</span></a>
+      </span>
+      </h4>
+      
     </li></ol>
             </div>
 

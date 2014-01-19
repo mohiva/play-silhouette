@@ -39,16 +39,13 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>This trait represents a user.  Using this trait you to return you can return your own object from the
-UserService.find methods if you need to instead of returning a SocialUser.</p><p>In your controller actions you can then convert this Identity to your own class using pattern matching in Scala
-or a cast in Java.</p><p>Important: your controllers will receive the instance you created, but this won't work the same for the
-UserService.save method.  In that case, Silhouette will pass an instance created by itself (a SocialUser) so
-do not try to cast the Identity to your own model within your method implementation.</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>This trait represents a user.
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="SocialUser.html" class="extype" name="com.mohiva.play.silhouette.core.SocialUser">SocialUser</a></div>
+          <div class="subClasses hiddenContent"><a href="../contrib/User.html" class="extype" name="com.mohiva.play.silhouette.contrib.User">User</a></div>
         </div></div>
         
 
@@ -90,136 +87,21 @@ do not try to cast the Identity to your own model within your method implementat
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.Identity#authMethod" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="authMethod:com.mohiva.play.silhouette.core.AuthenticationMethod"></a>
-      <a id="authMethod:AuthenticationMethod"></a>
+              <ol><li name="com.mohiva.play.silhouette.core.Identity#loginInfo" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="loginInfo:com.mohiva.play.silhouette.core.LoginInfo"></a>
+      <a id="loginInfo:LoginInfo"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">authMethod</span><span class="result">: <a href="AuthenticationMethod.html" class="extype" name="com.mohiva.play.silhouette.core.AuthenticationMethod">AuthenticationMethod</a></span>
+        <span class="name">loginInfo</span><span class="result">: <a href="LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>
       </span>
       </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.Identity#avatarUrl" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="avatarUrl:Option[String]"></a>
-      <a id="avatarUrl:Option[String]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">avatarUrl</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.Identity#email" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="email:Option[String]"></a>
-      <a id="email:Option[String]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">email</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.Identity#firstName" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="firstName:String"></a>
-      <a id="firstName:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">firstName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.Identity#fullName" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="fullName:String"></a>
-      <a id="fullName:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">fullName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.Identity#identityId" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="identityId:com.mohiva.play.silhouette.core.IdentityId"></a>
-      <a id="identityId:IdentityId"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">identityId</span><span class="result">: <a href="IdentityId.html" class="extype" name="com.mohiva.play.silhouette.core.IdentityId">IdentityId</a></span>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.Identity#lastName" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="lastName:String"></a>
-      <a id="lastName:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">lastName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.Identity#oAuth1Info" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="oAuth1Info:Option[com.mohiva.play.silhouette.core.OAuth1Info]"></a>
-      <a id="oAuth1Info:Option[OAuth1Info]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">oAuth1Info</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.OAuth1Info">OAuth1Info</a>]</span>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.Identity#oAuth2Info" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="oAuth2Info:Option[com.mohiva.play.silhouette.core.OAuth2Info]"></a>
-      <a id="oAuth2Info:Option[OAuth2Info]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">oAuth2Info</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.core.OAuth2Info">OAuth2Info</a>]</span>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.Identity#passwordInfo" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="passwordInfo:Option[com.mohiva.play.silhouette.core.PasswordInfo]"></a>
-      <a id="passwordInfo:Option[PasswordInfo]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">passwordInfo</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="PasswordInfo.html" class="extype" name="com.mohiva.play.silhouette.core.PasswordInfo">PasswordInfo</a>]</span>
-      </span>
-      </h4>
-      
+      <p class="shortcomment cmt">Gets the linked login info for an identity.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the linked login info for an identity.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The linked login info for an identity.
+</p></dd></dl></div>
     </li></ol>
             </div>
 

@@ -85,36 +85,20 @@ for the Silhouette module.
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.services.IdentityService#findByEmailAndProvider" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="findByEmailAndProvider(email:String,providerID:String):scala.concurrent.Future[Option[T]]"></a>
-      <a id="findByEmailAndProvider(String,String):Future[Option[T]]"></a>
+              <ol><li name="com.mohiva.play.silhouette.core.services.IdentityService#findByLoginInfo" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="findByLoginInfo(loginInfo:com.mohiva.play.silhouette.core.LoginInfo):scala.concurrent.Future[Option[T]]"></a>
+      <a id="findByLoginInfo(LoginInfo):Future[Option[T]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">findByEmailAndProvider</span><span class="params">(<span name="email">email: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="providerID">providerID: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="com.mohiva.play.silhouette.core.services.IdentityService.T">T</span>]]</span>
+        <span class="name">findByLoginInfo</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="com.mohiva.play.silhouette.core.services.IdentityService.T">T</span>]]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Finds an identity by email and provider ID.</p><div class="fullcomment"><div class="comment cmt"><p>Finds an identity by email and provider ID.</p><p>Note: If you do not plan to use the Credentials provider just provide an empty
-implementation.
-</p></div><dl class="paramcmts block"><dt class="param">email</dt><dd class="cmt"><p>The user email.</p></dd><dt class="param">providerID</dt><dd class="cmt"><p>The provider ID.</p></dd><dt>returns</dt><dd class="cmt"><p>The found identity or None if no identity could be found for the given ID.
-</p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.services.IdentityService#findByID" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="findByID(id:com.mohiva.play.silhouette.core.IdentityId):scala.concurrent.Future[Option[T]]"></a>
-      <a id="findByID(IdentityId):Future[Option[T]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">findByID</span><span class="params">(<span name="id">id: <a href="../IdentityId.html" class="extype" name="com.mohiva.play.silhouette.core.IdentityId">IdentityId</a></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="com.mohiva.play.silhouette.core.services.IdentityService.T">T</span>]]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Finds an identity that matches the specified ID.</p><div class="fullcomment"><div class="comment cmt"><p>Finds an identity that matches the specified ID.
-</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The ID to find an identity.</p></dd><dt>returns</dt><dd class="cmt"><p>The found identity or None if no identity could be found for the given ID.
+      <p class="shortcomment cmt">Finds an identity that matches the specified login info.</p><div class="fullcomment"><div class="comment cmt"><p>Finds an identity that matches the specified login info.
+</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info to find an identity.</p></dd><dt>returns</dt><dd class="cmt"><p>The found identity or None if no identity could be found for the given login info.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.services.IdentityService#save" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="save(identity:T):scala.concurrent.Future[Option[T]]"></a>

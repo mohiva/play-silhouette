@@ -91,7 +91,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="AccessDeniedException.html"><span class="name">AccessDeniedException</span></a><span class="params">()</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="AccessDeniedException.html"><span class="name">AccessDeniedException</span></a><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">An exception thrown when the user denies access to the application
@@ -105,24 +105,10 @@ in the login page of the 3rd party service.</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="AuthenticationException.html"><span class="name">AuthenticationException</span></a><span class="params">()</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="AuthenticationException.html"><span class="name">AuthenticationException</span></a><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">An exception thrown when there is an error in the authentication flow.</p>
-    </li><li name="com.mohiva.play.silhouette.core.AuthenticationMethod" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="AuthenticationMethodextendsProductwithSerializable"></a>
-      <a id="AuthenticationMethod:AuthenticationMethod"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="AuthenticationMethod.html"><span class="name">AuthenticationMethod</span></a><span class="params">(<span name="method">method: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">A class representing an authentication method
-</p>
     </li><li name="com.mohiva.play.silhouette.core.Authenticator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="AuthenticatorextendsProductwithSerializable"></a>
       <a id="Authenticator:Authenticator"></a>
@@ -132,7 +118,7 @@ in the login page of the 3rd party service.</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Authenticator.html"><span class="name">Authenticator</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="identityID">identityID: <a href="IdentityId.html" class="extype" name="com.mohiva.play.silhouette.core.IdentityId">IdentityId</a></span>, <span name="creationDate">creationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="lastUsedDate">lastUsedDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="expirationDate">expirationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Authenticator.html"><span class="name">Authenticator</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loginInfo">loginInfo: <a href="LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="creationDate">creationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="lastUsedDate">lastUsedDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="expirationDate">expirationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">An authenticator tracks an authenticated user.</p>
@@ -165,7 +151,7 @@ an authorization implementation in SecuredActions.</p>
       <p class="comment cmt">A trait to model Silhouette events
 </p>
     </li><li name="com.mohiva.play.silhouette.core.EventListener" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="EventListenerextendsPluginwithRegistrable"></a>
+      <a id="EventListenerextendsAnyRef"></a>
       <a id="EventListener:EventListener"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -173,7 +159,7 @@ an authorization implementation in SecuredActions.</p>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="EventListener.html"><span class="name">EventListener</span></a><span class="result"> extends <span class="extype" name="play.api.Plugin">Plugin</span> with <a href="Registrable.html" class="extype" name="com.mohiva.play.silhouette.core.Registrable">Registrable</a></span>
+        <a href="EventListener.html"><span class="name">EventListener</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       <p class="comment cmt">The event listener interface
@@ -191,33 +177,6 @@ an authorization implementation in SecuredActions.</p>
       </span>
       </h4>
       <p class="comment cmt">This trait represents a user.</p>
-    </li><li name="com.mohiva.play.silhouette.core.IdentityId" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="IdentityIdextendsProductwithSerializable"></a>
-      <a id="IdentityId:IdentityId"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="IdentityId.html"><span class="name">IdentityId</span></a><span class="params">(<span name="userId">userId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="providerId">providerId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">The ID of an Identity
-</p>
-    </li><li name="com.mohiva.play.silhouette.core.IdentityProvider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="IdentityProviderextendsPluginwithRegistrable"></a>
-      <a id="IdentityProvider:IdentityProvider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="IdentityProvider.html"><span class="name">IdentityProvider</span></a><span class="result"> extends <span class="extype" name="play.api.Plugin">Plugin</span> with <a href="Registrable.html" class="extype" name="com.mohiva.play.silhouette.core.Registrable">Registrable</a></span>
-      </span>
-      </h4>
-      <p class="comment cmt">Base class for all Identity Providers.</p>
     </li><li name="com.mohiva.play.silhouette.core.LoginEvent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LoginEventextendsEventwithProductwithSerializable"></a>
       <a id="LoginEvent:LoginEvent"></a>
@@ -231,6 +190,19 @@ an authorization implementation in SecuredActions.</p>
       </span>
       </h4>
       <p class="comment cmt">The event fired when a users logs in</p>
+    </li><li name="com.mohiva.play.silhouette.core.LoginInfo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LoginInfoextendsProductwithSerializable"></a>
+      <a id="LoginInfo:LoginInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="LoginInfo.html"><span class="name">LoginInfo</span></a><span class="params">(<span name="providerID">providerID: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="providerKey">providerKey: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Represents a linked login for an identity (i.</p>
     </li><li name="com.mohiva.play.silhouette.core.LogoutEvent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LogoutEventextendsEventwithProductwithSerializable"></a>
       <a id="LogoutEvent:LogoutEvent"></a>
@@ -244,75 +216,6 @@ an authorization implementation in SecuredActions.</p>
       </span>
       </h4>
       <p class="comment cmt">The event fired when a user logs out</p>
-    </li><li name="com.mohiva.play.silhouette.core.OAuth1Info" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="OAuth1InfoextendsProductwithSerializable"></a>
-      <a id="OAuth1Info:OAuth1Info"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="OAuth1Info.html"><span class="name">OAuth1Info</span></a><span class="params">(<span name="token">token: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="secret">secret: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">The OAuth 1 details
-</p>
-    </li><li name="com.mohiva.play.silhouette.core.OAuth1Provider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="OAuth1ProviderextendsIdentityProvider"></a>
-      <a id="OAuth1Provider:OAuth1Provider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="OAuth1Provider.html"><span class="name">OAuth1Provider</span></a><span class="result"> extends <a href="IdentityProvider.html" class="extype" name="com.mohiva.play.silhouette.core.IdentityProvider">IdentityProvider</a></span>
-      </span>
-      </h4>
-      <p class="comment cmt">Base class for all OAuth1 providers
-</p>
-    </li><li name="com.mohiva.play.silhouette.core.OAuth2Info" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="OAuth2InfoextendsProductwithSerializable"></a>
-      <a id="OAuth2Info:OAuth2Info"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="OAuth2Info.html"><span class="name">OAuth2Info</span></a><span class="params">(<span name="accessToken">accessToken: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="tokenType">tokenType: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="expiresIn">expiresIn: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>] = <span class="symbol">scala.None</span></span>, <span name="refreshToken">refreshToken: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">The Oauth2 details
-</p>
-    </li><li name="com.mohiva.play.silhouette.core.OAuth2Provider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="OAuth2ProviderextendsIdentityProvider"></a>
-      <a id="OAuth2Provider:OAuth2Provider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="OAuth2Provider.html"><span class="name">OAuth2Provider</span></a><span class="result"> extends <a href="IdentityProvider.html" class="extype" name="com.mohiva.play.silhouette.core.IdentityProvider">IdentityProvider</a></span>
-      </span>
-      </h4>
-      <p class="comment cmt">Base class for all OAuth2 providers
-</p>
-    </li><li name="com.mohiva.play.silhouette.core.OAuth2Settings" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="OAuth2SettingsextendsProductwithSerializable"></a>
-      <a id="OAuth2Settings:OAuth2Settings"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="OAuth2Settings.html"><span class="name">OAuth2Settings</span></a><span class="params">(<span name="authorizationUrl">authorizationUrl: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="accessTokenUrl">accessTokenUrl: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="clientId">clientId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="clientSecret">clientSecret: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="scope">scope: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      
     </li><li name="com.mohiva.play.silhouette.core.PasswordChangeEvent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="PasswordChangeEventextendsEventwithProductwithSerializable"></a>
       <a id="PasswordChangeEvent:PasswordChangeEvent"></a>
@@ -326,20 +229,6 @@ an authorization implementation in SecuredActions.</p>
       </span>
       </h4>
       <p class="comment cmt">The event fired when a user changes his password</p>
-    </li><li name="com.mohiva.play.silhouette.core.PasswordInfo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="PasswordInfoextendsProductwithSerializable"></a>
-      <a id="PasswordInfo:PasswordInfo"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="PasswordInfo.html"><span class="name">PasswordInfo</span></a><span class="params">(<span name="hasher">hasher: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="password">password: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="salt">salt: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">The password details
-</p>
     </li><li name="com.mohiva.play.silhouette.core.PasswordResetEvent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="PasswordResetEventextendsEventwithProductwithSerializable"></a>
       <a id="PasswordResetEvent:PasswordResetEvent"></a>
@@ -353,19 +242,6 @@ an authorization implementation in SecuredActions.</p>
       </span>
       </h4>
       <p class="comment cmt">The event fired when a user completes a password reset</p>
-    </li><li name="com.mohiva.play.silhouette.core.PluginRegistry" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="PluginRegistry[T&lt;:com.mohiva.play.silhouette.core.Registrable]extendsAnyRef"></a>
-      <a id="PluginRegistry[T&lt;:Registrable]:PluginRegistry[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="PluginRegistry.html"><span class="name">PluginRegistry</span></a><span class="tparams">[<span name="T">T &lt;: <a href="Registrable.html" class="extype" name="com.mohiva.play.silhouette.core.Registrable">Registrable</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      </h4>
-      
     </li><li name="com.mohiva.play.silhouette.core.Provider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ProviderextendsAnyRef"></a>
       <a id="Provider:Provider"></a>
@@ -379,19 +255,6 @@ an authorization implementation in SecuredActions.</p>
       </span>
       </h4>
       <p class="comment cmt">A marker interface for all providers.</p>
-    </li><li name="com.mohiva.play.silhouette.core.Registrable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="RegistrableextendsAnyRef"></a>
-      <a id="Registrable:Registrable"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="Registrable.html"><span class="name">Registrable</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      </h4>
-      
     </li><li name="com.mohiva.play.silhouette.core.SecuredSettings" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="SecuredSettingsextendsAnyRef"></a>
       <a id="SecuredSettings:SecuredSettings"></a>
@@ -433,46 +296,19 @@ for not-authenticated and not-authorized actions.</p>
       </h4>
       <p class="comment cmt">Provides the actions that can be used to protect controllers and retrieve the current user
 if available.</p>
-    </li><li name="com.mohiva.play.silhouette.core.SocialUser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SocialUserextendsIdentitywithProductwithSerializable"></a>
-      <a id="SocialUser:SocialUser"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="SocialUser.html"><span class="name">SocialUser</span></a><span class="params">(<span name="identityId">identityId: <a href="IdentityId.html" class="extype" name="com.mohiva.play.silhouette.core.IdentityId">IdentityId</a></span>, <span name="firstName">firstName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="lastName">lastName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fullName">fullName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="email">email: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="avatarUrl">avatarUrl: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="authMethod">authMethod: <a href="AuthenticationMethod.html" class="extype" name="com.mohiva.play.silhouette.core.AuthenticationMethod">AuthenticationMethod</a></span>, <span name="oAuth1Info">oAuth1Info: <span class="extype" name="scala.Option">Option</span>[<a href="OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.OAuth1Info">OAuth1Info</a>] = <span class="symbol">scala.None</span></span>, <span name="oAuth2Info">oAuth2Info: <span class="extype" name="scala.Option">Option</span>[<a href="OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.core.OAuth2Info">OAuth2Info</a>] = <span class="symbol">scala.None</span></span>, <span name="passwordInfo">passwordInfo: <span class="extype" name="scala.Option">Option</span>[<a href="PasswordInfo.html" class="extype" name="com.mohiva.play.silhouette.core.PasswordInfo">PasswordInfo</a>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">An implementation of Identity.</p>
-    </li><li name="com.mohiva.play.silhouette.core.UserService" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="UserServiceextendsAnyRef"></a>
-      <a id="UserService:UserService"></a>
+    </li><li name="com.mohiva.play.silhouette.core.Token" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="TokenextendsAnyRef"></a>
+      <a id="Token:Token"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="UserService.html"><span class="name">UserService</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="Token.html"><span class="name">Token</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <p class="comment cmt">A trait that provides the means to find and save users
-for the SecureSocial module.</p>
-    </li><li name="com.mohiva.play.silhouette.core.UserServicePlugin" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="UserServicePluginextendsPluginwithUserService"></a>
-      <a id="UserServicePlugin:UserServicePlugin"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="UserServicePlugin.html"><span class="name">UserServicePlugin</span></a><span class="result"> extends <span class="extype" name="play.api.Plugin">Plugin</span> with <a href="UserService.html" class="extype" name="com.mohiva.play.silhouette.core.UserService">UserService</a></span>
-      </span>
-      </h4>
-      <p class="comment cmt">Base class for the classes that implement UserService.</p>
+      <p class="comment cmt">A token used for reset password and sign up operations.</p>
     </li></ol>
             </div>
 
@@ -480,21 +316,7 @@ for the SecureSocial module.</p>
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.AuthenticationMethod" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="AuthenticationMethod"></a>
-      <a id="AuthenticationMethod:AuthenticationMethod"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="AuthenticationMethod$.html"><span class="name">AuthenticationMethod</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">Authentication methods used by the identity providers
-</p>
-    </li><li name="com.mohiva.play.silhouette.core.Authenticator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="com.mohiva.play.silhouette.core.Authenticator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Authenticator"></a>
       <a id="Authenticator:Authenticator"></a>
       <h4 class="signature">
@@ -507,112 +329,6 @@ for the SecureSocial module.</p>
       </span>
       </h4>
       <p class="comment cmt">The companion object.</p>
-    </li><li name="com.mohiva.play.silhouette.core.Events" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Events"></a>
-      <a id="Events:Events"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="Events$.html"><span class="name">Events</span></a>
-      </span>
-      </h4>
-      <p class="comment cmt">Helper object to fire events
-</p>
-    </li><li name="com.mohiva.play.silhouette.core.IdentityProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="IdentityProvider"></a>
-      <a id="IdentityProvider:IdentityProvider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="IdentityProvider$.html"><span class="name">IdentityProvider</span></a>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.OAuth1Provider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="OAuth1Provider"></a>
-      <a id="OAuth1Provider:OAuth1Provider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="OAuth1Provider$.html"><span class="name">OAuth1Provider</span></a>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.OAuth2Constants" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="OAuth2Constants"></a>
-      <a id="OAuth2Constants:OAuth2Constants"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="OAuth2Constants$.html"><span class="name">OAuth2Constants</span></a>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.OAuth2Settings" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="OAuth2Settings"></a>
-      <a id="OAuth2Settings:OAuth2Settings"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="OAuth2Settings$.html"><span class="name">OAuth2Settings</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.Registry" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Registry"></a>
-      <a id="Registry:Registry"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="Registry$.html"><span class="name">Registry</span></a>
-      </span>
-      </h4>
-      <p class="comment cmt">A registry for providers and password hashers.</p>
-    </li><li name="com.mohiva.play.silhouette.core.SocialUser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SocialUser"></a>
-      <a id="SocialUser:SocialUser"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="SocialUser$.html"><span class="name">SocialUser</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.core.UserService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="UserService"></a>
-      <a id="UserService:UserService"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="UserService$.html"><span class="name">UserService</span></a>
-      </span>
-      </h4>
-      <p class="comment cmt">The UserService singleton
-</p>
     </li><li name="com.mohiva.play.silhouette.core.providers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="providers"></a>
       <a id="providers:providers"></a>
@@ -625,7 +341,7 @@ for the SecureSocial module.</p>
         <a href="providers/package.html"><span class="name">providers</span></a>
       </span>
       </h4>
-      <p class="comment cmt">Contains <a href="IdentityProvider.html" class="extype" name="com.mohiva.play.silhouette.core.IdentityProvider">IdentityProvider</a> implementations that provide authentication
+      <p class="comment cmt">Contains <a href="Provider.html" class="extype" name="com.mohiva.play.silhouette.core.Provider">com.mohiva.play.silhouette.core.Provider</a> implementations that provide authentication
 for different schemes and services.</p>
     </li><li name="com.mohiva.play.silhouette.core.services" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="services"></a>

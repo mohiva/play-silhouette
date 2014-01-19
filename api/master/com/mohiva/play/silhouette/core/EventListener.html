@@ -35,14 +35,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">EventListener</span><span class="result"> extends <span class="extype" name="play.api.Plugin">Plugin</span> with <a href="Registrable.html" class="extype" name="com.mohiva.play.silhouette.core.Registrable">Registrable</a></span>
+        <span class="name">EventListener</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The event listener interface
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Registrable.html" class="extype" name="com.mohiva.play.silhouette.core.Registrable">Registrable</a>, <span class="extype" name="play.api.Plugin">Plugin</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -60,7 +60,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.core.EventListener"><span>EventListener</span></li><li class="in" name="com.mohiva.play.silhouette.core.Registrable"><span>Registrable</span></li><li class="in" name="play.api.Plugin"><span>Plugin</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.core.EventListener"><span>EventListener</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -100,20 +100,7 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.Registrable#id" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="id:String"></a>
-      <a id="id:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">id</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Registrable.html" class="extype" name="com.mohiva.play.silhouette.core.Registrable">Registrable</a></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.EventListener#onEvent" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="com.mohiva.play.silhouette.core.EventListener#onEvent" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="onEvent(event:com.mohiva.play.silhouette.core.Event,request:play.api.mvc.RequestHeader,session:play.api.mvc.Session):Option[play.api.mvc.Session]"></a>
       <a id="onEvent(Event,RequestHeader,Session):Option[Session]"></a>
       <h4 class="signature">
@@ -230,19 +217,6 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="play.api.Plugin#enabled" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="enabled:Boolean"></a>
-      <a id="enabled:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">enabled</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Plugin</dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -366,32 +340,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.EventListener#onStart" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="onStart():Unit"></a>
-      <a id="onStart():Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">onStart</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.core.EventListener">EventListener</a> → Plugin</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.EventListener#onStop" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="onStop():Unit"></a>
-      <a id="onStop():Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">onStop</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.core.EventListener">EventListener</a> → Plugin</dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -484,11 +432,7 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.mohiva.play.silhouette.core.Registrable">
-              <h3>Inherited from <a href="Registrable.html" class="extype" name="com.mohiva.play.silhouette.core.Registrable">Registrable</a></h3>
-            </div><div class="parent" name="play.api.Plugin">
-              <h3>Inherited from <span class="extype" name="play.api.Plugin">Plugin</span></h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

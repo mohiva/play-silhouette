@@ -35,12 +35,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Authenticator</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="identityID">identityID: <a href="IdentityId.html" class="extype" name="com.mohiva.play.silhouette.core.IdentityId">IdentityId</a></span>, <span name="creationDate">creationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="lastUsedDate">lastUsedDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="expirationDate">expirationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">Authenticator</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loginInfo">loginInfo: <a href="LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="creationDate">creationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="lastUsedDate">lastUsedDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="expirationDate">expirationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An authenticator tracks an authenticated user.
-</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The authenticator ID.</p></dd><dt class="param">identityID</dt><dd class="cmt"><p>The user ID.</p></dd><dt class="param">creationDate</dt><dd class="cmt"><p>The creation timestamp.</p></dd><dt class="param">lastUsedDate</dt><dd class="cmt"><p>The last used timestamp.</p></dd><dt class="param">expirationDate</dt><dd class="cmt"><p>The expiration time.
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The authenticator ID.</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The user ID.</p></dd><dt class="param">creationDate</dt><dd class="cmt"><p>The creation timestamp.</p></dd><dt class="param">lastUsedDate</dt><dd class="cmt"><p>The last used timestamp.</p></dd><dt class="param">expirationDate</dt><dd class="cmt"><p>The expiration time.
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -82,7 +82,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.mohiva.play.silhouette.core.Authenticator#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(id:String,identityID:com.mohiva.play.silhouette.core.IdentityId,creationDate:org.joda.time.DateTime,lastUsedDate:org.joda.time.DateTime,expirationDate:org.joda.time.DateTime):com.mohiva.play.silhouette.core.Authenticator"></a>
+      <a id="&lt;init&gt;(id:String,loginInfo:com.mohiva.play.silhouette.core.LoginInfo,creationDate:org.joda.time.DateTime,lastUsedDate:org.joda.time.DateTime,expirationDate:org.joda.time.DateTime):com.mohiva.play.silhouette.core.Authenticator"></a>
       <a id="&lt;init&gt;:Authenticator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -90,10 +90,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Authenticator</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="identityID">identityID: <a href="IdentityId.html" class="extype" name="com.mohiva.play.silhouette.core.IdentityId">IdentityId</a></span>, <span name="creationDate">creationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="lastUsedDate">lastUsedDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="expirationDate">expirationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>)</span>
+        <span class="name">Authenticator</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loginInfo">loginInfo: <a href="LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="creationDate">creationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="lastUsedDate">lastUsedDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="expirationDate">expirationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The authenticator ID.</p></dd><dt class="param">identityID</dt><dd class="cmt"><p>The user ID.</p></dd><dt class="param">creationDate</dt><dd class="cmt"><p>The creation timestamp.</p></dd><dt class="param">lastUsedDate</dt><dd class="cmt"><p>The last used timestamp.</p></dd><dt class="param">expirationDate</dt><dd class="cmt"><p>The expiration time.
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The authenticator ID.</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The user ID.</p></dd><dt class="param">creationDate</dt><dd class="cmt"><p>The creation timestamp.</p></dd><dt class="param">lastUsedDate</dt><dd class="cmt"><p>The last used timestamp.</p></dd><dt class="param">expirationDate</dt><dd class="cmt"><p>The expiration time.
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -301,19 +301,6 @@ the authenticator.
       </span>
       </h4>
       <p class="shortcomment cmt">The authenticator ID.</p>
-    </li><li name="com.mohiva.play.silhouette.core.Authenticator#identityID" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="identityID:com.mohiva.play.silhouette.core.IdentityId"></a>
-      <a id="identityID:IdentityId"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">identityID</span><span class="result">: <a href="IdentityId.html" class="extype" name="com.mohiva.play.silhouette.core.IdentityId">IdentityId</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">The user ID.</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -355,6 +342,19 @@ the authenticator.
       </span>
       </h4>
       <p class="shortcomment cmt">The last used timestamp.</p>
+    </li><li name="com.mohiva.play.silhouette.core.Authenticator#loginInfo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="loginInfo:com.mohiva.play.silhouette.core.LoginInfo"></a>
+      <a id="loginInfo:LoginInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loginInfo</span><span class="result">: <a href="LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The user ID.</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

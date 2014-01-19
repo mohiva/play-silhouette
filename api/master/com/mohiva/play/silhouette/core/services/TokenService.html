@@ -35,13 +35,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">TokenService</span><span class="tparams">[<span name="T">T &lt;: <a href="../providers/Token.html" class="extype" name="com.mohiva.play.silhouette.core.providers.Token">Token</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">TokenService</span><span class="tparams">[<span name="T">T &lt;: <a href="../Token.html" class="extype" name="com.mohiva.play.silhouette.core.Token">Token</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A trait that provides the means to find and save tokens for the Silhouette module if
 the Credentials provider is enabled.</p><p>Tokens are needed for users that are creating an account in the system instead of using
-one in a 3rd party system.
+one in a third-party system.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -86,63 +86,52 @@ one in a 3rd party system.
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.services.TokenService#deleteByID" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="deleteByID(id:String):Unit"></a>
-      <a id="deleteByID(String):Unit"></a>
+              <ol><li name="com.mohiva.play.silhouette.core.services.TokenService#consume" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="consume(id:String):Unit"></a>
+      <a id="consume(String):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deleteByID</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">consume</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Deletes a token.</p><div class="fullcomment"><div class="comment cmt"><p>Deletes a token.
+      <p class="shortcomment cmt">Consumes a token.</p><div class="fullcomment"><div class="comment cmt"><p>Consumes a token.</p><p>This method makes the token unavailable for further use.
+It's up to the implementation how to do that. For example, the token can be deleted,
+updated as &quot;consumed&quot;, moved to another table, etc.</p><p>Consumed tokens can't be retrieved.
 </p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The ID of the token to delete.
 </p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.services.TokenService#deleteExpired" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="deleteExpired():Unit"></a>
-      <a id="deleteExpired():Unit"></a>
+    </li><li name="com.mohiva.play.silhouette.core.services.TokenService#create" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="create(token:T):scala.concurrent.Future[Option[T]]"></a>
+      <a id="create(T):Future[Option[T]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deleteExpired</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">create</span><span class="params">(<span name="token">token: <span class="extype" name="com.mohiva.play.silhouette.core.services.TokenService.T">T</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="com.mohiva.play.silhouette.core.services.TokenService.T">T</span>]]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Deletes all expired tokens.</p>
-    </li><li name="com.mohiva.play.silhouette.core.services.TokenService#findByID" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="findByID(id:String):scala.concurrent.Future[Option[T]]"></a>
-      <a id="findByID(String):Future[Option[T]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">findByID</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="com.mohiva.play.silhouette.core.services.TokenService.T">T</span>]]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Finds a token.</p><div class="fullcomment"><div class="comment cmt"><p>Finds a token.
-</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The token ID.</p></dd><dt>returns</dt><dd class="cmt"><p>The found token or None if no token couldn't be found for the given ID.
+      <p class="shortcomment cmt">Creates a new token.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a new token.</p><p>The new token will be persisted so that later it can be retrieved by its ID.
+</p></div><dl class="paramcmts block"><dt class="param">token</dt><dd class="cmt"><p>The token to create.</p></dd><dt>returns</dt><dd class="cmt"><p>The created token or None if the token couldn't be created.
 </p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.services.TokenService#save" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="save(token:T):scala.concurrent.Future[Option[T]]"></a>
-      <a id="save(T):Future[Option[T]]"></a>
+    </li><li name="com.mohiva.play.silhouette.core.services.TokenService#retrieve" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="retrieve(id:String):scala.concurrent.Future[Option[T]]"></a>
+      <a id="retrieve(String):Future[Option[T]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">save</span><span class="params">(<span name="token">token: <span class="extype" name="com.mohiva.play.silhouette.core.services.TokenService.T">T</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="com.mohiva.play.silhouette.core.services.TokenService.T">T</span>]]</span>
+        <span class="name">retrieve</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="com.mohiva.play.silhouette.core.services.TokenService.T">T</span>]]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Saves a token.</p><div class="fullcomment"><div class="comment cmt"><p>Saves a token.
-</p></div><dl class="paramcmts block"><dt class="param">token</dt><dd class="cmt"><p>The token to save.</p></dd><dt>returns</dt><dd class="cmt"><p>The saved token or None if the token couldn't be saved.
+      <p class="shortcomment cmt">Retrieves an available token.</p><div class="fullcomment"><div class="comment cmt"><p>Retrieves an available token.
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The token ID.</p></dd><dt>returns</dt><dd class="cmt"><p>The found token or None if no token couldn't be found for the given ID.
 </p></dd></dl></div>
     </li></ol>
             </div>

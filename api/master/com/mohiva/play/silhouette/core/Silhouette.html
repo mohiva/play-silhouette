@@ -2653,7 +2653,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="name">notAuthenticated</span><span class="params">(<span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>]]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Implement this to return a result when the user isn't authenticated.</p><div class="fullcomment"><div class="comment cmt"><p>Implement this to return a result when the user isn't authenticated.
+      <p class="shortcomment cmt">Implement this to return a result when the user is not authenticated.</p><div class="fullcomment"><div class="comment cmt"><p>Implement this to return a result when the user is not authenticated.</p><p>As defined by RFC 2616, the status code of the response should be 401 Unauthorized.
 </p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client.
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.Silhouette#notAuthorized" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -2668,7 +2668,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
         <span class="name">notAuthorized</span><span class="params">(<span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>]]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Implement this to return a result when the user isn't authorized.</p><div class="fullcomment"><div class="comment cmt"><p>Implement this to return a result when the user isn't authorized.
+      <p class="shortcomment cmt">Implement this to return a result when the user is authenticated but not authorized.</p><div class="fullcomment"><div class="comment cmt"><p>Implement this to return a result when the user is authenticated but not authorized.</p><p>As defined by RFC 2616, the status code of the response should be 403 Forbidden.
 </p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client.
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">

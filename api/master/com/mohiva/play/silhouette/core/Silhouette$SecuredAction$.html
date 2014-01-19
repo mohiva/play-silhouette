@@ -39,7 +39,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A secured action.</p><p>If there is no identity in the session, the request is forwarded to
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A secured action.</p><p>If the user is not authenticated or not authorized, the request is forwarded to
 the <a href="Silhouette.html#notAuthenticated(request:play.api.mvc.RequestHeader):Option[scala.concurrent.Future[play.api.mvc.SimpleResult]]" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette#notAuthenticated">com.mohiva.play.silhouette.core.Silhouette.notAuthenticated</a> or
 the <a href="Silhouette.html#notAuthorized(request:play.api.mvc.RequestHeader):Option[scala.concurrent.Future[play.api.mvc.SimpleResult]]" class="extmbr" name="com.mohiva.play.silhouette.core.Silhouette#notAuthorized">com.mohiva.play.silhouette.core.Silhouette.notAuthorized</a> methods.</p><p>If these methods are not implemented, then
 the <a href="SecuredSettings.html#onNotAuthenticated(request:play.api.mvc.RequestHeader,lang:play.api.i18n.Lang):Option[scala.concurrent.Future[play.api.mvc.SimpleResult]]" class="extmbr" name="com.mohiva.play.silhouette.core.SecuredSettings#onNotAuthenticated">com.mohiva.play.silhouette.core.SecuredSettings.onNotAuthenticated</a> or
@@ -404,7 +404,10 @@ a default message will be displayed.
         <span class="name">handleNotAuthenticated</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Handles the not-authenticated result.</p><div class="fullcomment"><div class="comment cmt"><p>Handles the not-authenticated result.
+      <p class="shortcomment cmt">Produces a result indicating that the user must provide authentication before
+the requested action can be performed.</p><div class="fullcomment"><div class="comment cmt"><p>Produces a result indicating that the user must provide authentication before
+the requested action can be performed.</p><p>This should be called when the user is not authenticated.
+This indicates a temporary condition. The user can authenticate and repeat the request.</p><p>As defined by RFC 2616, the status code of the response will be 401 Unauthorized.
 </p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client if the user isn't authenticated.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Silhouette$SecuredActionBuilder.html" class="extype" name="com.mohiva.play.silhouette.core.Silhouette.SecuredActionBuilder">SecuredActionBuilder</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.Silhouette.SecuredActionBuilder#handleNotAuthorized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -419,7 +422,11 @@ a default message will be displayed.
         <span class="name">handleNotAuthorized</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Handles the not-authorized result.</p><div class="fullcomment"><div class="comment cmt"><p>Handles the not-authorized result.
+      <p class="shortcomment cmt">Produces a result indicating that the request will be forbidden
+because the authenticated user is not authorized to perform the requested action.</p><div class="fullcomment"><div class="comment cmt"><p>Produces a result indicating that the request will be forbidden
+because the authenticated user is not authorized to perform the requested action.</p><p>This should be called when the user is authenticated but authorization failed.
+This indicates a permanent situation. Repeating the request with the same authenticated
+user will produce the same response.</p><p>As defined by RFC 2616, the status code of the response will be 403 Forbidden.
 </p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client if the user isn't authorized.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Silhouette$SecuredActionBuilder.html" class="extype" name="com.mohiva.play.silhouette.core.Silhouette.SecuredActionBuilder">SecuredActionBuilder</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -447,7 +454,7 @@ a default message will be displayed.
         <span class="name">invokeBlock</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="request">request: <span class="extype" name="play.api.mvc.Request">Request</span>[<span class="extype" name="com.mohiva.play.silhouette.core.Silhouette.SecuredActionBuilder.invokeBlock.A">A</span>]</span>, <span name="block">block: (<a href="Silhouette$SecuredRequest.html" class="extype" name="com.mohiva.play.silhouette.core.Silhouette.SecuredRequest">SecuredRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.core.Silhouette.SecuredActionBuilder.invokeBlock.A">A</span>]) ⇒ <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>]</span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Invoke the block.</p><div class="fullcomment"><div class="comment cmt"><p>Invoke the block.
+      <p class="shortcomment cmt">Invokes the block.</p><div class="fullcomment"><div class="comment cmt"><p>Invokes the block.
 </p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request.</p></dd><dt class="param">block</dt><dd class="cmt"><p>The block of code to invoke.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Silhouette$SecuredActionBuilder.html" class="extype" name="com.mohiva.play.silhouette.core.Silhouette.SecuredActionBuilder">SecuredActionBuilder</a> → ActionBuilder</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">

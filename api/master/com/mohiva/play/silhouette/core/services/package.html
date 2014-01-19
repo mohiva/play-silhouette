@@ -82,7 +82,21 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.services.AuthenticatorService" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="com.mohiva.play.silhouette.core.services.AuthInfoService" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AuthInfoServiceextendsAnyRef"></a>
+      <a id="AuthInfoService:AuthInfoService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="AuthInfoService.html"><span class="name">AuthInfoService</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A trait that provides the means to find and save auth information
+for the Silhouette module.</p>
+    </li><li name="com.mohiva.play.silhouette.core.services.AuthenticatorService" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="AuthenticatorServiceextendsAnyRef"></a>
       <a id="AuthenticatorService:AuthenticatorService"></a>
       <h4 class="signature">
@@ -95,19 +109,19 @@
       </span>
       </h4>
       <p class="comment cmt">The authenticator store is in charge of persisting authenticators for the Silhouette module.</p>
-    </li><li name="com.mohiva.play.silhouette.core.services.CacheAuthenticatorService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="CacheAuthenticatorServiceextendsAuthenticatorService"></a>
-      <a id="CacheAuthenticatorService:CacheAuthenticatorService"></a>
+    </li><li name="com.mohiva.play.silhouette.core.services.AvatarService" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AvatarServiceextendsAnyRef"></a>
+      <a id="AvatarService:AvatarService"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="CacheAuthenticatorService.html"><span class="name">CacheAuthenticatorService</span></a><span class="result"> extends <a href="AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a></span>
+        <a href="AvatarService.html"><span class="name">AvatarService</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <p class="comment cmt">A default implementation of the AuthenticatorService that uses a cache to store the authenticators.</p>
+      <p class="comment cmt">Service to retrieve avatar URLs from an avatar service such as Gravatar.</p>
     </li><li name="com.mohiva.play.silhouette.core.services.IdentityService" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="IdentityService[T&lt;:com.mohiva.play.silhouette.core.Identity]extendsAnyRef"></a>
       <a id="IdentityService[T&lt;:Identity]:IdentityService[T]"></a>
@@ -123,7 +137,7 @@
       <p class="comment cmt">A trait that provides the means to find and save identities
 for the Silhouette module.</p>
     </li><li name="com.mohiva.play.silhouette.core.services.TokenService" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="TokenService[T&lt;:com.mohiva.play.silhouette.core.providers.Token]extendsAnyRef"></a>
+      <a id="TokenService[T&lt;:com.mohiva.play.silhouette.core.Token]extendsAnyRef"></a>
       <a id="TokenService[T&lt;:Token]:TokenService[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -131,7 +145,7 @@ for the Silhouette module.</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="TokenService.html"><span class="name">TokenService</span></a><span class="tparams">[<span name="T">T &lt;: <a href="../providers/Token.html" class="extype" name="com.mohiva.play.silhouette.core.providers.Token">Token</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="TokenService.html"><span class="name">TokenService</span></a><span class="tparams">[<span name="T">T &lt;: <a href="../Token.html" class="extype" name="com.mohiva.play.silhouette.core.Token">Token</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       <p class="comment cmt">A trait that provides the means to find and save tokens for the Silhouette module if
