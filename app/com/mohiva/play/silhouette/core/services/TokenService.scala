@@ -53,7 +53,7 @@ trait TokenService[T <: Token] {
    * Consumes a token.
    *
    * This method makes the token unavailable for further use.
-   * It's up to implementation how to do that. For example, the token can be deleted,
+   * It's up to the implementation how to do that. For example, the token can be deleted,
    * updated as "consumed", moved to another table, etc.
    *
    * Consumed tokens can't be retrieved.
