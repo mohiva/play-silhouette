@@ -84,7 +84,7 @@ abstract class OAuth2Provider(
           (State, state))
         settings.scope.foreach(s => { params = (Scope, s) :: params })
         val url = settings.authorizationURL + params.map(p => p._1 + "=" + URLEncoder.encode(p._2, "UTF-8")).mkString("?", "&", "")
-        val redirect = Results.Redirect(url).withSession(request.session + (CacheKey, cacheID))
+        val redirect = Results.Redirect(url).withSession(request.session + (CacheKey -> cacheID))
         if (Logger.isDebugEnabled) {
           Logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
           Logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
