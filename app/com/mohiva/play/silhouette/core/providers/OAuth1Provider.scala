@@ -80,7 +80,7 @@ abstract class OAuth1Provider(
           if (Logger.isDebugEnabled) {
             Logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
           }
-          cacheLayer.set(cacheID, token, 600) // set it for 10 minutes, plenty of time to log in
+          cacheLayer.set(cacheID, token, 300) // set it for 5 minutes, plenty of time to log in
           Left(redirect)
         }))
     }
