@@ -19,7 +19,7 @@
  */
 package com.mohiva.play.silhouette.core.services
 
-import com.mohiva.play.silhouette.core.{Identity, Authenticator}
+import com.mohiva.play.silhouette.core.{ Identity, Authenticator }
 import scala.concurrent.Future
 
 /**

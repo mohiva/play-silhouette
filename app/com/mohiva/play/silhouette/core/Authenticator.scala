@@ -22,7 +22,7 @@ package com.mohiva.play.silhouette.core
 import org.joda.time.DateTime
 import play.api.Play.current
 import play.api.Play
-import play.api.mvc.{DiscardingCookie, Cookie}
+import play.api.mvc.{ DiscardingCookie, Cookie }
 import Authenticator._
 
 /**
@@ -35,11 +35,11 @@ import Authenticator._
  * @param expirationDate The expiration time.
  */
 case class Authenticator(
-  id: String,
-  loginInfo: LoginInfo,
-  creationDate: DateTime,
-  lastUsedDate: DateTime,
-  expirationDate: DateTime) {
+    id: String,
+    loginInfo: LoginInfo,
+    creationDate: DateTime,
+    lastUsedDate: DateTime,
+    expirationDate: DateTime) {
 
   /**
    * Creates a cookie representing this authenticator.

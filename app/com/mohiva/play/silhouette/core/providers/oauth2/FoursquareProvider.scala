@@ -22,8 +22,8 @@ package com.mohiva.play.silhouette.core.providers.oauth2
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
-import com.mohiva.play.silhouette.core.utils.{HTTPLayer, CacheLayer}
-import com.mohiva.play.silhouette.core.providers.{SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider}
+import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
+import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
 import com.mohiva.play.silhouette.core.services.AuthInfoService
 import FoursquareProvider._
 
@@ -36,11 +36,11 @@ import FoursquareProvider._
  * @param settings The provider settings.
  */
 class FoursquareProvider(
-    val authInfoService: AuthInfoService,
-    cacheLayer: CacheLayer,
-    httpLayer: HTTPLayer,
-    settings: OAuth2Settings)
-  extends OAuth2Provider(settings, cacheLayer, httpLayer) {
+  val authInfoService: AuthInfoService,
+  cacheLayer: CacheLayer,
+  httpLayer: HTTPLayer,
+  settings: OAuth2Settings)
+    extends OAuth2Provider(settings, cacheLayer, httpLayer) {
 
   /**
    * Gets the provider ID.
@@ -61,12 +61,12 @@ class FoursquareProvider(
       (json \ Response \ User).asOpt[String] match {
         case Some(msg) => throw new AuthenticationException(SpecifiedProfileError.format(msg))
         case _ =>
-          val userID = ( json \ Response \ User \ ID).asOpt[String]
+          val userID = (json \ Response \ User \ ID).asOpt[String]
           val lastName = (json \ Response \ User \ LastName).asOpt[String]
           val firstName = (json \ Response \ User \ FirstName).asOpt[String]
-          val avatarURLPart1  = (json \ Response \ User \ AvatarURL \ Prefix).asOpt[String]
+          val avatarURLPart1 = (json \ Response \ User \ AvatarURL \ Prefix).asOpt[String]
           val avatarURLPart2 = (json \ Response \ User \ AvatarURL \ Suffix).asOpt[String]
-          val email = (json \ Response \ User \ Contact \ Email).asOpt[String].filter( !_.isEmpty )
+          val email = (json \ Response \ User \ Contact \ Email).asOpt[String].filter(!_.isEmpty)
 
           SocialProfile(
             loginInfo = LoginInfo(id, userID.get),

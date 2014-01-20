@@ -1,6 +1,6 @@
 package com.mohiva.play.silhouette.contrib
 
-import com.mohiva.play.silhouette.core.{LoginInfo, Identity}
+import com.mohiva.play.silhouette.core.{ LoginInfo, Identity }
 
 /**
  * The default implementation of Identity.

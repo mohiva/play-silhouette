@@ -23,7 +23,7 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.services.AuthInfoService
-import com.mohiva.play.silhouette.core.utils.{PasswordHasher, PasswordInfo}
+import com.mohiva.play.silhouette.core.utils.{ PasswordHasher, PasswordInfo }
 
 /**
  * A provider for authenticating with credentials.
@@ -39,9 +39,9 @@ import com.mohiva.play.silhouette.core.utils.{PasswordHasher, PasswordInfo}
  * @param passwordHasherList List of password hashers supported by the application.
  */
 class CredentialsProvider(
-  authInfoService: AuthInfoService,
-  passwordHasher: PasswordHasher,
-  passwordHasherList: Seq[PasswordHasher]) extends Provider {
+    authInfoService: AuthInfoService,
+    passwordHasher: PasswordHasher,
+    passwordHasherList: Seq[PasswordHasher]) extends Provider {
 
   /**
    * Gets the provider ID.

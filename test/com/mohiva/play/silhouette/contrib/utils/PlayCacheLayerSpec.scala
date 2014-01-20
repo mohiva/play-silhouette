@@ -16,7 +16,7 @@
 package com.mohiva.play.silhouette.contrib.utils
 
 import test.AfterWithinAround
-import play.api.test.{WithApplication, PlaySpecification}
+import play.api.test.{ WithApplication, PlaySpecification }
 import play.api.cache.Cache
 import play.api.Play.current
 import org.joda.time.DateTime

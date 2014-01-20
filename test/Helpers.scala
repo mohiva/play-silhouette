@@ -15,7 +15,7 @@
  */
 package test
 
-import org.specs2.execute.{Result, AsResult}
+import org.specs2.execute.{ Result, AsResult }
 import org.specs2.mutable.Around
 
 /**
@@ -23,7 +23,7 @@ import org.specs2.mutable.Around
  */
 trait BeforeWithinAround extends Around {
   def before: Any
-  abstract override def around[T : AsResult](t: =>T): Result = super.around {
+  abstract override def around[T: AsResult](t: => T): Result = super.around {
     try { before; t }
   }
 }
@@ -33,7 +33,7 @@ trait BeforeWithinAround extends Around {
  */
 trait AfterWithinAround extends Around {
   def after: Any
-  abstract override def around[T : AsResult](t: =>T): Result = super.around {
+  abstract override def around[T: AsResult](t: => T): Result = super.around {
     try { t } finally { after }
   }
 }
@@ -44,7 +44,7 @@ trait AfterWithinAround extends Around {
 trait BeforeAfterWithinAround extends Around {
   def before: Any
   def after: Any
-  abstract override def around[T : AsResult](t: =>T): Result = super.around {
+  abstract override def around[T: AsResult](t: => T): Result = super.around {
     try { before; t } finally { after }
   }
 }

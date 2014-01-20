@@ -19,12 +19,12 @@
  */
 package com.mohiva.play.silhouette.core.providers.oauth1
 
-import play.api.libs.oauth.{RequestToken, OAuthCalculator}
+import play.api.libs.oauth.{ RequestToken, OAuthCalculator }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
-import com.mohiva.play.silhouette.core.utils.{HTTPLayer, CacheLayer}
-import com.mohiva.play.silhouette.core.providers.{SocialProfile, OAuth1Info, OAuth1Settings, OAuth1Provider}
+import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
+import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth1Info, OAuth1Settings, OAuth1Provider }
 import com.mohiva.play.silhouette.core.services.AuthInfoService
 import TwitterProvider._
 
@@ -37,11 +37,11 @@ import TwitterProvider._
  * @param settings The provider settings.
  */
 class TwitterProvider(
-    val authInfoService: AuthInfoService,
-    cacheLayer: CacheLayer,
-    httpLayer: HTTPLayer,
-    settings: OAuth1Settings)
-  extends OAuth1Provider(settings, cacheLayer, httpLayer) {
+  val authInfoService: AuthInfoService,
+  cacheLayer: CacheLayer,
+  httpLayer: HTTPLayer,
+  settings: OAuth1Settings)
+    extends OAuth1Provider(settings, cacheLayer, httpLayer) {
 
   /**
    * Gets the provider ID.

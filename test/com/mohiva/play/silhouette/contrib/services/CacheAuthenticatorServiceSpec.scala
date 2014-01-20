@@ -20,8 +20,8 @@ import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import scala.concurrent.Future
 import play.api.test.PlaySpecification
-import com.mohiva.play.silhouette.core.{Identity, Authenticator, LoginInfo}
-import com.mohiva.play.silhouette.core.utils.{Clock, IDGenerator, CacheLayer}
+import com.mohiva.play.silhouette.core.{ Identity, Authenticator, LoginInfo }
+import com.mohiva.play.silhouette.core.utils.{ Clock, IDGenerator, CacheLayer }
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService]] class.
@@ -78,7 +78,7 @@ class CacheAuthenticatorServiceSpec extends PlaySpecification with Mockito {
 
   "The save method" should {
     "save the authenticator in cache" in new Context {
-      cacheLayer.set[Authenticator](any, any ,any) returns Future.successful(Some(authenticator))
+      cacheLayer.set[Authenticator](any, any, any) returns Future.successful(Some(authenticator))
 
       await(service.save(authenticator))
 
@@ -86,13 +86,13 @@ class CacheAuthenticatorServiceSpec extends PlaySpecification with Mockito {
     }
 
     "return the given authenticator if all going well" in new Context {
-      cacheLayer.set[Authenticator](any, any ,any) returns Future.successful(Some(authenticator))
+      cacheLayer.set[Authenticator](any, any, any) returns Future.successful(Some(authenticator))
 
       await(service.save(authenticator)) must beSome(authenticator)
     }
 
     "return the None if something went wrong" in new Context {
-      cacheLayer.set[Authenticator](any, any ,any) returns Future.successful(None)
+      cacheLayer.set[Authenticator](any, any, any) returns Future.successful(None)
 
       await(service.save(authenticator)) must beNone
     }
@@ -100,7 +100,7 @@ class CacheAuthenticatorServiceSpec extends PlaySpecification with Mockito {
 
   "The update method" should {
     "update the authenticator in cache" in new Context {
-      cacheLayer.set[Authenticator](any, any ,any) returns Future.successful(Some(authenticator))
+      cacheLayer.set[Authenticator](any, any, any) returns Future.successful(Some(authenticator))
 
       await(service.update(authenticator))
 
@@ -108,13 +108,13 @@ class CacheAuthenticatorServiceSpec extends PlaySpecification with Mockito {
     }
 
     "return the given authenticator if all going well" in new Context {
-      cacheLayer.set[Authenticator](any, any ,any) returns Future.successful(Some(authenticator))
+      cacheLayer.set[Authenticator](any, any, any) returns Future.successful(Some(authenticator))
 
       await(service.update(authenticator)) must beSome(authenticator)
     }
 
     "return the None if something went wrong" in new Context {
-      cacheLayer.set[Authenticator](any, any ,any) returns Future.successful(None)
+      cacheLayer.set[Authenticator](any, any, any) returns Future.successful(None)
 
       await(service.update(authenticator)) must beNone
     }

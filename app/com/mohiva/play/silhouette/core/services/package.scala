@@ -18,4 +18,4 @@ package com.mohiva.play.silhouette.core
 /**
  * Provides services used by the core to persist and retrieve objects.
  */
-package object services { }
+package object services {}

@@ -19,12 +19,12 @@
  */
 package com.mohiva.play.silhouette.core.providers.oauth1
 
-import play.api.libs.oauth.{RequestToken, OAuthCalculator}
+import play.api.libs.oauth.{ RequestToken, OAuthCalculator }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
-import com.mohiva.play.silhouette.core.utils.{HTTPLayer, CacheLayer}
-import com.mohiva.play.silhouette.core.providers.{SocialProfile, OAuth1Info, OAuth1Settings, OAuth1Provider}
+import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
+import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth1Info, OAuth1Settings, OAuth1Provider }
 import com.mohiva.play.silhouette.core.services.AuthInfoService
 import XingProvider._
 
@@ -37,11 +37,11 @@ import XingProvider._
  * @param settings The provider settings.
  */
 class XingProvider(
-    val authInfoService: AuthInfoService,
-    cacheLayer: CacheLayer,
-    httpLayer: HTTPLayer,
-    settings: OAuth1Settings)
-  extends OAuth1Provider(settings, cacheLayer, httpLayer) {
+  val authInfoService: AuthInfoService,
+  cacheLayer: CacheLayer,
+  httpLayer: HTTPLayer,
+  settings: OAuth1Settings)
+    extends OAuth1Provider(settings, cacheLayer, httpLayer) {
 
   /**
    * Gets the provider ID.
@@ -60,11 +60,11 @@ class XingProvider(
     val sign = OAuthCalculator(serviceInfo.key, RequestToken(authInfo.token, authInfo.secret))
     httpLayer.url(API).sign(sign).get().map { response =>
       val json = response.json
-      val userID = (json \\ ID ).head.as[String]
+      val userID = (json \\ ID).head.as[String]
       val fullName = (json \\ Name).head.asOpt[String]
       val lastName = (json \\ LastName).head.asOpt[String]
       val firstName = (json \\ FirstName).head.asOpt[String]
-      val avatarURL = (json \\ Large ).head.asOpt[String]
+      val avatarURL = (json \\ Large).head.asOpt[String]
       val email = (json \\ ActiveEmail).head.asOpt[String]
 
       SocialProfile(

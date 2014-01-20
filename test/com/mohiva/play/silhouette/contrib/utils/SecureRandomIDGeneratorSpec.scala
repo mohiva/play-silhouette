@@ -27,7 +27,7 @@ class SecureRandomIDGeneratorSpec extends PlaySpecification {
       val generator = new SecureRandomIDGenerator()
       val id = await(generator.generate)
 
-      id must have size(128 * 2)
+      id must have size (128 * 2)
       id must beMatching("[a-f0-9]+")
     }
 
@@ -35,7 +35,7 @@ class SecureRandomIDGeneratorSpec extends PlaySpecification {
       val generator = new SecureRandomIDGenerator(256)
       val id = await(generator.generate)
 
-      id must have size(256 * 2)
+      id must have size (256 * 2)
       id must beMatching("[a-f0-9]+")
     }
   }

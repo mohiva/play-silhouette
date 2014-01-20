@@ -22,8 +22,8 @@ package com.mohiva.play.silhouette.core.providers.oauth2
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
-import com.mohiva.play.silhouette.core.utils.{HTTPLayer, CacheLayer}
-import com.mohiva.play.silhouette.core.providers.{SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider}
+import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
+import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
 import com.mohiva.play.silhouette.core.services.AuthInfoService
 import LinkedInProvider._
 
@@ -36,11 +36,11 @@ import LinkedInProvider._
  * @param settings The provider settings.
  */
 class LinkedInProvider(
-    val authInfoService: AuthInfoService,
-    cacheLayer: CacheLayer,
-    httpLayer: HTTPLayer,
-    settings: OAuth2Settings)
-  extends OAuth2Provider(settings, cacheLayer, httpLayer) {
+  val authInfoService: AuthInfoService,
+  cacheLayer: CacheLayer,
+  httpLayer: HTTPLayer,
+  settings: OAuth2Settings)
+    extends OAuth2Provider(settings, cacheLayer, httpLayer) {
 
   /**
    * Gets the provider ID.
