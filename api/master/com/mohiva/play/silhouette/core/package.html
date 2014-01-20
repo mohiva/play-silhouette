@@ -136,34 +136,6 @@ in the login page of the 3rd party service.</p>
       </h4>
       <p class="comment cmt">A trait to define Authorization objects that let you hook
 an authorization implementation in SecuredActions.</p>
-    </li><li name="com.mohiva.play.silhouette.core.Event" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="EventextendsAnyRef"></a>
-      <a id="Event:Event"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">sealed </span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="Event.html"><span class="name">Event</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">A trait to model Silhouette events
-</p>
-    </li><li name="com.mohiva.play.silhouette.core.EventListener" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="EventListenerextendsAnyRef"></a>
-      <a id="EventListener:EventListener"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="EventListener.html"><span class="name">EventListener</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">The event listener interface
-</p>
     </li><li name="com.mohiva.play.silhouette.core.Identity" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="IdentityextendsAnyRef"></a>
       <a id="Identity:Identity"></a>
@@ -177,19 +149,6 @@ an authorization implementation in SecuredActions.</p>
       </span>
       </h4>
       <p class="comment cmt">This trait represents a user.</p>
-    </li><li name="com.mohiva.play.silhouette.core.LoginEvent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="LoginEventextendsEventwithProductwithSerializable"></a>
-      <a id="LoginEvent:LoginEvent"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="LoginEvent.html"><span class="name">LoginEvent</span></a><span class="params">(<span name="user">user: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>)</span><span class="result"> extends <a href="Event.html" class="extype" name="com.mohiva.play.silhouette.core.Event">Event</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">The event fired when a users logs in</p>
     </li><li name="com.mohiva.play.silhouette.core.LoginInfo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LoginInfoextendsProductwithSerializable"></a>
       <a id="LoginInfo:LoginInfo"></a>
@@ -203,45 +162,6 @@ an authorization implementation in SecuredActions.</p>
       </span>
       </h4>
       <p class="comment cmt">Represents a linked login for an identity (i.</p>
-    </li><li name="com.mohiva.play.silhouette.core.LogoutEvent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="LogoutEventextendsEventwithProductwithSerializable"></a>
-      <a id="LogoutEvent:LogoutEvent"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="LogoutEvent.html"><span class="name">LogoutEvent</span></a><span class="params">(<span name="user">user: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>)</span><span class="result"> extends <a href="Event.html" class="extype" name="com.mohiva.play.silhouette.core.Event">Event</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">The event fired when a user logs out</p>
-    </li><li name="com.mohiva.play.silhouette.core.PasswordChangeEvent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="PasswordChangeEventextendsEventwithProductwithSerializable"></a>
-      <a id="PasswordChangeEvent:PasswordChangeEvent"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="PasswordChangeEvent.html"><span class="name">PasswordChangeEvent</span></a><span class="params">(<span name="user">user: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>)</span><span class="result"> extends <a href="Event.html" class="extype" name="com.mohiva.play.silhouette.core.Event">Event</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">The event fired when a user changes his password</p>
-    </li><li name="com.mohiva.play.silhouette.core.PasswordResetEvent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="PasswordResetEventextendsEventwithProductwithSerializable"></a>
-      <a id="PasswordResetEvent:PasswordResetEvent"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="PasswordResetEvent.html"><span class="name">PasswordResetEvent</span></a><span class="params">(<span name="user">user: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>)</span><span class="result"> extends <a href="Event.html" class="extype" name="com.mohiva.play.silhouette.core.Event">Event</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">The event fired when a user completes a password reset</p>
     </li><li name="com.mohiva.play.silhouette.core.Provider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ProviderextendsAnyRef"></a>
       <a id="Provider:Provider"></a>
@@ -269,19 +189,6 @@ an authorization implementation in SecuredActions.</p>
       </h4>
       <p class="comment cmt">Can be mixed into the GlobalSettings object to define a global behaviour
 for not-authenticated and not-authorized actions.</p>
-    </li><li name="com.mohiva.play.silhouette.core.SignUpEvent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SignUpEventextendsEventwithProductwithSerializable"></a>
-      <a id="SignUpEvent:SignUpEvent"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="SignUpEvent.html"><span class="name">SignUpEvent</span></a><span class="params">(<span name="user">user: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>)</span><span class="result"> extends <a href="Event.html" class="extype" name="com.mohiva.play.silhouette.core.Event">Event</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">The event fired when a user sings up with the Username and Password Provider</p>
     </li><li name="com.mohiva.play.silhouette.core.Silhouette" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Silhouette[I&lt;:com.mohiva.play.silhouette.core.Identity]extendsController"></a>
       <a id="Silhouette[I&lt;:Identity]:Silhouette[I]"></a>
