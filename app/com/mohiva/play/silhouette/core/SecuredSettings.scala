@@ -16,7 +16,7 @@
 package com.mohiva.play.silhouette.core
 
 import play.api.GlobalSettings
-import play.api.mvc.{RequestHeader, SimpleResult}
+import play.api.mvc.{ RequestHeader, SimpleResult }
 import scala.concurrent.Future
 import play.api.i18n.Lang
 

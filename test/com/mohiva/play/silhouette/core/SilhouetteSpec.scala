@@ -20,14 +20,14 @@ import org.specs2.specification.Scope
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import scala.concurrent.Future
-import play.api.test.{WithApplication, FakeRequest, PlaySpecification}
+import play.api.test.{ WithApplication, FakeRequest, PlaySpecification }
 import play.api.GlobalSettings
-import play.api.i18n.{Messages, Lang}
-import play.api.mvc.{Cookie, RequestHeader, SimpleResult}
+import play.api.i18n.{ Messages, Lang }
+import play.api.mvc.{ Cookie, RequestHeader, SimpleResult }
 import play.api.mvc.Results._
 import play.api.test.FakeApplication
 import play.api.libs.json.Json
-import com.mohiva.play.silhouette.core.services.{AuthenticatorService, IdentityService}
+import com.mohiva.play.silhouette.core.services.{ AuthenticatorService, IdentityService }
 import com.mohiva.play.silhouette.contrib.User
 
 /**
@@ -407,11 +407,10 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
    * @param authenticatorService The authenticator service implementation.
    */
   class SecuredController(
-      val identityService: IdentityService[User],
-      val authenticatorService: AuthenticatorService,
-      val authorization: Authorization[User] =  SimpleAuthorization()
-    )
-    extends Silhouette[User] {
+    val identityService: IdentityService[User],
+    val authenticatorService: AuthenticatorService,
+    val authorization: Authorization[User] = SimpleAuthorization())
+      extends Silhouette[User] {
 
     /**
      * A protected action.

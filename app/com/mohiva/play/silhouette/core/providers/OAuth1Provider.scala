@@ -22,11 +22,11 @@ package com.mohiva.play.silhouette.core.providers
 import java.util.UUID
 import play.api.Logger
 import play.api.libs.oauth._
-import play.api.mvc.{RequestHeader, Result, Results}
+import play.api.mvc.{ RequestHeader, Result, Results }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
-import com.mohiva.play.silhouette.core.utils.{HTTPLayer, CacheLayer}
+import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import OAuth1Provider._
 
 /**
@@ -37,10 +37,10 @@ import OAuth1Provider._
  * @param httpLayer The HTTP layer implementation.
  */
 abstract class OAuth1Provider(
-    settings: OAuth1Settings,
-    cacheLayer: CacheLayer,
-    httpLayer: HTTPLayer)
-  extends SocialProvider[OAuth1Info] {
+  settings: OAuth1Settings,
+  cacheLayer: CacheLayer,
+  httpLayer: HTTPLayer)
+    extends SocialProvider[OAuth1Info] {
 
   /**
    * The OAuth1 service.
@@ -61,13 +61,14 @@ abstract class OAuth1Provider(
     request.queryString.get(OAuthVerifier) match {
       // Second step in the oauth flow, we have the access token in the cache, we need to
       // swap it for the access token
-      case Some(seq) => cachedToken.flatMap { case (cacheID, requestToken) =>
-        Future(service.retrieveAccessToken(RequestToken(requestToken.token, requestToken.secret), seq.head)).map(_.fold(
-          exception => throw new AuthenticationException(ErrorAccessToken.format(id), exception),
-          token => {
-            cacheLayer.remove(cacheID)
-            Right(OAuth1Info(token.token, token.secret))
-          }))
+      case Some(seq) => cachedToken.flatMap {
+        case (cacheID, requestToken) =>
+          Future(service.retrieveAccessToken(RequestToken(requestToken.token, requestToken.secret), seq.head)).map(_.fold(
+            exception => throw new AuthenticationException(ErrorAccessToken.format(id), exception),
+            token => {
+              cacheLayer.remove(cacheID)
+              Right(OAuth1Info(token.token, token.secret))
+            }))
       }
       // The oauth_verifier field is not in the request, this is the first step in the auth flow.
       // we need to get the request tokens

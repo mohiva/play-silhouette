@@ -20,4 +20,4 @@ package com.mohiva.play.silhouette
  *
  * The main API is exposed as controller actions by the [[Silhouette]] trait.
  */
-package object core { }
+package object core {}

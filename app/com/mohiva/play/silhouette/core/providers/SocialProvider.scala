@@ -15,10 +15,10 @@
  */
 package com.mohiva.play.silhouette.core.providers
 
-import play.api.mvc.{Result, RequestHeader}
+import play.api.mvc.{ Result, RequestHeader }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import com.mohiva.play.silhouette.core.{LoginInfo, Provider}
+import com.mohiva.play.silhouette.core.{ LoginInfo, Provider }
 import com.mohiva.play.silhouette.core.services.AuthInfoService
 
 /**

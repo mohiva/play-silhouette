@@ -18,4 +18,4 @@ package com.mohiva.play.silhouette.core
 /**
  * Provides supporting features used by the core.
  */
-package object utils { }
+package object utils {}

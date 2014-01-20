@@ -20,8 +20,8 @@
 package com.mohiva.play.silhouette.contrib.services
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import com.mohiva.play.silhouette.core.utils.{Clock, IDGenerator, CacheLayer}
-import com.mohiva.play.silhouette.core.{Identity, Authenticator}
+import com.mohiva.play.silhouette.core.utils.{ Clock, IDGenerator, CacheLayer }
+import com.mohiva.play.silhouette.core.{ Identity, Authenticator }
 import com.mohiva.play.silhouette.core.services.AuthenticatorService
 
 /**
@@ -34,7 +34,7 @@ import com.mohiva.play.silhouette.core.services.AuthenticatorService
  * @param clock The clock implementation.
  */
 class CacheAuthenticatorService(cacheLayer: CacheLayer, idGenerator: IDGenerator, clock: Clock)
-  extends AuthenticatorService {
+    extends AuthenticatorService {
 
   /**
    * Creates a new authenticator ID for the specified identity.

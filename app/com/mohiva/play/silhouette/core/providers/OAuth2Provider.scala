@@ -22,13 +22,13 @@ package com.mohiva.play.silhouette.core.providers
 import java.net.URLEncoder
 import java.util.UUID
 import play.api.Logger
-import play.api.mvc.{RequestHeader, Results, Result}
+import play.api.mvc.{ RequestHeader, Results, Result }
 import play.api.libs.ws.Response
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import com.mohiva.play.silhouette.core.utils.{HTTPLayer, CacheLayer}
+import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core._
 import OAuth2Provider._
 
@@ -40,17 +40,17 @@ import OAuth2Provider._
  * @param httpLayer The HTTP layer implementation.
  */
 abstract class OAuth2Provider(
-    settings: OAuth2Settings,
-    cacheLayer: CacheLayer,
-    httpLayer: HTTPLayer)
-  extends SocialProvider[OAuth2Info] {
+  settings: OAuth2Settings,
+  cacheLayer: CacheLayer,
+  httpLayer: HTTPLayer)
+    extends SocialProvider[OAuth2Info] {
 
   /**
    * Converts the JSON into a [[com.mohiva.play.silhouette.core.providers.OAuth2Info]] object.
    */
   implicit val infoReads = (
     (__ \ AccessToken).read[String] and
-    (__ \ TokenType).readNullable[String]and
+    (__ \ TokenType).readNullable[String] and
     (__ \ ExpiresIn).readNullable[Int] and
     (__ \ RefreshToken).readNullable[String]
   )(OAuth2Info.apply _)
