@@ -5,15 +5,15 @@
 set -o nounset -o errexit
 
 echo ""
-echo "Deleting generated files"
-scripts/sbt clean
+echo "Compiling"
+scripts/sbt clean compile test:compile
 
 echo ""
 echo "Validating code formatting"
 scripts/validate-format
 
 echo ""
-echo "Compiling, testing and generating documentation"
+echo "Testing and generating documentation"
 scripts/sbt -v coveralls doc
 
 echo ""
