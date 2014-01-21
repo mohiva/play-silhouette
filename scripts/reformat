@@ -1,0 +1,7 @@
+#!/bin/bash
+#
+# Reformats source code.
+#
+set -o nounset -o errexit
+
+scripts/sbt scalariformFormat test:scalariformFormat

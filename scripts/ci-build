@@ -4,4 +4,18 @@
 #
 set -o nounset -o errexit
 
-scripts/sbt -v -jvm-opts scripts/conf/jvm-opts clean coveralls doc
+echo ""
+echo "Deleting generated files"
+scripts/sbt clean
+
+echo ""
+echo "Validating code formatting"
+scripts/validate-format
+
+echo ""
+echo "Compiling, testing and generating documentation"
+scripts/sbt -v coveralls doc
+
+echo ""
+echo "Build finished"
+echo ""
