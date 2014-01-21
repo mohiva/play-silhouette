@@ -29,17 +29,12 @@
 # limitations under the License.
 #
 set -o nounset -o errexit
-set -x
 
 fail () {
   local message=$1
   echo "ERROR: $message"
   exit 1
 }
-
-echo "TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG"
-echo "TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST"
-echo "TRAVIS_BRANCH=$TRAVIS_BRANCH"
 
 if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
   echo ""
