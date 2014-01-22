@@ -42,6 +42,10 @@ scalacOptions ++= Seq(
   "-Ywarn-numeric-widen" // Warn when numerics are widened.
 )
 
+scalacOptions in Test ~= { (options: Seq[String]) =>
+  options filterNot ( _ == "-Ywarn-dead-code" )  // Allow dead code in tests (to support using mockito).
+}
+
 CoverallsPlugin.singleProject
 
 defaultScalariformSettings
