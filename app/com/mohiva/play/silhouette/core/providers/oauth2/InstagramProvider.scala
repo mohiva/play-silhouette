@@ -36,7 +36,7 @@ import InstagramProvider._
  * @param settings The provider settings.
  */
 class InstagramProvider(
-  val authInfoService: AuthInfoService,
+  protected val authInfoService: AuthInfoService,
   cacheLayer: CacheLayer,
   httpLayer: HTTPLayer,
   settings: OAuth2Settings)
@@ -55,7 +55,7 @@ class InstagramProvider(
    * @param authInfo The auth info received from the provider.
    * @return The social profile.
    */
-  def buildProfile(authInfo: OAuth2Info): Future[SocialProfile] = {
+  protected def buildProfile(authInfo: OAuth2Info): Future[SocialProfile] = {
     httpLayer.url(API.format(authInfo.accessToken)).get().map { response =>
       val json = response.json
       (json \ Response \ User).asOpt[String] match {

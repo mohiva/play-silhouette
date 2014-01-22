@@ -29,31 +29,6 @@ import com.mohiva.play.silhouette.core.services.AuthInfoService
 trait SocialProvider[A] extends Provider {
 
   /**
-   * Gets the auth info implementation.
-   *
-   * @return The auth info implementation.
-   */
-  def authInfoService: AuthInfoService
-
-  /**
-   * Subclasses need to implement this method to populate the profile information from the service provider.
-   *
-   * @param authInfo The auth info received from the provider.
-   * @return The build social profile.
-   */
-  def buildProfile(authInfo: A): Future[SocialProfile]
-
-  /**
-   * Subclasses need to implement the authentication logic.
-   *
-   * This method needs to return a auth info object that then gets passed to the buildIdentity method.
-   *
-   * @param request The request header.
-   * @return Either a Result or the auth info from the provider.
-   */
-  def doAuth()(implicit request: RequestHeader): Future[Either[Result, A]]
-
-  /**
    * Authenticates the user and fills the profile information.
    *
    * Returns either a SocialProfile if all went ok or a Result that the controller sends to the
@@ -71,6 +46,31 @@ trait SocialProvider[A] extends Provider {
         Right(profile)
       })))
   }
+
+  /**
+   * Gets the auth info implementation.
+   *
+   * @return The auth info implementation.
+   */
+  protected def authInfoService: AuthInfoService
+
+  /**
+   * Subclasses need to implement this method to populate the profile information from the service provider.
+   *
+   * @param authInfo The auth info received from the provider.
+   * @return The build social profile.
+   */
+  protected def buildProfile(authInfo: A): Future[SocialProfile]
+
+  /**
+   * Subclasses need to implement the authentication logic.
+   *
+   * This method needs to return a auth info object that then gets passed to the buildIdentity method.
+   *
+   * @param request The request header.
+   * @return Either a Result or the auth info from the provider.
+   */
+  protected def doAuth()(implicit request: RequestHeader): Future[Either[Result, A]]
 }
 
 /**

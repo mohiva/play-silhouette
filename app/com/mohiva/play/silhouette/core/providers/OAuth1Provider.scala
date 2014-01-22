@@ -45,7 +45,7 @@ abstract class OAuth1Provider(
   /**
    * The OAuth1 service.
    */
-  val service = OAuth(serviceInfo, use10a = true)
+  private val service = OAuth(serviceInfo, use10a = true)
 
   /**
    * Starts the authentication process.
@@ -53,7 +53,7 @@ abstract class OAuth1Provider(
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  def doAuth()(implicit request: RequestHeader): Future[Either[Result, OAuth1Info]] = {
+  protected def doAuth()(implicit request: RequestHeader): Future[Either[Result, OAuth1Info]] = {
     if (request.queryString.get(Denied).isDefined) {
       throw new AccessDeniedException(AuthorizationError.format(id, Denied))
     }
