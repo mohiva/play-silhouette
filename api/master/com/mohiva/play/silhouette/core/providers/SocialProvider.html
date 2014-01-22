@@ -243,9 +243,9 @@
         <span class="name">authenticate</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="play.api.mvc.Result">Result</span>, <a href="SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>]]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Authenticates the user and fills the profile information.</p><div class="fullcomment"><div class="comment cmt"><p>Authenticates the user and fills the profile information.</p><p>Returns either a SocialProfile if all went ok or a Result that the controller sends to the
-browser (eg: in the case of OAuth for example where the user needs to be redirected to
-the service provider)
+      <p class="shortcomment cmt">Authenticates the user and fills the profile information.</p><div class="fullcomment"><div class="comment cmt"><p>Authenticates the user and fills the profile information.</p><p>Returns either a SocialProfile if all went OK or a Result that the controller sends to the
+browser (e.g.: in the case of OAuth where the user needs to be redirected to
+the service provider).
 </p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The social profile.
 </p></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
