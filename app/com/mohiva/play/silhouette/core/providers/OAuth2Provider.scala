@@ -48,7 +48,7 @@ abstract class OAuth2Provider(
   /**
    * Converts the JSON into a [[com.mohiva.play.silhouette.core.providers.OAuth2Info]] object.
    */
-  implicit val infoReads = (
+  private implicit val infoReads = (
     (__ \ AccessToken).read[String] and
     (__ \ TokenType).readNullable[String] and
     (__ \ ExpiresIn).readNullable[Int] and
@@ -61,7 +61,7 @@ abstract class OAuth2Provider(
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  def doAuth()(implicit request: RequestHeader): Future[Either[Result, OAuth2Info]] = {
+  protected def doAuth()(implicit request: RequestHeader): Future[Either[Result, OAuth2Info]] = {
     request.queryString.get(Error).flatMap(_.headOption).map {
       case e @ AccessDenied => throw new AccessDeniedException(AuthorizationError.format(id, e))
       case error => throw new AuthenticationException(AuthorizationError.format(id, error))

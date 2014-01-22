@@ -37,7 +37,7 @@ import XingProvider._
  * @param settings The provider settings.
  */
 class XingProvider(
-  val authInfoService: AuthInfoService,
+  protected val authInfoService: AuthInfoService,
   cacheLayer: CacheLayer,
   httpLayer: HTTPLayer,
   settings: OAuth1Settings)
@@ -56,7 +56,7 @@ class XingProvider(
    * @param authInfo The auth info received from the provider.
    * @return The social profile.
    */
-  def buildProfile(authInfo: OAuth1Info): Future[SocialProfile] = {
+  protected def buildProfile(authInfo: OAuth1Info): Future[SocialProfile] = {
     val sign = OAuthCalculator(serviceInfo.key, RequestToken(authInfo.token, authInfo.secret))
     httpLayer.url(API).sign(sign).get().map { response =>
       val json = response.json
