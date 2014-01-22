@@ -19,6 +19,7 @@ import org.joda.time.DateTime
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import scala.concurrent.Future
+import scala.reflect.ClassTag
 import play.api.test.PlaySpecification
 import com.mohiva.play.silhouette.core.{ Identity, Authenticator, LoginInfo }
 import com.mohiva.play.silhouette.core.utils.{ Clock, IDGenerator, CacheLayer }
@@ -78,21 +79,21 @@ class CacheAuthenticatorServiceSpec extends PlaySpecification with Mockito {
 
   "The save method" should {
     "save the authenticator in cache" in new Context {
-      cacheLayer.set[Authenticator](any, any, any) returns Future.successful(Some(authenticator))
+      cacheLayer.set[Authenticator](authenticator.id, authenticator, 0) returns Future.successful(Some(authenticator))
 
       await(service.save(authenticator))
 
-      there was one(cacheLayer).set(any, any, any)
+      there was one(cacheLayer).set(authenticator.id, authenticator, 0)
     }
 
     "return the given authenticator if all going well" in new Context {
-      cacheLayer.set[Authenticator](any, any, any) returns Future.successful(Some(authenticator))
+      cacheLayer.set[Authenticator](authenticator.id, authenticator, 0) returns Future.successful(Some(authenticator))
 
       await(service.save(authenticator)) must beSome(authenticator)
     }
 
     "return the None if something went wrong" in new Context {
-      cacheLayer.set[Authenticator](any, any, any) returns Future.successful(None)
+      cacheLayer.set[Authenticator](authenticator.id, authenticator, 0) returns Future.successful(None)
 
       await(service.save(authenticator)) must beNone
     }
@@ -100,21 +101,21 @@ class CacheAuthenticatorServiceSpec extends PlaySpecification with Mockito {
 
   "The update method" should {
     "update the authenticator in cache" in new Context {
-      cacheLayer.set[Authenticator](any, any, any) returns Future.successful(Some(authenticator))
+      cacheLayer.set[Authenticator](authenticator.id, authenticator, 0) returns Future.successful(Some(authenticator))
 
       await(service.update(authenticator))
 
-      there was one(cacheLayer).set(any, any, any)
+      there was one(cacheLayer).set(authenticator.id, authenticator, 0)
     }
 
     "return the given authenticator if all going well" in new Context {
-      cacheLayer.set[Authenticator](any, any, any) returns Future.successful(Some(authenticator))
+      cacheLayer.set[Authenticator](authenticator.id, authenticator, 0) returns Future.successful(Some(authenticator))
 
       await(service.update(authenticator)) must beSome(authenticator)
     }
 
     "return the None if something went wrong" in new Context {
-      cacheLayer.set[Authenticator](any, any, any) returns Future.successful(None)
+      cacheLayer.set[Authenticator](authenticator.id, authenticator, 0) returns Future.successful(None)
 
       await(service.update(authenticator)) must beNone
     }
@@ -122,13 +123,13 @@ class CacheAuthenticatorServiceSpec extends PlaySpecification with Mockito {
 
   "The findByID method" should {
     "return the found authenticator from cache" in new Context {
-      cacheLayer.get[Authenticator](any)(any) returns Future.successful(Some(authenticator))
+      cacheLayer.get[Authenticator](authenticator.id) returns Future.successful(Some(authenticator))
 
       await(service.findByID("test-id")) should beSome(authenticator)
     }
 
     "return None if no authenticator could be found in cache" in new Context {
-      cacheLayer.get[Authenticator](any)(any) returns Future.successful(None)
+      cacheLayer.get[Authenticator](authenticator.id) returns Future.successful(None)
 
       await(service.findByID("test-id")) should beNone
     }
@@ -138,7 +139,7 @@ class CacheAuthenticatorServiceSpec extends PlaySpecification with Mockito {
     "remove the authenticator from cache" in new Context {
       service.deleteByID("test-id")
 
-      there was one(cacheLayer).remove(any)
+      there was one(cacheLayer).remove(authenticator.id)
     }
   }
 
@@ -184,5 +185,10 @@ class CacheAuthenticatorServiceSpec extends PlaySpecification with Mockito {
       lastUsedDate = DateTime.now,
       expirationDate = DateTime.now.plusMinutes(12 * 60)
     )
+
+    /**
+     * The class tag for the authenticator.
+     */
+    implicit lazy val classTag = ClassTag(authenticator.getClass)
   }
 }
