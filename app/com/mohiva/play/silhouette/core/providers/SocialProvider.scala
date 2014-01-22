@@ -31,9 +31,9 @@ trait SocialProvider[A] extends Provider {
   /**
    * Authenticates the user and fills the profile information.
    *
-   * Returns either a SocialProfile if all went ok or a Result that the controller sends to the
-   * browser (eg: in the case of OAuth for example where the user needs to be redirected to
-   * the service provider)
+   * Returns either a SocialProfile if all went OK or a Result that the controller sends to the
+   * browser (e.g.: in the case of OAuth where the user needs to be redirected to
+   * the service provider).
    *
    * @param request The request header.
    * @return The social profile.
