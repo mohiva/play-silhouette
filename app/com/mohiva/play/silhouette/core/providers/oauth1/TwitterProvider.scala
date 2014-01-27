@@ -19,12 +19,11 @@
  */
 package com.mohiva.play.silhouette.core.providers.oauth1
 
-import play.api.libs.oauth.{ RequestToken, OAuthCalculator }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
-import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth1Info, OAuth1Settings, OAuth1Provider }
+import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.services.AuthInfoService
 import TwitterProvider._
 
@@ -34,14 +33,19 @@ import TwitterProvider._
  * @param authInfoService The auth info service.
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
- * @param settings The provider settings.
+ * @param oAuth1Service The OAuth1 service implementation.
+ * @param oAuth1Settings The OAuth1 provider settings.
+ *
+ * @see https://dev.twitter.com/docs/user-profile-images-and-banners
+ * @see https://dev.twitter.com/docs/entities#users
  */
 class TwitterProvider(
   protected val authInfoService: AuthInfoService,
   cacheLayer: CacheLayer,
   httpLayer: HTTPLayer,
-  settings: OAuth1Settings)
-    extends OAuth1Provider(settings, cacheLayer, httpLayer) {
+  oAuth1Service: OAuth1Service,
+  oAuth1Settings: OAuth1Settings)
+    extends OAuth1Provider(cacheLayer, httpLayer, oAuth1Service, oAuth1Settings) {
 
   /**
    * Gets the provider ID.
@@ -57,18 +61,27 @@ class TwitterProvider(
    * @return The social profile.
    */
   protected def buildProfile(authInfo: OAuth1Info): Future[SocialProfile] = {
-    val sign = OAuthCalculator(serviceInfo.key, RequestToken(authInfo.token, authInfo.secret))
-    httpLayer.url(API).sign(sign).get().map { response =>
+    httpLayer.url(API).sign(oAuth1Service.sign(authInfo)).get().map { response =>
       val json = response.json
-      val userId = (json \ ID).as[Int]
-      val name = (json \ Name).asOpt[String]
-      val avatarURL = (json \ ProfileImage).asOpt[String]
+      (json \ Errors \\ Code).headOption.map(_.as[Int]) match {
+        case Some(code) =>
+          val message = (json \ Errors \\ Message).headOption.map(_.as[String])
 
-      SocialProfile(
-        loginInfo = LoginInfo(id, userId.toString),
-        fullName = name,
-        avatarURL = avatarURL)
-    }.recover { case e => throw new AuthenticationException(UnspecifiedProfileError.format(id), e) }
+          throw new AuthenticationException(SpecifiedProfileError.format(id, code, message))
+        case _ =>
+          val userId = (json \ ID).as[Int]
+          val name = (json \ Name).asOpt[String]
+          val avatarURL = (json \ ProfileImage).asOpt[String]
+
+          SocialProfile(
+            loginInfo = LoginInfo(id, userId.toString),
+            fullName = name,
+            avatarURL = avatarURL)
+      }
+    }.recover {
+      case e if !e.isInstanceOf[AuthenticationException] =>
+        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
+    }
   }
 }
 
@@ -81,12 +94,16 @@ object TwitterProvider {
    * The error messages.
    */
   val UnspecifiedProfileError = "[Silhouette][%s] error retrieving profile information"
+  val SpecifiedProfileError = "[Silhouette][%s] error retrieving profile information. Error code: %s, message: %s"
 
   /**
    * The LinkedIn constants.
    */
   val Twitter = "twitter"
   val API = "https://api.twitter.com/1.1/account/verify_credentials.json"
+  val Errors = "errors"
+  val Message = "message"
+  val Code = "code"
   val ID = "id"
   val Name = "name"
   val ProfileImage = "profile_image_url_https"

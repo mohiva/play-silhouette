@@ -22,7 +22,7 @@ package com.mohiva.play.silhouette.core.providers
 import java.net.URLEncoder
 import java.util.UUID
 import play.api.Logger
-import play.api.mvc.{ RequestHeader, Results, Result }
+import play.api.mvc.{ SimpleResult, RequestHeader, Results }
 import play.api.libs.ws.Response
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
@@ -61,7 +61,7 @@ abstract class OAuth2Provider(
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  protected def doAuth()(implicit request: RequestHeader): Future[Either[Result, OAuth2Info]] = {
+  protected def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, OAuth2Info]] = {
     request.queryString.get(Error).flatMap(_.headOption).map {
       case e @ AccessDenied => throw new AccessDeniedException(AuthorizationError.format(id, e))
       case error => throw new AuthenticationException(AuthorizationError.format(id, error))

@@ -19,12 +19,11 @@
  */
 package com.mohiva.play.silhouette.core.providers.oauth1
 
-import play.api.libs.oauth.{ RequestToken, OAuthCalculator }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
-import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth1Info, OAuth1Settings, OAuth1Provider }
+import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.services.AuthInfoService
 import LinkedInProvider._
 
@@ -34,14 +33,18 @@ import LinkedInProvider._
  * @param authInfoService The auth info service.
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
- * @param settings The provider settings.
+ * @param oAuth1Service The OAuth1 service implementation.
+ * @param auth1Settings The OAuth1 provider settings.
+ *
+ * @see https://developer.linkedin.com/documents/inapiprofile
  */
 class LinkedInProvider(
   protected val authInfoService: AuthInfoService,
   cacheLayer: CacheLayer,
   httpLayer: HTTPLayer,
-  settings: OAuth1Settings)
-    extends OAuth1Provider(settings, cacheLayer, httpLayer) {
+  oAuth1Service: OAuth1Service,
+  auth1Settings: OAuth1Settings)
+    extends OAuth1Provider(cacheLayer, httpLayer, oAuth1Service, auth1Settings) {
 
   /**
    * Gets the provider ID.
@@ -57,16 +60,16 @@ class LinkedInProvider(
    * @return The social profile.
    */
   protected def buildProfile(authInfo: OAuth1Info): Future[SocialProfile] = {
-    val sign = OAuthCalculator(serviceInfo.key, RequestToken(authInfo.token, authInfo.secret))
-    httpLayer.url(API).sign(sign).get().map { response =>
+    httpLayer.url(API).sign(oAuth1Service.sign(authInfo)).get().map { response =>
       val json = response.json
       (json \ ErrorCode).asOpt[Int] match {
         case Some(error) =>
           val message = (json \ Message).asOpt[String]
           val requestId = (json \ RequestId).asOpt[String]
-          val timestamp = (json \ Timestamp).asOpt[String]
+          val status = (json \ Status).asOpt[Int]
+          val timestamp = (json \ Timestamp).asOpt[Long]
 
-          throw new AuthenticationException(SpecifiedProfileError.format(error, message, requestId, timestamp))
+          throw new AuthenticationException(SpecifiedProfileError.format(id, error, message, requestId, status, timestamp))
         case _ =>
           val userID = (json \ ID).as[String]
           val firstName = (json \ FirstName).asOpt[String]
@@ -83,7 +86,10 @@ class LinkedInProvider(
             avatarURL = avatarURL,
             email = email)
       }
-    }.recover { case e => throw new AuthenticationException(UnspecifiedProfileError.format(id), e) }
+    }.recover {
+      case e if !e.isInstanceOf[AuthenticationException] =>
+        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
+    }
   }
 }
 
@@ -96,7 +102,7 @@ object LinkedInProvider {
    * The error messages.
    */
   val UnspecifiedProfileError = "[Silhouette][%s] error retrieving profile information"
-  val SpecifiedProfileError = "[Silhouette][%s] error retrieving profile information. Error code: %s, requestId: %s, message: %s, timestamp: %s"
+  val SpecifiedProfileError = "[Silhouette][%s] error retrieving profile information. Error code: %s, message: %s, requestId: %s, status: %s, timestamp: %s"
 
   /**
    * The LinkedIn constants.
@@ -106,6 +112,7 @@ object LinkedInProvider {
   val ErrorCode = "errorCode"
   val Message = "message"
   val RequestId = "requestId"
+  val Status = "status"
   val Timestamp = "timestamp"
   val ID = "id"
   val FirstName = "firstName"

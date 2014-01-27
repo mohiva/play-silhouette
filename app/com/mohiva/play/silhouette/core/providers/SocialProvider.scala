@@ -15,7 +15,7 @@
  */
 package com.mohiva.play.silhouette.core.providers
 
-import play.api.mvc.{ Result, RequestHeader }
+import play.api.mvc.{ SimpleResult, RequestHeader }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core.{ LoginInfo, Provider }
@@ -38,7 +38,7 @@ trait SocialProvider[A] extends Provider {
    * @param request The request header.
    * @return The social profile.
    */
-  def authenticate()(implicit request: RequestHeader): Future[Either[Result, SocialProfile]] = {
+  def authenticate()(implicit request: RequestHeader): Future[Either[SimpleResult, SocialProfile]] = {
     doAuth().flatMap(_.fold(
       result => Future.successful(Left(result)),
       authInfo => buildProfile(authInfo).map(profile => {
@@ -70,7 +70,7 @@ trait SocialProvider[A] extends Provider {
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  protected def doAuth()(implicit request: RequestHeader): Future[Either[Result, A]]
+  protected def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, A]]
 }
 
 /**

@@ -150,8 +150,7 @@ class DefaultActionHandlerSpec extends PlaySpecification {
     val result = f(request)
 
     status(result) must equalTo(expectedStatus)
-    header(CONTENT_TYPE, result) must beSome
-    header(CONTENT_TYPE, result).get must equalTo(expectedContentType)
+    header(CONTENT_TYPE, result) must beSome(expectedContentType)
     contentAsString(result) must contain(expectedResponseFragment)
     contentAsString(result) must contain(Messages(expectedMessage))
   }
