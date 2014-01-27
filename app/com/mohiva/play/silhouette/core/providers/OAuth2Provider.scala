@@ -89,7 +89,7 @@ abstract class OAuth2Provider(
           Logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
           Logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
         }
-        cacheLayer.set(cacheID, state, 300) // set it for 5 minutes, plenty of time to log in
+        cacheLayer.set(cacheID, state, CacheExpiration)
         Future.successful(Left(redirect))
     }
   }
@@ -187,6 +187,12 @@ object OAuth2Provider {
   val Expires = "expires"
   val RefreshToken = "refresh_token"
   val AccessDenied = "access_denied"
+
+  /**
+   *  Cache expiration. Provides sufficient time to log in, but not too much.
+   *  This is a balance between convenience and security.
+   */
+  val CacheExpiration = 5 * 60; // 5 minutes
 }
 
 /**

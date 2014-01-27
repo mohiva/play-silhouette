@@ -54,7 +54,7 @@ trait BeforeAfterWithinAround extends Around {
 }
 
 /**
- * Some test related helper methods.
+ * Some test-related helper methods.
  */
 object Helper {
 

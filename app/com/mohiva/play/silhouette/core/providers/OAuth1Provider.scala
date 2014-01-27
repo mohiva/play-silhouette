@@ -57,8 +57,8 @@ abstract class OAuth1Provider(
     }
 
     request.queryString.get(OAuthVerifier) match {
-      // Second step in the oauth flow, we have the request info in the cache, we need to
-      // swap it for the access info
+      // Second step in the OAuth flow.
+      // We have the request info in the cache, and we need to swap it for the access info.
       case Some(seq) => cachedInfo.flatMap {
         case (cacheID, cachedInfo) =>
           oAuth1Service.retrieveAccessToken(cachedInfo, seq.head).map {
@@ -68,8 +68,8 @@ abstract class OAuth1Provider(
               Right(info)
           }
       }
-      // The oauth_verifier field is not in the request, this is the first step in the auth flow.
-      // we need to get the request tokens
+      // The oauth_verifier field is not in the request.
+      // This is the first step in the OAuth flow. We need to get the request tokens.
       case _ => oAuth1Service.retrieveRequestToken(oAuth1Settings.callbackURL).map {
         case Failure(exception) => throw new AuthenticationException(ErrorRequestToken.format(id), exception)
         case Success(info) =>
@@ -79,7 +79,7 @@ abstract class OAuth1Provider(
           if (Logger.isDebugEnabled) {
             Logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
           }
-          cacheLayer.set(cacheID, info, 300) // set it for 5 minutes, plenty of time to log in
+          cacheLayer.set(cacheID, info, CacheExpiration)
           Left(redirect)
       }
     }
@@ -122,6 +122,12 @@ object OAuth1Provider {
   val CacheKey = "silhouetteOAuth1Cache"
   val Denied = "denied"
   val OAuthVerifier = "oauth_verifier"
+
+  /**
+   *  Cache expiration. Provides sufficient time to log in, but not too much.
+   *  This is a balance between convenience and security.
+   */
+  val CacheExpiration = 5 * 60; // 5 minutes
 }
 
 /**
@@ -130,7 +136,7 @@ object OAuth1Provider {
 trait OAuth1Service {
 
   /**
-   * Request the request info and secret.
+   * Retrieves the request info and secret.
    *
    * @param callbackURL The URL where the provider should redirect to (usually a URL on the current app).
    * @return A Success(OAuth1Info) in case of success, Failure(Exception) otherwise.
@@ -147,7 +153,7 @@ trait OAuth1Service {
   def retrieveAccessToken(oAuthInfo: OAuth1Info, verifier: String): Future[Try[OAuth1Info]]
 
   /**
-   * The URL where the user needs to be redirected to grant authorization to your application.
+   * The URL to which the user needs to be redirected to grant authorization to your application.
    *
    * @param token The request info.
    * @return The redirect URL.
