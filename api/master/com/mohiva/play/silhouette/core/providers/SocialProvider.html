@@ -119,15 +119,15 @@
 </p></div><dl class="paramcmts block"><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info received from the provider.</p></dd><dt>returns</dt><dd class="cmt"><p>The build social profile.
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.providers.SocialProvider#doAuth" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="doAuth()(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Either[play.api.mvc.Result,A]]"></a>
-      <a id="doAuth()(RequestHeader):Future[Either[Result,A]]"></a>
+      <a id="doAuth()(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Either[play.api.mvc.SimpleResult,A]]"></a>
+      <a id="doAuth()(RequestHeader):Future[Either[SimpleResult,A]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">doAuth</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="play.api.mvc.Result">Result</span>, <span class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider.A">A</span>]]</span>
+        <span class="name">doAuth</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>, <span class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider.A">A</span>]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Subclasses need to implement the authentication logic.</p><div class="fullcomment"><div class="comment cmt"><p>Subclasses need to implement the authentication logic.</p><p>This method needs to return a auth info object that then gets passed to the buildIdentity method.
@@ -232,15 +232,15 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.providers.SocialProvider#authenticate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="authenticate()(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Either[play.api.mvc.Result,com.mohiva.play.silhouette.core.providers.SocialProfile]]"></a>
-      <a id="authenticate()(RequestHeader):Future[Either[Result,SocialProfile]]"></a>
+      <a id="authenticate()(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Either[play.api.mvc.SimpleResult,com.mohiva.play.silhouette.core.providers.SocialProfile]]"></a>
+      <a id="authenticate()(RequestHeader):Future[Either[SimpleResult,SocialProfile]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">authenticate</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="play.api.mvc.Result">Result</span>, <a href="SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>]]</span>
+        <span class="name">authenticate</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>, <a href="SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Authenticates the user and fills the profile information.</p><div class="fullcomment"><div class="comment cmt"><p>Authenticates the user and fills the profile information.</p><p>Returns either a SocialProfile if all went OK or a Result that the controller sends to the
