@@ -80,7 +80,7 @@ class PlayOAuth1ServiceSpec extends PlaySpecification with Mockito {
       consumerSecret = "my.consumer.secret")
 
     /**
-     * A mock of the Play framework OAuth implementation.
+     * A mock of the Play Framework OAuth implementation.
      */
     lazy val oauth: OAuth = mock[OAuth]
 

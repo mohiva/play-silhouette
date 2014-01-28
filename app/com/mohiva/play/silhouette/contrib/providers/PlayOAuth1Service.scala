@@ -32,15 +32,15 @@ import com.mohiva.play.silhouette.core.providers.{ OAuth1Info, OAuth1Service, OA
 import PlayOAuth1Service._
 
 /**
- * The OAuth1 service implementation which wraps the Play framework OAuth implementation.
+ * The OAuth1 service implementation which wraps Play Framework's OAuth implementation.
  *
- * @param service The Play framework OAuth implementation.
+ * @param service The Play Framework OAuth implementation.
  * @param settings The service settings.
  */
 class PlayOAuth1Service(service: OAuth, settings: OAuth1Settings) extends OAuth1Service {
 
   /**
-   * Constructs the default Play framework OAuth implementation.
+   * Constructs the default Play Framework OAuth implementation.
    *
    * @param settings The service settings.
    * @return The OAuth1 service.
@@ -48,7 +48,7 @@ class PlayOAuth1Service(service: OAuth, settings: OAuth1Settings) extends OAuth1
   def this(settings: OAuth1Settings) = this(OAuth(serviceInfo(settings), use10a = true), settings)
 
   /**
-   * Request the request info and secret.
+   * Retrieves the request info and secret.
    *
    * @param callbackURL The URL where the provider should redirect to (usually a URL on the current app).
    * @return A Success(OAuth1Info) in case of success, Failure(Exception) otherwise.
@@ -73,7 +73,7 @@ class PlayOAuth1Service(service: OAuth, settings: OAuth1Settings) extends OAuth1
   }
 
   /**
-   * The URL where the user needs to be redirected to grant authorization to your application.
+   * The URL to which the user needs to be redirected to grant authorization to your application.
    *
    * @param token The request info.
    * @return The redirect URL.
