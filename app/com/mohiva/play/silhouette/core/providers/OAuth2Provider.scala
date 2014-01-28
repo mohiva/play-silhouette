@@ -22,7 +22,7 @@ package com.mohiva.play.silhouette.core.providers
 import java.net.URLEncoder
 import java.util.UUID
 import play.api.Logger
-import play.api.mvc.{ RequestHeader, Results, Result }
+import play.api.mvc.{ SimpleResult, RequestHeader, Results }
 import play.api.libs.ws.Response
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
@@ -61,7 +61,7 @@ abstract class OAuth2Provider(
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  protected def doAuth()(implicit request: RequestHeader): Future[Either[Result, OAuth2Info]] = {
+  protected def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, OAuth2Info]] = {
     request.queryString.get(Error).flatMap(_.headOption).map {
       case e @ AccessDenied => throw new AccessDeniedException(AuthorizationError.format(id, e))
       case error => throw new AuthenticationException(AuthorizationError.format(id, error))
@@ -89,7 +89,7 @@ abstract class OAuth2Provider(
           Logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
           Logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
         }
-        cacheLayer.set(cacheID, state, 300) // set it for 5 minutes, plenty of time to log in
+        cacheLayer.set(cacheID, state, CacheExpiration)
         Future.successful(Left(redirect))
     }
   }
@@ -187,6 +187,12 @@ object OAuth2Provider {
   val Expires = "expires"
   val RefreshToken = "refresh_token"
   val AccessDenied = "access_denied"
+
+  /**
+   *  Cache expiration. Provides sufficient time to log in, but not too much.
+   *  This is a balance between convenience and security.
+   */
+  val CacheExpiration = 5 * 60; // 5 minutes
 }
 
 /**

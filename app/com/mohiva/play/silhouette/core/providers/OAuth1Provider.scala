@@ -21,10 +21,11 @@ package com.mohiva.play.silhouette.core.providers
 
 import java.util.UUID
 import play.api.Logger
-import play.api.libs.oauth._
-import play.api.mvc.{ RequestHeader, Result, Results }
+import play.api.mvc.{ SimpleResult, RequestHeader, Results }
+import play.api.libs.ws.SignatureCalculator
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{ Success, Failure, Try }
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import OAuth1Provider._
@@ -32,20 +33,17 @@ import OAuth1Provider._
 /**
  * Base class for all OAuth1 providers.
  *
- * @param settings The provider settings.
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
+ * @param oAuth1Service The OAuth1 service implementation.
+ * @param oAuth1Settings The OAuth1 provider settings.
  */
 abstract class OAuth1Provider(
-  settings: OAuth1Settings,
   cacheLayer: CacheLayer,
-  httpLayer: HTTPLayer)
+  httpLayer: HTTPLayer,
+  oAuth1Service: OAuth1Service,
+  oAuth1Settings: OAuth1Settings)
     extends SocialProvider[OAuth1Info] {
-
-  /**
-   * The OAuth1 service.
-   */
-  private val service = OAuth(serviceInfo, use10a = true)
 
   /**
    * Starts the authentication process.
@@ -53,60 +51,49 @@ abstract class OAuth1Provider(
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  protected def doAuth()(implicit request: RequestHeader): Future[Either[Result, OAuth1Info]] = {
+  protected def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, OAuth1Info]] = {
     if (request.queryString.get(Denied).isDefined) {
       throw new AccessDeniedException(AuthorizationError.format(id, Denied))
     }
 
     request.queryString.get(OAuthVerifier) match {
-      // Second step in the oauth flow, we have the access token in the cache, we need to
-      // swap it for the access token
-      case Some(seq) => cachedToken.flatMap {
-        case (cacheID, requestToken) =>
-          Future(service.retrieveAccessToken(RequestToken(requestToken.token, requestToken.secret), seq.head)).map(_.fold(
-            exception => throw new AuthenticationException(ErrorAccessToken.format(id), exception),
-            token => {
+      // Second step in the OAuth flow.
+      // We have the request info in the cache, and we need to swap it for the access info.
+      case Some(seq) => cachedInfo.flatMap {
+        case (cacheID, cachedInfo) =>
+          oAuth1Service.retrieveAccessToken(cachedInfo, seq.head).map {
+            case Failure(exception) => throw new AuthenticationException(ErrorAccessToken.format(id), exception)
+            case Success(info) =>
               cacheLayer.remove(cacheID)
-              Right(OAuth1Info(token.token, token.secret))
-            }))
+              Right(info)
+          }
       }
-      // The oauth_verifier field is not in the request, this is the first step in the auth flow.
-      // we need to get the request tokens
-      case _ => Future(service.retrieveRequestToken(settings.callbackURL)).map(_.fold(
-        exception => throw new AuthenticationException(ErrorRequestToken.format(id), exception),
-        token => {
+      // The oauth_verifier field is not in the request.
+      // This is the first step in the OAuth flow. We need to get the request tokens.
+      case _ => oAuth1Service.retrieveRequestToken(oAuth1Settings.callbackURL).map {
+        case Failure(exception) => throw new AuthenticationException(ErrorRequestToken.format(id), exception)
+        case Success(info) =>
           val cacheID = UUID.randomUUID().toString
-          val url = service.redirectUrl(token.token)
+          val url = oAuth1Service.redirectUrl(info.token)
           val redirect = Results.Redirect(url).withSession(request.session + (CacheKey -> cacheID))
           if (Logger.isDebugEnabled) {
             Logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
           }
-          cacheLayer.set(cacheID, token, 300) // set it for 5 minutes, plenty of time to log in
+          cacheLayer.set(cacheID, info, CacheExpiration)
           Left(redirect)
-        }))
+      }
     }
   }
 
   /**
-   * Builds the service info.
-   *
-   * @return The service info.
-   */
-  protected def serviceInfo: ServiceInfo = ServiceInfo(
-    settings.requestTokenURL,
-    settings.accessTokenURL,
-    settings.authorizationURL,
-    ConsumerKey(settings.consumerKey, settings.consumerSecret))
-
-  /**
-   * Gets the cached token if it's stored in cache.
+   * Gets the cached info if it's stored in cache.
    *
    * @param request The request header.
-   * @return A tuple contains the cache ID with the cached token.
+   * @return A tuple contains the cache ID with the cached info.
    */
-  private def cachedToken(implicit request: RequestHeader): Future[(String, RequestToken)] = {
+  private def cachedInfo(implicit request: RequestHeader): Future[(String, OAuth1Info)] = {
     request.session.get(CacheKey) match {
-      case Some(cacheID) => cacheLayer.get[RequestToken](cacheID).map {
+      case Some(cacheID) => cacheLayer.get[OAuth1Info](cacheID).map {
         case Some(state) => cacheID -> state
         case _ => throw new AuthenticationException(CachedTokenDoesNotExists.format(id, cacheID))
       }
@@ -123,7 +110,7 @@ object OAuth1Provider {
   /**
    * The error messages.
    */
-  val AuthorizationError = "[Silhouette][%s] Authorization server returned error: '%s'"
+  val AuthorizationError = "[Silhouette][%s] Authorization server returned error: %s"
   val CacheKeyNotInSession = "[Silhouette][%s] Session doesn't contain cache key: %s"
   val CachedTokenDoesNotExists = "[Silhouette][%s] Token doesn't exists in cache for cache key: %s"
   val ErrorAccessToken = "[Silhouette][%s] Error retrieving access token"
@@ -135,6 +122,51 @@ object OAuth1Provider {
   val CacheKey = "silhouetteOAuth1Cache"
   val Denied = "denied"
   val OAuthVerifier = "oauth_verifier"
+
+  /**
+   *  Cache expiration. Provides sufficient time to log in, but not too much.
+   *  This is a balance between convenience and security.
+   */
+  val CacheExpiration = 5 * 60; // 5 minutes
+}
+
+/**
+ * The OAuth1 service trait.
+ */
+trait OAuth1Service {
+
+  /**
+   * Retrieves the request info and secret.
+   *
+   * @param callbackURL The URL where the provider should redirect to (usually a URL on the current app).
+   * @return A Success(OAuth1Info) in case of success, Failure(Exception) otherwise.
+   */
+  def retrieveRequestToken(callbackURL: String): Future[Try[OAuth1Info]]
+
+  /**
+   * Exchange a request info for an access info.
+   *
+   * @param oAuthInfo The info/secret pair obtained from a previous call.
+   * @param verifier A string you got through your user with redirection.
+   * @return A Success(OAuth1Info) in case of success, Failure(Exception) otherwise.
+   */
+  def retrieveAccessToken(oAuthInfo: OAuth1Info, verifier: String): Future[Try[OAuth1Info]]
+
+  /**
+   * The URL to which the user needs to be redirected to grant authorization to your application.
+   *
+   * @param token The request info.
+   * @return The redirect URL.
+   */
+  def redirectUrl(token: String): String
+
+  /**
+   * Creates the signature calculator for the OAuth request.
+   *
+   * @param oAuthInfo The info/secret pair obtained from a previous call.
+   * @return The signature calculator for the OAuth1 request.
+   */
+  def sign(oAuthInfo: OAuth1Info): SignatureCalculator
 }
 
 /**

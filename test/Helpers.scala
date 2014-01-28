@@ -17,6 +17,10 @@ package test
 
 import org.specs2.execute.{ Result, AsResult }
 import org.specs2.mutable.Around
+import play.api.libs.json.{ JsValue, Json }
+import scala.io.{ Source, Codec }
+import play.api.Play
+import play.api.Play.current
 
 /**
  * Executes a before method in the context of the around method.
@@ -46,5 +50,24 @@ trait BeforeAfterWithinAround extends Around {
   def after: Any
   abstract override def around[T: AsResult](t: => T): Result = super.around {
     try { before; t } finally { after }
+  }
+}
+
+/**
+ * Some test-related helper methods.
+ */
+object Helper {
+
+  /**
+   * Loads a JSON file from class path.
+   *
+   * @param file The file to load.
+   * @return The JSON value.
+   */
+  def loadJson(file: String): JsValue = {
+    Play.application.resourceAsStream(file) match {
+      case Some(is) => Json.parse(Source.fromInputStream(is)(Codec.UTF8).mkString)
+      case None => throw new Exception("Cannot load file: " + file)
+    }
   }
 }

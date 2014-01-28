@@ -19,12 +19,11 @@
  */
 package com.mohiva.play.silhouette.core.providers.oauth1
 
-import play.api.libs.oauth.{ RequestToken, OAuthCalculator }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
-import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth1Info, OAuth1Settings, OAuth1Provider }
+import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.services.AuthInfoService
 import XingProvider._
 
@@ -34,14 +33,16 @@ import XingProvider._
  * @param authInfoService The auth info service.
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
- * @param settings The provider settings.
+ * @param oAuth1Service The OAuth1 service implementation.
+ * @param oAuth1Settings The OAuth1 provider settings.
  */
 class XingProvider(
   protected val authInfoService: AuthInfoService,
   cacheLayer: CacheLayer,
   httpLayer: HTTPLayer,
-  settings: OAuth1Settings)
-    extends OAuth1Provider(settings, cacheLayer, httpLayer) {
+  oAuth1Service: OAuth1Service,
+  oAuth1Settings: OAuth1Settings)
+    extends OAuth1Provider(cacheLayer, httpLayer, oAuth1Service, oAuth1Settings) {
 
   /**
    * Gets the provider ID.
@@ -57,8 +58,7 @@ class XingProvider(
    * @return The social profile.
    */
   protected def buildProfile(authInfo: OAuth1Info): Future[SocialProfile] = {
-    val sign = OAuthCalculator(serviceInfo.key, RequestToken(authInfo.token, authInfo.secret))
-    httpLayer.url(API).sign(sign).get().map { response =>
+    httpLayer.url(API).sign(oAuth1Service.sign(authInfo)).get().map { response =>
       val json = response.json
       val userID = (json \\ ID).head.as[String]
       val fullName = (json \\ Name).head.asOpt[String]
