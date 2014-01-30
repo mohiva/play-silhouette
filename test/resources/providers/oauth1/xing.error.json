@@ -1,0 +1,4 @@
+{
+    "error_name": "INVALID_PARAMETERS",
+    "message": "Invalid parameters (Limit must be a non-negative number.)"
+}

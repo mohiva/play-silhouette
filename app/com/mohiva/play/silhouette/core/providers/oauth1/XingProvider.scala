@@ -35,6 +35,9 @@ import XingProvider._
  * @param httpLayer The HTTP layer implementation.
  * @param oAuth1Service The OAuth1 service implementation.
  * @param oAuth1Settings The OAuth1 provider settings.
+ *
+ * @see https://dev.xing.com/docs/get/users/me
+ * @see https://dev.xing.com/docs/error_responses
  */
 class XingProvider(
   protected val authInfoService: AuthInfoService,
@@ -60,21 +63,32 @@ class XingProvider(
   protected def buildProfile(authInfo: OAuth1Info): Future[SocialProfile] = {
     httpLayer.url(API).sign(oAuth1Service.sign(authInfo)).get().map { response =>
       val json = response.json
-      val userID = (json \\ ID).head.as[String]
-      val fullName = (json \\ Name).head.asOpt[String]
-      val lastName = (json \\ LastName).head.asOpt[String]
-      val firstName = (json \\ FirstName).head.asOpt[String]
-      val avatarURL = (json \\ Large).head.asOpt[String]
-      val email = (json \\ ActiveEmail).head.asOpt[String]
+      (json \ ErrorName).asOpt[String] match {
+        case Some(error) =>
+          val message = (json \ Message).asOpt[String]
 
-      SocialProfile(
-        loginInfo = LoginInfo(id, userID),
-        firstName = firstName,
-        lastName = lastName,
-        fullName = fullName,
-        avatarURL = avatarURL,
-        email = email)
-    }.recover { case e => throw new AuthenticationException(UnspecifiedProfileError.format(id), e) }
+          throw new AuthenticationException(SpecifiedProfileError.format(id, error, message.getOrElse("")))
+        case _ =>
+          val json = response.json
+          val userID = (json \ Users \\ ID).head.as[String]
+          val fullName = (json \ Users \\ Name).headOption.map(_.as[String])
+          val lastName = (json \ Users \\ LastName).headOption.map(_.as[String])
+          val firstName = (json \ Users \\ FirstName).headOption.map(_.as[String])
+          val avatarURL = (json \ Users \\ ProfileImage).headOption.flatMap(urls => (urls \ Large).asOpt[String])
+          val email = (json \ Users \\ ActiveEmail).headOption.map(_.as[String])
+
+          SocialProfile(
+            loginInfo = LoginInfo(id, userID),
+            firstName = firstName,
+            lastName = lastName,
+            fullName = fullName,
+            avatarURL = avatarURL,
+            email = email)
+      }
+    }.recover {
+      case e if !e.isInstanceOf[AuthenticationException] =>
+        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
+    }
   }
 }
 
@@ -87,17 +101,20 @@ object XingProvider {
    * The error messages.
    */
   val UnspecifiedProfileError = "[Silhouette][%s] error retrieving profile information"
+  val SpecifiedProfileError = "[Silhouette][%s] error retrieving profile information. Error name: %s, message: %s"
 
   /**
    * The LinkedIn constants.
    */
   val Xing = "xing"
-  val API = "https://api.xing.com/v1/users/me"
+  val API = "https://api.xing.com/v1/users/me?fields=id,display_name,first_name,last_name,active_email,photo_urls.large"
+  val ErrorName = "error_name"
+  val Message = "message"
+  val Users = "users"
   val ID = "id"
   val Name = "display_name"
   val FirstName = "first_name"
   val LastName = "last_name"
-  val Users = "users"
   val ProfileImage = "photo_urls"
   val Large = "large"
   val ActiveEmail = "active_email"

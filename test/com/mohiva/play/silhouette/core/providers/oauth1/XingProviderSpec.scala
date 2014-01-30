@@ -26,12 +26,12 @@ import com.mohiva.play.silhouette.core.providers.OAuth1Settings
 import com.mohiva.play.silhouette.core.providers.OAuth1Info
 import com.mohiva.play.silhouette.core.{ LoginInfo, AuthenticationException }
 import OAuth1Provider._
-import LinkedInProvider._
+import XingProvider._
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.core.providers.oauth1.LinkedInProvider]] class.
+ * Test case for the [[com.mohiva.play.silhouette.core.providers.oauth1.XingProvider]] class.
  */
-class LinkedInProviderSpec extends OAuth1ProviderSpec {
+class XingProviderSpec extends OAuth1ProviderSpec {
 
   "The authenticate method" should {
     "throw AuthenticationException if API returns error" in new WithApplication with Context {
@@ -43,17 +43,14 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
       oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(Success(oAuthInfo))
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
-      response.json returns Helper.loadJson("providers/oauth1/LinkedIn.error.json")
+      response.json returns Helper.loadJson("providers/oauth1/xing.error.json")
       httpLayer.url(API) returns requestHolder
 
       await(provider.authenticate()) must throwAn[AuthenticationException].like {
         case e => e.getMessage must equalTo(SpecifiedProfileError.format(
           provider.id,
-          0,
-          Some("Unknown authentication scheme"),
-          Some("LY860UAC5U"),
-          Some(401),
-          Some(1390421660154L)))
+          "INVALID_PARAMETERS",
+          "Invalid parameters (Limit must be a non-negative number.)"))
       }
 
       there was one(cacheLayer).remove(cacheID)
@@ -87,18 +84,18 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
       oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(Success(oAuthInfo))
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
-      response.json returns Helper.loadJson("providers/oauth1/LinkedIn.success.json")
+      response.json returns Helper.loadJson("providers/oauth1/xing.success.json")
       httpLayer.url(API) returns requestHolder
 
       await(provider.authenticate()) must beRight.like {
         case p =>
           p must be equalTo new SocialProfile(
-            loginInfo = LoginInfo(provider.id, "NhZXBl_O6f"),
+            loginInfo = LoginInfo(provider.id, "1235468792"),
             firstName = Some("Apollonia"),
             lastName = Some("Vanova"),
             fullName = Some("Apollonia Vanova"),
-            email = Some("apollonia.vanova@watchmen.com"),
-            avatarURL = Some("http://media.linkedin.com/mpr/mprx/0_fsPnURNRhLhk_Ue2fjKLUZkB2FL6TOe2S4bdUZz61GA9Ysxu_y_sz4THGW5JGJWhaMleN0F61-Dg")
+            avatarURL = Some("http://www.xing.com/img/users/e/3/d/f94ef165a.123456,1.140x185.jpg"),
+            email = Some("apollonia.vanova@watchmen.com")
           )
       }
 
@@ -122,9 +119,9 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
      * The OAuth1 settings.
      */
     lazy val oAuthSettings = OAuth1Settings(
-      requestTokenURL = "https://api.linkedin.com/uas/oauth/requestToken",
-      accessTokenURL = "https://api.linkedin.com/uas/oauth/accessToken",
-      authorizationURL = "https://api.linkedin.com/uas/oauth/authenticate",
+      requestTokenURL = "https://api.xing.com/v1/request_token",
+      accessTokenURL = "https://api.xing.com/v1/access_token",
+      authorizationURL = "https://api.xing.com/v1/authorize",
       callbackURL = "https://www.mohiva.com",
       consumerKey = "my.consumer.key",
       consumerSecret = "my.consumer.secret")
@@ -137,6 +134,6 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new LinkedInProvider(authInfoService, cacheLayer, httpLayer, oAuthService, oAuthSettings)
+    lazy val provider = new XingProvider(authInfoService, cacheLayer, httpLayer, oAuthService, oAuthSettings)
   }
 }

@@ -44,7 +44,7 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
       response.json returns Helper.loadJson("providers/oauth1/twitter.error.json")
-      httpLayer.url(TwitterProvider.API) returns requestHolder
+      httpLayer.url(API) returns requestHolder
 
       await(provider.authenticate()) must throwAn[AuthenticationException].like {
         case e => e.getMessage must equalTo(SpecifiedProfileError.format(
@@ -66,7 +66,7 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
       response.json throws new RuntimeException("")
-      httpLayer.url(TwitterProvider.API) returns requestHolder
+      httpLayer.url(API) returns requestHolder
 
       await(provider.authenticate()) must throwAn[AuthenticationException].like {
         case e => e.getMessage must equalTo(UnspecifiedProfileError.format(provider.id))
@@ -85,7 +85,7 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
       response.json returns Helper.loadJson("providers/oauth1/twitter.success.json")
-      httpLayer.url(TwitterProvider.API) returns requestHolder
+      httpLayer.url(API) returns requestHolder
 
       await(provider.authenticate()) must beRight.like {
         case p =>
