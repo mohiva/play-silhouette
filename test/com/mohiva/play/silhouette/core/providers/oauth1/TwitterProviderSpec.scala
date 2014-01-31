@@ -124,11 +124,6 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
       consumerSecret = "my.consumer.secret")
 
     /**
-     * A OAuth info.
-     */
-    lazy val oAuthInfo = OAuth1Info("my.token", "my.secret")
-
-    /**
      * The provider to test.
      */
     lazy val provider = new TwitterProvider(authInfoService, cacheLayer, httpLayer, oAuthService, oAuthSettings)

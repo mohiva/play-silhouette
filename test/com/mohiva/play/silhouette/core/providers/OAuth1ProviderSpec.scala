@@ -142,6 +142,11 @@ trait OAuth1ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
   lazy val httpLayer: HTTPLayer = mock[HTTPLayer]
 
   /**
+   * A OAuth1 info.
+   */
+  lazy val oAuthInfo = OAuth1Info("my.token", "my.secret")
+
+  /**
    * The OAuth1 service mock.
    */
   lazy val oAuthService: OAuth1Service = mock[OAuth1Service]
@@ -150,11 +155,6 @@ trait OAuth1ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
    * The OAuth1 settings.
    */
   def oAuthSettings: OAuth1Settings
-
-  /**
-   * A OAuth info.
-   */
-  def oAuthInfo: OAuth1Info
 
   /**
    * The provider to test.
