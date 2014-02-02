@@ -79,7 +79,7 @@ abstract class OAuth1ProviderSpec extends PlaySpecification with Mockito with Js
           val result = Future.successful(r)
           val cacheID = session(result).get(OAuth1Provider.CacheKey).get
 
-          there was one(c.cacheLayer).set(cacheID, c.oAuthInfo, 300)
+          there was one(c.cacheLayer).set(cacheID, c.oAuthInfo, CacheExpiration)
         }
       }
     }
