@@ -77,12 +77,11 @@ abstract class OAuth2Provider(
       case None =>
         val state = UUID.randomUUID().toString
         val cacheID = request.session.get(CacheKey).getOrElse(UUID.randomUUID().toString)
-        var params = List(
+        val params = settings.scope.foldLeft(List(
           (ClientID, settings.clientID),
           (RedirectURI, settings.redirectURL),
           (ResponseType, Code),
-          (State, state))
-        settings.scope.foreach(s => { params = (Scope, s) :: params })
+          (State, state))) { case (p, s) => (Scope, s) :: p }
         val url = settings.authorizationURL + params.map(p => p._1 + "=" + URLEncoder.encode(p._2, "UTF-8")).mkString("?", "&", "")
         val redirect = Results.Redirect(url).withSession(request.session + (CacheKey -> cacheID))
         if (Logger.isDebugEnabled) {
