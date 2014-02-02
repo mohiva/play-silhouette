@@ -21,12 +21,10 @@ import play.api.libs.ws.{ Response, WS }
 import play.api.test.{ FakeRequest, WithApplication }
 import scala.concurrent.Future
 import com.mohiva.play.silhouette.core.providers._
-import com.mohiva.play.silhouette.core.providers.OAuth2Info
 import com.mohiva.play.silhouette.core.providers.oauth2.FacebookProvider
 import com.mohiva.play.silhouette.core.{ LoginInfo, AuthenticationException }
-import com.mohiva.play.silhouette.core.providers.OAuth2Provider._
-import com.mohiva.play.silhouette.core.providers.OAuth2Settings
 import FacebookProvider._
+import OAuth2Provider._
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.core.providers.oauth2.FacebookProvider]] class.
