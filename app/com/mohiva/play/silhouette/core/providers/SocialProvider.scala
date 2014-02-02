@@ -55,7 +55,7 @@ trait SocialProvider[A] extends Provider {
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, A]]
+  protected def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, A]]
 
   /**
    * Subclasses need to implement this method to populate the profile information from the service provider.
@@ -63,7 +63,7 @@ trait SocialProvider[A] extends Provider {
    * @param authInfo The auth info received from the provider.
    * @return The build social profile.
    */
-  def buildProfile(authInfo: A): Future[SocialProfile]
+  protected def buildProfile(authInfo: A): Future[SocialProfile]
 
   /**
    * Gets the auth info implementation.
