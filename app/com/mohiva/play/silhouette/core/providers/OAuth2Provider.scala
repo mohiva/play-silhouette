@@ -105,10 +105,9 @@ abstract class OAuth2Provider(
       ClientSecret -> Seq(settings.clientSecret),
       GrantType -> Seq(AuthorizationCode),
       Code -> Seq(code),
-      RedirectURI -> Seq(settings.redirectURL)
-    )).map { response =>
+      RedirectURI -> Seq(settings.redirectURL))).map { response =>
       if (Logger.isDebugEnabled) {
-        Logger.debug("[Silhouette][%s] Got json back: [%s]".format(id, response.json))
+        Logger.debug("[Silhouette][%s] Access token response: [%s]".format(id, response.body))
       }
       buildInfo(response)
     }
@@ -160,7 +159,7 @@ object OAuth2Provider {
   /**
    * The error messages.
    */
-  val AuthorizationError = "[Silhouette][%s] Authorization server returned error: '%s'"
+  val AuthorizationError = "[Silhouette][%s] Authorization server returned error: %s"
   val CacheKeyNotInSession = "[Silhouette][%s] Session doesn't contain cache key: %s"
   val CachedStateDoesNotExists = "[Silhouette][%s] State doesn't exists in cache for cache key: %s"
   val RequestStateDoesNotExists = "[Silhouette][%s] State doesn't exists in query string"
@@ -188,8 +187,8 @@ object OAuth2Provider {
   val AccessDenied = "access_denied"
 
   /**
-   *  Cache expiration. Provides sufficient time to log in, but not too much.
-   *  This is a balance between convenience and security.
+   * Cache expiration. Provides sufficient time to log in, but not too much.
+   * This is a balance between convenience and security.
    */
   val CacheExpiration = 5 * 60; // 5 minutes
 }

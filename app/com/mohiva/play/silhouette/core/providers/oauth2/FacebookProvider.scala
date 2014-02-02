@@ -37,6 +37,10 @@ import OAuth2Provider._
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
  * @param settings The provider settings.
+ *
+ * @see https://developers.facebook.com/tools/explorer
+ * @see https://developers.facebook.com/docs/graph-api/reference/user
+ * @see https://developers.facebook.com/docs/facebook-login/access-tokens
  */
 class FacebookProvider(
   protected val authInfoService: AuthInfoService,
@@ -63,10 +67,11 @@ class FacebookProvider(
       val json = response.json
       (json \ Error).asOpt[JsObject] match {
         case Some(error) =>
-          val errorType = (error \ Type).as[String]
           val errorMsg = (error \ Message).as[String]
+          val errorType = (error \ Type).as[String]
+          val errorCode = (error \ Code).as[Int]
 
-          throw new AuthenticationException(SpecifiedProfileError.format(id, errorType, errorMsg))
+          throw new AuthenticationException(SpecifiedProfileError.format(id, errorMsg, errorType, errorCode))
         case _ =>
           val userID = (json \ ID).as[String]
           val firstName = (json \ FirstName).asOpt[String]
@@ -83,7 +88,10 @@ class FacebookProvider(
             avatarURL = avatarURL,
             email = email)
       }
-    }.recover { case e => throw new AuthenticationException(UnspecifiedProfileError.format(id), e) }
+    }.recover {
+      case e if !e.isInstanceOf[AuthenticationException] =>
+        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
+    }
   }
 
   /**
@@ -113,21 +121,21 @@ object FacebookProvider {
    */
   val InvalidResponseFormat = "[Silhouette][%s] Invalid response format for accessToken"
   val UnspecifiedProfileError = "[Silhouette][%s] Error retrieving profile information"
-  val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error type: %s, message: %s"
+  val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error message: %s, type: %s, code: %s"
 
   /**
    * The Facebook constants.
    */
   val Facebook = "facebook"
   val API = "https://graph.facebook.com/me?fields=name,first_name,last_name,picture,email&return_ssl_resources=1&access_token=%s"
-  val Type = "type"
   val Message = "message"
+  val Type = "type"
   val ID = "id"
+  val Name = "name"
   val FirstName = "first_name"
   val LastName = "last_name"
-  val Name = "name"
-  val Picture = "picture"
   val Email = "email"
+  val Picture = "picture"
   val Data = "data"
   val URL = "url"
 }
