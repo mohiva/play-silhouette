@@ -60,12 +60,11 @@ abstract class OAuth1ProviderSpec extends PlaySpecification with Mockito with Js
       c.oAuthService.redirectUrl(any) returns c.oAuthSettings.authorizationURL
 
       await(c.provider.authenticate()) must beLeft.like {
-        case r => {
+        case r =>
           val result = Future.successful(r)
           status(result) must equalTo(SEE_OTHER)
           session(result).get(OAuth1Provider.CacheKey) must beSome.which(s => UUID.fromString(s).toString == s)
           redirectLocation(result) must beSome.which(_ == c.oAuthSettings.authorizationURL)
-        }
       }
     }
 
@@ -75,12 +74,11 @@ abstract class OAuth1ProviderSpec extends PlaySpecification with Mockito with Js
       c.oAuthService.redirectUrl(any) returns c.oAuthSettings.authorizationURL
 
       await(c.provider.authenticate()) must beLeft.like {
-        case r => {
+        case r =>
           val result = Future.successful(r)
           val cacheID = session(result).get(OAuth1Provider.CacheKey).get
 
           there was one(c.cacheLayer).set(cacheID, c.oAuthInfo, CacheExpiration)
-        }
       }
     }
 
