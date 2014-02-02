@@ -61,7 +61,7 @@ abstract class OAuth2Provider(
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  protected def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, OAuth2Info]] = {
+  def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, OAuth2Info]] = {
     request.queryString.get(Error).flatMap(_.headOption).map {
       case e @ AccessDenied => throw new AccessDeniedException(AuthorizationError.format(id, e))
       case error => throw new AuthenticationException(AuthorizationError.format(id, error))

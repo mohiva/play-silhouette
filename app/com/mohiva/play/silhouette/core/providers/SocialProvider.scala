@@ -48,21 +48,6 @@ trait SocialProvider[A] extends Provider {
   }
 
   /**
-   * Gets the auth info implementation.
-   *
-   * @return The auth info implementation.
-   */
-  protected def authInfoService: AuthInfoService
-
-  /**
-   * Subclasses need to implement this method to populate the profile information from the service provider.
-   *
-   * @param authInfo The auth info received from the provider.
-   * @return The build social profile.
-   */
-  protected def buildProfile(authInfo: A): Future[SocialProfile]
-
-  /**
    * Subclasses need to implement the authentication logic.
    *
    * This method needs to return a auth info object that then gets passed to the buildIdentity method.
@@ -70,7 +55,22 @@ trait SocialProvider[A] extends Provider {
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  protected def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, A]]
+  def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, A]]
+
+  /**
+   * Subclasses need to implement this method to populate the profile information from the service provider.
+   *
+   * @param authInfo The auth info received from the provider.
+   * @return The build social profile.
+   */
+  def buildProfile(authInfo: A): Future[SocialProfile]
+
+  /**
+   * Gets the auth info implementation.
+   *
+   * @return The auth info implementation.
+   */
+  protected def authInfoService: AuthInfoService
 }
 
 /**
