@@ -51,7 +51,7 @@ abstract class OAuth1Provider(
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  protected def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, OAuth1Info]] = {
+  def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, OAuth1Info]] = {
     if (request.queryString.get(Denied).isDefined) {
       throw new AccessDeniedException(AuthorizationError.format(id, Denied))
     }
