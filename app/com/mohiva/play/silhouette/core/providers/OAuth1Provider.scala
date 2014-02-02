@@ -124,8 +124,8 @@ object OAuth1Provider {
   val OAuthVerifier = "oauth_verifier"
 
   /**
-   *  Cache expiration. Provides sufficient time to log in, but not too much.
-   *  This is a balance between convenience and security.
+   * Cache expiration. Provides sufficient time to log in, but not too much.
+   * This is a balance between convenience and security.
    */
   val CacheExpiration = 5 * 60; // 5 minutes
 }
