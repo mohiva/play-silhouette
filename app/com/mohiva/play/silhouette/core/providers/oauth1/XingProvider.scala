@@ -60,7 +60,7 @@ class XingProvider(
    * @param authInfo The auth info received from the provider.
    * @return The social profile.
    */
-  def buildProfile(authInfo: OAuth1Info): Future[SocialProfile] = {
+  protected def buildProfile(authInfo: OAuth1Info): Future[SocialProfile] = {
     httpLayer.url(API).sign(oAuth1Service.sign(authInfo)).get().map { response =>
       val json = response.json
       (json \ ErrorName).asOpt[String] match {
