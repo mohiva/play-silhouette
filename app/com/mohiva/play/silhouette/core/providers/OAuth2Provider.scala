@@ -19,7 +19,7 @@
  */
 package com.mohiva.play.silhouette.core.providers
 
-import java.net.URLEncoder
+import java.net.URLEncoder._
 import java.util.UUID
 import play.api.Logger
 import play.api.mvc.{ SimpleResult, RequestHeader, Results }
@@ -81,8 +81,11 @@ abstract class OAuth2Provider(
           (ClientID, settings.clientID),
           (RedirectURI, settings.redirectURL),
           (ResponseType, Code),
-          (State, state))) { case (p, s) => (Scope, s) :: p }
-        val url = settings.authorizationURL + params.map(p => p._1 + "=" + URLEncoder.encode(p._2, "UTF-8")).mkString("?", "&", "")
+          (State, state)) ++ settings.authorizationParams.toList) {
+          case (p, s) => (Scope, s) :: p
+        }
+        val encodedParams = params.map { p => encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8") }
+        val url = settings.authorizationURL + encodedParams.mkString("?", "&", "")
         val redirect = Results.Redirect(url).withSession(request.session + (CacheKey -> cacheID))
         if (Logger.isDebugEnabled) {
           Logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
@@ -105,7 +108,7 @@ abstract class OAuth2Provider(
       ClientSecret -> Seq(settings.clientSecret),
       GrantType -> Seq(AuthorizationCode),
       Code -> Seq(code),
-      RedirectURI -> Seq(settings.redirectURL))).map { response =>
+      RedirectURI -> Seq(settings.redirectURL)) ++ settings.accessTokenParams.mapValues(Seq(_))).map { response =>
       if (Logger.isDebugEnabled) {
         Logger.debug("[Silhouette][%s] Access token response: [%s]".format(id, response.body))
       }
@@ -202,6 +205,8 @@ object OAuth2Provider {
  * @param clientID The client ID.
  * @param clientSecret The client secret.
  * @param scope The scope.
+ * @param authorizationParams Additional params to add to the authorization request.
+ * @param accessTokenParams Additional params to add to the access token request.
  */
 case class OAuth2Settings(
   authorizationURL: String,
@@ -209,7 +214,9 @@ case class OAuth2Settings(
   redirectURL: String,
   clientID: String,
   clientSecret: String,
-  scope: Option[String])
+  scope: Option[String],
+  authorizationParams: Map[String, String] = Map(),
+  accessTokenParams: Map[String, String] = Map())
 
 /**
  * The Oauth2 details.

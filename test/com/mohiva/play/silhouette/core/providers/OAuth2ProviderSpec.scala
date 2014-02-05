@@ -16,7 +16,7 @@
 package com.mohiva.play.silhouette.core.providers
 
 import java.util.UUID
-import java.net.URLEncoder
+import java.net.URLEncoder._
 import scala.concurrent.Future
 import play.api.test.{ FakeRequest, WithApplication, PlaySpecification }
 import org.specs2.matcher.{ ThrownExpectations, JsonMatchers }
@@ -26,6 +26,7 @@ import com.mohiva.play.silhouette.core.utils.{ CacheLayer, HTTPLayer }
 import com.mohiva.play.silhouette.core.services.AuthInfoService
 import com.mohiva.play.silhouette.core.{ AuthenticationException, AccessDeniedException }
 import OAuth2Provider._
+import play.api.libs.ws.WS
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.core.providers.OAuth2ProviderSpec]] class.
@@ -59,13 +60,17 @@ abstract class OAuth2ProviderSpec extends PlaySpecification with Mockito with Js
           status(result) must equalTo(SEE_OTHER)
           session(result).get(CacheKey) must beSome.which(s => UUID.fromString(s).toString == s)
           redirectLocation(result) must beSome.which { url =>
+            val urlParams = c.urlParams(url)
             val params = c.oAuthSettings.scope.foldLeft(List(
               (ClientID, c.oAuthSettings.clientID),
               (RedirectURI, c.oAuthSettings.redirectURL),
               (ResponseType, Code),
-              (State, ""))) { case (p, s) => (Scope, s) :: p }
-            url must startWith(c.oAuthSettings.authorizationURL + params.map(p =>
-              p._1 + "=" + URLEncoder.encode(p._2, "UTF-8")).mkString("?", "&", ""))
+              (State, urlParams(State))) ++ c.oAuthSettings.authorizationParams.toList) {
+              case (p, s) => (Scope, s) :: p
+            }
+            url must be equalTo (c.oAuthSettings.authorizationURL + params.map { p =>
+              encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8")
+            }.mkString("?", "&", ""))
           }
       }
     }
@@ -78,12 +83,9 @@ abstract class OAuth2ProviderSpec extends PlaySpecification with Mockito with Js
           val result = Future.successful(r)
           val cacheID = session(result).get(CacheKey).get
           val url = redirectLocation(result).get
-          val params = (url.split('&') map { str =>
-            val pair = str.split('=')
-            pair(0) -> pair(1)
-          }).toMap
+          val urlParams = c.urlParams(url)
 
-          there was one(c.cacheLayer).set(cacheID, params(State), CacheExpiration)
+          there was one(c.cacheLayer).set(cacheID, urlParams(State), CacheExpiration)
       }
     }
 
@@ -124,6 +126,37 @@ abstract class OAuth2ProviderSpec extends PlaySpecification with Mockito with Js
 
       await(c.provider.authenticate()) must throwAn[AuthenticationException].like {
         case e => e.getMessage must startWith(StateIsNotEqual.format(c.provider.id, ""))
+      }
+    }
+
+    "submit the proper params to the access token post request" in new WithApplication {
+      val cacheID = UUID.randomUUID().toString
+      val state = UUID.randomUUID().toString
+      val requestHolder = mock[WS.WSRequestHolder]
+      val params = Map(
+        ClientID -> Seq(c.oAuthSettings.clientID),
+        ClientSecret -> Seq(c.oAuthSettings.clientSecret),
+        GrantType -> Seq(AuthorizationCode),
+        Code -> Seq("my.code"),
+        RedirectURI -> Seq(c.oAuthSettings.redirectURL)) ++ c.oAuthSettings.accessTokenParams.mapValues(Seq(_))
+      implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
+
+      // We must use this neat trick here because it isn't possible to check the post call with a verification,
+      // because of the implicit params needed for the post call. On the other hand we can test it in the abstract
+      // spec, because we throw an exception in both cases which stops the test once the post method was called.
+      // This protects as for an NPE because of the not mocked dependencies. The other solution would be to execute
+      // this test in every provider with the full mocked dependencies.
+      requestHolder.post[Map[String, Seq[String]]](any)(any, any) answers {
+        _.equals(params) match {
+          case true => throw new RuntimeException("success")
+          case false => throw new RuntimeException("failure")
+        }
+      }
+      c.cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
+      c.httpLayer.url(c.oAuthSettings.accessTokenURL) returns requestHolder
+
+      await(c.provider.authenticate()) must throwAn[RuntimeException].like {
+        case e => e.getMessage must startWith("success")
       }
     }
   }
@@ -174,4 +207,15 @@ trait OAuth2ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
    * The provider to test.
    */
   def provider: OAuth2Provider
+
+  /**
+   * Extracts the params of a URL.
+   *
+   * @param url The url to parse.
+   * @return The params of a URL.
+   */
+  def urlParams(url: String) = (url.split('&') map { str =>
+    val pair = str.split('=')
+    pair(0) -> pair(1)
+  }).toMap
 }
