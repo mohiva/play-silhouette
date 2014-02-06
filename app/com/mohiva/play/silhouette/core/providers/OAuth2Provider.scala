@@ -122,7 +122,10 @@ abstract class OAuth2Provider(
    * @param response The response from the provider.
    * @return The OAuth2 info.
    */
-  protected def buildInfo(response: Response): OAuth2Info = response.json.as[OAuth2Info]
+  protected def buildInfo(response: Response): OAuth2Info = response.json.validate[OAuth2Info].asEither.fold(
+    error => throw new AuthenticationException(InvalidResponseFormat.format(id, error)),
+    info => info
+  )
 
   /**
    * Gets the cached state if it's stored in cache.
@@ -167,6 +170,7 @@ object OAuth2Provider {
   val CachedStateDoesNotExists = "[Silhouette][%s] State doesn't exists in cache for cache key: %s"
   val RequestStateDoesNotExists = "[Silhouette][%s] State doesn't exists in query string"
   val StateIsNotEqual = "[Silhouette][%s] State isn't equal"
+  val InvalidResponseFormat = "[Silhouette][%s] Invalid response format for accessToken: %s"
 
   /**
    * The OAuth2 constants.
@@ -207,6 +211,7 @@ object OAuth2Provider {
  * @param scope The scope.
  * @param authorizationParams Additional params to add to the authorization request.
  * @param accessTokenParams Additional params to add to the access token request.
+ * @param customProperties A map of custom properties for the different providers.
  */
 case class OAuth2Settings(
   authorizationURL: String,
@@ -214,9 +219,10 @@ case class OAuth2Settings(
   redirectURL: String,
   clientID: String,
   clientSecret: String,
-  scope: Option[String],
+  scope: Option[String] = None,
   authorizationParams: Map[String, String] = Map(),
-  accessTokenParams: Map[String, String] = Map())
+  accessTokenParams: Map[String, String] = Map(),
+  customProperties: Map[String, String] = Map())
 
 /**
  * The Oauth2 details.

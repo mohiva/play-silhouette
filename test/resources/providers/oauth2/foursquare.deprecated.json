@@ -1,0 +1,20 @@
+{
+    "meta": {
+        "code": 200,
+        "errorType": "deprecated"
+    },
+    "response": {
+        "user": {
+            "id": "13221052",
+            "firstName": "Apollonia",
+            "lastName": "Vanova",
+            "photo": {
+                "prefix": "https://irs0.4sqi.net/img/user/",
+                "suffix": "/blank_girl.png"
+            },
+            "contact": {
+                "email": "apollonia.vanova@watchmen.com"
+            }
+        }
+    }
+}

@@ -106,7 +106,7 @@ class FacebookProvider(
     response.body.split("&|=") match {
       case Array(AccessToken, token, Expires, expiresIn) => OAuth2Info(token, None, Some(expiresIn.toInt))
       case Array(AccessToken, token) => OAuth2Info(token)
-      case _ => throw new AuthenticationException(InvalidResponseFormat.format(id))
+      case _ => throw new AuthenticationException(InvalidResponseFormat.format(id, response.body))
     }
   }
 }
@@ -119,7 +119,6 @@ object FacebookProvider {
   /**
    * The error messages.
    */
-  val InvalidResponseFormat = "[Silhouette][%s] Invalid response format for accessToken"
   val UnspecifiedProfileError = "[Silhouette][%s] Error retrieving profile information"
   val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error message: %s, type: %s, code: %s"
 
