@@ -18,6 +18,8 @@ package com.mohiva.play.silhouette.core.providers
 import java.util.UUID
 import java.net.URLEncoder._
 import scala.concurrent.Future
+import play.api.libs.ws.WS
+import play.api.libs.json.{ JsValue, Json }
 import play.api.test.{ FakeRequest, WithApplication, PlaySpecification }
 import org.specs2.matcher.{ ThrownExpectations, JsonMatchers }
 import org.specs2.mock.Mockito
@@ -26,7 +28,6 @@ import com.mohiva.play.silhouette.core.utils.{ CacheLayer, HTTPLayer }
 import com.mohiva.play.silhouette.core.services.AuthInfoService
 import com.mohiva.play.silhouette.core.{ AuthenticationException, AccessDeniedException }
 import OAuth2Provider._
-import play.api.libs.ws.WS
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.core.providers.OAuth2ProviderSpec]] class.
@@ -192,11 +193,11 @@ trait OAuth2ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
   /**
    * A OAuth2 info.
    */
-  lazy val oAuthInfo = OAuth2Info(
-    accessToken = "my.access.token",
-    tokenType = None,
-    expiresIn = None,
-    refreshToken = None)
+  lazy val oAuthInfo: JsValue = Json.obj(
+    AccessToken -> "my.access.token",
+    TokenType -> "",
+    ExpiresIn -> 5,
+    RefreshToken -> "")
 
   /**
    * The OAuth2 settings.
