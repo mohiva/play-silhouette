@@ -25,7 +25,7 @@ import com.mohiva.play.silhouette.core.{ Identity, Authenticator, LoginInfo }
 import com.mohiva.play.silhouette.core.utils.{ Clock, IDGenerator, CacheLayer }
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService]] class.
+ * Test case for the [[com.mohiva.play.silhouette.contrib.services.CookieAuthenticatorService]] class.
  */
 class CacheAuthenticatorServiceSpec extends PlaySpecification with Mockito {
 
@@ -166,7 +166,7 @@ class CacheAuthenticatorServiceSpec extends PlaySpecification with Mockito {
     /**
      * The cache service instance to test.
      */
-    lazy val service = new CacheAuthenticatorService(cacheLayer, idGenerator, clock)
+    lazy val service = new CookieAuthenticatorService(cacheLayer, idGenerator, clock)
 
     /**
      * An identity.

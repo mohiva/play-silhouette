@@ -21,7 +21,6 @@ package com.mohiva.play.silhouette.core
 
 import play.api.{ Play, Logger }
 import play.api.mvc._
-import play.api.i18n.Messages
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core.services.{ AuthenticatorService, IdentityService }
@@ -90,31 +89,11 @@ trait Silhouette[I <: Identity] extends Controller {
    * @return The identity if any.
    */
   protected def currentIdentity(implicit request: RequestHeader): Future[Option[I]] = {
-    authenticatorFromRequest.flatMap {
+    authenticatorService.retrieve.flatMap {
       case Some(authenticator) => identityService.findByLoginInfo(authenticator.loginInfo).map(_.map { identity =>
-        authenticatorService.update(authenticator.touch)
+        authenticatorService.update(authenticator)
         identity
       })
-      case None => Future.successful(None)
-    }
-  }
-
-  /**
-   * Retrieves the authenticator from request.
-   *
-   * @param request The request header.
-   * @return Some authenticator or None if no authenticator could be found in request.
-   */
-  private def authenticatorFromRequest(implicit request: RequestHeader): Future[Option[Authenticator]] = {
-    request.cookies.get(Authenticator.cookieName) match {
-      case Some(cookie) => authenticatorService.findByID(cookie.value).map {
-        case Some(a) if a.isValid => Some(a)
-        case Some(a) => {
-          authenticatorService.deleteByID(a.id)
-          None
-        }
-        case None => None
-      }
       case None => Future.successful(None)
     }
   }
@@ -243,7 +222,7 @@ trait Silhouette[I <: Identity] extends Controller {
           handleNotAuthorized(request)
         // No user is authenticated. The request will ask for authentication.
         case None =>
-          handleNotAuthenticated(request).map(_.discardingCookies(Authenticator.discardingCookie))
+          handleNotAuthenticated(request).map(authenticatorService.discard)
       }
     }
   }
