@@ -43,8 +43,9 @@ import com.mohiva.play.silhouette.core.utils.DefaultActionHandler
  * }}}
  *
  * @tparam I The type of the identity.
+ * @tparam T The type of the authenticator.
  */
-trait Silhouette[I <: Identity] extends Controller {
+trait Silhouette[I <: Identity, T <: Authenticator] extends Controller {
 
   /**
    * Gets the identity service implementation.
@@ -58,7 +59,7 @@ trait Silhouette[I <: Identity] extends Controller {
    *
    * @return The authenticator service implementation.
    */
-  protected def authenticatorService: AuthenticatorService
+  protected def authenticatorService: AuthenticatorService[T]
 
   /**
    * Implement this to return a result when the user is not authenticated.

@@ -37,12 +37,12 @@ import com.mohiva.play.silhouette.core.services.AuthenticatorService
  * @param idGenerator The ID generator used to create the authenticator ID.
  * @param clock The clock implementation.
  */
-class CookieAuthenticatorService(
-  settings: CookieAuthenticatorSettings,
+class CachedCookieAuthenticatorService(
+  settings: CachedCookieAuthenticatorSettings,
   cacheLayer: CacheLayer,
   idGenerator: IDGenerator,
   clock: Clock)
-    extends AuthenticatorService[CookieAuthenticator] {
+    extends AuthenticatorService[CachedCookieAuthenticator] {
 
   /**
    * Creates a new authenticator ID for the specified identity.
@@ -50,23 +50,19 @@ class CookieAuthenticatorService(
    * @param identity The identity for which the ID should be created.
    * @return An authenticator.
    */
-  def create[I <: Identity](identity: I) = {
+  def create[I <: Identity](identity: I): Future[Option[CachedCookieAuthenticator]] = {
     idGenerator.generate.flatMap { id =>
       val now = clock.now
-      val expirationDate = now.plusSeconds(settings.expiry)
-      val authenticator = CookieAuthenticator(id, identity.loginInfo, now, expirationDate, settings)
+      val expirationDate = now.plusSeconds(settings.authenticatorExpiry)
+      val authenticator = CachedCookieAuthenticator(
+        id = id,
+        loginInfo = identity.loginInfo,
+        lastUsedDate = now,
+        expirationDate = expirationDate,
+        cookieIdleTimeout = settings.cookieIdleTimeout
+      )
       cacheLayer.set(authenticator.id, authenticator)
     }
-  }
-
-  /**
-   * Updates an existing authenticator.
-   *
-   * @param authenticator The authenticator to update.
-   * @return The updated authenticator or None if the authenticator couldn't be updated.
-   */
-  def update(authenticator: CookieAuthenticator) = {
-    cacheLayer.set(authenticator.id, authenticator.copy(lastUsedDate = clock.now))
   }
 
   /**
@@ -75,9 +71,9 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return Some authenticator or None if no authenticator could be found in request.
    */
-  def retrieve(implicit request: RequestHeader): Future[Option[CookieAuthenticator]] = {
-    request.cookies.get(settings.name) match {
-      case Some(cookie) => cacheLayer.get[CookieAuthenticator](cookie.value).map {
+  def retrieve(implicit request: RequestHeader): Future[Option[CachedCookieAuthenticator]] = {
+    request.cookies.get(settings.cookieName) match {
+      case Some(cookie) => cacheLayer.get[CachedCookieAuthenticator](cookie.value).map {
         case Some(a) if a.isValid => Some(a)
         case Some(a) => {
           cacheLayer.remove(a.id)
@@ -90,20 +86,30 @@ class CookieAuthenticatorService(
   }
 
   /**
+   * Updates an existing authenticator.
+   *
+   * @param authenticator The authenticator to update.
+   * @return The updated authenticator or None if the authenticator couldn't be updated.
+   */
+  def update(authenticator: CachedCookieAuthenticator): Future[Option[CachedCookieAuthenticator]] = {
+    cacheLayer.set(authenticator.id, authenticator.copy(lastUsedDate = clock.now))
+  }
+
+  /**
    * Sends the authenticator cookie to the client.
    *
    * @param result The result to manipulate.
    * @return The manipulated result.
    */
-  override def send(authenticator: CookieAuthenticator, result: SimpleResult): SimpleResult = {
+  override def send(authenticator: CachedCookieAuthenticator, result: SimpleResult): SimpleResult = {
     result.withCookies(Cookie(
-      name = settings.name,
+      name = settings.cookieName,
       value = authenticator.id,
-      maxAge = settings.absoluteTimeout,
-      path = settings.path,
-      domain = settings.domain,
-      secure = settings.secure,
-      httpOnly = settings.httpOnly
+      maxAge = settings.cookieAbsoluteTimeout,
+      path = settings.cookiePath,
+      domain = settings.cookieDomain,
+      secure = settings.secureCookie,
+      httpOnly = settings.httpOnlyCookie
     ))
   }
 
@@ -114,7 +120,12 @@ class CookieAuthenticatorService(
    * @return The manipulated result.
    */
   override def discard(result: SimpleResult): SimpleResult = {
-    result.discardingCookies(DiscardingCookie(settings.name, settings.path, settings.domain, settings.secure))
+    result.discardingCookies(DiscardingCookie(
+      name = settings.cookieName,
+      path = settings.cookiePath,
+      domain = settings.cookieDomain,
+      secure = settings.secureCookie
+    ))
   }
 }
 
@@ -125,13 +136,14 @@ class CookieAuthenticatorService(
  * @param loginInfo The user ID.
  * @param lastUsedDate The last used timestamp.
  * @param expirationDate The expiration time.
+ * @param cookieIdleTimeout The time in seconds a cookie can be idle before it timed out.
  */
-case class CookieAuthenticator(
+case class CachedCookieAuthenticator(
     id: String,
     loginInfo: LoginInfo,
     lastUsedDate: DateTime,
     expirationDate: DateTime,
-    settings: CookieAuthenticatorSettings) extends Authenticator {
+    cookieIdleTimeout: Int) extends Authenticator {
 
   /**
    * Checks if the authenticator has expired. This is an absolute timeout since the creation of
@@ -139,7 +151,7 @@ case class CookieAuthenticator(
    *
    * @return True if the authenticator has expired, false otherwise.
    */
-  def expired = expirationDate.isBeforeNow
+  def isExpired = expirationDate.isBeforeNow
 
   /**
    * Checks if the time elapsed since the last time the authenticator was used is longer than
@@ -147,34 +159,34 @@ case class CookieAuthenticator(
    *
    * @return True if the authenticator timed out, false otherwise.
    */
-  def timedOut = lastUsedDate.plusMinutes(settings.idleTimeout).isBeforeNow
+  def isTimedOut = lastUsedDate.plusMinutes(cookieIdleTimeout).isBeforeNow
 
   /**
    * Checks if the authenticator isn't expired and isn't timed out.
    *
    * @return True if the authenticator isn't expired and isn't timed out.
    */
-  def isValid = !expired && !timedOut
+  def isValid = !isExpired && !isTimedOut
 }
 
 /**
  * The settings for the cookie authenticator.
  *
- * @param name The cookie name.
- * @param path The cookie path.
- * @param domain The cookie domain.
- * @param secure Whether this cookie is secured, sent only for HTTPS requests.
- * @param httpOnly Whether this cookie is HTTP only, i.e. not accessible from client-side JavaScript code.
- * @param idleTimeout The time in seconds a cookie can be idle before it timed out. Defaults to 30 minutes.
- * @param absoluteTimeout The cookie expiration date in seconds, `None` for a transient cookie. Defaults to 12 hours.
- * @param expiry The expiry of the authenticator in minutes. Defaults to 12 hours.
+ * @param cookieName The cookie name.
+ * @param cookiePath The cookie path.
+ * @param cookieDomain The cookie domain.
+ * @param secureCookie Whether this cookie is secured, sent only for HTTPS requests.
+ * @param httpOnlyCookie Whether this cookie is HTTP only, i.e. not accessible from client-side JavaScript code.
+ * @param cookieIdleTimeout The time in seconds a cookie can be idle before it timed out. Defaults to 30 minutes.
+ * @param cookieAbsoluteTimeout The cookie expiration date in seconds, `None` for a transient cookie. Defaults to 12 hours.
+ * @param authenticatorExpiry The expiry of the authenticator in minutes. Defaults to 12 hours.
  */
-case class CookieAuthenticatorSettings(
-  name: String = "id",
-  path: String = "/",
-  domain: Option[String] = None,
-  secure: Boolean = true,
-  httpOnly: Boolean = true,
-  idleTimeout: Int = 30 * 60,
-  absoluteTimeout: Option[Int] = Some(12 * 60 * 60),
-  expiry: Int = 12 * 60 * 60)
+case class CachedCookieAuthenticatorSettings(
+  cookieName: String = "id",
+  cookiePath: String = "/",
+  cookieDomain: Option[String] = None,
+  secureCookie: Boolean = true,
+  httpOnlyCookie: Boolean = true,
+  cookieIdleTimeout: Int = 30 * 60,
+  cookieAbsoluteTimeout: Option[Int] = Some(12 * 60 * 60),
+  authenticatorExpiry: Int = 12 * 60 * 60)
