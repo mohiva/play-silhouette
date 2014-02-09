@@ -19,30 +19,32 @@
  */
 package com.mohiva.play.silhouette.core.services
 
-import com.mohiva.play.silhouette.core.{ Identity, Authenticator }
 import scala.concurrent.Future
+import play.api.mvc.{ SimpleResult, RequestHeader }
+import com.mohiva.play.silhouette.core.{ Identity, Authenticator }
 
 /**
  * The authenticator store is in charge of persisting authenticators for the Silhouette module.
+ *
+ * @tparam T The type of the authenticator this service is responsible.
  */
-trait AuthenticatorService {
+trait AuthenticatorService[T <: Authenticator] {
 
   /**
    * Creates a new authenticator ID for the specified identity.
    *
    * @param identity The identity for which the ID should be created.
-   * @param expiry The expiry of the authenticator in minutes. Defaults to 12 hours.
    * @return An authenticator.
    */
-  def create[I <: Identity](identity: I, expiry: Int = 12 * 60): Future[Authenticator]
+  def create[I <: Identity](identity: I): Future[Option[T]]
 
   /**
-   * Saves the authenticator.
+   * Retrieves the authenticator from request.
    *
-   * @param authenticator The authenticator to save.
-   * @return The saved authenticator or None if the authenticator couldn't be saved.
+   * @param request The request header.
+   * @return Some authenticator or None if no authenticator could be found in request.
    */
-  def save(authenticator: Authenticator): Future[Option[Authenticator]]
+  def retrieve(implicit request: RequestHeader): Future[Option[T]]
 
   /**
    * Updates an existing authenticator.
@@ -50,20 +52,22 @@ trait AuthenticatorService {
    * @param authenticator The authenticator to update.
    * @return The updated authenticator or None if the authenticator couldn't be updated.
    */
-  def update(authenticator: Authenticator): Future[Option[Authenticator]]
+  def update(authenticator: T): Future[Option[T]]
 
   /**
-   * Finds an authenticator.
+   * Manipulates the response and send authenticator specific data to the client.
    *
-   * @param id The authenticator ID.
-   * @return The found authenticator or None if no authenticator couldn't be found for the given ID.
+   * @param authenticator The authenticator instance.
+   * @param result The result to manipulate.
+   * @return The manipulated result.
    */
-  def findByID(id: String): Future[Option[Authenticator]]
+  def send(authenticator: T, result: SimpleResult): SimpleResult = result
 
   /**
-   * Deletes an authenticator.
+   * Manipulates the response and removes authenticator specific data before sending it to the client.
    *
-   * @param id The authenticator ID.
+   * @param result The result to manipulate.
+   * @return The manipulated result.
    */
-  def deleteByID(id: String)
+  def discard(result: SimpleResult): SimpleResult = result
 }
