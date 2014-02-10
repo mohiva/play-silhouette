@@ -29,21 +29,10 @@ import com.mohiva.play.silhouette.core.{ Identity, LoginInfo }
 trait IdentityService[T <: Identity] {
 
   /**
-   * Saves an identity.
+   * Retrieves an identity that matches the specified login info.
    *
-   * This method gets called when a user logs in(social auth) or registers.
-   * This is your chance to save the user information in your backing store.
-   *
-   * @param identity The identity to save.
-   * @return The saved identity or None if the identity couldn't be saved.
+   * @param loginInfo The login info to retrieve an identity.
+   * @return The retrieved identity or None if no identity could be retrieved for the given login info.
    */
-  def save(identity: T): Future[Option[T]]
-
-  /**
-   * Finds an identity that matches the specified login info.
-   *
-   * @param loginInfo The login info to find an identity.
-   * @return The found identity or None if no identity could be found for the given login info.
-   */
-  def findByLoginInfo(loginInfo: LoginInfo): Future[Option[T]]
+  def retrieve(loginInfo: LoginInfo): Future[Option[T]]
 }

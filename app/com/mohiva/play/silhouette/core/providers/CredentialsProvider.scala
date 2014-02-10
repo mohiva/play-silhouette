@@ -58,7 +58,7 @@ class CredentialsProvider(
    */
   def authenticate(credentials: Credentials): Future[Option[LoginInfo]] = {
     val loginInfo = new LoginInfo(id, credentials.identifier)
-    authInfoService.findByLoginInfo[PasswordInfo](loginInfo).map {
+    authInfoService.retrieve[PasswordInfo](loginInfo).map {
       case Some(authInfo) => passwordHasherList.find(_.id == authInfo.hasher) match {
         case Some(hasher) if hasher.matches(authInfo, credentials.password) =>
           if (hasher != passwordHasher) {
