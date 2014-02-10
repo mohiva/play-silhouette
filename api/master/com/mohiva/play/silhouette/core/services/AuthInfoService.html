@@ -101,15 +101,15 @@ for the Silhouette module.
 </p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info.</p></dd><dt>returns</dt><dd class="cmt"><p>The retrieved auth info or None if no auth info could be retrieved for the given login info.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.services.AuthInfoService#save" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="save[T](loginInfo:com.mohiva.play.silhouette.core.LoginInfo,authInfo:T):scala.concurrent.Future[Option[com.mohiva.play.silhouette.core.LoginInfo]]"></a>
-      <a id="save[T](LoginInfo,T):Future[Option[LoginInfo]]"></a>
+      <a id="save[T](loginInfo:com.mohiva.play.silhouette.core.LoginInfo,authInfo:T):scala.concurrent.Future[Option[T]]"></a>
+      <a id="save[T](LoginInfo,T):Future[Option[T]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">save</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfoService.save.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a>]]</span>
+        <span class="name">save</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfoService.save.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfoService.save.T">T</span>]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Saves auth info.</p><div class="fullcomment"><div class="comment cmt"><p>Saves auth info.</p><p>This method gets called when a user logs in(social auth) or registers. This is the change
@@ -117,7 +117,7 @@ to persist the auth info for a provider in the backing store. If the application
 the concept of &quot;merged identities&quot;, i.e., the same user being able to authenticate through
 different providers, then make sure that the auth info for every linked login info gets
 stored separately.
-</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be saved.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info to save.</p></dd><dt>returns</dt><dd class="cmt"><p>The saved auth info or None if the identity couldn't be saved.
+</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be saved.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info to save.</p></dd><dt>returns</dt><dd class="cmt"><p>The saved auth info or None if the auth info couldn't be saved.
 </p></dd></dl></div>
     </li></ol>
             </div>
