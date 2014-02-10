@@ -39,9 +39,9 @@ trait AuthInfoService {
    *
    * @param loginInfo The login info for which the auth info should be saved.
    * @param authInfo The auth info to save.
-   * @return The saved auth info or None if the identity couldn't be saved.
+   * @return The saved auth info or None if the auth info couldn't be saved.
    */
-  def save[T](loginInfo: LoginInfo, authInfo: T): Future[Option[LoginInfo]]
+  def save[T](loginInfo: LoginInfo, authInfo: T): Future[Option[T]]
 
   /**
    * Retrieves the auth info which is linked with the specified login info.
