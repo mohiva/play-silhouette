@@ -1,31 +1,60 @@
 import play.Project._
+import mohiva.sbt.Helper._
 
 name := "silhouette"
 
-version := "master-SNAPSHOT"
+version := "1.0-SNAPSHOT"
+
+organization := "com.mohiva"
+
+description := "Authentication library for Play Framework applications that supports several authentication methods, including OAuth, OAuth2, OpenID and password"
+
+homepage := Some(url("http://silhouette.mohiva.com/"))
+
+licenses := Seq("Apache License" -> url("https://github.com/mohiva/play-silhouette/blob/master/LICENSE"))
 
 libraryDependencies ++= Seq(
   cache,
-  "com.typesafe" %% "play-plugins-util" % "2.2.0",
-  "com.typesafe" %% "play-plugins-mailer" % "2.2.0",
   "org.mindrot" % "jbcrypt" % "0.3m",
   "org.mockito" % "mockito-core" % "1.9.5" % "test"
 )
 
-resolvers ++= Seq(
-  Resolver.typesafeRepo("releases")
-)
+parallelExecution in Test := false
 
-publishMavenStyle := false
+val pom = <scm>
+    <url>git@github.com:mohiva/play-silhouette.git</url>
+    <connection>scm:git:git@github.com:mohiva/play-silhouette.git</connection>
+  </scm>
+  <developers>
+    <developer>
+      <id>akkie</id>
+      <name>Christian Kaps</name>
+      <url>http://mohiva.com</url>
+    </developer>
+    <developer>
+      <id>fernandoacorreia</id>
+      <name>Fernando Correia</name>
+      <url>http://www.fernandocorreia.info/</url>
+    </developer>
+  </developers>
+
+publishMavenStyle := true
 
 publishArtifact in Test := false
 
-parallelExecution in Test := false
+pomIncludeRepository := { _ => false }
 
-publishTo <<= (version) { v: String =>
-  val status = if(v.trim.endsWith("-SNAPSHOT")) "snapshots" else "releases"
-  Some(Resolver.sbtPluginRepo(status))
+pomExtra := pom
+
+publishTo <<= version { v: String =>
+  val nexus = "https://oss.sonatype.org/"
+  if (v.trim.endsWith("SNAPSHOT"))
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases" at nexus + "service/local/staging/deploy/maven2")
 }
+
+credentials += Credentials(Path.userHome / ".sbt" / "sonatype.credentials")
 
 playScalaSettings ++ ScoverageSbtPlugin.instrumentSettings
 
@@ -53,3 +82,15 @@ scalacOptions in scoverageTest ~= { (options: Seq[String]) =>
 CoverallsPlugin.singleProject
 
 defaultScalariformSettings
+
+autoAPIMappings := true
+
+apiURL := Some(url(s"http://silhouette.mohiva.com/api/${version}/"))
+
+apiMappings ++= {
+  implicit val cp = (fullClasspath in Compile).value
+  Map (
+    jarFor("com.typesafe.play", "play") -> url(s"http://www.playframework.com/documentation/${playVersion.value}/api/scala/"),
+    scalaInstance.value.libraryJar      -> url(s"http://www.scala-lang.org/api/${scalaVersion.value}/")
+  )
+}
