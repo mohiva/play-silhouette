@@ -44,10 +44,10 @@ trait AuthInfoService {
   def save[T](loginInfo: LoginInfo, authInfo: T): Future[Option[LoginInfo]]
 
   /**
-   * Finds the auth info which is linked with the specified login info.
+   * Retrieves the auth info which is linked with the specified login info.
    *
    * @param loginInfo The linked login info.
-   * @return The found auth info or None if no auth info could be found for the given login info.
+   * @return The retrieved auth info or None if no auth info could be retrieved for the given login info.
    */
-  def findByLoginInfo[T](loginInfo: LoginInfo): Future[Option[T]]
+  def retrieve[T](loginInfo: LoginInfo): Future[Option[T]]
 }
