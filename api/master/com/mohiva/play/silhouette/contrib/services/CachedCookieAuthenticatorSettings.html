@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>PlayHTTPLayer - com.mohiva.play.silhouette.core.utils.PlayHTTPLayer</title>
-          <meta name="description" content="PlayHTTPLayer - com.mohiva.play.silhouette.core.utils.PlayHTTPLayer" />
-          <meta name="keywords" content="PlayHTTPLayer com.mohiva.play.silhouette.core.utils.PlayHTTPLayer" />
+          <title>CachedCookieAuthenticatorSettings - com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings</title>
+          <meta name="description" content="CachedCookieAuthenticatorSettings - com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings" />
+          <meta name="keywords" content="CachedCookieAuthenticatorSettings com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'com.mohiva.play.silhouette.core.utils.PlayHTTPLayer';
+            var hash = 'com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -25,25 +25,25 @@
         <body class="type">
       <div id="definition">
         <img src="../../../../../../lib/class_big.png" />
-        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.core">core</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.core.utils">utils</a></p>
-        <h1>PlayHTTPLayer</h1>
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.contrib">contrib</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.contrib.services">services</a></p>
+        <h1>CachedCookieAuthenticatorSettings</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">PlayHTTPLayer</span><span class="result"> extends <a href="HTTPLayer.html" class="extype" name="com.mohiva.play.silhouette.core.utils.HTTPLayer">HTTPLayer</a></span>
+        <span class="name">CachedCookieAuthenticatorSettings</span><span class="params">(<span name="cookieName">cookieName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;id&quot;</span></span>, <span name="cookiePath">cookiePath: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;/&quot;</span></span>, <span name="cookieDomain">cookieDomain: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="secureCookie">secureCookie: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">true</span></span>, <span name="httpOnlyCookie">httpOnlyCookie: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">true</span></span>, <span name="cookieIdleTimeout">cookieIdleTimeout: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">30.*(60)</span></span>, <span name="cookieAbsoluteTimeout">cookieAbsoluteTimeout: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="defval" name="scala.Some.apply[Int](12.*(60).*(60))">...</span></span>, <span name="authenticatorExpiry">authenticatorExpiry: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">12.*(60).*(60)</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Implementation of the HTTP layer which uses the Play web service implementation.</p><p>It makes no sense to move the HTTPLayer implementation to the contrib package, because the complete
-Silhouette module is bound to Play's HTTP implementation. So this layer exists only for mocking purpose.
-</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The settings for the cookie authenticator.
+</p></div><dl class="paramcmts block"><dt class="param">cookieName</dt><dd class="cmt"><p>The cookie name.</p></dd><dt class="param">cookiePath</dt><dd class="cmt"><p>The cookie path.</p></dd><dt class="param">cookieDomain</dt><dd class="cmt"><p>The cookie domain.</p></dd><dt class="param">secureCookie</dt><dd class="cmt"><p>Whether this cookie is secured, sent only for HTTPS requests.</p></dd><dt class="param">httpOnlyCookie</dt><dd class="cmt"><p>Whether this cookie is HTTP only, i.e. not accessible from client-side JavaScript code.</p></dd><dt class="param">cookieIdleTimeout</dt><dd class="cmt"><p>The time in seconds a cookie can be idle before it timed out. Defaults to 30 minutes.</p></dd><dt class="param">cookieAbsoluteTimeout</dt><dd class="cmt"><p>The cookie expiration date in seconds, <code>None</code> for a transient cookie. Defaults to 12 hours.</p></dd><dt class="param">authenticatorExpiry</dt><dd class="cmt"><p>The expiry of the authenticator in minutes. Defaults to 12 hours.
+</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="HTTPLayer.html" class="extype" name="com.mohiva.play.silhouette.core.utils.HTTPLayer">HTTPLayer</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -61,7 +61,7 @@ Silhouette module is bound to Play's HTTP implementation. So this layer exists o
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.core.utils.PlayHTTPLayer"><span>PlayHTTPLayer</span></li><li class="in" name="com.mohiva.play.silhouette.core.utils.HTTPLayer"><span>HTTPLayer</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings"><span>CachedCookieAuthenticatorSettings</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -81,19 +81,20 @@ Silhouette module is bound to Play's HTTP implementation. So this layer exists o
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.utils.PlayHTTPLayer#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;():com.mohiva.play.silhouette.core.utils.PlayHTTPLayer"></a>
-      <a id="&lt;init&gt;:PlayHTTPLayer"></a>
+              <ol><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(cookieName:String,cookiePath:String,cookieDomain:Option[String],secureCookie:Boolean,httpOnlyCookie:Boolean,cookieIdleTimeout:Int,cookieAbsoluteTimeout:Option[Int],authenticatorExpiry:Int):com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings"></a>
+      <a id="&lt;init&gt;:CachedCookieAuthenticatorSettings"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">PlayHTTPLayer</span><span class="params">()</span>
+        <span class="name">CachedCookieAuthenticatorSettings</span><span class="params">(<span name="cookieName">cookieName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;id&quot;</span></span>, <span name="cookiePath">cookiePath: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;/&quot;</span></span>, <span name="cookieDomain">cookieDomain: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="secureCookie">secureCookie: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">true</span></span>, <span name="httpOnlyCookie">httpOnlyCookie: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">true</span></span>, <span name="cookieIdleTimeout">cookieIdleTimeout: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">30.*(60)</span></span>, <span name="cookieAbsoluteTimeout">cookieAbsoluteTimeout: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="defval" name="scala.Some.apply[Int](12.*(60).*(60))">...</span></span>, <span name="authenticatorExpiry">authenticatorExpiry: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">12.*(60).*(60)</span></span>)</span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">cookieName</dt><dd class="cmt"><p>The cookie name.</p></dd><dt class="param">cookiePath</dt><dd class="cmt"><p>The cookie path.</p></dd><dt class="param">cookieDomain</dt><dd class="cmt"><p>The cookie domain.</p></dd><dt class="param">secureCookie</dt><dd class="cmt"><p>Whether this cookie is secured, sent only for HTTPS requests.</p></dd><dt class="param">httpOnlyCookie</dt><dd class="cmt"><p>Whether this cookie is HTTP only, i.e. not accessible from client-side JavaScript code.</p></dd><dt class="param">cookieIdleTimeout</dt><dd class="cmt"><p>The time in seconds a cookie can be idle before it timed out. Defaults to 30 minutes.</p></dd><dt class="param">cookieAbsoluteTimeout</dt><dd class="cmt"><p>The cookie expiration date in seconds, <code>None</code> for a transient cookie. Defaults to 12 hours.</p></dd><dt class="param">authenticatorExpiry</dt><dd class="cmt"><p>The expiry of the authenticator in minutes. Defaults to 12 hours.
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -181,6 +182,20 @@ Silhouette module is bound to Play's HTTP implementation. So this layer exists o
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings#authenticatorExpiry" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="authenticatorExpiry:Int"></a>
+      <a id="authenticatorExpiry:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">authenticatorExpiry</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The expiry of the authenticator in minutes.</p><div class="fullcomment"><div class="comment cmt"><p>The expiry of the authenticator in minutes. Defaults to 12 hours.
+</p></div></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -200,6 +215,71 @@ Silhouette module is bound to Play's HTTP implementation. So this layer exists o
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings#cookieAbsoluteTimeout" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cookieAbsoluteTimeout:Option[Int]"></a>
+      <a id="cookieAbsoluteTimeout:Option[Int]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cookieAbsoluteTimeout</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The cookie expiration date in seconds, <code>None</code> for a transient cookie.</p><div class="fullcomment"><div class="comment cmt"><p>The cookie expiration date in seconds, <code>None</code> for a transient cookie. Defaults to 12 hours.</p></div></div>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings#cookieDomain" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="cookieDomain:Option[String]"></a>
+      <a id="cookieDomain:Option[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cookieDomain</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The cookie domain.</p>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings#cookieIdleTimeout" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cookieIdleTimeout:Int"></a>
+      <a id="cookieIdleTimeout:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cookieIdleTimeout</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The time in seconds a cookie can be idle before it timed out.</p><div class="fullcomment"><div class="comment cmt"><p>The time in seconds a cookie can be idle before it timed out. Defaults to 30 minutes.</p></div></div>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings#cookieName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="cookieName:String"></a>
+      <a id="cookieName:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cookieName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The cookie name.</p>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings#cookiePath" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="cookiePath:String"></a>
+      <a id="cookiePath:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cookiePath</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The cookie path.</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -213,19 +293,6 @@ Silhouette module is bound to Play's HTTP implementation. So this layer exists o
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a>
-      <a id="equals(Any):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -258,19 +325,19 @@ Silhouette module is bound to Play's HTTP implementation. So this layer exists o
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
-      <a id="hashCode():Int"></a>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings#httpOnlyCookie" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="httpOnlyCookie:Boolean"></a>
+      <a id="httpOnlyCookie:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">def</span>
+        <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">httpOnlyCookie</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <p class="shortcomment cmt">Whether this cookie is HTTP only, i.</p><div class="fullcomment"><div class="comment cmt"><p>Whether this cookie is HTTP only, i.e. not accessible from client-side JavaScript code.</p></div></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -323,6 +390,19 @@ Silhouette module is bound to Play's HTTP implementation. So this layer exists o
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings#secureCookie" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="secureCookie:Boolean"></a>
+      <a id="secureCookie:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">secureCookie</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Whether this cookie is secured, sent only for HTTPS requests.</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -336,34 +416,6 @@ Silhouette module is bound to Play's HTTP implementation. So this layer exists o
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toString():String"></a>
-      <a id="toString():String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.utils.PlayHTTPLayer#url" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="url(url:String):play.api.libs.ws.WS.WSRequestHolder"></a>
-      <a id="url(String):WSRequestHolder"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">url</span><span class="params">(<span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="play.api.libs.ws.WS.WSRequestHolder">WSRequestHolder</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Prepare a new request.</p><div class="fullcomment"><div class="comment cmt"><p>Prepare a new request. You can then construct it by chaining calls.
-</p></div><dl class="paramcmts block"><dt class="param">url</dt><dd class="cmt"><p>the URL to request
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.core.utils.PlayHTTPLayer">PlayHTTPLayer</a> → <a href="HTTPLayer.html" class="extype" name="com.mohiva.play.silhouette.core.utils.HTTPLayer">HTTPLayer</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -430,8 +482,14 @@ Silhouette module is bound to Play's HTTP implementation. So this layer exists o
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.mohiva.play.silhouette.core.utils.HTTPLayer">
-              <h3>Inherited from <a href="HTTPLayer.html" class="extype" name="com.mohiva.play.silhouette.core.utils.HTTPLayer">HTTPLayer</a></h3>
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.Product">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

@@ -91,7 +91,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="AccessDeniedException.html"><span class="name">AccessDeniedException</span></a><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="AccessDeniedException.html"><span class="name">AccessDeniedException</span></a><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       <p class="comment cmt">An exception thrown when the user denies access to the application
@@ -105,20 +105,20 @@ in the login page of the 3rd party service.</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="AuthenticationException.html"><span class="name">AuthenticationException</span></a><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="AuthenticationException.html"><span class="name">AuthenticationException</span></a><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       <p class="comment cmt">An exception thrown when there is an error in the authentication flow.</p>
-    </li><li name="com.mohiva.play.silhouette.core.Authenticator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="AuthenticatorextendsProductwithSerializable"></a>
+    </li><li name="com.mohiva.play.silhouette.core.Authenticator" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AuthenticatorextendsAnyRef"></a>
       <a id="Authenticator:Authenticator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">case class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Authenticator.html"><span class="name">Authenticator</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loginInfo">loginInfo: <a href="LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="creationDate">creationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="lastUsedDate">lastUsedDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="expirationDate">expirationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Authenticator.html"><span class="name">Authenticator</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       <p class="comment cmt">An authenticator tracks an authenticated user.</p>
@@ -158,7 +158,7 @@ an authorization implementation in SecuredActions.</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="LoginInfo.html"><span class="name">LoginInfo</span></a><span class="params">(<span name="providerID">providerID: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="providerKey">providerKey: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="LoginInfo.html"><span class="name">LoginInfo</span></a><span class="params">(<span name="providerID">providerID: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="providerKey">providerKey: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       <p class="comment cmt">Represents a linked login for an identity (i.</p>
@@ -190,15 +190,15 @@ an authorization implementation in SecuredActions.</p>
       <p class="comment cmt">Can be mixed into the GlobalSettings object to define a global behaviour
 for not-authenticated and not-authorized actions.</p>
     </li><li name="com.mohiva.play.silhouette.core.Silhouette" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Silhouette[I&lt;:com.mohiva.play.silhouette.core.Identity]extendsController"></a>
-      <a id="Silhouette[I&lt;:Identity]:Silhouette[I]"></a>
+      <a id="Silhouette[I&lt;:com.mohiva.play.silhouette.core.Identity,T&lt;:com.mohiva.play.silhouette.core.Authenticator]extendsController"></a>
+      <a id="Silhouette[I&lt;:Identity,T&lt;:Authenticator]:Silhouette[I,T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Silhouette.html"><span class="name">Silhouette</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>]</span><span class="result"> extends <span class="extype" name="play.api.mvc.Controller">Controller</span></span>
+        <a href="Silhouette.html"><span class="name">Silhouette</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>, <span name="T">T &lt;: <a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a></span>]</span><span class="result"> extends <span class="extype" name="play.api.mvc.Controller">Controller</span></span>
       </span>
       </h4>
       <p class="comment cmt">Provides the actions that can be used to protect controllers and retrieve the current user
@@ -223,20 +223,7 @@ if available.</p>
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.Authenticator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Authenticator"></a>
-      <a id="Authenticator:Authenticator"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="Authenticator$.html"><span class="name">Authenticator</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">The companion object.</p>
-    </li><li name="com.mohiva.play.silhouette.core.providers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="com.mohiva.play.silhouette.core.providers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="providers"></a>
       <a id="providers:providers"></a>
       <h4 class="signature">

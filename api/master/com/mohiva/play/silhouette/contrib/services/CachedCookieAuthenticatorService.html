@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>CacheAuthenticatorService - com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService</title>
-          <meta name="description" content="CacheAuthenticatorService - com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService" />
-          <meta name="keywords" content="CacheAuthenticatorService com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService" />
+          <title>CachedCookieAuthenticatorService - com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService</title>
+          <meta name="description" content="CachedCookieAuthenticatorService - com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService" />
+          <meta name="keywords" content="CachedCookieAuthenticatorService com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService';
+            var hash = 'com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -26,7 +26,7 @@
       <div id="definition">
         <img src="../../../../../../lib/class_big.png" />
         <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.contrib">contrib</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.contrib.services">services</a></p>
-        <h1>CacheAuthenticatorService</h1>
+        <h1>CachedCookieAuthenticatorService</h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -35,14 +35,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">CacheAuthenticatorService</span><span class="result"> extends <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a></span>
+        <span class="name">CachedCookieAuthenticatorService</span><span class="result"> extends <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a>[<a href="CachedCookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator">CachedCookieAuthenticator</a>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A default implementation of the AuthenticatorService that uses a cache to store the authenticators.</p><p>Note: If deploying to multiple nodes the caches will need to synchronize.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a>[<a href="CachedCookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator">CachedCookieAuthenticator</a>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -60,7 +60,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService"><span>CacheAuthenticatorService</span></li><li class="in" name="com.mohiva.play.silhouette.core.services.AuthenticatorService"><span>AuthenticatorService</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService"><span>CachedCookieAuthenticatorService</span></li><li class="in" name="com.mohiva.play.silhouette.core.services.AuthenticatorService"><span>AuthenticatorService</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -80,19 +80,19 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(cacheLayer:com.mohiva.play.silhouette.core.utils.CacheLayer,idGenerator:com.mohiva.play.silhouette.core.utils.IDGenerator,clock:com.mohiva.play.silhouette.core.utils.Clock):com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService"></a>
-      <a id="&lt;init&gt;:CacheAuthenticatorService"></a>
+              <ol><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(settings:com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings,cacheLayer:com.mohiva.play.silhouette.core.utils.CacheLayer,idGenerator:com.mohiva.play.silhouette.core.utils.IDGenerator,clock:com.mohiva.play.silhouette.core.utils.Clock):com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService"></a>
+      <a id="&lt;init&gt;:CachedCookieAuthenticatorService"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">CacheAuthenticatorService</span><span class="params">(<span name="cacheLayer">cacheLayer: <a href="../../core/utils/CacheLayer.html" class="extype" name="com.mohiva.play.silhouette.core.utils.CacheLayer">CacheLayer</a></span>, <span name="idGenerator">idGenerator: <a href="../../core/utils/IDGenerator.html" class="extype" name="com.mohiva.play.silhouette.core.utils.IDGenerator">IDGenerator</a></span>, <span name="clock">clock: <a href="../../core/utils/Clock.html" class="extype" name="com.mohiva.play.silhouette.core.utils.Clock">Clock</a></span>)</span>
+        <span class="name">CachedCookieAuthenticatorService</span><span class="params">(<span name="settings">settings: <a href="CachedCookieAuthenticatorSettings.html" class="extype" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings">CachedCookieAuthenticatorSettings</a></span>, <span name="cacheLayer">cacheLayer: <a href="../../core/utils/CacheLayer.html" class="extype" name="com.mohiva.play.silhouette.core.utils.CacheLayer">CacheLayer</a></span>, <span name="idGenerator">idGenerator: <a href="../../core/utils/IDGenerator.html" class="extype" name="com.mohiva.play.silhouette.core.utils.IDGenerator">IDGenerator</a></span>, <span name="clock">clock: <a href="../../core/utils/Clock.html" class="extype" name="com.mohiva.play.silhouette.core.utils.Clock">Clock</a></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">cacheLayer</dt><dd class="cmt"><p>The cache layer implementation.</p></dd><dt class="param">idGenerator</dt><dd class="cmt"><p>The ID generator used to create the authenticator ID.</p></dd><dt class="param">clock</dt><dd class="cmt"><p>The clock implementation.
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">settings</dt><dd class="cmt"><p>The cookie settings.</p></dd><dt class="param">cacheLayer</dt><dd class="cmt"><p>The cache layer implementation.</p></dd><dt class="param">idGenerator</dt><dd class="cmt"><p>The ID generator used to create the authenticator ID.</p></dd><dt class="param">clock</dt><dd class="cmt"><p>The clock implementation.
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -112,7 +112,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -125,7 +125,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -138,7 +138,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -151,7 +151,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -164,7 +164,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -200,36 +200,36 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService#create" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="create[I&lt;:com.mohiva.play.silhouette.core.Identity](identity:I,expiry:Int):scala.concurrent.Future[com.mohiva.play.silhouette.core.Authenticator]"></a>
-      <a id="create[I&lt;:Identity](I,Int):Future[Authenticator]"></a>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService#create" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="create[I&lt;:com.mohiva.play.silhouette.core.Identity](identity:I):scala.concurrent.Future[Option[com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator]]"></a>
+      <a id="create[I&lt;:Identity](I):Future[Option[CachedCookieAuthenticator]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">create</span><span class="tparams">[<span name="I">I &lt;: <a href="../../core/Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService.create.I">I</span></span>, <span name="expiry">expiry: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">12 * 60</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<a href="../../core/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a>]</span>
+        <span class="name">create</span><span class="tparams">[<span name="I">I &lt;: <a href="../../core/Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService.create.I">I</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="CachedCookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator">CachedCookieAuthenticator</a>]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Creates a new authenticator ID for the specified identity.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a new authenticator ID for the specified identity.
-</p></div><dl class="paramcmts block"><dt class="param">identity</dt><dd class="cmt"><p>The identity for which the ID should be created.</p></dd><dt class="param">expiry</dt><dd class="cmt"><p>The expiry of the authenticator in minutes. Defaults to 12 hours.</p></dd><dt>returns</dt><dd class="cmt"><p>An authenticator.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService">CacheAuthenticatorService</a> → <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService#deleteByID" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="deleteByID(id:String):Unit"></a>
-      <a id="deleteByID(String):Unit"></a>
+</p></div><dl class="paramcmts block"><dt class="param">identity</dt><dd class="cmt"><p>The identity for which the ID should be created.</p></dd><dt>returns</dt><dd class="cmt"><p>An authenticator.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService">CachedCookieAuthenticatorService</a> → <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService#discard" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="discard(result:play.api.mvc.SimpleResult):play.api.mvc.SimpleResult"></a>
+      <a id="discard(SimpleResult):SimpleResult"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deleteByID</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">discard</span><span class="params">(<span name="result">result: <span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span></span>)</span><span class="result">: <span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Deletes an authenticator.</p><div class="fullcomment"><div class="comment cmt"><p>Deletes an authenticator.
-</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The authenticator ID.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService">CacheAuthenticatorService</a> → <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
+      <p class="shortcomment cmt">Discards the cookie.</p><div class="fullcomment"><div class="comment cmt"><p>Discards the cookie.
+</p></div><dl class="paramcmts block"><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt>returns</dt><dd class="cmt"><p>The manipulated result.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService">CachedCookieAuthenticatorService</a> → <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -239,7 +239,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -252,7 +252,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -265,7 +265,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -275,21 +275,6 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService#findByID" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="findByID(id:String):scala.concurrent.Future[Option[com.mohiva.play.silhouette.core.Authenticator]]"></a>
-      <a id="findByID(String):Future[Option[Authenticator]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">findByID</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Option">Option</span>[<a href="../../core/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a>]]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Finds an authenticator.</p><div class="fullcomment"><div class="comment cmt"><p>Finds an authenticator.
-</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The authenticator ID.</p></dd><dt>returns</dt><dd class="cmt"><p>The found authenticator or None if no authenticator couldn't be found for the given ID.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService">CacheAuthenticatorService</a> → <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -312,7 +297,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -325,7 +310,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -338,7 +323,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -351,7 +336,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -364,25 +349,39 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService#save" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="save(authenticator:com.mohiva.play.silhouette.core.Authenticator):scala.concurrent.Future[Option[com.mohiva.play.silhouette.core.Authenticator]]"></a>
-      <a id="save(Authenticator):Future[Option[Authenticator]]"></a>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService#retrieve" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="retrieve(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Option[com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator]]"></a>
+      <a id="retrieve(RequestHeader):Future[Option[CachedCookieAuthenticator]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">save</span><span class="params">(<span name="authenticator">authenticator: <a href="../../core/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Option">Option</span>[<a href="../../core/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a>]]</span>
+        <span class="name">retrieve</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="CachedCookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator">CachedCookieAuthenticator</a>]]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Saves the authenticator.</p><div class="fullcomment"><div class="comment cmt"><p>Saves the authenticator.
-</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to save.</p></dd><dt>returns</dt><dd class="cmt"><p>The saved authenticator or None if the authenticator couldn't be saved.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService">CacheAuthenticatorService</a> → <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
+      <p class="shortcomment cmt">Retrieves the authenticator from request.</p><div class="fullcomment"><div class="comment cmt"><p>Retrieves the authenticator from request.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>Some authenticator or None if no authenticator could be found in request.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService">CachedCookieAuthenticatorService</a> → <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService#send" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="send(authenticator:com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator,result:play.api.mvc.SimpleResult):play.api.mvc.SimpleResult"></a>
+      <a id="send(CachedCookieAuthenticator,SimpleResult):SimpleResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">send</span><span class="params">(<span name="authenticator">authenticator: <a href="CachedCookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator">CachedCookieAuthenticator</a></span>, <span name="result">result: <span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span></span>)</span><span class="result">: <span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Sends the authenticator cookie to the client.</p><div class="fullcomment"><div class="comment cmt"><p>Sends the authenticator cookie to the client.</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator instance.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt>returns</dt><dd class="cmt"><p>The manipulated result.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService">CachedCookieAuthenticatorService</a> → <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -409,21 +408,21 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService#update" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="update(authenticator:com.mohiva.play.silhouette.core.Authenticator):scala.concurrent.Future[Option[com.mohiva.play.silhouette.core.Authenticator]]"></a>
-      <a id="update(Authenticator):Future[Option[Authenticator]]"></a>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService#update" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="update(authenticator:com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator):scala.concurrent.Future[Option[com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator]]"></a>
+      <a id="update(CachedCookieAuthenticator):Future[Option[CachedCookieAuthenticator]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">update</span><span class="params">(<span name="authenticator">authenticator: <a href="../../core/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Option">Option</span>[<a href="../../core/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a>]]</span>
+        <span class="name">update</span><span class="params">(<span name="authenticator">authenticator: <a href="CachedCookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator">CachedCookieAuthenticator</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="CachedCookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator">CachedCookieAuthenticator</a>]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Updates an existing authenticator.</p><div class="fullcomment"><div class="comment cmt"><p>Updates an existing authenticator.
 </p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to update.</p></dd><dt>returns</dt><dd class="cmt"><p>The updated authenticator or None if the authenticator couldn't be updated.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService">CacheAuthenticatorService</a> → <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService">CachedCookieAuthenticatorService</a> → <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -433,7 +432,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -452,7 +451,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -471,7 +470,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -491,7 +490,7 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">
-              <h3>Inherited from <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a></h3>
+              <h3>Inherited from <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a>[<a href="CachedCookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator">CachedCookieAuthenticator</a>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

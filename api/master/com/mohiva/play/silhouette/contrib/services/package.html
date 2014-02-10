@@ -58,19 +58,45 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.contrib.services.CacheAuthenticatorService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="CacheAuthenticatorServiceextendsAuthenticatorService"></a>
-      <a id="CacheAuthenticatorService:CacheAuthenticatorService"></a>
+              <ol><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CachedCookieAuthenticatorextendsAuthenticatorwithProductwithSerializable"></a>
+      <a id="CachedCookieAuthenticator:CachedCookieAuthenticator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CachedCookieAuthenticator.html"><span class="name">CachedCookieAuthenticator</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loginInfo">loginInfo: <a href="../../core/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="lastUsedDate">lastUsedDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="expirationDate">expirationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="cookieIdleTimeout">cookieIdleTimeout: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result"> extends <a href="../../core/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">An authenticator tracks an authenticated user.</p>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CachedCookieAuthenticatorServiceextendsAuthenticatorService[com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator]"></a>
+      <a id="CachedCookieAuthenticatorService:CachedCookieAuthenticatorService"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="CacheAuthenticatorService.html"><span class="name">CacheAuthenticatorService</span></a><span class="result"> extends <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a></span>
+        <a href="CachedCookieAuthenticatorService.html"><span class="name">CachedCookieAuthenticatorService</span></a><span class="result"> extends <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a>[<a href="CachedCookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator">CachedCookieAuthenticator</a>]</span>
       </span>
       </h4>
       <p class="comment cmt">A default implementation of the AuthenticatorService that uses a cache to store the authenticators.</p>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CachedCookieAuthenticatorSettingsextendsProductwithSerializable"></a>
+      <a id="CachedCookieAuthenticatorSettings:CachedCookieAuthenticatorSettings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CachedCookieAuthenticatorSettings.html"><span class="name">CachedCookieAuthenticatorSettings</span></a><span class="params">(<span name="cookieName">cookieName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;id&quot;</span></span>, <span name="cookiePath">cookiePath: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;/&quot;</span></span>, <span name="cookieDomain">cookieDomain: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="secureCookie">secureCookie: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">true</span></span>, <span name="httpOnlyCookie">httpOnlyCookie: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">true</span></span>, <span name="cookieIdleTimeout">cookieIdleTimeout: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">30.*(60)</span></span>, <span name="cookieAbsoluteTimeout">cookieAbsoluteTimeout: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="defval" name="scala.Some.apply[Int](12.*(60).*(60))">...</span></span>, <span name="authenticatorExpiry">authenticatorExpiry: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">12.*(60).*(60)</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The settings for the cookie authenticator.</p>
     </li><li name="com.mohiva.play.silhouette.contrib.services.GravatarService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="GravatarServiceextendsAvatarService"></a>
       <a id="GravatarService:GravatarService"></a>
