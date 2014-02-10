@@ -1,7 +1,7 @@
 import play.Project._
 import mohiva.sbt.Helper._
 
-name := "silhouette"
+name := "play-silhouette"
 
 version := "1.0-SNAPSHOT"
 
