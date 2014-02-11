@@ -11,4 +11,4 @@ See [the project wiki](https://github.com/mohiva/play-silhouette/wiki) for more 
 
 ### API Documentation
 
-* [master branch](http://silhouette.mohiva.com/api/master/#com.mohiva.play.silhouette.core.package)
+* [1.0-SNAPSHOT](http://silhouette.mohiva.com/api/1.0-SNAPSHOT/#com.mohiva.play.silhouette.core.package)
