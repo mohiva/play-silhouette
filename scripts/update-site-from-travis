@@ -61,10 +61,11 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
 
   echo ""
   echo "Updating API documentation"
-  api_master_dir="$target_dir/api/master"
-  rm -Rf "$api_master_dir"
-  mkdir -p "$api_master_dir"
-  cp -Rf $source_dir/target/scala-2.10/api/* "$api_master_dir"
+  version=`scripts/get-version` || fail "Could not retrieve version."
+  api_dir="$target_dir/api/$version"
+  rm -Rf "$api_dir"
+  mkdir -p "$api_dir"
+  cp -Rf $source_dir/target/scala-2.10/api/* "$api_dir"
   original_commit=`git rev-parse HEAD`
   git add --all .
   git commit -m "Update API documentation from Travis build $TRAVIS_BUILD_NUMBER" || echo "No change to API documentation."
