@@ -61,7 +61,7 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
 
   echo ""
   echo "Updating API documentation"
-  version=`$source_dir/scripts/get-version` || fail "Could not retrieve version."
+  version=`$source_dir/scripts/get-version < $source_dir/build.sbt` || fail "Could not retrieve version."
   api_dir="$target_dir/api/$version"
   rm -Rf "$api_dir"
   mkdir -p "$api_dir"

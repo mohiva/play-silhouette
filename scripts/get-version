@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Outputs version specified in build.sbt.
+# Outputs version specified in the standard input.
 #
 # Copyright 2014 Mohiva Organisation (license at mohiva dot com)
 #
@@ -20,16 +20,10 @@
 use strict;
 use warnings;
 
-# Read build.sbt file.
-my $filename = "build.sbt";
-open(FILE, "$filename") or die "Can't open $filename\n";
-local $/ = undef;
-my $lines = <FILE>;
-close(FILE);
-
-# Look for version.
-if ($lines =~ /^version := "(.*)"$/m) {
-  print "$1\n";
-} else {
-  die "Version not found.\n";
+while (<>) {
+  if ($_ =~ /^version := "(.*)"$/m) {
+    print "$1\n";
+    exit;
+  }
 }
+die "Version not found.\n";
