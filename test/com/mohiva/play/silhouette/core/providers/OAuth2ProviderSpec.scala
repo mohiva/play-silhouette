@@ -30,7 +30,7 @@ import com.mohiva.play.silhouette.core.{ AuthenticationException, AccessDeniedEx
 import OAuth2Provider._
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.core.providers.OAuth2ProviderSpec]] class.
+ * Test case for the [[com.mohiva.play.silhouette.core.providers.OAuth2Provider]] class.
  *
  * These tests will be additionally executed before every OAuth2 provider spec.
  */

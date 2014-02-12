@@ -19,6 +19,7 @@
  */
 package com.mohiva.play.silhouette.core.services
 
+import scala.reflect.ClassTag
 import scala.concurrent.Future
 import com.mohiva.play.silhouette.core.LoginInfo
 
@@ -41,13 +42,19 @@ trait AuthInfoService {
    * @param authInfo The auth info to save.
    * @return The saved auth info or None if the auth info couldn't be saved.
    */
-  def save[T](loginInfo: LoginInfo, authInfo: T): Future[Option[T]]
+  def save[T <: AuthInfo](loginInfo: LoginInfo, authInfo: T): Future[Option[T]]
 
   /**
    * Retrieves the auth info which is linked with the specified login info.
    *
    * @param loginInfo The linked login info.
+   * @param tag The class tag of the auth info.
    * @return The retrieved auth info or None if no auth info could be retrieved for the given login info.
    */
-  def retrieve[T](loginInfo: LoginInfo): Future[Option[T]]
+  def retrieve[T <: AuthInfo](loginInfo: LoginInfo)(implicit tag: ClassTag[T]): Future[Option[T]]
 }
+
+/**
+ * A marker trait for authentication information.
+ */
+trait AuthInfo

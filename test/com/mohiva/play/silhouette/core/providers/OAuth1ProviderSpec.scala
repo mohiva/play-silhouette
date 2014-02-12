@@ -29,7 +29,7 @@ import com.mohiva.play.silhouette.core.AuthenticationException
 import OAuth1Provider._
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.core.providers.OAuth1ProviderSpec]] class.
+ * Test case for the [[com.mohiva.play.silhouette.core.providers.OAuth1Provider]] class.
  *
  * These tests will be additionally executed before every OAuth1 provider spec.
  */

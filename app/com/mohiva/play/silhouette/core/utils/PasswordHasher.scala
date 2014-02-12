@@ -19,6 +19,8 @@
  */
 package com.mohiva.play.silhouette.core.utils
 
+import com.mohiva.play.silhouette.core.providers.PasswordInfo
+
 /**
  * A trait that defines the password hasher interface.
  */
@@ -48,12 +50,3 @@ trait PasswordHasher {
    */
   def matches(passwordInfo: PasswordInfo, suppliedPassword: String): Boolean
 }
-
-/**
- * The password details.
- *
- * @param hasher The ID of the hasher used to hash this password.
- * @param password The hashed password.
- * @param salt The optional salt used when hashing.
- */
-case class PasswordInfo(hasher: String, password: String, salt: Option[String] = None)

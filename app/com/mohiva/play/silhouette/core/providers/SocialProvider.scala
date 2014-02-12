@@ -15,18 +15,18 @@
  */
 package com.mohiva.play.silhouette.core.providers
 
-import play.api.mvc.{ SimpleResult, RequestHeader }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.mvc.{ SimpleResult, RequestHeader }
 import com.mohiva.play.silhouette.core.{ LoginInfo, Provider }
-import com.mohiva.play.silhouette.core.services.AuthInfoService
+import com.mohiva.play.silhouette.core.services.{ AuthInfo, AuthInfoService }
 
 /**
  * The base interface for all social providers.
  *
  * @tparam A The type of the auth info.
  */
-trait SocialProvider[A] extends Provider {
+trait SocialProvider[A <: AuthInfo] extends Provider {
 
   /**
    * Authenticates the user and fills the profile information.

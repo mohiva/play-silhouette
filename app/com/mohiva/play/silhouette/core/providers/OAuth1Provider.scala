@@ -28,6 +28,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{ Success, Failure, Try }
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
+import com.mohiva.play.silhouette.core.services.AuthInfo
 import OAuth1Provider._
 
 /**
@@ -193,4 +194,4 @@ case class OAuth1Settings(
  * @param token The consumer token.
  * @param secret The consumer secret.
  */
-case class OAuth1Info(token: String, secret: String)
+case class OAuth1Info(token: String, secret: String) extends AuthInfo

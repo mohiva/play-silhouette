@@ -29,6 +29,7 @@ import play.api.libs.functional.syntax._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
+import com.mohiva.play.silhouette.core.services.AuthInfo
 import com.mohiva.play.silhouette.core._
 import OAuth2Provider._
 
@@ -236,4 +237,4 @@ case class OAuth2Info(
   accessToken: String,
   tokenType: Option[String] = None,
   expiresIn: Option[Int] = None,
-  refreshToken: Option[String] = None)
+  refreshToken: Option[String] = None) extends AuthInfo

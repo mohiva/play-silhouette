@@ -19,7 +19,8 @@
  */
 package com.mohiva.play.silhouette.contrib.utils
 
-import com.mohiva.play.silhouette.core.utils.{ PasswordInfo, PasswordHasher }
+import com.mohiva.play.silhouette.core.utils.PasswordHasher
+import com.mohiva.play.silhouette.core.providers.PasswordInfo
 import org.mindrot.jbcrypt.BCrypt
 import BCryptPasswordHasher._
 
