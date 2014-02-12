@@ -22,8 +22,8 @@ package com.mohiva.play.silhouette.core.providers
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
-import com.mohiva.play.silhouette.core.services.AuthInfoService
-import com.mohiva.play.silhouette.core.utils.{ PasswordHasher, PasswordInfo }
+import com.mohiva.play.silhouette.core.services.{ AuthInfo, AuthInfoService }
+import com.mohiva.play.silhouette.core.utils.PasswordHasher
 
 /**
  * A provider for authenticating with credentials.
@@ -86,3 +86,12 @@ object CredentialsProvider {
  * @param password The password to authenticate with.
  */
 case class Credentials(identifier: String, password: String)
+
+/**
+ * The password details.
+ *
+ * @param hasher The ID of the hasher used to hash this password.
+ * @param password The hashed password.
+ * @param salt The optional salt used when hashing.
+ */
+case class PasswordInfo(hasher: String, password: String, salt: Option[String] = None) extends AuthInfo
