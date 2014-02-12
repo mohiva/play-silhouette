@@ -44,6 +44,9 @@ for the Silhouette module.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+          <span class="toggle">Known Subclasses</span>
+          <div class="subClasses hiddenContent"><a href="../../contrib/services/DefaultAuthInfoService.html" class="extype" name="com.mohiva.play.silhouette.contrib.services.DefaultAuthInfoService">DefaultAuthInfoService</a></div>
         </div></div>
         
 
@@ -86,30 +89,30 @@ for the Silhouette module.
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="com.mohiva.play.silhouette.core.services.AuthInfoService#retrieve" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="retrieve[T](loginInfo:com.mohiva.play.silhouette.core.LoginInfo):scala.concurrent.Future[Option[T]]"></a>
-      <a id="retrieve[T](LoginInfo):Future[Option[T]]"></a>
+      <a id="retrieve[T&lt;:com.mohiva.play.silhouette.core.services.AuthInfo](loginInfo:com.mohiva.play.silhouette.core.LoginInfo)(implicittag:scala.reflect.ClassTag[T]):scala.concurrent.Future[Option[T]]"></a>
+      <a id="retrieve[T&lt;:AuthInfo](LoginInfo)(ClassTag[T]):Future[Option[T]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">retrieve</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfoService.retrieve.T">T</span>]]</span>
+        <span class="name">retrieve</span><span class="tparams">[<span name="T">T &lt;: <a href="AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tag">tag: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.reflect.ClassTag" class="extype" target="_top">ClassTag</a>[<span class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfoService.retrieve.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfoService.retrieve.T">T</span>]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Retrieves the auth info which is linked with the specified login info.</p><div class="fullcomment"><div class="comment cmt"><p>Retrieves the auth info which is linked with the specified login info.
-</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info.</p></dd><dt>returns</dt><dd class="cmt"><p>The retrieved auth info or None if no auth info could be retrieved for the given login info.
+</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info.</p></dd><dt class="param">tag</dt><dd class="cmt"><p>The class tag of the auth info.</p></dd><dt>returns</dt><dd class="cmt"><p>The retrieved auth info or None if no auth info could be retrieved for the given login info.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.services.AuthInfoService#save" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="save[T](loginInfo:com.mohiva.play.silhouette.core.LoginInfo,authInfo:T):scala.concurrent.Future[Option[T]]"></a>
-      <a id="save[T](LoginInfo,T):Future[Option[T]]"></a>
+      <a id="save[T&lt;:com.mohiva.play.silhouette.core.services.AuthInfo](loginInfo:com.mohiva.play.silhouette.core.LoginInfo,authInfo:T):scala.concurrent.Future[Option[T]]"></a>
+      <a id="save[T&lt;:AuthInfo](LoginInfo,T):Future[Option[T]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">save</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfoService.save.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfoService.save.T">T</span>]]</span>
+        <span class="name">save</span><span class="tparams">[<span name="T">T &lt;: <a href="AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfoService.save.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfoService.save.T">T</span>]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Saves auth info.</p><div class="fullcomment"><div class="comment cmt"><p>Saves auth info.</p><p>This method gets called when a user logs in(social auth) or registers. This is the change

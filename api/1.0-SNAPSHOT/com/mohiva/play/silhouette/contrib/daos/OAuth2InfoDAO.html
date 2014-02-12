@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>OAuth2Info - com.mohiva.play.silhouette.core.providers.OAuth2Info</title>
-          <meta name="description" content="OAuth2Info - com.mohiva.play.silhouette.core.providers.OAuth2Info" />
-          <meta name="keywords" content="OAuth2Info com.mohiva.play.silhouette.core.providers.OAuth2Info" />
+          <title>OAuth2InfoDAO - com.mohiva.play.silhouette.contrib.daos.OAuth2InfoDAO</title>
+          <meta name="description" content="OAuth2InfoDAO - com.mohiva.play.silhouette.contrib.daos.OAuth2InfoDAO" />
+          <meta name="keywords" content="OAuth2InfoDAO com.mohiva.play.silhouette.contrib.daos.OAuth2InfoDAO" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'com.mohiva.play.silhouette.core.providers.OAuth2Info';
+            var hash = 'com.mohiva.play.silhouette.contrib.daos.OAuth2InfoDAO';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -24,26 +24,25 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../../../../lib/class_big.png" />
-        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.core">core</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.core.providers">providers</a></p>
-        <h1>OAuth2Info</h1>
+        <img src="../../../../../../lib/trait_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.contrib">contrib</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.contrib.daos">daos</a></p>
+        <h1>OAuth2InfoDAO</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">case class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">OAuth2Info</span><span class="params">(<span name="accessToken">accessToken: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="tokenType">tokenType: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="expiresIn">expiresIn: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="symbol">scala.None</span></span>, <span name="refreshToken">refreshToken: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">OAuth2InfoDAO</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The Oauth2 details.
-</p></div><dl class="paramcmts block"><dt class="param">accessToken</dt><dd class="cmt"><p>The access token.</p></dd><dt class="param">tokenType</dt><dd class="cmt"><p>The token type.</p></dd><dt class="param">expiresIn</dt><dd class="cmt"><p>The number of seconds before the token expires.</p></dd><dt class="param">refreshToken</dt><dd class="cmt"><p>The refresh token.
-</p></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The DAO to store the OAuth2 information.
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -61,7 +60,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.core.providers.OAuth2Info"><span>OAuth2Info</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="com.mohiva.play.silhouette.core.services.AuthInfo"><span>AuthInfo</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.contrib.daos.OAuth2InfoDAO"><span>OAuth2InfoDAO</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -79,31 +78,47 @@
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.providers.OAuth2Info#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(accessToken:String,tokenType:Option[String],expiresIn:Option[Int],refreshToken:Option[String]):com.mohiva.play.silhouette.core.providers.OAuth2Info"></a>
-      <a id="&lt;init&gt;:OAuth2Info"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">OAuth2Info</span><span class="params">(<span name="accessToken">accessToken: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="tokenType">tokenType: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="expiresIn">expiresIn: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="symbol">scala.None</span></span>, <span name="refreshToken">refreshToken: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">accessToken</dt><dd class="cmt"><p>The access token.</p></dd><dt class="param">tokenType</dt><dd class="cmt"><p>The token type.</p></dd><dt class="param">expiresIn</dt><dd class="cmt"><p>The number of seconds before the token expires.</p></dd><dt class="param">refreshToken</dt><dd class="cmt"><p>The refresh token.
-</p></dd></dl></div>
-    </li></ol>
-            </div>
-
         
 
         
 
         <div id="values" class="values members">
-              <h3>Value Members</h3>
+              <h3>Abstract Value Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.contrib.daos.OAuth2InfoDAO#find" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="find(loginInfo:com.mohiva.play.silhouette.core.LoginInfo):scala.concurrent.Future[Option[com.mohiva.play.silhouette.core.providers.OAuth2Info]]"></a>
+      <a id="find(LoginInfo):Future[Option[OAuth2Info]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">find</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../core/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../../core/providers/OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Info">OAuth2Info</a>]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Finds the OAuth2 info which is linked with the specified login info.</p><div class="fullcomment"><div class="comment cmt"><p>Finds the OAuth2 info which is linked with the specified login info.
+</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info.</p></dd><dt>returns</dt><dd class="cmt"><p>The retrieved OAuth2 info or None if no OAuth2 info could be retrieved for the given login info.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.contrib.daos.OAuth2InfoDAO#save" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="save(loginInfo:com.mohiva.play.silhouette.core.LoginInfo,authInfo:com.mohiva.play.silhouette.core.providers.OAuth2Info):scala.concurrent.Future[Option[com.mohiva.play.silhouette.core.providers.OAuth2Info]]"></a>
+      <a id="save(LoginInfo,OAuth2Info):Future[Option[OAuth2Info]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">save</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../core/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <a href="../../core/providers/OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Info">OAuth2Info</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../../core/providers/OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Info">OAuth2Info</a>]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Saves the OAuth2 info.</p><div class="fullcomment"><div class="comment cmt"><p>Saves the OAuth2 info.
+</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be saved.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The OAuth2 info to save.</p></dd><dt>returns</dt><dd class="cmt"><p>The saved OAuth2 info or None if the OAuth2 info couldn't be saved.
+</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
@@ -169,19 +184,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Info#accessToken" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="accessToken:String"></a>
-      <a id="accessToken:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">accessToken</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">The access token.</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -227,19 +229,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Info#expiresIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="expiresIn:Option[Int]"></a>
-      <a id="expiresIn:Option[Int]"></a>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">expiresIn</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">The number of seconds before the token expires.</p>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -269,6 +271,19 @@
       </span>
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -324,19 +339,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Info#refreshToken" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="refreshToken:Option[String]"></a>
-      <a id="refreshToken:Option[String]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">refreshToken</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">The refresh token.</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -350,19 +352,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Info#tokenType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="tokenType:Option[String]"></a>
-      <a id="tokenType:Option[String]"></a>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">tokenType</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">The token type.</p>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -429,17 +431,7 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
-            </div><div class="parent" name="java.io.Serializable">
-              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="scala.Product">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
-            </div><div class="parent" name="scala.Equals">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
-            </div><div class="parent" name="com.mohiva.play.silhouette.core.services.AuthInfo">
-              <h3>Inherited from <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

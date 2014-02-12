@@ -110,7 +110,7 @@ for different schemes and services.
       </h4>
       <p class="comment cmt">A provider for authenticating with credentials.</p>
     </li><li name="com.mohiva.play.silhouette.core.providers.OAuth1Info" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="OAuth1InfoextendsProductwithSerializable"></a>
+      <a id="OAuth1InfoextendsAuthInfowithProductwithSerializable"></a>
       <a id="OAuth1Info:OAuth1Info"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -118,7 +118,7 @@ for different schemes and services.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="OAuth1Info.html"><span class="name">OAuth1Info</span></a><span class="params">(<span name="token">token: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="secret">secret: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="OAuth1Info.html"><span class="name">OAuth1Info</span></a><span class="params">(<span name="token">token: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="secret">secret: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       <p class="comment cmt">The OAuth1 details.</p>
@@ -162,7 +162,7 @@ for different schemes and services.
       </h4>
       <p class="comment cmt">The OAuth1 settings.</p>
     </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Info" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="OAuth2InfoextendsProductwithSerializable"></a>
+      <a id="OAuth2InfoextendsAuthInfowithProductwithSerializable"></a>
       <a id="OAuth2Info:OAuth2Info"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -170,7 +170,7 @@ for different schemes and services.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="OAuth2Info.html"><span class="name">OAuth2Info</span></a><span class="params">(<span name="accessToken">accessToken: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="tokenType">tokenType: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="expiresIn">expiresIn: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="symbol">scala.None</span></span>, <span name="refreshToken">refreshToken: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="OAuth2Info.html"><span class="name">OAuth2Info</span></a><span class="params">(<span name="accessToken">accessToken: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="tokenType">tokenType: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="expiresIn">expiresIn: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="symbol">scala.None</span></span>, <span name="refreshToken">refreshToken: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       <p class="comment cmt">The Oauth2 details.</p>
@@ -200,6 +200,19 @@ for different schemes and services.
       </span>
       </h4>
       <p class="comment cmt">The OAuth2 settings.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.PasswordInfo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PasswordInfoextendsAuthInfowithProductwithSerializable"></a>
+      <a id="PasswordInfo:PasswordInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="PasswordInfo.html"><span class="name">PasswordInfo</span></a><span class="params">(<span name="hasher">hasher: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="password">password: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="salt">salt: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The password details.</p>
     </li><li name="com.mohiva.play.silhouette.core.providers.SocialProfile" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="SocialProfileextendsProductwithSerializable"></a>
       <a id="SocialProfile:SocialProfile"></a>
@@ -214,15 +227,15 @@ for different schemes and services.
       </h4>
       <p class="comment cmt">The social profile contains all the data returned from the social providers after authentication.</p>
     </li><li name="com.mohiva.play.silhouette.core.providers.SocialProvider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="SocialProvider[A]extendsProvider"></a>
-      <a id="SocialProvider[A]:SocialProvider[A]"></a>
+      <a id="SocialProvider[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsProvider"></a>
+      <a id="SocialProvider[A&lt;:AuthInfo]:SocialProvider[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="SocialProvider.html"><span class="name">SocialProvider</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="../Provider.html" class="extype" name="com.mohiva.play.silhouette.core.Provider">Provider</a></span>
+        <a href="SocialProvider.html"><span class="name">SocialProvider</span></a><span class="tparams">[<span name="A">A &lt;: <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <a href="../Provider.html" class="extype" name="com.mohiva.play.silhouette.core.Provider">Provider</a></span>
       </span>
       </h4>
       <p class="comment cmt">The base interface for all social providers.</p>
