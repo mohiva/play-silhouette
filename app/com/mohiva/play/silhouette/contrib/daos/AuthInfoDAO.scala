@@ -15,29 +15,31 @@
  */
 package com.mohiva.play.silhouette.contrib.daos
 
-import com.mohiva.play.silhouette.core.LoginInfo
-import com.mohiva.play.silhouette.core.providers.PasswordInfo
 import scala.concurrent.Future
+import com.mohiva.play.silhouette.core.LoginInfo
+import com.mohiva.play.silhouette.core.services.AuthInfo
 
 /**
- * The DAO to store the password information.
+ * The DAO to persist the auth info.
+ *
+ * @tparam T The type of the auth info to store.
  */
-trait PasswordInfoDAO {
+trait AuthInfoDAO[T <: AuthInfo] {
 
   /**
-   * Saves the password info.
+   * Saves the auth info.
    *
    * @param loginInfo The login info for which the auth info should be saved.
-   * @param authInfo The password info to save.
-   * @return The saved password info or None if the password info couldn't be saved.
+   * @param authInfo The auth info to save.
+   * @return The saved auth info.
    */
-  def save(loginInfo: LoginInfo, authInfo: PasswordInfo): Future[Option[PasswordInfo]]
+  def save(loginInfo: LoginInfo, authInfo: T): Future[T]
 
   /**
-   * Finds the password info which is linked with the specified login info.
+   * Finds the OAuth1 info which is linked with the specified login info.
    *
    * @param loginInfo The linked login info.
-   * @return The retrieved password info or None if no password info could be retrieved for the given login info.
+   * @return The retrieved auth info or None if no auth info could be retrieved for the given login info.
    */
-  def find(loginInfo: LoginInfo): Future[Option[PasswordInfo]]
+  def find(loginInfo: LoginInfo): Future[Option[T]]
 }
