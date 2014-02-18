@@ -15,19 +15,17 @@
  */
 package com.mohiva.play.silhouette.contrib.services
 
-import javax.inject.Inject
 import scala.reflect.ClassTag
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.services.{ AuthInfo, AuthInfoService }
-import com.mohiva.play.silhouette.core.providers.{ OAuth2Info, OAuth1Info, PasswordInfo }
-import com.mohiva.play.silhouette.contrib.daos.{ OAuth2InfoDAO, OAuth1InfoDAO, PasswordInfoDAO }
-import DefaultAuthInfoService._
+import com.mohiva.play.silhouette.contrib.daos.{ DelegableAuthInfoDAO, AuthInfoDAO }
+import DelegableAuthInfoService._
 
 /**
- * An implementation of the auth info service which stores the different auth info instances with the help of
- * different DAOs.
+ * An implementation of the auth info service which delegates the storage of an auth info instance to its
+ * appropriate DAO.
  *
  * Due the nature of the different auth information it is hard to persist the data in a single data structure,
  * expect the data gets stored in a serialized format. With this implementation it is possible to store the
@@ -35,14 +33,9 @@ import DefaultAuthInfoService._
  * can be stored in different tables. And the tables represents the internal data structure of each auth info
  * object.
  *
- * @param passwordInfoDAO The password info DAO implementation.
- * @param oauth1InfoDAO The OAuth1 info DAO implementation.
- * @param oauth2InfoDAO The OAuth2 info DAO implementation.
+ * @param daos The auth info DAO implementations.
  */
-class DefaultAuthInfoService @Inject() (
-    passwordInfoDAO: PasswordInfoDAO,
-    oauth1InfoDAO: OAuth1InfoDAO,
-    oauth2InfoDAO: OAuth2InfoDAO) extends AuthInfoService {
+class DelegableAuthInfoService(daos: DelegableAuthInfoDAO[_]*) extends AuthInfoService {
 
   /**
    * Saves auth info.
@@ -55,13 +48,13 @@ class DefaultAuthInfoService @Inject() (
    *
    * @param loginInfo The login info for which the auth info should be saved.
    * @param authInfo The auth info to save.
-   * @return The saved auth info or None if the auth info couldn't be saved.
+   * @return The saved auth info.
    */
-  def save[T <: AuthInfo](loginInfo: LoginInfo, authInfo: T): Future[Option[T]] = authInfo match {
-    case a: PasswordInfo => passwordInfoDAO.save(loginInfo, a).map(_.map(_.asInstanceOf[T]))
-    case a: OAuth1Info => oauth1InfoDAO.save(loginInfo, a).map(_.map(_.asInstanceOf[T]))
-    case a: OAuth2Info => oauth2InfoDAO.save(loginInfo, a).map(_.map(_.asInstanceOf[T]))
-    case a => throw new Exception(SaveError.format(a.getClass))
+  def save[T <: AuthInfo](loginInfo: LoginInfo, authInfo: T): Future[T] = {
+    daos.find(_.classTag.runtimeClass == authInfo.getClass) match {
+      case Some(dao) => dao.asInstanceOf[AuthInfoDAO[T]].save(loginInfo, authInfo)
+      case _ => throw new Exception(SaveError.format(authInfo.getClass))
+    }
   }
 
   /**
@@ -71,18 +64,18 @@ class DefaultAuthInfoService @Inject() (
    * @param tag The class tag of the auth info.
    * @return The retrieved auth info or None if no auth info could be retrieved for the given login info.
    */
-  def retrieve[T <: AuthInfo](loginInfo: LoginInfo)(implicit tag: ClassTag[T]): Future[Option[T]] = tag match {
-    case a if a.runtimeClass == classOf[PasswordInfo] => passwordInfoDAO.find(loginInfo).map(_.map(_.asInstanceOf[T]))
-    case a if a.runtimeClass == classOf[OAuth1Info] => oauth1InfoDAO.find(loginInfo).map(_.map(_.asInstanceOf[T]))
-    case a if a.runtimeClass == classOf[OAuth2Info] => oauth2InfoDAO.find(loginInfo).map(_.map(_.asInstanceOf[T]))
-    case a => throw new Exception(RetrieveError.format(a.runtimeClass))
+  def retrieve[T <: AuthInfo](loginInfo: LoginInfo)(implicit tag: ClassTag[T]): Future[Option[T]] = {
+    daos.find(_.classTag == tag) match {
+      case Some(dao) => dao.find(loginInfo).map(_.map(_.asInstanceOf[T]))
+      case _ => throw new Exception(RetrieveError.format(tag.runtimeClass))
+    }
   }
 }
 
 /**
  * The companion object.
  */
-object DefaultAuthInfoService {
+object DelegableAuthInfoService {
 
   /**
    * The error messages.
