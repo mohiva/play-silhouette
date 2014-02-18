@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>DefaultAuthInfoService - com.mohiva.play.silhouette.contrib.services.DefaultAuthInfoService</title>
-          <meta name="description" content="DefaultAuthInfoService - com.mohiva.play.silhouette.contrib.services.DefaultAuthInfoService" />
-          <meta name="keywords" content="DefaultAuthInfoService com.mohiva.play.silhouette.contrib.services.DefaultAuthInfoService" />
+          <title>DelegableAuthInfoDAO - com.mohiva.play.silhouette.contrib.daos.DelegableAuthInfoDAO</title>
+          <meta name="description" content="DelegableAuthInfoDAO - com.mohiva.play.silhouette.contrib.daos.DelegableAuthInfoDAO" />
+          <meta name="keywords" content="DelegableAuthInfoDAO com.mohiva.play.silhouette.contrib.daos.DelegableAuthInfoDAO" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'com.mohiva.play.silhouette.contrib.services.DefaultAuthInfoService$';
+            var hash = 'com.mohiva.play.silhouette.contrib.daos.DelegableAuthInfoDAO';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -22,27 +22,31 @@
    	  </script>
     
         </head>
-        <body class="value">
+        <body class="type">
       <div id="definition">
-        <a href="DefaultAuthInfoService.html" title="Go to companion"><img src="../../../../../../lib/object_to_class_big.png" /></a>
-        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.contrib">contrib</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.contrib.services">services</a></p>
-        <h1><a href="DefaultAuthInfoService.html" title="Go to companion">DefaultAuthInfoService</a></h1>
+        <img src="../../../../../../lib/class_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.contrib">contrib</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.contrib.daos">daos</a></p>
+        <h1>DelegableAuthInfoDAO</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">DefaultAuthInfoService</span>
+        <span class="name">DelegableAuthInfoDAO</span><span class="tparams">[<span name="T">T &lt;: <a href="../../core/services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <a href="AuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.contrib.daos.AuthInfoDAO">AuthInfoDAO</a>[<span class="extype" name="com.mohiva.play.silhouette.contrib.daos.DelegableAuthInfoDAO.T">T</span>]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The companion object.
-</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An implementation of the auth info DAO.</p><p>This abstract implementation of the <a href="AuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.contrib.daos.AuthInfoDAO">com.mohiva.play.silhouette.contrib.daos.AuthInfoDAO</a> trait
+allows us to get the class tag of the auth info he is responsible for. On the base of this tag
+the <a href="../services/DelegableAuthInfoService.html" class="extype" name="com.mohiva.play.silhouette.contrib.services.DelegableAuthInfoService">com.mohiva.play.silhouette.contrib.services.DelegableAuthInfoService</a> class can delegate
+operations to the DAO which is responsible for the currently handled auth info.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the auth info to store.
+</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="AuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.contrib.daos.AuthInfoDAO">AuthInfoDAO</a>[<span class="extype" name="com.mohiva.play.silhouette.contrib.daos.DelegableAuthInfoDAO.T">T</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -60,7 +64,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.contrib.services.DefaultAuthInfoService"><span>DefaultAuthInfoService</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.contrib.daos.DelegableAuthInfoDAO"><span>DelegableAuthInfoDAO</span></li><li class="in" name="com.mohiva.play.silhouette.contrib.daos.AuthInfoDAO"><span>AuthInfoDAO</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -78,14 +82,63 @@
 
       <div id="template">
         <div id="allMembers">
-        
-
-        
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="com.mohiva.play.silhouette.contrib.daos.DelegableAuthInfoDAO#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;()(implicitclassTag:scala.reflect.ClassTag[T]):com.mohiva.play.silhouette.contrib.daos.DelegableAuthInfoDAO[T]"></a>
+      <a id="&lt;init&gt;:DelegableAuthInfoDAO[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">DelegableAuthInfoDAO</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="classTag">classTag: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.reflect.ClassTag" class="extype" target="_top">ClassTag</a>[<span class="extype" name="com.mohiva.play.silhouette.contrib.daos.DelegableAuthInfoDAO.T">T</span>]</span>)</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">classTag</dt><dd class="cmt"><p>The class tag for the type parameter.</p></dd></dl></div>
+    </li></ol>
+            </div>
 
         
 
         <div id="values" class="values members">
-              <h3>Value Members</h3>
+              <h3>Abstract Value Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.contrib.daos.AuthInfoDAO#find" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="find(loginInfo:com.mohiva.play.silhouette.core.LoginInfo):scala.concurrent.Future[Option[T]]"></a>
+      <a id="find(LoginInfo):Future[Option[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">find</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../core/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.contrib.daos.DelegableAuthInfoDAO.T">T</span>]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Finds the OAuth1 info which is linked with the specified login info.</p><div class="fullcomment"><div class="comment cmt"><p>Finds the OAuth1 info which is linked with the specified login info.
+</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info.</p></dd><dt>returns</dt><dd class="cmt"><p>The retrieved auth info or None if no auth info could be retrieved for the given login info.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.contrib.daos.AuthInfoDAO">AuthInfoDAO</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.contrib.daos.AuthInfoDAO#save" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="save(loginInfo:com.mohiva.play.silhouette.core.LoginInfo,authInfo:T):scala.concurrent.Future[T]"></a>
+      <a id="save(LoginInfo,T):Future[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">save</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../core/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.contrib.daos.DelegableAuthInfoDAO.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.contrib.daos.DelegableAuthInfoDAO.T">T</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Saves the auth info.</p><div class="fullcomment"><div class="comment cmt"><p>Saves the auth info.
+</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be saved.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info to save.</p></dd><dt>returns</dt><dd class="cmt"><p>The saved auth info.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.contrib.daos.AuthInfoDAO">AuthInfoDAO</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
@@ -151,32 +204,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.contrib.services.DefaultAuthInfoService#RetrieveError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="RetrieveError:String"></a>
-      <a id="RetrieveError:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">RetrieveError</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4>
-      
-    </li><li name="com.mohiva.play.silhouette.contrib.services.DefaultAuthInfoService#SaveError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SaveError:String"></a>
-      <a id="SaveError:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">SaveError</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">The error messages.</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -190,6 +217,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.contrib.daos.DelegableAuthInfoDAO#classTag" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="classTag:scala.reflect.ClassTag[T]"></a>
+      <a id="classTag:ClassTag[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">classTag</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.reflect.ClassTag" class="extype" target="_top">ClassTag</a>[<span class="extype" name="com.mohiva.play.silhouette.contrib.daos.DelegableAuthInfoDAO.T">T</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The class tag for the type parameter.</p>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -424,7 +464,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="com.mohiva.play.silhouette.contrib.daos.AuthInfoDAO">
+              <h3>Inherited from <a href="AuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.contrib.daos.AuthInfoDAO">AuthInfoDAO</a>[<span class="extype" name="com.mohiva.play.silhouette.contrib.daos.DelegableAuthInfoDAO.T">T</span>]</h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

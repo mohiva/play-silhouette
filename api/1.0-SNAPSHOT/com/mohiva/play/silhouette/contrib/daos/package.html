@@ -58,45 +58,32 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.contrib.daos.OAuth1InfoDAO" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="OAuth1InfoDAOextendsAnyRef"></a>
-      <a id="OAuth1InfoDAO:OAuth1InfoDAO"></a>
+              <ol><li name="com.mohiva.play.silhouette.contrib.daos.AuthInfoDAO" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AuthInfoDAO[T&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsAnyRef"></a>
+      <a id="AuthInfoDAO[T&lt;:AuthInfo]:AuthInfoDAO[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="OAuth1InfoDAO.html"><span class="name">OAuth1InfoDAO</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="AuthInfoDAO.html"><span class="name">AuthInfoDAO</span></a><span class="tparams">[<span name="T">T &lt;: <a href="../../core/services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <p class="comment cmt">The DAO to store the OAuth1 information.</p>
-    </li><li name="com.mohiva.play.silhouette.contrib.daos.OAuth2InfoDAO" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="OAuth2InfoDAOextendsAnyRef"></a>
-      <a id="OAuth2InfoDAO:OAuth2InfoDAO"></a>
+      <p class="comment cmt">The DAO to persist the auth info.</p>
+    </li><li name="com.mohiva.play.silhouette.contrib.daos.DelegableAuthInfoDAO" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DelegableAuthInfoDAO[T&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsAuthInfoDAO[T]"></a>
+      <a id="DelegableAuthInfoDAO[T&lt;:AuthInfo]:DelegableAuthInfoDAO[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="OAuth2InfoDAO.html"><span class="name">OAuth2InfoDAO</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="DelegableAuthInfoDAO.html"><span class="name">DelegableAuthInfoDAO</span></a><span class="tparams">[<span name="T">T &lt;: <a href="../../core/services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <a href="AuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.contrib.daos.AuthInfoDAO">AuthInfoDAO</a>[<span class="extype" name="com.mohiva.play.silhouette.contrib.daos.DelegableAuthInfoDAO.T">T</span>]</span>
       </span>
       </h4>
-      <p class="comment cmt">The DAO to store the OAuth2 information.</p>
-    </li><li name="com.mohiva.play.silhouette.contrib.daos.PasswordInfoDAO" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="PasswordInfoDAOextendsAnyRef"></a>
-      <a id="PasswordInfoDAO:PasswordInfoDAO"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="PasswordInfoDAO.html"><span class="name">PasswordInfoDAO</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">The DAO to store the password information.</p>
+      <p class="comment cmt">An implementation of the auth info DAO.</p>
     </li></ol>
             </div>
 

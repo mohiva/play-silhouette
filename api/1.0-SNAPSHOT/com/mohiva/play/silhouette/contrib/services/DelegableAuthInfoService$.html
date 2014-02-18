@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>PasswordInfoDAO - com.mohiva.play.silhouette.contrib.daos.PasswordInfoDAO</title>
-          <meta name="description" content="PasswordInfoDAO - com.mohiva.play.silhouette.contrib.daos.PasswordInfoDAO" />
-          <meta name="keywords" content="PasswordInfoDAO com.mohiva.play.silhouette.contrib.daos.PasswordInfoDAO" />
+          <title>DelegableAuthInfoService - com.mohiva.play.silhouette.contrib.services.DelegableAuthInfoService</title>
+          <meta name="description" content="DelegableAuthInfoService - com.mohiva.play.silhouette.contrib.services.DelegableAuthInfoService" />
+          <meta name="keywords" content="DelegableAuthInfoService com.mohiva.play.silhouette.contrib.services.DelegableAuthInfoService" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'com.mohiva.play.silhouette.contrib.daos.PasswordInfoDAO';
+            var hash = 'com.mohiva.play.silhouette.contrib.services.DelegableAuthInfoService$';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -22,24 +22,24 @@
    	  </script>
     
         </head>
-        <body class="type">
+        <body class="value">
       <div id="definition">
-        <img src="../../../../../../lib/trait_big.png" />
-        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.contrib">contrib</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.contrib.daos">daos</a></p>
-        <h1>PasswordInfoDAO</h1>
+        <a href="DelegableAuthInfoService.html" title="Go to companion"><img src="../../../../../../lib/object_to_class_big.png" /></a>
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.contrib">contrib</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.contrib.services">services</a></p>
+        <h1><a href="DelegableAuthInfoService.html" title="Go to companion">DelegableAuthInfoService</a></h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">PasswordInfoDAO</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">DelegableAuthInfoService</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The DAO to store the password information.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The companion object.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -60,7 +60,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.contrib.daos.PasswordInfoDAO"><span>PasswordInfoDAO</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.contrib.services.DelegableAuthInfoService"><span>DelegableAuthInfoService</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -82,43 +82,10 @@
 
         
 
-        <div id="values" class="values members">
-              <h3>Abstract Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.contrib.daos.PasswordInfoDAO#find" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="find(loginInfo:com.mohiva.play.silhouette.core.LoginInfo):scala.concurrent.Future[Option[com.mohiva.play.silhouette.core.providers.PasswordInfo]]"></a>
-      <a id="find(LoginInfo):Future[Option[PasswordInfo]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">find</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../core/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../../core/providers/PasswordInfo.html" class="extype" name="com.mohiva.play.silhouette.core.providers.PasswordInfo">PasswordInfo</a>]]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Finds the password info which is linked with the specified login info.</p><div class="fullcomment"><div class="comment cmt"><p>Finds the password info which is linked with the specified login info.
-</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info.</p></dd><dt>returns</dt><dd class="cmt"><p>The retrieved password info or None if no password info could be retrieved for the given login info.
-</p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.contrib.daos.PasswordInfoDAO#save" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="save(loginInfo:com.mohiva.play.silhouette.core.LoginInfo,authInfo:com.mohiva.play.silhouette.core.providers.PasswordInfo):scala.concurrent.Future[Option[com.mohiva.play.silhouette.core.providers.PasswordInfo]]"></a>
-      <a id="save(LoginInfo,PasswordInfo):Future[Option[PasswordInfo]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">save</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../core/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <a href="../../core/providers/PasswordInfo.html" class="extype" name="com.mohiva.play.silhouette.core.providers.PasswordInfo">PasswordInfo</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../../core/providers/PasswordInfo.html" class="extype" name="com.mohiva.play.silhouette.core.providers.PasswordInfo">PasswordInfo</a>]]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Saves the password info.</p><div class="fullcomment"><div class="comment cmt"><p>Saves the password info.
-</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be saved.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The password info to save.</p></dd><dt>returns</dt><dd class="cmt"><p>The saved password info or None if the password info couldn't be saved.
-</p></dd></dl></div>
-    </li></ol>
-            </div>
+        
 
         <div id="values" class="values members">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
@@ -184,6 +151,32 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.DelegableAuthInfoService#RetrieveError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RetrieveError:String"></a>
+      <a id="RetrieveError:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">RetrieveError</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.mohiva.play.silhouette.contrib.services.DelegableAuthInfoService#SaveError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SaveError:String"></a>
+      <a id="SaveError:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">SaveError</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The error messages.</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
