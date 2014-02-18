@@ -22,7 +22,7 @@ import com.mohiva.play.silhouette.core.services.AuthInfo
  * An implementation of the auth info DAO.
  *
  * This abstract implementation of the [[com.mohiva.play.silhouette.contrib.daos.AuthInfoDAO]] trait
- * allows us to get the class tag of the auth info he is responsible for. On the base of this tag
+ * allows us to get the class tag of the auth info it is responsible for. Based on the class tag
  * the [[com.mohiva.play.silhouette.contrib.services.DelegableAuthInfoService]] class can delegate
  * operations to the DAO which is responsible for the currently handled auth info.
  *
