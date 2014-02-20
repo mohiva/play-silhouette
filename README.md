@@ -13,8 +13,6 @@ The project is named after the fictional crime fighter character [Silhouette](ht
 * Asynchronous, non-blocking operations
 * Customizable: components can be enhanced via inheritance or replaced based on their traits
 * Internationalization support
-* Non-disclosure of sensitive data (such as existence of a given user)
-* Optional user registration support
 * Persistence agnostic
 * Scala API
 * Testable
