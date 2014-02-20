@@ -27,20 +27,20 @@ The project is named after the fictional crime fighter character [Silhouette](ht
 Note: The module is currently only available as snapshot.
 
 In your build.sbt:
-```scala
+{% highlight scala %}
 libraryDependencies ++= Seq(
   "com.mohiva" %% "play-silhouette" % "1.0"
 )
-```
+{% endhighlight %}
 
 If you want to use the latest snapshot, add the following instead:
-```scala
+{% highlight scala %}
 resolvers += "Sonatype Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 
 libraryDependencies ++= Seq(
   "com.mohiva" %% "play-silhouette" % "1.0-SNAPSHOT"
 )
-```
+{% endhighlight %}
 
 
 ## Documentation
