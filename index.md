@@ -3,8 +3,6 @@ layout: default
 title: Silhouette
 ---
 
-<a href="http://www.reactivemanifesto.org/"> <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000" src="http://www.reactivemanifesto.org/images/ribbons/we-are-reactive-black-right.png"> </a>
-
 [![Build Status](https://travis-ci.org/mohiva/play-silhouette.png)](https://travis-ci.org/mohiva/play-silhouette) [![Coverage Status](https://coveralls.io/repos/mohiva/play-silhouette/badge.png)](https://coveralls.io/r/mohiva/play-silhouette)
 
 **Silhouette** is an authentication library for Play Framework applications that supports several authentication methods, including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes. It is a fork of [SecureSocial](http://securesocial.ws/), the widely known authentication module for Play Framework applications, with the intention to built a more customizable, non-blocking and well tested implementation.
