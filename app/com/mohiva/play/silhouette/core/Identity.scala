@@ -20,7 +20,7 @@
 package com.mohiva.play.silhouette.core
 
 /**
- * This trait represents a user.
+ * This trait represents an authenticated user.
  */
 trait Identity {
 
