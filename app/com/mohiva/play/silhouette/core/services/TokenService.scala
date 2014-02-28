@@ -23,8 +23,7 @@ import scala.concurrent.Future
 import com.mohiva.play.silhouette.core.Token
 
 /**
- * A trait that provides the means to find and save tokens for the Silhouette module if
- * the Credentials provider is enabled.
+ * A trait that provides the means to handle auth tokens for the Silhouette module.
  *
  * Tokens are needed for users that are creating an account in the system instead of using
  * one in a third-party system.
@@ -45,7 +44,7 @@ trait TokenService[T <: Token] {
    * Retrieves an available token.
    *
    * @param id The token ID.
-   * @return The found token or None if no token couldn't be found for the given ID.
+   * @return The retrieved token or None if no token couldn't be retrieved for the given ID.
    */
   def retrieve(id: String): Future[Option[T]]
 
@@ -58,7 +57,7 @@ trait TokenService[T <: Token] {
    *
    * Consumed tokens can't be retrieved.
    *
-   * @param id The ID of the token to delete.
+   * @param id The ID of the token to consume.
    */
   def consume(id: String)
 }
