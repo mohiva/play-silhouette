@@ -23,8 +23,7 @@ import scala.concurrent.Future
 import com.mohiva.play.silhouette.core.{ Identity, LoginInfo }
 
 /**
- * A trait that provides the means to find and save identities
- * for the Silhouette module.
+ * A trait that provides the means to retrieve identities for the Silhouette module.
  */
 trait IdentityService[T <: Identity] {
 
