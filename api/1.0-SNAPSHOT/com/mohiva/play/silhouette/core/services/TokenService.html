@@ -39,8 +39,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A trait that provides the means to find and save tokens for the Silhouette module if
-the Credentials provider is enabled.</p><p>Tokens are needed for users that are creating an account in the system instead of using
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A trait that provides the means to handle auth tokens for the Silhouette module.</p><p>Tokens are needed for users that are creating an account in the system instead of using
 one in a third-party system.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
@@ -101,7 +100,7 @@ one in a third-party system.
       <p class="shortcomment cmt">Consumes a token.</p><div class="fullcomment"><div class="comment cmt"><p>Consumes a token.</p><p>This method makes the token unavailable for further use.
 It's up to the implementation how to do that. For example, the token can be deleted,
 updated as &quot;consumed&quot;, moved to another table, etc.</p><p>Consumed tokens can't be retrieved.
-</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The ID of the token to delete.
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The ID of the token to consume.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.services.TokenService#create" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="create(token:T):scala.concurrent.Future[Option[T]]"></a>
@@ -131,7 +130,7 @@ updated as &quot;consumed&quot;, moved to another table, etc.</p><p>Consumed tok
       </span>
       </h4>
       <p class="shortcomment cmt">Retrieves an available token.</p><div class="fullcomment"><div class="comment cmt"><p>Retrieves an available token.
-</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The token ID.</p></dd><dt>returns</dt><dd class="cmt"><p>The found token or None if no token couldn't be found for the given ID.
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The token ID.</p></dd><dt>returns</dt><dd class="cmt"><p>The retrieved token or None if no token couldn't be retrieved for the given ID.
 </p></dd></dl></div>
     </li></ol>
             </div>
