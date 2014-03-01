@@ -13,24 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.core.providers.oauh2
+package com.mohiva.play.silhouette.core.providers.oauth2
 
 import test.Helper
 import java.util.UUID
-import play.api.libs.json.Json
 import play.api.libs.ws.{ Response, WS }
 import play.api.test.{ FakeRequest, WithApplication }
 import scala.concurrent.Future
 import com.mohiva.play.silhouette.core.providers._
-import com.mohiva.play.silhouette.core.providers.oauth2.FoursquareProvider
 import com.mohiva.play.silhouette.core.{ LoginInfo, AuthenticationException }
-import FoursquareProvider._
+import FacebookProvider._
 import OAuth2Provider._
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.core.providers.oauth2.FoursquareProvider]] class.
+ * Test case for the [[com.mohiva.play.silhouette.core.providers.oauth2.FacebookProvider]] class.
  */
-class FoursquareProviderSpec extends OAuth2ProviderSpec {
+class FacebookProviderSpec extends OAuth2ProviderSpec {
 
   "The authenticate method" should {
     "throw AuthenticationException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
@@ -39,13 +37,13 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       val requestHolder = mock[WS.WSRequestHolder]
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      response.json returns Json.obj()
+      response.body returns ""
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
 
       await(provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must startWith(InvalidResponseFormat.format(provider.id, ""))
+        case e => e.getMessage must equalTo(InvalidResponseFormat.format(provider.id, ""))
       }
     }
 
@@ -55,19 +53,20 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       val requestHolder = mock[WS.WSRequestHolder]
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      response.json returns oAuthInfo thenReturns Helper.loadJson("providers/oauth2/foursquare.error.json")
+      response.body returns AccessToken + "=my.access.token&" + Expires + "=1"
+      response.json returns Helper.loadJson("providers/oauth2/facebook.error.json")
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
       requestHolder.get() returns Future.successful(response)
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      httpLayer.url(API.format("my.access.token", DefaultAPIVersion)) returns requestHolder
+      httpLayer.url(API.format("my.access.token")) returns requestHolder
 
       await(provider.authenticate()) must throwAn[AuthenticationException].like {
         case e => e.getMessage must equalTo(SpecifiedProfileError.format(
           provider.id,
-          400,
-          Some("param_error"),
-          Some("Must provide a valid user ID or 'self.'")))
+          "An active access token must be used to query information about the current user.",
+          "OAuthException",
+          2500))
       }
     }
 
@@ -77,12 +76,13 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       val requestHolder = mock[WS.WSRequestHolder]
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      response.json returns oAuthInfo thenThrows new RuntimeException("")
+      response.body returns AccessToken + "=my.access.token&" + Expires + "=1"
+      response.json throws new RuntimeException("")
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
       requestHolder.get() returns Future.successful(response)
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      httpLayer.url(API.format("my.access.token", DefaultAPIVersion)) returns requestHolder
+      httpLayer.url(API.format("my.access.token")) returns requestHolder
 
       await(provider.authenticate()) must throwAn[AuthenticationException].like {
         case e => e.getMessage must equalTo(UnspecifiedProfileError.format(provider.id))
@@ -95,114 +95,69 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       val requestHolder = mock[WS.WSRequestHolder]
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      response.json returns oAuthInfo thenReturns Helper.loadJson("providers/oauth2/foursquare.success.json")
+      response.body returns AccessToken + "=my.access.token&" + Expires + "=1"
+      response.json returns Helper.loadJson("providers/oauth2/facebook.success.json")
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
       requestHolder.get() returns Future.successful(response)
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      httpLayer.url(API.format("my.access.token", DefaultAPIVersion)) returns requestHolder
+      httpLayer.url(API.format("my.access.token")) returns requestHolder
 
       await(provider.authenticate()) must beRight.like {
         case p =>
           p must be equalTo new SocialProfile(
-            loginInfo = LoginInfo(provider.id, "13221052"),
+            loginInfo = LoginInfo(provider.id, "134405962728980"),
             firstName = Some("Apollonia"),
             lastName = Some("Vanova"),
+            fullName = Some("Apollonia Vanova"),
             email = Some("apollonia.vanova@watchmen.com"),
-            avatarURL = Some("https://irs0.4sqi.net/img/user/100x100/blank_girl.png")
+            avatarURL = Some("https://fbcdn-sphotos-g-a.akamaihd.net/hphotos-ak-ash2/t1/36245_155530314499277_2350717_n.jpg?lvh=1")
           )
       }
     }
 
-    "return the social profile if API is deprecated" in new WithApplication with Context {
+    "store the auth info with expires value if the authentication was successful" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
       val requestHolder = mock[WS.WSRequestHolder]
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      response.json returns oAuthInfo thenReturns Helper.loadJson("providers/oauth2/foursquare.deprecated.json")
+      response.body returns AccessToken + "=my.access.token&" + Expires + "=1"
+      response.json returns Helper.loadJson("providers/oauth2/facebook.success.json")
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
       requestHolder.get() returns Future.successful(response)
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      httpLayer.url(API.format("my.access.token", DefaultAPIVersion)) returns requestHolder
+      httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      await(provider.authenticate()) must beRight.like {
-        case p =>
-          p must be equalTo new SocialProfile(
-            loginInfo = LoginInfo(provider.id, "13221052"),
-            firstName = Some("Apollonia"),
-            lastName = Some("Vanova"),
-            email = Some("apollonia.vanova@watchmen.com"),
-            avatarURL = Some("https://irs0.4sqi.net/img/user/100x100/blank_girl.png")
-          )
-      }
+      await(provider.authenticate())
+      there was one(authInfoService).save[OAuth2Info](LoginInfo(provider.id, "134405962728980"), OAuth2Info(
+        accessToken = "my.access.token",
+        tokenType = None,
+        expiresIn = Some(1),
+        refreshToken = None))
     }
 
-    "handle the custom API version property" in new WithApplication with Context {
-      val customProperties = Map(APIVersion -> "20120101")
+    "store the auth info without expires value if the authentication was successful" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
       val requestHolder = mock[WS.WSRequestHolder]
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      override lazy val provider = new FoursquareProvider(
-        authInfoService,
-        cacheLayer,
-        httpLayer,
-        oAuthSettings.copy(customProperties = customProperties)
-      )
-
-      response.json returns oAuthInfo thenReturns Helper.loadJson("providers/oauth2/foursquare.success.json")
+      response.body returns AccessToken + "=my.access.token"
+      response.json returns Helper.loadJson("providers/oauth2/facebook.success.json")
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
       requestHolder.get() returns Future.successful(response)
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      httpLayer.url(API.format("my.access.token", "20120101")) returns requestHolder
+      httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      await(provider.authenticate()) must beRight.like {
-        case p =>
-          p must be equalTo new SocialProfile(
-            loginInfo = LoginInfo(provider.id, "13221052"),
-            firstName = Some("Apollonia"),
-            lastName = Some("Vanova"),
-            email = Some("apollonia.vanova@watchmen.com"),
-            avatarURL = Some("https://irs0.4sqi.net/img/user/100x100/blank_girl.png")
-          )
-      }
-    }
-
-    "handle the custom avatar resolution property" in new WithApplication with Context {
-      val customProperties = Map(AvatarResolution -> "150x150")
-      val cacheID = UUID.randomUUID().toString
-      val state = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
-      implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      override lazy val provider = new FoursquareProvider(
-        authInfoService,
-        cacheLayer,
-        httpLayer,
-        oAuthSettings.copy(customProperties = customProperties)
-      )
-
-      response.json returns oAuthInfo thenReturns Helper.loadJson("providers/oauth2/foursquare.success.json")
-      requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
-      requestHolder.get() returns Future.successful(response)
-      cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
-      httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      httpLayer.url(API.format("my.access.token", DefaultAPIVersion)) returns requestHolder
-
-      await(provider.authenticate()) must beRight.like {
-        case p =>
-          p must be equalTo new SocialProfile(
-            loginInfo = LoginInfo(provider.id, "13221052"),
-            firstName = Some("Apollonia"),
-            lastName = Some("Vanova"),
-            email = Some("apollonia.vanova@watchmen.com"),
-            avatarURL = Some("https://irs0.4sqi.net/img/user/150x150/blank_girl.png")
-          )
-      }
+      await(provider.authenticate())
+      there was one(authInfoService).save[OAuth2Info](LoginInfo(provider.id, "134405962728980"), OAuth2Info(
+        accessToken = "my.access.token",
+        tokenType = None,
+        expiresIn = None,
+        refreshToken = None))
     }
   }
 
@@ -222,15 +177,16 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
      * The OAuth2 settings.
      */
     lazy val oAuthSettings = OAuth2Settings(
-      authorizationURL = "https://foursquare.com/oauth2/authenticate",
-      accessTokenURL = "https://foursquare.com/oauth2/access_token",
+      authorizationURL = "https://graph.facebook.com/oauth/authorize",
+      accessTokenURL = "https://graph.facebook.com/oauth/access_token",
       redirectURL = "https://www.mohiva.com",
       clientID = "my.client.id",
-      clientSecret = "my.client.secret")
+      clientSecret = "my.client.secret",
+      scope = Some("email"))
 
     /**
      * The provider to test.
      */
-    lazy val provider = new FoursquareProvider(authInfoService, cacheLayer, httpLayer, oAuthSettings)
+    lazy val provider = new FacebookProvider(authInfoService, cacheLayer, httpLayer, oAuthSettings)
   }
 }
