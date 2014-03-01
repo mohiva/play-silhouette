@@ -83,7 +83,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="com.mohiva.play.silhouette.core.AccessDeniedException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="AccessDeniedExceptionextendsExceptionwithProductwithSerializable"></a>
+      <a id="AccessDeniedExceptionextendsExceptionwithLoggerwithProductwithSerializable"></a>
       <a id="AccessDeniedException:AccessDeniedException"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -91,13 +91,13 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="AccessDeniedException.html"><span class="name">AccessDeniedException</span></a><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="AccessDeniedException.html"><span class="name">AccessDeniedException</span></a><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       <p class="comment cmt">An exception thrown when the user denies access to the application
 in the login page of the 3rd party service.</p>
     </li><li name="com.mohiva.play.silhouette.core.AuthenticationException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="AuthenticationExceptionextendsExceptionwithProductwithSerializable"></a>
+      <a id="AuthenticationExceptionextendsExceptionwithLoggerwithProductwithSerializable"></a>
       <a id="AuthenticationException:AuthenticationException"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -105,7 +105,7 @@ in the login page of the 3rd party service.</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="AuthenticationException.html"><span class="name">AuthenticationException</span></a><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="AuthenticationException.html"><span class="name">AuthenticationException</span></a><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       <p class="comment cmt">An exception thrown when there is an error in the authentication flow.</p>
@@ -149,6 +149,19 @@ an authorization implementation in SecuredActions.</p>
       </span>
       </h4>
       <p class="comment cmt">This trait represents an authenticated user.</p>
+    </li><li name="com.mohiva.play.silhouette.core.Logger" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LoggerextendsAnyRef"></a>
+      <a id="Logger:Logger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Logger.html"><span class="name">Logger</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Implement this to get a named logger in scope.</p>
     </li><li name="com.mohiva.play.silhouette.core.LoginInfo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LoginInfoextendsProductwithSerializable"></a>
       <a id="LoginInfo:LoginInfo"></a>
@@ -190,7 +203,7 @@ an authorization implementation in SecuredActions.</p>
       <p class="comment cmt">Can be mixed into the GlobalSettings object to define a global behaviour
 for not-authenticated and not-authorized actions.</p>
     </li><li name="com.mohiva.play.silhouette.core.Silhouette" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Silhouette[I&lt;:com.mohiva.play.silhouette.core.Identity,T&lt;:com.mohiva.play.silhouette.core.Authenticator]extendsController"></a>
+      <a id="Silhouette[I&lt;:com.mohiva.play.silhouette.core.Identity,T&lt;:com.mohiva.play.silhouette.core.Authenticator]extendsControllerwithLogger"></a>
       <a id="Silhouette[I&lt;:Identity,T&lt;:Authenticator]:Silhouette[I,T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -198,7 +211,7 @@ for not-authenticated and not-authorized actions.</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Silhouette.html"><span class="name">Silhouette</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>, <span name="T">T &lt;: <a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a></span>]</span><span class="result"> extends <span class="extype" name="play.api.mvc.Controller">Controller</span></span>
+        <a href="Silhouette.html"><span class="name">Silhouette</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>, <span name="T">T &lt;: <a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a></span>]</span><span class="result"> extends <span class="extype" name="play.api.mvc.Controller">Controller</span> with <a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></span>
       </span>
       </h4>
       <p class="comment cmt">Provides the actions that can be used to protect controllers and retrieve the current user

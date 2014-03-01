@@ -35,7 +35,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Silhouette</span><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>, <span name="T">T &lt;: <a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a></span>]</span><span class="result"> extends <span class="extype" name="play.api.mvc.Controller">Controller</span></span>
+        <span class="name">Silhouette</span><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>, <span name="T">T &lt;: <a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a></span>]</span><span class="result"> extends <span class="extype" name="play.api.mvc.Controller">Controller</span> with <a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></span>
       </span>
       </h4>
       
@@ -51,7 +51,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
 }</pre></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.</p></dd><dt class="tparam">T</dt><dd class="cmt"><p>The type of the authenticator.
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="play.api.mvc.Controller">Controller</span>, <span class="extype" name="play.api.mvc.Rendering">Rendering</span>, <span class="extype" name="play.api.mvc.RequestExtractors">RequestExtractors</span>, <span class="extype" name="play.api.mvc.AcceptExtractors">AcceptExtractors</span>, <span class="extype" name="play.api.http.ContentTypes">ContentTypes</span>, <span class="extype" name="play.api.http.HeaderNames">HeaderNames</span>, <span class="extype" name="play.api.http.Status">play.api.http.Status</span>, <span class="extype" name="play.api.http.HttpProtocol">HttpProtocol</span>, <span class="extype" name="play.api.mvc.BodyParsers">BodyParsers</span>, <span class="extype" name="play.api.mvc.Results">Results</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a>, <span class="extype" name="play.api.mvc.Controller">Controller</span>, <span class="extype" name="play.api.mvc.Rendering">Rendering</span>, <span class="extype" name="play.api.mvc.RequestExtractors">RequestExtractors</span>, <span class="extype" name="play.api.mvc.AcceptExtractors">AcceptExtractors</span>, <span class="extype" name="play.api.http.ContentTypes">ContentTypes</span>, <span class="extype" name="play.api.http.HeaderNames">HeaderNames</span>, <span class="extype" name="play.api.http.Status">play.api.http.Status</span>, <span class="extype" name="play.api.http.HttpProtocol">HttpProtocol</span>, <span class="extype" name="play.api.mvc.BodyParsers">BodyParsers</span>, <span class="extype" name="play.api.mvc.Results">Results</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@ if available.</p><pre><span class="kw">class</span> MyController(
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.core.Silhouette"><span>Silhouette</span></li><li class="in" name="play.api.mvc.Controller"><span>Controller</span></li><li class="in" name="play.api.mvc.Rendering"><span>Rendering</span></li><li class="in" name="play.api.mvc.RequestExtractors"><span>RequestExtractors</span></li><li class="in" name="play.api.mvc.AcceptExtractors"><span>AcceptExtractors</span></li><li class="in" name="play.api.http.ContentTypes"><span>ContentTypes</span></li><li class="in" name="play.api.http.HeaderNames"><span>HeaderNames</span></li><li class="in" name="play.api.http.Status"><span>Status</span></li><li class="in" name="play.api.http.HttpProtocol"><span>HttpProtocol</span></li><li class="in" name="play.api.mvc.BodyParsers"><span>BodyParsers</span></li><li class="in" name="play.api.mvc.Results"><span>Results</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.core.Silhouette"><span>Silhouette</span></li><li class="in" name="com.mohiva.play.silhouette.core.Logger"><span>Logger</span></li><li class="in" name="play.api.mvc.Controller"><span>Controller</span></li><li class="in" name="play.api.mvc.Rendering"><span>Rendering</span></li><li class="in" name="play.api.mvc.RequestExtractors"><span>RequestExtractors</span></li><li class="in" name="play.api.mvc.AcceptExtractors"><span>AcceptExtractors</span></li><li class="in" name="play.api.http.ContentTypes"><span>ContentTypes</span></li><li class="in" name="play.api.http.HeaderNames"><span>HeaderNames</span></li><li class="in" name="play.api.http.Status"><span>Status</span></li><li class="in" name="play.api.http.HttpProtocol"><span>HttpProtocol</span></li><li class="in" name="play.api.mvc.BodyParsers"><span>BodyParsers</span></li><li class="in" name="play.api.mvc.Results"><span>Results</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -2641,6 +2641,20 @@ if available.</p><pre><span class="kw">class</span> MyController(
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Controller</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.Logger#logger" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logger:play.api.Logger"></a>
+      <a id="logger:play.api.Logger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logger</span><span class="result">: <span class="extype" name="play.api.Logger">play.api.Logger</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">A named logger instance.</p><div class="fullcomment"><div class="comment cmt"><p>A named logger instance.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -2860,7 +2874,9 @@ if available.</p><pre><span class="kw">class</span> MyController(
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="play.api.mvc.Controller">
+        <div class="parent" name="com.mohiva.play.silhouette.core.Logger">
+              <h3>Inherited from <a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></h3>
+            </div><div class="parent" name="play.api.mvc.Controller">
               <h3>Inherited from <span class="extype" name="play.api.mvc.Controller">Controller</span></h3>
             </div><div class="parent" name="play.api.mvc.Rendering">
               <h3>Inherited from <span class="extype" name="play.api.mvc.Rendering">Rendering</span></h3>

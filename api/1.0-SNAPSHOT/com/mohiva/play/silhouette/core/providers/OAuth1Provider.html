@@ -35,14 +35,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">OAuth1Provider</span><span class="result"> extends <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider">SocialProvider</a>[<a href="OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Info">OAuth1Info</a>]</span>
+        <span class="name">OAuth1Provider</span><span class="result"> extends <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider">SocialProvider</a>[<a href="OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Info">OAuth1Info</a>] with <a href="../Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Base class for all OAuth1 providers.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider">SocialProvider</a>[<a href="OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Info">OAuth1Info</a>], <a href="../Provider.html" class="extype" name="com.mohiva.play.silhouette.core.Provider">Provider</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a>, <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider">SocialProvider</a>[<a href="OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Info">OAuth1Info</a>], <a href="../Provider.html" class="extype" name="com.mohiva.play.silhouette.core.Provider">Provider</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
           <div class="subClasses hiddenContent"><a href="oauth1/LinkedInProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.oauth1.LinkedInProvider">LinkedInProvider</a>, <a href="oauth1/TwitterProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.oauth1.TwitterProvider">TwitterProvider</a>, <a href="oauth1/XingProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.oauth1.XingProvider">XingProvider</a></div>
@@ -63,7 +63,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.core.providers.OAuth1Provider"><span>OAuth1Provider</span></li><li class="in" name="com.mohiva.play.silhouette.core.providers.SocialProvider"><span>SocialProvider</span></li><li class="in" name="com.mohiva.play.silhouette.core.Provider"><span>Provider</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.core.providers.OAuth1Provider"><span>OAuth1Provider</span></li><li class="in" name="com.mohiva.play.silhouette.core.Logger"><span>Logger</span></li><li class="in" name="com.mohiva.play.silhouette.core.providers.SocialProvider"><span>SocialProvider</span></li><li class="in" name="com.mohiva.play.silhouette.core.Provider"><span>Provider</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -367,6 +367,20 @@ the service provider).
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.Logger#logger" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logger:play.api.Logger"></a>
+      <a id="logger:play.api.Logger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logger</span><span class="result">: <span class="extype" name="play.api.Logger">play.api.Logger</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">A named logger instance.</p><div class="fullcomment"><div class="comment cmt"><p>A named logger instance.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -498,7 +512,9 @@ the service provider).
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.mohiva.play.silhouette.core.providers.SocialProvider">
+        <div class="parent" name="com.mohiva.play.silhouette.core.Logger">
+              <h3>Inherited from <a href="../Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></h3>
+            </div><div class="parent" name="com.mohiva.play.silhouette.core.providers.SocialProvider">
               <h3>Inherited from <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider">SocialProvider</a>[<a href="OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Info">OAuth1Info</a>]</h3>
             </div><div class="parent" name="com.mohiva.play.silhouette.core.Provider">
               <h3>Inherited from <a href="../Provider.html" class="extype" name="com.mohiva.play.silhouette.core.Provider">Provider</a></h3>
