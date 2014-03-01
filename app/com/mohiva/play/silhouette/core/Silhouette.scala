@@ -19,7 +19,7 @@
  */
 package com.mohiva.play.silhouette.core
 
-import play.api.{ Play, Logger }
+import play.api.Play
 import play.api.mvc._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -45,7 +45,7 @@ import com.mohiva.play.silhouette.core.utils.DefaultActionHandler
  * @tparam I The type of the identity.
  * @tparam T The type of the authenticator.
  */
-trait Silhouette[I <: Identity, T <: Authenticator] extends Controller {
+trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logger {
 
   /**
    * Gets the identity service implementation.
@@ -168,9 +168,7 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller {
      * @return The result to send to the client if the user isn't authorized.
      */
     def handleNotAuthorized(implicit request: RequestHeader): Future[SimpleResult] = {
-      if (Logger.isDebugEnabled) {
-        Logger.debug("[Silhouette] Unauthorized user trying to access '%s'".format(request.uri))
-      }
+      logger.debug("[Silhouette] Unauthorized user trying to access '%s'".format(request.uri))
 
       notAuthorized(request).orElse {
         Play.current.global match {
@@ -193,9 +191,7 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller {
      * @return The result to send to the client if the user isn't authenticated.
      */
     def handleNotAuthenticated(implicit request: RequestHeader): Future[SimpleResult] = {
-      if (Logger.isDebugEnabled) {
-        Logger.debug("[Silhouette] Unauthenticated user trying to access '%s'".format(request.uri))
-      }
+      logger.debug("[Silhouette] Unauthenticated user trying to access '%s'".format(request.uri))
 
       notAuthenticated(request).orElse {
         Play.current.global match {
@@ -215,9 +211,8 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller {
     def invokeBlock[A](request: Request[A], block: SecuredRequest[A] => Future[SimpleResult]) = {
       currentIdentity(request).flatMap {
         // A user is both authenticated and authorized. The request will be granted.
-        case Some(identity) if authorize.isEmpty || authorize.get.isAuthorized(identity) => {
+        case Some(identity) if authorize.isEmpty || authorize.get.isAuthorized(identity) =>
           block(SecuredRequest(identity, request))
-        }
         // A user is authenticated but not authorized. The request will be forbidden.
         case Some(identity) =>
           handleNotAuthorized(request)
