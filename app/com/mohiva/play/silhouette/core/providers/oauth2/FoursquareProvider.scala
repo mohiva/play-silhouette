@@ -19,7 +19,6 @@
  */
 package com.mohiva.play.silhouette.core.providers.oauth2
 
-import play.api.Logger
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
@@ -71,10 +70,10 @@ class FoursquareProvider(
 
           throw new AuthenticationException(SpecifiedProfileError.format(id, code, errorType, errorDetail))
         case _ =>
-          // Status code 200 and a existing errorType can only be a deprecated error
+          // Status code 200 and an existing errorType can only be a deprecated error
           // https://developer.foursquare.com/overview/responses
           if (errorType.isDefined) {
-            Logger.info("This implementation may be deprecated! Please contact the Silhouette team for a fix!")
+            logger.info("This implementation may be deprecated! Please contact the Silhouette team for a fix!")
           }
 
           val userID = (json \ Response \ User \ ID).asOpt[String]
