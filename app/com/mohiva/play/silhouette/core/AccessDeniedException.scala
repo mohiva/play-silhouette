@@ -19,8 +19,6 @@
  */
 package com.mohiva.play.silhouette.core
 
-import play.api.Logger
-
 /**
  * An exception thrown when the user denies access to the application
  * in the login page of the 3rd party service.
@@ -28,8 +26,8 @@ import play.api.Logger
  * @param msg The exception message.
  * @param cause The exception cause.
  */
-case class AccessDeniedException(msg: String, cause: Throwable) extends Exception(msg, cause) {
-  Logger.info(msg)
+case class AccessDeniedException(msg: String, cause: Throwable) extends Exception(msg, cause) with Logger {
+  logger.info(msg)
 
   /**
    * Constructs an exception with only a message.

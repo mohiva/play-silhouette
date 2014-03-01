@@ -21,7 +21,6 @@ package com.mohiva.play.silhouette.core.providers
 
 import java.net.URLEncoder._
 import java.util.UUID
-import play.api.Logger
 import play.api.mvc.{ SimpleResult, RequestHeader, Results }
 import play.api.libs.ws.Response
 import play.api.libs.json._
@@ -44,7 +43,8 @@ abstract class OAuth2Provider(
   settings: OAuth2Settings,
   cacheLayer: CacheLayer,
   httpLayer: HTTPLayer)
-    extends SocialProvider[OAuth2Info] {
+    extends SocialProvider[OAuth2Info]
+    with Logger {
 
   /**
    * Converts the JSON into a [[com.mohiva.play.silhouette.core.providers.OAuth2Info]] object.
@@ -88,10 +88,8 @@ abstract class OAuth2Provider(
         val encodedParams = params.map { p => encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8") }
         val url = settings.authorizationURL + encodedParams.mkString("?", "&", "")
         val redirect = Results.Redirect(url).withSession(request.session + (CacheKey -> cacheID))
-        if (Logger.isDebugEnabled) {
-          Logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
-          Logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
-        }
+        logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
+        logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
         cacheLayer.set(cacheID, state, CacheExpiration)
         Future.successful(Left(redirect))
     }
@@ -110,9 +108,7 @@ abstract class OAuth2Provider(
       GrantType -> Seq(AuthorizationCode),
       Code -> Seq(code),
       RedirectURI -> Seq(settings.redirectURL)) ++ settings.accessTokenParams.mapValues(Seq(_))).map { response =>
-      if (Logger.isDebugEnabled) {
-        Logger.debug("[Silhouette][%s] Access token response: [%s]".format(id, response.body))
-      }
+      logger.debug("[Silhouette][%s] Access token response: [%s]".format(id, response.body))
       buildInfo(response)
     }
   }

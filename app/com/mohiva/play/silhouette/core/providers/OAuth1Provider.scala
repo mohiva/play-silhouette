@@ -20,7 +20,6 @@
 package com.mohiva.play.silhouette.core.providers
 
 import java.util.UUID
-import play.api.Logger
 import play.api.mvc.{ SimpleResult, RequestHeader, Results }
 import play.api.libs.ws.SignatureCalculator
 import scala.concurrent.Future
@@ -44,7 +43,8 @@ abstract class OAuth1Provider(
   httpLayer: HTTPLayer,
   oAuth1Service: OAuth1Service,
   oAuth1Settings: OAuth1Settings)
-    extends SocialProvider[OAuth1Info] {
+    extends SocialProvider[OAuth1Info]
+    with Logger {
 
   /**
    * Starts the authentication process.
@@ -77,9 +77,7 @@ abstract class OAuth1Provider(
           val cacheID = UUID.randomUUID().toString
           val url = oAuth1Service.redirectUrl(info.token)
           val redirect = Results.Redirect(url).withSession(request.session + (CacheKey -> cacheID))
-          if (Logger.isDebugEnabled) {
-            Logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
-          }
+          logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
           cacheLayer.set(cacheID, info, CacheExpiration)
           Left(redirect)
       }
