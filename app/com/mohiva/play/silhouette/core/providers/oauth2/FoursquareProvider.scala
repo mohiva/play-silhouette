@@ -76,7 +76,7 @@ class FoursquareProvider(
             logger.info("This implementation may be deprecated! Please contact the Silhouette team for a fix!")
           }
 
-          val userID = (json \ Response \ User \ ID).asOpt[String]
+          val userID = (json \ Response \ User \ ID).as[String]
           val lastName = (json \ Response \ User \ LastName).asOpt[String]
           val firstName = (json \ Response \ User \ FirstName).asOpt[String]
           val avatarURLPart1 = (json \ Response \ User \ Photo \ Prefix).asOpt[String]
@@ -85,7 +85,7 @@ class FoursquareProvider(
           val resolution = settings.customProperties.getOrElse(AvatarResolution, DefaultAvatarResolution)
 
           SocialProfile(
-            loginInfo = LoginInfo(id, userID.get),
+            loginInfo = LoginInfo(id, userID),
             firstName = firstName,
             lastName = lastName,
             avatarURL = for (prefix <- avatarURLPart1; postfix <- avatarURLPart2) yield prefix + resolution + postfix,
