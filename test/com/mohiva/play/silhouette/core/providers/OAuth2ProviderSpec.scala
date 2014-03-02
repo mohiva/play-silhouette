@@ -197,9 +197,9 @@ trait OAuth2ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
    */
   lazy val oAuthInfo: JsValue = Json.obj(
     AccessToken -> "my.access.token",
-    TokenType -> "",
-    ExpiresIn -> 5,
-    RefreshToken -> "")
+    TokenType -> "bearer",
+    ExpiresIn -> 3600,
+    RefreshToken -> "my.refresh.token")
 
   /**
    * The OAuth2 settings.
