@@ -95,7 +95,7 @@ object VkProvider {
   val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error code: %s, message: %s"
 
   /**
-   * The Facebook constants.
+   * The VK constants.
    */
   val Vk = "vk"
   val API = "https://api.vk.com/method/getProfiles?fields=uid,first_name,last_name,photo&access_token=%s"

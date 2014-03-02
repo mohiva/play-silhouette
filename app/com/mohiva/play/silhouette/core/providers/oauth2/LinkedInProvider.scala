@@ -95,7 +95,7 @@ object LinkedInProvider {
   val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error code: %s, requestId: %s, message: %s, timestamp: %s"
 
   /**
-   * The Facebook constants.
+   * The LinkedIn constants.
    */
   val LinkedIn = "linkedin"
   val API = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,formatted-name,picture-url)?format=json&oauth2_access_token=%s"
