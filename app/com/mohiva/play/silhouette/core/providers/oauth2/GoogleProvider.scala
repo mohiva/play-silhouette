@@ -98,7 +98,7 @@ object GoogleProvider {
   val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error type: %s, message: %s"
 
   /**
-   * The Foursquare constants.
+   * The Google constants.
    */
   val Google = "google"
   val API = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=%s"

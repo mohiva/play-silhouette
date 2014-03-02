@@ -106,7 +106,7 @@ object GitHubProvider {
   val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error message: %s, doc URL: %s"
 
   /**
-   * The Foursquare constants.
+   * The GitHub constants.
    */
   val GitHub = "github"
   val API = "https://api.github.com/user?access_token=%s"

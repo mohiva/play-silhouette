@@ -86,7 +86,7 @@ object InstagramProvider {
   val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error message: %s"
 
   /**
-   * The Facebook constants.
+   * The Instagram constants.
    */
   val Instagram = "instagram"
   val API = "https://api.instagram.com/v1/users/self?access_token=%s"
