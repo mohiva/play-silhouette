@@ -36,6 +36,10 @@ import OAuth2Provider._
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
  * @param settings The provider settings.
+ * @see https://developers.google.com/+/api/auth-migration#timetable
+ * @see https://developers.google.com/+/api/auth-migration#oauth2login
+ * @see https://developers.google.com/accounts/docs/OAuth2Login
+ * @see https://developers.google.com/+/api/latest/people
  */
 class GoogleProvider(
   protected val authInfoService: AuthInfoService,
@@ -62,17 +66,24 @@ class GoogleProvider(
       val json = response.json
       (json \ Error).asOpt[JsObject] match {
         case Some(error) =>
-          val errorType = (error \ Type).as[String]
+          val errorCode = (error \ Code).as[Int]
           val errorMsg = (error \ Message).as[String]
 
-          throw new AuthenticationException(SpecifiedProfileError.format(id, errorType, errorMsg))
+          throw new AuthenticationException(SpecifiedProfileError.format(id, errorCode, errorMsg))
         case _ =>
           val userID = (json \ ID).as[String]
-          val firstName = (json \ GivenName).asOpt[String]
-          val lastName = (json \ FamilyName).asOpt[String]
-          val fullName = (json \ Name).asOpt[String]
-          val avatarURL = (json \ Picture).asOpt[String]
-          val email = (json \ Email).asOpt[String]
+          val firstName = (json \ Name \ GivenName).asOpt[String]
+          val lastName = (json \ Name \ FamilyName).asOpt[String]
+          val fullName = (json \ DisplayName).asOpt[String]
+          val avatarURL = (json \ Image \ URL).asOpt[String]
+
+          // https://developers.google.com/+/api/latest/people#emails.type
+          val emailIndex = (json \ Emails \\ Type).indexWhere(_.as[String] == Account)
+          val emailValue = if ((json \ Emails \\ Value).isDefinedAt(emailIndex)) {
+            (json \ Emails \\ Value)(emailIndex).asOpt[String]
+          } else {
+            None
+          }
 
           SocialProfile(
             loginInfo = LoginInfo(id, userID),
@@ -80,9 +91,12 @@ class GoogleProvider(
             lastName = lastName,
             fullName = fullName,
             avatarURL = avatarURL,
-            email = email)
+            email = emailValue)
       }
-    }.recover { case e => throw new AuthenticationException(UnspecifiedProfileError.format(id), e) }
+    }.recover {
+      case e if !e.isInstanceOf[AuthenticationException] =>
+        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
+    }
   }
 }
 
@@ -95,19 +109,23 @@ object GoogleProvider {
    * The error messages.
    */
   val UnspecifiedProfileError = "[Silhouette][%s] Error retrieving profile information"
-  val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error type: %s, message: %s"
+  val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error code: %s, message: %s"
 
   /**
    * The Google constants.
    */
   val Google = "google"
-  val API = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=%s"
-  val Type = "type"
+  val API = "https://www.googleapis.com/plus/v1/people/me?access_token=%s"
   val Message = "message"
   val ID = "id"
   val Name = "name"
-  val GivenName = "given_name"
-  val FamilyName = "family_name"
-  val Picture = "picture"
-  val Email = "email"
+  val GivenName = "givenName"
+  val FamilyName = "familyName"
+  val DisplayName = "displayName"
+  val Image = "image"
+  val URL = "url"
+  val Emails = "emails"
+  val Value = "value"
+  val Type = "type"
+  val Account = "account"
 }
