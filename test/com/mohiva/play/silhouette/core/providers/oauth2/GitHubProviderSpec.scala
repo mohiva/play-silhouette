@@ -22,13 +22,15 @@ import play.api.test.{ FakeRequest, WithApplication }
 import scala.concurrent.Future
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.{ LoginInfo, AuthenticationException }
-import FacebookProvider._
+import GitHubProvider._
 import OAuth2Provider._
+import play.api.libs.json.{ JsValue, Json }
+import play.api.http.HeaderNames
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.core.providers.oauth2.FacebookProvider]] class.
+ * Test case for the [[com.mohiva.play.silhouette.core.providers.oauth2.GitHubProvider]] class.
  */
-class FacebookProviderSpec extends OAuth2ProviderSpec {
+class GitHubProviderSpec extends OAuth2ProviderSpec {
 
   "The authenticate method" should {
     "throw AuthenticationException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
@@ -37,14 +39,14 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       val requestHolder = mock[WS.WSRequestHolder]
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      response.body returns ""
-      requestHolder.withHeaders(any) returns requestHolder
+      response.json returns Json.obj()
+      requestHolder.withHeaders(HeaderNames.ACCEPT -> "application/json") returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
 
       await(provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must equalTo(InvalidResponseFormat.format(provider.id, ""))
+        case e => e.getMessage must startWith(InvalidResponseFormat.format(provider.id, ""))
       }
     }
 
@@ -54,9 +56,8 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       val requestHolder = mock[WS.WSRequestHolder]
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      response.body returns AccessToken + "=my.access.token&" + Expires + "=1"
-      response.json returns Helper.loadJson("providers/oauth2/facebook.error.json")
-      requestHolder.withHeaders(any) returns requestHolder
+      response.json returns oAuthInfo thenReturns Helper.loadJson("providers/oauth2/github.error.json")
+      requestHolder.withHeaders(HeaderNames.ACCEPT -> "application/json") returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
       requestHolder.get() returns Future.successful(response)
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
@@ -66,9 +67,8 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       await(provider.authenticate()) must throwAn[AuthenticationException].like {
         case e => e.getMessage must equalTo(SpecifiedProfileError.format(
           provider.id,
-          "An active access token must be used to query information about the current user.",
-          "OAuthException",
-          2500))
+          "Bad credentials",
+          Some("http://developer.github.com/v3")))
       }
     }
 
@@ -78,9 +78,8 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       val requestHolder = mock[WS.WSRequestHolder]
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      response.body returns AccessToken + "=my.access.token&" + Expires + "=1"
-      response.json throws new RuntimeException("")
-      requestHolder.withHeaders(any) returns requestHolder
+      response.json returns oAuthInfo thenThrows new RuntimeException("")
+      requestHolder.withHeaders(HeaderNames.ACCEPT -> "application/json") returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
       requestHolder.get() returns Future.successful(response)
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
@@ -98,9 +97,8 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       val requestHolder = mock[WS.WSRequestHolder]
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      response.body returns AccessToken + "=my.access.token&" + Expires + "=1"
-      response.json returns Helper.loadJson("providers/oauth2/facebook.success.json")
-      requestHolder.withHeaders(any) returns requestHolder
+      response.json returns oAuthInfo thenReturns Helper.loadJson("providers/oauth2/github.success.json")
+      requestHolder.withHeaders(HeaderNames.ACCEPT -> "application/json") returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
       requestHolder.get() returns Future.successful(response)
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
@@ -110,60 +108,12 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       await(provider.authenticate()) must beRight.like {
         case p =>
           p must be equalTo new SocialProfile(
-            loginInfo = LoginInfo(provider.id, "134405962728980"),
-            firstName = Some("Apollonia"),
-            lastName = Some("Vanova"),
+            loginInfo = LoginInfo(provider.id, "1"),
             fullName = Some("Apollonia Vanova"),
             email = Some("apollonia.vanova@watchmen.com"),
-            avatarURL = Some("https://fbcdn-sphotos-g-a.akamaihd.net/hphotos-ak-ash2/t1/36245_155530314499277_2350717_n.jpg?lvh=1")
+            avatarURL = Some("https://github.com/images/error/apollonia_vanova.gif")
           )
       }
-    }
-
-    "store the auth info with expires value if the authentication was successful" in new WithApplication with Context {
-      val cacheID = UUID.randomUUID().toString
-      val state = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
-      implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      response.body returns AccessToken + "=my.access.token&" + Expires + "=1"
-      response.json returns Helper.loadJson("providers/oauth2/facebook.success.json")
-      requestHolder.withHeaders(any) returns requestHolder
-      requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
-      requestHolder.get() returns Future.successful(response)
-      cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
-      httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      httpLayer.url(API.format("my.access.token")) returns requestHolder
-
-      await(provider.authenticate())
-      there was one(authInfoService).save[OAuth2Info](LoginInfo(provider.id, "134405962728980"), OAuth2Info(
-        accessToken = "my.access.token",
-        tokenType = None,
-        expiresIn = Some(1),
-        refreshToken = None))
-    }
-
-    "store the auth info without expires value if the authentication was successful" in new WithApplication with Context {
-      val cacheID = UUID.randomUUID().toString
-      val state = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
-      implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      response.body returns AccessToken + "=my.access.token"
-      response.json returns Helper.loadJson("providers/oauth2/facebook.success.json")
-      requestHolder.withHeaders(any) returns requestHolder
-      requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
-      requestHolder.get() returns Future.successful(response)
-      cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
-      httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      httpLayer.url(API.format("my.access.token")) returns requestHolder
-
-      await(provider.authenticate())
-      there was one(authInfoService).save[OAuth2Info](LoginInfo(provider.id, "134405962728980"), OAuth2Info(
-        accessToken = "my.access.token",
-        tokenType = None,
-        expiresIn = None,
-        refreshToken = None))
     }
   }
 
@@ -183,16 +133,26 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
      * The OAuth2 settings.
      */
     lazy val oAuthSettings = OAuth2Settings(
-      authorizationURL = "https://graph.facebook.com/oauth/authorize",
-      accessTokenURL = "https://graph.facebook.com/oauth/access_token",
+      authorizationURL = "https://github.com/login/oauth/authorize",
+      accessTokenURL = "https://github.com/login/oauth/access_token",
       redirectURL = "https://www.mohiva.com",
       clientID = "my.client.id",
       clientSecret = "my.client.secret",
-      scope = Some("email"))
+      scope = Some("repo,gist"))
+
+    /**
+     * The OAuth2 info returned by GutHub
+     *
+     * @see https://developer.github.com/v3/oauth/#response
+     */
+    override lazy val oAuthInfo: JsValue = Json.obj(
+      "access_token" -> "my.access.token",
+      "scope" -> "repo,gist",
+      "token_type" -> "bearer")
 
     /**
      * The provider to test.
      */
-    lazy val provider = new FacebookProvider(authInfoService, cacheLayer, httpLayer, oAuthSettings)
+    lazy val provider = new GitHubProvider(authInfoService, cacheLayer, httpLayer, oAuthSettings)
   }
 }

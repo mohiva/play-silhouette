@@ -39,6 +39,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
       response.json returns Json.obj()
+      requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
@@ -55,6 +56,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
       response.json returns oAuthInfo thenReturns Helper.loadJson("providers/oauth2/foursquare.error.json")
+      requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
       requestHolder.get() returns Future.successful(response)
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
@@ -77,6 +79,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
       response.json returns oAuthInfo thenThrows new RuntimeException("")
+      requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
       requestHolder.get() returns Future.successful(response)
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
@@ -95,6 +98,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
       response.json returns oAuthInfo thenReturns Helper.loadJson("providers/oauth2/foursquare.success.json")
+      requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
       requestHolder.get() returns Future.successful(response)
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
@@ -120,6 +124,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
       response.json returns oAuthInfo thenReturns Helper.loadJson("providers/oauth2/foursquare.deprecated.json")
+      requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
       requestHolder.get() returns Future.successful(response)
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
@@ -153,6 +158,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       )
 
       response.json returns oAuthInfo thenReturns Helper.loadJson("providers/oauth2/foursquare.success.json")
+      requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
       requestHolder.get() returns Future.successful(response)
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
@@ -186,6 +192,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       )
 
       response.json returns oAuthInfo thenReturns Helper.loadJson("providers/oauth2/foursquare.success.json")
+      requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
       requestHolder.get() returns Future.successful(response)
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
