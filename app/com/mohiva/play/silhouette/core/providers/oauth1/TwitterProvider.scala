@@ -69,7 +69,7 @@ class TwitterProvider(
 
           throw new AuthenticationException(SpecifiedProfileError.format(id, code, message))
         case _ =>
-          val userId = (json \ ID).as[Int]
+          val userId = (json \ ID).as[Long]
           val name = (json \ Name).asOpt[String]
           val avatarURL = (json \ ProfileImage).asOpt[String]
 

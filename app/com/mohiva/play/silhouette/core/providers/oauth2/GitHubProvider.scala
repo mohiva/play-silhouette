@@ -76,7 +76,7 @@ class GitHubProvider(
 
           throw new AuthenticationException(SpecifiedProfileError.format(id, msg, docURL))
         case _ =>
-          val userID = (json \ ID).as[Int]
+          val userID = (json \ ID).as[Long]
           val fullName = (json \ Name).asOpt[String]
           val avatarUrl = (json \ AvatarURL).asOpt[String]
           val email = (json \ Email).asOpt[String].filter(!_.isEmpty)
