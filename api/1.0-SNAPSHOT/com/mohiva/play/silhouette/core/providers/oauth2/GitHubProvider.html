@@ -40,7 +40,8 @@
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A GitHub OAuth2 Provider.
-</p></div><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>https://developer.github.com/v3/oauth/
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="../OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Provider">OAuth2Provider</a>, <a href="../../Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a>, <a href="../SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider">SocialProvider</a>[<a href="../OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Info">OAuth2Info</a>], <a href="../../Provider.html" class="extype" name="com.mohiva.play.silhouette.core.Provider">Provider</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -92,8 +93,7 @@
         <span class="name">GitHubProvider</span><span class="params">(<span name="authInfoService">authInfoService: <a href="../../services/AuthInfoService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfoService">AuthInfoService</a></span>, <span name="cacheLayer">cacheLayer: <a href="../../utils/CacheLayer.html" class="extype" name="com.mohiva.play.silhouette.core.utils.CacheLayer">CacheLayer</a></span>, <span name="httpLayer">httpLayer: <a href="../../utils/HTTPLayer.html" class="extype" name="com.mohiva.play.silhouette.core.utils.HTTPLayer">HTTPLayer</a></span>, <span name="settings">settings: <a href="../OAuth2Settings.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Settings">OAuth2Settings</a></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">authInfoService</dt><dd class="cmt"><p>The auth info service.</p></dd><dt class="param">cacheLayer</dt><dd class="cmt"><p>The cache layer implementation.</p></dd><dt class="param">httpLayer</dt><dd class="cmt"><p>The HTTP layer implementation.</p></dd><dt class="param">settings</dt><dd class="cmt"><p>The provider settings.
-</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">authInfoService</dt><dd class="cmt"><p>The auth info service.</p></dd><dt class="param">cacheLayer</dt><dd class="cmt"><p>The cache layer implementation.</p></dd><dt class="param">httpLayer</dt><dd class="cmt"><p>The HTTP layer implementation.</p></dd><dt class="param">settings</dt><dd class="cmt"><p>The provider settings.</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -211,7 +211,7 @@ browser (e.g.: in the case of OAuth where the user needs to be redirected to
 the service provider).
 </p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The social profile.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider">SocialProvider</a></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.providers.oauth2.GitHubProvider#buildInfo" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#buildInfo" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="buildInfo(response:play.api.libs.ws.Response):com.mohiva.play.silhouette.core.providers.OAuth2Info"></a>
       <a id="buildInfo(Response):OAuth2Info"></a>
       <h4 class="signature">
@@ -225,7 +225,7 @@ the service provider).
       </h4>
       <p class="shortcomment cmt">Builds the OAuth2 info.</p><div class="fullcomment"><div class="comment cmt"><p>Builds the OAuth2 info.
 </p></div><dl class="paramcmts block"><dt class="param">response</dt><dd class="cmt"><p>The response from the provider.</p></dd><dt>returns</dt><dd class="cmt"><p>The OAuth2 info.
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.core.providers.oauth2.GitHubProvider">GitHubProvider</a> → <a href="../OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Provider">OAuth2Provider</a></dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Provider">OAuth2Provider</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.providers.oauth2.GitHubProvider#buildProfile" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="buildProfile(authInfo:com.mohiva.play.silhouette.core.providers.OAuth2Info):scala.concurrent.Future[com.mohiva.play.silhouette.core.providers.SocialProfile]"></a>
       <a id="buildProfile(OAuth2Info):Future[SocialProfile]"></a>
@@ -361,6 +361,22 @@ the service provider).
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.oauth2.GitHubProvider#headers" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="headers:Seq[(String,String)]"></a>
+      <a id="headers:Seq[(String,String)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">headers</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.collection.Seq" class="extype" target="_top">Seq</a>[(<span class="extype" name="java.lang.String">String</span>, <span class="extype" name="java.lang.String">String</span>)]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">A list with headers to send to the API.</p><div class="fullcomment"><div class="comment cmt"><p>A list with headers to send to the API.</p><p>Without defining the accept header, the response will take the following form:
+access_token=e72e16c7e42f292c6912e7710c838347ae178b4a&amp;scope=user%2Cgist&amp;token_type=bearer
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.core.providers.oauth2.GitHubProvider">GitHubProvider</a> → <a href="../OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Provider">OAuth2Provider</a></dd><dt>See also</dt><dd><span class="cmt"><p>https://developer.github.com/v3/oauth/#response
+</p></span></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.providers.oauth2.GitHubProvider#id" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="id:String"></a>
       <a id="id:String"></a>
