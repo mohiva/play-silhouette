@@ -19,7 +19,7 @@
  */
 package com.mohiva.play.silhouette.core.providers.oauth2
 
-import play.api.libs.ws.Response
+import play.api.http.HeaderNames
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
@@ -27,7 +27,6 @@ import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
 import com.mohiva.play.silhouette.core.services.AuthInfoService
 import GitHubProvider._
-import OAuth2Provider._
 
 /**
  * A GitHub OAuth2 Provider.
@@ -36,6 +35,7 @@ import OAuth2Provider._
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
  * @param settings The provider settings.
+ * @see https://developer.github.com/v3/oauth/
  */
 class GitHubProvider(
   protected val authInfoService: AuthInfoService,
@@ -43,6 +43,16 @@ class GitHubProvider(
   httpLayer: HTTPLayer,
   settings: OAuth2Settings)
     extends OAuth2Provider(settings, cacheLayer, httpLayer) {
+
+  /**
+   * A list with headers to send to the API.
+   *
+   * Without defining the accept header, the response will take the following form:
+   * access_token=e72e16c7e42f292c6912e7710c838347ae178b4a&scope=user%2Cgist&token_type=bearer
+   *
+   * @see https://developer.github.com/v3/oauth/#response
+   */
+  override protected val headers = Seq(HeaderNames.ACCEPT -> "application/json")
 
   /**
    * Gets the provider ID.
@@ -61,7 +71,10 @@ class GitHubProvider(
     httpLayer.url(API.format(authInfo.accessToken)).get().map { response =>
       val json = response.json
       (json \ Message).asOpt[String] match {
-        case Some(msg) => throw new AuthenticationException(SpecifiedProfileError.format(id, msg))
+        case Some(msg) =>
+          val docURL = (json \ DocURL).asOpt[String]
+
+          throw new AuthenticationException(SpecifiedProfileError.format(id, msg, docURL))
         case _ =>
           val userID = (json \ ID).as[Int]
           val fullName = (json \ Name).asOpt[String]
@@ -74,28 +87,9 @@ class GitHubProvider(
             avatarURL = avatarUrl,
             email = email)
       }
-    }.recover { case e => throw new AuthenticationException(UnspecifiedProfileError.format(id), e) }
-  }
-
-  /**
-   * Builds the OAuth2 info.
-   *
-   * @param response The response from the provider.
-   * @return The OAuth2 info.
-   */
-  override protected def buildInfo(response: Response): OAuth2Info = {
-    val values: Map[String, String] = response.body.split("&").toList
-      .map(_.split("=")).withFilter(_.size == 2)
-      .map(r => (r(0), r(1)))(collection.breakOut)
-
-    values.get(AccessToken) match {
-      case Some(accessToken) => OAuth2Info(
-        accessToken,
-        values.get(TokenType),
-        values.get(ExpiresIn).map(_.toInt),
-        values.get(RefreshToken)
-      )
-      case _ => throw new AuthenticationException(MissingAccessToken.format(id))
+    }.recover {
+      case e if !e.isInstanceOf[AuthenticationException] =>
+        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
     }
   }
 }
@@ -109,8 +103,7 @@ object GitHubProvider {
    * The error messages.
    */
   val UnspecifiedProfileError = "[Silhouette][%s] Error retrieving profile information"
-  val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error message: %s"
-  val MissingAccessToken = "[Silhouette][%s] Did not get access token"
+  val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error message: %s, doc URL: %s"
 
   /**
    * The Foursquare constants.
@@ -118,6 +111,7 @@ object GitHubProvider {
   val GitHub = "github"
   val API = "https://api.github.com/user?access_token=%s"
   val Message = "message"
+  val DocURL = "documentation_url"
   val ID = "id"
   val Name = "name"
   val AvatarURL = "avatar_url"

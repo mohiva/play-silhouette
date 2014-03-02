@@ -142,6 +142,8 @@ abstract class OAuth2ProviderSpec extends PlaySpecification with Mockito with Js
         RedirectURI -> Seq(c.oAuthSettings.redirectURL)) ++ c.oAuthSettings.accessTokenParams.mapValues(Seq(_))
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
 
+      requestHolder.withHeaders(any) returns requestHolder
+
       // We must use this neat trick here because it isn't possible to check the post call with a verification,
       // because of the implicit params needed for the post call. On the other hand we can test it in the abstract
       // spec, because we throw an exception in both cases which stops the test once the post method was called.
