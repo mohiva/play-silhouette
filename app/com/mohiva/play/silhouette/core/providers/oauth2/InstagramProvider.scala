@@ -26,6 +26,7 @@ import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
 import com.mohiva.play.silhouette.core.services.AuthInfoService
 import InstagramProvider._
+import OAuth2Provider._
 
 /**
  * An Instagram OAuth2 provider.
@@ -34,6 +35,9 @@ import InstagramProvider._
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
  * @param settings The provider settings.
+ * @see http://instagram.com/developer/authentication/
+ * @see http://instagram.com/developer/endpoints/
+ *
  */
 class InstagramProvider(
   protected val authInfoService: AuthInfoService,
@@ -58,19 +62,26 @@ class InstagramProvider(
   protected def buildProfile(authInfo: OAuth2Info): Future[SocialProfile] = {
     httpLayer.url(API.format(authInfo.accessToken)).get().map { response =>
       val json = response.json
-      (json \ Response \ User).asOpt[String] match {
-        case Some(msg) => throw new AuthenticationException(SpecifiedProfileError.format(id, msg))
+      (json \ Meta \ Code).asOpt[Int] match {
+        case Some(code) if code != 200 =>
+          val errorType = (json \ Meta \ ErrorType).asOpt[String]
+          val errorMsg = (json \ Meta \ ErrorMsg).asOpt[String]
+
+          throw new AuthenticationException(SpecifiedProfileError.format(id, code, errorType, errorMsg))
         case _ =>
-          val userID = (json \ Date \ ID).as[String]
-          val fullName = (json \ Date \ FullName).asOpt[String]
-          val avatarURL = (json \ Date \ ProfilePic).asOpt[String]
+          val userID = (json \ Data \ ID).as[String]
+          val fullName = (json \ Data \ FullName).asOpt[String]
+          val avatarURL = (json \ Data \ ProfilePic).asOpt[String]
 
           SocialProfile(
             loginInfo = LoginInfo(id, userID),
             fullName = fullName,
             avatarURL = avatarURL)
       }
-    }.recover { case e => throw new AuthenticationException(UnspecifiedProfileError.format(id), e) }
+    }.recover {
+      case e if !e.isInstanceOf[AuthenticationException] =>
+        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
+    }
   }
 }
 
@@ -83,16 +94,18 @@ object InstagramProvider {
    * The error messages.
    */
   val UnspecifiedProfileError = "[Silhouette][%s] Error retrieving profile information"
-  val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error message: %s"
+  val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error code: %s, type: %s, message: %s"
 
   /**
    * The Instagram constants.
    */
   val Instagram = "instagram"
   val API = "https://api.instagram.com/v1/users/self?access_token=%s"
-  val Response = "response"
+  val Meta = "meta"
+  val ErrorType = "error_type"
+  val ErrorMsg = "error_message"
   val User = "user"
-  val Date = "data"
+  val Data = "data"
   val ID = "id"
   val FullName = "full_name"
   val ProfilePic = "profile_picture"
