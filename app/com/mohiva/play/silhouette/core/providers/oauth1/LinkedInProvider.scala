@@ -20,10 +20,9 @@
 package com.mohiva.play.silhouette.core.providers.oauth1
 
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
-import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.providers._
+import com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile._
 import com.mohiva.play.silhouette.core.services.AuthInfoService
 import LinkedInProvider._
 
@@ -35,8 +34,6 @@ import LinkedInProvider._
  * @param httpLayer The HTTP layer implementation.
  * @param oAuth1Service The OAuth1 service implementation.
  * @param auth1Settings The OAuth1 provider settings.
- *
- * @see https://developer.linkedin.com/documents/inapiprofile
  */
 class LinkedInProvider(
   protected val authInfoService: AuthInfoService,
@@ -60,36 +57,7 @@ class LinkedInProvider(
    * @return The social profile.
    */
   protected def buildProfile(authInfo: OAuth1Info): Future[SocialProfile] = {
-    httpLayer.url(API).sign(oAuth1Service.sign(authInfo)).get().map { response =>
-      val json = response.json
-      (json \ ErrorCode).asOpt[Int] match {
-        case Some(error) =>
-          val message = (json \ Message).asOpt[String]
-          val requestId = (json \ RequestId).asOpt[String]
-          val status = (json \ Status).asOpt[Int]
-          val timestamp = (json \ Timestamp).asOpt[Long]
-
-          throw new AuthenticationException(SpecifiedProfileError.format(id, error, message, requestId, status, timestamp))
-        case _ =>
-          val userID = (json \ ID).as[String]
-          val firstName = (json \ FirstName).asOpt[String]
-          val lastName = (json \ LastName).asOpt[String]
-          val fullName = (json \ FormattedName).asOpt[String]
-          val avatarURL = (json \ PictureUrl).asOpt[String]
-          val email = (json \ EmailAddress).asOpt[String]
-
-          SocialProfile(
-            loginInfo = LoginInfo(id, userID),
-            firstName = firstName,
-            lastName = lastName,
-            fullName = fullName,
-            avatarURL = avatarURL,
-            email = email)
-      }
-    }.recover {
-      case e if !e.isInstanceOf[AuthenticationException] =>
-        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
-    }
+    build(httpLayer.url(API).sign(oAuth1Service.sign(authInfo)).get())
   }
 }
 
@@ -99,25 +67,7 @@ class LinkedInProvider(
 object LinkedInProvider {
 
   /**
-   * The error messages.
-   */
-  val UnspecifiedProfileError = "[Silhouette][%s] error retrieving profile information"
-  val SpecifiedProfileError = "[Silhouette][%s] error retrieving profile information. Error code: %s, message: %s, requestId: %s, status: %s, timestamp: %s"
-
-  /**
    * The LinkedIn constants.
    */
-  val LinkedIn = "linkedin"
-  val API = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,formatted-name,picture-url,email-address)?format=json"
-  val ErrorCode = "errorCode"
-  val Message = "message"
-  val RequestId = "requestId"
-  val Status = "status"
-  val Timestamp = "timestamp"
-  val ID = "id"
-  val FirstName = "firstName"
-  val LastName = "lastName"
-  val FormattedName = "formattedName"
-  val PictureUrl = "pictureUrl"
-  val EmailAddress = "emailAddress"
+  val API = BaseAPI
 }

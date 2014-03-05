@@ -20,10 +20,9 @@
 package com.mohiva.play.silhouette.core.providers.oauth2
 
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
-import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
+import com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile._
 import com.mohiva.play.silhouette.core.services.AuthInfoService
 import LinkedInProvider._
 
@@ -56,30 +55,7 @@ class LinkedInProvider(
    * @return The social profile.
    */
   protected def buildProfile(authInfo: OAuth2Info): Future[SocialProfile] = {
-    httpLayer.url(API.format(authInfo.accessToken)).get().map { response =>
-      val json = response.json
-      (json \ ErrorCode).asOpt[Int] match {
-        case Some(error) =>
-          val message = (json \ Message).asOpt[String]
-          val requestID = (json \ RequestId).asOpt[String]
-          val timestamp = (json \ Timestamp).asOpt[String]
-
-          throw new AuthenticationException(SpecifiedProfileError.format(error, message, requestID, timestamp))
-        case _ =>
-          val userID = (json \ ID).as[String]
-          val firstName = (json \ FirstName).asOpt[String]
-          val lastName = (json \ LastName).asOpt[String]
-          val fullName = (json \ FormattedName).asOpt[String]
-          val avatarURL = (json \ PictureUrl).asOpt[String]
-
-          SocialProfile(
-            loginInfo = LoginInfo(id, userID),
-            firstName = firstName,
-            lastName = lastName,
-            fullName = fullName,
-            avatarURL = avatarURL)
-      }
-    }.recover { case e => throw new AuthenticationException(UnspecifiedProfileError.format(id), e) }
+    build(httpLayer.url(API.format(authInfo.accessToken)).get())
   }
 }
 
@@ -89,23 +65,7 @@ class LinkedInProvider(
 object LinkedInProvider {
 
   /**
-   * The error messages.
-   */
-  val UnspecifiedProfileError = "[Silhouette][%s] Error retrieving profile information"
-  val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error code: %s, requestId: %s, message: %s, timestamp: %s"
-
-  /**
    * The LinkedIn constants.
    */
-  val LinkedIn = "linkedin"
-  val API = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,formatted-name,picture-url)?format=json&oauth2_access_token=%s"
-  val ErrorCode = "errorCode"
-  val Message = "message"
-  val RequestId = "requestId"
-  val Timestamp = "timestamp"
-  val ID = "id"
-  val FirstName = "firstName"
-  val LastName = "lastName"
-  val FormattedName = "formattedName"
-  val PictureUrl = "pictureUrl"
+  val API = BaseAPI + "&oauth2_access_token=%s"
 }
