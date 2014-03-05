@@ -26,3 +26,5 @@ set -o nounset -o errexit
 echo ""
 echo "Uploading data to Coveralls"
 scripts/sbt -v coveralls
+
+# Force build
