@@ -22,9 +22,10 @@ import play.api.test.{ FakeRequest, WithApplication }
 import scala.concurrent.Future
 import scala.util.Success
 import com.mohiva.play.silhouette.core.providers._
+import com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile._
 import com.mohiva.play.silhouette.core.{ LoginInfo, AuthenticationException }
-import OAuth1Provider._
 import LinkedInProvider._
+import OAuth1Provider._
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.core.providers.oauth1.LinkedInProvider]] class.
@@ -41,7 +42,7 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
       oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(Success(oAuthInfo))
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
-      response.json returns Helper.loadJson("providers/oauth1/LinkedIn.error.json")
+      response.json returns Helper.loadJson("providers/oauth1/linkedin.error.json")
       httpLayer.url(API) returns requestHolder
 
       await(provider.authenticate()) must throwAn[AuthenticationException].like {
@@ -85,7 +86,7 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
       oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(Success(oAuthInfo))
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
-      response.json returns Helper.loadJson("providers/oauth1/LinkedIn.success.json")
+      response.json returns Helper.loadJson("providers/oauth1/linkedin.success.json")
       httpLayer.url(API) returns requestHolder
 
       await(provider.authenticate()) must beRight.like {
@@ -112,7 +113,7 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
       oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(Success(oAuthInfo))
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
-      response.json returns Helper.loadJson("providers/oauth1/LinkedIn.success.json")
+      response.json returns Helper.loadJson("providers/oauth1/linkedin.success.json")
       httpLayer.url(API) returns requestHolder
 
       await(provider.authenticate())
