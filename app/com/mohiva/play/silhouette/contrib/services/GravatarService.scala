@@ -19,7 +19,7 @@
  */
 package com.mohiva.play.silhouette.contrib.services
 
-import play.api.Logger
+import com.mohiva.play.silhouette.core.Logger
 import java.security.MessageDigest
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -32,7 +32,7 @@ import GravatarService._
  *
  * @param httpLayer The HTTP layer implementation.
  */
-class GravatarService(httpLayer: HTTPLayer) extends AvatarService {
+class GravatarService(httpLayer: HTTPLayer) extends AvatarService with Logger {
 
   /**
    * Retrieves the URL for the given email address.
@@ -49,7 +49,7 @@ class GravatarService(httpLayer: HTTPLayer) extends AvatarService {
           case _ => None
         }).recover {
           case e =>
-            Logger.error("[Silhouette] Error invoking gravatar", e)
+            logger.error("[Silhouette] Error invoking gravatar", e)
             None
         }
       case None => Future.successful(None)
