@@ -35,14 +35,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">GravatarService</span><span class="result"> extends <a href="../../core/services/AvatarService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AvatarService">AvatarService</a></span>
+        <span class="name">GravatarService</span><span class="result"> extends <a href="../../core/services/AvatarService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AvatarService">AvatarService</a> with <a href="../../core/Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Retrieves avatar URLs from the Gravatar service.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../core/services/AvatarService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AvatarService">AvatarService</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../../core/Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a>, <a href="../../core/services/AvatarService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AvatarService">AvatarService</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -60,7 +60,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.contrib.services.GravatarService"><span>GravatarService</span></li><li class="in" name="com.mohiva.play.silhouette.core.services.AvatarService"><span>AvatarService</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.contrib.services.GravatarService"><span>GravatarService</span></li><li class="in" name="com.mohiva.play.silhouette.core.Logger"><span>Logger</span></li><li class="in" name="com.mohiva.play.silhouette.core.services.AvatarService"><span>AvatarService</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -284,6 +284,20 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.Logger#logger" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logger:play.api.Logger"></a>
+      <a id="logger:Logger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logger</span><span class="result">: <span class="extype" name="play.api.Logger">Logger</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">A named logger instance.</p><div class="fullcomment"><div class="comment cmt"><p>A named logger instance.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../core/Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -430,7 +444,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.mohiva.play.silhouette.core.services.AvatarService">
+        <div class="parent" name="com.mohiva.play.silhouette.core.Logger">
+              <h3>Inherited from <a href="../../core/Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></h3>
+            </div><div class="parent" name="com.mohiva.play.silhouette.core.services.AvatarService">
               <h3>Inherited from <a href="../../core/services/AvatarService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AvatarService">AvatarService</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>

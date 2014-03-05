@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>LinkedInProvider - com.mohiva.play.silhouette.core.providers.oauth2.LinkedInProvider</title>
-          <meta name="description" content="LinkedInProvider - com.mohiva.play.silhouette.core.providers.oauth2.LinkedInProvider" />
-          <meta name="keywords" content="LinkedInProvider com.mohiva.play.silhouette.core.providers.oauth2.LinkedInProvider" />
+          <title>LinkedInProfile - com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile</title>
+          <meta name="description" content="LinkedInProfile - com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile" />
+          <meta name="keywords" content="LinkedInProfile com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../../index.html';
-            var hash = 'com.mohiva.play.silhouette.core.providers.oauth2.LinkedInProvider$';
+            var hash = 'com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile$';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -24,9 +24,9 @@
         </head>
         <body class="value">
       <div id="definition">
-        <a href="LinkedInProvider.html" title="Go to companion"><img src="../../../../../../../lib/object_to_class_big.png" /></a>
-        <p id="owner"><a href="../../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette.core">core</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.core.providers">providers</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.core.providers.oauth2">oauth2</a></p>
-        <h1><a href="LinkedInProvider.html" title="Go to companion">LinkedInProvider</a></h1>
+        <img src="../../../../../../../lib/object_big.png" />
+        <p id="owner"><a href="../../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette.core">core</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.core.providers">providers</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.core.providers.helpers">helpers</a></p>
+        <h1>LinkedInProfile</h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -35,12 +35,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">LinkedInProvider</span>
+        <span class="name">LinkedInProfile</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The companion object.
-</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Parses the JSON response for the LinkedIn OAuth1 and OAuth2 API.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>https://developer.linkedin.com/documents/inapiprofile
+</p></span><span class="cmt"><p>https://developer.linkedin.com/documents/authentication</p></span><span class="cmt"><p>https://developer.linkedin.com/documents/oauth-10a</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -60,7 +61,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.core.providers.oauth2.LinkedInProvider"><span>LinkedInProvider</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile"><span>LinkedInProfile</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -151,19 +152,201 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.providers.oauth2.LinkedInProvider#API" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="API:String"></a>
-      <a id="API:String"></a>
+    </li><li name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile#BaseAPI" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BaseAPI:String"></a>
+      <a id="BaseAPI:String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">API</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">BaseAPI</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile#EmailAddress" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EmailAddress:String"></a>
+      <a id="EmailAddress:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">EmailAddress</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile#ErrorCode" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ErrorCode:String"></a>
+      <a id="ErrorCode:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ErrorCode</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile#FirstName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FirstName:String"></a>
+      <a id="FirstName:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">FirstName</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile#FormattedName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FormattedName:String"></a>
+      <a id="FormattedName:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">FormattedName</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile#ID" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ID:String"></a>
+      <a id="ID:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ID</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile#LastName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LastName:String"></a>
+      <a id="LastName:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">LastName</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile#LinkedIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LinkedIn:String"></a>
+      <a id="LinkedIn:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">LinkedIn</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">The LinkedIn constants.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile#Message" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Message:String"></a>
+      <a id="Message:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Message</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile#PictureUrl" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PictureUrl:String"></a>
+      <a id="PictureUrl:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">PictureUrl</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile#RequestId" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RequestId:String"></a>
+      <a id="RequestId:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">RequestId</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile#SpecifiedProfileError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SpecifiedProfileError:String"></a>
+      <a id="SpecifiedProfileError:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">SpecifiedProfileError</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile#Status" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Status:String"></a>
+      <a id="Status:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Status</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile#Timestamp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Timestamp:String"></a>
+      <a id="Timestamp:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Timestamp</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile#UnspecifiedProfileError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UnspecifiedProfileError:String"></a>
+      <a id="UnspecifiedProfileError:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">UnspecifiedProfileError</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The error messages.</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -177,6 +360,21 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile#build" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="build(maybeResponse:scala.concurrent.Future[play.api.libs.ws.Response]):scala.concurrent.Future[com.mohiva.play.silhouette.core.providers.SocialProfile]"></a>
+      <a id="build(Future[Response]):Future[SocialProfile]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">build</span><span class="params">(<span name="maybeResponse">maybeResponse: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="play.api.libs.ws.Response">Response</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.2/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="../SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Builds the social profile from the JSON response.</p><div class="fullcomment"><div class="comment cmt"><p>Builds the social profile from the JSON response.
+</p></div><dl class="paramcmts block"><dt class="param">maybeResponse</dt><dd class="cmt"><p>The response from the provider.</p></dd><dt>returns</dt><dd class="cmt"><p>The social profile.
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
