@@ -44,7 +44,7 @@ trait TokenService[T <: Token] {
    * Retrieves an available token.
    *
    * @param id The token ID.
-   * @return The retrieved token or None if no token couldn't be retrieved for the given ID.
+   * @return The retrieved token or None if no token could be retrieved for the given ID.
    */
   def retrieve(id: String): Future[Option[T]]
 
