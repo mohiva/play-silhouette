@@ -1,6 +1,11 @@
 #!/bin/bash
 #
-# Builds the project in the continuous integration environment.
+# Uploads test coverage data to Coveralls.
+#
+# See https://github.com/scoverage/sbt-coveralls
+# and https://coveralls.io.
+#
+# This script is meant to be executed from a Travis CI build.
 #
 # Copyright 2014 Mohiva Organisation (license at mohiva dot com)
 #
@@ -19,17 +24,5 @@
 set -o nounset -o errexit
 
 echo ""
-echo "Compiling"
-scripts/sbt clean compile test:compile
-
-echo ""
-echo "Validating code formatting"
-scripts/validate-format
-
-echo ""
-echo "Testing and generating documentation"
-scripts/sbt -v scoverage:test doc
-
-echo ""
-echo "Build finished"
-echo ""
+echo "Uploading data to Coveralls"
+scripts/sbt -v coveralls
