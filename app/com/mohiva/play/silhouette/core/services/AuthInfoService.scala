@@ -32,7 +32,7 @@ trait AuthInfoService {
   /**
    * Saves auth info.
    *
-   * This method gets called when a user logs in(social auth) or registers. This is the change
+   * This method gets called when a user logs in (social auth) or registers. This is the change
    * to persist the auth info for a provider in the backing store. If the application supports
    * the concept of "merged identities", i.e., the same user being able to authenticate through
    * different providers, then make sure that the auth info for every linked login info gets
