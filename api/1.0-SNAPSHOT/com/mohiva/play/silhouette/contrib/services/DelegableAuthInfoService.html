@@ -355,7 +355,7 @@ object.
         <span class="name">save</span><span class="tparams">[<span name="T">T &lt;: <a href="../../core/services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../core/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.contrib.services.DelegableAuthInfoService.save.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.contrib.services.DelegableAuthInfoService.save.T">T</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Saves auth info.</p><div class="fullcomment"><div class="comment cmt"><p>Saves auth info.</p><p>This method gets called when a user logs in(social auth) or registers. This is the change
+      <p class="shortcomment cmt">Saves auth info.</p><div class="fullcomment"><div class="comment cmt"><p>Saves auth info.</p><p>This method gets called when a user logs in (social auth) or registers. This is the chance
 to persist the auth info for a provider in the backing store. If the application supports
 the concept of &quot;merged identities&quot;, i.e., the same user being able to authenticate through
 different providers, then make sure that the auth info for every linked login info gets
