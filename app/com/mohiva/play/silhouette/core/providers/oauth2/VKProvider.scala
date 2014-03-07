@@ -26,7 +26,7 @@ import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
 import com.mohiva.play.silhouette.core.services.AuthInfoService
-import VkProvider._
+import VKProvider._
 import OAuth2Provider._
 
 /**
@@ -36,8 +36,11 @@ import OAuth2Provider._
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
  * @param settings The provider settings.
+ * @see http://vk.com/dev/auth_sites
+ * @see http://vk.com/dev/api_requests
+ * @see http://vk.com/pages.php?o=-1&p=getProfiles
  */
-class VkProvider(
+class VKProvider(
   protected val authInfoService: AuthInfoService,
   cacheLayer: CacheLayer,
   httpLayer: HTTPLayer,
@@ -62,10 +65,10 @@ class VkProvider(
       val json = response.json
       (json \ Error).asOpt[JsObject] match {
         case Some(error) =>
-          val message = (error \ ErrorMessage).as[String]
           val errorCode = (error \ ErrorCode).as[Int]
+          val errorMsg = (error \ ErrorMsg).as[String]
 
-          throw new AuthenticationException(SpecifiedProfileError.format(errorCode, message))
+          throw new AuthenticationException(SpecifiedProfileError.format(id, errorCode, errorMsg))
         case _ =>
           val me = (json \ Response).apply(0)
           val userId = (me \ ID).as[Long]
@@ -79,14 +82,17 @@ class VkProvider(
             lastName = lastName,
             avatarURL = avatarURL)
       }
-    }.recover { case e => throw new AuthenticationException(UnspecifiedProfileError.format(id), e) }
+    }.recover {
+      case e if !e.isInstanceOf[AuthenticationException] =>
+        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
+    }
   }
 }
 
 /**
  * The companion object.
  */
-object VkProvider {
+object VKProvider {
 
   /**
    * The error messages.
@@ -99,11 +105,11 @@ object VkProvider {
    */
   val Vk = "vk"
   val API = "https://api.vk.com/method/getProfiles?fields=uid,first_name,last_name,photo&access_token=%s"
+  val ErrorCode = "error_code"
+  val ErrorMsg = "error_msg"
   val Response = "response"
   val ID = "uid"
   val FirstName = "first_name"
   val LastName = "last_name"
   val Photo = "photo"
-  val ErrorCode = "error_code"
-  val ErrorMessage = "error_msg"
 }
