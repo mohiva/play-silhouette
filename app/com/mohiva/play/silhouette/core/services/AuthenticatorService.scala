@@ -55,7 +55,7 @@ trait AuthenticatorService[T <: Authenticator] {
   def update(authenticator: T): Future[Option[T]]
 
   /**
-   * Manipulates the response and send authenticator specific data to the client.
+   * Manipulates the response and sends authenticator specific data to the client.
    *
    * @param authenticator The authenticator instance.
    * @param result The result to manipulate.
