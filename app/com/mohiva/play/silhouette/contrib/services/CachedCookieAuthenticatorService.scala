@@ -22,6 +22,7 @@ package com.mohiva.play.silhouette.contrib.services
 import org.joda.time.DateTime
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import play.Play
 import play.api.mvc.{ Cookie, SimpleResult, DiscardingCookie, RequestHeader }
 import com.mohiva.play.silhouette.core.{ Identity, Authenticator, LoginInfo }
 import com.mohiva.play.silhouette.core.utils.{ Clock, IDGenerator, CacheLayer }
@@ -181,7 +182,7 @@ case class CachedCookieAuthenticatorSettings(
   cookieName: String = "id",
   cookiePath: String = "/",
   cookieDomain: Option[String] = None,
-  secureCookie: Boolean = true,
+  secureCookie: Boolean = Play.isProd, // Default to sending only for HTTPS in production, but not for development and test.
   httpOnlyCookie: Boolean = true,
   cookieIdleTimeout: Int = 30 * 60,
   cookieAbsoluteTimeout: Option[Int] = Some(12 * 60 * 60),
