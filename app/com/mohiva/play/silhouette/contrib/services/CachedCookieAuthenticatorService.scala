@@ -22,7 +22,7 @@ package com.mohiva.play.silhouette.contrib.services
 import org.joda.time.DateTime
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import play.Play
+import play.api.Play
 import play.api.mvc.{ Cookie, SimpleResult, DiscardingCookie, RequestHeader }
 import com.mohiva.play.silhouette.core.{ Identity, Authenticator, LoginInfo }
 import com.mohiva.play.silhouette.core.utils.{ Clock, IDGenerator, CacheLayer }
