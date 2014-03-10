@@ -59,8 +59,7 @@ class CachedCookieAuthenticatorService(
         loginInfo = identity.loginInfo,
         lastUsedDate = now,
         expirationDate = expirationDate,
-        cookieIdleTimeout = settings.cookieIdleTimeout
-      )
+        cookieIdleTimeout = settings.cookieIdleTimeout)
       cacheLayer.set(authenticator.id, authenticator)
     }
   }
@@ -75,10 +74,9 @@ class CachedCookieAuthenticatorService(
     request.cookies.get(settings.cookieName) match {
       case Some(cookie) => cacheLayer.get[CachedCookieAuthenticator](cookie.value).map {
         case Some(a) if a.isValid => Some(a)
-        case Some(a) => {
+        case Some(a) =>
           cacheLayer.remove(a.id)
           None
-        }
         case None => None
       }
       case None => Future.successful(None)
@@ -109,8 +107,7 @@ class CachedCookieAuthenticatorService(
       path = settings.cookiePath,
       domain = settings.cookieDomain,
       secure = settings.secureCookie,
-      httpOnly = settings.httpOnlyCookie
-    ))
+      httpOnly = settings.httpOnlyCookie))
   }
 
   /**
@@ -124,8 +121,7 @@ class CachedCookieAuthenticatorService(
       name = settings.cookieName,
       path = settings.cookiePath,
       domain = settings.cookieDomain,
-      secure = settings.secureCookie
-    ))
+      secure = settings.secureCookie))
   }
 }
 
