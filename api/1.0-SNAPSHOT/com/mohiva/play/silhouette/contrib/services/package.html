@@ -93,7 +93,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="CachedCookieAuthenticatorSettings.html"><span class="name">CachedCookieAuthenticatorSettings</span></a><span class="params">(<span name="cookieName">cookieName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;id&quot;</span></span>, <span name="cookiePath">cookiePath: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;/&quot;</span></span>, <span name="cookieDomain">cookieDomain: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="secureCookie">secureCookie: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">play.Play.isProd()</span></span>, <span name="httpOnlyCookie">httpOnlyCookie: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">true</span></span>, <span name="cookieIdleTimeout">cookieIdleTimeout: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">30.*(60)</span></span>, <span name="cookieAbsoluteTimeout">cookieAbsoluteTimeout: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="defval" name="scala.Some.apply[Int](12.*(60).*(60))">...</span></span>, <span name="authenticatorExpiry">authenticatorExpiry: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">12.*(60).*(60)</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="CachedCookieAuthenticatorSettings.html"><span class="name">CachedCookieAuthenticatorSettings</span></a><span class="params">(<span name="cookieName">cookieName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;id&quot;</span></span>, <span name="cookiePath">cookiePath: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;/&quot;</span></span>, <span name="cookieDomain">cookieDomain: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="secureCookie">secureCookie: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="defval" name="play.api.Play.isProd(play.api.Play.current)">...</span></span>, <span name="httpOnlyCookie">httpOnlyCookie: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">true</span></span>, <span name="cookieIdleTimeout">cookieIdleTimeout: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">30.*(60)</span></span>, <span name="cookieAbsoluteTimeout">cookieAbsoluteTimeout: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="defval" name="scala.Some.apply[Int](12.*(60).*(60))">...</span></span>, <span name="authenticatorExpiry">authenticatorExpiry: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">12.*(60).*(60)</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       <p class="comment cmt">The settings for the cookie authenticator.</p>
@@ -124,6 +124,19 @@ appropriate DAO.</p>
       </span>
       </h4>
       <p class="comment cmt">Retrieves avatar URLs from the Gravatar service.</p>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.PlayOAuth1Service" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PlayOAuth1ServiceextendsOAuth1Service"></a>
+      <a id="PlayOAuth1Service:PlayOAuth1Service"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="PlayOAuth1Service.html"><span class="name">PlayOAuth1Service</span></a><span class="result"> extends <a href="../../core/providers/OAuth1Service.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Service">OAuth1Service</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The OAuth1 service implementation which wraps Play Framework's OAuth implementation.</p>
     </li></ol>
             </div>
 
@@ -154,6 +167,19 @@ appropriate DAO.</p>
       </span>
       <span class="symbol">
         <a href="GravatarService$.html"><span class="name">GravatarService</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.PlayOAuth1Service" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PlayOAuth1Service"></a>
+      <a id="PlayOAuth1Service:PlayOAuth1Service"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="PlayOAuth1Service$.html"><span class="name">PlayOAuth1Service</span></a>
       </span>
       </h4>
       <p class="comment cmt">The companion object.</p>
