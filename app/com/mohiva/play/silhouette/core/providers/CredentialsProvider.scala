@@ -19,6 +19,7 @@
  */
 package com.mohiva.play.silhouette.core.providers
 
+import scala.util.{ Failure, Success, Try }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
@@ -54,20 +55,23 @@ class CredentialsProvider(
    * Authenticates a user with its credentials.
    *
    * @param credentials The credentials to authenticate with.
-   * @return The login info if the authentication was successful, otherwise None.
+   * @return The login info if the authentication was successful, otherwise a failure.
    */
-  def authenticate(credentials: Credentials): Future[Option[LoginInfo]] = {
-    val loginInfo = new LoginInfo(id, credentials.identifier)
+  def authenticate(credentials: Credentials): Future[Try[LoginInfo]] = {
+    val loginInfo = LoginInfo(id, credentials.identifier)
     authInfoService.retrieve[PasswordInfo](loginInfo).map {
       case Some(authInfo) => passwordHasherList.find(_.id == authInfo.hasher) match {
         case Some(hasher) if hasher.matches(authInfo, credentials.password) =>
           if (hasher != passwordHasher) {
             authInfoService.save(loginInfo, passwordHasher.hash(credentials.password))
           }
-          Some(loginInfo)
-        case _ => None
+          Success(loginInfo)
+        case Some(hasher) => Failure(new AccessDeniedException(CredentialsProvider.InvalidPassword.format(id)))
+        case None => Failure(new AuthenticationException(CredentialsProvider.UnsupportedHasher.format(
+          id, authInfo.hasher, passwordHasherList.map(_.id).mkString(", ")
+        )))
       }
-      case None => None
+      case None => Failure(new AccessDeniedException(CredentialsProvider.UnknownCredentials))
     }
   }
 }
@@ -76,6 +80,17 @@ class CredentialsProvider(
  * The companion object.
  */
 object CredentialsProvider {
+
+  /**
+   * The error messages.
+   */
+  val UnknownCredentials = "[Silhouette][%s] Could not find auth info for given credentials"
+  val InvalidPassword = "[Silhouette][%s] Passwords does not match"
+  val UnsupportedHasher = "[Silhouette][%s] Stored hasher ID `%s` isn't contained in the list of supported hashers: %s"
+
+  /**
+   * The provider constants.
+   */
   val Credentials = "credentials"
 }
 
