@@ -21,10 +21,12 @@ package com.mohiva.play.silhouette.core.providers.oauth1
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{ Success, Failure, Try }
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.services.AuthInfoService
+import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import TwitterProvider._
 
 /**
@@ -58,29 +60,28 @@ class TwitterProvider(
    * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
-   * @return The social profile.
+   * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth1Info): Future[SocialProfile] = {
+  protected def buildProfile(authInfo: OAuth1Info): Future[Try[SocialProfile]] = {
     httpLayer.url(API).sign(oAuth1Service.sign(authInfo)).get().map { response =>
       val json = response.json
       (json \ Errors \\ Code).headOption.map(_.as[Int]) match {
         case Some(code) =>
           val message = (json \ Errors \\ Message).headOption.map(_.as[String])
 
-          throw new AuthenticationException(SpecifiedProfileError.format(id, code, message))
+          Failure(new AuthenticationException(SpecifiedProfileError.format(id, code, message)))
         case _ =>
           val userId = (json \ ID).as[Long]
           val name = (json \ Name).asOpt[String]
           val avatarURL = (json \ ProfileImage).asOpt[String]
 
-          SocialProfile(
+          Success(SocialProfile(
             loginInfo = LoginInfo(id, userId.toString),
             fullName = name,
-            avatarURL = avatarURL)
+            avatarURL = avatarURL))
       }
     }.recover {
-      case e if !e.isInstanceOf[AuthenticationException] =>
-        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
+      case e => Failure(new AuthenticationException(UnspecifiedProfileError.format(id), e))
     }
   }
 }

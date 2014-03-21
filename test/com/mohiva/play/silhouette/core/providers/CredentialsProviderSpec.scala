@@ -19,9 +19,10 @@ import scala.concurrent.Future
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.test.{ PlaySpecification, WithApplication }
-import com.mohiva.play.silhouette.core.{ AuthenticationException, AccessDeniedException, LoginInfo }
+import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.services.AuthInfoService
 import com.mohiva.play.silhouette.core.utils.PasswordHasher
+import com.mohiva.play.silhouette.core.exceptions._
 import CredentialsProvider._
 
 /**

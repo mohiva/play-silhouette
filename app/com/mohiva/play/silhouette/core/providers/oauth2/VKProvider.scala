@@ -22,10 +22,12 @@ package com.mohiva.play.silhouette.core.providers.oauth2
 import play.api.libs.json.JsObject
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{ Success, Failure, Try }
 import com.mohiva.play.silhouette.core._
+import com.mohiva.play.silhouette.core.services.AuthInfoService
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
-import com.mohiva.play.silhouette.core.services.AuthInfoService
+import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import VKProvider._
 import OAuth2Provider._
 
@@ -58,9 +60,9 @@ class VKProvider(
    * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
-   * @return The social profile.
+   * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[SocialProfile] = {
+  protected def buildProfile(authInfo: OAuth2Info): Future[Try[SocialProfile]] = {
     httpLayer.url(API.format(authInfo.accessToken)).get().map { response =>
       val json = response.json
       (json \ Error).asOpt[JsObject] match {
@@ -68,7 +70,7 @@ class VKProvider(
           val errorCode = (error \ ErrorCode).as[Int]
           val errorMsg = (error \ ErrorMsg).as[String]
 
-          throw new AuthenticationException(SpecifiedProfileError.format(id, errorCode, errorMsg))
+          Failure(new AuthenticationException(SpecifiedProfileError.format(id, errorCode, errorMsg)))
         case _ =>
           val me = (json \ Response).apply(0)
           val userId = (me \ ID).as[Long]
@@ -76,15 +78,14 @@ class VKProvider(
           val lastName = (me \ LastName).asOpt[String]
           val avatarURL = (me \ Photo).asOpt[String]
 
-          SocialProfile(
+          Success(SocialProfile(
             loginInfo = LoginInfo(id, userId.toString),
             firstName = firstName,
             lastName = lastName,
-            avatarURL = avatarURL)
+            avatarURL = avatarURL))
       }
     }.recover {
-      case e if !e.isInstanceOf[AuthenticationException] =>
-        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
+      case e => Failure(new AuthenticationException(UnspecifiedProfileError.format(id), e))
     }
   }
 }

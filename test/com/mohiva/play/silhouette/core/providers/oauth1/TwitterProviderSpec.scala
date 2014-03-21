@@ -21,10 +21,11 @@ import play.api.libs.ws.{ Response, WS }
 import play.api.test.{ FakeRequest, WithApplication }
 import scala.concurrent.Future
 import scala.util.Success
+import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.providers.OAuth1Settings
 import com.mohiva.play.silhouette.core.providers.OAuth1Info
-import com.mohiva.play.silhouette.core.{ LoginInfo, AuthenticationException }
+import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import OAuth1Provider._
 import TwitterProvider._
 
@@ -34,7 +35,7 @@ import TwitterProvider._
 class TwitterProviderSpec extends OAuth1ProviderSpec {
 
   "The authenticate method" should {
-    "throw AuthenticationException if API returns error" in new WithApplication with Context {
+    "fail with AuthenticationException if API returns error" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val requestHolder = mock[WS.WSRequestHolder]
       val response = mock[Response]
@@ -46,8 +47,8 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
       response.json returns Helper.loadJson("providers/oauth1/twitter.error.json")
       httpLayer.url(API) returns requestHolder
 
-      await(provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must equalTo(SpecifiedProfileError.format(
+      failedTry[AuthenticationException](provider.authenticate()) {
+        mustEqualTo(SpecifiedProfileError.format(
           provider.id,
           215,
           Some("Bad Authentication data")))
@@ -56,7 +57,7 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
       there was one(cacheLayer).remove(cacheID)
     }
 
-    "throw AuthenticationException if an unexpected error occurred" in new WithApplication with Context {
+    "fail with AuthenticationException if an unexpected error occurred" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val requestHolder = mock[WS.WSRequestHolder]
       val response = mock[Response]
@@ -68,8 +69,8 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
       response.json throws new RuntimeException("")
       httpLayer.url(API) returns requestHolder
 
-      await(provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must equalTo(UnspecifiedProfileError.format(provider.id))
+      failedTry[AuthenticationException](provider.authenticate()) {
+        mustEqualTo(UnspecifiedProfileError.format(provider.id))
       }
 
       there was one(cacheLayer).remove(cacheID)
@@ -87,7 +88,7 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
       response.json returns Helper.loadJson("providers/oauth1/twitter.success.json")
       httpLayer.url(API) returns requestHolder
 
-      await(provider.authenticate()) must beRight.like {
+      profile(provider.authenticate()) {
         case p =>
           p must be equalTo new SocialProfile(
             loginInfo = LoginInfo(provider.id, "6253282"),

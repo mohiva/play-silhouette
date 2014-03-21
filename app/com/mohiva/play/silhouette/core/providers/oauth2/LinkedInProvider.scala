@@ -19,6 +19,7 @@
  */
 package com.mohiva.play.silhouette.core.providers.oauth2
 
+import scala.util.Try
 import scala.concurrent.Future
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
@@ -52,9 +53,9 @@ class LinkedInProvider(
    * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
-   * @return The social profile.
+   * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[SocialProfile] = {
+  protected def buildProfile(authInfo: OAuth2Info): Future[Try[SocialProfile]] = {
     build(httpLayer.url(API.format(authInfo.accessToken)).get())
   }
 }

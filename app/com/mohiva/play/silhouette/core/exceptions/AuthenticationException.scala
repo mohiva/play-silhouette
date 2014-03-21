@@ -1,9 +1,5 @@
 /**
- * Original work: SecureSocial (https://github.com/jaliss/securesocial)
- * Copyright 2013 Jorge Aliss (jaliss at gmail dot com) - twitter: @jaliss
- *
- * Derivative work: Silhouette (https://github.com/mohiva/play-silhouette)
- * Modifications Copyright 2014 Mohiva Organisation (license at mohiva dot com)
+ * Copyright 2014 Mohiva Organisation (license at mohiva dot com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.core
+package com.mohiva.play.silhouette.core.exceptions
+
+import com.mohiva.play.silhouette.core.Logger
 
 /**
  * An exception thrown when there is an error in the authentication flow.
@@ -25,7 +23,11 @@ package com.mohiva.play.silhouette.core
  * @param msg The exception message.
  * @param cause The exception cause.
  */
-case class AuthenticationException(msg: String, cause: Throwable) extends Exception(msg, cause) with Logger {
+case class AuthenticationException(msg: String, cause: Throwable)
+  extends Exception(msg, cause)
+  with SilhouetteException
+    with Logger {
+
   logger.error(msg, cause)
 
   /**

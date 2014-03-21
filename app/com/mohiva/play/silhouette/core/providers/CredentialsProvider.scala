@@ -25,6 +25,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.services.{ AuthInfo, AuthInfoService }
 import com.mohiva.play.silhouette.core.utils.PasswordHasher
+import com.mohiva.play.silhouette.core.exceptions._
 
 /**
  * A provider for authenticating with credentials.

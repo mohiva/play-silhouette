@@ -21,10 +21,12 @@ package com.mohiva.play.silhouette.core.providers.oauth2
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{ Success, Failure, Try }
 import com.mohiva.play.silhouette.core._
+import com.mohiva.play.silhouette.core.services.AuthInfoService
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
-import com.mohiva.play.silhouette.core.services.AuthInfoService
+import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import FoursquareProvider._
 import OAuth2Provider._
 
@@ -57,9 +59,9 @@ class FoursquareProvider(
    * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
-   * @return The social profile.
+   * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[SocialProfile] = {
+  protected def buildProfile(authInfo: OAuth2Info): Future[Try[SocialProfile]] = {
     val version = settings.customProperties.getOrElse(APIVersion, DefaultAPIVersion)
     httpLayer.url(API.format(authInfo.accessToken, version)).get().map { response =>
       val json = response.json
@@ -68,7 +70,7 @@ class FoursquareProvider(
         case Some(code) if code != 200 =>
           val errorDetail = (json \ Meta \ ErrorDetail).asOpt[String]
 
-          throw new AuthenticationException(SpecifiedProfileError.format(id, code, errorType, errorDetail))
+          Failure(new AuthenticationException(SpecifiedProfileError.format(id, code, errorType, errorDetail)))
         case _ =>
           // Status code 200 and an existing errorType can only be a deprecated error
           // https://developer.foursquare.com/overview/responses
@@ -84,16 +86,15 @@ class FoursquareProvider(
           val email = (json \ Response \ User \ Contact \ Email).asOpt[String].filter(!_.isEmpty)
           val resolution = settings.customProperties.getOrElse(AvatarResolution, DefaultAvatarResolution)
 
-          SocialProfile(
+          Success(SocialProfile(
             loginInfo = LoginInfo(id, userID),
             firstName = firstName,
             lastName = lastName,
             avatarURL = for (prefix <- avatarURLPart1; postfix <- avatarURLPart2) yield prefix + resolution + postfix,
-            email = email)
+            email = email))
       }
     }.recover {
-      case e if !e.isInstanceOf[AuthenticationException] =>
-        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
+      case e => Failure(new AuthenticationException(UnspecifiedProfileError.format(id), e))
     }
   }
 }

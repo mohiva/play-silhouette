@@ -21,9 +21,10 @@ import play.api.libs.ws.{ Response, WS }
 import play.api.test.{ FakeRequest, WithApplication }
 import scala.concurrent.Future
 import scala.util.Success
+import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile._
-import com.mohiva.play.silhouette.core.{ LoginInfo, AuthenticationException }
+import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import LinkedInProvider._
 import OAuth1Provider._
 
@@ -33,7 +34,7 @@ import OAuth1Provider._
 class LinkedInProviderSpec extends OAuth1ProviderSpec {
 
   "The authenticate method" should {
-    "throw AuthenticationException if API returns error" in new WithApplication with Context {
+    "fail with AuthenticationException if API returns error" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val requestHolder = mock[WS.WSRequestHolder]
       val response = mock[Response]
@@ -45,8 +46,8 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
       response.json returns Helper.loadJson("providers/oauth1/linkedin.error.json")
       httpLayer.url(API) returns requestHolder
 
-      await(provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must equalTo(SpecifiedProfileError.format(
+      failedTry[AuthenticationException](provider.authenticate()) {
+        mustEqualTo(SpecifiedProfileError.format(
           provider.id,
           0,
           Some("Unknown authentication scheme"),
@@ -58,7 +59,7 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
       there was one(cacheLayer).remove(cacheID)
     }
 
-    "throw AuthenticationException if an unexpected error occurred" in new WithApplication with Context {
+    "fail with AuthenticationException if an unexpected error occurred" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val requestHolder = mock[WS.WSRequestHolder]
       val response = mock[Response]
@@ -70,8 +71,8 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
       response.json throws new RuntimeException("")
       httpLayer.url(API) returns requestHolder
 
-      await(provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must equalTo(UnspecifiedProfileError.format(provider.id))
+      failedTry[AuthenticationException](provider.authenticate()) {
+        mustEqualTo(UnspecifiedProfileError.format(provider.id))
       }
 
       there was one(cacheLayer).remove(cacheID)
@@ -89,7 +90,7 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
       response.json returns Helper.loadJson("providers/oauth1/linkedin.success.json")
       httpLayer.url(API) returns requestHolder
 
-      await(provider.authenticate()) must beRight.like {
+      profile(provider.authenticate()) {
         case p =>
           p must be equalTo new SocialProfile(
             loginInfo = LoginInfo(provider.id, "NhZXBl_O6f"),

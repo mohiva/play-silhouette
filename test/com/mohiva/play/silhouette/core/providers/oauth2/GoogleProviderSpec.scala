@@ -17,14 +17,15 @@ package com.mohiva.play.silhouette.core.providers.oauth2
 
 import test.Helper
 import java.util.UUID
+import scala.concurrent.Future
+import play.api.libs.json.Json
 import play.api.libs.ws.{ Response, WS }
 import play.api.test.{ FakeRequest, WithApplication }
-import scala.concurrent.Future
 import com.mohiva.play.silhouette.core.providers._
-import com.mohiva.play.silhouette.core.{ LoginInfo, AuthenticationException }
+import com.mohiva.play.silhouette.core.LoginInfo
+import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import GoogleProvider._
 import OAuth2Provider._
-import play.api.libs.json.Json
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.core.providers.oauth2.GoogleProvider]] class.
@@ -32,7 +33,7 @@ import play.api.libs.json.Json
 class GoogleProviderSpec extends OAuth2ProviderSpec {
 
   "The authenticate method" should {
-    "throw AuthenticationException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
+    "fail with AuthenticationException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
       val requestHolder = mock[WS.WSRequestHolder]
@@ -44,12 +45,12 @@ class GoogleProviderSpec extends OAuth2ProviderSpec {
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
 
-      await(provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must startWith(InvalidResponseFormat.format(provider.id, ""))
+      failedTry[AuthenticationException](provider.authenticate()) {
+        mustStartWith(InvalidResponseFormat.format(provider.id, ""))
       }
     }
 
-    "throw AuthenticationException if API returns error" in new WithApplication with Context {
+    "fail with AuthenticationException if API returns error" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
       val requestHolder = mock[WS.WSRequestHolder]
@@ -63,15 +64,15 @@ class GoogleProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      await(provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must equalTo(SpecifiedProfileError.format(
+      failedTry[AuthenticationException](provider.authenticate()) {
+        mustEqualTo(SpecifiedProfileError.format(
           provider.id,
           401,
           "Invalid Credentials"))
       }
     }
 
-    "throw AuthenticationException if an unexpected error occurred" in new WithApplication with Context {
+    "fail with AuthenticationException if an unexpected error occurred" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
       val requestHolder = mock[WS.WSRequestHolder]
@@ -85,8 +86,8 @@ class GoogleProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      await(provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must equalTo(UnspecifiedProfileError.format(provider.id))
+      failedTry[AuthenticationException](provider.authenticate()) {
+        mustEqualTo(UnspecifiedProfileError.format(provider.id))
       }
     }
 
@@ -104,7 +105,7 @@ class GoogleProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      await(provider.authenticate()) must beRight.like {
+      profile(provider.authenticate()) {
         case p =>
           p must be equalTo new SocialProfile(
             loginInfo = LoginInfo(provider.id, "109476598527568979481"),
@@ -131,7 +132,7 @@ class GoogleProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      await(provider.authenticate()) must beRight.like {
+      profile(provider.authenticate()) {
         case p =>
           p must be equalTo new SocialProfile(
             loginInfo = LoginInfo(provider.id, "109476598527568979481"),

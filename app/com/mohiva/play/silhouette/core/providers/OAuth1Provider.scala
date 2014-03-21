@@ -22,12 +22,13 @@ package com.mohiva.play.silhouette.core.providers
 import java.util.UUID
 import play.api.mvc.{ SimpleResult, RequestHeader, Results }
 import play.api.libs.ws.SignatureCalculator
+import scala.util.{ Success, Failure, Try }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{ Success, Failure, Try }
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.services.AuthInfo
+import com.mohiva.play.silhouette.core.exceptions._
 import OAuth1Provider._
 
 /**
@@ -52,34 +53,34 @@ abstract class OAuth1Provider(
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  protected def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, OAuth1Info]] = {
-    if (request.queryString.get(Denied).isDefined) {
-      throw new AccessDeniedException(AuthorizationError.format(id, Denied))
-    }
+  protected def doAuth()(implicit request: RequestHeader): Future[Try[Either[SimpleResult, OAuth1Info]]] = {
+    request.queryString.get(Denied) match {
+      case Some(_) => Future.failed(new AccessDeniedException(AuthorizationError.format(id, Denied)))
+      case None => request.queryString.get(OAuthVerifier) match {
+        // Second step in the OAuth flow.
+        // We have the request info in the cache, and we need to swap it for the access info.
+        case Some(seq) => cachedInfo.flatMap(_.asFuture.flatMap {
+          case (cacheID, cachedInfo) =>
+            oAuth1Service.retrieveAccessToken(cachedInfo, seq.head).map {
+              case Failure(exception) => Failure(new AuthenticationException(ErrorAccessToken.format(id), exception))
+              case Success(info) =>
+                cacheLayer.remove(cacheID)
+                Success(Right(info))
+            }
+        })
 
-    request.queryString.get(OAuthVerifier) match {
-      // Second step in the OAuth flow.
-      // We have the request info in the cache, and we need to swap it for the access info.
-      case Some(seq) => cachedInfo.flatMap {
-        case (cacheID, cachedInfo) =>
-          oAuth1Service.retrieveAccessToken(cachedInfo, seq.head).map {
-            case Failure(exception) => throw new AuthenticationException(ErrorAccessToken.format(id), exception)
-            case Success(info) =>
-              cacheLayer.remove(cacheID)
-              Right(info)
-          }
-      }
-      // The oauth_verifier field is not in the request.
-      // This is the first step in the OAuth flow. We need to get the request tokens.
-      case _ => oAuth1Service.retrieveRequestToken(oAuth1Settings.callbackURL).map {
-        case Failure(exception) => throw new AuthenticationException(ErrorRequestToken.format(id), exception)
-        case Success(info) =>
-          val cacheID = UUID.randomUUID().toString
-          val url = oAuth1Service.redirectUrl(info.token)
-          val redirect = Results.Redirect(url).withSession(request.session + (CacheKey -> cacheID))
-          logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
-          cacheLayer.set(cacheID, info, CacheExpiration)
-          Left(redirect)
+        // The oauth_verifier field is not in the request.
+        // This is the first step in the OAuth flow. We need to get the request tokens.
+        case _ => oAuth1Service.retrieveRequestToken(oAuth1Settings.callbackURL).map {
+          case Failure(exception) => Failure(new AuthenticationException(ErrorRequestToken.format(id), exception))
+          case Success(info) =>
+            val cacheID = UUID.randomUUID().toString
+            val url = oAuth1Service.redirectUrl(info.token)
+            val redirect = Results.Redirect(url).withSession(request.session + (CacheKey -> cacheID))
+            logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
+            cacheLayer.set(cacheID, info, CacheExpiration)
+            Success(Left(redirect))
+        }
       }
     }
   }
@@ -90,13 +91,13 @@ abstract class OAuth1Provider(
    * @param request The request header.
    * @return A tuple contains the cache ID with the cached info.
    */
-  private def cachedInfo(implicit request: RequestHeader): Future[(String, OAuth1Info)] = {
+  private def cachedInfo(implicit request: RequestHeader): Future[Try[(String, OAuth1Info)]] = {
     request.session.get(CacheKey) match {
       case Some(cacheID) => cacheLayer.get[OAuth1Info](cacheID).map {
-        case Some(state) => cacheID -> state
-        case _ => throw new AuthenticationException(CachedTokenDoesNotExists.format(id, cacheID))
+        case Some(state) => Success(cacheID -> state)
+        case _ => Failure(new AuthenticationException(CachedTokenDoesNotExists.format(id, cacheID)))
       }
-      case _ => throw new AuthenticationException(CacheKeyNotInSession.format(id, CacheKey))
+      case _ => Future.failed(new AuthenticationException(CacheKeyNotInSession.format(id, CacheKey)))
     }
   }
 }

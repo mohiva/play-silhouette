@@ -20,13 +20,13 @@ import java.net.URLEncoder._
 import scala.concurrent.Future
 import play.api.libs.ws.WS
 import play.api.libs.json.{ JsValue, Json }
-import play.api.test.{ FakeRequest, WithApplication, PlaySpecification }
-import org.specs2.matcher.{ ThrownExpectations, JsonMatchers }
+import play.api.test.{ FakeRequest, WithApplication }
+import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import com.mohiva.play.silhouette.core.utils.{ CacheLayer, HTTPLayer }
 import com.mohiva.play.silhouette.core.services.AuthInfoService
-import com.mohiva.play.silhouette.core.{ AuthenticationException, AccessDeniedException }
+import com.mohiva.play.silhouette.core.exceptions._
 import OAuth2Provider._
 
 /**
@@ -34,30 +34,29 @@ import OAuth2Provider._
  *
  * These tests will be additionally executed before every OAuth2 provider spec.
  */
-abstract class OAuth2ProviderSpec extends PlaySpecification with Mockito with JsonMatchers {
+abstract class OAuth2ProviderSpec extends ProviderSpec {
   isolated
 
   "The authenticate method" should {
     val c = context
-    "throw an AccessDeniedException if 'error' key with value 'access_denied' exists in query string" in new WithApplication {
+    "fail with an AccessDeniedException if 'error' key with value 'access_denied' exists in query string" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + Error + "=" + AccessDenied)
-      await(c.provider.authenticate()) must throwAn[AccessDeniedException].like {
-        case e => e.getMessage must startWith(AuthorizationError.format(c.provider.id, ""))
+      failedTry[AccessDeniedException](c.provider.authenticate()) {
+        mustStartWith(AuthorizationError.format(c.provider.id, ""))
       }
     }
 
-    "throw an AuthenticationException if 'error' key with unspecified value exists in query string" in new WithApplication {
+    "fail with an AuthenticationException if 'error' key with unspecified value exists in query string" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + Error + "=unspecified")
-      await(c.provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must startWith(AuthorizationError.format(c.provider.id, "unspecified"))
+      failedTry[AuthenticationException](c.provider.authenticate()) {
+        mustStartWith( AuthorizationError.format(c.provider.id, "unspecified"))
       }
     }
 
     "redirect to authorization URL if authorization code doesn't exists in request" in new WithApplication {
       implicit val req = FakeRequest(GET, "/")
-      await(c.provider.authenticate()) must beLeft.like {
-        case r =>
-          val result = Future.successful(r)
+      result(c.provider.authenticate()) {
+        case result =>
           status(result) must equalTo(SEE_OTHER)
           session(result).get(CacheKey) must beSome.which(s => UUID.fromString(s).toString == s)
           redirectLocation(result) must beSome.which { url =>
@@ -79,9 +78,8 @@ abstract class OAuth2ProviderSpec extends PlaySpecification with Mockito with Js
     "cache the state if authorization code doesn't exists in request" in new WithApplication {
       val cacheID = UUID.randomUUID().toString
       implicit val req = FakeRequest(GET, "/").withSession(CacheKey -> cacheID)
-      await(c.provider.authenticate()) must beLeft.like {
-        case r =>
-          val result = Future.successful(r)
+      result(c.provider.authenticate()) {
+        case result =>
           val cacheID = session(result).get(CacheKey).get
           val url = redirectLocation(result).get
           val urlParams = c.urlParams(url)
@@ -90,43 +88,43 @@ abstract class OAuth2ProviderSpec extends PlaySpecification with Mockito with Js
       }
     }
 
-    "throw an AuthenticationException if code exists in URL but info doesn't exists in session" in new WithApplication {
+    "fail with an AuthenticationException if code exists in URL but info doesn't exists in session" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
-      await(c.provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must startWith(CacheKeyNotInSession.format(c.provider.id, ""))
+      failedTry[AuthenticationException](c.provider.authenticate()) {
+        mustStartWith(CacheKeyNotInSession.format(c.provider.id, ""))
       }
     }
 
-    "throw an AuthenticationException if code exists in URL but info doesn't exists in cache" in new WithApplication {
+    "fail with an AuthenticationException if code exists in URL but info doesn't exists in cache" in new WithApplication {
       val cacheID = UUID.randomUUID().toString
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code").withSession(CacheKey -> cacheID)
       c.cacheLayer.get[String](cacheID) returns Future.successful(None)
 
-      await(c.provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must startWith(CachedStateDoesNotExists.format(c.provider.id, ""))
+      failedTry[AuthenticationException](c.provider.authenticate()){
+        mustStartWith(CachedStateDoesNotExists.format(c.provider.id, ""))
       }
     }
 
-    "throw an AuthenticationException if code exists in URL but info doesn't exists in session" in new WithApplication {
+    "fail with an AuthenticationException if code exists in URL but info doesn't exists in session" in new WithApplication {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code").withSession(CacheKey -> cacheID)
       c.cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
 
-      await(c.provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must startWith(RequestStateDoesNotExists.format(c.provider.id, ""))
+      failedTry[AuthenticationException](c.provider.authenticate()) {
+        mustStartWith(RequestStateDoesNotExists.format(c.provider.id, ""))
       }
     }
 
-    "throw an AuthenticationException if cached state doesn't equal request sate" in new WithApplication {
+    "fail with an AuthenticationException if cached state doesn't equal request sate" in new WithApplication {
       val cacheID = UUID.randomUUID().toString
       val cachedState = UUID.randomUUID().toString
       val requestState = UUID.randomUUID().toString
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + requestState).withSession(CacheKey -> cacheID)
       c.cacheLayer.get[String](cacheID) returns Future.successful(Some(cachedState))
 
-      await(c.provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must startWith(StateIsNotEqual.format(c.provider.id, ""))
+      failedTry[AuthenticationException](c.provider.authenticate()) {
+        mustStartWith(StateIsNotEqual.format(c.provider.id, ""))
       }
     }
 
