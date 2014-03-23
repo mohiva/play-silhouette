@@ -107,6 +107,10 @@ ScoverageSbtPlugin.instrumentSettings
 
 CoverallsPlugin.coverallsSettings
 
+//*******************************
+// Scalariform settings
+//*******************************
+
 defaultScalariformSettings
 
 //*******************************
