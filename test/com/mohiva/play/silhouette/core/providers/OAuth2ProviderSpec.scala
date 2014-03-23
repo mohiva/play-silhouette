@@ -49,7 +49,7 @@ abstract class OAuth2ProviderSpec extends ProviderSpec {
     "fail with an AuthenticationException if 'error' key with unspecified value exists in query string" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + Error + "=unspecified")
       failedTry[AuthenticationException](c.provider.authenticate()) {
-        mustStartWith( AuthorizationError.format(c.provider.id, "unspecified"))
+        mustStartWith(AuthorizationError.format(c.provider.id, "unspecified"))
       }
     }
 
@@ -100,7 +100,7 @@ abstract class OAuth2ProviderSpec extends ProviderSpec {
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code").withSession(CacheKey -> cacheID)
       c.cacheLayer.get[String](cacheID) returns Future.successful(None)
 
-      failedTry[AuthenticationException](c.provider.authenticate()){
+      failedTry[AuthenticationException](c.provider.authenticate()) {
         mustStartWith(CachedStateDoesNotExists.format(c.provider.id, ""))
       }
     }

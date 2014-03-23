@@ -20,7 +20,7 @@ import play.api.test.{ FakeRequest, WithApplication }
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import scala.util.{ Success, Failure}
+import scala.util.{ Success, Failure }
 import scala.concurrent.Future
 import com.mohiva.play.silhouette.core.utils.{ CacheLayer, HTTPLayer }
 import com.mohiva.play.silhouette.core.services.AuthInfoService

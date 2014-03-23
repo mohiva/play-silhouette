@@ -25,8 +25,8 @@ import com.mohiva.play.silhouette.core.Logger
  * @param cause The exception cause.
  */
 case class AccessDeniedException(msg: String, cause: Throwable)
-  extends Exception(msg, cause)
-  with SilhouetteException
+    extends Exception(msg, cause)
+    with SilhouetteException
     with Logger {
 
   logger.info(msg)

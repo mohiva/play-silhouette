@@ -15,11 +15,11 @@
  */
 package com.mohiva.play.silhouette.core.providers
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.mvc.{ SimpleResult, RequestHeader }
-import com.mohiva.play.silhouette.core.{LoginInfo, Provider}
+import com.mohiva.play.silhouette.core.{ LoginInfo, Provider }
 import com.mohiva.play.silhouette.core.services.{ AuthInfo, AuthInfoService }
 import com.mohiva.play.silhouette.core.exceptions.SilhouetteException
 

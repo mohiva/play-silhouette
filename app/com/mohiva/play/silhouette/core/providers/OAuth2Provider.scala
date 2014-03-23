@@ -25,7 +25,7 @@ import play.api.mvc.{ SimpleResult, RequestHeader, Results }
 import play.api.libs.ws.Response
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
@@ -101,7 +101,7 @@ abstract class OAuth2Provider(
           logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
           cacheLayer.set(cacheID, state, CacheExpiration)
           Future.successful(Success(Left(redirect)))
-        }
+      }
     }
   }
 
