@@ -120,19 +120,19 @@
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The auth info implementation.
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider">SocialProvider</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.providers.SocialProvider#buildProfile" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="buildProfile(authInfo:A):scala.concurrent.Future[com.mohiva.play.silhouette.core.providers.SocialProfile]"></a>
-      <a id="buildProfile(OAuth1Info):Future[SocialProfile]"></a>
+      <a id="buildProfile(authInfo:A):scala.concurrent.Future[scala.util.Try[com.mohiva.play.silhouette.core.providers.SocialProfile]]"></a>
+      <a id="buildProfile(OAuth1Info):Future[Try[SocialProfile]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">buildProfile</span><span class="params">(<span name="authInfo">authInfo: <a href="OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Info">OAuth1Info</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>]</span>
+        <span class="name">buildProfile</span><span class="params">(<span name="authInfo">authInfo: <a href="OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Info">OAuth1Info</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.util.Try" class="extype" target="_top">Try</a>[<a href="SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Subclasses need to implement this method to populate the profile information from the service provider.</p><div class="fullcomment"><div class="comment cmt"><p>Subclasses need to implement this method to populate the profile information from the service provider.
-</p></div><dl class="paramcmts block"><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info received from the provider.</p></dd><dt>returns</dt><dd class="cmt"><p>The build social profile.
+</p></div><dl class="paramcmts block"><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info received from the provider.</p></dd><dt>returns</dt><dd class="cmt"><p>On success the build social profile, otherwise a failure.
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider">SocialProvider</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.Provider#id" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="id:String"></a>
@@ -233,21 +233,21 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.providers.SocialProvider#authenticate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="authenticate()(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Either[play.api.mvc.SimpleResult,com.mohiva.play.silhouette.core.providers.SocialProfile]]"></a>
-      <a id="authenticate()(RequestHeader):Future[Either[SimpleResult,SocialProfile]]"></a>
+      <a id="authenticate()(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[scala.util.Try[Either[play.api.mvc.SimpleResult,com.mohiva.play.silhouette.core.providers.SocialProfile]]]"></a>
+      <a id="authenticate()(RequestHeader):Future[Try[Either[SimpleResult,SocialProfile]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">authenticate</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>, <a href="SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>]]</span>
+        <span class="name">authenticate</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>, <a href="SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>]]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Authenticates the user and fills the profile information.</p><div class="fullcomment"><div class="comment cmt"><p>Authenticates the user and fills the profile information.</p><p>Returns either a SocialProfile if all went OK or a Result that the controller sends to the
 browser (e.g.: in the case of OAuth where the user needs to be redirected to
 the service provider).
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The social profile.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>On success either the social profile or a simple result, otherwise a failure.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider">SocialProvider</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
@@ -269,15 +269,15 @@ the service provider).
               
         </dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.providers.OAuth1Provider#doAuth" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="doAuth()(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Either[play.api.mvc.SimpleResult,com.mohiva.play.silhouette.core.providers.OAuth1Info]]"></a>
-      <a id="doAuth()(RequestHeader):Future[Either[SimpleResult,OAuth1Info]]"></a>
+      <a id="doAuth()(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[scala.util.Try[Either[play.api.mvc.SimpleResult,com.mohiva.play.silhouette.core.providers.OAuth1Info]]]"></a>
+      <a id="doAuth()(RequestHeader):Future[Try[Either[SimpleResult,OAuth1Info]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">doAuth</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>, <a href="OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Info">OAuth1Info</a>]]</span>
+        <span class="name">doAuth</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>, <a href="OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Info">OAuth1Info</a>]]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Starts the authentication process.</p><div class="fullcomment"><div class="comment cmt"><p>Starts the authentication process.

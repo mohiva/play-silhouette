@@ -2,17 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>AuthenticationException - com.mohiva.play.silhouette.core.AuthenticationException</title>
-          <meta name="description" content="AuthenticationException - com.mohiva.play.silhouette.core.AuthenticationException" />
-          <meta name="keywords" content="AuthenticationException com.mohiva.play.silhouette.core.AuthenticationException" />
+          <title>AccessDeniedException - com.mohiva.play.silhouette.core.exceptions.AccessDeniedException</title>
+          <meta name="description" content="AccessDeniedException - com.mohiva.play.silhouette.core.exceptions.AccessDeniedException" />
+          <meta name="keywords" content="AccessDeniedException com.mohiva.play.silhouette.core.exceptions.AccessDeniedException" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
-      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
       <script type="text/javascript">
          if(top === self) {
-            var url = '../../../../../index.html';
-            var hash = 'com.mohiva.play.silhouette.core.AuthenticationException';
+            var url = '../../../../../../index.html';
+            var hash = 'com.mohiva.play.silhouette.core.exceptions.AccessDeniedException';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -24,9 +24,9 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../../../lib/class_big.png" />
-        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.core">core</a></p>
-        <h1>AuthenticationException</h1>
+        <img src="../../../../../../lib/class_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.core">core</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.core.exceptions">exceptions</a></p>
+        <h1>AccessDeniedException</h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -35,15 +35,16 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">AuthenticationException</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a> with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">AccessDeniedException</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="SilhouetteException.html" class="extype" name="com.mohiva.play.silhouette.core.exceptions.SilhouetteException">SilhouetteException</a> with <a href="../Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a> with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An exception thrown when there is an error in the authentication flow.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An exception thrown when the user denies access to the application
+in the login page of the 3rd party service.
 </p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>The exception message.</p></dd><dt class="param">cause</dt><dd class="cmt"><p>The exception cause.
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a>, <span class="extype" name="java.lang.Exception">Exception</span>, <span class="extype" name="java.lang.Throwable">Throwable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="../Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a>, <a href="SilhouetteException.html" class="extype" name="com.mohiva.play.silhouette.core.exceptions.SilhouetteException">SilhouetteException</a>, <span class="extype" name="java.lang.Exception">Exception</span>, <span class="extype" name="java.lang.Throwable">Throwable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -61,7 +62,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.core.AuthenticationException"><span>AuthenticationException</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="com.mohiva.play.silhouette.core.Logger"><span>Logger</span></li><li class="in" name="java.lang.Exception"><span>Exception</span></li><li class="in" name="java.lang.Throwable"><span>Throwable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.core.exceptions.AccessDeniedException"><span>AccessDeniedException</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="com.mohiva.play.silhouette.core.Logger"><span>Logger</span></li><li class="in" name="com.mohiva.play.silhouette.core.exceptions.SilhouetteException"><span>SilhouetteException</span></li><li class="in" name="java.lang.Exception"><span>Exception</span></li><li class="in" name="java.lang.Throwable"><span>Throwable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -81,31 +82,31 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.AuthenticationException#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(msg:String):com.mohiva.play.silhouette.core.AuthenticationException"></a>
-      <a id="&lt;init&gt;:AuthenticationException"></a>
+              <ol><li name="com.mohiva.play.silhouette.core.exceptions.AccessDeniedException#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(msg:String):com.mohiva.play.silhouette.core.exceptions.AccessDeniedException"></a>
+      <a id="&lt;init&gt;:AccessDeniedException"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">AuthenticationException</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
+        <span class="name">AccessDeniedException</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Constructs an exception with only a message.</p><div class="fullcomment"><div class="comment cmt"><p>Constructs an exception with only a message.
 </p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>The exception message.
 </p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.AuthenticationException#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(msg:String,cause:Throwable):com.mohiva.play.silhouette.core.AuthenticationException"></a>
-      <a id="&lt;init&gt;:AuthenticationException"></a>
+    </li><li name="com.mohiva.play.silhouette.core.exceptions.AccessDeniedException#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(msg:String,cause:Throwable):com.mohiva.play.silhouette.core.exceptions.AccessDeniedException"></a>
+      <a id="&lt;init&gt;:AccessDeniedException"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">AuthenticationException</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span>
+        <span class="name">AccessDeniedException</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>The exception message.</p></dd><dt class="param">cause</dt><dd class="cmt"><p>The exception cause.
@@ -210,7 +211,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.AuthenticationException#cause" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.mohiva.play.silhouette.core.exceptions.AccessDeniedException#cause" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="cause:Throwable"></a>
       <a id="cause:Throwable"></a>
       <h4 class="signature">
@@ -235,7 +236,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
@@ -280,7 +281,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="symbol">classOf[java.lang.Throwable]</span>
@@ -404,8 +405,8 @@
       </span>
       </h4>
       <p class="shortcomment cmt">A named logger instance.</p><div class="fullcomment"><div class="comment cmt"><p>A named logger instance.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.AuthenticationException#msg" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.exceptions.AccessDeniedException#msg" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="msg:String"></a>
       <a id="msg:String"></a>
       <h4 class="signature">
@@ -608,7 +609,9 @@
             </div><div class="parent" name="scala.Equals">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
             </div><div class="parent" name="com.mohiva.play.silhouette.core.Logger">
-              <h3>Inherited from <a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></h3>
+              <h3>Inherited from <a href="../Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></h3>
+            </div><div class="parent" name="com.mohiva.play.silhouette.core.exceptions.SilhouetteException">
+              <h3>Inherited from <a href="SilhouetteException.html" class="extype" name="com.mohiva.play.silhouette.core.exceptions.SilhouetteException">SilhouetteException</a></h3>
             </div><div class="parent" name="java.lang.Exception">
               <h3>Inherited from <span class="extype" name="java.lang.Exception">Exception</span></h3>
             </div><div class="parent" name="java.lang.Throwable">
@@ -635,6 +638,6 @@
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../lib/template.js"></script>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../../lib/template.js"></script>
     </body>
       </html>
