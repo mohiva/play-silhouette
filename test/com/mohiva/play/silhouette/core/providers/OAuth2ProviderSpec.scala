@@ -25,7 +25,6 @@ import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import com.mohiva.play.silhouette.core.utils.{ CacheLayer, HTTPLayer }
-import com.mohiva.play.silhouette.core.services.AuthInfoService
 import com.mohiva.play.silhouette.core.exceptions._
 import OAuth2Provider._
 
@@ -34,7 +33,7 @@ import OAuth2Provider._
  *
  * These tests will be additionally executed before every OAuth2 provider spec.
  */
-abstract class OAuth2ProviderSpec extends ProviderSpec {
+abstract class OAuth2ProviderSpec extends ProviderSpec[OAuth2Info] {
   isolated
 
   "The authenticate method" should {
@@ -174,11 +173,6 @@ abstract class OAuth2ProviderSpec extends ProviderSpec {
  * Context for the OAuth2ProviderSpec.
  */
 trait OAuth2ProviderSpecContext extends Scope with Mockito with ThrownExpectations {
-
-  /**
-   * The auth info service mock.
-   */
-  lazy val authInfoService: AuthInfoService = mock[AuthInfoService]
 
   /**
    * The cache layer mock.

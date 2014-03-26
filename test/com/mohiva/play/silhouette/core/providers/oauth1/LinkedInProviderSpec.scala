@@ -92,8 +92,9 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
 
       profile(provider.authenticate()) {
         case p =>
-          p must be equalTo new SocialProfile(
+          p must be equalTo new SocialProfile[OAuth1Info](
             loginInfo = LoginInfo(provider.id, "NhZXBl_O6f"),
+            authInfo = oAuthInfo,
             firstName = Some("Apollonia"),
             lastName = Some("Vanova"),
             fullName = Some("Apollonia Vanova"),
@@ -103,22 +104,6 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
       }
 
       there was one(cacheLayer).remove(cacheID)
-    }
-
-    "store the auth info if the authentication was successful" in new WithApplication with Context {
-      val cacheID = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
-      implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
-      cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(Some(oAuthInfo))
-      oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(Success(oAuthInfo))
-      requestHolder.sign(any) returns requestHolder
-      requestHolder.get() returns Future.successful(response)
-      response.json returns Helper.loadJson("providers/oauth1/linkedin.success.json")
-      httpLayer.url(API) returns requestHolder
-
-      await(provider.authenticate())
-      there was one(authInfoService).save[OAuth1Info](LoginInfo(provider.id, "NhZXBl_O6f"), oAuthInfo)
     }
   }
 
@@ -148,6 +133,6 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new LinkedInProvider(authInfoService, cacheLayer, httpLayer, oAuthService, oAuthSettings)
+    lazy val provider = new LinkedInProvider(cacheLayer, httpLayer, oAuthService, oAuthSettings)
   }
 }

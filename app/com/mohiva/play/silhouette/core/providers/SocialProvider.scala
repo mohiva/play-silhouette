@@ -20,7 +20,7 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.mvc.{ SimpleResult, RequestHeader }
 import com.mohiva.play.silhouette.core.{ LoginInfo, Provider }
-import com.mohiva.play.silhouette.core.services.{ AuthInfo, AuthInfoService }
+import com.mohiva.play.silhouette.core.services.AuthInfo
 import com.mohiva.play.silhouette.core.exceptions.SilhouetteException
 
 /**
@@ -40,7 +40,7 @@ trait SocialProvider[A <: AuthInfo] extends Provider {
    * @param request The request header.
    * @return On success either the social profile or a simple result, otherwise a failure.
    */
-  def authenticate()(implicit request: RequestHeader): Future[Try[Either[SimpleResult, SocialProfile]]] = {
+  def authenticate()(implicit request: RequestHeader): Future[Try[Either[SimpleResult, SocialProfile[A]]]] = {
     (for {
       auth <- doAuth()
       either <- auth.asFuture
@@ -50,7 +50,6 @@ trait SocialProvider[A <: AuthInfo] extends Provider {
           maybeProfile <- buildProfile(authInfo)
           profile <- maybeProfile.asFuture
         } yield {
-          authInfoService.save(profile.loginInfo, authInfo)
           Success(Right(profile))
         })
     } yield result).recover { case e: SilhouetteException => Failure(e) }
@@ -72,14 +71,7 @@ trait SocialProvider[A <: AuthInfo] extends Provider {
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: A): Future[Try[SocialProfile]]
-
-  /**
-   * Gets the auth info implementation.
-   *
-   * @return The auth info implementation.
-   */
-  protected def authInfoService: AuthInfoService
+  protected def buildProfile(authInfo: A): Future[Try[SocialProfile[A]]]
 }
 
 /**
@@ -90,14 +82,17 @@ trait SocialProvider[A <: AuthInfo] extends Provider {
  * for the first authentication(which is also the registration) or to update an existing identity on every
  * subsequent authentication.
  *
+ * @param loginInfo The linked login info.
+ * @param authInfo The current auth info returned from the provider.
  * @param firstName Maybe the first name of the authenticated user.
  * @param lastName Maybe the last name of the authenticated user.
  * @param fullName Maybe the full name of the authenticated user.
  * @param email Maybe the email of the authenticated provider.
  * @param avatarURL Maybe the avatar URL of the authenticated provider.
  */
-case class SocialProfile(
+case class SocialProfile[A <: AuthInfo](
   loginInfo: LoginInfo,
+  authInfo: A,
   firstName: Option[String] = None,
   lastName: Option[String] = None,
   fullName: Option[String] = None,

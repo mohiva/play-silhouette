@@ -22,18 +22,19 @@ import play.api.mvc.SimpleResult
 import play.api.test.PlaySpecification
 import org.specs2.matcher.{ MatchResult, JsonMatchers }
 import org.specs2.mock.Mockito
+import com.mohiva.play.silhouette.core.services.AuthInfo
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.core.providers.OAuth1Provider]] class.
  *
  * These tests will be additionally executed before every OAuth1 provider spec.
  */
-abstract class ProviderSpec extends PlaySpecification with Mockito with JsonMatchers {
+abstract class ProviderSpec[A <: AuthInfo] extends PlaySpecification with Mockito with JsonMatchers {
 
   /**
    * The provider result.
    */
-  type ProviderResult = Future[Try[Either[SimpleResult, SocialProfile]]]
+  type ProviderResult = Future[Try[Either[SimpleResult, SocialProfile[A]]]]
 
   /**
    * Applies a matcher on a simple result.
@@ -43,7 +44,7 @@ abstract class ProviderSpec extends PlaySpecification with Mockito with JsonMatc
    * @return A specs2 match result.
    */
   def result(providerResult: ProviderResult)(b: Future[SimpleResult] => MatchResult[_]) = {
-    await(providerResult) must beSuccessfulTry[Either[SimpleResult, SocialProfile]].like {
+    await(providerResult) must beSuccessfulTry[Either[SimpleResult, SocialProfile[A]]].like {
       case e => e must beLeft[SimpleResult].like {
         case simpleResult => b(Future.successful(simpleResult))
       }
@@ -57,9 +58,9 @@ abstract class ProviderSpec extends PlaySpecification with Mockito with JsonMatc
    * @param b The matcher block to apply.
    * @return A specs2 match result.
    */
-  def profile(providerResult: ProviderResult)(b: SocialProfile => MatchResult[_]) = {
-    await(providerResult) must beSuccessfulTry[Either[SimpleResult, SocialProfile]].like {
-      case e => e must beRight[SocialProfile].like {
+  def profile(providerResult: ProviderResult)(b: SocialProfile[A] => MatchResult[_]) = {
+    await(providerResult) must beSuccessfulTry[Either[SimpleResult, SocialProfile[A]]].like {
+      case e => e must beRight[SocialProfile[A]].like {
         case socialProfile => b(socialProfile)
       }
     }

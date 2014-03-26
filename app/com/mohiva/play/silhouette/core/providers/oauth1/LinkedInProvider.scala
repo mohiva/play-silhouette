@@ -24,20 +24,17 @@ import scala.concurrent.Future
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile._
-import com.mohiva.play.silhouette.core.services.AuthInfoService
 import LinkedInProvider._
 
 /**
  * A LinkedIn OAuth1 Provider.
  *
- * @param authInfoService The auth info service.
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
  * @param oAuth1Service The OAuth1 service implementation.
  * @param auth1Settings The OAuth1 provider settings.
  */
 class LinkedInProvider(
-  protected val authInfoService: AuthInfoService,
   cacheLayer: CacheLayer,
   httpLayer: HTTPLayer,
   oAuth1Service: OAuth1Service,
@@ -57,8 +54,8 @@ class LinkedInProvider(
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth1Info): Future[Try[SocialProfile]] = {
-    build(httpLayer.url(API).sign(oAuth1Service.sign(authInfo)).get())
+  protected def buildProfile(authInfo: OAuth1Info): Future[Try[SocialProfile[OAuth1Info]]] = {
+    build(httpLayer.url(API).sign(oAuth1Service.sign(authInfo)).get(), authInfo)
   }
 }
 

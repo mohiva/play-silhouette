@@ -35,6 +35,36 @@ import com.mohiva.play.silhouette.core._
 import OAuth2Provider._
 
 /**
+ * The Oauth2 details.
+ *
+ * @param accessToken The access token.
+ * @param tokenType The token type.
+ * @param expiresIn The number of seconds before the token expires.
+ * @param refreshToken The refresh token.
+ */
+case class OAuth2Info(
+  accessToken: String,
+  tokenType: Option[String] = None,
+  expiresIn: Option[Int] = None,
+  refreshToken: Option[String] = None) extends AuthInfo
+
+/**
+ * The Oauth2 companion object.
+ */
+object OAuth2Info {
+
+  /**
+   * Converts the JSON into a [[com.mohiva.play.silhouette.core.providers.OAuth2Info]] object.
+   */
+  implicit val infoReads = (
+    (__ \ AccessToken).read[String] and
+    (__ \ TokenType).readNullable[String] and
+    (__ \ ExpiresIn).readNullable[Int] and
+    (__ \ RefreshToken).readNullable[String]
+  )(OAuth2Info.apply _)
+}
+
+/**
  * Base class for all OAuth2 providers.
  *
  * @param settings The provider settings.
@@ -52,16 +82,6 @@ abstract class OAuth2Provider(
    * A list with headers to send to the API.
    */
   protected val headers: Seq[(String, String)] = Seq()
-
-  /**
-   * Converts the JSON into a [[com.mohiva.play.silhouette.core.providers.OAuth2Info]] object.
-   */
-  private implicit val infoReads = (
-    (__ \ AccessToken).read[String] and
-    (__ \ TokenType).readNullable[String] and
-    (__ \ ExpiresIn).readNullable[Int] and
-    (__ \ RefreshToken).readNullable[String]
-  )(OAuth2Info.apply _)
 
   /**
    * Starts the authentication process.
@@ -165,7 +185,7 @@ abstract class OAuth2Provider(
 }
 
 /**
- * The companion object.
+ * The OAuth2Provider companion object.
  */
 object OAuth2Provider {
 
@@ -230,17 +250,3 @@ case class OAuth2Settings(
   authorizationParams: Map[String, String] = Map(),
   accessTokenParams: Map[String, String] = Map(),
   customProperties: Map[String, String] = Map())
-
-/**
- * The Oauth2 details.
- *
- * @param accessToken The access token.
- * @param tokenType The token type.
- * @param expiresIn The number of seconds before the token expires.
- * @param refreshToken The refresh token.
- */
-case class OAuth2Info(
-  accessToken: String,
-  tokenType: Option[String] = None,
-  expiresIn: Option[Int] = None,
-  refreshToken: Option[String] = None) extends AuthInfo

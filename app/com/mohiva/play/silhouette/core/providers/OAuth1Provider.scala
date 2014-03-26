@@ -103,7 +103,7 @@ abstract class OAuth1Provider(
 }
 
 /**
- * The companion object.
+ * The OAuth1Provider companion object.
  */
 object OAuth1Provider {
 

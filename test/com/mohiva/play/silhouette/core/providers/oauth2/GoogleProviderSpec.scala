@@ -109,6 +109,7 @@ class GoogleProviderSpec extends OAuth2ProviderSpec {
         case p =>
           p must be equalTo new SocialProfile(
             loginInfo = LoginInfo(provider.id, "109476598527568979481"),
+            authInfo = oAuthInfo.as[OAuth2Info],
             firstName = Some("Apollonia"),
             lastName = Some("Vanova"),
             fullName = Some("Apollonia Vanova"),
@@ -136,6 +137,7 @@ class GoogleProviderSpec extends OAuth2ProviderSpec {
         case p =>
           p must be equalTo new SocialProfile(
             loginInfo = LoginInfo(provider.id, "109476598527568979481"),
+            authInfo = oAuthInfo.as[OAuth2Info],
             firstName = Some("Apollonia"),
             lastName = Some("Vanova"),
             fullName = Some("Apollonia Vanova"),
@@ -172,6 +174,6 @@ class GoogleProviderSpec extends OAuth2ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new GoogleProvider(authInfoService, cacheLayer, httpLayer, oAuthSettings)
+    lazy val provider = new GoogleProvider(cacheLayer, httpLayer, oAuthSettings)
   }
 }

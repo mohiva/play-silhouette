@@ -109,6 +109,7 @@ class VKProviderSpec extends OAuth2ProviderSpec {
         case p =>
           p must be equalTo new SocialProfile(
             loginInfo = LoginInfo(provider.id, "66748"),
+            authInfo = oAuthInfo.as[OAuth2Info],
             firstName = Some("Apollonia"),
             lastName = Some("Vanova"),
             avatarURL = Some("http://vk.com/images/camera_b.gif")
@@ -150,6 +151,6 @@ class VKProviderSpec extends OAuth2ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new VKProvider(authInfoService, cacheLayer, httpLayer, oAuthSettings)
+    lazy val provider = new VKProvider(cacheLayer, httpLayer, oAuthSettings)
   }
 }

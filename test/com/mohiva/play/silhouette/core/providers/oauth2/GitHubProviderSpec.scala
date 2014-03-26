@@ -110,6 +110,7 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
         case p =>
           p must be equalTo new SocialProfile(
             loginInfo = LoginInfo(provider.id, "1"),
+            authInfo = oAuthInfo.as[OAuth2Info],
             fullName = Some("Apollonia Vanova"),
             email = Some("apollonia.vanova@watchmen.com"),
             avatarURL = Some("https://github.com/images/error/apollonia_vanova.gif")
@@ -154,6 +155,6 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new GitHubProvider(authInfoService, cacheLayer, httpLayer, oAuthSettings)
+    lazy val provider = new GitHubProvider(cacheLayer, httpLayer, oAuthSettings)
   }
 }
