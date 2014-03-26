@@ -113,6 +113,7 @@ class LinkedInProviderSpec extends OAuth2ProviderSpec {
         case p =>
           p must be equalTo new SocialProfile(
             loginInfo = LoginInfo(provider.id, "NhZXBl_O6f"),
+            authInfo = oAuthInfo.as[OAuth2Info],
             firstName = Some("Apollonia"),
             lastName = Some("Vanova"),
             fullName = Some("Apollonia Vanova"),
@@ -156,6 +157,6 @@ class LinkedInProviderSpec extends OAuth2ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new LinkedInProvider(authInfoService, cacheLayer, httpLayer, oAuthSettings)
+    lazy val provider = new LinkedInProvider(cacheLayer, httpLayer, oAuthSettings)
   }
 }

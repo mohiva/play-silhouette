@@ -25,14 +25,12 @@ import scala.util.{ Success, Failure, Try }
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.providers._
-import com.mohiva.play.silhouette.core.services.AuthInfoService
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import TwitterProvider._
 
 /**
  * A Twitter OAuth1 Provider.
  *
- * @param authInfoService The auth info service.
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
  * @param oAuth1Service The OAuth1 service implementation.
@@ -42,7 +40,6 @@ import TwitterProvider._
  * @see https://dev.twitter.com/docs/entities#users
  */
 class TwitterProvider(
-  protected val authInfoService: AuthInfoService,
   cacheLayer: CacheLayer,
   httpLayer: HTTPLayer,
   oAuth1Service: OAuth1Service,
@@ -62,7 +59,7 @@ class TwitterProvider(
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth1Info): Future[Try[SocialProfile]] = {
+  protected def buildProfile(authInfo: OAuth1Info): Future[Try[SocialProfile[OAuth1Info]]] = {
     httpLayer.url(API).sign(oAuth1Service.sign(authInfo)).get().map { response =>
       val json = response.json
       (json \ Errors \\ Code).headOption.map(_.as[Int]) match {
@@ -77,6 +74,7 @@ class TwitterProvider(
 
           Success(SocialProfile(
             loginInfo = LoginInfo(id, userId.toString),
+            authInfo = authInfo,
             fullName = name,
             avatarURL = avatarURL))
       }

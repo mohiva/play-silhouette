@@ -110,6 +110,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
         case p =>
           p must be equalTo new SocialProfile(
             loginInfo = LoginInfo(provider.id, "13221052"),
+            authInfo = oAuthInfo.as[OAuth2Info],
             firstName = Some("Apollonia"),
             lastName = Some("Vanova"),
             email = Some("apollonia.vanova@watchmen.com"),
@@ -136,6 +137,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
         case p =>
           p must be equalTo new SocialProfile(
             loginInfo = LoginInfo(provider.id, "13221052"),
+            authInfo = oAuthInfo.as[OAuth2Info],
             firstName = Some("Apollonia"),
             lastName = Some("Vanova"),
             email = Some("apollonia.vanova@watchmen.com"),
@@ -152,7 +154,6 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
       override lazy val provider = new FoursquareProvider(
-        authInfoService,
         cacheLayer,
         httpLayer,
         oAuthSettings.copy(customProperties = customProperties)
@@ -170,6 +171,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
         case p =>
           p must be equalTo new SocialProfile(
             loginInfo = LoginInfo(provider.id, "13221052"),
+            authInfo = oAuthInfo.as[OAuth2Info],
             firstName = Some("Apollonia"),
             lastName = Some("Vanova"),
             email = Some("apollonia.vanova@watchmen.com"),
@@ -186,7 +188,6 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
       override lazy val provider = new FoursquareProvider(
-        authInfoService,
         cacheLayer,
         httpLayer,
         oAuthSettings.copy(customProperties = customProperties)
@@ -204,6 +205,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
         case p =>
           p must be equalTo new SocialProfile(
             loginInfo = LoginInfo(provider.id, "13221052"),
+            authInfo = oAuthInfo.as[OAuth2Info],
             firstName = Some("Apollonia"),
             lastName = Some("Vanova"),
             email = Some("apollonia.vanova@watchmen.com"),
@@ -238,6 +240,6 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new FoursquareProvider(authInfoService, cacheLayer, httpLayer, oAuthSettings)
+    lazy val provider = new FoursquareProvider(cacheLayer, httpLayer, oAuthSettings)
   }
 }

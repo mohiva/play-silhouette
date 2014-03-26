@@ -27,6 +27,7 @@ import scala.util.{ Success, Failure, Try }
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers.SocialProfile
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.core.services.AuthInfo
 
 /**
  * Parses the JSON response for the LinkedIn OAuth1 and OAuth2 API.
@@ -64,9 +65,10 @@ object LinkedInProfile {
    * Builds the social profile from the JSON response.
    *
    * @param maybeResponse The response from the provider.
+   * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  def build(maybeResponse: Future[Response]): Future[Try[SocialProfile]] = {
+  def build[A <: AuthInfo](maybeResponse: Future[Response], authInfo: A): Future[Try[SocialProfile[A]]] = {
     maybeResponse.map { response =>
       val json = response.json
       (json \ ErrorCode).asOpt[Int] match {
@@ -87,6 +89,7 @@ object LinkedInProfile {
 
           Success(SocialProfile(
             loginInfo = LoginInfo(LinkedIn, userID),
+            authInfo = authInfo,
             firstName = firstName,
             lastName = lastName,
             fullName = fullName,

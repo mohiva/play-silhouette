@@ -23,7 +23,6 @@ import org.specs2.specification.Scope
 import scala.util.{ Success, Failure }
 import scala.concurrent.Future
 import com.mohiva.play.silhouette.core.utils.{ CacheLayer, HTTPLayer }
-import com.mohiva.play.silhouette.core.services.AuthInfoService
 import com.mohiva.play.silhouette.core.exceptions._
 import OAuth1Provider._
 
@@ -32,7 +31,7 @@ import OAuth1Provider._
  *
  * These tests will be additionally executed before every OAuth1 provider spec.
  */
-abstract class OAuth1ProviderSpec extends ProviderSpec {
+abstract class OAuth1ProviderSpec extends ProviderSpec[OAuth1Info] {
   isolated
 
   "The authenticate method" should {
@@ -120,11 +119,6 @@ abstract class OAuth1ProviderSpec extends ProviderSpec {
  * Context for the OAuth1ProviderSpec.
  */
 trait OAuth1ProviderSpecContext extends Scope with Mockito with ThrownExpectations {
-
-  /**
-   * The auth info service mock.
-   */
-  lazy val authInfoService: AuthInfoService = mock[AuthInfoService]
 
   /**
    * The cache layer mock.

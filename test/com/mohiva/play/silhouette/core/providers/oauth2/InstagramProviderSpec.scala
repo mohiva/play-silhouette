@@ -110,6 +110,7 @@ class InstagramProviderSpec extends OAuth2ProviderSpec {
         case p =>
           p must be equalTo new SocialProfile(
             loginInfo = LoginInfo(provider.id, "1574083"),
+            authInfo = oAuthInfo.as[OAuth2Info],
             fullName = Some("Apollonia Vanova"),
             avatarURL = Some("http://distillery.s3.amazonaws.com/profiles/profile_1574083_75sq_1295469061.jpg")
           )
@@ -150,6 +151,6 @@ class InstagramProviderSpec extends OAuth2ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new InstagramProvider(authInfoService, cacheLayer, httpLayer, oAuthSettings)
+    lazy val provider = new InstagramProvider(cacheLayer, httpLayer, oAuthSettings)
   }
 }

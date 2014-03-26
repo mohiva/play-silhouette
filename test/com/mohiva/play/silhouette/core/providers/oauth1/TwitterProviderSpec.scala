@@ -92,28 +92,13 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
         case p =>
           p must be equalTo new SocialProfile(
             loginInfo = LoginInfo(provider.id, "6253282"),
+            authInfo = oAuthInfo,
             fullName = Some("Apollonia Vanova"),
             avatarURL = Some("https://pbs.twimg.com/profile_images/1209905677/appolonia_.jpg")
           )
       }
 
       there was one(cacheLayer).remove(cacheID)
-    }
-
-    "store the auth info if the authentication was successful" in new WithApplication with Context {
-      val cacheID = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
-      implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
-      cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(Some(oAuthInfo))
-      oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(Success(oAuthInfo))
-      requestHolder.sign(any) returns requestHolder
-      requestHolder.get() returns Future.successful(response)
-      response.json returns Helper.loadJson("providers/oauth1/twitter.success.json")
-      httpLayer.url(API) returns requestHolder
-
-      await(provider.authenticate())
-      there was one(authInfoService).save[OAuth1Info](LoginInfo(provider.id, "6253282"), oAuthInfo)
     }
   }
 
@@ -143,6 +128,6 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new TwitterProvider(authInfoService, cacheLayer, httpLayer, oAuthService, oAuthSettings)
+    lazy val provider = new TwitterProvider(cacheLayer, httpLayer, oAuthService, oAuthSettings)
   }
 }

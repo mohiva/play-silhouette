@@ -93,7 +93,7 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       }
     }
 
-    "return the social profile" in new WithApplication with Context {
+    "return the social profile and the auth info with expires value" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
       val requestHolder = mock[WS.WSRequestHolder]
@@ -112,6 +112,11 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
         case p =>
           p must be equalTo new SocialProfile(
             loginInfo = LoginInfo(provider.id, "134405962728980"),
+            authInfo = OAuth2Info(
+              accessToken = "my.access.token",
+              tokenType = None,
+              expiresIn = Some(1),
+              refreshToken = None),
             firstName = Some("Apollonia"),
             lastName = Some("Vanova"),
             fullName = Some("Apollonia Vanova"),
@@ -121,30 +126,7 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       }
     }
 
-    "store the auth info with expires value if the authentication was successful" in new WithApplication with Context {
-      val cacheID = UUID.randomUUID().toString
-      val state = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
-      implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      response.body returns AccessToken + "=my.access.token&" + Expires + "=1"
-      response.json returns Helper.loadJson("providers/oauth2/facebook.success.json")
-      requestHolder.withHeaders(any) returns requestHolder
-      requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
-      requestHolder.get() returns Future.successful(response)
-      cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
-      httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      httpLayer.url(API.format("my.access.token")) returns requestHolder
-
-      await(provider.authenticate())
-      there was one(authInfoService).save[OAuth2Info](LoginInfo(provider.id, "134405962728980"), OAuth2Info(
-        accessToken = "my.access.token",
-        tokenType = None,
-        expiresIn = Some(1),
-        refreshToken = None))
-    }
-
-    "store the auth info without expires value if the authentication was successful" in new WithApplication with Context {
+    "return the social profile and the auth info without expires value" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
       val requestHolder = mock[WS.WSRequestHolder]
@@ -159,12 +141,22 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      await(provider.authenticate())
-      there was one(authInfoService).save[OAuth2Info](LoginInfo(provider.id, "134405962728980"), OAuth2Info(
-        accessToken = "my.access.token",
-        tokenType = None,
-        expiresIn = None,
-        refreshToken = None))
+      profile(provider.authenticate()) {
+        case p =>
+          p must be equalTo new SocialProfile(
+            loginInfo = LoginInfo(provider.id, "134405962728980"),
+            authInfo = OAuth2Info(
+              accessToken = "my.access.token",
+              tokenType = None,
+              expiresIn = None,
+              refreshToken = None),
+            firstName = Some("Apollonia"),
+            lastName = Some("Vanova"),
+            fullName = Some("Apollonia Vanova"),
+            email = Some("apollonia.vanova@watchmen.com"),
+            avatarURL = Some("https://fbcdn-sphotos-g-a.akamaihd.net/hphotos-ak-ash2/t1/36245_155530314499277_2350717_n.jpg?lvh=1")
+          )
+      }
     }
   }
 
@@ -194,6 +186,6 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new FacebookProvider(authInfoService, cacheLayer, httpLayer, oAuthSettings)
+    lazy val provider = new FacebookProvider(cacheLayer, httpLayer, oAuthSettings)
   }
 }
