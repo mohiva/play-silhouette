@@ -23,10 +23,12 @@ import play.api.libs.ws.Response
 import play.api.libs.json.JsObject
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{ Success, Failure, Try }
 import com.mohiva.play.silhouette.core._
+import com.mohiva.play.silhouette.core.services.AuthInfoService
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
-import com.mohiva.play.silhouette.core.services.AuthInfoService
+import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import FacebookProvider._
 import OAuth2Provider._
 
@@ -60,9 +62,9 @@ class FacebookProvider(
    * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
-   * @return The social profile.
+   * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[SocialProfile] = {
+  protected def buildProfile(authInfo: OAuth2Info): Future[Try[SocialProfile]] = {
     httpLayer.url(API.format(authInfo.accessToken)).get().map { response =>
       val json = response.json
       (json \ Error).asOpt[JsObject] match {
@@ -71,7 +73,7 @@ class FacebookProvider(
           val errorType = (error \ Type).as[String]
           val errorCode = (error \ Code).as[Int]
 
-          throw new AuthenticationException(SpecifiedProfileError.format(id, errorMsg, errorType, errorCode))
+          Failure(new AuthenticationException(SpecifiedProfileError.format(id, errorMsg, errorType, errorCode)))
         case _ =>
           val userID = (json \ ID).as[String]
           val firstName = (json \ FirstName).asOpt[String]
@@ -80,17 +82,16 @@ class FacebookProvider(
           val avatarURL = (json \ Picture \ Data \ URL).asOpt[String]
           val email = (json \ Email).asOpt[String]
 
-          SocialProfile(
+          Success(SocialProfile(
             loginInfo = LoginInfo(id, userID),
             firstName = firstName,
             lastName = lastName,
             fullName = fullName,
             avatarURL = avatarURL,
-            email = email)
+            email = email))
       }
     }.recover {
-      case e if !e.isInstanceOf[AuthenticationException] =>
-        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
+      case e => Failure(new AuthenticationException(UnspecifiedProfileError.format(id), e))
     }
   }
 
@@ -100,13 +101,13 @@ class FacebookProvider(
    * Facebook does not follow the OAuth2 spec :-\
    *
    * @param response The response from the provider.
-   * @return The OAuth2 info.
+   * @return The OAuth2 info on success, otherwise an failure.
    */
-  override protected def buildInfo(response: Response): OAuth2Info = {
+  override protected def buildInfo(response: Response): Try[OAuth2Info] = {
     response.body.split("&|=") match {
-      case Array(AccessToken, token, Expires, expiresIn) => OAuth2Info(token, None, Some(expiresIn.toInt))
-      case Array(AccessToken, token) => OAuth2Info(token)
-      case _ => throw new AuthenticationException(InvalidResponseFormat.format(id, response.body))
+      case Array(AccessToken, token, Expires, expiresIn) => Success(OAuth2Info(token, None, Some(expiresIn.toInt)))
+      case Array(AccessToken, token) => Success(OAuth2Info(token))
+      case _ => Failure(new AuthenticationException(InvalidResponseFormat.format(id, response.body)))
     }
   }
 }

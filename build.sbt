@@ -1,17 +1,14 @@
 import play.Project._
 import mohiva.sbt.Helper._
+import com.typesafe.sbt.SbtScalariform._
+
+//*******************************
+// Play settings
+//*******************************
 
 name := "play-silhouette"
 
 version := "1.0-SNAPSHOT"
-
-organization := "com.mohiva"
-
-description := "Authentication library for Play Framework applications that supports several authentication methods, including OAuth, OAuth2, OpenID and password"
-
-homepage := Some(url("http://silhouette.mohiva.com/"))
-
-licenses := Seq("Apache License" -> url("https://github.com/mohiva/play-silhouette/blob/master/LICENSE"))
 
 libraryDependencies ++= Seq(
   cache,
@@ -22,7 +19,19 @@ libraryDependencies ++= Seq(
   "net.codingwell" %% "scala-guice" % "4.0.0-beta" % "test"
 )
 
-parallelExecution in Test := false
+playScalaSettings
+
+//*******************************
+// Maven settings
+//*******************************
+
+organization := "com.mohiva"
+
+description := "Authentication library for Play Framework applications that supports several authentication methods, including OAuth, OAuth2, OpenID and password"
+
+homepage := Some(url("http://silhouette.mohiva.com/"))
+
+licenses := Seq("Apache License" -> url("https://github.com/mohiva/play-silhouette/blob/master/LICENSE"))
 
 val pom = <scm>
     <url>git@github.com:mohiva/play-silhouette.git</url>
@@ -59,7 +68,15 @@ publishTo <<= version { v: String =>
 
 credentials += Credentials(Path.userHome / ".sbt" / "sonatype.credentials")
 
-playScalaSettings ++ ScoverageSbtPlugin.instrumentSettings
+//*******************************
+// Test settings
+//*******************************
+
+parallelExecution in Test := false
+
+//*******************************
+// Compiler settings
+//*******************************
 
 scalacOptions ++= Seq(
   "-deprecation", // Emit warning and location for usages of deprecated APIs.
@@ -82,13 +99,27 @@ scalacOptions in scoverageTest ~= { (options: Seq[String]) =>
   options filterNot ( _ == "-Ywarn-dead-code" )  // The same when running under scoverage.
 }
 
-CoverallsPlugin.singleProject
+//*******************************
+// Coveralls settings
+//*******************************
+
+ScoverageSbtPlugin.instrumentSettings
+
+CoverallsPlugin.coverallsSettings
+
+//*******************************
+// Scalariform settings
+//*******************************
 
 defaultScalariformSettings
 
+//*******************************
+// ScalaDoc settings
+//*******************************
+
 autoAPIMappings := true
 
-apiURL := Some(url(s"http://silhouette.mohiva.com/api/${version}/"))
+apiURL := Some(url(s"http://silhouette.mohiva.com/api/$version/"))
 
 apiMappings ++= {
   implicit val cp = (fullClasspath in Compile).value

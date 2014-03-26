@@ -20,8 +20,9 @@ import java.util.UUID
 import play.api.libs.ws.{ Response, WS }
 import play.api.test.{ FakeRequest, WithApplication }
 import scala.concurrent.Future
+import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
-import com.mohiva.play.silhouette.core.{ LoginInfo, AuthenticationException }
+import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import FacebookProvider._
 import OAuth2Provider._
 
@@ -31,7 +32,7 @@ import OAuth2Provider._
 class FacebookProviderSpec extends OAuth2ProviderSpec {
 
   "The authenticate method" should {
-    "throw AuthenticationException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
+    "fail with AuthenticationException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
       val requestHolder = mock[WS.WSRequestHolder]
@@ -43,12 +44,12 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
 
-      await(provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must equalTo(InvalidResponseFormat.format(provider.id, ""))
+      failedTry[AuthenticationException](provider.authenticate()) {
+        mustEqualTo(InvalidResponseFormat.format(provider.id, ""))
       }
     }
 
-    "throw AuthenticationException if API returns error" in new WithApplication with Context {
+    "fail with AuthenticationException if API returns error" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
       val requestHolder = mock[WS.WSRequestHolder]
@@ -63,8 +64,8 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      await(provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must equalTo(SpecifiedProfileError.format(
+      failedTry[AuthenticationException](provider.authenticate()) {
+        mustEqualTo(SpecifiedProfileError.format(
           provider.id,
           "An active access token must be used to query information about the current user.",
           "OAuthException",
@@ -72,7 +73,7 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       }
     }
 
-    "throw AuthenticationException if an unexpected error occurred" in new WithApplication with Context {
+    "fail with AuthenticationException if an unexpected error occurred" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
       val requestHolder = mock[WS.WSRequestHolder]
@@ -87,8 +88,8 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      await(provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must equalTo(UnspecifiedProfileError.format(provider.id))
+      failedTry[AuthenticationException](provider.authenticate()) {
+        mustEqualTo(UnspecifiedProfileError.format(provider.id))
       }
     }
 
@@ -107,7 +108,7 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      await(provider.authenticate()) must beRight.like {
+      profile(provider.authenticate()) {
         case p =>
           p must be equalTo new SocialProfile(
             loginInfo = LoginInfo(provider.id, "134405962728980"),

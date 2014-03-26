@@ -25,10 +25,12 @@ import play.api.mvc.{ SimpleResult, RequestHeader, Results }
 import play.api.libs.ws.Response
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
+import scala.util.{ Failure, Success, Try }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.services.AuthInfo
+import com.mohiva.play.silhouette.core.exceptions._
 import com.mohiva.play.silhouette.core._
 import OAuth2Provider._
 
@@ -67,36 +69,39 @@ abstract class OAuth2Provider(
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  protected def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, OAuth2Info]] = {
+  protected def doAuth()(implicit request: RequestHeader): Future[Try[Either[SimpleResult, OAuth2Info]]] = {
     request.queryString.get(Error).flatMap(_.headOption).map {
-      case e @ AccessDenied => throw new AccessDeniedException(AuthorizationError.format(id, e))
-      case error => throw new AuthenticationException(AuthorizationError.format(id, error))
-    }
-
-    request.queryString.get(Code).flatMap(_.headOption) match {
-      // We're being redirected back from the authorization server with the access code
-      case Some(code) => cachedState.map { case (cacheID, cachedState) => cachedState == requestState }.flatMap {
-        case false => throw new AuthenticationException(StateIsNotEqual.format(id))
-        case true => getAccessToken(code).map(oauth2Info => Right(oauth2Info))
+      case e @ AccessDenied => new AccessDeniedException(AuthorizationError.format(id, e))
+      case e => new AuthenticationException(AuthorizationError.format(id, e))
+    } match {
+      case Some(throwable) => Future.failed(throwable)
+      case None => request.queryString.get(Code).flatMap(_.headOption) match {
+        // We're being redirected back from the authorization server with the access code
+        case Some(code) => cachedState.flatMap(_.asFuture.flatMap {
+          case (cacheID, cachedState) => cachedState == requestState.get match {
+            case false => Future.failed(new AuthenticationException(StateIsNotEqual.format(id)))
+            case true => getAccessToken(code).map(oauth2Info => oauth2Info.map(i => Right(i)))
+          }
+        })
+        // There's no code in the request, this is the first step in the OAuth flow
+        case None =>
+          val state = UUID.randomUUID().toString
+          val cacheID = request.session.get(CacheKey).getOrElse(UUID.randomUUID().toString)
+          val params = settings.scope.foldLeft(List(
+            (ClientID, settings.clientID),
+            (RedirectURI, settings.redirectURL),
+            (ResponseType, Code),
+            (State, state)) ++ settings.authorizationParams.toList) {
+            case (p, s) => (Scope, s) :: p
+          }
+          val encodedParams = params.map { p => encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8") }
+          val url = settings.authorizationURL + encodedParams.mkString("?", "&", "")
+          val redirect = Results.Redirect(url).withSession(request.session + (CacheKey -> cacheID))
+          logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
+          logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
+          cacheLayer.set(cacheID, state, CacheExpiration)
+          Future.successful(Success(Left(redirect)))
       }
-      // There's no code in the request, this is the first step in the OAuth flow
-      case None =>
-        val state = UUID.randomUUID().toString
-        val cacheID = request.session.get(CacheKey).getOrElse(UUID.randomUUID().toString)
-        val params = settings.scope.foldLeft(List(
-          (ClientID, settings.clientID),
-          (RedirectURI, settings.redirectURL),
-          (ResponseType, Code),
-          (State, state)) ++ settings.authorizationParams.toList) {
-          case (p, s) => (Scope, s) :: p
-        }
-        val encodedParams = params.map { p => encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8") }
-        val url = settings.authorizationURL + encodedParams.mkString("?", "&", "")
-        val redirect = Results.Redirect(url).withSession(request.session + (CacheKey -> cacheID))
-        logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
-        logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
-        cacheLayer.set(cacheID, state, CacheExpiration)
-        Future.successful(Left(redirect))
     }
   }
 
@@ -106,7 +111,7 @@ abstract class OAuth2Provider(
    * @param code The access code.
    * @return The info containing the access token.
    */
-  protected def getAccessToken(code: String): Future[OAuth2Info] = {
+  protected def getAccessToken(code: String): Future[Try[OAuth2Info]] = {
     httpLayer.url(settings.accessTokenURL).withHeaders(headers: _*).post(Map(
       ClientID -> Seq(settings.clientID),
       ClientSecret -> Seq(settings.clientSecret),
@@ -122,26 +127,26 @@ abstract class OAuth2Provider(
    * Builds the OAuth2 info.
    *
    * @param response The response from the provider.
-   * @return The OAuth2 info.
+   * @return The OAuth2 info on success, otherwise an failure.
    */
-  protected def buildInfo(response: Response): OAuth2Info = response.json.validate[OAuth2Info].asEither.fold(
-    error => throw new AuthenticationException(InvalidResponseFormat.format(id, error)),
-    info => info
+  protected def buildInfo(response: Response): Try[OAuth2Info] = response.json.validate[OAuth2Info].asEither.fold(
+    error => Failure(new AuthenticationException(InvalidResponseFormat.format(id, error))),
+    info => Success(info)
   )
 
   /**
    * Gets the cached state if it's stored in cache.
    *
    * @param request The request header.
-   * @return A tuple contains the cache ID with the cached state.
+   * @return A tuple contains the cache ID with the cached state on success, otherwise an failure.
    */
-  private def cachedState(implicit request: RequestHeader): Future[(String, String)] = {
+  private def cachedState(implicit request: RequestHeader): Future[Try[(String, String)]] = {
     request.session.get(CacheKey) match {
       case Some(cacheID) => cacheLayer.get[String](cacheID).map {
-        case Some(state) => cacheID -> state
-        case _ => throw new AuthenticationException(CachedStateDoesNotExists.format(id, cacheID))
+        case Some(state) => Success(cacheID -> state)
+        case _ => Failure(new AuthenticationException(CachedStateDoesNotExists.format(id, cacheID)))
       }
-      case _ => throw new AuthenticationException(CacheKeyNotInSession.format(id, CacheKey))
+      case _ => Future.failed(new AuthenticationException(CacheKeyNotInSession.format(id, CacheKey)))
     }
   }
 
@@ -149,12 +154,12 @@ abstract class OAuth2Provider(
    * Gets the state from request.
    *
    * @param request The request header.
-   * @return The state from request.
+   * @return The state from request on success, otherwise an failure.
    */
-  private def requestState(implicit request: RequestHeader): String = {
+  private def requestState(implicit request: RequestHeader): Try[String] = {
     request.queryString.get(State).flatMap(_.headOption) match {
-      case Some(state) => state
-      case _ => throw new AuthenticationException(RequestStateDoesNotExists.format(id))
+      case Some(state) => Success(state)
+      case _ => Failure(new AuthenticationException(RequestStateDoesNotExists.format(id)))
     }
   }
 }

@@ -16,16 +16,15 @@
 package com.mohiva.play.silhouette.core.providers
 
 import java.util.UUID
-import play.api.test.{ FakeRequest, WithApplication, PlaySpecification }
-import org.specs2.matcher.{ ThrownExpectations, JsonMatchers }
+import play.api.test.{ FakeRequest, WithApplication }
+import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import scala.util.{ Success, Failure }
 import scala.concurrent.Future
 import com.mohiva.play.silhouette.core.utils.{ CacheLayer, HTTPLayer }
 import com.mohiva.play.silhouette.core.services.AuthInfoService
-import com.mohiva.play.silhouette.core.AccessDeniedException
-import com.mohiva.play.silhouette.core.AuthenticationException
+import com.mohiva.play.silhouette.core.exceptions._
 import OAuth1Provider._
 
 /**
@@ -33,24 +32,24 @@ import OAuth1Provider._
  *
  * These tests will be additionally executed before every OAuth1 provider spec.
  */
-abstract class OAuth1ProviderSpec extends PlaySpecification with Mockito with JsonMatchers {
+abstract class OAuth1ProviderSpec extends ProviderSpec {
   isolated
 
   "The authenticate method" should {
     val c = context
-    "throw an AccessDeniedException if denied key exists in query string" in new WithApplication {
+    "fail with an AccessDeniedException if denied key exists in query string" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + Denied + "=")
-      await(c.provider.authenticate()) must throwAn[AccessDeniedException].like {
-        case e => e.getMessage must startWith(AuthorizationError.format(c.provider.id, ""))
+      failedTry[AccessDeniedException](c.provider.authenticate()) {
+        mustStartWith(AuthorizationError.format(c.provider.id, ""))
       }
     }
 
-    "throw an AuthenticationException if request token cannot be retrieved" in new WithApplication {
+    "fail with an AuthenticationException if request token cannot be retrieved" in new WithApplication {
       implicit val req = FakeRequest()
       c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.successful(Failure(new Exception("")))
 
-      await(c.provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must startWith(ErrorRequestToken.format(c.provider.id, ""))
+      failedTry[AuthenticationException](c.provider.authenticate()) {
+        mustStartWith(ErrorRequestToken.format(c.provider.id, ""))
       }
     }
 
@@ -59,9 +58,8 @@ abstract class OAuth1ProviderSpec extends PlaySpecification with Mockito with Js
       c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.successful(Success(c.oAuthInfo))
       c.oAuthService.redirectUrl(any) returns c.oAuthSettings.authorizationURL
 
-      await(c.provider.authenticate()) must beLeft.like {
-        case r =>
-          val result = Future.successful(r)
+      result(c.provider.authenticate()) {
+        case result =>
           status(result) must equalTo(SEE_OTHER)
           session(result).get(OAuth1Provider.CacheKey) must beSome.which(s => UUID.fromString(s).toString == s)
           redirectLocation(result) must beSome.which(_ == c.oAuthSettings.authorizationURL)
@@ -73,40 +71,39 @@ abstract class OAuth1ProviderSpec extends PlaySpecification with Mockito with Js
       c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.successful(Success(c.oAuthInfo))
       c.oAuthService.redirectUrl(any) returns c.oAuthSettings.authorizationURL
 
-      await(c.provider.authenticate()) must beLeft.like {
-        case r =>
-          val result = Future.successful(r)
+      result(c.provider.authenticate()) {
+        case result =>
           val cacheID = session(result).get(OAuth1Provider.CacheKey).get
 
           there was one(c.cacheLayer).set(cacheID, c.oAuthInfo, CacheExpiration)
       }
     }
 
-    "throw an AuthenticationException if OAuthVerifier exists in URL but info doesn't exists in session" in new WithApplication {
+    "fail with an AuthenticationException if OAuthVerifier exists in URL but info doesn't exists in session" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier")
-      await(c.provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must startWith(CacheKeyNotInSession.format(c.provider.id, ""))
+      failedTry[AuthenticationException](c.provider.authenticate()) {
+        mustStartWith(CacheKeyNotInSession.format(c.provider.id, ""))
       }
     }
 
-    "throw an AuthenticationException if OAuthVerifier exists in URL but info doesn't exists in cache" in new WithApplication {
+    "fail with an AuthenticationException if OAuthVerifier exists in URL but info doesn't exists in cache" in new WithApplication {
       val cacheID = UUID.randomUUID().toString
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
       c.cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(None)
 
-      await(c.provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must startWith(CachedTokenDoesNotExists.format(c.provider.id, ""))
+      failedTry[AuthenticationException](c.provider.authenticate()) {
+        mustStartWith(CachedTokenDoesNotExists.format(c.provider.id, ""))
       }
     }
 
-    "throw an AuthenticationException if access token cannot be retrieved" in new WithApplication {
+    "fail with an AuthenticationException if access token cannot be retrieved" in new WithApplication {
       val cacheID = UUID.randomUUID().toString
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
       c.cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(Some(c.oAuthInfo))
       c.oAuthService.retrieveAccessToken(c.oAuthInfo, "my.verifier") returns Future.successful(Failure(new Exception("")))
 
-      await(c.provider.authenticate()) must throwAn[AuthenticationException].like {
-        case e => e.getMessage must startWith(ErrorAccessToken.format(c.provider.id, ""))
+      failedTry[AuthenticationException](c.provider.authenticate()) {
+        mustStartWith(ErrorAccessToken.format(c.provider.id, ""))
       }
     }
   }

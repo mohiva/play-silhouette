@@ -23,8 +23,10 @@ package com.mohiva.play.silhouette.core.providers.helpers
 import play.api.libs.ws.Response
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import com.mohiva.play.silhouette.core.{ LoginInfo, AuthenticationException }
+import scala.util.{ Success, Failure, Try }
+import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers.SocialProfile
+import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 
 /**
  * Parses the JSON response for the LinkedIn OAuth1 and OAuth2 API.
@@ -62,9 +64,9 @@ object LinkedInProfile {
    * Builds the social profile from the JSON response.
    *
    * @param maybeResponse The response from the provider.
-   * @return The social profile.
+   * @return On success the build social profile, otherwise a failure.
    */
-  def build(maybeResponse: Future[Response]): Future[SocialProfile] = {
+  def build(maybeResponse: Future[Response]): Future[Try[SocialProfile]] = {
     maybeResponse.map { response =>
       val json = response.json
       (json \ ErrorCode).asOpt[Int] match {
@@ -74,7 +76,7 @@ object LinkedInProfile {
           val status = (json \ Status).asOpt[Int]
           val timestamp = (json \ Timestamp).asOpt[Long]
 
-          throw new AuthenticationException(SpecifiedProfileError.format(LinkedIn, error, message, requestId, status, timestamp))
+          Failure(new AuthenticationException(SpecifiedProfileError.format(LinkedIn, error, message, requestId, status, timestamp)))
         case _ =>
           val userID = (json \ ID).as[String]
           val firstName = (json \ FirstName).asOpt[String]
@@ -83,17 +85,16 @@ object LinkedInProfile {
           val avatarURL = (json \ PictureUrl).asOpt[String]
           val email = (json \ EmailAddress).asOpt[String]
 
-          SocialProfile(
+          Success(SocialProfile(
             loginInfo = LoginInfo(LinkedIn, userID),
             firstName = firstName,
             lastName = lastName,
             fullName = fullName,
             avatarURL = avatarURL,
-            email = email)
+            email = email))
       }
     }.recover {
-      case e if !e.isInstanceOf[AuthenticationException] =>
-        throw new AuthenticationException(UnspecifiedProfileError.format(LinkedIn), e)
+      case e => Failure(new AuthenticationException(UnspecifiedProfileError.format(LinkedIn), e))
     }
   }
 }
