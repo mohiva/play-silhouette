@@ -214,15 +214,15 @@ for different schemes and services.
       </h4>
       <p class="comment cmt">The password details.</p>
     </li><li name="com.mohiva.play.silhouette.core.providers.SocialProfile" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SocialProfileextendsProductwithSerializable"></a>
-      <a id="SocialProfile:SocialProfile"></a>
+      <a id="SocialProfile[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsProductwithSerializable"></a>
+      <a id="SocialProfile[A&lt;:AuthInfo]:SocialProfile[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="SocialProfile.html"><span class="name">SocialProfile</span></a><span class="params">(<span name="loginInfo">loginInfo: <a href="../LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="firstName">firstName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="lastName">lastName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="fullName">fullName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="email">email: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="avatarURL">avatarURL: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="SocialProfile.html"><span class="name">SocialProfile</span></a><span class="tparams">[<span name="A">A &lt;: <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile.A">A</span></span>, <span name="firstName">firstName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="lastName">lastName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="fullName">fullName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="email">email: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="avatarURL">avatarURL: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       <p class="comment cmt">The social profile contains all the data returned from the social providers after authentication.</p>
@@ -285,7 +285,20 @@ a <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Futu
         <a href="OAuth1Provider$.html"><span class="name">OAuth1Provider</span></a>
       </span>
       </h4>
-      <p class="comment cmt">The companion object.</p>
+      <p class="comment cmt">The OAuth1Provider companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Info" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OAuth2Info"></a>
+      <a id="OAuth2Info:OAuth2Info"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="OAuth2Info$.html"><span class="name">OAuth2Info</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The Oauth2 companion object.</p>
     </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="OAuth2Provider"></a>
       <a id="OAuth2Provider:OAuth2Provider"></a>
@@ -298,7 +311,7 @@ a <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Futu
         <a href="OAuth2Provider$.html"><span class="name">OAuth2Provider</span></a>
       </span>
       </h4>
-      <p class="comment cmt">The companion object.</p>
+      <p class="comment cmt">The OAuth2Provider companion object.</p>
     </li><li name="com.mohiva.play.silhouette.core.providers.helpers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="helpers"></a>
       <a id="helpers:helpers"></a>

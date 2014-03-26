@@ -361,19 +361,19 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile#build" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="build(maybeResponse:scala.concurrent.Future[play.api.libs.ws.Response]):scala.concurrent.Future[scala.util.Try[com.mohiva.play.silhouette.core.providers.SocialProfile]]"></a>
-      <a id="build(Future[Response]):Future[Try[SocialProfile]]"></a>
+      <a id="build[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo](maybeResponse:scala.concurrent.Future[play.api.libs.ws.Response],authInfo:A):scala.concurrent.Future[scala.util.Try[com.mohiva.play.silhouette.core.providers.SocialProfile[A]]]"></a>
+      <a id="build[A&lt;:AuthInfo](Future[Response],A):Future[Try[SocialProfile[A]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">build</span><span class="params">(<span name="maybeResponse">maybeResponse: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="play.api.libs.ws.Response">Response</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.util.Try" class="extype" target="_top">Try</a>[<a href="../SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>]]</span>
+        <span class="name">build</span><span class="tparams">[<span name="A">A &lt;: <a href="../../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="params">(<span name="maybeResponse">maybeResponse: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="play.api.libs.ws.Response">Response</span>]</span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile.build.A">A</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.util.Try" class="extype" target="_top">Try</a>[<a href="../SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>[<span class="extype" name="com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile.build.A">A</span>]]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Builds the social profile from the JSON response.</p><div class="fullcomment"><div class="comment cmt"><p>Builds the social profile from the JSON response.
-</p></div><dl class="paramcmts block"><dt class="param">maybeResponse</dt><dd class="cmt"><p>The response from the provider.</p></dd><dt>returns</dt><dd class="cmt"><p>On success the build social profile, otherwise a failure.
+</p></div><dl class="paramcmts block"><dt class="param">maybeResponse</dt><dd class="cmt"><p>The response from the provider.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info received from the provider.</p></dd><dt>returns</dt><dd class="cmt"><p>On success the build social profile, otherwise a failure.
 </p></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
