@@ -19,12 +19,12 @@
  */
 package com.mohiva.play.silhouette.contrib.services
 
-import com.mohiva.play.silhouette.core.Logger
 import java.security.MessageDigest
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core.services.AvatarService
 import com.mohiva.play.silhouette.core.utils.HTTPLayer
+import com.mohiva.play.silhouette.core.Logger
 import GravatarService._
 
 /**
@@ -46,10 +46,12 @@ class GravatarService(httpLayer: HTTPLayer) extends AvatarService with Logger {
         val url = URL.format(hash)
         httpLayer.url(url).get().map(_.status match {
           case 200 => Some(url)
-          case _ => None
+          case code =>
+            logger.info("[Silhouette] Gravatar API returns status code: " + code)
+            None
         }).recover {
           case e =>
-            logger.error("[Silhouette] Error invoking gravatar", e)
+            logger.info("[Silhouette] Error invoking gravatar", e)
             None
         }
       case None => Future.successful(None)

@@ -24,7 +24,7 @@ import oauth.signpost.exception.{ OAuthException, OAuthMessageSignerException }
 import com.mohiva.play.silhouette.core.providers.{ OAuth1Info, OAuth1Settings }
 
 /**
- * Test case for the [[PlayOAuth1Service]] class.
+ * Test case for the [[com.mohiva.play.silhouette.contrib.services.PlayOAuth1Service]] class.
  */
 class PlayOAuth1ServiceSpec extends PlaySpecification with Mockito {
 

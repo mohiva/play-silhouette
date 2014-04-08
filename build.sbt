@@ -13,7 +13,6 @@ version := "1.0-SNAPSHOT"
 libraryDependencies ++= Seq(
   cache,
   "org.mindrot" % "jbcrypt" % "0.3m",
-  "javax.inject" % "javax.inject" % "1",
   "org.mockito" % "mockito-core" % "1.9.5" % "test",
   "com.google.inject" % "guice" % "4.0-beta" % "test",
   "net.codingwell" %% "scala-guice" % "4.0.0-beta" % "test"
