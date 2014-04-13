@@ -28,7 +28,7 @@ scripts/validate-format
 
 echo ""
 echo "Testing and generating documentation"
-scripts/sbt -v coveralls doc
+scripts/sbt -v test doc
 
 echo ""
 echo "Build finished"
