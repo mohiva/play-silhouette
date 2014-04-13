@@ -143,14 +143,11 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
       scope = Some("repo,gist"))
 
     /**
-     * The OAuth2 info returned by GutHub
+     * The OAuth2 info returned by GitHub.
      *
-     * @see https://developer.github.com/v3/oauth/#response
+     * @see http://vk.com/dev/auth_sites
      */
-    override lazy val oAuthInfo: JsValue = Json.obj(
-      "access_token" -> "my.access.token",
-      "scope" -> "repo,gist",
-      "token_type" -> "bearer")
+    override lazy val oAuthInfo = Helper.loadJson("providers/oauth2/github.access.token.json")
 
     /**
      * The provider to test.

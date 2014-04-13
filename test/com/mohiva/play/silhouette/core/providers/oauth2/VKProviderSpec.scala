@@ -142,7 +142,7 @@ class VKProviderSpec extends OAuth2ProviderSpec {
       scope = None)
 
     /**
-     * The OAuth2 info returned by GutHub
+     * The OAuth2 info returned by VK.
      *
      * @see http://vk.com/dev/auth_sites
      */

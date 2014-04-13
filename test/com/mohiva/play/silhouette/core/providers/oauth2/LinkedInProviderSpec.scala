@@ -148,7 +148,7 @@ class LinkedInProviderSpec extends OAuth2ProviderSpec {
       scope = None)
 
     /**
-     * The OAuth2 info returned by GutHub
+     * The OAuth2 info returned by LinkedIn.
      *
      * @see https://developer.linkedin.com/documents/authentication
      */
