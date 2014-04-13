@@ -54,6 +54,7 @@ abstract class OAuth1Provider(
    * @return Either a Result or the auth info from the provider.
    */
   protected def doAuth()(implicit request: RequestHeader): Future[Try[Either[SimpleResult, OAuth1Info]]] = {
+    logger.debug("[Silhouette][%s] Query string: %s".format(id, request.rawQueryString))
     request.queryString.get(Denied) match {
       case Some(_) => Future.failed(new AccessDeniedException(AuthorizationError.format(id, Denied)))
       case None => request.queryString.get(OAuthVerifier) match {
