@@ -238,6 +238,13 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       clientSecret = "my.client.secret")
 
     /**
+     * The OAuth2 info returned by Foursquare.
+     *
+     * @see https://developer.foursquare.com/overview/auth
+     */
+    override lazy val oAuthInfo = Helper.loadJson("providers/oauth2/foursquare.access.token.json")
+
+    /**
      * The provider to test.
      */
     lazy val provider = new FoursquareProvider(cacheLayer, httpLayer, oAuthSettings)

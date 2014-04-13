@@ -172,6 +172,13 @@ class GoogleProviderSpec extends OAuth2ProviderSpec {
       scope = Some("profile,email"))
 
     /**
+     * The OAuth2 info returned by Google.
+     *
+     * @see https://developers.google.com/accounts/docs/OAuth2Login#sendauthrequest
+     */
+    override lazy val oAuthInfo = Helper.loadJson("providers/oauth2/google.access.token.json")
+
+    /**
      * The provider to test.
      */
     lazy val provider = new GoogleProvider(cacheLayer, httpLayer, oAuthSettings)

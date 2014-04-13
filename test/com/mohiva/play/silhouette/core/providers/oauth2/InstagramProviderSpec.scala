@@ -142,7 +142,7 @@ class InstagramProviderSpec extends OAuth2ProviderSpec {
       scope = Some("basic"))
 
     /**
-     * The OAuth2 info returned by GutHub
+     * The OAuth2 info returned by Instagram.
      *
      * @see http://instagram.com/developer/authentication/
      */
