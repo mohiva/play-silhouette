@@ -33,7 +33,7 @@ trait Identity {
 }
 
 /**
- * Represents a linked login for an identity (i.e. a local username/password or a facebook/google account.
+ * Represents a linked login for an identity (i.e. a local username/password or a Facebook/Google account).
  *
  * The login info contains the data about the provider that authenticated that identity.
  *
