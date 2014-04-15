@@ -42,7 +42,7 @@ class BCryptPasswordHasher(logRounds: Int = 10) extends PasswordHasher {
   /**
    * Hashes a password.
    *
-   * This implementation does not return the salt because it is not needed to verify passwords later.
+   * This implementation does not return the salt separately because it is embedded in the hashed password.
    * Other implementations might need to return it so it gets saved in the backing store.
    *
    * @param plainPassword The password to hash.
