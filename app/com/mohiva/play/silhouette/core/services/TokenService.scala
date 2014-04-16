@@ -20,7 +20,7 @@
 package com.mohiva.play.silhouette.core.services
 
 import scala.concurrent.Future
-import com.mohiva.play.silhouette.core.Token
+import com.mohiva.play.silhouette.core.{ Token, TokenID }
 
 /**
  * A trait that provides the means to handle auth tokens for the Silhouette module.
@@ -46,7 +46,7 @@ trait TokenService[T <: Token] {
    * @param id The token ID.
    * @return The retrieved token or None if no token could be retrieved for the given ID.
    */
-  def retrieve(id: String): Future[Option[T]]
+  def retrieve(id: TokenID): Future[Option[T]]
 
   /**
    * Consumes a token.
@@ -59,5 +59,5 @@ trait TokenService[T <: Token] {
    *
    * @param id The ID of the token to consume.
    */
-  def consume(id: String)
+  def consume(id: TokenID)
 }

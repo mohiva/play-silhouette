@@ -25,5 +25,12 @@ trait Token {
    *
    * @return The token ID.
    */
-  def id: String
+  def id: TokenID
 }
+
+/**
+ * A strongly-typed token ID.
+ *
+ * It might be implemented as a UUID value, a String value, etc.
+ */
+trait TokenID
