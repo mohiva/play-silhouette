@@ -22,7 +22,6 @@ package com.mohiva.play.silhouette.core.providers.oauth2
 import play.api.http.HeaderNames
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{ Success, Failure, Try }
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
@@ -66,29 +65,30 @@ class GitHubProvider(
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[Try[SocialProfile[OAuth2Info]]] = {
+  protected def buildProfile(authInfo: OAuth2Info): Future[SocialProfile[OAuth2Info]] = {
     httpLayer.url(API.format(authInfo.accessToken)).get().map { response =>
       val json = response.json
       (json \ Message).asOpt[String] match {
         case Some(msg) =>
           val docURL = (json \ DocURL).asOpt[String]
 
-          Failure(new AuthenticationException(SpecifiedProfileError.format(id, msg, docURL)))
+          throw new AuthenticationException(SpecifiedProfileError.format(id, msg, docURL))
         case _ =>
           val userID = (json \ ID).as[Long]
           val fullName = (json \ Name).asOpt[String]
           val avatarUrl = (json \ AvatarURL).asOpt[String]
           val email = (json \ Email).asOpt[String].filter(!_.isEmpty)
 
-          Success(SocialProfile(
+          SocialProfile(
             loginInfo = LoginInfo(id, userID.toString),
             authInfo = authInfo,
             fullName = fullName,
             avatarURL = avatarUrl,
-            email = email))
+            email = email)
       }
     }.recover {
-      case e => Failure(new AuthenticationException(UnspecifiedProfileError.format(id), e))
+      case e if !e.isInstanceOf[AuthenticationException] =>
+        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
     }
   }
 }

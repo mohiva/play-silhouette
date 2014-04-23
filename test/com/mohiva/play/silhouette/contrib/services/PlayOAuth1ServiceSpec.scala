@@ -35,30 +35,30 @@ class PlayOAuth1ServiceSpec extends PlaySpecification with Mockito {
   }
 
   "The retrieveRequestToken method" should {
-    "return Failure if the token couldn't be retrieved" in new Context {
+    "throw exception if the token couldn't be retrieved" in new Context {
       oauth.retrieveRequestToken(settings.callbackURL) returns Left(new OAuthMessageSignerException(""))
 
-      await(service.retrieveRequestToken(settings.callbackURL)) must beFailedTry.withThrowable[OAuthException]
+      await(service.retrieveRequestToken(settings.callbackURL)) must throwA[OAuthException]
     }
 
-    "return Success if the token could be retrieved" in new Context {
+    "return request token" in new Context {
       oauth.retrieveRequestToken(settings.callbackURL) returns Right(token)
 
-      await(service.retrieveRequestToken(settings.callbackURL)) must beSuccessfulTry.withValue(info)
+      await(service.retrieveRequestToken(settings.callbackURL)) must be equalTo info
     }
   }
 
   "The retrieveAccessToken method" should {
-    "return Failure if the token couldn't be retrieved" in new Context {
+    "throw Exception if the token couldn't be retrieved" in new Context {
       oauth.retrieveAccessToken(token, "") returns Left(new OAuthMessageSignerException(""))
 
-      await(service.retrieveAccessToken(info, "")) must beFailedTry.withThrowable[OAuthException]
+      await(service.retrieveAccessToken(info, "")) must throwA[OAuthException]
     }
 
-    "return Success if the token could be retrieved" in new Context {
+    "return access token" in new Context {
       oauth.retrieveAccessToken(token, "") returns Right(token)
 
-      await(service.retrieveAccessToken(info, "")) must beSuccessfulTry.withValue(info)
+      await(service.retrieveAccessToken(info, "")) must be equalTo info
     }
   }
 

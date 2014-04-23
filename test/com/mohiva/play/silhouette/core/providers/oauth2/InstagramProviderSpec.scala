@@ -45,8 +45,8 @@ class InstagramProviderSpec extends OAuth2ProviderSpec {
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
 
-      failedTry[AuthenticationException](provider.authenticate()) {
-        mustStartWith(InvalidResponseFormat.format(provider.id, ""))
+      failed[AuthenticationException](provider.authenticate()) {
+        case e => e.getMessage must startWith(InvalidResponseFormat.format(provider.id, ""))
       }
     }
 
@@ -64,8 +64,8 @@ class InstagramProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      failedTry[AuthenticationException](provider.authenticate()) {
-        mustEqualTo(SpecifiedProfileError.format(
+      failed[AuthenticationException](provider.authenticate()) {
+        case e => e.getMessage must equalTo(SpecifiedProfileError.format(
           provider.id,
           400,
           Some("OAuthAccessTokenException"),
@@ -87,8 +87,8 @@ class InstagramProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      failedTry[AuthenticationException](provider.authenticate()) {
-        mustEqualTo(UnspecifiedProfileError.format(provider.id))
+      failed[AuthenticationException](provider.authenticate()) {
+        case e => e.getMessage must equalTo(UnspecifiedProfileError.format(provider.id))
       }
     }
 

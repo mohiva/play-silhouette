@@ -44,8 +44,8 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
 
-      failedTry[AuthenticationException](provider.authenticate()) {
-        mustEqualTo(InvalidResponseFormat.format(provider.id, ""))
+      failed[AuthenticationException](provider.authenticate()) {
+        case e => e.getMessage must equalTo(InvalidResponseFormat.format(provider.id, ""))
       }
     }
 
@@ -64,8 +64,8 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      failedTry[AuthenticationException](provider.authenticate()) {
-        mustEqualTo(SpecifiedProfileError.format(
+      failed[AuthenticationException](provider.authenticate()) {
+        case e => e.getMessage must equalTo(SpecifiedProfileError.format(
           provider.id,
           "An active access token must be used to query information about the current user.",
           "OAuthException",
@@ -88,8 +88,8 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      failedTry[AuthenticationException](provider.authenticate()) {
-        mustEqualTo(UnspecifiedProfileError.format(provider.id))
+      failed[AuthenticationException](provider.authenticate()) {
+        case e => e.getMessage must equalTo(UnspecifiedProfileError.format(provider.id))
       }
     }
 

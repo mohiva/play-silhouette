@@ -40,15 +40,15 @@ abstract class OAuth2ProviderSpec extends ProviderSpec[OAuth2Info] {
     val c = context
     "fail with an AccessDeniedException if 'error' key with value 'access_denied' exists in query string" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + Error + "=" + AccessDenied)
-      failedTry[AccessDeniedException](c.provider.authenticate()) {
-        mustStartWith(AuthorizationError.format(c.provider.id, ""))
+      failed[AccessDeniedException](c.provider.authenticate()) {
+        case e => e.getMessage must startWith(AuthorizationError.format(c.provider.id, ""))
       }
     }
 
     "fail with an AuthenticationException if 'error' key with unspecified value exists in query string" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + Error + "=unspecified")
-      failedTry[AuthenticationException](c.provider.authenticate()) {
-        mustStartWith(AuthorizationError.format(c.provider.id, "unspecified"))
+      failed[AuthenticationException](c.provider.authenticate()) {
+        case e => e.getMessage must startWith(AuthorizationError.format(c.provider.id, "unspecified"))
       }
     }
 
@@ -89,8 +89,8 @@ abstract class OAuth2ProviderSpec extends ProviderSpec[OAuth2Info] {
 
     "fail with an AuthenticationException if code exists in URL but info doesn't exists in session" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
-      failedTry[AuthenticationException](c.provider.authenticate()) {
-        mustStartWith(CacheKeyNotInSession.format(c.provider.id, ""))
+      failed[AuthenticationException](c.provider.authenticate()) {
+        case e => e.getMessage must startWith(CacheKeyNotInSession.format(c.provider.id, ""))
       }
     }
 
@@ -99,8 +99,8 @@ abstract class OAuth2ProviderSpec extends ProviderSpec[OAuth2Info] {
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code").withSession(CacheKey -> cacheID)
       c.cacheLayer.get[String](cacheID) returns Future.successful(None)
 
-      failedTry[AuthenticationException](c.provider.authenticate()) {
-        mustStartWith(CachedStateDoesNotExists.format(c.provider.id, ""))
+      failed[AuthenticationException](c.provider.authenticate()) {
+        case e => e.getMessage must startWith(CachedStateDoesNotExists.format(c.provider.id, ""))
       }
     }
 
@@ -110,8 +110,8 @@ abstract class OAuth2ProviderSpec extends ProviderSpec[OAuth2Info] {
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code").withSession(CacheKey -> cacheID)
       c.cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
 
-      failedTry[AuthenticationException](c.provider.authenticate()) {
-        mustStartWith(RequestStateDoesNotExists.format(c.provider.id, ""))
+      failed[AuthenticationException](c.provider.authenticate()) {
+        case e => e.getMessage must startWith(RequestStateDoesNotExists.format(c.provider.id, ""))
       }
     }
 
@@ -122,8 +122,8 @@ abstract class OAuth2ProviderSpec extends ProviderSpec[OAuth2Info] {
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + requestState).withSession(CacheKey -> cacheID)
       c.cacheLayer.get[String](cacheID) returns Future.successful(Some(cachedState))
 
-      failedTry[AuthenticationException](c.provider.authenticate()) {
-        mustStartWith(StateIsNotEqual.format(c.provider.id, ""))
+      failed[AuthenticationException](c.provider.authenticate()) {
+        case e => e.getMessage must startWith(StateIsNotEqual.format(c.provider.id, ""))
       }
     }
 
@@ -155,7 +155,7 @@ abstract class OAuth2ProviderSpec extends ProviderSpec[OAuth2Info] {
       c.cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
       c.httpLayer.url(c.oAuthSettings.accessTokenURL) returns requestHolder
 
-      await(c.provider.authenticate()) must throwAn[RuntimeException].like {
+      failed[RuntimeException](c.provider.authenticate()) {
         case e => e.getMessage must startWith("success")
       }
     }

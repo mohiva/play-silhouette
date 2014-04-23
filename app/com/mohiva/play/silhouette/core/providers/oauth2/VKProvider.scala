@@ -22,7 +22,6 @@ package com.mohiva.play.silhouette.core.providers.oauth2
 import play.api.libs.json.JsObject
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{ Success, Failure, Try }
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
@@ -59,7 +58,7 @@ class VKProvider(
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[Try[SocialProfile[OAuth2Info]]] = {
+  protected def buildProfile(authInfo: OAuth2Info): Future[SocialProfile[OAuth2Info]] = {
     httpLayer.url(API.format(authInfo.accessToken)).get().map { response =>
       val json = response.json
       (json \ Error).asOpt[JsObject] match {
@@ -67,7 +66,7 @@ class VKProvider(
           val errorCode = (error \ ErrorCode).as[Int]
           val errorMsg = (error \ ErrorMsg).as[String]
 
-          Failure(new AuthenticationException(SpecifiedProfileError.format(id, errorCode, errorMsg)))
+          throw new AuthenticationException(SpecifiedProfileError.format(id, errorCode, errorMsg))
         case _ =>
           val me = (json \ Response).apply(0)
           val userId = (me \ ID).as[Long]
@@ -75,15 +74,16 @@ class VKProvider(
           val lastName = (me \ LastName).asOpt[String]
           val avatarURL = (me \ Photo).asOpt[String]
 
-          Success(SocialProfile(
+          SocialProfile(
             loginInfo = LoginInfo(id, userId.toString),
             authInfo = authInfo,
             firstName = firstName,
             lastName = lastName,
-            avatarURL = avatarURL))
+            avatarURL = avatarURL)
       }
     }.recover {
-      case e => Failure(new AuthenticationException(UnspecifiedProfileError.format(id), e))
+      case e if !e.isInstanceOf[AuthenticationException] =>
+        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
     }
   }
 }

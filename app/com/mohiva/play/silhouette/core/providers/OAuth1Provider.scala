@@ -53,34 +53,33 @@ abstract class OAuth1Provider(
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  protected def doAuth()(implicit request: RequestHeader): Future[Try[Either[SimpleResult, OAuth1Info]]] = {
+  protected def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, OAuth1Info]] = {
     logger.debug("[Silhouette][%s] Query string: %s".format(id, request.rawQueryString))
     request.queryString.get(Denied) match {
       case Some(_) => Future.failed(new AccessDeniedException(AuthorizationError.format(id, Denied)))
       case None => request.queryString.get(OAuthVerifier) match {
         // Second step in the OAuth flow.
         // We have the request info in the cache, and we need to swap it for the access info.
-        case Some(seq) => cachedInfo.flatMap(_.asFuture.flatMap {
+        case Some(seq) => cachedInfo.flatMap {
           case (cacheID, cachedInfo) =>
-            oAuth1Service.retrieveAccessToken(cachedInfo, seq.head).map {
-              case Failure(exception) => Failure(new AuthenticationException(ErrorAccessToken.format(id), exception))
-              case Success(info) =>
-                cacheLayer.remove(cacheID)
-                Success(Right(info))
+            oAuth1Service.retrieveAccessToken(cachedInfo, seq.head).map { info =>
+              cacheLayer.remove(cacheID)
+              Right(info)
+            }.recover {
+              case e => throw new AuthenticationException(ErrorAccessToken.format(id), e)
             }
-        })
-
+        }
         // The oauth_verifier field is not in the request.
         // This is the first step in the OAuth flow. We need to get the request tokens.
-        case _ => oAuth1Service.retrieveRequestToken(oAuth1Settings.callbackURL).map {
-          case Failure(exception) => Failure(new AuthenticationException(ErrorRequestToken.format(id), exception))
-          case Success(info) =>
-            val cacheID = UUID.randomUUID().toString
-            val url = oAuth1Service.redirectUrl(info.token)
-            val redirect = Results.Redirect(url).withSession(request.session + (CacheKey -> cacheID))
-            logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
-            cacheLayer.set(cacheID, info, CacheExpiration)
-            Success(Left(redirect))
+        case _ => oAuth1Service.retrieveRequestToken(oAuth1Settings.callbackURL).map { info =>
+          val cacheID = UUID.randomUUID().toString
+          val url = oAuth1Service.redirectUrl(info.token)
+          val redirect = Results.Redirect(url).withSession(request.session + (CacheKey -> cacheID))
+          logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
+          cacheLayer.set(cacheID, info, CacheExpiration)
+          Left(redirect)
+        }.recover {
+          case e => throw new AuthenticationException(ErrorRequestToken.format(id), e)
         }
       }
     }
@@ -92,11 +91,11 @@ abstract class OAuth1Provider(
    * @param request The request header.
    * @return A tuple contains the cache ID with the cached info.
    */
-  private def cachedInfo(implicit request: RequestHeader): Future[Try[(String, OAuth1Info)]] = {
+  private def cachedInfo(implicit request: RequestHeader): Future[(String, OAuth1Info)] = {
     request.session.get(CacheKey) match {
       case Some(cacheID) => cacheLayer.get[OAuth1Info](cacheID).map {
-        case Some(state) => Success(cacheID -> state)
-        case _ => Failure(new AuthenticationException(CachedTokenDoesNotExists.format(id, cacheID)))
+        case Some(state) => cacheID -> state
+        case _ => throw new AuthenticationException(CachedTokenDoesNotExists.format(id, cacheID))
       }
       case _ => Future.failed(new AuthenticationException(CacheKeyNotInSession.format(id, CacheKey)))
     }
@@ -140,18 +139,18 @@ trait OAuth1Service {
    * Retrieves the request info and secret.
    *
    * @param callbackURL The URL where the provider should redirect to (usually a URL on the current app).
-   * @return A Success(OAuth1Info) in case of success, Failure(Exception) otherwise.
+   * @return A OAuth1Info in case of success, Exception otherwise.
    */
-  def retrieveRequestToken(callbackURL: String): Future[Try[OAuth1Info]]
+  def retrieveRequestToken(callbackURL: String): Future[OAuth1Info]
 
   /**
    * Exchange a request info for an access info.
    *
    * @param oAuthInfo The info/secret pair obtained from a previous call.
    * @param verifier A string you got through your user with redirection.
-   * @return A Success(OAuth1Info) in case of success, Failure(Exception) otherwise.
+   * @return A OAuth1Info in case of success, Exception otherwise.
    */
-  def retrieveAccessToken(oAuthInfo: OAuth1Info, verifier: String): Future[Try[OAuth1Info]]
+  def retrieveAccessToken(oAuthInfo: OAuth1Info, verifier: String): Future[OAuth1Info]
 
   /**
    * The URL to which the user needs to be redirected to grant authorization to your application.

@@ -38,23 +38,23 @@ abstract class OAuth1ProviderSpec extends ProviderSpec[OAuth1Info] {
     val c = context
     "fail with an AccessDeniedException if denied key exists in query string" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + Denied + "=")
-      failedTry[AccessDeniedException](c.provider.authenticate()) {
-        mustStartWith(AuthorizationError.format(c.provider.id, ""))
+      failed[AccessDeniedException](c.provider.authenticate()) {
+        case e => e.getMessage must startWith(AuthorizationError.format(c.provider.id, ""))
       }
     }
 
     "fail with an AuthenticationException if request token cannot be retrieved" in new WithApplication {
       implicit val req = FakeRequest()
-      c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.successful(Failure(new Exception("")))
+      c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.failed(new Exception(""))
 
-      failedTry[AuthenticationException](c.provider.authenticate()) {
-        mustStartWith(ErrorRequestToken.format(c.provider.id, ""))
+      failed[AuthenticationException](c.provider.authenticate()) {
+        case e => e.getMessage must startWith(ErrorRequestToken.format(c.provider.id, ""))
       }
     }
 
     "redirect to authorization URL if request token could be retrieved" in new WithApplication {
       implicit val req = FakeRequest()
-      c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.successful(Success(c.oAuthInfo))
+      c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.successful(c.oAuthInfo)
       c.oAuthService.redirectUrl(any) returns c.oAuthSettings.authorizationURL
 
       result(c.provider.authenticate()) {
@@ -67,7 +67,7 @@ abstract class OAuth1ProviderSpec extends ProviderSpec[OAuth1Info] {
 
     "cache the oauth info if request token could be retrieved" in new WithApplication {
       implicit val req = FakeRequest()
-      c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.successful(Success(c.oAuthInfo))
+      c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.successful(c.oAuthInfo)
       c.oAuthService.redirectUrl(any) returns c.oAuthSettings.authorizationURL
 
       result(c.provider.authenticate()) {
@@ -80,8 +80,8 @@ abstract class OAuth1ProviderSpec extends ProviderSpec[OAuth1Info] {
 
     "fail with an AuthenticationException if OAuthVerifier exists in URL but info doesn't exists in session" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier")
-      failedTry[AuthenticationException](c.provider.authenticate()) {
-        mustStartWith(CacheKeyNotInSession.format(c.provider.id, ""))
+      failed[AuthenticationException](c.provider.authenticate()) {
+        case e => e.getMessage must startWith(CacheKeyNotInSession.format(c.provider.id, ""))
       }
     }
 
@@ -90,8 +90,8 @@ abstract class OAuth1ProviderSpec extends ProviderSpec[OAuth1Info] {
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
       c.cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(None)
 
-      failedTry[AuthenticationException](c.provider.authenticate()) {
-        mustStartWith(CachedTokenDoesNotExists.format(c.provider.id, ""))
+      failed[AuthenticationException](c.provider.authenticate()) {
+        case e => e.getMessage must startWith(CachedTokenDoesNotExists.format(c.provider.id, ""))
       }
     }
 
@@ -99,10 +99,10 @@ abstract class OAuth1ProviderSpec extends ProviderSpec[OAuth1Info] {
       val cacheID = UUID.randomUUID().toString
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
       c.cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(Some(c.oAuthInfo))
-      c.oAuthService.retrieveAccessToken(c.oAuthInfo, "my.verifier") returns Future.successful(Failure(new Exception("")))
+      c.oAuthService.retrieveAccessToken(c.oAuthInfo, "my.verifier") returns Future.failed(new Exception(""))
 
-      failedTry[AuthenticationException](c.provider.authenticate()) {
-        mustStartWith(ErrorAccessToken.format(c.provider.id, ""))
+      failed[AuthenticationException](c.provider.authenticate()) {
+        case e => e.getMessage must startWith(ErrorAccessToken.format(c.provider.id, ""))
       }
     }
   }

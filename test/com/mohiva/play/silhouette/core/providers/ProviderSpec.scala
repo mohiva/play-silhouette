@@ -15,7 +15,6 @@
  */
 package com.mohiva.play.silhouette.core.providers
 
-import scala.util.Try
 import scala.reflect.ClassTag
 import scala.concurrent.Future
 import play.api.mvc.SimpleResult
@@ -34,7 +33,7 @@ abstract class ProviderSpec[A <: AuthInfo] extends PlaySpecification with Mockit
   /**
    * The provider result.
    */
-  type ProviderResult = Future[Try[Either[SimpleResult, SocialProfile[A]]]]
+  type ProviderResult = Future[Either[SimpleResult, SocialProfile[A]]]
 
   /**
    * Applies a matcher on a simple result.
@@ -44,10 +43,8 @@ abstract class ProviderSpec[A <: AuthInfo] extends PlaySpecification with Mockit
    * @return A specs2 match result.
    */
   def result(providerResult: ProviderResult)(b: Future[SimpleResult] => MatchResult[_]) = {
-    await(providerResult) must beSuccessfulTry[Either[SimpleResult, SocialProfile[A]]].like {
-      case e => e must beLeft[SimpleResult].like {
-        case simpleResult => b(Future.successful(simpleResult))
-      }
+    await(providerResult) must beLeft[SimpleResult].like {
+      case simpleResult => b(Future.successful(simpleResult))
     }
   }
 
@@ -59,37 +56,19 @@ abstract class ProviderSpec[A <: AuthInfo] extends PlaySpecification with Mockit
    * @return A specs2 match result.
    */
   def profile(providerResult: ProviderResult)(b: SocialProfile[A] => MatchResult[_]) = {
-    await(providerResult) must beSuccessfulTry[Either[SimpleResult, SocialProfile[A]]].like {
-      case e => e must beRight[SocialProfile[A]].like {
-        case socialProfile => b(socialProfile)
-      }
+    await(providerResult) must beRight[SocialProfile[A]].like {
+      case socialProfile => b(socialProfile)
     }
   }
 
   /**
-   * Matches a string against the failure message.
+   * Matches a partial function against a failure message.
    *
    * @param providerResult The result from the provider.
    * @param f A matcher function.
    * @return A specs2 match result.
    */
-  def failedTry[E <: Throwable: ClassTag](providerResult: ProviderResult)(f: => String) = {
-    await(providerResult) must beFailedTry.withThrowable[E](f)
+  def failed[E <: Throwable: ClassTag](providerResult: ProviderResult)(f: => PartialFunction[Throwable, MatchResult[_]]) = {
+    await(providerResult) must throwAn[E].like(f)
   }
-
-  /**
-   * A pattern which matches if a string starts with the given string.
-   *
-   * @param str The matching string.
-   * @return The pattern.
-   */
-  def mustStartWith(str: String): String = s"""^\\Q$str\\E.*$$"""
-
-  /**
-   * A pattern which matches if a string equals the given string.
-   *
-   * @param str The matching string.
-   * @return The pattern.
-   */
-  def mustEqualTo(str: String): String = s"""^\\Q$str\\E$$"""
 }

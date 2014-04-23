@@ -19,7 +19,6 @@
  */
 package com.mohiva.play.silhouette.core.providers
 
-import scala.util.{ Failure, Success, Try }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
@@ -58,7 +57,7 @@ class CredentialsProvider(
    * @param credentials The credentials to authenticate with.
    * @return The login info if the authentication was successful, otherwise a failure.
    */
-  def authenticate(credentials: Credentials): Future[Try[LoginInfo]] = {
+  def authenticate(credentials: Credentials): Future[LoginInfo] = {
     val loginInfo = LoginInfo(id, credentials.identifier)
     authInfoService.retrieve[PasswordInfo](loginInfo).map {
       case Some(authInfo) => passwordHasherList.find(_.id == authInfo.hasher) match {
@@ -66,13 +65,13 @@ class CredentialsProvider(
           if (hasher != passwordHasher) {
             authInfoService.save(loginInfo, passwordHasher.hash(credentials.password))
           }
-          Success(loginInfo)
-        case Some(hasher) => Failure(new AccessDeniedException(CredentialsProvider.InvalidPassword.format(id)))
-        case None => Failure(new AuthenticationException(CredentialsProvider.UnsupportedHasher.format(
+          loginInfo
+        case Some(hasher) => throw new AccessDeniedException(CredentialsProvider.InvalidPassword.format(id))
+        case None => throw new AuthenticationException(CredentialsProvider.UnsupportedHasher.format(
           id, authInfo.hasher, passwordHasherList.map(_.id).mkString(", ")
-        )))
+        ))
       }
-      case None => Failure(new AccessDeniedException(CredentialsProvider.UnknownCredentials))
+      case None => throw new AccessDeniedException(CredentialsProvider.UnknownCredentials.format(id))
     }
   }
 }

@@ -89,7 +89,7 @@ abstract class OAuth2Provider(
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  protected def doAuth()(implicit request: RequestHeader): Future[Try[Either[SimpleResult, OAuth2Info]]] = {
+  protected def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, OAuth2Info]] = {
     logger.debug("[Silhouette][%s] Query string: %s".format(id, request.rawQueryString))
     request.queryString.get(Error).flatMap(_.headOption).map {
       case e @ AccessDenied => new AccessDeniedException(AuthorizationError.format(id, e))
@@ -98,12 +98,10 @@ abstract class OAuth2Provider(
       case Some(throwable) => Future.failed(throwable)
       case None => request.queryString.get(Code).flatMap(_.headOption) match {
         // We're being redirected back from the authorization server with the access code
-        case Some(code) => cachedState.flatMap(_.asFuture.flatMap {
-          case (cacheID, cachedState) => cachedState == requestState.get match {
-            case false => Future.failed(new AuthenticationException(StateIsNotEqual.format(id)))
-            case true => getAccessToken(code).map(oauth2Info => oauth2Info.map(i => Right(i)))
-          }
-        })
+        case Some(code) => cachedState.map { case (cacheID, cachedState) => cachedState == requestState.get }.flatMap {
+          case false => throw new AuthenticationException(StateIsNotEqual.format(id))
+          case true => getAccessToken(code).map(oauth2Info => Right(oauth2Info))
+        }
         // There's no code in the request, this is the first step in the OAuth flow
         case None =>
           val state = UUID.randomUUID().toString
@@ -121,7 +119,7 @@ abstract class OAuth2Provider(
           logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
           logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
           cacheLayer.set(cacheID, state, CacheExpiration)
-          Future.successful(Success(Left(redirect)))
+          Future.successful(Left(redirect))
       }
     }
   }
@@ -132,15 +130,15 @@ abstract class OAuth2Provider(
    * @param code The access code.
    * @return The info containing the access token.
    */
-  protected def getAccessToken(code: String): Future[Try[OAuth2Info]] = {
+  protected def getAccessToken(code: String): Future[OAuth2Info] = {
     httpLayer.url(settings.accessTokenURL).withHeaders(headers: _*).post(Map(
       ClientID -> Seq(settings.clientID),
       ClientSecret -> Seq(settings.clientSecret),
       GrantType -> Seq(AuthorizationCode),
       Code -> Seq(code),
-      RedirectURI -> Seq(settings.redirectURL)) ++ settings.accessTokenParams.mapValues(Seq(_))).map { response =>
+      RedirectURI -> Seq(settings.redirectURL)) ++ settings.accessTokenParams.mapValues(Seq(_))).flatMap { response =>
       logger.debug("[Silhouette][%s] Access token response: [%s]".format(id, response.body))
-      buildInfo(response)
+      buildInfo(response).asFuture
     }
   }
 
@@ -150,10 +148,12 @@ abstract class OAuth2Provider(
    * @param response The response from the provider.
    * @return The OAuth2 info on success, otherwise an failure.
    */
-  protected def buildInfo(response: Response): Try[OAuth2Info] = response.json.validate[OAuth2Info].asEither.fold(
-    error => Failure(new AuthenticationException(InvalidResponseFormat.format(id, error))),
-    info => Success(info)
-  )
+  protected def buildInfo(response: Response): Try[OAuth2Info] = {
+    response.json.validate[OAuth2Info].asEither.fold(
+      error => Failure(new AuthenticationException(InvalidResponseFormat.format(id, error))),
+      info => Success(info)
+    )
+  }
 
   /**
    * Gets the cached state if it's stored in cache.
@@ -161,11 +161,11 @@ abstract class OAuth2Provider(
    * @param request The request header.
    * @return A tuple contains the cache ID with the cached state on success, otherwise an failure.
    */
-  private def cachedState(implicit request: RequestHeader): Future[Try[(String, String)]] = {
+  private def cachedState(implicit request: RequestHeader): Future[(String, String)] = {
     request.session.get(CacheKey) match {
       case Some(cacheID) => cacheLayer.get[String](cacheID).map {
-        case Some(state) => Success(cacheID -> state)
-        case _ => Failure(new AuthenticationException(CachedStateDoesNotExists.format(id, cacheID)))
+        case Some(state) => cacheID -> state
+        case _ => throw new AuthenticationException(CachedStateDoesNotExists.format(id, cacheID))
       }
       case _ => Future.failed(new AuthenticationException(CacheKeyNotInSession.format(id, CacheKey)))
     }

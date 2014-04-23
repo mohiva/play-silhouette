@@ -21,7 +21,6 @@ package com.mohiva.play.silhouette.contrib.services
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{ Success, Failure, Try }
 import play.api.libs.oauth._
 import play.api.libs.ws.SignatureCalculator
 import play.api.libs.oauth.ConsumerKey
@@ -51,12 +50,12 @@ class PlayOAuth1Service(service: OAuth, settings: OAuth1Settings) extends OAuth1
    * Retrieves the request info and secret.
    *
    * @param callbackURL The URL where the provider should redirect to (usually a URL on the current app).
-   * @return A Success(OAuth1Info) in case of success, Failure(Exception) otherwise.
+   * @return A OAuth1Info in case of success, Exception otherwise.
    */
-  def retrieveRequestToken(callbackURL: String): Future[Try[OAuth1Info]] = {
+  def retrieveRequestToken(callbackURL: String): Future[OAuth1Info] = {
     Future(service.retrieveRequestToken(settings.callbackURL)).map(_.fold(
-      exception => Failure(exception),
-      token => Success(OAuth1Info(token.token, token.secret))))
+      e => throw e,
+      t => OAuth1Info(t.token, t.secret)))
   }
 
   /**
@@ -64,12 +63,12 @@ class PlayOAuth1Service(service: OAuth, settings: OAuth1Settings) extends OAuth1
    *
    * @param oAuthInfo The info/secret pair obtained from a previous call.
    * @param verifier A string you got through your user, with redirection.
-   * @return A Success(OAuth1Info) in case of success, Failure(Exception) otherwise.
+   * @return A OAuth1Info in case of success, Exception otherwise.
    */
-  def retrieveAccessToken(oAuthInfo: OAuth1Info, verifier: String): Future[Try[OAuth1Info]] = {
+  def retrieveAccessToken(oAuthInfo: OAuth1Info, verifier: String): Future[OAuth1Info] = {
     Future(service.retrieveAccessToken(RequestToken(oAuthInfo.token, oAuthInfo.secret), verifier)).map(_.fold(
-      exception => Failure(exception),
-      token => Success(OAuth1Info(token.token, token.secret))))
+      e => throw e,
+      t => OAuth1Info(t.token, t.secret)))
   }
 
   /**
