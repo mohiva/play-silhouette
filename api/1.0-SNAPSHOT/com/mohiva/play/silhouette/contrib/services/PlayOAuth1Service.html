@@ -354,34 +354,34 @@
 </p></div><dl class="paramcmts block"><dt class="param">token</dt><dd class="cmt"><p>The request info.</p></dd><dt>returns</dt><dd class="cmt"><p>The redirect URL.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.contrib.services.PlayOAuth1Service">PlayOAuth1Service</a> → <a href="../../core/providers/OAuth1Service.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Service">OAuth1Service</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.contrib.services.PlayOAuth1Service#retrieveAccessToken" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="retrieveAccessToken(oAuthInfo:com.mohiva.play.silhouette.core.providers.OAuth1Info,verifier:String):scala.concurrent.Future[scala.util.Try[com.mohiva.play.silhouette.core.providers.OAuth1Info]]"></a>
-      <a id="retrieveAccessToken(OAuth1Info,String):Future[Try[OAuth1Info]]"></a>
+      <a id="retrieveAccessToken(oAuthInfo:com.mohiva.play.silhouette.core.providers.OAuth1Info,verifier:String):scala.concurrent.Future[com.mohiva.play.silhouette.core.providers.OAuth1Info]"></a>
+      <a id="retrieveAccessToken(OAuth1Info,String):Future[OAuth1Info]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">retrieveAccessToken</span><span class="params">(<span name="oAuthInfo">oAuthInfo: <a href="../../core/providers/OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Info">OAuth1Info</a></span>, <span name="verifier">verifier: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.util.Try" class="extype" target="_top">Try</a>[<a href="../../core/providers/OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Info">OAuth1Info</a>]]</span>
+        <span class="name">retrieveAccessToken</span><span class="params">(<span name="oAuthInfo">oAuthInfo: <a href="../../core/providers/OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Info">OAuth1Info</a></span>, <span name="verifier">verifier: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="../../core/providers/OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Info">OAuth1Info</a>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Exchange a request info for an access info.</p><div class="fullcomment"><div class="comment cmt"><p>Exchange a request info for an access info.
-</p></div><dl class="paramcmts block"><dt class="param">oAuthInfo</dt><dd class="cmt"><p>The info/secret pair obtained from a previous call.</p></dd><dt class="param">verifier</dt><dd class="cmt"><p>A string you got through your user, with redirection.</p></dd><dt>returns</dt><dd class="cmt"><p>A Success(OAuth1Info) in case of success, Failure(Exception) otherwise.
+</p></div><dl class="paramcmts block"><dt class="param">oAuthInfo</dt><dd class="cmt"><p>The info/secret pair obtained from a previous call.</p></dd><dt class="param">verifier</dt><dd class="cmt"><p>A string you got through your user, with redirection.</p></dd><dt>returns</dt><dd class="cmt"><p>A OAuth1Info in case of success, Exception otherwise.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.contrib.services.PlayOAuth1Service">PlayOAuth1Service</a> → <a href="../../core/providers/OAuth1Service.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Service">OAuth1Service</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.contrib.services.PlayOAuth1Service#retrieveRequestToken" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="retrieveRequestToken(callbackURL:String):scala.concurrent.Future[scala.util.Try[com.mohiva.play.silhouette.core.providers.OAuth1Info]]"></a>
-      <a id="retrieveRequestToken(String):Future[Try[OAuth1Info]]"></a>
+      <a id="retrieveRequestToken(callbackURL:String):scala.concurrent.Future[com.mohiva.play.silhouette.core.providers.OAuth1Info]"></a>
+      <a id="retrieveRequestToken(String):Future[OAuth1Info]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">retrieveRequestToken</span><span class="params">(<span name="callbackURL">callbackURL: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.util.Try" class="extype" target="_top">Try</a>[<a href="../../core/providers/OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Info">OAuth1Info</a>]]</span>
+        <span class="name">retrieveRequestToken</span><span class="params">(<span name="callbackURL">callbackURL: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="../../core/providers/OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Info">OAuth1Info</a>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Retrieves the request info and secret.</p><div class="fullcomment"><div class="comment cmt"><p>Retrieves the request info and secret.
-</p></div><dl class="paramcmts block"><dt class="param">callbackURL</dt><dd class="cmt"><p>The URL where the provider should redirect to (usually a URL on the current app).</p></dd><dt>returns</dt><dd class="cmt"><p>A Success(OAuth1Info) in case of success, Failure(Exception) otherwise.
+</p></div><dl class="paramcmts block"><dt class="param">callbackURL</dt><dd class="cmt"><p>The URL where the provider should redirect to (usually a URL on the current app).</p></dd><dt>returns</dt><dd class="cmt"><p>A OAuth1Info in case of success, Exception otherwise.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.contrib.services.PlayOAuth1Service">PlayOAuth1Service</a> → <a href="../../core/providers/OAuth1Service.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Service">OAuth1Service</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.contrib.services.PlayOAuth1Service#sign" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="sign(oAuthInfo:com.mohiva.play.silhouette.core.providers.OAuth1Info):play.api.libs.ws.SignatureCalculator"></a>

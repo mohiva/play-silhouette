@@ -182,15 +182,15 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.providers.SocialProvider#authenticate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="authenticate()(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[scala.util.Try[Either[play.api.mvc.SimpleResult,com.mohiva.play.silhouette.core.providers.SocialProfile[A]]]]"></a>
-      <a id="authenticate()(RequestHeader):Future[Try[Either[SimpleResult,SocialProfile[OAuth2Info]]]]"></a>
+      <a id="authenticate()(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Either[play.api.mvc.SimpleResult,com.mohiva.play.silhouette.core.providers.SocialProfile[A]]]"></a>
+      <a id="authenticate()(RequestHeader):Future[Either[SimpleResult,SocialProfile[OAuth2Info]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">authenticate</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>, <a href="../SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>[<a href="../OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Info">OAuth2Info</a>]]]]</span>
+        <span class="name">authenticate</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>, <a href="../SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>[<a href="../OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Info">OAuth2Info</a>]]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Authenticates the user and fills the profile information.</p><div class="fullcomment"><div class="comment cmt"><p>Authenticates the user and fills the profile information.</p><p>Returns either a SocialProfile if all went OK or a Result that the controller sends to the
@@ -214,15 +214,15 @@ the service provider).
 </p></div><dl class="paramcmts block"><dt class="param">response</dt><dd class="cmt"><p>The response from the provider.</p></dd><dt>returns</dt><dd class="cmt"><p>The OAuth2 info on success, otherwise an failure.
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Provider">OAuth2Provider</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.providers.oauth2.FoursquareProvider#buildProfile" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="buildProfile(authInfo:com.mohiva.play.silhouette.core.providers.OAuth2Info):scala.concurrent.Future[scala.util.Try[com.mohiva.play.silhouette.core.providers.SocialProfile[com.mohiva.play.silhouette.core.providers.OAuth2Info]]]"></a>
-      <a id="buildProfile(OAuth2Info):Future[Try[SocialProfile[OAuth2Info]]]"></a>
+      <a id="buildProfile(authInfo:com.mohiva.play.silhouette.core.providers.OAuth2Info):scala.concurrent.Future[com.mohiva.play.silhouette.core.providers.SocialProfile[com.mohiva.play.silhouette.core.providers.OAuth2Info]]"></a>
+      <a id="buildProfile(OAuth2Info):Future[SocialProfile[OAuth2Info]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">buildProfile</span><span class="params">(<span name="authInfo">authInfo: <a href="../OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Info">OAuth2Info</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.util.Try" class="extype" target="_top">Try</a>[<a href="../SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>[<a href="../OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Info">OAuth2Info</a>]]]</span>
+        <span class="name">buildProfile</span><span class="params">(<span name="authInfo">authInfo: <a href="../OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Info">OAuth2Info</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="../SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>[<a href="../OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Info">OAuth2Info</a>]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Builds the social profile.</p><div class="fullcomment"><div class="comment cmt"><p>Builds the social profile.
@@ -248,15 +248,15 @@ the service provider).
               
         </dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#doAuth" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="doAuth()(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[scala.util.Try[Either[play.api.mvc.SimpleResult,com.mohiva.play.silhouette.core.providers.OAuth2Info]]]"></a>
-      <a id="doAuth()(RequestHeader):Future[Try[Either[SimpleResult,OAuth2Info]]]"></a>
+      <a id="doAuth()(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Either[play.api.mvc.SimpleResult,com.mohiva.play.silhouette.core.providers.OAuth2Info]]"></a>
+      <a id="doAuth()(RequestHeader):Future[Either[SimpleResult,OAuth2Info]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">doAuth</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>, <a href="../OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Info">OAuth2Info</a>]]]</span>
+        <span class="name">doAuth</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>, <a href="../OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Info">OAuth2Info</a>]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Starts the authentication process.</p><div class="fullcomment"><div class="comment cmt"><p>Starts the authentication process.
@@ -308,15 +308,15 @@ the service provider).
               
         </dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#getAccessToken" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getAccessToken(code:String):scala.concurrent.Future[scala.util.Try[com.mohiva.play.silhouette.core.providers.OAuth2Info]]"></a>
-      <a id="getAccessToken(String):Future[Try[OAuth2Info]]"></a>
+      <a id="getAccessToken(code:String):scala.concurrent.Future[com.mohiva.play.silhouette.core.providers.OAuth2Info]"></a>
+      <a id="getAccessToken(String):Future[OAuth2Info]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getAccessToken</span><span class="params">(<span name="code">code: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.util.Try" class="extype" target="_top">Try</a>[<a href="../OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Info">OAuth2Info</a>]]</span>
+        <span class="name">getAccessToken</span><span class="params">(<span name="code">code: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="../OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Info">OAuth2Info</a>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Gets the access token.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the access token.
