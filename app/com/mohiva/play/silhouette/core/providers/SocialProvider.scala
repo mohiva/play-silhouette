@@ -15,13 +15,11 @@
  */
 package com.mohiva.play.silhouette.core.providers
 
-import scala.util.{ Failure, Success, Try }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.mvc.{ SimpleResult, RequestHeader }
 import com.mohiva.play.silhouette.core.{ LoginInfo, Provider }
 import com.mohiva.play.silhouette.core.services.AuthInfo
-import com.mohiva.play.silhouette.core.exceptions.SilhouetteException
 
 /**
  * The base interface for all social providers.
@@ -40,19 +38,11 @@ trait SocialProvider[A <: AuthInfo] extends Provider {
    * @param request The request header.
    * @return On success either the social profile or a simple result, otherwise a failure.
    */
-  def authenticate()(implicit request: RequestHeader): Future[Try[Either[SimpleResult, SocialProfile[A]]]] = {
-    (for {
-      auth <- doAuth()
-      either <- auth.asFuture
-      result <- either.fold(
-        result => Future.successful(Success(Left(result))),
-        authInfo => for {
-          maybeProfile <- buildProfile(authInfo)
-          profile <- maybeProfile.asFuture
-        } yield {
-          Success(Right(profile))
-        })
-    } yield result).recover { case e: SilhouetteException => Failure(e) }
+  def authenticate()(implicit request: RequestHeader): Future[Either[SimpleResult, SocialProfile[A]]] = {
+    doAuth().flatMap(_.fold(
+      result => Future.successful(Left(result)),
+      authInfo => buildProfile(authInfo).map(profile => Right(profile))
+    ))
   }
 
   /**
@@ -63,7 +53,7 @@ trait SocialProvider[A <: AuthInfo] extends Provider {
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  protected def doAuth()(implicit request: RequestHeader): Future[Try[Either[SimpleResult, A]]]
+  protected def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, A]]
 
   /**
    * Subclasses need to implement this method to populate the profile information from the service provider.
@@ -71,7 +61,7 @@ trait SocialProvider[A <: AuthInfo] extends Provider {
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: A): Future[Try[SocialProfile[A]]]
+  protected def buildProfile(authInfo: A): Future[SocialProfile[A]]
 }
 
 /**

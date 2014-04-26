@@ -21,7 +21,6 @@ package com.mohiva.play.silhouette.core.providers.oauth2
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{ Success, Failure, Try }
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
@@ -58,7 +57,7 @@ class InstagramProvider(
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[Try[SocialProfile[OAuth2Info]]] = {
+  protected def buildProfile(authInfo: OAuth2Info): Future[SocialProfile[OAuth2Info]] = {
     httpLayer.url(API.format(authInfo.accessToken)).get().map { response =>
       val json = response.json
       (json \ Meta \ Code).asOpt[Int] match {
@@ -66,20 +65,21 @@ class InstagramProvider(
           val errorType = (json \ Meta \ ErrorType).asOpt[String]
           val errorMsg = (json \ Meta \ ErrorMsg).asOpt[String]
 
-          Failure(new AuthenticationException(SpecifiedProfileError.format(id, code, errorType, errorMsg)))
+          throw new AuthenticationException(SpecifiedProfileError.format(id, code, errorType, errorMsg))
         case _ =>
           val userID = (json \ Data \ ID).as[String]
           val fullName = (json \ Data \ FullName).asOpt[String]
           val avatarURL = (json \ Data \ ProfilePic).asOpt[String]
 
-          Success(SocialProfile(
+          SocialProfile(
             loginInfo = LoginInfo(id, userID),
             authInfo = authInfo,
             fullName = fullName,
-            avatarURL = avatarURL))
+            avatarURL = avatarURL)
       }
     }.recover {
-      case e => Failure(new AuthenticationException(UnspecifiedProfileError.format(id), e))
+      case e if !e.isInstanceOf[AuthenticationException] =>
+        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
     }
   }
 }

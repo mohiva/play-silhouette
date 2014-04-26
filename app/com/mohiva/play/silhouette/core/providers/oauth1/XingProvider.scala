@@ -21,7 +21,6 @@ package com.mohiva.play.silhouette.core.providers.oauth1
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{ Success, Failure, Try }
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.providers._
@@ -59,14 +58,14 @@ class XingProvider(
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth1Info): Future[Try[SocialProfile[OAuth1Info]]] = {
+  protected def buildProfile(authInfo: OAuth1Info): Future[SocialProfile[OAuth1Info]] = {
     httpLayer.url(API).sign(oAuth1Service.sign(authInfo)).get().map { response =>
       val json = response.json
       (json \ ErrorName).asOpt[String] match {
         case Some(error) =>
           val message = (json \ Message).asOpt[String]
 
-          Failure(new AuthenticationException(SpecifiedProfileError.format(id, error, message.getOrElse(""))))
+          throw new AuthenticationException(SpecifiedProfileError.format(id, error, message.getOrElse("")))
         case _ =>
           val json = response.json
           val userID = (json \ Users \\ ID).head.as[String]
@@ -76,17 +75,18 @@ class XingProvider(
           val avatarURL = (json \ Users \\ ProfileImage).headOption.flatMap(urls => (urls \ Large).asOpt[String])
           val email = (json \ Users \\ ActiveEmail).headOption.map(_.as[String])
 
-          Success(SocialProfile(
+          SocialProfile(
             loginInfo = LoginInfo(id, userID),
             authInfo = authInfo,
             firstName = firstName,
             lastName = lastName,
             fullName = fullName,
             avatarURL = avatarURL,
-            email = email))
+            email = email)
       }
     }.recover {
-      case e => Failure(new AuthenticationException(UnspecifiedProfileError.format(id), e))
+      case e if !e.isInstanceOf[AuthenticationException] =>
+        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
     }
   }
 }

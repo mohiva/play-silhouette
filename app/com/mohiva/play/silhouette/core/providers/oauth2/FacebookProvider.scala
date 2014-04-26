@@ -21,9 +21,9 @@ package com.mohiva.play.silhouette.core.providers.oauth2
 
 import play.api.libs.ws.Response
 import play.api.libs.json.JsObject
+import scala.util.{ Failure, Success, Try }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{ Success, Failure, Try }
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
@@ -61,7 +61,7 @@ class FacebookProvider(
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[Try[SocialProfile[OAuth2Info]]] = {
+  protected def buildProfile(authInfo: OAuth2Info): Future[SocialProfile[OAuth2Info]] = {
     httpLayer.url(API.format(authInfo.accessToken)).get().map { response =>
       val json = response.json
       (json \ Error).asOpt[JsObject] match {
@@ -70,7 +70,7 @@ class FacebookProvider(
           val errorType = (error \ Type).as[String]
           val errorCode = (error \ Code).as[Int]
 
-          Failure(new AuthenticationException(SpecifiedProfileError.format(id, errorMsg, errorType, errorCode)))
+          throw new AuthenticationException(SpecifiedProfileError.format(id, errorMsg, errorType, errorCode))
         case _ =>
           val userID = (json \ ID).as[String]
           val firstName = (json \ FirstName).asOpt[String]
@@ -79,17 +79,18 @@ class FacebookProvider(
           val avatarURL = (json \ Picture \ Data \ URL).asOpt[String]
           val email = (json \ Email).asOpt[String]
 
-          Success(SocialProfile(
+          SocialProfile(
             loginInfo = LoginInfo(id, userID),
             authInfo = authInfo,
             firstName = firstName,
             lastName = lastName,
             fullName = fullName,
             avatarURL = avatarURL,
-            email = email))
+            email = email)
       }
     }.recover {
-      case e => Failure(new AuthenticationException(UnspecifiedProfileError.format(id), e))
+      case e if !e.isInstanceOf[AuthenticationException] =>
+        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
     }
   }
 

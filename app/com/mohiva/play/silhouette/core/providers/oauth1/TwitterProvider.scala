@@ -21,7 +21,6 @@ package com.mohiva.play.silhouette.core.providers.oauth1
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{ Success, Failure, Try }
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.providers._
@@ -59,27 +58,28 @@ class TwitterProvider(
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth1Info): Future[Try[SocialProfile[OAuth1Info]]] = {
+  protected def buildProfile(authInfo: OAuth1Info): Future[SocialProfile[OAuth1Info]] = {
     httpLayer.url(API).sign(oAuth1Service.sign(authInfo)).get().map { response =>
       val json = response.json
       (json \ Errors \\ Code).headOption.map(_.as[Int]) match {
         case Some(code) =>
           val message = (json \ Errors \\ Message).headOption.map(_.as[String])
 
-          Failure(new AuthenticationException(SpecifiedProfileError.format(id, code, message)))
+          throw new AuthenticationException(SpecifiedProfileError.format(id, code, message))
         case _ =>
           val userId = (json \ ID).as[Long]
           val name = (json \ Name).asOpt[String]
           val avatarURL = (json \ ProfileImage).asOpt[String]
 
-          Success(SocialProfile(
+          SocialProfile(
             loginInfo = LoginInfo(id, userId.toString),
             authInfo = authInfo,
             fullName = name,
-            avatarURL = avatarURL))
+            avatarURL = avatarURL)
       }
     }.recover {
-      case e => Failure(new AuthenticationException(UnspecifiedProfileError.format(id), e))
+      case e if !e.isInstanceOf[AuthenticationException] =>
+        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
     }
   }
 }

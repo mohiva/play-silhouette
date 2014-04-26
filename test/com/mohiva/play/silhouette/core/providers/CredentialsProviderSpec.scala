@@ -31,64 +31,59 @@ import CredentialsProvider._
 class CredentialsProviderSpec extends PlaySpecification with Mockito {
 
   "The `authenticate` method" should {
-    "return failure if no auth info could be found for the given credentials" in new WithApplication with Context {
+    "throw AccessDeniedException if no auth info could be found for the given credentials" in new WithApplication with Context {
       val loginInfo = new LoginInfo(provider.id, credentials.identifier)
-      val pattern = UnknownCredentials.format(provider.id).replaceAll("\\[.*\\]", "^.*")
 
       authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(None)
 
-      await(provider.authenticate(credentials)) must beFailedTry.withThrowable[AccessDeniedException](pattern)
+      await(provider.authenticate(credentials)) must throwA[AccessDeniedException].like {
+        case e => e.getMessage must beEqualTo(UnknownCredentials.format(provider.id))
+      }
     }
 
-    "return failure if passwords does not match" in new WithApplication with Context {
+    "throw AccessDeniedException if passwords does not match" in new WithApplication with Context {
       val passwordInfo = PasswordInfo("foo", "hashed(s3cr3t)")
       val loginInfo = LoginInfo(provider.id, credentials.identifier)
-      val pattern = InvalidPassword.format(provider.id).replaceAll("\\[.*\\]", "^.*")
 
       fooHasher.matches(passwordInfo, credentials.password) returns false
       authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
-      await(provider.authenticate(credentials)) must beFailedTry.withThrowable[AccessDeniedException](pattern)
+      await(provider.authenticate(credentials)) must throwA[AccessDeniedException].like {
+        case e => e.getMessage must beEqualTo(InvalidPassword.format(provider.id))
+      }
     }
 
-    "return failure if unsupported hasher is stored" in new WithApplication with Context {
+    "throw AuthenticationException if unsupported hasher is stored" in new WithApplication with Context {
       val passwordInfo = PasswordInfo("unknown", "hashed(s3cr3t)")
       val loginInfo = LoginInfo(provider.id, credentials.identifier)
-      val pattern = UnsupportedHasher.format(provider.id, "unknown", "foo, bar").replaceAll("\\[.*\\]", "^.*")
 
       authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
-      await(provider.authenticate(credentials)) must beFailedTry.withThrowable[AuthenticationException](pattern)
+      await(provider.authenticate(credentials)) must throwA[AuthenticationException].like {
+        case e => e.getMessage must beEqualTo(UnsupportedHasher.format(provider.id, "unknown", "foo, bar"))
+      }
     }
 
-    "return success if passwords does match" in new WithApplication with Context {
+    "return login info if passwords does match" in new WithApplication with Context {
       val passwordInfo = PasswordInfo("foo", "hashed(s3cr3t)")
       val loginInfo = LoginInfo(provider.id, credentials.identifier)
-      val pattern = InvalidPassword.format(provider.id).replaceAll("\\[.*\\]", "^.*")
 
       fooHasher.matches(passwordInfo, credentials.password) returns true
       authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
-      await(provider.authenticate(credentials)) must beSuccessfulTry.like {
-        case result =>
-          result must be equalTo loginInfo
-      }
+      await(provider.authenticate(credentials)) must be equalTo loginInfo
     }
 
     "re-hash password with new hasher" in new WithApplication with Context {
       val passwordInfo = PasswordInfo("bar", "hashed(s3cr3t)")
       val loginInfo = LoginInfo(provider.id, credentials.identifier)
-      val pattern = InvalidPassword.format(provider.id).replaceAll("\\[.*\\]", "^.*")
 
       fooHasher.hash(credentials.password) returns passwordInfo
       barHasher.matches(passwordInfo, credentials.password) returns true
       authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
-      await(provider.authenticate(credentials)) must beSuccessfulTry.like {
-        case result =>
-          result must be equalTo loginInfo
-          there was one(authInfoService).save(loginInfo, passwordInfo)
-      }
+      await(provider.authenticate(credentials)) must be equalTo loginInfo
+      there was one(authInfoService).save(loginInfo, passwordInfo)
     }
   }
 

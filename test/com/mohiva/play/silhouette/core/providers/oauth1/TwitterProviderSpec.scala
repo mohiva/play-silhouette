@@ -41,14 +41,14 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
       cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(Some(oAuthInfo))
-      oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(Success(oAuthInfo))
+      oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(oAuthInfo)
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
       response.json returns Helper.loadJson("providers/oauth1/twitter.error.json")
       httpLayer.url(API) returns requestHolder
 
-      failedTry[AuthenticationException](provider.authenticate()) {
-        mustEqualTo(SpecifiedProfileError.format(
+      failed[AuthenticationException](provider.authenticate()) {
+        case e => e.getMessage must equalTo(SpecifiedProfileError.format(
           provider.id,
           215,
           Some("Bad Authentication data")))
@@ -63,14 +63,14 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
       cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(Some(oAuthInfo))
-      oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(Success(oAuthInfo))
+      oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(oAuthInfo)
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
       response.json throws new RuntimeException("")
       httpLayer.url(API) returns requestHolder
 
-      failedTry[AuthenticationException](provider.authenticate()) {
-        mustEqualTo(UnspecifiedProfileError.format(provider.id))
+      failed[AuthenticationException](provider.authenticate()) {
+        case e => e.getMessage must equalTo(UnspecifiedProfileError.format(provider.id))
       }
 
       there was one(cacheLayer).remove(cacheID)
@@ -82,7 +82,7 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
       cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(Some(oAuthInfo))
-      oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(Success(oAuthInfo))
+      oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(oAuthInfo)
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
       response.json returns Helper.loadJson("providers/oauth1/twitter.success.json")
