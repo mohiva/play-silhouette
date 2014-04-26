@@ -377,8 +377,10 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      * Checks whether the user is authorized to execute an action or not.
      *
      * @param identity The identity to check for.
+     * @param request The current request header.
+     * @param lang The current lang.
      * @return True if the user is authorized, false otherwise.
      */
-    def isAuthorized(identity: TestIdentity): Boolean = isAuthorized
+    def isAuthorized(identity: TestIdentity)(implicit request: RequestHeader, lang: Lang): Boolean = isAuthorized
   }
 }

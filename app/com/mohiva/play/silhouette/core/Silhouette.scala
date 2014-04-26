@@ -33,8 +33,8 @@ import com.mohiva.play.silhouette.core.utils.DefaultActionHandler
  * {{{
  * class MyController(
  *     val identityService: IdentityService[User],
- *     val authenticatorService: AuthenticatorService
- *   ) extends Silhouette[User] {
+ *     val authenticatorService: AuthenticatorService[CachedCookieAuthenticator]
+ *   ) extends Silhouette[User, CachedCookieAuthenticator] {
  *
  *   def protectedAction = SecuredAction { implicit request =>
  *     Ok("Hello %s".format(request.identity.fullName))
@@ -209,6 +209,7 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logg
      * @return The result to send to the client.
      */
     def invokeBlock[A](request: Request[A], block: SecuredRequest[A] => Future[SimpleResult]) = {
+      implicit val r = request
       currentIdentity(request).flatMap {
         // A user is both authenticated and authorized. The request will be granted.
         case Some(identity) if authorize.isEmpty || authorize.get.isAuthorized(identity) =>

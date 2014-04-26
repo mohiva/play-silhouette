@@ -19,6 +19,9 @@
  */
 package com.mohiva.play.silhouette.core
 
+import play.api.mvc.RequestHeader
+import play.api.i18n.Lang
+
 /**
  * A trait to define Authorization objects that let you hook
  * an authorization implementation in SecuredActions.
@@ -31,7 +34,9 @@ trait Authorization[I <: Identity] {
    * Checks whether the user is authorized to execute an action or not.
    *
    * @param identity The identity to check for.
+   * @param request The current request header.
+   * @param lang The current lang.
    * @return True if the user is authorized, false otherwise.
    */
-  def isAuthorized(identity: I): Boolean
+  def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang): Boolean
 }
