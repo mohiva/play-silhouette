@@ -42,8 +42,8 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Provides the actions that can be used to protect controllers and retrieve the current user
 if available.</p><pre><span class="kw">class</span> MyController(
   <span class="kw">val</span> identityService: IdentityService[User],
-  <span class="kw">val</span> authenticatorService: AuthenticatorService
-) <span class="kw">extends</span> Silhouette[User] {
+  <span class="kw">val</span> authenticatorService: AuthenticatorService[CachedCookieAuthenticator]
+) <span class="kw">extends</span> Silhouette[User, CachedCookieAuthenticator] {
 
 <span class="kw">def</span> protectedAction = SecuredAction { <span class="kw">implicit</span> request <span class="kw">=&gt;</span>
   Ok(<span class="lit">"Hello %s"</span>.format(request.identity.fullName))

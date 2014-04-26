@@ -87,19 +87,19 @@ an authorization implementation in SecuredActions.
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="com.mohiva.play.silhouette.core.Authorization#isAuthorized" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="isAuthorized(identity:I):Boolean"></a>
-      <a id="isAuthorized(I):Boolean"></a>
+      <a id="isAuthorized(identity:I)(implicitrequest:play.api.mvc.RequestHeader,implicitlang:play.api.i18n.Lang):Boolean"></a>
+      <a id="isAuthorized(I)(RequestHeader,Lang):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isAuthorized</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.core.Authorization.I">I</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isAuthorized</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.core.Authorization.I">I</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="lang">lang: <span class="extype" name="play.api.i18n.Lang">Lang</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Checks whether the user is authorized to execute an action or not.</p><div class="fullcomment"><div class="comment cmt"><p>Checks whether the user is authorized to execute an action or not.
-</p></div><dl class="paramcmts block"><dt class="param">identity</dt><dd class="cmt"><p>The identity to check for.</p></dd><dt>returns</dt><dd class="cmt"><p>True if the user is authorized, false otherwise.
+</p></div><dl class="paramcmts block"><dt class="param">identity</dt><dd class="cmt"><p>The identity to check for.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request header.</p></dd><dt class="param">lang</dt><dd class="cmt"><p>The current lang.</p></dd><dt>returns</dt><dd class="cmt"><p>True if the user is authorized, false otherwise.
 </p></dd></dl></div>
     </li></ol>
             </div>
