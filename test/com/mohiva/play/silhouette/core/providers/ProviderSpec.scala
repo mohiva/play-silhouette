@@ -64,11 +64,21 @@ abstract class ProviderSpec[A <: AuthInfo] extends PlaySpecification with Mockit
   /**
    * Matches a partial function against a failure message.
    *
+   * This method checks if an exception was thrown in a future.
+   * @see https://groups.google.com/d/msg/specs2-users/MhJxnvyS1_Q/FgAK-5IIIhUJ
+   *
    * @param providerResult The result from the provider.
    * @param f A matcher function.
    * @return A specs2 match result.
    */
   def failed[E <: Throwable: ClassTag](providerResult: ProviderResult)(f: => PartialFunction[Throwable, MatchResult[_]]) = {
-    await(providerResult) must throwAn[E].like(f)
+    implicit class Rethrow(t: Throwable) {
+      def rethrow = { throw t; t }
+    }
+
+    lazy val result = await(providerResult.failed)
+
+    result must not(throwAn[E])
+    result.rethrow must throwAn[E].like(f)
   }
 }
