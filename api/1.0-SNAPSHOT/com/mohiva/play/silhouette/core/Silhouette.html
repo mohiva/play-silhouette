@@ -2557,6 +2557,24 @@ if available.</p><pre><span class="kw">class</span> MyController(
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.Silhouette#exceptionHandler" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="exceptionHandler(implicitrequest:play.api.mvc.RequestHeader):PartialFunction[Throwable,scala.concurrent.Future[play.api.mvc.SimpleResult]]"></a>
+      <a id="exceptionHandler(RequestHeader):PartialFunction[Throwable,Future[SimpleResult]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">exceptionHandler</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[<span class="extype" name="scala.Throwable">Throwable</span>, <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Default exception handler for silhouette exceptions which translates an exception into
+the appropriate result.</p><div class="fullcomment"><div class="comment cmt"><p>Default exception handler for silhouette exceptions which translates an exception into
+the appropriate result.</p><p>Translates an AccessDeniedException into a 403 Forbidden result and an AuthenticationException
+into a 401 Unauthorized result.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client based on the exception.
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>

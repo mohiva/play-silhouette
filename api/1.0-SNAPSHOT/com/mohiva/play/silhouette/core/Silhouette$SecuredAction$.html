@@ -392,43 +392,6 @@ a default message will be displayed.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.Silhouette.SecuredActionBuilder#handleNotAuthenticated" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="handleNotAuthenticated(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.SimpleResult]"></a>
-      <a id="handleNotAuthenticated(RequestHeader):Future[SimpleResult]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">handleNotAuthenticated</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Produces a result indicating that the user must provide authentication before
-the requested action can be performed.</p><div class="fullcomment"><div class="comment cmt"><p>Produces a result indicating that the user must provide authentication before
-the requested action can be performed.</p><p>This should be called when the user is not authenticated.
-This indicates a temporary condition. The user can authenticate and repeat the request.</p><p>As defined by RFC 2616, the status code of the response will be 401 Unauthorized.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client if the user isn't authenticated.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Silhouette$SecuredActionBuilder.html" class="extype" name="com.mohiva.play.silhouette.core.Silhouette.SecuredActionBuilder">SecuredActionBuilder</a></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.Silhouette.SecuredActionBuilder#handleNotAuthorized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="handleNotAuthorized(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.SimpleResult]"></a>
-      <a id="handleNotAuthorized(RequestHeader):Future[SimpleResult]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">handleNotAuthorized</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="play.api.mvc.SimpleResult">SimpleResult</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Produces a result indicating that the request will be forbidden
-because the authenticated user is not authorized to perform the requested action.</p><div class="fullcomment"><div class="comment cmt"><p>Produces a result indicating that the request will be forbidden
-because the authenticated user is not authorized to perform the requested action.</p><p>This should be called when the user is authenticated but authorization failed.
-This indicates a permanent situation. Repeating the request with the same authenticated
-user will produce the same response.</p><p>As defined by RFC 2616, the status code of the response will be 403 Forbidden.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client if the user isn't authorized.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Silhouette$SecuredActionBuilder.html" class="extype" name="com.mohiva.play.silhouette.core.Silhouette.SecuredActionBuilder">SecuredActionBuilder</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
