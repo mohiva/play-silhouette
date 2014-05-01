@@ -24,6 +24,7 @@ import play.api.mvc._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core.services.{ AuthenticatorService, IdentityService }
+import com.mohiva.play.silhouette.core.exceptions.{ AuthenticationException, AccessDeniedException }
 import com.mohiva.play.silhouette.core.utils.DefaultActionHandler
 
 /**
@@ -82,6 +83,21 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logg
   protected def notAuthorized(request: RequestHeader): Option[Future[SimpleResult]] = None
 
   /**
+   * Default exception handler for silhouette exceptions which translates an exception into
+   * the appropriate result.
+   *
+   * Translates an AccessDeniedException into a 403 Forbidden result and an AuthenticationException
+   * into a 401 Unauthorized result.
+   *
+   * @param request The request header.
+   * @return The result to send to the client based on the exception.
+   */
+  protected def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[SimpleResult]] = {
+    case e: AccessDeniedException => handleNotAuthorized
+    case e: AuthenticationException => handleNotAuthenticated
+  }
+
+  /**
    * Gets the current logged in identity.
    *
    * This method can be used from public actions that need to access the current user if there's any.
@@ -97,6 +113,53 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logg
       })
       case None => Future.successful(None)
     }
+  }
+
+  /**
+   * Produces a result indicating that the request will be forbidden
+   * because the authenticated user is not authorized to perform the requested action.
+   *
+   * This should be called when the user is authenticated but authorization failed.
+   * This indicates a permanent situation. Repeating the request with the same authenticated
+   * user will produce the same response.
+   *
+   * As defined by RFC 2616, the status code of the response will be 403 Forbidden.
+   *
+   * @param request The request header.
+   * @return The result to send to the client if the user isn't authorized.
+   */
+  private def handleNotAuthorized(implicit request: RequestHeader): Future[SimpleResult] = {
+    logger.debug("[Silhouette] Unauthorized user trying to access '%s'".format(request.uri))
+
+    notAuthorized(request).orElse {
+      Play.current.global match {
+        case s: SecuredSettings => s.onNotAuthorized(request, lang)
+        case _ => None
+      }
+    }.getOrElse(DefaultActionHandler.handleForbidden)
+  }
+
+  /**
+   * Produces a result indicating that the user must provide authentication before
+   * the requested action can be performed.
+   *
+   * This should be called when the user is not authenticated.
+   * This indicates a temporary condition. The user can authenticate and repeat the request.
+   *
+   * As defined by RFC 2616, the status code of the response will be 401 Unauthorized.
+   *
+   * @param request The request header.
+   * @return The result to send to the client if the user isn't authenticated.
+   */
+  private def handleNotAuthenticated(implicit request: RequestHeader): Future[SimpleResult] = {
+    logger.debug("[Silhouette] Unauthenticated user trying to access '%s'".format(request.uri))
+
+    notAuthenticated(request).orElse {
+      Play.current.global match {
+        case s: SecuredSettings => s.onNotAuthenticated(request, lang)
+        case _ => None
+      }
+    }.getOrElse(DefaultActionHandler.handleUnauthorized)
   }
 
   /**
@@ -153,53 +216,6 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logg
    * @param authorize An Authorize object that checks if the user is authorized to invoke the action.
    */
   class SecuredActionBuilder(authorize: Option[Authorization[I]] = None) extends ActionBuilder[SecuredRequest] {
-
-    /**
-     * Produces a result indicating that the request will be forbidden
-     * because the authenticated user is not authorized to perform the requested action.
-     *
-     * This should be called when the user is authenticated but authorization failed.
-     * This indicates a permanent situation. Repeating the request with the same authenticated
-     * user will produce the same response.
-     *
-     * As defined by RFC 2616, the status code of the response will be 403 Forbidden.
-     *
-     * @param request The request header.
-     * @return The result to send to the client if the user isn't authorized.
-     */
-    def handleNotAuthorized(implicit request: RequestHeader): Future[SimpleResult] = {
-      logger.debug("[Silhouette] Unauthorized user trying to access '%s'".format(request.uri))
-
-      notAuthorized(request).orElse {
-        Play.current.global match {
-          case s: SecuredSettings => s.onNotAuthorized(request, lang)
-          case _ => None
-        }
-      }.getOrElse(DefaultActionHandler.handleForbidden)
-    }
-
-    /**
-     * Produces a result indicating that the user must provide authentication before
-     * the requested action can be performed.
-     *
-     * This should be called when the user is not authenticated.
-     * This indicates a temporary condition. The user can authenticate and repeat the request.
-     *
-     * As defined by RFC 2616, the status code of the response will be 401 Unauthorized.
-     *
-     * @param request The request header.
-     * @return The result to send to the client if the user isn't authenticated.
-     */
-    def handleNotAuthenticated(implicit request: RequestHeader): Future[SimpleResult] = {
-      logger.debug("[Silhouette] Unauthenticated user trying to access '%s'".format(request.uri))
-
-      notAuthenticated(request).orElse {
-        Play.current.global match {
-          case s: SecuredSettings => s.onNotAuthenticated(request, lang)
-          case _ => None
-        }
-      }.getOrElse(DefaultActionHandler.handleUnauthorized)
-    }
 
     /**
      * Invokes the block.

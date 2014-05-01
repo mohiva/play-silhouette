@@ -19,6 +19,7 @@ import org.specs2.specification.Scope
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.test.{ WithApplication, FakeRequest, PlaySpecification }
 import play.api.GlobalSettings
 import play.api.i18n.{ Messages, Lang }
@@ -27,13 +28,14 @@ import play.api.mvc.Results._
 import play.api.test.FakeApplication
 import play.api.libs.json.Json
 import com.mohiva.play.silhouette.core.services.{ AuthenticatorService, IdentityService }
+import com.mohiva.play.silhouette.core.exceptions.{ AuthenticationException, AccessDeniedException }
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.core.Silhouette]] base controller.
  */
 class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
-  "The SecuredAction action" should {
+  "The `SecuredAction` action" should {
     "restrict access if no authenticator can be retrieved" in new WithDefaultGlobal {
       authenticatorService.retrieve returns Future.successful(None)
       authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
@@ -196,7 +198,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
   }
 
-  "The UserAwareAction action" should {
+  "The `UserAwareAction` action" should {
     "restrict access if no authenticator could be found" in new WithDefaultGlobal {
       authenticatorService.retrieve returns Future.successful(None)
 
@@ -237,6 +239,30 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
       status(result) must equalTo(OK)
       contentAsString(result) must contain(Messages("full.access"))
+    }
+  }
+
+  "The `exceptionHandler` method" should {
+    "translate an AccessDeniedException into a 403 Forbidden result" in new WithDefaultGlobal {
+      authenticatorService.retrieve returns Future.successful(None)
+      authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
+
+      val controller = new SecuredController(identityService, authenticatorService)
+      val failed = Future.failed(new AccessDeniedException("Access denied"))
+      val result = controller.recover(failed)
+
+      status(result) must equalTo(FORBIDDEN)
+    }
+
+    "translate an AuthenticationException into a 401 Unauthorized result" in new WithDefaultGlobal {
+      authenticatorService.retrieve returns Future.successful(None)
+      authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
+
+      val controller = new SecuredController(identityService, authenticatorService)
+      val failed = Future.failed(new AuthenticationException("Not authenticated"))
+      val result = controller.recover(failed)
+
+      status(result) must equalTo(UNAUTHORIZED)
     }
   }
 
@@ -363,6 +389,17 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       } else {
         Unauthorized("not.authenticated")
       }
+    }
+
+    /**
+     * Method to test the `exceptionHandler` method of the Silhouette controller.
+     *
+     * @param f The future to recover from.
+     * @param request The request header.
+     * @return The result to send to the client.
+     */
+    def recover(f: Future[SimpleResult])(implicit request: RequestHeader): Future[SimpleResult] = {
+      f.recoverWith(exceptionHandler)
     }
   }
 
