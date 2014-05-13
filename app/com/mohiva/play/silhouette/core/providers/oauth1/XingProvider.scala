@@ -73,7 +73,7 @@ abstract class XingProvider(
         case Some(error) =>
           val message = (json \ "message").asOpt[String]
 
-          Future.failed(throw new AuthenticationException(SpecifiedProfileError.format(id, error, message.getOrElse(""))))
+          Future.failed(new AuthenticationException(SpecifiedProfileError.format(id, error, message.getOrElse(""))))
         case _ => parseProfile(parser(authInfo), json).asFuture
       }
     }
