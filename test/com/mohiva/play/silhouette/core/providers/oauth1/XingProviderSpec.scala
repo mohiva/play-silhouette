@@ -20,12 +20,12 @@ import java.util.UUID
 import play.api.libs.ws.{ Response, WS }
 import play.api.test.{ FakeRequest, WithApplication }
 import scala.concurrent.Future
-import scala.util.Success
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.providers.OAuth1Settings
 import com.mohiva.play.silhouette.core.providers.OAuth1Info
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import SocialProfileBuilder._
 import OAuth1Provider._
 import XingProvider._
 
@@ -90,7 +90,7 @@ class XingProviderSpec extends OAuth1ProviderSpec {
 
       profile(provider.authenticate()) {
         case p =>
-          p must be equalTo new SocialProfile(
+          p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "1235468792"),
             authInfo = oAuthInfo,
             firstName = Some("Apollonia"),
@@ -131,6 +131,6 @@ class XingProviderSpec extends OAuth1ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new XingProvider(cacheLayer, httpLayer, oAuthService, oAuthSettings)
+    lazy val provider = XingProvider(cacheLayer, httpLayer, oAuthService, oAuthSettings)
   }
 }

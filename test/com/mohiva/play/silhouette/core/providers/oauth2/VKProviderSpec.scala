@@ -24,6 +24,7 @@ import play.api.test.{ FakeRequest, WithApplication }
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import SocialProfileBuilder._
 import VKProvider._
 import OAuth2Provider._
 
@@ -107,7 +108,7 @@ class VKProviderSpec extends OAuth2ProviderSpec {
 
       profile(provider.authenticate()) {
         case p =>
-          p must be equalTo new SocialProfile(
+          p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "66748"),
             authInfo = oAuthInfo.as[OAuth2Info],
             firstName = Some("Apollonia"),
@@ -151,6 +152,6 @@ class VKProviderSpec extends OAuth2ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new VKProvider(cacheLayer, httpLayer, oAuthSettings)
+    lazy val provider = VKProvider(cacheLayer, httpLayer, oAuthSettings)
   }
 }

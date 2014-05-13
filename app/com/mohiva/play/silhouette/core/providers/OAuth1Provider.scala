@@ -22,7 +22,6 @@ package com.mohiva.play.silhouette.core.providers
 import java.util.UUID
 import play.api.mvc.{ SimpleResult, RequestHeader, Results }
 import play.api.libs.ws.SignatureCalculator
-import scala.util.{ Success, Failure, Try }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
@@ -36,14 +35,14 @@ import OAuth1Provider._
  *
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
- * @param oAuth1Service The OAuth1 service implementation.
- * @param oAuth1Settings The OAuth1 provider settings.
+ * @param service The OAuth1 service implementation.
+ * @param settings The OAuth1 provider settings.
  */
 abstract class OAuth1Provider(
   cacheLayer: CacheLayer,
   httpLayer: HTTPLayer,
-  oAuth1Service: OAuth1Service,
-  oAuth1Settings: OAuth1Settings)
+  service: OAuth1Service,
+  settings: OAuth1Settings)
     extends SocialProvider[OAuth1Info]
     with Logger {
 
@@ -62,7 +61,7 @@ abstract class OAuth1Provider(
         // We have the request info in the cache, and we need to swap it for the access info.
         case Some(seq) => cachedInfo.flatMap {
           case (cacheID, cachedInfo) =>
-            oAuth1Service.retrieveAccessToken(cachedInfo, seq.head).map { info =>
+            service.retrieveAccessToken(cachedInfo, seq.head).map { info =>
               cacheLayer.remove(cacheID)
               Right(info)
             }.recover {
@@ -71,9 +70,9 @@ abstract class OAuth1Provider(
         }
         // The oauth_verifier field is not in the request.
         // This is the first step in the OAuth flow. We need to get the request tokens.
-        case _ => oAuth1Service.retrieveRequestToken(oAuth1Settings.callbackURL).map { info =>
+        case _ => service.retrieveRequestToken(settings.callbackURL).map { info =>
           val cacheID = UUID.randomUUID().toString
-          val url = oAuth1Service.redirectUrl(info.token)
+          val url = service.redirectUrl(info.token)
           val redirect = Results.Redirect(url).withSession(request.session + (CacheKey -> cacheID))
           logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
           cacheLayer.set(cacheID, info, CacheExpiration)
@@ -127,7 +126,7 @@ object OAuth1Provider {
    * Cache expiration. Provides sufficient time to log in, but not too much.
    * This is a balance between convenience and security.
    */
-  val CacheExpiration = 5 * 60; // 5 minutes
+  val CacheExpiration = 5 * 60 // 5 minutes
 }
 
 /**

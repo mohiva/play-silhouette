@@ -23,6 +23,7 @@ import scala.concurrent.Future
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import SocialProfileBuilder._
 import FacebookProvider._
 import OAuth2Provider._
 
@@ -110,7 +111,7 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
 
       profile(provider.authenticate()) {
         case p =>
-          p must be equalTo new SocialProfile(
+          p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "134405962728980"),
             authInfo = OAuth2Info(
               accessToken = "my.access.token",
@@ -143,7 +144,7 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
 
       profile(provider.authenticate()) {
         case p =>
-          p must be equalTo new SocialProfile(
+          p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "134405962728980"),
             authInfo = OAuth2Info(
               accessToken = "my.access.token",
@@ -186,6 +187,6 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new FacebookProvider(cacheLayer, httpLayer, oAuthSettings)
+    lazy val provider = FacebookProvider(cacheLayer, httpLayer, oAuthSettings)
   }
 }

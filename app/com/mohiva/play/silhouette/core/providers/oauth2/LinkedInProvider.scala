@@ -19,10 +19,13 @@
  */
 package com.mohiva.play.silhouette.core.providers.oauth2
 
+import play.api.libs.json.JsValue
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+import com.mohiva.play.silhouette.core.LoginInfo
+import com.mohiva.play.silhouette.core.providers._
+import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
-import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
-import com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile._
 import LinkedInProvider._
 
 /**
@@ -31,12 +34,13 @@ import LinkedInProvider._
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
  * @param settings The provider settings.
+ *
+ * @see https://developer.linkedin.com/documents/oauth-10a
+ * @see https://developer.linkedin.com/documents/authentication
+ * @see https://developer.linkedin.com/documents/inapiprofile
  */
-class LinkedInProvider(
-  cacheLayer: CacheLayer,
-  httpLayer: HTTPLayer,
-  settings: OAuth2Settings)
-    extends OAuth2Provider(settings, cacheLayer, httpLayer) {
+abstract class LinkedInProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings)
+    extends OAuth2Provider(cacheLayer, httpLayer, settings) {
 
   /**
    * Gets the provider ID.
@@ -46,13 +50,55 @@ class LinkedInProvider(
   def id = LinkedIn
 
   /**
+   * Gets the API URL to retrieve the profile data.
+   *
+   * @return The API URL to retrieve the profile data.
+   */
+  protected def profileAPI = API
+
+  /**
    * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[SocialProfile[OAuth2Info]] = {
-    build(httpLayer.url(API.format(authInfo.accessToken)).get(), authInfo)
+  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+    httpLayer.url(API.format(authInfo.accessToken)).get().flatMap { response =>
+      val json = response.json
+      (json \ "errorCode").asOpt[Int] match {
+        case Some(error) =>
+          val message = (json \ "message").asOpt[String]
+          val requestId = (json \ "requestId").asOpt[String]
+          val status = (json \ "status").asOpt[Int]
+          val timestamp = (json \ "timestamp").asOpt[Long]
+
+          Future.failed(new AuthenticationException(SpecifiedProfileError.format(id, error, message, requestId, status, timestamp)))
+        case _ => parseProfile(parser(authInfo), json).asFuture
+      }
+    }
+  }
+
+  /**
+   * Defines the parser which parses the most common profile supported by Silhouette.
+   *
+   * @return The parser which parses the most common profile supported by Silhouette.
+   */
+  protected def parser: Parser = (authInfo: OAuth2Info) => (json: JsValue) => {
+    val userID = (json \ "id").as[String]
+    val firstName = (json \ "firstName").asOpt[String]
+    val lastName = (json \ "lastName").asOpt[String]
+    val fullName = (json \ "formattedName").asOpt[String]
+    val avatarURL = (json \ "pictureUrl").asOpt[String]
+    val email = (json \ "emailAddress").asOpt[String]
+
+    CommonSocialProfile(
+      loginInfo = LoginInfo(id, userID),
+      authInfo = authInfo,
+      firstName = firstName,
+      lastName = lastName,
+      fullName = fullName,
+      avatarURL = avatarURL,
+      email = email)
   }
 }
 
@@ -62,7 +108,25 @@ class LinkedInProvider(
 object LinkedInProvider {
 
   /**
+   * The error messages.
+   */
+  val SpecifiedProfileError = "[Silhouette][%s] error retrieving profile information. Error code: %s, message: %s, requestId: %s, status: %s, timestamp: %s"
+
+  /**
    * The LinkedIn constants.
    */
-  val API = BaseAPI + "&oauth2_access_token=%s"
+  val LinkedIn = "linkedin"
+  val API = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,formatted-name,picture-url,email-address)?format=json&oauth2_access_token=%s"
+
+  /**
+   * Creates an instance of the provider.
+   *
+   * @param cacheLayer The cache layer implementation.
+   * @param httpLayer The HTTP layer implementation.
+   * @param settings The provider settings.
+   * @return An instance of this provider.
+   */
+  def apply(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings) = {
+    new LinkedInProvider(cacheLayer, httpLayer, settings) with CommonSocialProfileBuilder[OAuth2Info]
+  }
 }

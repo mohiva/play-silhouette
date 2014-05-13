@@ -19,14 +19,14 @@
  */
 package com.mohiva.play.silhouette.core.providers.oauth2
 
+import play.api.libs.json.JsValue
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import com.mohiva.play.silhouette.core._
+import com.mohiva.play.silhouette.core.providers._
+import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
-import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import InstagramProvider._
-import OAuth2Provider._
 
 /**
  * An Instagram OAuth2 provider.
@@ -34,15 +34,12 @@ import OAuth2Provider._
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
  * @param settings The provider settings.
+ *
  * @see http://instagram.com/developer/authentication/
  * @see http://instagram.com/developer/endpoints/
- *
  */
-class InstagramProvider(
-  cacheLayer: CacheLayer,
-  httpLayer: HTTPLayer,
-  settings: OAuth2Settings)
-    extends OAuth2Provider(settings, cacheLayer, httpLayer) {
+abstract class InstagramProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings)
+    extends OAuth2Provider(cacheLayer, httpLayer, settings) {
 
   /**
    * Gets the provider ID.
@@ -52,35 +49,48 @@ class InstagramProvider(
   def id = Instagram
 
   /**
+   * Gets the API URL to retrieve the profile data.
+   *
+   * @return The API URL to retrieve the profile data.
+   */
+  protected def profileAPI = API
+
+  /**
    * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[SocialProfile[OAuth2Info]] = {
-    httpLayer.url(API.format(authInfo.accessToken)).get().map { response =>
+  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+    httpLayer.url(API.format(authInfo.accessToken)).get().flatMap { response =>
       val json = response.json
-      (json \ Meta \ Code).asOpt[Int] match {
+      (json \ "meta" \ "code").asOpt[Int] match {
         case Some(code) if code != 200 =>
-          val errorType = (json \ Meta \ ErrorType).asOpt[String]
-          val errorMsg = (json \ Meta \ ErrorMsg).asOpt[String]
+          val errorType = (json \ "meta" \ "error_type").asOpt[String]
+          val errorMsg = (json \ "meta" \ "error_message").asOpt[String]
 
           throw new AuthenticationException(SpecifiedProfileError.format(id, code, errorType, errorMsg))
-        case _ =>
-          val userID = (json \ Data \ ID).as[String]
-          val fullName = (json \ Data \ FullName).asOpt[String]
-          val avatarURL = (json \ Data \ ProfilePic).asOpt[String]
-
-          SocialProfile(
-            loginInfo = LoginInfo(id, userID),
-            authInfo = authInfo,
-            fullName = fullName,
-            avatarURL = avatarURL)
+        case _ => parseProfile(parser(authInfo), json).asFuture
       }
-    }.recover {
-      case e if !e.isInstanceOf[AuthenticationException] =>
-        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
     }
+  }
+
+  /**
+   * Defines the parser which parses the most common profile supported by Silhouette.
+   *
+   * @return The parser which parses the most common profile supported by Silhouette.
+   */
+  protected def parser: Parser = (authInfo: OAuth2Info) => (json: JsValue) => {
+    val data = json \ "data"
+    val userID = (data \ "id").as[String]
+    val fullName = (data \ "full_name").asOpt[String]
+    val avatarURL = (data \ "profile_picture").asOpt[String]
+
+    CommonSocialProfile(
+      loginInfo = LoginInfo(id, userID),
+      authInfo = authInfo,
+      fullName = fullName,
+      avatarURL = avatarURL)
   }
 }
 
@@ -92,7 +102,6 @@ object InstagramProvider {
   /**
    * The error messages.
    */
-  val UnspecifiedProfileError = "[Silhouette][%s] Error retrieving profile information"
   val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error code: %s, type: %s, message: %s"
 
   /**
@@ -100,12 +109,16 @@ object InstagramProvider {
    */
   val Instagram = "instagram"
   val API = "https://api.instagram.com/v1/users/self?access_token=%s"
-  val Meta = "meta"
-  val ErrorType = "error_type"
-  val ErrorMsg = "error_message"
-  val User = "user"
-  val Data = "data"
-  val ID = "id"
-  val FullName = "full_name"
-  val ProfilePic = "profile_picture"
+
+  /**
+   * Creates an instance of the provider.
+   *
+   * @param cacheLayer The cache layer implementation.
+   * @param httpLayer The HTTP layer implementation.
+   * @param settings The provider settings.
+   * @return An instance of this provider.
+   */
+  def apply(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings) = {
+    new InstagramProvider(cacheLayer, httpLayer, settings) with CommonSocialProfileBuilder[OAuth2Info]
+  }
 }

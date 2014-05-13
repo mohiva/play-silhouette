@@ -19,16 +19,14 @@ import scala.reflect.ClassTag
 import scala.concurrent.Future
 import play.api.mvc.SimpleResult
 import play.api.test.PlaySpecification
-import org.specs2.matcher.{ MatchResult, JsonMatchers }
 import org.specs2.mock.Mockito
+import org.specs2.matcher.{ MatchResult, JsonMatchers }
 import com.mohiva.play.silhouette.core.services.AuthInfo
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.core.providers.OAuth1Provider]] class.
- *
- * These tests will be additionally executed before every OAuth1 provider spec.
+ * Abstract test case for the social providers.
  */
-abstract class ProviderSpec[A <: AuthInfo] extends PlaySpecification with Mockito with JsonMatchers {
+abstract class SocialProviderSpec[A <: AuthInfo] extends PlaySpecification with Mockito with JsonMatchers {
 
   /**
    * The provider result.

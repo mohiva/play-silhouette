@@ -19,12 +19,13 @@
  */
 package com.mohiva.play.silhouette.core.providers.oauth1
 
+import play.api.libs.json.JsValue
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import com.mohiva.play.silhouette.core._
-import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
+import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import XingProvider._
 
 /**
@@ -38,7 +39,7 @@ import XingProvider._
  * @see https://dev.xing.com/docs/get/users/me
  * @see https://dev.xing.com/docs/error_responses
  */
-class XingProvider(
+abstract class XingProvider(
   cacheLayer: CacheLayer,
   httpLayer: HTTPLayer,
   oAuth1Service: OAuth1Service,
@@ -53,41 +54,52 @@ class XingProvider(
   def id = Xing
 
   /**
+   * Gets the API URL to retrieve the profile data.
+   *
+   * @return The API URL to retrieve the profile data.
+   */
+  protected def profileAPI = API
+
+  /**
    * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth1Info): Future[SocialProfile[OAuth1Info]] = {
-    httpLayer.url(API).sign(oAuth1Service.sign(authInfo)).get().map { response =>
+  protected def buildProfile(authInfo: OAuth1Info): Future[Profile] = {
+    httpLayer.url(profileAPI).sign(oAuth1Service.sign(authInfo)).get().flatMap { response =>
       val json = response.json
-      (json \ ErrorName).asOpt[String] match {
+      (json \ "error_name").asOpt[String] match {
         case Some(error) =>
-          val message = (json \ Message).asOpt[String]
+          val message = (json \ "message").asOpt[String]
 
-          throw new AuthenticationException(SpecifiedProfileError.format(id, error, message.getOrElse("")))
-        case _ =>
-          val json = response.json
-          val userID = (json \ Users \\ ID).head.as[String]
-          val fullName = (json \ Users \\ Name).headOption.map(_.as[String])
-          val lastName = (json \ Users \\ LastName).headOption.map(_.as[String])
-          val firstName = (json \ Users \\ FirstName).headOption.map(_.as[String])
-          val avatarURL = (json \ Users \\ ProfileImage).headOption.flatMap(urls => (urls \ Large).asOpt[String])
-          val email = (json \ Users \\ ActiveEmail).headOption.map(_.as[String])
-
-          SocialProfile(
-            loginInfo = LoginInfo(id, userID),
-            authInfo = authInfo,
-            firstName = firstName,
-            lastName = lastName,
-            fullName = fullName,
-            avatarURL = avatarURL,
-            email = email)
+          Future.failed(throw new AuthenticationException(SpecifiedProfileError.format(id, error, message.getOrElse(""))))
+        case _ => parseProfile(parser(authInfo), json).asFuture
       }
-    }.recover {
-      case e if !e.isInstanceOf[AuthenticationException] =>
-        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
     }
+  }
+
+  /**
+   * Defines the parser which parses the most common profile supported by Silhouette.
+   *
+   * @return The parser which parses the most common profile supported by Silhouette.
+   */
+  protected def parser: Parser = (authInfo: OAuth1Info) => (json: JsValue) => {
+    val userID = (json \ "users" \\ "id").head.as[String]
+    val firstName = (json \ "users" \\ "first_name").headOption.map(_.as[String])
+    val lastName = (json \ "users" \\ "last_name").headOption.map(_.as[String])
+    val fullName = (json \ "users" \\ "display_name").headOption.map(_.as[String])
+    val avatarURL = (json \ "users" \\ "photo_urls").headOption.flatMap(urls => (urls \ "large").asOpt[String])
+    val email = (json \ "users" \\ "active_email").headOption.map(_.as[String])
+
+    CommonSocialProfile(
+      loginInfo = LoginInfo(id, userID),
+      authInfo = authInfo,
+      firstName = firstName,
+      lastName = lastName,
+      fullName = fullName,
+      avatarURL = avatarURL,
+      email = email)
   }
 }
 
@@ -99,7 +111,6 @@ object XingProvider {
   /**
    * The error messages.
    */
-  val UnspecifiedProfileError = "[Silhouette][%s] error retrieving profile information"
   val SpecifiedProfileError = "[Silhouette][%s] error retrieving profile information. Error name: %s, message: %s"
 
   /**
@@ -107,14 +118,20 @@ object XingProvider {
    */
   val Xing = "xing"
   val API = "https://api.xing.com/v1/users/me?fields=id,display_name,first_name,last_name,active_email,photo_urls.large"
-  val ErrorName = "error_name"
-  val Message = "message"
-  val Users = "users"
-  val ID = "id"
-  val Name = "display_name"
-  val FirstName = "first_name"
-  val LastName = "last_name"
-  val ProfileImage = "photo_urls"
-  val Large = "large"
-  val ActiveEmail = "active_email"
+
+  /**
+   * Creates an instance of the provider.
+   *
+   * @param cacheLayer The cache layer implementation.
+   * @param httpLayer The HTTP layer implementation.
+   * @param oAuth1Service The OAuth1 service implementation.
+   * @param auth1Settings The OAuth1 provider settings.
+   * @return An instance of this provider.
+   */
+  def apply(cacheLayer: CacheLayer,
+    httpLayer: HTTPLayer,
+    oAuth1Service: OAuth1Service,
+    auth1Settings: OAuth1Settings) = {
+    new XingProvider(cacheLayer, httpLayer, oAuth1Service, auth1Settings) with CommonSocialProfileBuilder[OAuth1Info]
+  }
 }
