@@ -83,7 +83,33 @@ for different schemes and services.
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.providers.Credentials" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CommonSocialProfile[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsSocialProfile[A]withProductwithSerializable"></a>
+      <a id="CommonSocialProfile[A&lt;:AuthInfo]:CommonSocialProfile[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CommonSocialProfile.html"><span class="name">CommonSocialProfile</span></a><span class="tparams">[<span name="A">A &lt;: <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile.A">A</span></span>, <span name="firstName">firstName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="lastName">lastName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="fullName">fullName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="email">email: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="avatarURL">avatarURL: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <a href="SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>[<span class="extype" name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile.A">A</span>] with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The social profile contains all the data returned from the social providers after authentication.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.CommonSocialProfileBuilder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="CommonSocialProfileBuilder[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsAnyRef"></a>
+      <a id="CommonSocialProfileBuilder[A&lt;:AuthInfo]:CommonSocialProfileBuilder[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="CommonSocialProfileBuilder.html"><span class="name">CommonSocialProfileBuilder</span></a><span class="tparams">[<span name="A">A &lt;: <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The profile builder for the common social profile.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.Credentials" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="CredentialsextendsProductwithSerializable"></a>
       <a id="Credentials:Credentials"></a>
       <h4 class="signature">
@@ -213,21 +239,34 @@ for different schemes and services.
       </span>
       </h4>
       <p class="comment cmt">The password details.</p>
-    </li><li name="com.mohiva.play.silhouette.core.providers.SocialProfile" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SocialProfile[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsProductwithSerializable"></a>
+    </li><li name="com.mohiva.play.silhouette.core.providers.SocialProfile" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SocialProfile[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsAnyRef"></a>
       <a id="SocialProfile[A&lt;:AuthInfo]:SocialProfile[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">case class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="SocialProfile.html"><span class="name">SocialProfile</span></a><span class="tparams">[<span name="A">A &lt;: <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile.A">A</span></span>, <span name="firstName">firstName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="lastName">lastName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="fullName">fullName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="email">email: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="avatarURL">avatarURL: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="SocialProfile.html"><span class="name">SocialProfile</span></a><span class="tparams">[<span name="A">A &lt;: <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       <p class="comment cmt">The social profile contains all the data returned from the social providers after authentication.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.SocialProfileBuilder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SocialProfileBuilder[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsAnyRef"></a>
+      <a id="SocialProfileBuilder[A&lt;:AuthInfo]:SocialProfileBuilder[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SocialProfileBuilder.html"><span class="name">SocialProfileBuilder</span></a><span class="tparams">[<span name="A">A &lt;: <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Builds the social profile.</p>
     </li><li name="com.mohiva.play.silhouette.core.providers.SocialProvider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="SocialProvider[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsProvider"></a>
+      <a id="SocialProvider[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsProviderwithSocialProfileBuilder[A]"></a>
       <a id="SocialProvider[A&lt;:AuthInfo]:SocialProvider[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -235,7 +274,7 @@ for different schemes and services.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="SocialProvider.html"><span class="name">SocialProvider</span></a><span class="tparams">[<span name="A">A &lt;: <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <a href="../Provider.html" class="extype" name="com.mohiva.play.silhouette.core.Provider">Provider</a></span>
+        <a href="SocialProvider.html"><span class="name">SocialProvider</span></a><span class="tparams">[<span name="A">A &lt;: <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <a href="../Provider.html" class="extype" name="com.mohiva.play.silhouette.core.Provider">Provider</a> with <a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfileBuilder">SocialProfileBuilder</a>[<span class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider.A">A</span>]</span>
       </span>
       </h4>
       <p class="comment cmt">The base interface for all social providers.</p>
@@ -312,19 +351,19 @@ a <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Futu
       </span>
       </h4>
       <p class="comment cmt">The OAuth2Provider companion object.</p>
-    </li><li name="com.mohiva.play.silhouette.core.providers.helpers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="helpers"></a>
-      <a id="helpers:helpers"></a>
+    </li><li name="com.mohiva.play.silhouette.core.providers.SocialProfileBuilder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SocialProfileBuilder"></a>
+      <a id="SocialProfileBuilder:SocialProfileBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">package</span>
+        <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="helpers/package.html"><span class="name">helpers</span></a>
+        <a href="SocialProfileBuilder$.html"><span class="name">SocialProfileBuilder</span></a>
       </span>
       </h4>
-      
+      <p class="comment cmt">The companion object.</p>
     </li><li name="com.mohiva.play.silhouette.core.providers.oauth1" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="oauth1"></a>
       <a id="oauth1:oauth1"></a>

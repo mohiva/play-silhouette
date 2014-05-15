@@ -2,17 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>User - com.mohiva.play.silhouette.contrib.User</title>
-          <meta name="description" content="User - com.mohiva.play.silhouette.contrib.User" />
-          <meta name="keywords" content="User com.mohiva.play.silhouette.contrib.User" />
+          <title>CommonSocialProfile - com.mohiva.play.silhouette.core.providers.CommonSocialProfile</title>
+          <meta name="description" content="CommonSocialProfile - com.mohiva.play.silhouette.core.providers.CommonSocialProfile" />
+          <meta name="keywords" content="CommonSocialProfile com.mohiva.play.silhouette.core.providers.CommonSocialProfile" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
-      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
       <script type="text/javascript">
          if(top === self) {
-            var url = '../../../../../index.html';
-            var hash = 'com.mohiva.play.silhouette.contrib.User';
+            var url = '../../../../../../index.html';
+            var hash = 'com.mohiva.play.silhouette.core.providers.CommonSocialProfile';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -24,9 +24,9 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../../../lib/class_big.png" />
-        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.contrib">contrib</a></p>
-        <h1>User</h1>
+        <img src="../../../../../../lib/class_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.core">core</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.core.providers">providers</a></p>
+        <h1>CommonSocialProfile</h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -35,15 +35,18 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">User</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../core/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="firstName">firstName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="lastName">lastName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="fullName">fullName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="email">email: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="avatarURL">avatarURL: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="../core/Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a> with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">CommonSocialProfile</span><span class="tparams">[<span name="A">A &lt;: <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile.A">A</span></span>, <span name="firstName">firstName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="lastName">lastName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="fullName">fullName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="email">email: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="avatarURL">avatarURL: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <a href="SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>[<span class="extype" name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile.A">A</span>] with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The default implementation of Identity.
-</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info.</p></dd><dt class="param">firstName</dt><dd class="cmt"><p>Maybe the first name of the authenticated user.</p></dd><dt class="param">lastName</dt><dd class="cmt"><p>Maybe the last name of the authenticated user.</p></dd><dt class="param">fullName</dt><dd class="cmt"><p>Maybe the full name of the authenticated user.</p></dd><dt class="param">email</dt><dd class="cmt"><p>Maybe the email of the authenticated provider.</p></dd><dt class="param">avatarURL</dt><dd class="cmt"><p>Maybe the avatar URL of the authenticated provider.
-</p></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The social profile contains all the data returned from the social providers after authentication.</p><p>Not every provider returns all the data defined in this class. This is also the representation of the
+most common profile information provided by the social providers. The data can be used to create a new
+identity for the first authentication(which is also the registration) or to update an existing identity
+on every subsequent authentication.
+</p></div><dl class="paramcmts block"><dt class="tparam">A</dt><dd class="cmt"><p>The auth info type.
+</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The current auth info returned from the provider.</p></dd><dt class="param">firstName</dt><dd class="cmt"><p>Maybe the first name of the authenticated user.</p></dd><dt class="param">lastName</dt><dd class="cmt"><p>Maybe the last name of the authenticated user.</p></dd><dt class="param">fullName</dt><dd class="cmt"><p>Maybe the full name of the authenticated user.</p></dd><dt class="param">email</dt><dd class="cmt"><p>Maybe the email of the authenticated provider.</p></dd><dt class="param">avatarURL</dt><dd class="cmt"><p>Maybe the avatar URL of the authenticated provider.</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="../core/Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>[<span class="extype" name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile.A">A</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -61,7 +64,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.contrib.User"><span>User</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="com.mohiva.play.silhouette.core.Identity"><span>Identity</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile"><span>CommonSocialProfile</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="com.mohiva.play.silhouette.core.providers.SocialProfile"><span>SocialProfile</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -81,20 +84,19 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="com.mohiva.play.silhouette.contrib.User#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(loginInfo:com.mohiva.play.silhouette.core.LoginInfo,firstName:Option[String],lastName:Option[String],fullName:Option[String],email:Option[String],avatarURL:Option[String]):com.mohiva.play.silhouette.contrib.User"></a>
-      <a id="&lt;init&gt;:User"></a>
+              <ol><li name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(loginInfo:com.mohiva.play.silhouette.core.LoginInfo,authInfo:A,firstName:Option[String],lastName:Option[String],fullName:Option[String],email:Option[String],avatarURL:Option[String]):com.mohiva.play.silhouette.core.providers.CommonSocialProfile[A]"></a>
+      <a id="&lt;init&gt;:CommonSocialProfile[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">User</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../core/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="firstName">firstName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="lastName">lastName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="fullName">fullName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="email">email: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="avatarURL">avatarURL: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span>
+        <span class="name">CommonSocialProfile</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile.A">A</span></span>, <span name="firstName">firstName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="lastName">lastName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="fullName">fullName: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="email">email: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="avatarURL">avatarURL: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info.</p></dd><dt class="param">firstName</dt><dd class="cmt"><p>Maybe the first name of the authenticated user.</p></dd><dt class="param">lastName</dt><dd class="cmt"><p>Maybe the last name of the authenticated user.</p></dd><dt class="param">fullName</dt><dd class="cmt"><p>Maybe the full name of the authenticated user.</p></dd><dt class="param">email</dt><dd class="cmt"><p>Maybe the email of the authenticated provider.</p></dd><dt class="param">avatarURL</dt><dd class="cmt"><p>Maybe the avatar URL of the authenticated provider.
-</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The current auth info returned from the provider.</p></dd><dt class="param">firstName</dt><dd class="cmt"><p>Maybe the first name of the authenticated user.</p></dd><dt class="param">lastName</dt><dd class="cmt"><p>Maybe the last name of the authenticated user.</p></dd><dt class="param">fullName</dt><dd class="cmt"><p>Maybe the full name of the authenticated user.</p></dd><dt class="param">email</dt><dd class="cmt"><p>Maybe the email of the authenticated provider.</p></dd><dt class="param">avatarURL</dt><dd class="cmt"><p>Maybe the avatar URL of the authenticated provider.</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -182,7 +184,20 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.contrib.User#avatarURL" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile#authInfo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="authInfo:A"></a>
+      <a id="authInfo:A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">authInfo</span><span class="result">: <span class="extype" name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile.A">A</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The current auth info returned from the provider.</p><div class="fullcomment"><div class="comment cmt"><p>The current auth info returned from the provider.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile">CommonSocialProfile</a> → <a href="SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile#avatarURL" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="avatarURL:Option[String]"></a>
       <a id="avatarURL:Option[String]"></a>
       <h4 class="signature">
@@ -207,14 +222,14 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.contrib.User#email" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile#email" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="email:Option[String]"></a>
       <a id="email:Option[String]"></a>
       <h4 class="signature">
@@ -252,14 +267,14 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="symbol">classOf[java.lang.Throwable]</span>
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.contrib.User#firstName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile#firstName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="firstName:Option[String]"></a>
       <a id="firstName:Option[String]"></a>
       <h4 class="signature">
@@ -272,7 +287,7 @@
       </span>
       </h4>
       <p class="shortcomment cmt">Maybe the first name of the authenticated user.</p>
-    </li><li name="com.mohiva.play.silhouette.contrib.User#fullName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile#fullName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="fullName:Option[String]"></a>
       <a id="fullName:Option[String]"></a>
       <h4 class="signature">
@@ -311,7 +326,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.contrib.User#lastName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile#lastName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="lastName:Option[String]"></a>
       <a id="lastName:Option[String]"></a>
       <h4 class="signature">
@@ -324,7 +339,7 @@
       </span>
       </h4>
       <p class="shortcomment cmt">Maybe the last name of the authenticated user.</p>
-    </li><li name="com.mohiva.play.silhouette.contrib.User#loginInfo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile#loginInfo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loginInfo:com.mohiva.play.silhouette.core.LoginInfo"></a>
       <a id="loginInfo:LoginInfo"></a>
       <h4 class="signature">
@@ -333,10 +348,10 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">loginInfo</span><span class="result">: <a href="../core/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>
+        <span class="name">loginInfo</span><span class="result">: <a href="../LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">The linked login info.</p><div class="fullcomment"><div class="comment cmt"><p>The linked login info.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.contrib.User">User</a> → <a href="../core/Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></dd></dl></div>
+      <p class="shortcomment cmt">The linked login info.</p><div class="fullcomment"><div class="comment cmt"><p>The linked login info.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile">CommonSocialProfile</a> → <a href="SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -463,8 +478,8 @@
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
             </div><div class="parent" name="scala.Equals">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
-            </div><div class="parent" name="com.mohiva.play.silhouette.core.Identity">
-              <h3>Inherited from <a href="../core/Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></h3>
+            </div><div class="parent" name="com.mohiva.play.silhouette.core.providers.SocialProfile">
+              <h3>Inherited from <a href="SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>[<span class="extype" name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile.A">A</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
@@ -485,6 +500,6 @@
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../lib/template.js"></script>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../../lib/template.js"></script>
     </body>
       </html>
