@@ -19,14 +19,14 @@
  */
 package com.mohiva.play.silhouette.core.providers.oauth2
 
+import play.api.libs.json.JsValue
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import com.mohiva.play.silhouette.core._
+import com.mohiva.play.silhouette.core.LoginInfo
+import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
-import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import FoursquareProvider._
-import OAuth2Provider._
 
 /**
  * A Foursquare OAuth2 provider.
@@ -34,15 +34,13 @@ import OAuth2Provider._
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
  * @param settings The provider settings.
+ *
  * @see https://developer.foursquare.com/overview/auth
  * @see https://developer.foursquare.com/overview/responses
  * @see https://developer.foursquare.com/docs/explore
  */
-class FoursquareProvider(
-  cacheLayer: CacheLayer,
-  httpLayer: HTTPLayer,
-  settings: OAuth2Settings)
-    extends OAuth2Provider(settings, cacheLayer, httpLayer) {
+abstract class FoursquareProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings)
+    extends OAuth2Provider(cacheLayer, httpLayer, settings) {
 
   /**
    * Gets the provider ID.
@@ -52,19 +50,26 @@ class FoursquareProvider(
   def id = Foursquare
 
   /**
+   * Gets the API URL to retrieve the profile data.
+   *
+   * @return The API URL to retrieve the profile data.
+   */
+  protected def profileAPI = API
+
+  /**
    * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[SocialProfile[OAuth2Info]] = {
+  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
     val version = settings.customProperties.getOrElse(APIVersion, DefaultAPIVersion)
-    httpLayer.url(API.format(authInfo.accessToken, version)).get().map { response =>
+    httpLayer.url(profileAPI.format(authInfo.accessToken, version)).get().flatMap { response =>
       val json = response.json
-      val errorType = (json \ Meta \ ErrorType).asOpt[String]
-      (json \ Meta \ Code).asOpt[Int] match {
+      val errorType = (json \ "meta" \ "errorType").asOpt[String]
+      (json \ "meta" \ "code").asOpt[Int] match {
         case Some(code) if code != 200 =>
-          val errorDetail = (json \ Meta \ ErrorDetail).asOpt[String]
+          val errorDetail = (json \ "meta" \ "errorDetail").asOpt[String]
 
           throw new AuthenticationException(SpecifiedProfileError.format(id, code, errorType, errorDetail))
         case _ =>
@@ -74,26 +79,33 @@ class FoursquareProvider(
             logger.info("This implementation may be deprecated! Please contact the Silhouette team for a fix!")
           }
 
-          val userID = (json \ Response \ User \ ID).as[String]
-          val lastName = (json \ Response \ User \ LastName).asOpt[String]
-          val firstName = (json \ Response \ User \ FirstName).asOpt[String]
-          val avatarURLPart1 = (json \ Response \ User \ Photo \ Prefix).asOpt[String]
-          val avatarURLPart2 = (json \ Response \ User \ Photo \ Suffix).asOpt[String]
-          val email = (json \ Response \ User \ Contact \ Email).asOpt[String].filter(!_.isEmpty)
-          val resolution = settings.customProperties.getOrElse(AvatarResolution, DefaultAvatarResolution)
-
-          SocialProfile(
-            loginInfo = LoginInfo(id, userID),
-            authInfo = authInfo,
-            firstName = firstName,
-            lastName = lastName,
-            avatarURL = for (prefix <- avatarURLPart1; postfix <- avatarURLPart2) yield prefix + resolution + postfix,
-            email = email)
+          parseProfile(parser(authInfo), json).asFuture
       }
-    }.recover {
-      case e if !e.isInstanceOf[AuthenticationException] =>
-        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
     }
+  }
+
+  /**
+   * Defines the parser which parses the most common profile supported by Silhouette.
+   *
+   * @return The parser which parses the most common profile supported by Silhouette.
+   */
+  protected def parser: Parser = (authInfo: OAuth2Info) => (json: JsValue) => {
+    val user = json \ "response" \ "user"
+    val userID = (user \ "id").as[String]
+    val lastName = (user \ "lastName").asOpt[String]
+    val firstName = (user \ "firstName").asOpt[String]
+    val avatarURLPart1 = (user \ "photo" \ "prefix").asOpt[String]
+    val avatarURLPart2 = (user \ "photo" \ "suffix").asOpt[String]
+    val email = (user \ "contact" \ "email").asOpt[String].filter(!_.isEmpty)
+    val resolution = settings.customProperties.getOrElse(AvatarResolution, DefaultAvatarResolution)
+
+    CommonSocialProfile(
+      loginInfo = LoginInfo(id, userID),
+      authInfo = authInfo,
+      firstName = firstName,
+      lastName = lastName,
+      avatarURL = for (prefix <- avatarURLPart1; postfix <- avatarURLPart2) yield prefix + resolution + postfix,
+      email = email)
   }
 }
 
@@ -123,7 +135,6 @@ object FoursquareProvider {
   /**
    * The error messages.
    */
-  val UnspecifiedProfileError = "[Silhouette][%s] Error retrieving profile information"
   val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error code: %s, type: %s, detail: %s"
 
   /**
@@ -131,18 +142,16 @@ object FoursquareProvider {
    */
   val Foursquare = "foursquare"
   val API = "https://api.foursquare.com/v2/users/self?oauth_token=%s&v=%s"
-  val ID = "id"
-  val Meta = "meta"
-  val ErrorType = "errorType"
-  val ErrorDetail = "errorDetail"
-  val Deprecated = "deprecated"
-  val Response = "response"
-  val User = "user"
-  val FirstName = "firstName"
-  val LastName = "lastName"
-  val Photo = "photo"
-  val Prefix = "prefix"
-  val Suffix = "suffix"
-  val Contact = "contact"
-  val Email = "email"
+
+  /**
+   * Creates an instance of the provider.
+   *
+   * @param cacheLayer The cache layer implementation.
+   * @param httpLayer The HTTP layer implementation.
+   * @param settings The provider settings.
+   * @return An instance of this provider.
+   */
+  def apply(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings) = {
+    new FoursquareProvider(cacheLayer, httpLayer, settings) with CommonSocialProfileBuilder[OAuth2Info]
+  }
 }

@@ -20,11 +20,10 @@ import java.util.UUID
 import play.api.libs.ws.{ Response, WS }
 import play.api.test.{ FakeRequest, WithApplication }
 import scala.concurrent.Future
-import scala.util.Success
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
-import com.mohiva.play.silhouette.core.providers.helpers.LinkedInProfile._
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import SocialProfileBuilder._
 import LinkedInProvider._
 import OAuth1Provider._
 
@@ -92,7 +91,7 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
 
       profile(provider.authenticate()) {
         case p =>
-          p must be equalTo new SocialProfile[OAuth1Info](
+          p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "NhZXBl_O6f"),
             authInfo = oAuthInfo,
             firstName = Some("Apollonia"),
@@ -133,6 +132,6 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new LinkedInProvider(cacheLayer, httpLayer, oAuthService, oAuthSettings)
+    lazy val provider = LinkedInProvider(cacheLayer, httpLayer, oAuthService, oAuthSettings)
   }
 }

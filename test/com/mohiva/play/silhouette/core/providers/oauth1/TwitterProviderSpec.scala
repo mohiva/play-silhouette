@@ -20,12 +20,12 @@ import java.util.UUID
 import play.api.libs.ws.{ Response, WS }
 import play.api.test.{ FakeRequest, WithApplication }
 import scala.concurrent.Future
-import scala.util.Success
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.providers.OAuth1Settings
 import com.mohiva.play.silhouette.core.providers.OAuth1Info
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import SocialProfileBuilder._
 import OAuth1Provider._
 import TwitterProvider._
 
@@ -90,7 +90,7 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
 
       profile(provider.authenticate()) {
         case p =>
-          p must be equalTo new SocialProfile(
+          p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "6253282"),
             authInfo = oAuthInfo,
             fullName = Some("Apollonia Vanova"),
@@ -128,6 +128,6 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new TwitterProvider(cacheLayer, httpLayer, oAuthService, oAuthSettings)
+    lazy val provider = TwitterProvider(cacheLayer, httpLayer, oAuthService, oAuthSettings)
   }
 }

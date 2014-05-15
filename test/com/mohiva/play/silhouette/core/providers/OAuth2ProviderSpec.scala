@@ -25,15 +25,15 @@ import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import com.mohiva.play.silhouette.core.utils.{ CacheLayer, HTTPLayer }
+import com.mohiva.play.silhouette.core.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.core.exceptions._
-import OAuth2Provider._
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.core.providers.OAuth2Provider]] class.
+ * Abstract test case for the [[com.mohiva.play.silhouette.core.providers.OAuth2Provider]] class.
  *
  * These tests will be additionally executed before every OAuth2 provider spec.
  */
-abstract class OAuth2ProviderSpec extends ProviderSpec[OAuth2Info] {
+abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
   isolated
 
   "The authenticate method" should {

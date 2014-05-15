@@ -24,6 +24,7 @@ import play.api.test.{ FakeRequest, WithApplication }
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import SocialProfileBuilder._
 import GoogleProvider._
 import OAuth2Provider._
 
@@ -107,7 +108,7 @@ class GoogleProviderSpec extends OAuth2ProviderSpec {
 
       profile(provider.authenticate()) {
         case p =>
-          p must be equalTo new SocialProfile(
+          p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "109476598527568979481"),
             authInfo = oAuthInfo.as[OAuth2Info],
             firstName = Some("Apollonia"),
@@ -135,7 +136,7 @@ class GoogleProviderSpec extends OAuth2ProviderSpec {
 
       profile(provider.authenticate()) {
         case p =>
-          p must be equalTo new SocialProfile(
+          p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "109476598527568979481"),
             authInfo = oAuthInfo.as[OAuth2Info],
             firstName = Some("Apollonia"),
@@ -181,6 +182,6 @@ class GoogleProviderSpec extends OAuth2ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new GoogleProvider(cacheLayer, httpLayer, oAuthSettings)
+    lazy val provider = GoogleProvider(cacheLayer, httpLayer, oAuthSettings)
   }
 }

@@ -16,22 +16,21 @@
 package com.mohiva.play.silhouette.core.providers
 
 import java.util.UUID
-import play.api.test.{ FakeRequest, WithApplication }
-import org.specs2.matcher.ThrownExpectations
+import scala.concurrent.Future
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import scala.util.{ Success, Failure }
-import scala.concurrent.Future
+import org.specs2.matcher.ThrownExpectations
+import play.api.test.{ FakeRequest, WithApplication }
 import com.mohiva.play.silhouette.core.utils.{ CacheLayer, HTTPLayer }
+import com.mohiva.play.silhouette.core.providers.OAuth1Provider._
 import com.mohiva.play.silhouette.core.exceptions._
-import OAuth1Provider._
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.core.providers.OAuth1Provider]] class.
+ * Abstract test case for the [[com.mohiva.play.silhouette.core.providers.OAuth1Provider]] class.
  *
  * These tests will be additionally executed before every OAuth1 provider spec.
  */
-abstract class OAuth1ProviderSpec extends ProviderSpec[OAuth1Info] {
+abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
   isolated
 
   "The authenticate method" should {

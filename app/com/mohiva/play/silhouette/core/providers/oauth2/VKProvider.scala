@@ -19,15 +19,14 @@
  */
 package com.mohiva.play.silhouette.core.providers.oauth2
 
-import play.api.libs.json.JsObject
+import play.api.libs.json.{ JsValue, JsObject }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import com.mohiva.play.silhouette.core._
+import com.mohiva.play.silhouette.core.LoginInfo
+import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
-import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import VKProvider._
-import OAuth2Provider._
 
 /**
  * A Vk OAuth 2 provider.
@@ -35,15 +34,13 @@ import OAuth2Provider._
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
  * @param settings The provider settings.
+ *
  * @see http://vk.com/dev/auth_sites
  * @see http://vk.com/dev/api_requests
  * @see http://vk.com/pages.php?o=-1&p=getProfiles
  */
-class VKProvider(
-  cacheLayer: CacheLayer,
-  httpLayer: HTTPLayer,
-  settings: OAuth2Settings)
-    extends OAuth2Provider(settings, cacheLayer, httpLayer) {
+abstract class VKProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings)
+    extends OAuth2Provider(cacheLayer, httpLayer, settings) {
 
   /**
    * Gets the provider ID.
@@ -53,38 +50,50 @@ class VKProvider(
   def id = Vk
 
   /**
+   * Gets the API URL to retrieve the profile data.
+   *
+   * @return The API URL to retrieve the profile data.
+   */
+  protected def profileAPI = API
+
+  /**
    * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[SocialProfile[OAuth2Info]] = {
-    httpLayer.url(API.format(authInfo.accessToken)).get().map { response =>
+  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+    httpLayer.url(API.format(authInfo.accessToken)).get().flatMap { response =>
       val json = response.json
-      (json \ Error).asOpt[JsObject] match {
+      (json \ "error").asOpt[JsObject] match {
         case Some(error) =>
-          val errorCode = (error \ ErrorCode).as[Int]
-          val errorMsg = (error \ ErrorMsg).as[String]
+          val errorCode = (error \ "error_code").as[Int]
+          val errorMsg = (error \ "error_msg").as[String]
 
           throw new AuthenticationException(SpecifiedProfileError.format(id, errorCode, errorMsg))
-        case _ =>
-          val me = (json \ Response).apply(0)
-          val userId = (me \ ID).as[Long]
-          val firstName = (me \ FirstName).asOpt[String]
-          val lastName = (me \ LastName).asOpt[String]
-          val avatarURL = (me \ Photo).asOpt[String]
-
-          SocialProfile(
-            loginInfo = LoginInfo(id, userId.toString),
-            authInfo = authInfo,
-            firstName = firstName,
-            lastName = lastName,
-            avatarURL = avatarURL)
+        case _ => parseProfile(parser(authInfo), json).asFuture
       }
-    }.recover {
-      case e if !e.isInstanceOf[AuthenticationException] =>
-        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
     }
+  }
+
+  /**
+   * Defines the parser which parses the most common profile supported by Silhouette.
+   *
+   * @return The parser which parses the most common profile supported by Silhouette.
+   */
+  protected def parser: Parser = (authInfo: OAuth2Info) => (json: JsValue) => {
+    val response = (json \ "response").apply(0)
+    val userId = (response \ "uid").as[Long]
+    val firstName = (response \ "first_name").asOpt[String]
+    val lastName = (response \ "last_name").asOpt[String]
+    val avatarURL = (response \ "photo").asOpt[String]
+
+    CommonSocialProfile(
+      loginInfo = LoginInfo(id, userId.toString),
+      authInfo = authInfo,
+      firstName = firstName,
+      lastName = lastName,
+      avatarURL = avatarURL)
   }
 }
 
@@ -96,7 +105,6 @@ object VKProvider {
   /**
    * The error messages.
    */
-  val UnspecifiedProfileError = "[Silhouette][%s] Error retrieving profile information"
   val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error code: %s, message: %s"
 
   /**
@@ -104,11 +112,16 @@ object VKProvider {
    */
   val Vk = "vk"
   val API = "https://api.vk.com/method/getProfiles?fields=uid,first_name,last_name,photo&access_token=%s"
-  val ErrorCode = "error_code"
-  val ErrorMsg = "error_msg"
-  val Response = "response"
-  val ID = "uid"
-  val FirstName = "first_name"
-  val LastName = "last_name"
-  val Photo = "photo"
+
+  /**
+   * Creates an instance of the provider.
+   *
+   * @param cacheLayer The cache layer implementation.
+   * @param httpLayer The HTTP layer implementation.
+   * @param settings The provider settings.
+   * @return An instance of this provider.
+   */
+  def apply(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings) = {
+    new VKProvider(cacheLayer, httpLayer, settings) with CommonSocialProfileBuilder[OAuth2Info]
+  }
 }

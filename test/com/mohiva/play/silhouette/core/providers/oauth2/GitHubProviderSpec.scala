@@ -25,6 +25,7 @@ import play.api.test.{ FakeRequest, WithApplication }
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import SocialProfileBuilder._
 import GitHubProvider._
 import OAuth2Provider._
 
@@ -108,7 +109,7 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
 
       profile(provider.authenticate()) {
         case p =>
-          p must be equalTo new SocialProfile(
+          p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "1"),
             authInfo = oAuthInfo.as[OAuth2Info],
             fullName = Some("Apollonia Vanova"),
@@ -152,6 +153,6 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new GitHubProvider(cacheLayer, httpLayer, oAuthSettings)
+    lazy val provider = GitHubProvider(cacheLayer, httpLayer, oAuthSettings)
   }
 }

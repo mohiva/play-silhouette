@@ -20,13 +20,13 @@
 package com.mohiva.play.silhouette.core.providers.oauth2
 
 import play.api.libs.ws.Response
-import play.api.libs.json.JsObject
+import play.api.libs.json.{ JsValue, JsObject }
 import scala.util.{ Failure, Success, Try }
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import com.mohiva.play.silhouette.core._
+import com.mohiva.play.silhouette.core.LoginInfo
+import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
-import com.mohiva.play.silhouette.core.providers.{ SocialProfile, OAuth2Info, OAuth2Settings, OAuth2Provider }
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import FacebookProvider._
 import OAuth2Provider._
@@ -42,11 +42,8 @@ import OAuth2Provider._
  * @see https://developers.facebook.com/docs/graph-api/reference/user
  * @see https://developers.facebook.com/docs/facebook-login/access-tokens
  */
-class FacebookProvider(
-  cacheLayer: CacheLayer,
-  httpLayer: HTTPLayer,
-  settings: OAuth2Settings)
-    extends OAuth2Provider(settings, cacheLayer, httpLayer) {
+abstract class FacebookProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings)
+    extends OAuth2Provider(cacheLayer, httpLayer, settings) {
 
   /**
    * Gets the provider ID.
@@ -56,42 +53,54 @@ class FacebookProvider(
   def id = Facebook
 
   /**
+   * Gets the API URL to retrieve the profile data.
+   *
+   * @return The API URL to retrieve the profile data.
+   */
+  protected def profileAPI = API
+
+  /**
    * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[SocialProfile[OAuth2Info]] = {
-    httpLayer.url(API.format(authInfo.accessToken)).get().map { response =>
+  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+    httpLayer.url(profileAPI.format(authInfo.accessToken)).get().flatMap { response =>
       val json = response.json
-      (json \ Error).asOpt[JsObject] match {
+      (json \ "error").asOpt[JsObject] match {
         case Some(error) =>
-          val errorMsg = (error \ Message).as[String]
-          val errorType = (error \ Type).as[String]
-          val errorCode = (error \ Code).as[Int]
+          val errorMsg = (error \ "message").as[String]
+          val errorType = (error \ "type").as[String]
+          val errorCode = (error \ "code").as[Int]
 
           throw new AuthenticationException(SpecifiedProfileError.format(id, errorMsg, errorType, errorCode))
-        case _ =>
-          val userID = (json \ ID).as[String]
-          val firstName = (json \ FirstName).asOpt[String]
-          val lastName = (json \ LastName).asOpt[String]
-          val fullName = (json \ Name).asOpt[String]
-          val avatarURL = (json \ Picture \ Data \ URL).asOpt[String]
-          val email = (json \ Email).asOpt[String]
-
-          SocialProfile(
-            loginInfo = LoginInfo(id, userID),
-            authInfo = authInfo,
-            firstName = firstName,
-            lastName = lastName,
-            fullName = fullName,
-            avatarURL = avatarURL,
-            email = email)
+        case _ => parseProfile(parser(authInfo), json).asFuture
       }
-    }.recover {
-      case e if !e.isInstanceOf[AuthenticationException] =>
-        throw new AuthenticationException(UnspecifiedProfileError.format(id), e)
     }
+  }
+
+  /**
+   * Defines the parser which parses the most common profile supported by Silhouette.
+   *
+   * @return The parser which parses the most common profile supported by Silhouette.
+   */
+  protected def parser: Parser = (authInfo: OAuth2Info) => (json: JsValue) => {
+    val userID = (json \ "id").as[String]
+    val firstName = (json \ "first_name").asOpt[String]
+    val lastName = (json \ "last_name").asOpt[String]
+    val fullName = (json \ "name").asOpt[String]
+    val avatarURL = (json \ "picture" \ "data" \ "url").asOpt[String]
+    val email = (json \ "email").asOpt[String]
+
+    CommonSocialProfile(
+      loginInfo = LoginInfo(id, userID),
+      authInfo = authInfo,
+      firstName = firstName,
+      lastName = lastName,
+      fullName = fullName,
+      avatarURL = avatarURL,
+      email = email)
   }
 
   /**
@@ -119,7 +128,6 @@ object FacebookProvider {
   /**
    * The error messages.
    */
-  val UnspecifiedProfileError = "[Silhouette][%s] Error retrieving profile information"
   val SpecifiedProfileError = "[Silhouette][%s] Error retrieving profile information. Error message: %s, type: %s, code: %s"
 
   /**
@@ -127,14 +135,16 @@ object FacebookProvider {
    */
   val Facebook = "facebook"
   val API = "https://graph.facebook.com/me?fields=name,first_name,last_name,picture,email&return_ssl_resources=1&access_token=%s"
-  val Message = "message"
-  val Type = "type"
-  val ID = "id"
-  val Name = "name"
-  val FirstName = "first_name"
-  val LastName = "last_name"
-  val Email = "email"
-  val Picture = "picture"
-  val Data = "data"
-  val URL = "url"
+
+  /**
+   * Creates an instance of the provider.
+   *
+   * @param cacheLayer The cache layer implementation.
+   * @param httpLayer The HTTP layer implementation.
+   * @param settings The provider settings.
+   * @return An instance of this provider.
+   */
+  def apply(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings) = {
+    new FacebookProvider(cacheLayer, httpLayer, settings) with CommonSocialProfileBuilder[OAuth2Info]
+  }
 }

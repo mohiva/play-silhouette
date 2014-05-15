@@ -24,6 +24,7 @@ import play.api.test.{ FakeRequest, WithApplication }
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import SocialProfileBuilder._
 import FoursquareProvider._
 import OAuth2Provider._
 
@@ -108,7 +109,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
 
       profile(provider.authenticate()) {
         case p =>
-          p must be equalTo new SocialProfile(
+          p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "13221052"),
             authInfo = oAuthInfo.as[OAuth2Info],
             firstName = Some("Apollonia"),
@@ -135,7 +136,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
 
       profile(provider.authenticate()) {
         case p =>
-          p must be equalTo new SocialProfile(
+          p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "13221052"),
             authInfo = oAuthInfo.as[OAuth2Info],
             firstName = Some("Apollonia"),
@@ -153,7 +154,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       val requestHolder = mock[WS.WSRequestHolder]
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      override lazy val provider = new FoursquareProvider(
+      override lazy val provider = FoursquareProvider(
         cacheLayer,
         httpLayer,
         oAuthSettings.copy(customProperties = customProperties)
@@ -169,7 +170,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
 
       profile(provider.authenticate()) {
         case p =>
-          p must be equalTo new SocialProfile(
+          p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "13221052"),
             authInfo = oAuthInfo.as[OAuth2Info],
             firstName = Some("Apollonia"),
@@ -187,7 +188,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       val requestHolder = mock[WS.WSRequestHolder]
       val response = mock[Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      override lazy val provider = new FoursquareProvider(
+      override lazy val provider = FoursquareProvider(
         cacheLayer,
         httpLayer,
         oAuthSettings.copy(customProperties = customProperties)
@@ -203,7 +204,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
 
       profile(provider.authenticate()) {
         case p =>
-          p must be equalTo new SocialProfile(
+          p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "13221052"),
             authInfo = oAuthInfo.as[OAuth2Info],
             firstName = Some("Apollonia"),
@@ -247,6 +248,6 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new FoursquareProvider(cacheLayer, httpLayer, oAuthSettings)
+    lazy val provider = FoursquareProvider(cacheLayer, httpLayer, oAuthSettings)
   }
 }

@@ -67,14 +67,11 @@ object OAuth2Info {
 /**
  * Base class for all OAuth2 providers.
  *
- * @param settings The provider settings.
  * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
+ * @param settings The provider settings.
  */
-abstract class OAuth2Provider(
-  settings: OAuth2Settings,
-  cacheLayer: CacheLayer,
-  httpLayer: HTTPLayer)
+abstract class OAuth2Provider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings)
     extends SocialProvider[OAuth2Info]
     with Logger {
 
@@ -225,7 +222,7 @@ object OAuth2Provider {
    * Cache expiration. Provides sufficient time to log in, but not too much.
    * This is a balance between convenience and security.
    */
-  val CacheExpiration = 5 * 60; // 5 minutes
+  val CacheExpiration = 5 * 60 // 5 minutes
 }
 
 /**

@@ -24,6 +24,7 @@ import play.api.test.{ FakeRequest, WithApplication }
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import SocialProfileBuilder._
 import InstagramProvider._
 import OAuth2Provider._
 
@@ -108,7 +109,7 @@ class InstagramProviderSpec extends OAuth2ProviderSpec {
 
       profile(provider.authenticate()) {
         case p =>
-          p must be equalTo new SocialProfile(
+          p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "1574083"),
             authInfo = oAuthInfo.as[OAuth2Info],
             fullName = Some("Apollonia Vanova"),
@@ -151,6 +152,6 @@ class InstagramProviderSpec extends OAuth2ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new InstagramProvider(cacheLayer, httpLayer, oAuthSettings)
+    lazy val provider = InstagramProvider(cacheLayer, httpLayer, oAuthSettings)
   }
 }
