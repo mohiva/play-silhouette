@@ -17,7 +17,7 @@ package com.mohiva.play.silhouette.contrib.services
 
 import scala.reflect.ClassTag
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.services.{ AuthInfo, AuthInfoService }
 import com.mohiva.play.silhouette.contrib.daos.{ DelegableAuthInfoDAO, AuthInfoDAO }

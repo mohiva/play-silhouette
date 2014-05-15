@@ -21,11 +21,11 @@ package com.mohiva.play.silhouette.core
 
 import play.api.Play
 import play.api.mvc._
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.services.{ AuthenticatorService, IdentityService }
 import com.mohiva.play.silhouette.core.exceptions.{ AuthenticationException, AccessDeniedException }
 import com.mohiva.play.silhouette.core.utils.DefaultActionHandler
+import scala.concurrent.Future
 
 /**
  * Provides the actions that can be used to protect controllers and retrieve the current user

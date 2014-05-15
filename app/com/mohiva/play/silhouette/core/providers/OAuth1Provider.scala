@@ -20,10 +20,10 @@
 package com.mohiva.play.silhouette.core.providers
 
 import java.util.UUID
+import scala.concurrent.Future
 import play.api.mvc.{ SimpleResult, RequestHeader, Results }
 import play.api.libs.ws.SignatureCalculator
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.services.AuthInfo

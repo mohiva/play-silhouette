@@ -22,7 +22,7 @@ package com.mohiva.play.silhouette.contrib.utils
 import play.api.libs.Codecs
 import java.security.SecureRandom
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.utils.IDGenerator
 
 /**

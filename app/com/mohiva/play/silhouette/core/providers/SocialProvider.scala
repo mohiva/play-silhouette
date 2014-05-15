@@ -17,8 +17,8 @@ package com.mohiva.play.silhouette.core.providers
 
 import scala.util.Try
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.libs.json.JsValue
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ SimpleResult, RequestHeader }
 import com.mohiva.play.silhouette.core.{ LoginInfo, Provider }
 import com.mohiva.play.silhouette.core.services.AuthInfo
