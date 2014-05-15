@@ -25,9 +25,9 @@ import play.api.mvc.{ SimpleResult, RequestHeader, Results }
 import play.api.libs.ws.Response
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
+import play.api.libs.concurrent.Execution.Implicits._
 import scala.util.{ Failure, Success, Try }
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import com.mohiva.play.silhouette.core.services.AuthInfo
 import com.mohiva.play.silhouette.core.exceptions._

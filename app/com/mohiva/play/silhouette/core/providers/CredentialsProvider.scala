@@ -20,11 +20,11 @@
 package com.mohiva.play.silhouette.core.providers
 
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.services.{ AuthInfo, AuthInfoService }
 import com.mohiva.play.silhouette.core.utils.PasswordHasher
 import com.mohiva.play.silhouette.core.exceptions._
+import play.api.libs.concurrent.Execution.Implicits._
 
 /**
  * A provider for authenticating with credentials.

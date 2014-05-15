@@ -19,9 +19,9 @@
  */
 package com.mohiva.play.silhouette.core.providers.oauth2
 
-import play.api.libs.json.{ JsValue, JsObject }
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.libs.json.{ JsValue, JsObject }
+import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }

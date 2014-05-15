@@ -21,7 +21,7 @@ package com.mohiva.play.silhouette.contrib.services
 
 import java.security.MessageDigest
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.services.AvatarService
 import com.mohiva.play.silhouette.core.utils.HTTPLayer
 import com.mohiva.play.silhouette.core.Logger

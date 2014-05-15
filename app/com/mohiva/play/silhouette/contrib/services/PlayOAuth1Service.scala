@@ -20,13 +20,13 @@
 package com.mohiva.play.silhouette.contrib.services
 
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.libs.oauth._
 import play.api.libs.ws.SignatureCalculator
 import play.api.libs.oauth.ConsumerKey
 import play.api.libs.oauth.ServiceInfo
 import play.api.libs.oauth.OAuth
 import play.api.libs.oauth.RequestToken
+import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.providers.{ OAuth1Info, OAuth1Service, OAuth1Settings }
 import PlayOAuth1Service._
 
