@@ -19,6 +19,7 @@ import org.specs2.specification.Scope
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.test.{ WithApplication, FakeRequest, PlaySpecification }
 import play.api.GlobalSettings
 import play.api.i18n.{ Messages, Lang }
@@ -26,7 +27,6 @@ import play.api.mvc.{ RequestHeader, SimpleResult }
 import play.api.mvc.Results._
 import play.api.test.FakeApplication
 import play.api.libs.json.Json
-import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.services.{ AuthenticatorService, IdentityService }
 import com.mohiva.play.silhouette.core.exceptions.{ AuthenticationException, AccessDeniedException }
 
