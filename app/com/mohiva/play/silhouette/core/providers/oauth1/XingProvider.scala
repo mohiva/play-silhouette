@@ -20,7 +20,7 @@
 package com.mohiva.play.silhouette.core.providers.oauth1
 
 import scala.concurrent.Future
-import play.api.libs.json.JsValue
+import play.api.libs.json.{ JsObject, JsValue }
 import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
@@ -85,12 +85,13 @@ abstract class XingProvider(
    * @return The parser which parses the most common profile supported by Silhouette.
    */
   protected def parser: Parser = (authInfo: OAuth1Info) => (json: JsValue) => {
-    val userID = (json \ "users" \\ "id").head.as[String]
-    val firstName = (json \ "users" \\ "first_name").headOption.map(_.as[String])
-    val lastName = (json \ "users" \\ "last_name").headOption.map(_.as[String])
-    val fullName = (json \ "users" \\ "display_name").headOption.map(_.as[String])
-    val avatarURL = (json \ "users" \\ "photo_urls").headOption.flatMap(urls => (urls \ "large").asOpt[String])
-    val email = (json \ "users" \\ "active_email").headOption.map(_.as[String])
+    val users = (json \ "users").as[Seq[JsObject]].head
+    val userID = (users \ "id").as[String]
+    val firstName = (users \ "first_name").asOpt[String]
+    val lastName = (users \ "last_name").asOpt[String]
+    val fullName = (users \ "display_name").asOpt[String]
+    val avatarURL = (users \ "photo_urls" \ "large").asOpt[String]
+    val email = (users \ "active_email").asOpt[String]
 
     CommonSocialProfile(
       loginInfo = LoginInfo(id, userID),
@@ -117,7 +118,7 @@ object XingProvider {
    * The LinkedIn constants.
    */
   val Xing = "xing"
-  val API = "https://api.xing.com/v1/users/me?fields=id,display_name,first_name,last_name,active_email,photo_urls.large"
+  val API = "https://api.xing.com/v1/users/me?fields=id,first_name,last_name,display_name,photo_urls.large,active_email"
 
   /**
    * Creates an instance of the provider.
