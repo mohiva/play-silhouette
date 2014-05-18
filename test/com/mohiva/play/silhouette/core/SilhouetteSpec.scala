@@ -18,6 +18,7 @@ package com.mohiva.play.silhouette.core
 import org.specs2.specification.Scope
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
+import scala.concurrent.duration._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.test.{ WithApplication, FakeRequest, PlaySpecification }
@@ -29,6 +30,9 @@ import play.api.test.FakeApplication
 import play.api.libs.json.Json
 import com.mohiva.play.silhouette.core.services.{ AuthenticatorService, IdentityService }
 import com.mohiva.play.silhouette.core.exceptions.{ AuthenticationException, AccessDeniedException }
+import play.api.libs.concurrent.Akka
+import akka.testkit.TestProbe
+import akka.actor.{ Actor, Props }
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.core.Silhouette]] base controller.
@@ -37,10 +41,10 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
   "The `SecuredAction` action" should {
     "restrict access if no authenticator can be retrieved" in new WithDefaultGlobal {
-      authenticatorService.retrieve returns Future.successful(None)
-      authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
+      env.authenticatorService.retrieve returns Future.successful(None)
+      env.authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
 
-      val controller = new SecuredController(identityService, authenticatorService)
+      val controller = new SecuredController(env)
       val result = controller.protectedAction(request)
 
       status(result) must equalTo(UNAUTHORIZED)
@@ -48,11 +52,11 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "restrict access if no identity could be found for an authenticator" in new WithDefaultGlobal {
-      authenticatorService.retrieve returns Future.successful(Some(authenticator))
-      authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
-      identityService.retrieve(identity.loginInfo) returns Future.successful(None)
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(None)
 
-      val controller = new SecuredController(identityService, authenticatorService)
+      val controller = new SecuredController(env)
       val result = controller.protectedAction(request)
 
       status(result) must equalTo(UNAUTHORIZED)
@@ -60,22 +64,22 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "update an authenticator if an identity could be found for it" in new WithDefaultGlobal {
-      authenticatorService.retrieve returns Future.successful(Some(authenticator))
-      authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
-      identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(identityService, authenticatorService)
+      val controller = new SecuredController(env)
       await(controller.protectedAction(request))
 
-      there was one(authenticatorService).update(any)
+      there was one(env.authenticatorService).update(any)
     }
 
     "display local not-authenticated result if user isn't authenticated" in new WithSecuredGlobal {
-      authenticatorService.retrieve returns Future.successful(Some(authenticator))
-      authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
-      identityService.retrieve(identity.loginInfo) returns Future.successful(None)
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(None)
 
-      val controller = new SecuredController(identityService, authenticatorService) {
+      val controller = new SecuredController(env) {
         override def notAuthenticated(request: RequestHeader): Option[Future[SimpleResult]] = {
           Some(Future.successful(Unauthorized("local.not.authenticated")))
         }
@@ -88,11 +92,11 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "display global not-authenticated result if user isn't authenticated" in new WithSecuredGlobal {
-      authenticatorService.retrieve returns Future.successful(Some(authenticator))
-      authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
-      identityService.retrieve(identity.loginInfo) returns Future.successful(None)
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(None)
 
-      val controller = new SecuredController(identityService, authenticatorService)
+      val controller = new SecuredController(env)
       val result = controller.protectedAction(request)
 
       status(result) must equalTo(UNAUTHORIZED)
@@ -100,22 +104,41 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "display fallback message if user isn't authenticated and fallback methods aren't implemented" in new WithDefaultGlobal {
-      authenticatorService.retrieve returns Future.successful(Some(authenticator))
-      authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
-      identityService.retrieve(identity.loginInfo) returns Future.successful(None)
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(None)
 
-      val controller = new SecuredController(identityService, authenticatorService)
+      val controller = new SecuredController(env)
       val result = controller.protectedAction(request)
 
       status(result) must equalTo(UNAUTHORIZED)
       contentAsString(result) must contain(Messages("silhouette.not.authenticated"))
     }
 
-    "display local not-authorized result if user isn't authorized" in new WithSecuredGlobal {
-      authenticatorService.retrieve returns Future.successful(Some(authenticator))
-      identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
+    "publish `NotAuthenticatedEvent` if user isn't authenticated" in new WithDefaultGlobal {
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(None)
 
-      val controller = new SecuredController(identityService, authenticatorService, SimpleAuthorization(isAuthorized = false)) {
+      val listener = system.actorOf(Props(new Actor {
+        def receive = {
+          case e @ NotAuthenticatedEvent(_, _) => theProbe.ref ! e
+        }
+      }))
+
+      env.eventBus.subscribe(listener, classOf[NotAuthenticatedEvent])
+
+      val controller = new SecuredController(env)
+      val result = controller.protectedAction(request)
+
+      theProbe.expectMsg(500 millis, NotAuthenticatedEvent(request, lang))
+    }
+
+    "display local not-authorized result if user isn't authorized" in new WithSecuredGlobal {
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
+
+      val controller = new SecuredController(env, SimpleAuthorization(isAuthorized = false)) {
         override def notAuthorized(request: RequestHeader): Option[Future[SimpleResult]] = {
           Some(Future.successful(Forbidden("local.not.authorized")))
         }
@@ -128,10 +151,10 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "display global not-authorized result if user isn't authorized" in new WithSecuredGlobal {
-      authenticatorService.retrieve returns Future.successful(Some(authenticator))
-      identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(identityService, authenticatorService, SimpleAuthorization(isAuthorized = false))
+      val controller = new SecuredController(env, SimpleAuthorization(isAuthorized = false))
       val result = controller.protectedActionWithAuthorization(request)
 
       status(result) must equalTo(FORBIDDEN)
@@ -139,21 +162,39 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "display fallback message if user isn't authorized and fallback methods aren't implemented" in new WithDefaultGlobal {
-      authenticatorService.retrieve returns Future.successful(Some(authenticator))
-      identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(identityService, authenticatorService, SimpleAuthorization(isAuthorized = false))
+      val controller = new SecuredController(env, SimpleAuthorization(isAuthorized = false))
       val result = controller.protectedActionWithAuthorization(request)
 
       status(result) must equalTo(FORBIDDEN)
       contentAsString(result) must contain(Messages("silhouette.not.authorized"))
     }
 
-    "invoke action without authorization if user is authenticated" in new WithSecuredGlobal {
-      authenticatorService.retrieve returns Future.successful(Some(authenticator))
-      identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
+    "publish `NotAuthorizedEvent` if user isn't authorized" in new WithDefaultGlobal {
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(identityService, authenticatorService)
+      val listener = system.actorOf(Props(new Actor {
+        def receive = {
+          case e @ NotAuthorizedEvent(_, _, _) => theProbe.ref ! e
+        }
+      }))
+
+      env.eventBus.subscribe(listener, classOf[NotAuthorizedEvent[TestIdentity]])
+
+      val controller = new SecuredController(env, SimpleAuthorization(isAuthorized = false))
+      val result = controller.protectedActionWithAuthorization(request)
+
+      theProbe.expectMsg(500 millis, NotAuthorizedEvent(identity, request, lang))
+    }
+
+    "invoke action without authorization if user is authenticated" in new WithSecuredGlobal {
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
+
+      val controller = new SecuredController(env)
       val result = controller.protectedAction(request)
 
       status(result) must equalTo(OK)
@@ -161,35 +202,53 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "invoke action with authorization if user is authenticated but not authorized" in new WithSecuredGlobal {
-      authenticatorService.retrieve returns Future.successful(Some(authenticator))
-      identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(identityService, authenticatorService)
+      val controller = new SecuredController(env)
       val result = controller.protectedActionWithAuthorization(request)
 
       status(result) must equalTo(OK)
       contentAsString(result) must contain("full.access")
     }
 
-    "discard authentication cookie if user isn't authenticated" in new WithSecuredGlobal {
-      authenticatorService.retrieve returns Future.successful(None)
-      authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
+    "publish `AuthenticatedEvent` if user is authenticated" in new WithDefaultGlobal {
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(identityService, authenticatorService)
+      val listener = system.actorOf(Props(new Actor {
+        def receive = {
+          case e @ AuthenticatedEvent(_, _, _) => theProbe.ref ! e
+        }
+      }))
+
+      env.eventBus.subscribe(listener, classOf[AuthenticatedEvent[TestIdentity]])
+
+      val controller = new SecuredController(env)
+      val result = controller.protectedAction(request)
+
+      theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, lang))
+    }
+
+    "discard authentication cookie if user isn't authenticated" in new WithSecuredGlobal {
+      env.authenticatorService.retrieve returns Future.successful(None)
+      env.authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
+
+      val controller = new SecuredController(env)
       val result = controller.protectedAction(request)
 
       status(result) must equalTo(UNAUTHORIZED)
 
-      there was one(authenticatorService).discard(any)
+      there was one(env.authenticatorService).discard(any)
     }
 
     "handle an Ajax request" in new WithSecuredGlobal {
       implicit val req = FakeRequest().withHeaders("Accept" -> "application/json")
 
-      authenticatorService.retrieve returns Future.successful(Some(authenticator))
-      identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(identityService, authenticatorService)
+      val controller = new SecuredController(env)
       val result = controller.protectedAction(req)
 
       status(result) must equalTo(OK)
@@ -200,9 +259,9 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
   "The `UserAwareAction` action" should {
     "restrict access if no authenticator could be found" in new WithDefaultGlobal {
-      authenticatorService.retrieve returns Future.successful(None)
+      env.authenticatorService.retrieve returns Future.successful(None)
 
-      val controller = new SecuredController(identityService, authenticatorService)
+      val controller = new SecuredController(env)
       val result = controller.userAwareAction(request)
 
       status(result) must equalTo(UNAUTHORIZED)
@@ -210,10 +269,10 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "restrict access if no identity could be found for an authenticator" in new WithDefaultGlobal {
-      authenticatorService.retrieve returns Future.successful(Some(authenticator))
-      identityService.retrieve(identity.loginInfo) returns Future.successful(None)
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(None)
 
-      val controller = new SecuredController(identityService, authenticatorService)
+      val controller = new SecuredController(env)
       val result = controller.userAwareAction(request)
 
       status(result) must equalTo(UNAUTHORIZED)
@@ -221,20 +280,20 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "update an authenticator if an identity could be found for it" in new WithDefaultGlobal {
-      authenticatorService.retrieve returns Future.successful(Some(authenticator))
-      identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(identityService, authenticatorService)
+      val controller = new SecuredController(env)
       await(controller.userAwareAction(request))
 
-      there was one(authenticatorService).update(any)
+      there was one(env.authenticatorService).update(any)
     }
 
     "grant access if an identity could be found" in new WithDefaultGlobal {
-      authenticatorService.retrieve returns Future.successful(Some(authenticator))
-      identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(identityService, authenticatorService)
+      val controller = new SecuredController(env)
       val result = controller.userAwareAction(request)
 
       status(result) must equalTo(OK)
@@ -244,10 +303,10 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
   "The `exceptionHandler` method" should {
     "translate an AccessDeniedException into a 403 Forbidden result" in new WithDefaultGlobal {
-      authenticatorService.retrieve returns Future.successful(None)
-      authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
+      env.authenticatorService.retrieve returns Future.successful(None)
+      env.authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
 
-      val controller = new SecuredController(identityService, authenticatorService)
+      val controller = new SecuredController(env)
       val failed = Future.failed(new AccessDeniedException("Access denied"))
       val result = controller.recover(failed)
 
@@ -255,10 +314,10 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "translate an AuthenticationException into a 401 Unauthorized result" in new WithDefaultGlobal {
-      authenticatorService.retrieve returns Future.successful(None)
-      authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
+      env.authenticatorService.retrieve returns Future.successful(None)
+      env.authenticatorService.discard(any) answers { r => r.asInstanceOf[SimpleResult] }
 
-      val controller = new SecuredController(identityService, authenticatorService)
+      val controller = new SecuredController(env)
       val failed = Future.failed(new AuthenticationException("Not authenticated"))
       val result = controller.recover(failed)
 
@@ -284,16 +343,30 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
    * The context.
    */
   trait Context extends Scope {
+    self: WithApplication =>
 
     /**
-     * The identity service implementation.
+     * The Silhouette environment.
      */
-    lazy val identityService: IdentityService[TestIdentity] = mock[IdentityService[TestIdentity]]
+    lazy val env = new Environment[TestIdentity, TestAuthenticator] {
 
-    /**
-     * The authenticator service implementation.
-     */
-    lazy val authenticatorService: AuthenticatorService[TestAuthenticator] = mock[AuthenticatorService[TestAuthenticator]]
+      /**
+       * The identity service implementation.
+       */
+      val identityService = mock[IdentityService[TestIdentity]]
+
+      /**
+       * The authenticator service implementation.
+       */
+      val authenticatorService = mock[AuthenticatorService[TestAuthenticator]]
+
+      /**
+       * The event bus implementation.
+       *
+       * @return The event bus implementation.
+       */
+      val eventBus = new EventBus
+    }
 
     /**
      * An identity.
@@ -309,6 +382,21 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      * A fake request.
      */
     lazy implicit val request = FakeRequest()
+
+    /**
+     * A language.
+     */
+    lazy val lang = Lang.defaultLang
+
+    /**
+     * The Play actor system.
+     */
+    lazy implicit val system = Akka.system
+
+    /**
+     * The test probe.
+     */
+    lazy val theProbe = TestProbe()
   }
 
   /**
@@ -348,12 +436,11 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
   /**
    * A secured controller.
    *
-   * @param identityService The identity service implementation.
-   * @param authenticatorService The authenticator service implementation.
+   * @param env The silhouette environment.
+   * @param authorization An authorization implementation.
    */
   class SecuredController(
-    val identityService: IdentityService[TestIdentity],
-    val authenticatorService: AuthenticatorService[TestAuthenticator],
+    val env: Environment[TestIdentity, TestAuthenticator],
     val authorization: Authorization[TestIdentity] = SimpleAuthorization())
       extends Silhouette[TestIdentity, TestAuthenticator] {
 

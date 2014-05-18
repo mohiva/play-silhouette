@@ -15,7 +15,8 @@ libraryDependencies ++= Seq(
   "org.mindrot" % "jbcrypt" % "0.3m",
   "org.mockito" % "mockito-core" % "1.9.5" % "test",
   "com.google.inject" % "guice" % "4.0-beta" % "test",
-  "net.codingwell" %% "scala-guice" % "4.0.0-beta" % "test"
+  "net.codingwell" %% "scala-guice" % "4.0.0-beta" % "test",
+  "com.typesafe.akka" %% "akka-testkit" % "2.2.0" % "test"
 )
 
 playScalaSettings
