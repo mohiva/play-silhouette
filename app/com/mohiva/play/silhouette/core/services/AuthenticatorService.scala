@@ -26,14 +26,14 @@ import com.mohiva.play.silhouette.core.{ Identity, Authenticator }
 /**
  * The authenticator store is in charge of persisting authenticators for the Silhouette module.
  *
- * @tparam T The type of the authenticator this service is responsible.
+ * @tparam T The type of the authenticator this service is responsible for.
  */
 trait AuthenticatorService[T <: Authenticator] {
 
   /**
-   * Creates a new authenticator ID for the specified identity.
+   * Creates a new authenticator for the specified identity.
    *
-   * @param identity The identity for which the ID should be created.
+   * @param identity The identity for which the authenticator should be created.
    * @return An authenticator.
    */
   def create[I <: Identity](identity: I): Future[Option[T]]
