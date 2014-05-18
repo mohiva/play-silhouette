@@ -40,7 +40,7 @@
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The authenticator store is in charge of persisting authenticators for the Silhouette module.
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the authenticator this service is responsible.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the authenticator this service is responsible for.
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -100,8 +100,8 @@
         <span class="name">create</span><span class="tparams">[<span name="I">I &lt;: <a href="../Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService.create.I">I</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService.T">T</span>]]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Creates a new authenticator ID for the specified identity.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a new authenticator ID for the specified identity.
-</p></div><dl class="paramcmts block"><dt class="param">identity</dt><dd class="cmt"><p>The identity for which the ID should be created.</p></dd><dt>returns</dt><dd class="cmt"><p>An authenticator.
+      <p class="shortcomment cmt">Creates a new authenticator for the specified identity.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a new authenticator for the specified identity.
+</p></div><dl class="paramcmts block"><dt class="param">identity</dt><dd class="cmt"><p>The identity for which the authenticator should be created.</p></dd><dt>returns</dt><dd class="cmt"><p>An authenticator.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.services.AuthenticatorService#retrieve" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="retrieve(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Option[T]]"></a>
