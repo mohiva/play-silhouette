@@ -40,10 +40,8 @@
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Provides the actions that can be used to protect controllers and retrieve the current user
-if available.</p><pre><span class="kw">class</span> MyController(
-  <span class="kw">val</span> identityService: IdentityService[User],
-  <span class="kw">val</span> authenticatorService: AuthenticatorService[CachedCookieAuthenticator]
-) <span class="kw">extends</span> Silhouette[User, CachedCookieAuthenticator] {
+if available.</p><pre><span class="kw">class</span> MyController(env: Environment[User, CachedCookieAuthenticator])
+<span class="kw">extends</span> Silhouette[User, CachedCookieAuthenticator] {
 
 <span class="kw">def</span> protectedAction = SecuredAction { <span class="kw">implicit</span> request <span class="kw">=&gt;</span>
   Ok(<span class="lit">"Hello %s"</span>.format(request.identity.fullName))
@@ -148,35 +146,20 @@ if available.</p><pre><span class="kw">class</span> MyController(
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.Silhouette#authenticatorService" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="authenticatorService:com.mohiva.play.silhouette.core.services.AuthenticatorService[T]"></a>
-      <a id="authenticatorService:AuthenticatorService[T]"></a>
+              <ol><li name="com.mohiva.play.silhouette.core.Silhouette#env" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="env:com.mohiva.play.silhouette.core.Environment[I,T]"></a>
+      <a id="env:Environment[I,T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">authenticatorService</span><span class="result">: <a href="services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a>[<span class="extype" name="com.mohiva.play.silhouette.core.Silhouette.T">T</span>]</span>
+        <span class="name">env</span><span class="result">: <a href="Environment.html" class="extype" name="com.mohiva.play.silhouette.core.Environment">Environment</a>[<span class="extype" name="com.mohiva.play.silhouette.core.Silhouette.I">I</span>, <span class="extype" name="com.mohiva.play.silhouette.core.Silhouette.T">T</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Gets the authenticator service implementation.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the authenticator service implementation.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The authenticator service implementation.
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.Silhouette#identityService" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="identityService:com.mohiva.play.silhouette.core.services.IdentityService[I]"></a>
-      <a id="identityService:IdentityService[I]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">identityService</span><span class="result">: <a href="services/IdentityService.html" class="extype" name="com.mohiva.play.silhouette.core.services.IdentityService">IdentityService</a>[<span class="extype" name="com.mohiva.play.silhouette.core.Silhouette.I">I</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Gets the identity service implementation.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the identity service implementation.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The identity service implementation.
+      <p class="shortcomment cmt">Gets the environment needed to instantiate a Silhouette controller.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the environment needed to instantiate a Silhouette controller.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The environment needed to instantiate a Silhouette controller.
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li></ol>
             </div>
