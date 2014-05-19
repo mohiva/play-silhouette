@@ -22,7 +22,6 @@ package com.mohiva.play.silhouette.core
 import play.api.Play
 import play.api.mvc._
 import play.api.libs.concurrent.Execution.Implicits._
-import com.mohiva.play.silhouette.core.services.{ AuthenticatorService, IdentityService }
 import com.mohiva.play.silhouette.core.exceptions.{ AuthenticationException, AccessDeniedException }
 import com.mohiva.play.silhouette.core.utils.DefaultActionHandler
 import scala.concurrent.Future
@@ -32,10 +31,8 @@ import scala.concurrent.Future
  * if available.
  *
  * {{{
- * class MyController(
- *     val identityService: IdentityService[User],
- *     val authenticatorService: AuthenticatorService[CachedCookieAuthenticator]
- *   ) extends Silhouette[User, CachedCookieAuthenticator] {
+ * class MyController(env: Environment[User, CachedCookieAuthenticator])
+ *   extends Silhouette[User, CachedCookieAuthenticator] {
  *
  *   def protectedAction = SecuredAction { implicit request =>
  *     Ok("Hello %s".format(request.identity.fullName))
@@ -49,18 +46,11 @@ import scala.concurrent.Future
 trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logger {
 
   /**
-   * Gets the identity service implementation.
+   * Gets the environment needed to instantiate a Silhouette controller.
    *
-   * @return The identity service implementation.
+   * @return The environment needed to instantiate a Silhouette controller.
    */
-  protected def identityService: IdentityService[I]
-
-  /**
-   * Gets the authenticator service implementation.
-   *
-   * @return The authenticator service implementation.
-   */
-  protected def authenticatorService: AuthenticatorService[T]
+  protected def env: Environment[I, T]
 
   /**
    * Implement this to return a result when the user is not authenticated.
@@ -106,9 +96,9 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logg
    * @return The identity if any.
    */
   protected def currentIdentity(implicit request: RequestHeader): Future[Option[I]] = {
-    authenticatorService.retrieve.flatMap {
-      case Some(authenticator) => identityService.retrieve(authenticator.loginInfo).map(_.map { identity =>
-        authenticatorService.update(authenticator)
+    env.authenticatorService.retrieve.flatMap {
+      case Some(authenticator) => env.identityService.retrieve(authenticator.loginInfo).map(_.map { identity =>
+        env.authenticatorService.update(authenticator)
         identity
       })
       case None => Future.successful(None)
@@ -225,17 +215,20 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logg
      * @return The result to send to the client.
      */
     def invokeBlock[A](request: Request[A], block: SecuredRequest[A] => Future[SimpleResult]) = {
-      implicit val r = request
+      implicit val req = request
       currentIdentity(request).flatMap {
         // A user is both authenticated and authorized. The request will be granted.
         case Some(identity) if authorize.isEmpty || authorize.get.isAuthorized(identity) =>
+          env.eventBus.publish(AuthenticatedEvent(identity, req, lang))
           block(SecuredRequest(identity, request))
         // A user is authenticated but not authorized. The request will be forbidden.
         case Some(identity) =>
+          env.eventBus.publish(NotAuthorizedEvent(identity, req, lang))
           handleNotAuthorized(request)
         // No user is authenticated. The request will ask for authentication.
         case None =>
-          handleNotAuthenticated(request).map(authenticatorService.discard)
+          env.eventBus.publish(NotAuthenticatedEvent(req, lang))
+          handleNotAuthenticated(request).map(env.authenticatorService.discard)
       }
     }
   }
