@@ -15,7 +15,7 @@
  */
 package com.mohiva.play.silhouette.core
 
-import com.mohiva.play.silhouette.core.services.{ AuthenticatorService, IdentityService }
+import com.mohiva.play.silhouette.core.services.{IdentityService, AuthenticatorService}
 
 /**
  * The environment needed to instantiate a Silhouette controller.
@@ -37,9 +37,32 @@ trait Environment[I <: Identity, T <: Authenticator] {
   def authenticatorService: AuthenticatorService[T]
 
   /**
+   * Gets the list of authentication providers.
+   *
+   * @return The list of authentication providers.
+   */
+  def providers: Map[String, Provider]
+
+  /**
    * The event bus implementation.
    *
    * @return The event bus implementation.
    */
   def eventBus: EventBus
+}
+
+/**
+ * The companion object.
+ */
+object Environment {
+  def apply[I <: Identity, T <: Authenticator](
+    identityServiceImpl: IdentityService[I],
+    authenticatorServiceImpl: AuthenticatorService[T],
+    providersImpl: Map[String, Provider],
+    eventBusImpl: EventBus) = new Environment[I, T] {
+      val identityService = identityServiceImpl
+      val authenticatorService = authenticatorServiceImpl
+      val providers = providersImpl
+      val eventBus = eventBusImpl
+  }
 }
