@@ -348,25 +348,12 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     /**
      * The Silhouette environment.
      */
-    lazy val env = new Environment[TestIdentity, TestAuthenticator] {
-
-      /**
-       * The identity service implementation.
-       */
-      val identityService = mock[IdentityService[TestIdentity]]
-
-      /**
-       * The authenticator service implementation.
-       */
-      val authenticatorService = mock[AuthenticatorService[TestAuthenticator]]
-
-      /**
-       * The event bus implementation.
-       *
-       * @return The event bus implementation.
-       */
-      val eventBus = new EventBus
-    }
+    lazy val env = Environment[TestIdentity, TestAuthenticator](
+      mock[IdentityService[TestIdentity]],
+      mock[AuthenticatorService[TestAuthenticator]],
+      Map(),
+      new EventBus
+    )
 
     /**
      * An identity.
