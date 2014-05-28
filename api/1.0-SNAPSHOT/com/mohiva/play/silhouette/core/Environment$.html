@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../index.html';
-            var hash = 'com.mohiva.play.silhouette.core.Environment';
+            var hash = 'com.mohiva.play.silhouette.core.Environment$';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -22,24 +22,24 @@
    	  </script>
     
         </head>
-        <body class="type">
+        <body class="value">
       <div id="definition">
-        <a href="Environment$.html" title="Go to companion"><img src="../../../../../lib/trait_to_object_big.png" /></a>
+        <a href="Environment.html" title="Go to companion"><img src="../../../../../lib/object_to_trait_big.png" /></a>
         <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.core">core</a></p>
-        <h1><a href="Environment$.html" title="Go to companion">Environment</a></h1>
+        <h1><a href="Environment.html" title="Go to companion">Environment</a></h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Environment</span><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>, <span name="T">T &lt;: <a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">Environment</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The environment needed to instantiate a Silhouette controller.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The companion object.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -82,73 +82,10 @@
 
         
 
-        <div id="values" class="values members">
-              <h3>Abstract Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.Environment#authenticatorService" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="authenticatorService:com.mohiva.play.silhouette.core.services.AuthenticatorService[T]"></a>
-      <a id="authenticatorService:AuthenticatorService[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">authenticatorService</span><span class="result">: <a href="services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a>[<span class="extype" name="com.mohiva.play.silhouette.core.Environment.T">T</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Gets the authenticator service implementation.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the authenticator service implementation.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The authenticator service implementation.
-</p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.Environment#eventBus" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="eventBus:com.mohiva.play.silhouette.core.EventBus"></a>
-      <a id="eventBus:EventBus"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">eventBus</span><span class="result">: <a href="EventBus.html" class="extype" name="com.mohiva.play.silhouette.core.EventBus">EventBus</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">The event bus implementation.</p><div class="fullcomment"><div class="comment cmt"><p>The event bus implementation.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The event bus implementation.
-</p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.Environment#identityService" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="identityService:com.mohiva.play.silhouette.core.services.IdentityService[I]"></a>
-      <a id="identityService:IdentityService[I]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">identityService</span><span class="result">: <a href="services/IdentityService.html" class="extype" name="com.mohiva.play.silhouette.core.services.IdentityService">IdentityService</a>[<span class="extype" name="com.mohiva.play.silhouette.core.Environment.I">I</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Gets the identity service implementation.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the identity service implementation.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The identity service implementation.
-</p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.Environment#providers" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="providers:Map[String,com.mohiva.play.silhouette.core.Provider]"></a>
-      <a id="providers:Map[String,Provider]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">providers</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="Provider.html" class="extype" name="com.mohiva.play.silhouette.core.Provider">Provider</a>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Gets the list of authentication providers.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the list of authentication providers.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The list of authentication providers.
-</p></dd></dl></div>
-    </li></ol>
-            </div>
+        
 
         <div id="values" class="values members">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
@@ -214,6 +151,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.Environment#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="apply[I&lt;:com.mohiva.play.silhouette.core.Identity,T&lt;:com.mohiva.play.silhouette.core.Authenticator](identityServiceImpl:com.mohiva.play.silhouette.core.services.IdentityService[I],authenticatorServiceImpl:com.mohiva.play.silhouette.core.services.AuthenticatorService[T],providersImpl:Map[String,com.mohiva.play.silhouette.core.Provider],eventBusImpl:com.mohiva.play.silhouette.core.EventBus):com.mohiva.play.silhouette.core.Environment[I,T]{validentityService:com.mohiva.play.silhouette.core.services.IdentityService[I];valauthenticatorService:com.mohiva.play.silhouette.core.services.AuthenticatorService[T];valproviders:Map[String,com.mohiva.play.silhouette.core.Provider];valeventBus:com.mohiva.play.silhouette.core.EventBus}"></a>
+      <a id="apply[I&lt;:Identity,T&lt;:Authenticator](IdentityService[I],AuthenticatorService[T],Map[String,Provider],EventBus):Environment[I,T]{.../*4definitionsintyperefinement*/}"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a></span>, <span name="T">T &lt;: <a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a></span>]</span><span class="params">(<span name="identityServiceImpl">identityServiceImpl: <a href="services/IdentityService.html" class="extype" name="com.mohiva.play.silhouette.core.services.IdentityService">IdentityService</a>[<span class="extype" name="com.mohiva.play.silhouette.core.Environment.apply.I">I</span>]</span>, <span name="authenticatorServiceImpl">authenticatorServiceImpl: <a href="services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a>[<span class="extype" name="com.mohiva.play.silhouette.core.Environment.apply.T">T</span>]</span>, <span name="providersImpl">providersImpl: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="Provider.html" class="extype" name="com.mohiva.play.silhouette.core.Provider">Provider</a>]</span>, <span name="eventBusImpl">eventBusImpl: <a href="EventBus.html" class="extype" name="com.mohiva.play.silhouette.core.EventBus">EventBus</a></span>)</span><span class="result">: <a href="Environment.html" class="extype" name="com.mohiva.play.silhouette.core.Environment">Environment</a>[<span class="extype" name="com.mohiva.play.silhouette.core.Environment.apply.I">I</span>, <span class="extype" name="com.mohiva.play.silhouette.core.Environment.apply.T">T</span>] { ... /* 4 definitions in type refinement */ }</span>
+      </span>
+      </h4>
+      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
