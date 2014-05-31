@@ -38,6 +38,9 @@ libraryDependencies ++= Seq(
 )
 ```
 
+## Examples
+
+There is an official Activator template called [Play Silhouette Seed](https://github.com/mohiva/play-silhouette-seed) which shows how Silhouette can be implemented into a Play Framework application.
 
 ## Documentation
 
