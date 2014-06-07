@@ -219,7 +219,7 @@ Full-Width Styles
 
 .inner {
   position: relative;
-  max-width: 640px;
+  max-width: 800px;
   padding: 20px 10px;
   margin: 0 auto;
 }
@@ -261,6 +261,14 @@ Full-Width Styles
   font-weight: 300;
   background: none;
   text-shadow: #111 0px 0px 10px;
+}
+
+#github-buttons {
+    position: absolute;
+    width: 210px;
+    z-index: 10;
+    bottom: 5px;
+    left: 10px;
 }
 
 #downloads {
