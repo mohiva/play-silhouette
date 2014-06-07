@@ -38,6 +38,10 @@ Silhouette makes it very easy to internationalize your application by passing th
 
 Silhouette is a security component which protects your users from being compromised by attackers. Therefore we try to cover the complete code with unit tests.
 
+#### Follows the OWASP Authentication Cheat Sheet
+
+Silhouette implements and promotes best practices such as described by the [OWASP Authentication Cheat Sheet](https://www.owasp.org/index.php/Authentication_Cheat_Sheet) like Password Strength Controls, SSL Client Authentication or use of authentication protocols that require no password.
+
 ## Documentation
 
 See [the project wiki](https://github.com/mohiva/play-silhouette/wiki) for more information. If you need help with the integration of Silhouette into your project, don't hesitate and ask questions in our [mailing list](https://groups.google.com/forum/#!forum/play-silhouette) or on [Stack Overflow](http://stackoverflow.com/questions/tagged/playframework).
