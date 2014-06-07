@@ -34,7 +34,7 @@ From the ground off Silhouette was designed to be as customizable and extendable
 
 Silhouette makes it very easy to internationalize your application by passing the Play Framework `Request` and `Lang` objects around, if internationalization come into play.
 
-#### Well tested [![Coverage Status](https://coveralls.io/repos/mohiva/play-silhouette/badge.png)](https://coveralls.io/r/mohiva/play-silhouette)
+#### Well tested
 
 Silhouette is a security component which protects your users from being compromised by attackers. Therefore we try to cover the complete code with unit tests.
 
