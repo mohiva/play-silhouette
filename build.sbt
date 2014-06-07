@@ -22,6 +22,14 @@ libraryDependencies ++= Seq(
 playScalaSettings
 
 //*******************************
+// Coveralls settings
+//*******************************
+
+instrumentSettings
+
+CoverallsPlugin.coverallsSettings
+
+//*******************************
 // Maven settings
 //*******************************
 
@@ -95,17 +103,9 @@ scalacOptions in Test ~= { (options: Seq[String]) =>
   options filterNot ( _ == "-Ywarn-dead-code" )  // Allow dead code in tests (to support using mockito).
 }
 
-scalacOptions in scoverageTest ~= { (options: Seq[String]) =>
+scalacOptions in ScoverageTest ~= { (options: Seq[String]) =>
   options filterNot ( _ == "-Ywarn-dead-code" )  // The same when running under scoverage.
 }
-
-//*******************************
-// Coveralls settings
-//*******************************
-
-ScoverageSbtPlugin.instrumentSettings
-
-CoverallsPlugin.coverallsSettings
 
 //*******************************
 // Scalariform settings
