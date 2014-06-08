@@ -62,7 +62,7 @@ abstract class InstagramProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, s
    * @return On success the build social profile, otherwise a failure.
    */
   protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
-    httpLayer.url(API.format(authInfo.accessToken)).get().flatMap { response =>
+    httpLayer.url(profileAPI.format(authInfo.accessToken)).get().flatMap { response =>
       val json = response.json
       (json \ "meta" \ "code").asOpt[Int] match {
         case Some(code) if code != 200 =>

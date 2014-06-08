@@ -63,7 +63,7 @@ abstract class LinkedInProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, se
    * @return On success the build social profile, otherwise a failure.
    */
   protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
-    httpLayer.url(API.format(authInfo.accessToken)).get().flatMap { response =>
+    httpLayer.url(profileAPI.format(authInfo.accessToken)).get().flatMap { response =>
       val json = response.json
       (json \ "errorCode").asOpt[Int] match {
         case Some(error) =>

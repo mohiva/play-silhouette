@@ -10,6 +10,7 @@
 
     <logger name="application" level="INFO" />
     <logger name="play" level="INFO" />
+    <logger name="com.mohiva" level="DEBUG" />
 
     <root level="ERROR">
         <appender-ref ref="STDOUT" />
