@@ -103,6 +103,13 @@ class EventBusSpec extends PlaySpecification {
 
       theProbe.expectNoMsg(500 millis)
     }
+
+    "returns a singleton event bus" in new WithApplication with Context {
+      val eventBus1 = EventBus()
+      val eventBus2 = EventBus()
+
+      eventBus1 ==== eventBus2
+    }
   }
 
   /**
