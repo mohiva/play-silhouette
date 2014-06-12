@@ -20,7 +20,7 @@ import java.util.UUID
 import scala.util.Try
 import scala.concurrent.Future
 import play.api.libs.json.JsValue
-import play.api.libs.ws.{ Response, WS }
+import play.api.libs.ws.{ WSResponse, WSRequestHolder }
 import play.api.test.{ FakeRequest, WithApplication }
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
@@ -40,8 +40,8 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
     "fail with AuthenticationException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
       response.body returns ""
       requestHolder.withHeaders(any) returns requestHolder
@@ -57,8 +57,8 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
     "fail with AuthenticationException if API returns error" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
       response.body returns AccessToken + "=my.access.token&" + Expires + "=1"
       response.json returns Helper.loadJson("providers/custom/facebook.error.json")
@@ -81,8 +81,8 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
     "fail with AuthenticationException if an unexpected error occurred" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
       response.body returns AccessToken + "=my.access.token&" + Expires + "=1"
       response.json throws new RuntimeException("")
@@ -101,8 +101,8 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
     "return the social profile and the auth info with expires value" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
       response.body returns AccessToken + "=my.access.token&" + Expires + "=1"
       response.json returns Helper.loadJson("providers/custom/facebook.success.json")
@@ -135,8 +135,8 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
     "return the social profile and the auth info without expires value" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
       response.body returns AccessToken + "=my.access.token"
       response.json returns Helper.loadJson("providers/custom/facebook.success.json")

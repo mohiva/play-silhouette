@@ -21,8 +21,8 @@ package com.mohiva.play.silhouette.core.providers
 
 import java.util.UUID
 import scala.concurrent.Future
-import play.api.mvc.{ SimpleResult, RequestHeader, Results }
-import play.api.libs.ws.SignatureCalculator
+import play.api.mvc.{ Result, RequestHeader, Results }
+import play.api.libs.ws.WSSignatureCalculator
 import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
@@ -52,7 +52,7 @@ abstract class OAuth1Provider(
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  protected def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, OAuth1Info]] = {
+  protected def doAuth()(implicit request: RequestHeader): Future[Either[Result, OAuth1Info]] = {
     logger.debug("[Silhouette][%s] Query string: %s".format(id, request.rawQueryString))
     request.queryString.get(Denied) match {
       case Some(_) => Future.failed(new AccessDeniedException(AuthorizationError.format(id, Denied)))
@@ -165,7 +165,7 @@ trait OAuth1Service {
    * @param oAuthInfo The info/secret pair obtained from a previous call.
    * @return The signature calculator for the OAuth1 request.
    */
-  def sign(oAuthInfo: OAuth1Info): SignatureCalculator
+  def sign(oAuthInfo: OAuth1Info): WSSignatureCalculator
 }
 
 /**

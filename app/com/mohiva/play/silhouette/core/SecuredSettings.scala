@@ -16,7 +16,7 @@
 package com.mohiva.play.silhouette.core
 
 import play.api.GlobalSettings
-import play.api.mvc.{ RequestHeader, SimpleResult }
+import play.api.mvc.{ RequestHeader, Result }
 import scala.concurrent.Future
 import play.api.i18n.Lang
 
@@ -36,7 +36,7 @@ trait SecuredSettings {
    * @param lang The currently selected language.
    * @return The result to send to the client.
    */
-  def onNotAuthenticated(request: RequestHeader, lang: Lang): Option[Future[SimpleResult]] = None
+  def onNotAuthenticated(request: RequestHeader, lang: Lang): Option[Future[Result]] = None
 
   /**
    * Called when a user is authenticated but not authorized.
@@ -47,5 +47,5 @@ trait SecuredSettings {
    * @param lang The currently selected language.
    * @return The result to send to the client.
    */
-  def onNotAuthorized(request: RequestHeader, lang: Lang): Option[Future[SimpleResult]] = None
+  def onNotAuthorized(request: RequestHeader, lang: Lang): Option[Future[Result]] = None
 }

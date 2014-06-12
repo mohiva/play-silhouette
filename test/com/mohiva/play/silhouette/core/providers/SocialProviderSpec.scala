@@ -17,7 +17,7 @@ package com.mohiva.play.silhouette.core.providers
 
 import scala.reflect.ClassTag
 import scala.concurrent.Future
-import play.api.mvc.SimpleResult
+import play.api.mvc.Result
 import play.api.test.PlaySpecification
 import org.specs2.mock.Mockito
 import org.specs2.matcher.{ MatchResult, JsonMatchers }
@@ -31,7 +31,7 @@ abstract class SocialProviderSpec[A <: AuthInfo] extends PlaySpecification with 
   /**
    * The provider result.
    */
-  type ProviderResult = Future[Either[SimpleResult, SocialProfile[A]]]
+  type ProviderResult = Future[Either[Result, SocialProfile[A]]]
 
   /**
    * Applies a matcher on a simple result.
@@ -40,8 +40,8 @@ abstract class SocialProviderSpec[A <: AuthInfo] extends PlaySpecification with 
    * @param b The matcher block to apply.
    * @return A specs2 match result.
    */
-  def result(providerResult: ProviderResult)(b: Future[SimpleResult] => MatchResult[_]) = {
-    await(providerResult) must beLeft[SimpleResult].like {
+  def result(providerResult: ProviderResult)(b: Future[Result] => MatchResult[_]) = {
+    await(providerResult) must beLeft[Result].like {
       case simpleResult => b(Future.successful(simpleResult))
     }
   }

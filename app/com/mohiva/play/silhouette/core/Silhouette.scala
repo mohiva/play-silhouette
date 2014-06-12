@@ -60,7 +60,7 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logg
    * @param request The request header.
    * @return The result to send to the client.
    */
-  protected def notAuthenticated(request: RequestHeader): Option[Future[SimpleResult]] = None
+  protected def notAuthenticated(request: RequestHeader): Option[Future[Result]] = None
 
   /**
    * Implement this to return a result when the user is authenticated but not authorized.
@@ -70,7 +70,7 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logg
    * @param request The request header.
    * @return The result to send to the client.
    */
-  protected def notAuthorized(request: RequestHeader): Option[Future[SimpleResult]] = None
+  protected def notAuthorized(request: RequestHeader): Option[Future[Result]] = None
 
   /**
    * Default exception handler for silhouette exceptions which translates an exception into
@@ -82,7 +82,7 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logg
    * @param request The request header.
    * @return The result to send to the client based on the exception.
    */
-  protected def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[SimpleResult]] = {
+  protected def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[Result]] = {
     case e: AccessDeniedException => handleNotAuthorized
     case e: AuthenticationException => handleNotAuthenticated
   }
@@ -118,12 +118,12 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logg
    * @param request The request header.
    * @return The result to send to the client if the user isn't authorized.
    */
-  private def handleNotAuthorized(implicit request: RequestHeader): Future[SimpleResult] = {
+  private def handleNotAuthorized(implicit request: RequestHeader): Future[Result] = {
     logger.debug("[Silhouette] Unauthorized user trying to access '%s'".format(request.uri))
 
     notAuthorized(request).orElse {
       Play.current.global match {
-        case s: SecuredSettings => s.onNotAuthorized(request, lang)
+        case s: SecuredSettings => s.onNotAuthorized(request, request2lang)
         case _ => None
       }
     }.getOrElse(DefaultActionHandler.handleForbidden)
@@ -141,12 +141,12 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logg
    * @param request The request header.
    * @return The result to send to the client if the user isn't authenticated.
    */
-  private def handleNotAuthenticated(implicit request: RequestHeader): Future[SimpleResult] = {
+  private def handleNotAuthenticated(implicit request: RequestHeader): Future[Result] = {
     logger.debug("[Silhouette] Unauthenticated user trying to access '%s'".format(request.uri))
 
     notAuthenticated(request).orElse {
       Play.current.global match {
-        case s: SecuredSettings => s.onNotAuthenticated(request, lang)
+        case s: SecuredSettings => s.onNotAuthenticated(request, request2lang)
         case _ => None
       }
     }.getOrElse(DefaultActionHandler.handleUnauthorized)
@@ -214,20 +214,20 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logg
      * @param block The block of code to invoke.
      * @return The result to send to the client.
      */
-    def invokeBlock[A](request: Request[A], block: SecuredRequest[A] => Future[SimpleResult]) = {
+    def invokeBlock[A](request: Request[A], block: SecuredRequest[A] => Future[Result]) = {
       implicit val req = request
       currentIdentity(request).flatMap {
         // A user is both authenticated and authorized. The request will be granted.
         case Some(identity) if authorize.isEmpty || authorize.get.isAuthorized(identity) =>
-          env.eventBus.publish(AuthenticatedEvent(identity, req, lang))
+          env.eventBus.publish(AuthenticatedEvent(identity, req, request2lang))
           block(SecuredRequest(identity, request))
         // A user is authenticated but not authorized. The request will be forbidden.
         case Some(identity) =>
-          env.eventBus.publish(NotAuthorizedEvent(identity, req, lang))
+          env.eventBus.publish(NotAuthorizedEvent(identity, req, request2lang))
           handleNotAuthorized(request)
         // No user is authenticated. The request will ask for authentication.
         case None =>
-          env.eventBus.publish(NotAuthenticatedEvent(req, lang))
+          env.eventBus.publish(NotAuthenticatedEvent(req, request2lang))
           handleNotAuthenticated(request).map(env.authenticatorService.discard)
       }
     }
@@ -245,7 +245,7 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logg
      * @param block The block of code to invoke.
      * @return The result to send to the client.
      */
-    def invokeBlock[A](request: Request[A], block: RequestWithUser[A] => Future[SimpleResult]) = {
+    def invokeBlock[A](request: Request[A], block: RequestWithUser[A] => Future[Result]) = {
       currentIdentity(request).flatMap { identity => block(RequestWithUser(identity, request)) }
     }
   }

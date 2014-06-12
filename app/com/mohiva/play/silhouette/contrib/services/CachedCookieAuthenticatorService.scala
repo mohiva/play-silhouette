@@ -24,7 +24,7 @@ import scala.concurrent.Future
 import play.api.Play
 import play.api.Play.current
 import play.api.libs.concurrent.Execution.Implicits._
-import play.api.mvc.{ Cookie, SimpleResult, DiscardingCookie, RequestHeader }
+import play.api.mvc.{ Cookie, Result, DiscardingCookie, RequestHeader }
 import com.mohiva.play.silhouette.core.{ Identity, Authenticator, LoginInfo }
 import com.mohiva.play.silhouette.core.utils.{ Clock, IDGenerator, CacheLayer }
 import com.mohiva.play.silhouette.core.services.AuthenticatorService
@@ -101,7 +101,7 @@ class CachedCookieAuthenticatorService(
    * @param result The result to manipulate.
    * @return The manipulated result.
    */
-  override def send(authenticator: CachedCookieAuthenticator, result: SimpleResult): SimpleResult = {
+  override def send(authenticator: CachedCookieAuthenticator, result: Result): Result = {
     result.withCookies(Cookie(
       name = settings.cookieName,
       value = authenticator.id,
@@ -118,7 +118,7 @@ class CachedCookieAuthenticatorService(
    * @param result The result to manipulate.
    * @return The manipulated result.
    */
-  override def discard(result: SimpleResult): SimpleResult = {
+  override def discard(result: Result): Result = {
     result.discardingCookies(DiscardingCookie(
       name = settings.cookieName,
       path = settings.cookiePath,

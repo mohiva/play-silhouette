@@ -21,7 +21,7 @@ package com.mohiva.play.silhouette.core.providers.oauth2
 
 import scala.concurrent.Future
 import scala.util.{ Failure, Success, Try }
-import play.api.libs.ws.Response
+import play.api.libs.ws.WSResponse
 import play.api.libs.json.{ JsValue, JsObject }
 import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.LoginInfo
@@ -111,7 +111,7 @@ abstract class FacebookProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, se
    * @param response The response from the provider.
    * @return The OAuth2 info on success, otherwise an failure.
    */
-  override protected def buildInfo(response: Response): Try[OAuth2Info] = {
+  override protected def buildInfo(response: WSResponse): Try[OAuth2Info] = {
     response.body.split("&|=") match {
       case Array(AccessToken, token, Expires, expiresIn) => Success(OAuth2Info(token, None, Some(expiresIn.toInt)))
       case Array(AccessToken, token) => Success(OAuth2Info(token))
