@@ -1,6 +1,7 @@
 import play.Project._
 import mohiva.sbt.Helper._
 import com.typesafe.sbt.SbtScalariform._
+import xerial.sbt.Sonatype._
 
 //*******************************
 // Play settings
@@ -8,15 +9,15 @@ import com.typesafe.sbt.SbtScalariform._
 
 name := "play-silhouette"
 
-version := "1.0-SNAPSHOT"
+version := "0.9"
 
 libraryDependencies ++= Seq(
-  cache,
   "org.mindrot" % "jbcrypt" % "0.3m",
   "org.mockito" % "mockito-core" % "1.9.5" % "test",
   "com.google.inject" % "guice" % "4.0-beta" % "test",
   "net.codingwell" %% "scala-guice" % "4.0.0-beta" % "test",
-  "com.typesafe.akka" %% "akka-testkit" % "2.2.0" % "test"
+  "com.typesafe.akka" %% "akka-testkit" % "2.2.0" % "test",
+  cache
 )
 
 playScalaSettings
@@ -33,9 +34,11 @@ CoverallsPlugin.coverallsSettings
 // Maven settings
 //*******************************
 
+sonatypeSettings
+
 organization := "com.mohiva"
 
-description := "Authentication library for Play Framework applications that supports several authentication methods, including OAuth, OAuth2, OpenID and password"
+description := "Authentication library for Play Framework applications that supports several authentication methods, including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes"
 
 homepage := Some(url("http://silhouette.mohiva.com/"))
 
@@ -65,14 +68,6 @@ publishArtifact in Test := false
 pomIncludeRepository := { _ => false }
 
 pomExtra := pom
-
-publishTo <<= version { v: String =>
-  val nexus = "https://oss.sonatype.org/"
-  if (v.trim.endsWith("SNAPSHOT"))
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
 
 credentials += Credentials(Path.userHome / ".sbt" / "sonatype.credentials")
 
