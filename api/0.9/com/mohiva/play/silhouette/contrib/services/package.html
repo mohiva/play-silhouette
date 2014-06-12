@@ -1,0 +1,213 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>services - com.mohiva.play.silhouette.contrib.services</title>
+          <meta name="description" content="services - com.mohiva.play.silhouette.contrib.services" />
+          <meta name="keywords" content="services com.mohiva.play.silhouette.contrib.services" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'com.mohiva.play.silhouette.contrib.services.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.contrib">contrib</a></p>
+        <h1>services</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">services</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CachedCookieAuthenticatorextendsAuthenticatorwithProductwithSerializable"></a>
+      <a id="CachedCookieAuthenticator:CachedCookieAuthenticator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CachedCookieAuthenticator.html"><span class="name">CachedCookieAuthenticator</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loginInfo">loginInfo: <a href="../../core/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="lastUsedDate">lastUsedDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="expirationDate">expirationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="cookieIdleTimeout">cookieIdleTimeout: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result"> extends <a href="../../core/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a> with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">An authenticator tracks an authenticated user.</p>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CachedCookieAuthenticatorServiceextendsAuthenticatorService[com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator]"></a>
+      <a id="CachedCookieAuthenticatorService:CachedCookieAuthenticatorService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CachedCookieAuthenticatorService.html"><span class="name">CachedCookieAuthenticatorService</span></a><span class="result"> extends <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a>[<a href="CachedCookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticator">CachedCookieAuthenticator</a>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">A default implementation of the AuthenticatorService that uses a cache to store the authenticators.</p>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.CachedCookieAuthenticatorSettings" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CachedCookieAuthenticatorSettingsextendsProductwithSerializable"></a>
+      <a id="CachedCookieAuthenticatorSettings:CachedCookieAuthenticatorSettings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CachedCookieAuthenticatorSettings.html"><span class="name">CachedCookieAuthenticatorSettings</span></a><span class="params">(<span name="cookieName">cookieName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;id&quot;</span></span>, <span name="cookiePath">cookiePath: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;/&quot;</span></span>, <span name="cookieDomain">cookieDomain: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="secureCookie">secureCookie: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="defval" name="play.api.Play.isProd(play.api.Play.current)">...</span></span>, <span name="httpOnlyCookie">httpOnlyCookie: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">true</span></span>, <span name="cookieIdleTimeout">cookieIdleTimeout: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">30.*(60)</span></span>, <span name="cookieAbsoluteTimeout">cookieAbsoluteTimeout: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="defval" name="scala.Some.apply[Int](12.*(60).*(60))">...</span></span>, <span name="authenticatorExpiry">authenticatorExpiry: <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">12.*(60).*(60)</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.3/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The settings for the cookie authenticator.</p>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.DelegableAuthInfoService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DelegableAuthInfoServiceextendsAuthInfoService"></a>
+      <a id="DelegableAuthInfoService:DelegableAuthInfoService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="DelegableAuthInfoService.html"><span class="name">DelegableAuthInfoService</span></a><span class="result"> extends <a href="../../core/services/AuthInfoService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfoService">AuthInfoService</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">An implementation of the auth info service which delegates the storage of an auth info instance to its
+appropriate DAO.</p>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.GravatarService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GravatarServiceextendsAvatarServicewithLogger"></a>
+      <a id="GravatarService:GravatarService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GravatarService.html"><span class="name">GravatarService</span></a><span class="result"> extends <a href="../../core/services/AvatarService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AvatarService">AvatarService</a> with <a href="../../core/Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Retrieves avatar URLs from the Gravatar service.</p>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.PlayOAuth1Service" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PlayOAuth1ServiceextendsOAuth1Service"></a>
+      <a id="PlayOAuth1Service:PlayOAuth1Service"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="PlayOAuth1Service.html"><span class="name">PlayOAuth1Service</span></a><span class="result"> extends <a href="../../core/providers/OAuth1Service.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Service">OAuth1Service</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The OAuth1 service implementation which wraps Play Framework's OAuth implementation.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.contrib.services.DelegableAuthInfoService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DelegableAuthInfoService"></a>
+      <a id="DelegableAuthInfoService:DelegableAuthInfoService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DelegableAuthInfoService$.html"><span class="name">DelegableAuthInfoService</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.GravatarService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GravatarService"></a>
+      <a id="GravatarService:GravatarService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="GravatarService$.html"><span class="name">GravatarService</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.contrib.services.PlayOAuth1Service" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PlayOAuth1Service"></a>
+      <a id="PlayOAuth1Service:PlayOAuth1Service"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="PlayOAuth1Service$.html"><span class="name">PlayOAuth1Service</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">The companion object.</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../../lib/template.js"></script>
+    </body>
+      </html>
