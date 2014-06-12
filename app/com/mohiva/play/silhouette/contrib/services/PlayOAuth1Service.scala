@@ -21,7 +21,7 @@ package com.mohiva.play.silhouette.contrib.services
 
 import scala.concurrent.Future
 import play.api.libs.oauth._
-import play.api.libs.ws.SignatureCalculator
+import play.api.libs.ws.WSSignatureCalculator
 import play.api.libs.oauth.ConsumerKey
 import play.api.libs.oauth.ServiceInfo
 import play.api.libs.oauth.OAuth
@@ -85,7 +85,7 @@ class PlayOAuth1Service(service: OAuth, settings: OAuth1Settings) extends OAuth1
    * @param oAuthInfo The info/secret pair obtained from a previous call.
    * @return The signature calculator for the OAuth1 request.
    */
-  def sign(oAuthInfo: OAuth1Info): SignatureCalculator = {
+  def sign(oAuthInfo: OAuth1Info): WSSignatureCalculator = {
     OAuthCalculator(service.info.key, RequestToken(oAuthInfo.token, oAuthInfo.secret))
   }
 }

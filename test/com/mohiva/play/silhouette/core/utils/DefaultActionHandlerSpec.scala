@@ -141,7 +141,7 @@ class DefaultActionHandlerSpec extends PlaySpecification {
     expectedContentType: String,
     expectedResponseFragment: String,
     expectedMessage: String,
-    f: RequestHeader => Future[SimpleResult]) = {
+    f: RequestHeader => Future[Result]) = {
     implicit val request = acceptedMediaType match {
       case Some(mediaType) => FakeRequest().withHeaders(ACCEPT -> mediaType)
       case None => FakeRequest()

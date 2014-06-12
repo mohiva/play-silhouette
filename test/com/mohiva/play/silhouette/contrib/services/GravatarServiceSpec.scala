@@ -19,7 +19,7 @@ import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.test.PlaySpecification
 import com.mohiva.play.silhouette.core.utils.HTTPLayer
-import play.api.libs.ws.{ Response, WS }
+import play.api.libs.ws.{ WSRequestHolder, WSResponse }
 import scala.concurrent.Future
 import GravatarService._
 
@@ -34,8 +34,8 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
     }
 
     "return None if HTTP status code isn't 200" in new Context {
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
 
       response.status returns 404
       requestHolder.get() returns Future.successful(response)
@@ -45,8 +45,8 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
     }
 
     "return None if HTTP status code isn't 200" in new Context {
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
 
       response.status returns 404
       requestHolder.get() returns Future.successful(response)
@@ -56,8 +56,8 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
     }
 
     "return None if exception will be thrown during API request" in new Context {
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
 
       response.status throws new RuntimeException("Timeout error")
       requestHolder.get() returns Future.successful(response)
@@ -67,8 +67,8 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
     }
 
     "return Avatar url" in new Context {
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
 
       response.status returns 200
       requestHolder.get() returns Future.successful(response)

@@ -19,7 +19,7 @@ import test.Helper
 import java.util.UUID
 import scala.concurrent.Future
 import play.api.libs.json.Json
-import play.api.libs.ws.{ Response, WS }
+import play.api.libs.ws.{ WSResponse, WSRequestHolder }
 import play.api.test.{ FakeRequest, WithApplication }
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
@@ -37,8 +37,8 @@ class InstagramProviderSpec extends OAuth2ProviderSpec {
     "fail with AuthenticationException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
       response.json returns Json.obj()
       requestHolder.withHeaders(any) returns requestHolder
@@ -54,8 +54,8 @@ class InstagramProviderSpec extends OAuth2ProviderSpec {
     "fail with AuthenticationException if API returns error" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
       response.json returns oAuthInfo thenReturns Helper.loadJson("providers/oauth2/instagram.error.json")
       requestHolder.withHeaders(any) returns requestHolder
@@ -77,8 +77,8 @@ class InstagramProviderSpec extends OAuth2ProviderSpec {
     "fail with AuthenticationException if an unexpected error occurred" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
       response.json returns oAuthInfo thenThrows new RuntimeException("")
       requestHolder.withHeaders(any) returns requestHolder
@@ -96,8 +96,8 @@ class InstagramProviderSpec extends OAuth2ProviderSpec {
     "return the social profile" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
       response.json returns oAuthInfo thenReturns Helper.loadJson("providers/oauth2/instagram.success.json")
       requestHolder.withHeaders(any) returns requestHolder

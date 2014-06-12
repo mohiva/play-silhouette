@@ -19,7 +19,7 @@ import scala.util.Try
 import scala.concurrent.Future
 import play.api.libs.json.JsValue
 import play.api.libs.concurrent.Execution.Implicits._
-import play.api.mvc.{ SimpleResult, RequestHeader }
+import play.api.mvc.{ Result, RequestHeader }
 import com.mohiva.play.silhouette.core.{ LoginInfo, Provider }
 import com.mohiva.play.silhouette.core.services.AuthInfo
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
@@ -42,7 +42,7 @@ trait SocialProvider[A <: AuthInfo] extends Provider with SocialProfileBuilder[A
    * @param request The request header.
    * @return On success either the social profile or a simple result, otherwise a failure.
    */
-  def authenticate()(implicit request: RequestHeader): Future[Either[SimpleResult, Profile]] = {
+  def authenticate()(implicit request: RequestHeader): Future[Either[Result, Profile]] = {
     doAuth().flatMap(_.fold(
       result => Future.successful(Left(result)),
       authInfo => buildProfile(authInfo).map(profile => Right(profile)).recoverWith {
@@ -60,7 +60,7 @@ trait SocialProvider[A <: AuthInfo] extends Provider with SocialProfileBuilder[A
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  protected def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, A]]
+  protected def doAuth()(implicit request: RequestHeader): Future[Either[Result, A]]
 }
 
 /**

@@ -15,7 +15,8 @@
  */
 package com.mohiva.play.silhouette.core.utils
 
-import play.api.libs.ws.WS
+import play.api.libs.ws._
+import play.api.Play.current
 
 /**
  * A trait which provides a mockable implementation for the HTTP layer.
@@ -27,7 +28,7 @@ trait HTTPLayer {
    *
    * @param url the URL to request
    */
-  def url(url: String): WS.WSRequestHolder
+  def url(url: String): WSRequestHolder
 }
 
 /**
@@ -43,5 +44,5 @@ class PlayHTTPLayer extends HTTPLayer {
    *
    * @param url the URL to request
    */
-  def url(url: String): WS.WSRequestHolder = WS.url(url)
+  def url(url: String): WSRequestHolder = WS.url(url)
 }

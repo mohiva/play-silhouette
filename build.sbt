@@ -1,4 +1,5 @@
-import play.Project._
+import play.PlayScala
+import play.core.PlayVersion
 import mohiva.sbt.Helper._
 import com.typesafe.sbt.SbtScalariform._
 import xerial.sbt.Sonatype._
@@ -9,18 +10,18 @@ import xerial.sbt.Sonatype._
 
 name := "play-silhouette"
 
-version := "0.9"
+version := "1.0"
 
 libraryDependencies ++= Seq(
   "org.mindrot" % "jbcrypt" % "0.3m",
   "org.mockito" % "mockito-core" % "1.9.5" % "test",
-  "com.google.inject" % "guice" % "4.0-beta" % "test",
-  "net.codingwell" %% "scala-guice" % "4.0.0-beta" % "test",
-  "com.typesafe.akka" %% "akka-testkit" % "2.2.0" % "test",
-  cache
+  "net.codingwell" %% "scala-guice" % "4.0.0-beta4" % "test",
+  "com.typesafe.akka" %% "akka-testkit" % "2.3.3" % "test",
+  cache,
+  ws
 )
 
-playScalaSettings
+lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 //*******************************
 // Coveralls settings
@@ -81,6 +82,10 @@ parallelExecution in Test := false
 // Compiler settings
 //*******************************
 
+scalaVersion := "2.11.1"
+
+crossScalaVersions := Seq("2.10.4", "2.11.0")
+
 scalacOptions ++= Seq(
   "-deprecation", // Emit warning and location for usages of deprecated APIs.
   "-feature", // Emit warning and location for usages of features that should be imported explicitly.
@@ -119,7 +124,7 @@ apiURL := Some(url(s"http://silhouette.mohiva.com/api/$version/"))
 apiMappings ++= {
   implicit val cp = (fullClasspath in Compile).value
   Map (
-    jarFor("com.typesafe.play", "play") -> url(s"http://www.playframework.com/documentation/${playVersion.value}/api/scala/"),
+    jarFor("com.typesafe.play", "play") -> url(s"http://www.playframework.com/documentation/${PlayVersion.current}/api/scala/"),
     scalaInstance.value.libraryJar      -> url(s"http://www.scala-lang.org/api/${scalaVersion.value}/")
   )
 }

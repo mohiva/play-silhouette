@@ -28,7 +28,7 @@ import play.api.Play.current
 trait BeforeWithinAround extends Around {
   def before: Any
   abstract override def around[T: AsResult](t: => T): Result = super.around {
-    try { before; t }
+    before; t
   }
 }
 

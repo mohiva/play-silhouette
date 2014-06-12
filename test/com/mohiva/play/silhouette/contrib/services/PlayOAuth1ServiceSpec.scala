@@ -18,7 +18,7 @@ package com.mohiva.play.silhouette.contrib.services
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.test.PlaySpecification
-import play.api.libs.ws.SignatureCalculator
+import play.api.libs.ws.WSSignatureCalculator
 import play.api.libs.oauth.{ RequestToken, OAuth }
 import oauth.signpost.exception.{ OAuthException, OAuthMessageSignerException }
 import com.mohiva.play.silhouette.core.providers.{ OAuth1Info, OAuth1Settings }
@@ -74,7 +74,7 @@ class PlayOAuth1ServiceSpec extends PlaySpecification with Mockito {
     "return the signature calculator" in new Context {
       oauth.info returns PlayOAuth1Service.serviceInfo(settings)
 
-      service.sign(info) must beAnInstanceOf[SignatureCalculator]
+      service.sign(info) must beAnInstanceOf[WSSignatureCalculator]
     }
   }
 

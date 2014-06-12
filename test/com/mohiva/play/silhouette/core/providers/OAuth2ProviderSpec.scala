@@ -18,7 +18,7 @@ package com.mohiva.play.silhouette.core.providers
 import java.util.UUID
 import java.net.URLEncoder._
 import scala.concurrent.Future
-import play.api.libs.ws.WS
+import play.api.libs.ws.WSRequestHolder
 import play.api.libs.json.{ JsValue, Json }
 import play.api.test.{ FakeRequest, WithApplication }
 import org.specs2.matcher.ThrownExpectations
@@ -130,7 +130,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
     "submit the proper params to the access token post request" in new WithApplication {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
+      val requestHolder = mock[WSRequestHolder]
       val params = Map(
         ClientID -> Seq(c.oAuthSettings.clientID),
         ClientSecret -> Seq(c.oAuthSettings.clientSecret),

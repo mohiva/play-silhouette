@@ -19,7 +19,7 @@ object DefaultActionHandler extends Controller {
    * @param request The request header.
    * @return A response indicating that access is forbidden.
    */
-  def handleForbidden(implicit request: RequestHeader): Future[SimpleResult] = {
+  def handleForbidden(implicit request: RequestHeader): Future[Result] = {
     produceResponse(Forbidden, "silhouette.not.authorized")
   }
 
@@ -32,7 +32,7 @@ object DefaultActionHandler extends Controller {
    * @param request The request header.
    * @return A response indicating that user authentication is required.
    */
-  def handleUnauthorized(implicit request: RequestHeader): Future[SimpleResult] = {
+  def handleUnauthorized(implicit request: RequestHeader): Future[Result] = {
     produceResponse(Unauthorized, "silhouette.not.authenticated")
   }
 
@@ -44,7 +44,7 @@ object DefaultActionHandler extends Controller {
    * @param msg The user-friendly message.
    * @param request The request header.
    */
-  private def produceResponse[S <: Status](status: S, msg: String)(implicit request: RequestHeader): Future[SimpleResult] = {
+  private def produceResponse[S <: Status](status: S, msg: String)(implicit request: RequestHeader): Future[Result] = {
     val localized = Messages(msg)
     Future.successful(render {
       case Accepts.Html() => status(toHtmlError(localized)).as(HTML)

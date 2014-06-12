@@ -21,8 +21,8 @@ package com.mohiva.play.silhouette.core.providers
 
 import java.net.URLEncoder._
 import java.util.UUID
-import play.api.mvc.{ SimpleResult, RequestHeader, Results }
-import play.api.libs.ws.Response
+import play.api.mvc.{ Result, RequestHeader, Results }
+import play.api.libs.ws.WSResponse
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.concurrent.Execution.Implicits._
@@ -86,7 +86,7 @@ abstract class OAuth2Provider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, sett
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  protected def doAuth()(implicit request: RequestHeader): Future[Either[SimpleResult, OAuth2Info]] = {
+  protected def doAuth()(implicit request: RequestHeader): Future[Either[Result, OAuth2Info]] = {
     logger.debug("[Silhouette][%s] Query string: %s".format(id, request.rawQueryString))
     request.queryString.get(Error).flatMap(_.headOption).map {
       case e @ AccessDenied => new AccessDeniedException(AuthorizationError.format(id, e))
@@ -145,7 +145,7 @@ abstract class OAuth2Provider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, sett
    * @param response The response from the provider.
    * @return The OAuth2 info on success, otherwise an failure.
    */
-  protected def buildInfo(response: Response): Try[OAuth2Info] = {
+  protected def buildInfo(response: WSResponse): Try[OAuth2Info] = {
     response.json.validate[OAuth2Info].asEither.fold(
       error => Failure(new AuthenticationException(InvalidResponseFormat.format(id, error))),
       info => Success(info)

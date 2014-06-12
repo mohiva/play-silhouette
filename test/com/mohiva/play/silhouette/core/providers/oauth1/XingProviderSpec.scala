@@ -17,7 +17,7 @@ package com.mohiva.play.silhouette.core.providers.oauth1
 
 import test.Helper
 import java.util.UUID
-import play.api.libs.ws.{ Response, WS }
+import play.api.libs.ws.{ WSResponse, WSRequestHolder }
 import play.api.test.{ FakeRequest, WithApplication }
 import scala.concurrent.Future
 import com.mohiva.play.silhouette.core.LoginInfo
@@ -37,8 +37,8 @@ class XingProviderSpec extends OAuth1ProviderSpec {
   "The authenticate method" should {
     "fail with AuthenticationException if API returns error" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
       cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(Some(oAuthInfo))
       oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(oAuthInfo)
@@ -59,8 +59,8 @@ class XingProviderSpec extends OAuth1ProviderSpec {
 
     "throw AuthenticationException if an unexpected error occurred" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
       cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(Some(oAuthInfo))
       oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(oAuthInfo)
@@ -78,8 +78,8 @@ class XingProviderSpec extends OAuth1ProviderSpec {
 
     "return the social profile" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
-      val requestHolder = mock[WS.WSRequestHolder]
-      val response = mock[Response]
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
       cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(Some(oAuthInfo))
       oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(oAuthInfo)

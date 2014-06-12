@@ -20,7 +20,7 @@
 package com.mohiva.play.silhouette.core.services
 
 import scala.concurrent.Future
-import play.api.mvc.{ SimpleResult, RequestHeader }
+import play.api.mvc.{ Result, RequestHeader }
 import com.mohiva.play.silhouette.core.{ Identity, Authenticator }
 
 /**
@@ -61,7 +61,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param result The result to manipulate.
    * @return The manipulated result.
    */
-  def send(authenticator: T, result: SimpleResult): SimpleResult = result
+  def send(authenticator: T, result: Result): Result = result
 
   /**
    * Manipulates the response and removes authenticator specific data before sending it to the client.
@@ -69,5 +69,5 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param result The result to manipulate.
    * @return The manipulated result.
    */
-  def discard(result: SimpleResult): SimpleResult = result
+  def discard(result: Result): Result = result
 }
