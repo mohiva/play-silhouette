@@ -16,7 +16,7 @@ The project is named after the fictional crime fighter character [Silhouette](ht
 
 #### Easy to integrate
 
-Silhouette comes with an [Activator template](https://github.com/mohiva/play-silhouette-seed) that gives you a complete sample application which is 100% customizable. You must only select the template `play-silhouette-seed` in your Activator UI. It was never been easier to start your a Silhouette application.
+Silhouette comes with an [Activator template](https://github.com/mohiva/play-silhouette-seed) that gives you a complete sample application which is 100% customizable. You must only select the template `play-silhouette-seed` in your Activator UI. It was never been easier to start a new Silhouette application.
 
 #### Authentication support
 
