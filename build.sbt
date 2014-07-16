@@ -10,7 +10,7 @@ import xerial.sbt.Sonatype._
 
 name := "play-silhouette"
 
-version := "1.0-SNAPSHOT"
+version := "1.1-SNAPSHOT"
 
 libraryDependencies ++= Seq(
   "org.mindrot" % "jbcrypt" % "0.3m",
