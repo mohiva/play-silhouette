@@ -19,6 +19,8 @@
  */
 package com.mohiva.play.silhouette.core
 
+import play.api.libs.json.Json
+
 /**
  * This trait represents an authenticated user.
  */
@@ -41,3 +43,14 @@ trait Identity {
  * @param providerKey A unique key which identifies a user on this provider (userID, email, ...).
  */
 case class LoginInfo(providerID: String, providerKey: String)
+
+/**
+ * The companion object of the login info.
+ */
+object LoginInfo {
+
+  /**
+   * Converts the [[com.mohiva.play.silhouette.core.LoginInfo]] to Json and vice versa.
+   */
+  implicit val jsonFormat = Json.format[LoginInfo]
+}
