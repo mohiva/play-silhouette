@@ -58,5 +58,5 @@ object SecureRandomIDGenerator {
    *
    * On Linux systems SecureRandom uses /dev/random and it can block waiting for sufficient entropy to build up.
    */
-  val random = new SecureRandom()
+  lazy val random = new SecureRandom()
 }
