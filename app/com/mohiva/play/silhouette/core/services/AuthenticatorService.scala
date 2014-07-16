@@ -34,9 +34,10 @@ trait AuthenticatorService[T <: Authenticator] {
    * Creates a new authenticator for the specified identity.
    *
    * @param identity The identity for which the authenticator should be created.
+   * @param request The request header.
    * @return An authenticator.
    */
-  def create[I <: Identity](identity: I): Future[Option[T]]
+  def create[I <: Identity](identity: I)(implicit request: RequestHeader): Future[T]
 
   /**
    * Retrieves the authenticator from request.
@@ -47,27 +48,37 @@ trait AuthenticatorService[T <: Authenticator] {
   def retrieve(implicit request: RequestHeader): Future[Option[T]]
 
   /**
-   * Updates an existing authenticator.
+   * Manipulates the response and pushes authenticator specific data to the client.
    *
-   * @param authenticator The authenticator to update.
-   * @return The updated authenticator or None if the authenticator couldn't be updated.
-   */
-  def update(authenticator: T): Future[Option[T]]
-
-  /**
-   * Manipulates the response and sends authenticator specific data to the client.
+   * This method gets called on authenticator initialization after an identity has logged in.
    *
    * @param authenticator The authenticator instance.
    * @param result The result to manipulate.
+   * @param request The request header.
    * @return The manipulated result.
    */
-  def send(authenticator: T, result: Result): Result = result
+  def init(authenticator: T, result: Future[Result])(implicit request: RequestHeader): Future[Result]
+
+  /**
+   * Updates authenticator specific data and maybe push it to the client.
+   *
+   * This method gets called on every subsequent request if an identity access a `SecuredAction` or
+   * a `UserAwareAction`.
+   *
+   * @param authenticator The authenticator to update.
+   * @param result A function which gets the updated authenticator and returns the original or a manipulated result.
+   * @param request The request header.
+   * @return The original or a manipulated result.
+   */
+  def update(authenticator: T, result: T => Future[Result])(implicit request: RequestHeader): Future[Result]
 
   /**
    * Manipulates the response and removes authenticator specific data before sending it to the client.
    *
+   * @param authenticator The authenticator instance.
    * @param result The result to manipulate.
+   * @param request The request header.
    * @return The manipulated result.
    */
-  def discard(result: Result): Result = result
+  def discard(authenticator: T, result: Future[Result])(implicit request: RequestHeader): Future[Result]
 }

@@ -41,16 +41,16 @@ import scala.concurrent.Future
  * }}}
  *
  * @tparam I The type of the identity.
- * @tparam T The type of the authenticator.
+ * @tparam A The type of the authenticator.
  */
-trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logger {
+trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logger {
 
   /**
    * Gets the environment needed to instantiate a Silhouette controller.
    *
    * @return The environment needed to instantiate a Silhouette controller.
    */
-  protected def env: Environment[I, T]
+  protected def env: Environment[I, A]
 
   /**
    * Implement this to return a result when the user is not authenticated.
@@ -85,24 +85,6 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logg
   protected def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[Result]] = {
     case e: AccessDeniedException => handleNotAuthorized
     case e: AuthenticationException => handleNotAuthenticated
-  }
-
-  /**
-   * Gets the current logged in identity.
-   *
-   * This method can be used from public actions that need to access the current user if there's any.
-   *
-   * @param request The request header.
-   * @return The identity if any.
-   */
-  protected def currentIdentity(implicit request: RequestHeader): Future[Option[I]] = {
-    env.authenticatorService.retrieve.flatMap {
-      case Some(authenticator) => env.identityService.retrieve(authenticator.loginInfo).map(_.map { identity =>
-        env.authenticatorService.update(authenticator)
-        identity
-      })
-      case None => Future.successful(None)
-    }
   }
 
   /**
@@ -153,14 +135,14 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logg
   }
 
   /**
-   * A request that only allows access if a user is authorized.
+   * A request that only allows access if an identity is authorized.
    */
-  case class SecuredRequest[A](identity: I, request: Request[A]) extends WrappedRequest(request)
+  case class SecuredRequest[R](identity: I, authenticator: A, request: Request[R]) extends WrappedRequest(request)
 
   /**
-   * A request that adds the User for the current call.
+   * A request that adds the identity and the authenticator for the current call.
    */
-  case class RequestWithUser[A](identity: Option[I], request: Request[A]) extends WrappedRequest(request)
+  case class RequestWithUser[R](identity: Option[I], authenticator: Option[A], request: Request[R]) extends WrappedRequest(request)
 
   /**
    * A secured action.
@@ -214,21 +196,33 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logg
      * @param block The block of code to invoke.
      * @return The result to send to the client.
      */
-    def invokeBlock[A](request: Request[A], block: SecuredRequest[A] => Future[Result]) = {
+    def invokeBlock[R](request: Request[R], block: SecuredRequest[R] => Future[Result]) = {
       implicit val req = request
-      currentIdentity(request).flatMap {
-        // A user is both authenticated and authorized. The request will be granted.
-        case Some(identity) if authorize.isEmpty || authorize.get.isAuthorized(identity) =>
-          env.eventBus.publish(AuthenticatedEvent(identity, req, request2lang))
-          block(SecuredRequest(identity, request))
-        // A user is authenticated but not authorized. The request will be forbidden.
-        case Some(identity) =>
-          env.eventBus.publish(NotAuthorizedEvent(identity, req, request2lang))
-          handleNotAuthorized(request)
-        // No user is authenticated. The request will ask for authentication.
-        case None =>
+      env.authenticatorService.retrieve.flatMap {
+        // A valid authenticator was found. We try to find the identity for it.
+        case Some(authenticator) if authenticator.isValid =>
+          env.identityService.retrieve(authenticator.loginInfo).flatMap {
+            // A user is both authenticated and authorized. The request will be granted.
+            case Some(identity) if authorize.isEmpty || authorize.get.isAuthorized(identity) =>
+              env.eventBus.publish(AuthenticatedEvent(identity, req, request2lang))
+              env.authenticatorService.update(authenticator, a => block(SecuredRequest(identity, a, request)))
+            // A user is authenticated but not authorized. The request will be forbidden.
+            case Some(identity) =>
+              env.eventBus.publish(NotAuthorizedEvent(identity, req, request2lang))
+              env.authenticatorService.update(authenticator, _ => handleNotAuthorized(request))
+            // No user was found. The request will ask for authentication and the authenticator will be discarded.
+            case None =>
+              env.eventBus.publish(NotAuthenticatedEvent(req, request2lang))
+              env.authenticatorService.discard(authenticator, handleNotAuthenticated(request))
+          }
+        // An invalid authenticator was found. The request will ask for authentication and the authenticator will be discarded.
+        case Some(authenticator) if !authenticator.isValid =>
           env.eventBus.publish(NotAuthenticatedEvent(req, request2lang))
-          handleNotAuthenticated(request).map(env.authenticatorService.discard)
+          env.authenticatorService.discard(authenticator, handleNotAuthenticated(request))
+        // No authenticator was found. The request will ask for authentication.
+        case None =>
+          env.eventBus.publish(NotAuthenticatedEvent(request, request2lang))
+          handleNotAuthenticated(request)
       }
     }
   }
@@ -245,8 +239,21 @@ trait Silhouette[I <: Identity, T <: Authenticator] extends Controller with Logg
      * @param block The block of code to invoke.
      * @return The result to send to the client.
      */
-    def invokeBlock[A](request: Request[A], block: RequestWithUser[A] => Future[Result]) = {
-      currentIdentity(request).flatMap { identity => block(RequestWithUser(identity, request)) }
+    def invokeBlock[R](request: Request[R], block: RequestWithUser[R] => Future[Result]) = {
+      implicit val req = request
+      env.authenticatorService.retrieve.flatMap {
+        // An valid authenticator was found. We try to find the identity for it.
+        case Some(authenticator) if authenticator.isValid =>
+          env.identityService.retrieve(authenticator.loginInfo).flatMap { identity =>
+            env.authenticatorService.update(authenticator, a => block(RequestWithUser(identity, Some(a), request)))
+          }
+        // An invalid authenticator was found. The authenticator will be discarded.
+        case Some(authenticator) if !authenticator.isValid =>
+          env.authenticatorService.discard(authenticator, block(RequestWithUser(None, Some(authenticator), request)))
+        // No authenticator was found.
+        case None =>
+          block(RequestWithUser(None, None, request))
+      }
     }
   }
 }

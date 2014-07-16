@@ -30,4 +30,11 @@ trait Authenticator {
    * @return The linked login info for an identity.
    */
   def loginInfo: LoginInfo
+
+  /**
+   * Checks if the authenticator isn't expired and isn't timed out.
+   *
+   * @return True if the authenticator isn't expired and isn't timed out.
+   */
+  def isValid: Boolean
 }
