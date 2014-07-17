@@ -1,0 +1,191 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>contrib - com.mohiva.play.silhouette.contrib</title>
+          <meta name="description" content="contrib - com.mohiva.play.silhouette.contrib" />
+          <meta name="keywords" content="contrib com.mohiva.play.silhouette.contrib" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../index.html';
+            var hash = 'com.mohiva.play.silhouette.contrib.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a></p>
+        <h1>contrib</h1> <span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.contrib.package" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">contrib</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.contrib.User" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="UserextendsIdentitywithProductwithSerializable"></a>
+      <a id="User:User"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="User.html"><span class="name">User</span></a><span class="params">(<span name="loginInfo">loginInfo: <a href="../core/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="firstName">firstName: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="lastName">lastName: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="fullName">fullName: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="email">email: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="avatarURL">avatarURL: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="../core/Identity.html" class="extype" name="com.mohiva.play.silhouette.core.Identity">Identity</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.contrib.package@UserextendsIdentitywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The default implementation of Identity.</p><div class="fullcomment"><div class="comment cmt"><p>The default implementation of Identity.
+</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info.</p></dd><dt class="param">firstName</dt><dd class="cmt"><p>Maybe the first name of the authenticated user.</p></dd><dt class="param">lastName</dt><dd class="cmt"><p>Maybe the last name of the authenticated user.</p></dd><dt class="param">fullName</dt><dd class="cmt"><p>Maybe the full name of the authenticated user.</p></dd><dt class="param">email</dt><dd class="cmt"><p>Maybe the email of the authenticated provider.</p></dd><dt class="param">avatarURL</dt><dd class="cmt"><p>Maybe the avatar URL of the authenticated provider.
+</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.contrib.authenticators" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="authenticators"></a>
+      <a id="authenticators:authenticators"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="authenticators/package.html"><span class="name">authenticators</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.contrib.package@authenticators" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.mohiva.play.silhouette.contrib.daos" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="daos"></a>
+      <a id="daos:daos"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="daos/package.html"><span class="name">daos</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.contrib.package@daos" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.mohiva.play.silhouette.contrib.services" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="services"></a>
+      <a id="services:services"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="services/package.html"><span class="name">services</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.contrib.package@services" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.mohiva.play.silhouette.contrib.utils" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="utils"></a>
+      <a id="utils:utils"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="utils/package.html"><span class="name">utils</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.contrib.package@utils" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

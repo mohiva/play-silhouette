@@ -1,0 +1,558 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>providers - com.mohiva.play.silhouette.core.providers</title>
+          <meta name="description" content="providers - com.mohiva.play.silhouette.core.providers" />
+          <meta name="keywords" content="providers com.mohiva.play.silhouette.core.providers" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'com.mohiva.play.silhouette.core.providers.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.core">core</a></p>
+        <h1>providers</h1> <span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">providers</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Contains <a href="../Provider.html" class="extype" name="com.mohiva.play.silhouette.core.Provider">com.mohiva.play.silhouette.core.Provider</a> implementations that provide authentication
+for different schemes and services.
+</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="com.mohiva.play.silhouette.core.providers"><span>providers</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="CommonSocialProfile[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsSocialProfile[A]withProductwithSerializable"></a>
+      <a id="CommonSocialProfile[A&lt;:AuthInfo]:CommonSocialProfile[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CommonSocialProfile.html"><span class="name">CommonSocialProfile</span></a><span class="tparams">[<span name="A">A &lt;: <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile.A">A</span></span>, <span name="firstName">firstName: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="lastName">lastName: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="fullName">fullName: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="email">email: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="avatarURL">avatarURL: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <a href="SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfile">SocialProfile</a>[<span class="extype" name="com.mohiva.play.silhouette.core.providers.CommonSocialProfile.A">A</span>] with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@CommonSocialProfile[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsSocialProfile[A]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The social profile contains all the data returned from the social providers after authentication.</p><div class="fullcomment"><div class="comment cmt"><p>The social profile contains all the data returned from the social providers after authentication.</p><p>Not every provider returns all the data defined in this class. This is also the representation of the
+most common profile information provided by the social providers. The data can be used to create a new
+identity for the first authentication(which is also the registration) or to update an existing identity
+on every subsequent authentication.
+</p></div><dl class="paramcmts block"><dt class="tparam">A</dt><dd class="cmt"><p>The auth info type.
+</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The current auth info returned from the provider.</p></dd><dt class="param">firstName</dt><dd class="cmt"><p>Maybe the first name of the authenticated user.</p></dd><dt class="param">lastName</dt><dd class="cmt"><p>Maybe the last name of the authenticated user.</p></dd><dt class="param">fullName</dt><dd class="cmt"><p>Maybe the full name of the authenticated user.</p></dd><dt class="param">email</dt><dd class="cmt"><p>Maybe the email of the authenticated provider.</p></dd><dt class="param">avatarURL</dt><dd class="cmt"><p>Maybe the avatar URL of the authenticated provider.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.CommonSocialProfileBuilder" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="CommonSocialProfileBuilder[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsAnyRef"></a>
+      <a id="CommonSocialProfileBuilder[A&lt;:AuthInfo]:CommonSocialProfileBuilder[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="CommonSocialProfileBuilder.html"><span class="name">CommonSocialProfileBuilder</span></a><span class="tparams">[<span name="A">A &lt;: <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@CommonSocialProfileBuilder[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The profile builder for the common social profile.</p><div class="fullcomment"><div class="comment cmt"><p>The profile builder for the common social profile.
+</p></div><dl class="paramcmts block"><dt class="tparam">A</dt><dd class="cmt"><p>The auth info type.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.Credentials" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="CredentialsextendsProductwithSerializable"></a>
+      <a id="Credentials:Credentials"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Credentials.html"><span class="name">Credentials</span></a><span class="params">(<span name="identifier">identifier: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="password">password: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@CredentialsextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The credentials to authenticate with.</p><div class="fullcomment"><div class="comment cmt"><p>The credentials to authenticate with.
+</p></div><dl class="paramcmts block"><dt class="param">identifier</dt><dd class="cmt"><p>The unique identifier to authenticate with.</p></dd><dt class="param">password</dt><dd class="cmt"><p>The password to authenticate with.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.CredentialsProvider" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="CredentialsProviderextendsProvider"></a>
+      <a id="CredentialsProvider:CredentialsProvider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CredentialsProvider.html"><span class="name">CredentialsProvider</span></a><span class="result"> extends <a href="../Provider.html" class="extype" name="com.mohiva.play.silhouette.core.Provider">Provider</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@CredentialsProviderextendsProvider" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A provider for authenticating with credentials.</p><div class="fullcomment"><div class="comment cmt"><p>A provider for authenticating with credentials.</p><p>The provider supports the change of password hashing algorithms on the fly. Sometimes it may be possible to change
+the hashing algorithm used by the application. But the hashes stored in the backing store can't be converted back
+into plain text passwords, to hash them again with the new algorithm. So if a user successfully authenticates after
+the application has changed the hashing algorithm, the provider hashes the entered password again with the new
+algorithm and stores the auth info in the backing store.
+</p></div></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth1Info" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="OAuth1InfoextendsAuthInfowithProductwithSerializable"></a>
+      <a id="OAuth1Info:OAuth1Info"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="OAuth1Info.html"><span class="name">OAuth1Info</span></a><span class="params">(<span name="token">token: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="secret">secret: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@OAuth1InfoextendsAuthInfowithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The OAuth1 details.</p><div class="fullcomment"><div class="comment cmt"><p>The OAuth1 details.
+</p></div><dl class="paramcmts block"><dt class="param">token</dt><dd class="cmt"><p>The consumer token.</p></dd><dt class="param">secret</dt><dd class="cmt"><p>The consumer secret.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth1Provider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="OAuth1ProviderextendsSocialProvider[com.mohiva.play.silhouette.core.providers.OAuth1Info]withLogger"></a>
+      <a id="OAuth1Provider:OAuth1Provider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="OAuth1Provider.html"><span class="name">OAuth1Provider</span></a><span class="result"> extends <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider">SocialProvider</a>[<a href="OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Info">OAuth1Info</a>] with <a href="../Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@OAuth1ProviderextendsSocialProvider[com.mohiva.play.silhouette.core.providers.OAuth1Info]withLogger" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Base class for all OAuth1 providers.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth1Service" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="OAuth1ServiceextendsAnyRef"></a>
+      <a id="OAuth1Service:OAuth1Service"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="OAuth1Service.html"><span class="name">OAuth1Service</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@OAuth1ServiceextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The OAuth1 service trait.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth1Settings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="OAuth1SettingsextendsProductwithSerializable"></a>
+      <a id="OAuth1Settings:OAuth1Settings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="OAuth1Settings.html"><span class="name">OAuth1Settings</span></a><span class="params">(<span name="requestTokenURL">requestTokenURL: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="accessTokenURL">accessTokenURL: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="authorizationURL">authorizationURL: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callbackURL">callbackURL: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="consumerKey">consumerKey: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="consumerSecret">consumerSecret: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@OAuth1SettingsextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The OAuth1 settings.</p><div class="fullcomment"><div class="comment cmt"><p>The OAuth1 settings.
+</p></div><dl class="paramcmts block"><dt class="param">requestTokenURL</dt><dd class="cmt"><p>The request token URL.</p></dd><dt class="param">accessTokenURL</dt><dd class="cmt"><p>The access token URL.</p></dd><dt class="param">authorizationURL</dt><dd class="cmt"><p>The authorization URL.</p></dd><dt class="param">callbackURL</dt><dd class="cmt"><p>The callback URL.</p></dd><dt class="param">consumerKey</dt><dd class="cmt"><p>The consumer ID.</p></dd><dt class="param">consumerSecret</dt><dd class="cmt"><p>The consumer secret.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Info" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="OAuth2InfoextendsAuthInfowithProductwithSerializable"></a>
+      <a id="OAuth2Info:OAuth2Info"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="OAuth2Info.html"><span class="name">OAuth2Info</span></a><span class="params">(<span name="accessToken">accessToken: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="tokenType">tokenType: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="expiresIn">expiresIn: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="symbol">None</span></span>, <span name="refreshToken">refreshToken: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@OAuth2InfoextendsAuthInfowithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The Oauth2 details.</p><div class="fullcomment"><div class="comment cmt"><p>The Oauth2 details.
+</p></div><dl class="paramcmts block"><dt class="param">accessToken</dt><dd class="cmt"><p>The access token.</p></dd><dt class="param">tokenType</dt><dd class="cmt"><p>The token type.</p></dd><dt class="param">expiresIn</dt><dd class="cmt"><p>The number of seconds before the token expires.</p></dd><dt class="param">refreshToken</dt><dd class="cmt"><p>The refresh token.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="OAuth2ProviderextendsSocialProvider[com.mohiva.play.silhouette.core.providers.OAuth2Info]withLogger"></a>
+      <a id="OAuth2Provider:OAuth2Provider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="OAuth2Provider.html"><span class="name">OAuth2Provider</span></a><span class="result"> extends <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider">SocialProvider</a>[<a href="OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Info">OAuth2Info</a>] with <a href="../Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@OAuth2ProviderextendsSocialProvider[com.mohiva.play.silhouette.core.providers.OAuth2Info]withLogger" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Base class for all OAuth2 providers.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Settings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="OAuth2SettingsextendsProductwithSerializable"></a>
+      <a id="OAuth2Settings:OAuth2Settings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="OAuth2Settings.html"><span class="name">OAuth2Settings</span></a><span class="params">(<span name="authorizationURL">authorizationURL: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="accessTokenURL">accessTokenURL: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="redirectURL">redirectURL: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="clientID">clientID: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="clientSecret">clientSecret: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="scope">scope: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="authorizationParams">authorizationParams: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Map()</span></span>, <span name="accessTokenParams">accessTokenParams: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Map()</span></span>, <span name="customProperties">customProperties: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Map()</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@OAuth2SettingsextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The OAuth2 settings.</p><div class="fullcomment"><div class="comment cmt"><p>The OAuth2 settings.
+</p></div><dl class="paramcmts block"><dt class="param">authorizationURL</dt><dd class="cmt"><p>The authorization URL.</p></dd><dt class="param">accessTokenURL</dt><dd class="cmt"><p>The access token URL.</p></dd><dt class="param">redirectURL</dt><dd class="cmt"><p>The redirect URL.</p></dd><dt class="param">clientID</dt><dd class="cmt"><p>The client ID.</p></dd><dt class="param">clientSecret</dt><dd class="cmt"><p>The client secret.</p></dd><dt class="param">scope</dt><dd class="cmt"><p>The scope.</p></dd><dt class="param">authorizationParams</dt><dd class="cmt"><p>Additional params to add to the authorization request.</p></dd><dt class="param">accessTokenParams</dt><dd class="cmt"><p>Additional params to add to the access token request.</p></dd><dt class="param">customProperties</dt><dd class="cmt"><p>A map of custom properties for the different providers.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.PasswordInfo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="PasswordInfoextendsAuthInfowithProductwithSerializable"></a>
+      <a id="PasswordInfo:PasswordInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="PasswordInfo.html"><span class="name">PasswordInfo</span></a><span class="params">(<span name="hasher">hasher: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="password">password: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="salt">salt: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@PasswordInfoextendsAuthInfowithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The password details.</p><div class="fullcomment"><div class="comment cmt"><p>The password details.
+</p></div><dl class="paramcmts block"><dt class="param">hasher</dt><dd class="cmt"><p>The ID of the hasher used to hash this password.</p></dd><dt class="param">password</dt><dd class="cmt"><p>The hashed password.</p></dd><dt class="param">salt</dt><dd class="cmt"><p>The optional salt used when hashing.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.SocialProfile" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="SocialProfile[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsAnyRef"></a>
+      <a id="SocialProfile[A&lt;:AuthInfo]:SocialProfile[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SocialProfile.html"><span class="name">SocialProfile</span></a><span class="tparams">[<span name="A">A &lt;: <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@SocialProfile[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The social profile contains all the data returned from the social providers after authentication.</p><div class="fullcomment"><div class="comment cmt"><p>The social profile contains all the data returned from the social providers after authentication.
+</p></div><dl class="paramcmts block"><dt class="tparam">A</dt><dd class="cmt"><p>The type of the auth info.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.SocialProfileBuilder" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="SocialProfileBuilder[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsAnyRef"></a>
+      <a id="SocialProfileBuilder[A&lt;:AuthInfo]:SocialProfileBuilder[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SocialProfileBuilder.html"><span class="name">SocialProfileBuilder</span></a><span class="tparams">[<span name="A">A &lt;: <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@SocialProfileBuilder[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Builds the social profile.</p><div class="fullcomment"><div class="comment cmt"><p>Builds the social profile.
+</p></div><dl class="paramcmts block"><dt class="tparam">A</dt><dd class="cmt"><p>The type of the auth info.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.SocialProvider" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="SocialProvider[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsProviderwithSocialProfileBuilder[A]"></a>
+      <a id="SocialProvider[A&lt;:AuthInfo]:SocialProvider[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SocialProvider.html"><span class="name">SocialProvider</span></a><span class="tparams">[<span name="A">A &lt;: <a href="../services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <a href="../Provider.html" class="extype" name="com.mohiva.play.silhouette.core.Provider">Provider</a> with <a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProfileBuilder">SocialProfileBuilder</a>[<span class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@SocialProvider[A&lt;:com.mohiva.play.silhouette.core.services.AuthInfo]extendsProviderwithSocialProfileBuilder[A]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The base interface for all social providers.</p><div class="fullcomment"><div class="comment cmt"><p>The base interface for all social providers.
+</p></div><dl class="paramcmts block"><dt class="tparam">A</dt><dd class="cmt"><p>The type of the auth info.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.TryAsFuture" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="TryAsFuture[T]extendsAnyVal"></a>
+      <a id="TryAsFuture[T]:TryAsFuture[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$TryAsFuture.html"><span class="name">TryAsFuture</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@TryAsFuture[T]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Provides an <code>asFuture</code> method on a <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.util.Try" class="extype" target="_top">scala.util.Try</a> which maps a <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.util.Try" class="extype" target="_top">scala.util.Try</a> to
+a <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">scala.concurrent.Future</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Provides an <code>asFuture</code> method on a <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.util.Try" class="extype" target="_top">scala.util.Try</a> which maps a <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.util.Try" class="extype" target="_top">scala.util.Try</a> to
+a <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">scala.concurrent.Future</a>.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>http://stackoverflow.com/questions/17907772/scala-chaining-futures-try-blocks
+</p></span><span class="cmt"><p>https://groups.google.com/forum/#!topic/scala-user/Mu4_lZAWxz0/discussion</p></span></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.core.providers.CredentialsProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CredentialsProvider"></a>
+      <a id="CredentialsProvider:CredentialsProvider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CredentialsProvider$.html"><span class="name">CredentialsProvider</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@CredentialsProvider" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth1Provider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OAuth1Provider"></a>
+      <a id="OAuth1Provider:OAuth1Provider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="OAuth1Provider$.html"><span class="name">OAuth1Provider</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@OAuth1Provider" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The OAuth1Provider companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Info" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OAuth2Info"></a>
+      <a id="OAuth2Info:OAuth2Info"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="OAuth2Info$.html"><span class="name">OAuth2Info</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@OAuth2Info" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The Oauth2 companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OAuth2Provider"></a>
+      <a id="OAuth2Provider:OAuth2Provider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="OAuth2Provider$.html"><span class="name">OAuth2Provider</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@OAuth2Provider" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The OAuth2Provider companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.SocialProfileBuilder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SocialProfileBuilder"></a>
+      <a id="SocialProfileBuilder:SocialProfileBuilder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SocialProfileBuilder$.html"><span class="name">SocialProfileBuilder</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@SocialProfileBuilder" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.core.providers.oauth1" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="oauth1"></a>
+      <a id="oauth1:oauth1"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="oauth1/package.html"><span class="name">oauth1</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@oauth1" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.mohiva.play.silhouette.core.providers.oauth2" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="oauth2"></a>
+      <a id="oauth2:oauth2"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="oauth2/package.html"><span class="name">oauth2</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@oauth2" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

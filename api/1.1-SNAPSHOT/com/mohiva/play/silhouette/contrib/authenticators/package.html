@@ -1,0 +1,250 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>authenticators - com.mohiva.play.silhouette.contrib.authenticators</title>
+          <meta name="description" content="authenticators - com.mohiva.play.silhouette.contrib.authenticators" />
+          <meta name="keywords" content="authenticators com.mohiva.play.silhouette.contrib.authenticators" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'com.mohiva.play.silhouette.contrib.authenticators.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.contrib">contrib</a></p>
+        <h1>authenticators</h1> <span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.contrib.authenticators.package" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">authenticators</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.contrib.authenticators.CookieAuthenticator" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="CookieAuthenticatorextendsAuthenticatorwithProductwithSerializable"></a>
+      <a id="CookieAuthenticator:CookieAuthenticator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CookieAuthenticator.html"><span class="name">CookieAuthenticator</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loginInfo">loginInfo: <a href="../../core/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="lastUsedDate">lastUsedDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="expirationDate">expirationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="idleTimeout">idleTimeout: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result"> extends <a href="../../core/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.contrib.authenticators.package@CookieAuthenticatorextendsAuthenticatorwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An authenticator that uses a cookie based approach.</p><div class="fullcomment"><div class="comment cmt"><p>An authenticator that uses a cookie based approach. It works by storing an ID in a cookie to track
+the authenticated user and a server side backing store that maps the ID to an authenticator instance.</p><p>Note: If deploying to multiple nodes the backing store will need to synchronize.
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The authenticator ID.</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The user ID.</p></dd><dt class="param">lastUsedDate</dt><dd class="cmt"><p>The last used timestamp.</p></dd><dt class="param">expirationDate</dt><dd class="cmt"><p>The expiration time.</p></dd><dt class="param">idleTimeout</dt><dd class="cmt"><p>The time in seconds an authenticator can be idle before it timed out.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.contrib.authenticators.CookieAuthenticatorService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CookieAuthenticatorServiceextendsAuthenticatorService[com.mohiva.play.silhouette.contrib.authenticators.CookieAuthenticator]withLogger"></a>
+      <a id="CookieAuthenticatorService:CookieAuthenticatorService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CookieAuthenticatorService.html"><span class="name">CookieAuthenticatorService</span></a><span class="result"> extends <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a>[<a href="CookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.contrib.authenticators.CookieAuthenticator">CookieAuthenticator</a>] with <a href="../../core/Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.contrib.authenticators.package@CookieAuthenticatorServiceextendsAuthenticatorService[com.mohiva.play.silhouette.contrib.authenticators.CookieAuthenticator]withLogger" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The service that handles the cookie authenticator.</p>
+    </li><li name="com.mohiva.play.silhouette.contrib.authenticators.CookieAuthenticatorSettings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="CookieAuthenticatorSettingsextendsProductwithSerializable"></a>
+      <a id="CookieAuthenticatorSettings:CookieAuthenticatorSettings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CookieAuthenticatorSettings.html"><span class="name">CookieAuthenticatorSettings</span></a><span class="params">(<span name="cookieName">cookieName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;id&quot;</span></span>, <span name="cookiePath">cookiePath: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;/&quot;</span></span>, <span name="cookieDomain">cookieDomain: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="secureCookie">secureCookie: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">Play.isProd</span></span>, <span name="httpOnlyCookie">httpOnlyCookie: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">true</span></span>, <span name="cookieMaxAge">cookieMaxAge: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="symbol">Some(12 * 60 * 60)</span></span>, <span name="authenticatorIdleTimeout">authenticatorIdleTimeout: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">30 * 60</span></span>, <span name="authenticatorExpiry">authenticatorExpiry: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">12 * 60 * 60</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.contrib.authenticators.package@CookieAuthenticatorSettingsextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The settings for the cookie authenticator.</p><div class="fullcomment"><div class="comment cmt"><p>The settings for the cookie authenticator.
+</p></div><dl class="paramcmts block"><dt class="param">cookieName</dt><dd class="cmt"><p>The cookie name.</p></dd><dt class="param">cookiePath</dt><dd class="cmt"><p>The cookie path.</p></dd><dt class="param">cookieDomain</dt><dd class="cmt"><p>The cookie domain.</p></dd><dt class="param">secureCookie</dt><dd class="cmt"><p>Whether this cookie is secured, sent only for HTTPS requests.</p></dd><dt class="param">httpOnlyCookie</dt><dd class="cmt"><p>Whether this cookie is HTTP only, i.e. not accessible from client-side JavaScript code.</p></dd><dt class="param">cookieMaxAge</dt><dd class="cmt"><p>The cookie expiration date in seconds, <code>None</code> for a transient cookie. Defaults to 12 hours.</p></dd><dt class="param">authenticatorIdleTimeout</dt><dd class="cmt"><p>The time in seconds an authenticator can be idle before it timed out. Defaults to 30 minutes.</p></dd><dt class="param">authenticatorExpiry</dt><dd class="cmt"><p>The expiry of the authenticator in minutes. Defaults to 12 hours.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.contrib.authenticators.HeaderAuthenticator" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="HeaderAuthenticatorextendsAuthenticatorwithProductwithSerializable"></a>
+      <a id="HeaderAuthenticator:HeaderAuthenticator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="HeaderAuthenticator.html"><span class="name">HeaderAuthenticator</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loginInfo">loginInfo: <a href="../../core/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="lastUsedDate">lastUsedDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="expirationDate">expirationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="idleTimeout">idleTimeout: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result"> extends <a href="../../core/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.contrib.authenticators.package@HeaderAuthenticatorextendsAuthenticatorwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An authenticator that uses a header based approach.</p><div class="fullcomment"><div class="comment cmt"><p>An authenticator that uses a header based approach. It works by using a user defined header to track
+the authenticated user and a server side backing store that maps the header to an authenticator instance.</p><p>Note: If deploying to multiple nodes the backing store will need to synchronize.
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The authenticator ID.</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The user ID.</p></dd><dt class="param">lastUsedDate</dt><dd class="cmt"><p>The last used timestamp.</p></dd><dt class="param">expirationDate</dt><dd class="cmt"><p>The expiration time.</p></dd><dt class="param">idleTimeout</dt><dd class="cmt"><p>The time in seconds an authenticator can be idle before it timed out.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.contrib.authenticators.HeaderAuthenticatorService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HeaderAuthenticatorServiceextendsAuthenticatorService[com.mohiva.play.silhouette.contrib.authenticators.HeaderAuthenticator]withLogger"></a>
+      <a id="HeaderAuthenticatorService:HeaderAuthenticatorService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="HeaderAuthenticatorService.html"><span class="name">HeaderAuthenticatorService</span></a><span class="result"> extends <a href="../../core/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.core.services.AuthenticatorService">AuthenticatorService</a>[<a href="HeaderAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.contrib.authenticators.HeaderAuthenticator">HeaderAuthenticator</a>] with <a href="../../core/Logger.html" class="extype" name="com.mohiva.play.silhouette.core.Logger">Logger</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.contrib.authenticators.package@HeaderAuthenticatorServiceextendsAuthenticatorService[com.mohiva.play.silhouette.contrib.authenticators.HeaderAuthenticator]withLogger" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The service that handles the header authenticator.</p>
+    </li><li name="com.mohiva.play.silhouette.contrib.authenticators.HeaderAuthenticatorSettings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="HeaderAuthenticatorSettingsextendsProductwithSerializable"></a>
+      <a id="HeaderAuthenticatorSettings:HeaderAuthenticatorSettings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="HeaderAuthenticatorSettings.html"><span class="name">HeaderAuthenticatorSettings</span></a><span class="params">(<span name="headerName">headerName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;X-Auth-Token&quot;</span></span>, <span name="authenticatorIdleTimeout">authenticatorIdleTimeout: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">30 * 60</span></span>, <span name="authenticatorExpiry">authenticatorExpiry: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">12 * 60 * 60</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.contrib.authenticators.package@HeaderAuthenticatorSettingsextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The settings for the header authenticator.</p><div class="fullcomment"><div class="comment cmt"><p>The settings for the header authenticator.
+</p></div><dl class="paramcmts block"><dt class="param">headerName</dt><dd class="cmt"><p>The header name.</p></dd><dt class="param">authenticatorIdleTimeout</dt><dd class="cmt"><p>The time in seconds an authenticator can be idle before it timed out. Defaults to 30 minutes.</p></dd><dt class="param">authenticatorExpiry</dt><dd class="cmt"><p>The expiry of the authenticator in minutes. Defaults to 12 hours.
+</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.contrib.authenticators.CookieAuthenticatorService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CookieAuthenticatorService"></a>
+      <a id="CookieAuthenticatorService:CookieAuthenticatorService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CookieAuthenticatorService$.html"><span class="name">CookieAuthenticatorService</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.contrib.authenticators.package@CookieAuthenticatorService" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object of the authenticator service.</p>
+    </li><li name="com.mohiva.play.silhouette.contrib.authenticators.HeaderAuthenticatorService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HeaderAuthenticatorService"></a>
+      <a id="HeaderAuthenticatorService:HeaderAuthenticatorService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="HeaderAuthenticatorService$.html"><span class="name">HeaderAuthenticatorService</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.contrib.authenticators.package@HeaderAuthenticatorService" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object of the authenticator service.</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
