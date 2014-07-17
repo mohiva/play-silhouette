@@ -65,7 +65,7 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
   api_dir="$target_dir/api/$version"
   rm -Rf "$api_dir"
   mkdir -p "$api_dir"
-  cp -Rf $source_dir/target/scala-2.10/api/* "$api_dir"
+  cp -Rf $source_dir/target/scala-2.11/api/* "$api_dir"
   original_commit=`git rev-parse HEAD`
   git add --all .
   git commit -m "Update API documentation from Travis build $TRAVIS_BUILD_NUMBER" || echo "No change to API documentation."
