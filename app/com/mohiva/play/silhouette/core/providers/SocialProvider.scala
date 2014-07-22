@@ -48,8 +48,22 @@ trait SocialProvider[A <: AuthInfo] extends Provider with SocialProfileBuilder[A
       authInfo => buildProfile(authInfo).map(profile => Right(profile)).recoverWith {
         case e if !e.isInstanceOf[AuthenticationException] =>
           Future.failed(new AuthenticationException(UnspecifiedProfileError.format(id), e))
-      }
-    ))
+      }))
+  }
+
+  /**
+   * Authenticates the user from authInfo and fills the profile information.
+   *
+   * Returns either a SocialProfile if all went OK
+   *
+   * @param authInfo The OAuth informations.
+   * @return On success return the social profile, otherwise a failure.
+   */
+  def authenticate(authInfo: A): Future[Profile] = {
+    buildProfile(authInfo).recoverWith {
+      case e if !e.isInstanceOf[AuthenticationException] =>
+        Future.failed(new AuthenticationException(UnspecifiedProfileError.format(id), e))
+    }
   }
 
   /**
