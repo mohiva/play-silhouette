@@ -89,7 +89,7 @@ class CookieAuthenticatorService(
     extends AuthenticatorService[CookieAuthenticator] with Logger {
 
   /**
-   * Creates a new authenticator ID for the specified identity.
+   * Creates a new authenticator for the specified identity.
    *
    * @param identity The identity for which the ID should be created.
    * @param request The request header.

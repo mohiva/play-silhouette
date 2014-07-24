@@ -92,15 +92,15 @@ class HeaderAuthenticatorSpec extends PlaySpecification with Mockito {
       implicit val request = FakeRequest()
       val sixHours = 6 * 60 * 60
       val now = new DateTime
-      val expiredService = new HeaderAuthenticatorService(settings.copy(authenticatorExpiry = sixHours), cacheLayer, idGenerator, clock)
 
+      settings.authenticatorExpiry returns sixHours
       idGenerator.generate returns Future.successful("test-id")
       clock.now returns now
       cacheLayer.set[Authenticator](any, any, any) answers { (a, m) =>
         Future.successful(Some(a.asInstanceOf[Array[Any]](1).asInstanceOf[Authenticator]))
       }
 
-      await(expiredService.create(identity)).expirationDate must be equalTo now.plusSeconds(sixHours)
+      await(service.create(identity)).expirationDate must be equalTo now.plusSeconds(sixHours)
     }
   }
 
@@ -165,6 +165,9 @@ class HeaderAuthenticatorSpec extends PlaySpecification with Mockito {
         Future.successful(Some(a.asInstanceOf[Array[Any]](1).asInstanceOf[Authenticator]))
       }
 
+      // In this case the result must be 0 because the cache returns the updated authenticator
+      // and this returned authenticator doesn't equal the passed authenticator because the
+      // lastUsedDate was updated
       implicit val request = FakeRequest()
       val result = service.update(authenticator, a => Future.successful(Results.Status(if (a == authenticator) 1 else 0)))
 
@@ -174,6 +177,8 @@ class HeaderAuthenticatorSpec extends PlaySpecification with Mockito {
     "return None if something went wrong" in new Context {
       cacheLayer.set[Authenticator](any, any, any) returns Future.successful(None)
 
+      // In this case the result must be 1 because the cache returns None and so the update
+      // method returns the original passed authenticator
       implicit val request = FakeRequest()
       val result = service.update(authenticator, a => Future.successful(Results.Status(if (a == authenticator) 1 else 0)))
 
@@ -213,11 +218,11 @@ class HeaderAuthenticatorSpec extends PlaySpecification with Mockito {
     /**
      * The settings.
      */
-    lazy val settings = HeaderAuthenticatorSettings(
+    lazy val settings = spy(HeaderAuthenticatorSettings(
       headerName = "X-Auth-Token",
       authenticatorIdleTimeout = 30 * 60,
       authenticatorExpiry = 12 * 60 * 60
-    )
+    ))
 
     /**
      * The cache service instance to test.

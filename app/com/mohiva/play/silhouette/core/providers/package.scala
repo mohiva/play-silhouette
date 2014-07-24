@@ -25,8 +25,7 @@ import scala.concurrent.Future
 package object providers {
 
   /**
-   * Provides an `asFuture` method on a [[scala.util.Try]] which maps a [[scala.util.Try]] to
-   * a [[scala.concurrent.Future]].
+   * Provides an `asFuture` method on a `Try` which maps a `Try` to a `Future`.
    *
    * @see https://groups.google.com/forum/#!topic/scala-user/Mu4_lZAWxz0/discussion
    * @see http://stackoverflow.com/questions/17907772/scala-chaining-futures-try-blocks
