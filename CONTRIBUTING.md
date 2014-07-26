@@ -29,4 +29,4 @@ After submitting your pull request, please [watch the result](https://travis-ci.
 License and Copyright
 ---------------------
 
-By submitting work via pull requests, issues, wiki, or any other means, contributors indicate their agreement to publish their work under this project's license and also attest that they are the authors of the work and cede its copyright to Mohiva Organisation, unless the contribution clearly states a different copyright notice (e.g., it contains original work by a third party).
+By submitting work via pull requests, issues, wiki, or any other means, contributors indicate their agreement to publish their work under this project's license and also attest that they are the authors of the work and grant a copyright license to the Mohiva Organisation, unless the contribution clearly states a different copyright notice (e.g., it contains original work by a third party).
