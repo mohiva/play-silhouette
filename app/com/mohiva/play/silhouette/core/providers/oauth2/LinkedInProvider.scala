@@ -24,7 +24,7 @@ import play.api.libs.json.JsValue
 import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
-import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.core.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import LinkedInProvider._
 
@@ -72,8 +72,8 @@ abstract class LinkedInProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, se
           val status = (json \ "status").asOpt[Int]
           val timestamp = (json \ "timestamp").asOpt[Long]
 
-          Future.failed(new AuthenticationException(SpecifiedProfileError.format(id, error, message, requestId, status, timestamp)))
-        case _ => parseProfile(parser(authInfo), json).asFuture
+          Future.failed(new ProfileRetrievalException(SpecifiedProfileError.format(id, error, message, requestId, status, timestamp)))
+        case _ => parseProfile(parser, json).asFuture
       }
     }
   }
@@ -83,7 +83,7 @@ abstract class LinkedInProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, se
    *
    * @return The parser which parses the most common profile supported by Silhouette.
    */
-  protected def parser: Parser = (authInfo: OAuth2Info) => (json: JsValue) => {
+  protected def parser: Parser = (json: JsValue) => {
     val userID = (json \ "id").as[String]
     val firstName = (json \ "firstName").asOpt[String]
     val lastName = (json \ "lastName").asOpt[String]
@@ -93,7 +93,6 @@ abstract class LinkedInProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, se
 
     CommonSocialProfile(
       loginInfo = LoginInfo(id, userID),
-      authInfo = authInfo,
       firstName = firstName,
       lastName = lastName,
       fullName = fullName,

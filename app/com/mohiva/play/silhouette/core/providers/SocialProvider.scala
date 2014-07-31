@@ -22,7 +22,7 @@ import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ Result, RequestHeader }
 import com.mohiva.play.silhouette.core.{ LoginInfo, Provider }
 import com.mohiva.play.silhouette.core.services.AuthInfo
-import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.core.exceptions.ProfileRetrievalException
 import SocialProfileBuilder._
 
 /**
@@ -33,42 +33,53 @@ import SocialProfileBuilder._
 trait SocialProvider[A <: AuthInfo] extends Provider with SocialProfileBuilder[A] {
 
   /**
-   * Authenticates the user and fills the profile information.
+   * Authenticates the user and returns the auth information.
    *
-   * Returns either a SocialProfile if all went OK or a Result that the controller sends
+   * Returns either a AuthInfo if all went OK or a Result that the controller sends
    * to the browser (e.g.: in the case of OAuth where the user needs to be redirected to
    * the service provider).
    *
    * @param request The request header.
-   * @return On success either the social profile or a simple result, otherwise a failure.
+   * @return Either a Result or the AuthInfo from the provider.
    */
-  def authenticate()(implicit request: RequestHeader): Future[Either[Result, Profile]] = {
-    doAuth().flatMap(_.fold(
-      result => Future.successful(Left(result)),
-      authInfo => buildProfile(authInfo).map(profile => Right(profile)).recoverWith {
-        case e if !e.isInstanceOf[AuthenticationException] =>
-          Future.failed(new AuthenticationException(UnspecifiedProfileError.format(id), e))
-      }
-    ))
-  }
+  def authenticate()(implicit request: RequestHeader): Future[AuthenticationResult]
 
   /**
-   * Subclasses need to implement the authentication logic.
+   * Retrieves the user profile for the given auth info.
    *
-   * This method needs to return a auth info object that then gets passed to the buildIdentity method.
+   * This method can be used to retrieve the profile information for an already authenticated
+   * identity.
    *
-   * @param request The request header.
-   * @return Either a Result or the auth info from the provider.
+   * @param authInfo The auth info for which the profile information should be retrieved.
+   * @return The profile information for the given auth info.
    */
-  protected def doAuth()(implicit request: RequestHeader): Future[Either[Result, A]]
+  def retrieveProfile(authInfo: A): Future[Profile] = {
+    buildProfile(authInfo).recoverWith {
+      case e if !e.isInstanceOf[ProfileRetrievalException] =>
+        Future.failed(new ProfileRetrievalException(UnspecifiedProfileError.format(id), e))
+    }
+  }
 }
 
 /**
- * The social profile contains all the data returned from the social providers after authentication.
- *
- * @tparam A The type of the auth info.
+ * The result of a request to Provider.authenticate().
  */
-trait SocialProfile[A <: AuthInfo] {
+sealed trait AuthenticationResult
+
+/**
+ * Wraps a redirect response in the authentication flow.
+ */
+case class AuthenticationOngoing(result: Result) extends AuthenticationResult
+
+/**
+ * Means the authentication has been completed, the auth info is available.
+ */
+case class AuthenticationCompleted[A <: AuthInfo](authInfo: A) extends AuthenticationResult
+
+/**
+ * The social profile contains all the data returned from the social providers after authentication.
+ */
+trait SocialProfile {
 
   /**
    * Gets the linked login info.
@@ -76,13 +87,6 @@ trait SocialProfile[A <: AuthInfo] {
    * @return The linked login info.
    */
   def loginInfo: LoginInfo
-
-  /**
-   * Gets the current auth info returned from the provider.
-   *
-   * @return The current auth info returned from the provider.
-   */
-  def authInfo: A
 }
 
 /**
@@ -96,17 +100,12 @@ trait SocialProfileBuilder[A <: AuthInfo] {
   /**
    * The type of the profile.
    */
-  type Profile <: SocialProfile[A]
-
-  /**
-   * The Json parser signature.
-   */
-  type JsonParser = (JsValue) => CommonSocialProfile[A]
+  type Profile <: SocialProfile
 
   /**
    * The parser signature.
    */
-  type Parser = (A) => JsonParser
+  type Parser = (JsValue) => CommonSocialProfile
 
   /**
    * Gets the API URL to retrieve the profile data.
@@ -130,7 +129,7 @@ trait SocialProfileBuilder[A <: AuthInfo] {
    * @param json The Json from the social provider.
    * @return The social profile from given result.
    */
-  protected def parseProfile(parser: JsonParser, json: JsValue): Try[Profile]
+  protected def parseProfile(parser: Parser, json: JsValue): Try[Profile]
 
   /**
    * Defines the parser which parses the most common profile supported by Silhouette.
@@ -160,22 +159,19 @@ object SocialProfileBuilder {
  * on every subsequent authentication.
  *
  * @param loginInfo The linked login info.
- * @param authInfo The current auth info returned from the provider.
  * @param firstName Maybe the first name of the authenticated user.
  * @param lastName Maybe the last name of the authenticated user.
  * @param fullName Maybe the full name of the authenticated user.
  * @param email Maybe the email of the authenticated provider.
  * @param avatarURL Maybe the avatar URL of the authenticated provider.
- * @tparam A The auth info type.
  */
-case class CommonSocialProfile[A <: AuthInfo](
+case class CommonSocialProfile(
   loginInfo: LoginInfo,
-  authInfo: A,
   firstName: Option[String] = None,
   lastName: Option[String] = None,
   fullName: Option[String] = None,
   email: Option[String] = None,
-  avatarURL: Option[String] = None) extends SocialProfile[A]
+  avatarURL: Option[String] = None) extends SocialProfile
 
 /**
  * The profile builder for the common social profile.
@@ -188,7 +184,7 @@ trait CommonSocialProfileBuilder[A <: AuthInfo] {
   /**
    * The type of the profile.
    */
-  type Profile = CommonSocialProfile[A]
+  type Profile = CommonSocialProfile
 
   /**
    * Parses the social profile with the given Json parser.
@@ -197,5 +193,5 @@ trait CommonSocialProfileBuilder[A <: AuthInfo] {
    * @param json The Json from the social provider.
    * @return The social profile from given result.
    */
-  protected def parseProfile(parser: JsonParser, json: JsValue): Try[Profile] = Try(parser(json))
+  protected def parseProfile(parser: Parser, json: JsValue): Try[Profile] = Try(parser(json))
 }

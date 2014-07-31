@@ -15,21 +15,14 @@
  */
 package com.mohiva.play.silhouette.core.exceptions
 
-import com.mohiva.play.silhouette.core.Logger
-
 /**
- * An exception thrown when the user denies access to the application
- * in the login page of the 3rd party service.
+ * An exception that indicates that an error occurred during profile retrieval.
  *
  * @param msg The exception message.
  * @param cause The exception cause.
  */
-class AccessDeniedException(msg: String, cause: Throwable)
-    extends Exception(msg, cause)
-    with SilhouetteException
-    with Logger {
-
-  logger.info(msg)
+class ProfileRetrievalException(msg: String, cause: Throwable)
+    extends AuthenticationException(msg, cause) {
 
   /**
    * Constructs an exception with only a message.

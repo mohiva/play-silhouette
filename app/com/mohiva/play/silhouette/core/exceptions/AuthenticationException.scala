@@ -23,7 +23,7 @@ import com.mohiva.play.silhouette.core.Logger
  * @param msg The exception message.
  * @param cause The exception cause.
  */
-case class AuthenticationException(msg: String, cause: Throwable)
+class AuthenticationException(msg: String, cause: Throwable)
     extends Exception(msg, cause)
     with SilhouetteException
     with Logger {

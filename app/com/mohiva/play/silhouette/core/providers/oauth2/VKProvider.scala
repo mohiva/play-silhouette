@@ -25,7 +25,7 @@ import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
-import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.core.exceptions.ProfileRetrievalException
 import VKProvider._
 
 /**
@@ -70,8 +70,8 @@ abstract class VKProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings
           val errorCode = (error \ "error_code").as[Int]
           val errorMsg = (error \ "error_msg").as[String]
 
-          throw new AuthenticationException(SpecifiedProfileError.format(id, errorCode, errorMsg))
-        case _ => parseProfile(parser(authInfo), json).asFuture
+          throw new ProfileRetrievalException(SpecifiedProfileError.format(id, errorCode, errorMsg))
+        case _ => parseProfile(parser, json).asFuture
       }
     }
   }
@@ -81,7 +81,7 @@ abstract class VKProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings
    *
    * @return The parser which parses the most common profile supported by Silhouette.
    */
-  protected def parser: Parser = (authInfo: OAuth2Info) => (json: JsValue) => {
+  protected def parser: Parser = (json: JsValue) => {
     val response = (json \ "response").apply(0)
     val userId = (response \ "uid").as[Long]
     val firstName = (response \ "first_name").asOpt[String]
@@ -90,7 +90,6 @@ abstract class VKProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings
 
     CommonSocialProfile(
       loginInfo = LoginInfo(id, userId.toString),
-      authInfo = authInfo,
       firstName = firstName,
       lastName = lastName,
       avatarURL = avatarURL)

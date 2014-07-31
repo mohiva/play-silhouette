@@ -25,7 +25,7 @@ import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
-import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.core.exceptions.ProfileRetrievalException
 import GoogleProvider._
 
 /**
@@ -71,8 +71,8 @@ abstract class GoogleProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, sett
           val errorCode = (error \ "code").as[Int]
           val errorMsg = (error \ "message").as[String]
 
-          throw new AuthenticationException(SpecifiedProfileError.format(id, errorCode, errorMsg))
-        case _ => parseProfile(parser(authInfo), json).asFuture
+          throw new ProfileRetrievalException(SpecifiedProfileError.format(id, errorCode, errorMsg))
+        case _ => parseProfile(parser, json).asFuture
       }
     }
   }
@@ -82,7 +82,7 @@ abstract class GoogleProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, sett
    *
    * @return The parser which parses the most common profile supported by Silhouette.
    */
-  protected def parser: Parser = (authInfo: OAuth2Info) => (json: JsValue) => {
+  protected def parser: Parser = (json: JsValue) => {
     val userID = (json \ "id").as[String]
     val firstName = (json \ "name" \ "givenName").asOpt[String]
     val lastName = (json \ "name" \ "familyName").asOpt[String]
@@ -99,7 +99,6 @@ abstract class GoogleProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, sett
 
     CommonSocialProfile(
       loginInfo = LoginInfo(id, userID),
-      authInfo = authInfo,
       firstName = firstName,
       lastName = lastName,
       fullName = fullName,

@@ -25,7 +25,7 @@ import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
-import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.core.exceptions.ProfileRetrievalException
 import InstagramProvider._
 
 /**
@@ -69,8 +69,8 @@ abstract class InstagramProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, s
           val errorType = (json \ "meta" \ "error_type").asOpt[String]
           val errorMsg = (json \ "meta" \ "error_message").asOpt[String]
 
-          throw new AuthenticationException(SpecifiedProfileError.format(id, code, errorType, errorMsg))
-        case _ => parseProfile(parser(authInfo), json).asFuture
+          throw new ProfileRetrievalException(SpecifiedProfileError.format(id, code, errorType, errorMsg))
+        case _ => parseProfile(parser, json).asFuture
       }
     }
   }
@@ -80,7 +80,7 @@ abstract class InstagramProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, s
    *
    * @return The parser which parses the most common profile supported by Silhouette.
    */
-  protected def parser: Parser = (authInfo: OAuth2Info) => (json: JsValue) => {
+  protected def parser: Parser = (json: JsValue) => {
     val data = json \ "data"
     val userID = (data \ "id").as[String]
     val fullName = (data \ "full_name").asOpt[String]
@@ -88,7 +88,6 @@ abstract class InstagramProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, s
 
     CommonSocialProfile(
       loginInfo = LoginInfo(id, userID),
-      authInfo = authInfo,
       fullName = fullName,
       avatarURL = avatarURL)
   }
