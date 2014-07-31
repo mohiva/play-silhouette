@@ -17,82 +17,79 @@ package com.mohiva.play.silhouette.core.providers.oauth1
 
 import test.Helper
 import java.util.UUID
+import scala.concurrent.Future
 import play.api.libs.ws.{ WSResponse, WSRequestHolder }
 import play.api.test.{ FakeRequest, WithApplication }
-import scala.concurrent.Future
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.providers.OAuth1Settings
-import com.mohiva.play.silhouette.core.providers.OAuth1Info
-import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.core.exceptions.ProfileRetrievalException
 import SocialProfileBuilder._
-import OAuth1Provider._
 import XingProvider._
+import OAuth1Provider._
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.core.providers.oauth1.XingProvider]] class.
  */
 class XingProviderSpec extends OAuth1ProviderSpec {
 
-  "The authenticate method" should {
-    "fail with AuthenticationException if API returns error" in new WithApplication with Context {
+  "The `authenticate` method" should {
+    "return the auth info" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
-      val requestHolder = mock[WSRequestHolder]
-      val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
       cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(Some(oAuthInfo))
       oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(oAuthInfo)
+
+      authInfo(provider.authenticate()) {
+        case authInfo => authInfo must be equalTo oAuthInfo
+      }
+
+      there was one(cacheLayer).remove(cacheID)
+    }
+  }
+
+  "The `retrieveProfile` method" should {
+    "fail with ProfileRetrievalException if API returns error" in new WithApplication with Context {
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
       response.json returns Helper.loadJson("providers/oauth1/xing.error.json")
       httpLayer.url(API) returns requestHolder
 
-      failed[AuthenticationException](provider.authenticate()) {
+      failed[ProfileRetrievalException](provider.retrieveProfile(oAuthInfo)) {
         case e => e.getMessage must equalTo(SpecifiedProfileError.format(
           provider.id,
           "INVALID_PARAMETERS",
           "Invalid parameters (Limit must be a non-negative number.)"))
       }
-
-      there was one(cacheLayer).remove(cacheID)
     }
 
-    "throw AuthenticationException if an unexpected error occurred" in new WithApplication with Context {
-      val cacheID = UUID.randomUUID().toString
+    "throw ProfileRetrievalException if an unexpected error occurred" in new WithApplication with Context {
       val requestHolder = mock[WSRequestHolder]
       val response = mock[WSResponse]
-      implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
-      cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(Some(oAuthInfo))
-      oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(oAuthInfo)
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
       response.json throws new RuntimeException("")
       httpLayer.url(API) returns requestHolder
 
-      failed[AuthenticationException](provider.authenticate()) {
+      failed[ProfileRetrievalException](provider.retrieveProfile(oAuthInfo)) {
         case e => e.getMessage must equalTo(UnspecifiedProfileError.format(provider.id))
       }
-
-      there was one(cacheLayer).remove(cacheID)
     }
 
     "return the social profile" in new WithApplication with Context {
-      val cacheID = UUID.randomUUID().toString
       val requestHolder = mock[WSRequestHolder]
       val response = mock[WSResponse]
-      implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
-      cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(Some(oAuthInfo))
-      oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(oAuthInfo)
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
       response.json returns Helper.loadJson("providers/oauth1/xing.success.json")
       httpLayer.url(API) returns requestHolder
 
-      profile(provider.authenticate()) {
+      profile(provider.retrieveProfile(oAuthInfo)) {
         case p =>
           p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "1235468792"),
-            authInfo = oAuthInfo,
             firstName = Some("Apollonia"),
             lastName = Some("Vanova"),
             fullName = Some("Apollonia Vanova"),
@@ -100,8 +97,6 @@ class XingProviderSpec extends OAuth1ProviderSpec {
             email = Some("apollonia.vanova@watchmen.com")
           )
       }
-
-      there was one(cacheLayer).remove(cacheID)
     }
   }
 

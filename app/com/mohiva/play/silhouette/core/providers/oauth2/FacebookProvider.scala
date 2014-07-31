@@ -27,7 +27,7 @@ import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
-import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.core.exceptions.{ AuthenticationException, ProfileRetrievalException }
 import FacebookProvider._
 import OAuth2Provider._
 
@@ -74,8 +74,8 @@ abstract class FacebookProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, se
           val errorType = (error \ "type").as[String]
           val errorCode = (error \ "code").as[Int]
 
-          throw new AuthenticationException(SpecifiedProfileError.format(id, errorMsg, errorType, errorCode))
-        case _ => parseProfile(parser(authInfo), json).asFuture
+          throw new ProfileRetrievalException(SpecifiedProfileError.format(id, errorMsg, errorType, errorCode))
+        case _ => parseProfile(parser, json).asFuture
       }
     }
   }
@@ -85,7 +85,7 @@ abstract class FacebookProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, se
    *
    * @return The parser which parses the most common profile supported by Silhouette.
    */
-  protected def parser: Parser = (authInfo: OAuth2Info) => (json: JsValue) => {
+  protected def parser: Parser = (json: JsValue) => {
     val userID = (json \ "id").as[String]
     val firstName = (json \ "first_name").asOpt[String]
     val lastName = (json \ "last_name").asOpt[String]
@@ -95,7 +95,6 @@ abstract class FacebookProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, se
 
     CommonSocialProfile(
       loginInfo = LoginInfo(id, userID),
-      authInfo = authInfo,
       firstName = firstName,
       lastName = lastName,
       fullName = fullName,

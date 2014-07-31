@@ -24,7 +24,7 @@ import play.api.libs.ws.{ WSResponse, WSRequestHolder }
 import play.api.test.{ FakeRequest, WithApplication }
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.LoginInfo
-import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.core.exceptions.{ ProfileRetrievalException, AuthenticationException }
 import SocialProfileBuilder._
 import GitHubProvider._
 import OAuth2Provider._
@@ -34,7 +34,7 @@ import OAuth2Provider._
  */
 class GitHubProviderSpec extends OAuth2ProviderSpec {
 
-  "The authenticate method" should {
+  "The `authenticate` method" should {
     "fail with AuthenticationException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
@@ -52,21 +52,33 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
       }
     }
 
-    "fail with AuthenticationException if API returns error" in new WithApplication with Context {
+    "return the auth info" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       val state = UUID.randomUUID().toString
       val requestHolder = mock[WSRequestHolder]
       val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      response.json returns oAuthInfo thenReturns Helper.loadJson("providers/oauth2/github.error.json")
-      requestHolder.withHeaders(HeaderNames.ACCEPT -> "application/json") returns requestHolder
+      response.json returns oAuthInfo
+      requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
-      requestHolder.get() returns Future.successful(response)
       cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
+
+      authInfo(provider.authenticate()) {
+        case authInfo => authInfo must be equalTo oAuthInfo.as[OAuth2Info]
+      }
+    }
+  }
+
+  "The `retrieveProfile` method" should {
+    "fail with ProfileRetrievalException if API returns error" in new WithApplication with Context {
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
+      response.json returns Helper.loadJson("providers/oauth2/github.error.json")
+      requestHolder.get() returns Future.successful(response)
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      failed[AuthenticationException](provider.authenticate()) {
+      failed[ProfileRetrievalException](provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
         case e => e.getMessage must equalTo(SpecifiedProfileError.format(
           provider.id,
           "Bad credentials",
@@ -74,44 +86,29 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
       }
     }
 
-    "fail with AuthenticationException if an unexpected error occurred" in new WithApplication with Context {
-      val cacheID = UUID.randomUUID().toString
-      val state = UUID.randomUUID().toString
+    "fail with ProfileRetrievalException if an unexpected error occurred" in new WithApplication with Context {
       val requestHolder = mock[WSRequestHolder]
       val response = mock[WSResponse]
-      implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      response.json returns oAuthInfo thenThrows new RuntimeException("")
-      requestHolder.withHeaders(HeaderNames.ACCEPT -> "application/json") returns requestHolder
-      requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
+      response.json throws new RuntimeException("")
       requestHolder.get() returns Future.successful(response)
-      cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
-      httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      failed[AuthenticationException](provider.authenticate()) {
+      failed[ProfileRetrievalException](provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
         case e => e.getMessage must equalTo(UnspecifiedProfileError.format(provider.id))
       }
     }
 
     "return the social profile" in new WithApplication with Context {
-      val cacheID = UUID.randomUUID().toString
-      val state = UUID.randomUUID().toString
       val requestHolder = mock[WSRequestHolder]
       val response = mock[WSResponse]
-      implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
-      response.json returns oAuthInfo thenReturns Helper.loadJson("providers/oauth2/github.success.json")
-      requestHolder.withHeaders(HeaderNames.ACCEPT -> "application/json") returns requestHolder
-      requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
+      response.json returns Helper.loadJson("providers/oauth2/github.success.json")
       requestHolder.get() returns Future.successful(response)
-      cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
-      httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      profile(provider.authenticate()) {
+      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
         case p =>
           p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "1"),
-            authInfo = oAuthInfo.as[OAuth2Info],
             fullName = Some("Apollonia Vanova"),
             email = Some("apollonia.vanova@watchmen.com"),
             avatarURL = Some("https://github.com/images/error/apollonia_vanova.gif")

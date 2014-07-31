@@ -25,7 +25,7 @@ import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
-import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.core.exceptions.ProfileRetrievalException
 import FoursquareProvider._
 
 /**
@@ -71,7 +71,7 @@ abstract class FoursquareProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, 
         case Some(code) if code != 200 =>
           val errorDetail = (json \ "meta" \ "errorDetail").asOpt[String]
 
-          throw new AuthenticationException(SpecifiedProfileError.format(id, code, errorType, errorDetail))
+          throw new ProfileRetrievalException(SpecifiedProfileError.format(id, code, errorType, errorDetail))
         case _ =>
           // Status code 200 and an existing errorType can only be a deprecated error
           // https://developer.foursquare.com/overview/responses
@@ -79,7 +79,7 @@ abstract class FoursquareProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, 
             logger.info("This implementation may be deprecated! Please contact the Silhouette team for a fix!")
           }
 
-          parseProfile(parser(authInfo), json).asFuture
+          parseProfile(parser, json).asFuture
       }
     }
   }
@@ -89,7 +89,7 @@ abstract class FoursquareProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, 
    *
    * @return The parser which parses the most common profile supported by Silhouette.
    */
-  protected def parser: Parser = (authInfo: OAuth2Info) => (json: JsValue) => {
+  protected def parser: Parser = (json: JsValue) => {
     val user = json \ "response" \ "user"
     val userID = (user \ "id").as[String]
     val lastName = (user \ "lastName").asOpt[String]
@@ -101,7 +101,6 @@ abstract class FoursquareProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, 
 
     CommonSocialProfile(
       loginInfo = LoginInfo(id, userID),
-      authInfo = authInfo,
       firstName = firstName,
       lastName = lastName,
       avatarURL = for (prefix <- avatarURLPart1; postfix <- avatarURLPart2) yield prefix + resolution + postfix,

@@ -29,20 +29,28 @@ import com.mohiva.play.silhouette.core.services.AuthInfo
 abstract class SocialProviderSpec[A <: AuthInfo] extends PlaySpecification with Mockito with JsonMatchers {
 
   /**
-   * The provider result.
-   */
-  type ProviderResult = Future[Either[Result, SocialProfile[A]]]
-
-  /**
    * Applies a matcher on a simple result.
    *
    * @param providerResult The result from the provider.
    * @param b The matcher block to apply.
    * @return A specs2 match result.
    */
-  def result(providerResult: ProviderResult)(b: Future[Result] => MatchResult[_]) = {
-    await(providerResult) must beLeft[Result].like {
-      case simpleResult => b(Future.successful(simpleResult))
+  def result(providerResult: Future[AuthenticationResult])(b: Future[Result] => MatchResult[_]) = {
+    await(providerResult) must beLike[AuthenticationResult] {
+      case AuthenticationOngoing(result) => b(Future.successful(result))
+    }
+  }
+
+  /**
+   * Applies a matcher on a auth info.
+   *
+   * @param providerResult The result from the provider.
+   * @param b The matcher block to apply.
+   * @return A specs2 match result.
+   */
+  def authInfo(providerResult: Future[AuthenticationResult])(b: A => MatchResult[_]) = {
+    await(providerResult) must beLike[AuthenticationResult] {
+      case r: AuthenticationCompleted[A] => b(r.authInfo)
     }
   }
 
@@ -53,8 +61,8 @@ abstract class SocialProviderSpec[A <: AuthInfo] extends PlaySpecification with 
    * @param b The matcher block to apply.
    * @return A specs2 match result.
    */
-  def profile(providerResult: ProviderResult)(b: SocialProfile[A] => MatchResult[_]) = {
-    await(providerResult) must beRight[SocialProfile[A]].like {
+  def profile(providerResult: Future[SocialProfile])(b: SocialProfile => MatchResult[_]) = {
+    await(providerResult) must beLike[SocialProfile] {
       case socialProfile => b(socialProfile)
     }
   }
@@ -69,7 +77,7 @@ abstract class SocialProviderSpec[A <: AuthInfo] extends PlaySpecification with 
    * @param f A matcher function.
    * @return A specs2 match result.
    */
-  def failed[E <: Throwable: ClassTag](providerResult: ProviderResult)(f: => PartialFunction[Throwable, MatchResult[_]]) = {
+  def failed[E <: Throwable: ClassTag](providerResult: Future[_])(f: => PartialFunction[Throwable, MatchResult[_]]) = {
     implicit class Rethrow(t: Throwable) {
       def rethrow = { throw t; t }
     }

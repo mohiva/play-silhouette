@@ -26,7 +26,7 @@ import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
-import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.core.exceptions.ProfileRetrievalException
 import GitHubProvider._
 
 /**
@@ -78,8 +78,8 @@ abstract class GitHubProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, sett
         case Some(msg) =>
           val docURL = (json \ "documentation_url").asOpt[String]
 
-          throw new AuthenticationException(SpecifiedProfileError.format(id, msg, docURL))
-        case _ => parseProfile(parser(authInfo), json).asFuture
+          throw new ProfileRetrievalException(SpecifiedProfileError.format(id, msg, docURL))
+        case _ => parseProfile(parser, json).asFuture
       }
     }
   }
@@ -89,7 +89,7 @@ abstract class GitHubProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, sett
    *
    * @return The parser which parses the most common profile supported by Silhouette.
    */
-  protected def parser: Parser = (authInfo: OAuth2Info) => (json: JsValue) => {
+  protected def parser: Parser = (json: JsValue) => {
     val userID = (json \ "id").as[Long]
     val fullName = (json \ "name").asOpt[String]
     val avatarUrl = (json \ "avatar_url").asOpt[String]
@@ -97,7 +97,6 @@ abstract class GitHubProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, sett
 
     CommonSocialProfile(
       loginInfo = LoginInfo(id, userID.toString),
-      authInfo = authInfo,
       fullName = fullName,
       avatarURL = avatarUrl,
       email = email)

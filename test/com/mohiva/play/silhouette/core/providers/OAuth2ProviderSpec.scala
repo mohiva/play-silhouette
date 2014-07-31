@@ -115,7 +115,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
       }
     }
 
-    "fail with an AuthenticationException if cached state doesn't equal request sate" in new WithApplication {
+    "fail with an AuthenticationException if cached state doesn't equal request state" in new WithApplication {
       val cacheID = UUID.randomUUID().toString
       val cachedState = UUID.randomUUID().toString
       val requestState = UUID.randomUUID().toString

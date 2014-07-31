@@ -17,88 +17,83 @@ package com.mohiva.play.silhouette.core.providers.oauth1
 
 import test.Helper
 import java.util.UUID
+import scala.concurrent.Future
 import play.api.libs.ws.{ WSResponse, WSRequestHolder }
 import play.api.test.{ FakeRequest, WithApplication }
-import scala.concurrent.Future
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.providers.OAuth1Settings
-import com.mohiva.play.silhouette.core.providers.OAuth1Info
-import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.core.exceptions.ProfileRetrievalException
 import SocialProfileBuilder._
-import OAuth1Provider._
 import TwitterProvider._
+import OAuth1Provider._
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.core.providers.oauth1.TwitterProvider]] class.
  */
 class TwitterProviderSpec extends OAuth1ProviderSpec {
 
-  "The authenticate method" should {
-    "fail with AuthenticationException if API returns error" in new WithApplication with Context {
+  "The `authenticate` method" should {
+    "return the auth info" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
-      val requestHolder = mock[WSRequestHolder]
-      val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
       cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(Some(oAuthInfo))
       oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(oAuthInfo)
+
+      authInfo(provider.authenticate()) {
+        case authInfo => authInfo must be equalTo oAuthInfo
+      }
+
+      there was one(cacheLayer).remove(cacheID)
+    }
+  }
+
+  "The `retrieveProfile` method" should {
+    "fail with ProfileRetrievalException if API returns error" in new WithApplication with Context {
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
       response.json returns Helper.loadJson("providers/oauth1/twitter.error.json")
       httpLayer.url(API) returns requestHolder
 
-      failed[AuthenticationException](provider.authenticate()) {
+      failed[ProfileRetrievalException](provider.retrieveProfile(oAuthInfo)) {
         case e => e.getMessage must equalTo(SpecifiedProfileError.format(
           provider.id,
           215,
           Some("Bad Authentication data")))
       }
-
-      there was one(cacheLayer).remove(cacheID)
     }
 
-    "fail with AuthenticationException if an unexpected error occurred" in new WithApplication with Context {
-      val cacheID = UUID.randomUUID().toString
+    "fail with ProfileRetrievalException if an unexpected error occurred" in new WithApplication with Context {
       val requestHolder = mock[WSRequestHolder]
       val response = mock[WSResponse]
-      implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
-      cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(Some(oAuthInfo))
-      oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(oAuthInfo)
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
       response.json throws new RuntimeException("")
       httpLayer.url(API) returns requestHolder
 
-      failed[AuthenticationException](provider.authenticate()) {
+      failed[ProfileRetrievalException](provider.retrieveProfile(oAuthInfo)) {
         case e => e.getMessage must equalTo(UnspecifiedProfileError.format(provider.id))
       }
-
-      there was one(cacheLayer).remove(cacheID)
     }
 
     "return the social profile" in new WithApplication with Context {
-      val cacheID = UUID.randomUUID().toString
       val requestHolder = mock[WSRequestHolder]
       val response = mock[WSResponse]
-      implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
-      cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(Some(oAuthInfo))
-      oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(oAuthInfo)
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
       response.json returns Helper.loadJson("providers/oauth1/twitter.success.json")
       httpLayer.url(API) returns requestHolder
 
-      profile(provider.authenticate()) {
+      profile(provider.retrieveProfile(oAuthInfo)) {
         case p =>
           p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "6253282"),
-            authInfo = oAuthInfo,
             fullName = Some("Apollonia Vanova"),
             avatarURL = Some("https://pbs.twimg.com/profile_images/1209905677/appolonia_.jpg")
           )
       }
-
-      there was one(cacheLayer).remove(cacheID)
     }
   }
 

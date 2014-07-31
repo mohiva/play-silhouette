@@ -24,7 +24,7 @@ import play.api.libs.json.JsValue
 import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
-import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.core.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import TwitterProvider._
 
@@ -73,8 +73,8 @@ abstract class TwitterProvider(
         case Some(code) =>
           val message = (json \ "errors" \\ "message").headOption.map(_.as[String])
 
-          Future.failed(new AuthenticationException(SpecifiedProfileError.format(id, code, message)))
-        case _ => parseProfile(parser(authInfo), json).asFuture
+          Future.failed(new ProfileRetrievalException(SpecifiedProfileError.format(id, code, message)))
+        case _ => parseProfile(parser, json).asFuture
       }
     }
   }
@@ -84,14 +84,13 @@ abstract class TwitterProvider(
    *
    * @return The parser which parses the most common profile supported by Silhouette.
    */
-  protected def parser: Parser = (authInfo: OAuth1Info) => (json: JsValue) => {
+  protected def parser: Parser = (json: JsValue) => {
     val userID = (json \ "id").as[Long]
     val fullName = (json \ "name").asOpt[String]
     val avatarURL = (json \ "profile_image_url_https").asOpt[String]
 
     CommonSocialProfile(
       loginInfo = LoginInfo(id, userID.toString),
-      authInfo = authInfo,
       fullName = fullName,
       avatarURL = avatarURL)
   }

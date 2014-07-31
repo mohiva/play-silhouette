@@ -24,7 +24,7 @@ import play.api.libs.json.{ JsObject, JsValue }
 import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
-import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.core.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
 import XingProvider._
 
@@ -73,8 +73,8 @@ abstract class XingProvider(
         case Some(error) =>
           val message = (json \ "message").asOpt[String]
 
-          Future.failed(new AuthenticationException(SpecifiedProfileError.format(id, error, message.getOrElse(""))))
-        case _ => parseProfile(parser(authInfo), json).asFuture
+          Future.failed(new ProfileRetrievalException(SpecifiedProfileError.format(id, error, message.getOrElse(""))))
+        case _ => parseProfile(parser, json).asFuture
       }
     }
   }
@@ -84,7 +84,7 @@ abstract class XingProvider(
    *
    * @return The parser which parses the most common profile supported by Silhouette.
    */
-  protected def parser: Parser = (authInfo: OAuth1Info) => (json: JsValue) => {
+  protected def parser: Parser = (json: JsValue) => {
     val users = (json \ "users").as[Seq[JsObject]].head
     val userID = (users \ "id").as[String]
     val firstName = (users \ "first_name").asOpt[String]
@@ -95,7 +95,6 @@ abstract class XingProvider(
 
     CommonSocialProfile(
       loginInfo = LoginInfo(id, userID),
-      authInfo = authInfo,
       firstName = firstName,
       lastName = lastName,
       fullName = fullName,

@@ -21,7 +21,7 @@ package com.mohiva.play.silhouette.core.providers
 
 import java.net.URLEncoder._
 import java.util.UUID
-import play.api.mvc.{ Result, RequestHeader, Results }
+import play.api.mvc.{ RequestHeader, Results }
 import play.api.libs.ws.WSResponse
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
@@ -86,7 +86,7 @@ abstract class OAuth2Provider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, sett
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  protected def doAuth()(implicit request: RequestHeader): Future[Either[Result, OAuth2Info]] = {
+  def authenticate()(implicit request: RequestHeader): Future[AuthenticationResult] = {
     logger.debug("[Silhouette][%s] Query string: %s".format(id, request.rawQueryString))
     request.queryString.get(Error).flatMap(_.headOption).map {
       case e @ AccessDenied => new AccessDeniedException(AuthorizationError.format(id, e))
@@ -97,7 +97,7 @@ abstract class OAuth2Provider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, sett
         // We're being redirected back from the authorization server with the access code
         case Some(code) => cachedState.map { case (cacheID, cachedState) => cachedState == requestState.get }.flatMap {
           case false => throw new AuthenticationException(StateIsNotEqual.format(id))
-          case true => getAccessToken(code).map(oauth2Info => Right(oauth2Info))
+          case true => getAccessToken(code).map(oauth2Info => AuthenticationCompleted(oauth2Info))
         }
         // There's no code in the request, this is the first step in the OAuth flow
         case None =>
@@ -116,7 +116,7 @@ abstract class OAuth2Provider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, sett
           logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
           logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
           cacheLayer.set(cacheID, state, CacheExpiration)
-          Future.successful(Left(redirect))
+          Future.successful(AuthenticationOngoing(redirect))
       }
     }
   }
