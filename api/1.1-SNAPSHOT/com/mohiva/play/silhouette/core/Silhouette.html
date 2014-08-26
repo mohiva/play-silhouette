@@ -48,8 +48,8 @@
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Provides the actions that can be used to protect controllers and retrieve the current user
-if available.</p><pre><span class="kw">class</span> MyController(env: Environment[User, CachedCookieAuthenticator])
-<span class="kw">extends</span> Silhouette[User, CachedCookieAuthenticator] {
+if available.</p><pre><span class="kw">class</span> MyController(env: Environment[User, CookieAuthenticator])
+<span class="kw">extends</span> Silhouette[User, CookieAuthenticator] {
 
 <span class="kw">def</span> protectedAction = SecuredAction { <span class="kw">implicit</span> request <span class="kw">=&gt;</span>
   Ok(<span class="lit">"Hello %s"</span>.format(request.identity.fullName))
