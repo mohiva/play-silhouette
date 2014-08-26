@@ -31,8 +31,8 @@ import scala.concurrent.Future
  * if available.
  *
  * {{{
- * class MyController(env: Environment[User, CachedCookieAuthenticator])
- *   extends Silhouette[User, CachedCookieAuthenticator] {
+ * class MyController(env: Environment[User, CookieAuthenticator])
+ *   extends Silhouette[User, CookieAuthenticator] {
  *
  *   def protectedAction = SecuredAction { implicit request =>
  *     Ok("Hello %s".format(request.identity.fullName))
