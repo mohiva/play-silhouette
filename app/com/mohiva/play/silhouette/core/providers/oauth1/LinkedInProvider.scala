@@ -78,7 +78,7 @@ abstract class LinkedInProvider(
           val timestamp = (json \ "timestamp").asOpt[Long]
 
           Future.failed(new ProfileRetrievalException(SpecifiedProfileError.format(id, error, message, requestId, status, timestamp)))
-        case _ => parseProfile(parser, json).asFuture
+        case _ => Future.fromTry(parseProfile(parser, json))
       }
     }
   }

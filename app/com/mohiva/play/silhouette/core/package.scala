@@ -18,6 +18,6 @@ package com.mohiva.play.silhouette
 /**
  * Provides the core authentication features.
  *
- * The main API is exposed as controller actions by the [[Silhouette]] trait.
+ * The main API is exposed as controller actions by the [[com.mohiva.play.silhouette.core.Silhouette]] trait.
  */
-package object core {}
+package object core

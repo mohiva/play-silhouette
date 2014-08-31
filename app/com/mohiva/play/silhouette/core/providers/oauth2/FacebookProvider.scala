@@ -26,7 +26,7 @@ import play.api.libs.json.{ JsValue, JsObject }
 import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
-import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
+import com.mohiva.play.silhouette.core.utils.HTTPLayer
 import com.mohiva.play.silhouette.core.exceptions.{ AuthenticationException, ProfileRetrievalException }
 import FacebookProvider._
 import OAuth2Provider._
@@ -34,23 +34,23 @@ import OAuth2Provider._
 /**
  * A Facebook OAuth2 Provider.
  *
- * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
+ * @param stateProvider The state provider implementation.
  * @param settings The provider settings.
  *
  * @see https://developers.facebook.com/tools/explorer
  * @see https://developers.facebook.com/docs/graph-api/reference/user
  * @see https://developers.facebook.com/docs/facebook-login/access-tokens
  */
-abstract class FacebookProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings)
-    extends OAuth2Provider(cacheLayer, httpLayer, settings) {
+abstract class FacebookProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
+    extends OAuth2Provider(httpLayer, stateProvider, settings) {
 
   /**
    * Gets the provider ID.
    *
    * @return The provider ID.
    */
-  def id = Facebook
+  def id = ID
 
   /**
    * Gets the API URL to retrieve the profile data.
@@ -75,7 +75,7 @@ abstract class FacebookProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, se
           val errorCode = (error \ "code").as[Int]
 
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, errorMsg, errorType, errorCode))
-        case _ => parseProfile(parser, json).asFuture
+        case _ => Future.fromTry(parseProfile(parser, json))
       }
     }
   }
@@ -114,7 +114,7 @@ abstract class FacebookProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, se
     response.body.split("&|=") match {
       case Array(AccessToken, token, Expires, expiresIn) => Success(OAuth2Info(token, None, Some(expiresIn.toInt)))
       case Array(AccessToken, token) => Success(OAuth2Info(token))
-      case _ => Failure(new AuthenticationException(InvalidResponseFormat.format(id, response.body)))
+      case _ => Failure(new AuthenticationException(InvalidInfoFormat.format(id, response.body)))
     }
   }
 }
@@ -132,18 +132,18 @@ object FacebookProvider {
   /**
    * The Facebook constants.
    */
-  val Facebook = "facebook"
+  val ID = "facebook"
   val API = "https://graph.facebook.com/me?fields=name,first_name,last_name,picture,email&return_ssl_resources=1&access_token=%s"
 
   /**
    * Creates an instance of the provider.
    *
-   * @param cacheLayer The cache layer implementation.
    * @param httpLayer The HTTP layer implementation.
+   * @param stateProvider The state provider implementation.
    * @param settings The provider settings.
    * @return An instance of this provider.
    */
-  def apply(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings) = {
-    new FacebookProvider(cacheLayer, httpLayer, settings) with CommonSocialProfileBuilder[OAuth2Info]
+  def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
+    new FacebookProvider(httpLayer, stateProvider, settings) with CommonSocialProfileBuilder[OAuth2Info]
   }
 }

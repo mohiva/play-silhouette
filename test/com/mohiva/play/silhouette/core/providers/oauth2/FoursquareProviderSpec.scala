@@ -16,7 +16,6 @@
 package com.mohiva.play.silhouette.core.providers.oauth2
 
 import test.Helper
-import java.util.UUID
 import scala.concurrent.Future
 import play.api.libs.json.Json
 import play.api.libs.ws.{ WSResponse, WSRequestHolder }
@@ -35,33 +34,29 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
 
   "The `authenticate` method" should {
     "fail with AuthenticationException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
-      val cacheID = UUID.randomUUID().toString
-      val state = UUID.randomUUID().toString
       val requestHolder = mock[WSRequestHolder]
       val response = mock[WSResponse]
-      implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
+      implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
       response.json returns Json.obj()
       requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
-      cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
+      stateProvider.validate(any)(any) returns Future.successful(state)
 
       failed[AuthenticationException](provider.authenticate()) {
-        case e => e.getMessage must startWith(InvalidResponseFormat.format(provider.id, ""))
+        case e => e.getMessage must startWith(InvalidInfoFormat.format(provider.id, ""))
       }
     }
 
     "return the auth info" in new WithApplication with Context {
-      val cacheID = UUID.randomUUID().toString
-      val state = UUID.randomUUID().toString
       val requestHolder = mock[WSRequestHolder]
       val response = mock[WSResponse]
-      implicit val req = FakeRequest(GET, "?" + Code + "=my.code&" + State + "=" + state).withSession(CacheKey -> cacheID)
+      implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
       response.json returns oAuthInfo
       requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
-      cacheLayer.get[String](cacheID) returns Future.successful(Some(state))
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
+      stateProvider.validate(any)(any) returns Future.successful(state)
 
       authInfo(provider.authenticate()) {
         case authInfo => authInfo must be equalTo oAuthInfo.as[OAuth2Info]
@@ -141,8 +136,8 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       val requestHolder = mock[WSRequestHolder]
       val response = mock[WSResponse]
       override lazy val provider = FoursquareProvider(
-        cacheLayer,
         httpLayer,
+        stateProvider,
         oAuthSettings.copy(customProperties = customProperties)
       )
 
@@ -167,8 +162,8 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       val requestHolder = mock[WSRequestHolder]
       val response = mock[WSResponse]
       override lazy val provider = FoursquareProvider(
-        cacheLayer,
         httpLayer,
+        stateProvider,
         oAuthSettings.copy(customProperties = customProperties)
       )
 
@@ -221,6 +216,6 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = FoursquareProvider(cacheLayer, httpLayer, oAuthSettings)
+    lazy val provider = FoursquareProvider(httpLayer, stateProvider, oAuthSettings)
   }
 }

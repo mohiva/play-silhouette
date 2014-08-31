@@ -74,7 +74,7 @@ abstract class XingProvider(
           val message = (json \ "message").asOpt[String]
 
           Future.failed(new ProfileRetrievalException(SpecifiedProfileError.format(id, error, message.getOrElse(""))))
-        case _ => parseProfile(parser, json).asFuture
+        case _ => Future.fromTry(parseProfile(parser, json))
       }
     }
   }

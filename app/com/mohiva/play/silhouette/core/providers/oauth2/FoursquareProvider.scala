@@ -24,30 +24,30 @@ import play.api.libs.json.JsValue
 import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
-import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
+import com.mohiva.play.silhouette.core.utils.HTTPLayer
 import com.mohiva.play.silhouette.core.exceptions.ProfileRetrievalException
 import FoursquareProvider._
 
 /**
  * A Foursquare OAuth2 provider.
  *
- * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
+ * @param stateProvider The state provider implementation.
  * @param settings The provider settings.
  *
  * @see https://developer.foursquare.com/overview/auth
  * @see https://developer.foursquare.com/overview/responses
  * @see https://developer.foursquare.com/docs/explore
  */
-abstract class FoursquareProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings)
-    extends OAuth2Provider(cacheLayer, httpLayer, settings) {
+abstract class FoursquareProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
+    extends OAuth2Provider(httpLayer, stateProvider, settings) {
 
   /**
    * Gets the provider ID.
    *
    * @return The provider ID.
    */
-  def id = Foursquare
+  def id = ID
 
   /**
    * Gets the API URL to retrieve the profile data.
@@ -79,7 +79,7 @@ abstract class FoursquareProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, 
             logger.info("This implementation may be deprecated! Please contact the Silhouette team for a fix!")
           }
 
-          parseProfile(parser, json).asFuture
+          Future.fromTry(parseProfile(parser, json))
       }
     }
   }
@@ -139,18 +139,18 @@ object FoursquareProvider {
   /**
    * The Foursquare constants.
    */
-  val Foursquare = "foursquare"
+  val ID = "foursquare"
   val API = "https://api.foursquare.com/v2/users/self?oauth_token=%s&v=%s"
 
   /**
    * Creates an instance of the provider.
    *
-   * @param cacheLayer The cache layer implementation.
    * @param httpLayer The HTTP layer implementation.
+   * @param stateProvider The state provider implementation.
    * @param settings The provider settings.
    * @return An instance of this provider.
    */
-  def apply(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings) = {
-    new FoursquareProvider(cacheLayer, httpLayer, settings) with CommonSocialProfileBuilder[OAuth2Info]
+  def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
+    new FoursquareProvider(httpLayer, stateProvider, settings) with CommonSocialProfileBuilder[OAuth2Info]
   }
 }

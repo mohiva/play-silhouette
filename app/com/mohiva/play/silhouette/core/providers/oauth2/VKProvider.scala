@@ -24,30 +24,30 @@ import play.api.libs.json.{ JsValue, JsObject }
 import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.LoginInfo
 import com.mohiva.play.silhouette.core.providers._
-import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
+import com.mohiva.play.silhouette.core.utils.HTTPLayer
 import com.mohiva.play.silhouette.core.exceptions.ProfileRetrievalException
 import VKProvider._
 
 /**
  * A Vk OAuth 2 provider.
  *
- * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
+ * @param stateProvider The state provider implementation.
  * @param settings The provider settings.
  *
  * @see http://vk.com/dev/auth_sites
  * @see http://vk.com/dev/api_requests
  * @see http://vk.com/pages.php?o=-1&p=getProfiles
  */
-abstract class VKProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings)
-    extends OAuth2Provider(cacheLayer, httpLayer, settings) {
+abstract class VKProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
+    extends OAuth2Provider(httpLayer, stateProvider, settings) {
 
   /**
    * Gets the provider ID.
    *
    * @return The provider ID.
    */
-  def id = Vk
+  def id = ID
 
   /**
    * Gets the API URL to retrieve the profile data.
@@ -71,7 +71,7 @@ abstract class VKProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings
           val errorMsg = (error \ "error_msg").as[String]
 
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, errorCode, errorMsg))
-        case _ => parseProfile(parser, json).asFuture
+        case _ => Future.fromTry(parseProfile(parser, json))
       }
     }
   }
@@ -109,18 +109,18 @@ object VKProvider {
   /**
    * The VK constants.
    */
-  val Vk = "vk"
+  val ID = "vk"
   val API = "https://api.vk.com/method/getProfiles?fields=uid,first_name,last_name,photo&access_token=%s"
 
   /**
    * Creates an instance of the provider.
    *
-   * @param cacheLayer The cache layer implementation.
    * @param httpLayer The HTTP layer implementation.
+   * @param stateProvider The state provider implementation.
    * @param settings The provider settings.
    * @return An instance of this provider.
    */
-  def apply(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings) = {
-    new VKProvider(cacheLayer, httpLayer, settings) with CommonSocialProfileBuilder[OAuth2Info]
+  def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
+    new VKProvider(httpLayer, stateProvider, settings) with CommonSocialProfileBuilder[OAuth2Info]
   }
 }

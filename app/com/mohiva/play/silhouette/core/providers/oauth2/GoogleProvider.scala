@@ -24,15 +24,15 @@ import play.api.libs.json.{ JsValue, JsObject }
 import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.LoginInfo
-import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
+import com.mohiva.play.silhouette.core.utils.HTTPLayer
 import com.mohiva.play.silhouette.core.exceptions.ProfileRetrievalException
 import GoogleProvider._
 
 /**
  * A Google OAuth2 Provider.
  *
- * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
+ * @param stateProvider The state provider implementation.
  * @param settings The provider settings.
  *
  * @see https://developers.google.com/+/api/auth-migration#timetable
@@ -40,15 +40,15 @@ import GoogleProvider._
  * @see https://developers.google.com/accounts/docs/OAuth2Login
  * @see https://developers.google.com/+/api/latest/people
  */
-abstract class GoogleProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings)
-    extends OAuth2Provider(cacheLayer, httpLayer, settings) {
+abstract class GoogleProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
+    extends OAuth2Provider(httpLayer, stateProvider, settings) {
 
   /**
    * Gets the provider ID.
    *
    * @return The provider ID.
    */
-  def id = Google
+  def id = ID
 
   /**
    * Gets the API URL to retrieve the profile data.
@@ -72,7 +72,7 @@ abstract class GoogleProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, sett
           val errorMsg = (error \ "message").as[String]
 
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, errorCode, errorMsg))
-        case _ => parseProfile(parser, json).asFuture
+        case _ => Future.fromTry(parseProfile(parser, json))
       }
     }
   }
@@ -120,18 +120,18 @@ object GoogleProvider {
   /**
    * The Google constants.
    */
-  val Google = "google"
+  val ID = "google"
   val API = "https://www.googleapis.com/plus/v1/people/me?access_token=%s"
 
   /**
    * Creates an instance of the provider.
    *
-   * @param cacheLayer The cache layer implementation.
    * @param httpLayer The HTTP layer implementation.
+   * @param stateProvider The state provider implementation.
    * @param settings The provider settings.
    * @return An instance of this provider.
    */
-  def apply(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings) = {
-    new GoogleProvider(cacheLayer, httpLayer, settings) with CommonSocialProfileBuilder[OAuth2Info]
+  def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
+    new GoogleProvider(httpLayer, stateProvider, settings) with CommonSocialProfileBuilder[OAuth2Info]
   }
 }
