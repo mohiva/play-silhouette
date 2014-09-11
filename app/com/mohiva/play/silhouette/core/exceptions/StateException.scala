@@ -16,13 +16,14 @@
 package com.mohiva.play.silhouette.core.exceptions
 
 /**
- * Indicates that an error occurred during profile retrieval.
+ * Indicates that an error occurred during state retrieval.
  *
  * @param msg The exception message.
  * @param cause The exception cause.
  */
-class ProfileRetrievalException(msg: String, cause: Throwable)
-    extends AuthenticationException(msg, cause) {
+class StateException(msg: String, cause: Throwable)
+    extends Exception(msg, cause)
+    with SilhouetteException {
 
   /**
    * Constructs an exception with only a message.

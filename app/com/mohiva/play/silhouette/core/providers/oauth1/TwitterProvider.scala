@@ -74,7 +74,7 @@ abstract class TwitterProvider(
           val message = (json \ "errors" \\ "message").headOption.map(_.as[String])
 
           Future.failed(new ProfileRetrievalException(SpecifiedProfileError.format(id, code, message)))
-        case _ => parseProfile(parser, json).asFuture
+        case _ => Future.fromTry(parseProfile(parser, json))
       }
     }
   }

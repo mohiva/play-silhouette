@@ -25,21 +25,21 @@ import play.api.http.HeaderNames
 import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.LoginInfo
-import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
+import com.mohiva.play.silhouette.core.utils.HTTPLayer
 import com.mohiva.play.silhouette.core.exceptions.ProfileRetrievalException
 import GitHubProvider._
 
 /**
  * A GitHub OAuth2 Provider.
  *
- * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
+ * @param stateProvider The state provider implementation.
  * @param settings The provider settings.
  *
  * @see https://developer.github.com/v3/oauth/
  */
-abstract class GitHubProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings)
-    extends OAuth2Provider(cacheLayer, httpLayer, settings) {
+abstract class GitHubProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
+    extends OAuth2Provider(httpLayer, stateProvider, settings) {
 
   /**
    * A list with headers to send to the API.
@@ -56,7 +56,7 @@ abstract class GitHubProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, sett
    *
    * @return The provider ID.
    */
-  def id = GitHub
+  def id = ID
 
   /**
    * Gets the API URL to retrieve the profile data.
@@ -79,7 +79,7 @@ abstract class GitHubProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, sett
           val docURL = (json \ "documentation_url").asOpt[String]
 
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, msg, docURL))
-        case _ => parseProfile(parser, json).asFuture
+        case _ => Future.fromTry(parseProfile(parser, json))
       }
     }
   }
@@ -116,18 +116,18 @@ object GitHubProvider {
   /**
    * The GitHub constants.
    */
-  val GitHub = "github"
+  val ID = "github"
   val API = "https://api.github.com/user?access_token=%s"
 
   /**
    * Creates an instance of the provider.
    *
-   * @param cacheLayer The cache layer implementation.
    * @param httpLayer The HTTP layer implementation.
+   * @param stateProvider The state provider implementation.
    * @param settings The provider settings.
    * @return An instance of this provider.
    */
-  def apply(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings) = {
-    new GitHubProvider(cacheLayer, httpLayer, settings) with CommonSocialProfileBuilder[OAuth2Info]
+  def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
+    new GitHubProvider(httpLayer, stateProvider, settings) with CommonSocialProfileBuilder[OAuth2Info]
   }
 }

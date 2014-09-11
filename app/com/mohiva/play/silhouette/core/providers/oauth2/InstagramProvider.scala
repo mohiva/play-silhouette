@@ -24,29 +24,29 @@ import play.api.libs.json.JsValue
 import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.providers._
 import com.mohiva.play.silhouette.core.LoginInfo
-import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
+import com.mohiva.play.silhouette.core.utils.HTTPLayer
 import com.mohiva.play.silhouette.core.exceptions.ProfileRetrievalException
 import InstagramProvider._
 
 /**
  * An Instagram OAuth2 provider.
  *
- * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
+ * @param stateProvider The state provider implementation.
  * @param settings The provider settings.
  *
  * @see http://instagram.com/developer/authentication/
  * @see http://instagram.com/developer/endpoints/
  */
-abstract class InstagramProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings)
-    extends OAuth2Provider(cacheLayer, httpLayer, settings) {
+abstract class InstagramProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
+    extends OAuth2Provider(httpLayer, stateProvider, settings) {
 
   /**
    * Gets the provider ID.
    *
    * @return The provider ID.
    */
-  def id = Instagram
+  def id = ID
 
   /**
    * Gets the API URL to retrieve the profile data.
@@ -70,7 +70,7 @@ abstract class InstagramProvider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, s
           val errorMsg = (json \ "meta" \ "error_message").asOpt[String]
 
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, code, errorType, errorMsg))
-        case _ => parseProfile(parser, json).asFuture
+        case _ => Future.fromTry(parseProfile(parser, json))
       }
     }
   }
@@ -106,18 +106,18 @@ object InstagramProvider {
   /**
    * The Instagram constants.
    */
-  val Instagram = "instagram"
+  val ID = "instagram"
   val API = "https://api.instagram.com/v1/users/self?access_token=%s"
 
   /**
    * Creates an instance of the provider.
    *
-   * @param cacheLayer The cache layer implementation.
    * @param httpLayer The HTTP layer implementation.
+   * @param stateProvider The state provider implementation.
    * @param settings The provider settings.
    * @return An instance of this provider.
    */
-  def apply(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings) = {
-    new InstagramProvider(cacheLayer, httpLayer, settings) with CommonSocialProfileBuilder[OAuth2Info]
+  def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
+    new InstagramProvider(httpLayer, stateProvider, settings) with CommonSocialProfileBuilder[OAuth2Info]
   }
 }

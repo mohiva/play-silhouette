@@ -15,25 +15,8 @@
  */
 package com.mohiva.play.silhouette.core
 
-import scala.util.{ Failure, Success, Try }
-import scala.concurrent.Future
-
 /**
  * Contains [[com.mohiva.play.silhouette.core.Provider]] implementations that provide authentication
  * for different schemes and services.
  */
-package object providers {
-
-  /**
-   * Provides an `asFuture` method on a `Try` which maps a `Try` to a `Future`.
-   *
-   * @see https://groups.google.com/forum/#!topic/scala-user/Mu4_lZAWxz0/discussion
-   * @see http://stackoverflow.com/questions/17907772/scala-chaining-futures-try-blocks
-   */
-  implicit class TryAsFuture[T](val attempt: Try[T]) extends AnyVal {
-    def asFuture: Future[T] = attempt match {
-      case Success(v) => Future.successful(v)
-      case Failure(f) => Future.failed(f)
-    }
-  }
-}
+package object providers {}

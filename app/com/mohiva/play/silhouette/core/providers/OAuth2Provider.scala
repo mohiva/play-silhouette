@@ -20,22 +20,21 @@
 package com.mohiva.play.silhouette.core.providers
 
 import java.net.URLEncoder._
-import java.util.UUID
-import play.api.mvc.{ RequestHeader, Results }
+import play.api.mvc.{ Result, RequestHeader, Results }
 import play.api.libs.ws.WSResponse
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.concurrent.Execution.Implicits._
 import scala.util.{ Failure, Success, Try }
 import scala.concurrent.Future
-import com.mohiva.play.silhouette.core.utils.{ HTTPLayer, CacheLayer }
+import com.mohiva.play.silhouette.core.utils.HTTPLayer
 import com.mohiva.play.silhouette.core.services.AuthInfo
 import com.mohiva.play.silhouette.core.exceptions._
 import com.mohiva.play.silhouette.core._
 import OAuth2Provider._
 
 /**
- * The Oauth2 details.
+ * The Oauth2 info.
  *
  * @param accessToken The access token.
  * @param tokenType The token type.
@@ -49,7 +48,7 @@ case class OAuth2Info(
   refreshToken: Option[String] = None) extends AuthInfo
 
 /**
- * The Oauth2 companion object.
+ * The Oauth2 info companion object.
  */
 object OAuth2Info {
 
@@ -67,11 +66,11 @@ object OAuth2Info {
 /**
  * Base class for all OAuth2 providers.
  *
- * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
+ * @param stateProvider The state provider implementation.
  * @param settings The provider settings.
  */
-abstract class OAuth2Provider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, settings: OAuth2Settings)
+abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
     extends SocialProvider[OAuth2Info]
     with Logger {
 
@@ -95,28 +94,27 @@ abstract class OAuth2Provider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, sett
       case Some(throwable) => Future.failed(throwable)
       case None => request.queryString.get(Code).flatMap(_.headOption) match {
         // We're being redirected back from the authorization server with the access code
-        case Some(code) => cachedState.map { case (cacheID, cachedState) => cachedState == requestState.get }.flatMap {
-          case false => throw new AuthenticationException(StateIsNotEqual.format(id))
-          case true => getAccessToken(code).map(oauth2Info => AuthenticationCompleted(oauth2Info))
+        case Some(code) => stateProvider.validate(id).recoverWith {
+          case e => Future.failed(new AuthenticationException(InvalidState.format(id), e))
+        }.flatMap { state =>
+          getAccessToken(code).map(oauth2Info => AuthenticationCompleted(oauth2Info))
         }
         // There's no code in the request, this is the first step in the OAuth flow
-        case None =>
-          val state = UUID.randomUUID().toString
-          val cacheID = request.session.get(CacheKey).getOrElse(UUID.randomUUID().toString)
+        case None => stateProvider.build().map { state =>
           val params = settings.scope.foldLeft(List(
             (ClientID, settings.clientID),
             (RedirectURI, settings.redirectURL),
             (ResponseType, Code),
-            (State, state)) ++ settings.authorizationParams.toList) {
+            (State, state.serialize)) ++ settings.authorizationParams.toList) {
             case (p, s) => (Scope, s) :: p
           }
           val encodedParams = params.map { p => encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8") }
           val url = settings.authorizationURL + encodedParams.mkString("?", "&", "")
-          val redirect = Results.Redirect(url).withSession(request.session + (CacheKey -> cacheID))
+          val redirect = stateProvider.publish(Results.Redirect(url), state)
           logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
           logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
-          cacheLayer.set(cacheID, state, CacheExpiration)
-          Future.successful(AuthenticationOngoing(redirect))
+          AuthenticationOngoing(redirect)
+        }
       }
     }
   }
@@ -135,50 +133,21 @@ abstract class OAuth2Provider(cacheLayer: CacheLayer, httpLayer: HTTPLayer, sett
       Code -> Seq(code),
       RedirectURI -> Seq(settings.redirectURL)) ++ settings.accessTokenParams.mapValues(Seq(_))).flatMap { response =>
       logger.debug("[Silhouette][%s] Access token response: [%s]".format(id, response.body))
-      buildInfo(response).asFuture
+      Future.fromTry(buildInfo(response))
     }
   }
 
   /**
-   * Builds the OAuth2 info.
+   * Builds the OAuth2 info from response.
    *
    * @param response The response from the provider.
-   * @return The OAuth2 info on success, otherwise an failure.
+   * @return The OAuth2 info on success, otherwise a failure.
    */
   protected def buildInfo(response: WSResponse): Try[OAuth2Info] = {
     response.json.validate[OAuth2Info].asEither.fold(
-      error => Failure(new AuthenticationException(InvalidResponseFormat.format(id, error))),
+      error => Failure(new AuthenticationException(InvalidInfoFormat.format(id, error))),
       info => Success(info)
     )
-  }
-
-  /**
-   * Gets the cached state if it's stored in cache.
-   *
-   * @param request The request header.
-   * @return A tuple contains the cache ID with the cached state on success, otherwise an failure.
-   */
-  private def cachedState(implicit request: RequestHeader): Future[(String, String)] = {
-    request.session.get(CacheKey) match {
-      case Some(cacheID) => cacheLayer.get[String](cacheID).map {
-        case Some(state) => cacheID -> state
-        case _ => throw new AuthenticationException(CachedStateDoesNotExists.format(id, cacheID))
-      }
-      case _ => Future.failed(new AuthenticationException(CacheKeyNotInSession.format(id, CacheKey)))
-    }
-  }
-
-  /**
-   * Gets the state from request.
-   *
-   * @param request The request header.
-   * @return The state from request on success, otherwise an failure.
-   */
-  private def requestState(implicit request: RequestHeader): Try[String] = {
-    request.queryString.get(State).flatMap(_.headOption) match {
-      case Some(state) => Success(state)
-      case _ => Failure(new AuthenticationException(RequestStateDoesNotExists.format(id)))
-    }
   }
 }
 
@@ -191,16 +160,12 @@ object OAuth2Provider {
    * The error messages.
    */
   val AuthorizationError = "[Silhouette][%s] Authorization server returned error: %s"
-  val CacheKeyNotInSession = "[Silhouette][%s] Session doesn't contain cache key: %s"
-  val CachedStateDoesNotExists = "[Silhouette][%s] State doesn't exists in cache for cache key: %s"
-  val RequestStateDoesNotExists = "[Silhouette][%s] State doesn't exists in query string"
-  val StateIsNotEqual = "[Silhouette][%s] State isn't equal"
-  val InvalidResponseFormat = "[Silhouette][%s] Invalid response format for accessToken: %s"
+  val InvalidInfoFormat = "[Silhouette][%s] Cannot build OAuth2Info because of invalid response format  : %s"
+  val InvalidState = "[Silhouette][%s] Invalid state"
 
   /**
    * The OAuth2 constants.
    */
-  val CacheKey = "silhouetteOAuth2Cache"
   val ClientID = "client_id"
   val ClientSecret = "client_secret"
   val RedirectURI = "redirect_uri"
@@ -217,12 +182,67 @@ object OAuth2Provider {
   val Expires = "expires"
   val RefreshToken = "refresh_token"
   val AccessDenied = "access_denied"
+}
+
+/**
+ * The OAuth2 state.
+ *
+ * This is to prevent the client for CSRF attacks as described in the OAuth2 RFC.
+ * @see https://tools.ietf.org/html/rfc6749#section-10.12
+ */
+trait OAuth2State {
 
   /**
-   * Cache expiration. Provides sufficient time to log in, but not too much.
-   * This is a balance between convenience and security.
+   * Checks if the state is expired. This is an absolute timeout since the creation of
+   * the state.
+   *
+   * @return True if the state is expired, false otherwise.
    */
-  val CacheExpiration = 5 * 60 // 5 minutes
+  def isExpired: Boolean
+
+  /**
+   * Returns a serialized value of the state.
+   *
+   * @return A serialized value of the state.
+   */
+  def serialize: String
+}
+
+/**
+ * Provides state for authentication providers.
+ */
+trait OAuth2StateProvider {
+
+  /**
+   * The type of the state implementation.
+   */
+  type State <: OAuth2State
+
+  /**
+   * Builds the state.
+   *
+   * @return The build state.
+   */
+  def build(): Future[State]
+
+  /**
+   * Validates the provider and the client state.
+   *
+   * @param id The provider ID.
+   * @param request The request header.
+   * @return The state on success, otherwise an failure.
+   */
+  def validate(id: String)(implicit request: RequestHeader): Future[State]
+
+  /**
+   * Publishes the state to the client.
+   *
+   * @param result The result to send to the client.
+   * @param state The state to publish.
+   * @param request The request header.
+   * @return The result to send to the client.
+   */
+  def publish(result: Result, state: State)(implicit request: RequestHeader): Result
 }
 
 /**
