@@ -313,7 +313,7 @@ algorithm and stores the auth info in the backing store.
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The Oauth2 details.</p><div class="fullcomment"><div class="comment cmt"><p>The Oauth2 details.
+      <p class="shortcomment cmt">The Oauth2 info.</p><div class="fullcomment"><div class="comment cmt"><p>The Oauth2 info.
 </p></div><dl class="paramcmts block"><dt class="param">accessToken</dt><dd class="cmt"><p>The access token.</p></dd><dt class="param">tokenType</dt><dd class="cmt"><p>The token type.</p></dd><dt class="param">expiresIn</dt><dd class="cmt"><p>The number of seconds before the token expires.</p></dd><dt class="param">refreshToken</dt><dd class="cmt"><p>The refresh token.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
@@ -352,6 +352,41 @@ algorithm and stores the auth info in the backing store.
       <p class="shortcomment cmt">The OAuth2 settings.</p><div class="fullcomment"><div class="comment cmt"><p>The OAuth2 settings.
 </p></div><dl class="paramcmts block"><dt class="param">authorizationURL</dt><dd class="cmt"><p>The authorization URL.</p></dd><dt class="param">accessTokenURL</dt><dd class="cmt"><p>The access token URL.</p></dd><dt class="param">redirectURL</dt><dd class="cmt"><p>The redirect URL.</p></dd><dt class="param">clientID</dt><dd class="cmt"><p>The client ID.</p></dd><dt class="param">clientSecret</dt><dd class="cmt"><p>The client secret.</p></dd><dt class="param">scope</dt><dd class="cmt"><p>The scope.</p></dd><dt class="param">authorizationParams</dt><dd class="cmt"><p>Additional params to add to the authorization request.</p></dd><dt class="param">accessTokenParams</dt><dd class="cmt"><p>Additional params to add to the access token request.</p></dd><dt class="param">customProperties</dt><dd class="cmt"><p>A map of custom properties for the different providers.
 </p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2State" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="OAuth2StateextendsAnyRef"></a>
+      <a id="OAuth2State:OAuth2State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="OAuth2State.html"><span class="name">OAuth2State</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@OAuth2StateextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The OAuth2 state.</p><div class="fullcomment"><div class="comment cmt"><p>The OAuth2 state.</p><p>This is to prevent the client for CSRF attacks as described in the OAuth2 RFC.</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>https://tools.ietf.org/html/rfc6749#section-10.12
+</p></span></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2StateProvider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="OAuth2StateProviderextendsAnyRef"></a>
+      <a id="OAuth2StateProvider:OAuth2StateProvider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="OAuth2StateProvider.html"><span class="name">OAuth2StateProvider</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@OAuth2StateProviderextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Provides state for authentication providers.</p>
     </li><li name="com.mohiva.play.silhouette.core.providers.PasswordInfo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="PasswordInfoextendsAuthInfowithProductwithSerializable"></a>
       <a id="PasswordInfo:PasswordInfo"></a>
@@ -426,25 +461,6 @@ algorithm and stores the auth info in the backing store.
       <p class="shortcomment cmt">The base interface for all social providers.</p><div class="fullcomment"><div class="comment cmt"><p>The base interface for all social providers.
 </p></div><dl class="paramcmts block"><dt class="tparam">A</dt><dd class="cmt"><p>The type of the auth info.
 </p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.providers.TryAsFuture" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="TryAsFuture[T]extendsAnyVal"></a>
-      <a id="TryAsFuture[T]:TryAsFuture[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit final </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="package$$TryAsFuture.html"><span class="name">TryAsFuture</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.package@TryAsFuture[T]extendsAnyVal" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Provides an <code>asFuture</code> method on a <code>Try</code> which maps a <code>Try</code> to a <code>Future</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Provides an <code>asFuture</code> method on a <code>Try</code> which maps a <code>Try</code> to a <code>Future</code>.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>http://stackoverflow.com/questions/17907772/scala-chaining-futures-try-blocks
-</p></span><span class="cmt"><p>https://groups.google.com/forum/#!topic/scala-user/Mu4_lZAWxz0/discussion</p></span></dd></dl></div>
     </li></ol>
             </div>
 
@@ -502,7 +518,7 @@ algorithm and stores the auth info in the backing store.
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The Oauth2 companion object.</p>
+      <p class="shortcomment cmt">The Oauth2 info companion object.</p>
     </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="OAuth2Provider"></a>
       <a id="OAuth2Provider:OAuth2Provider"></a>

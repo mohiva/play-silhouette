@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>OAuth2Provider - com.mohiva.play.silhouette.core.providers.OAuth2Provider</title>
-          <meta name="description" content="OAuth2Provider - com.mohiva.play.silhouette.core.providers.OAuth2Provider" />
-          <meta name="keywords" content="OAuth2Provider com.mohiva.play.silhouette.core.providers.OAuth2Provider" />
+          <title>OAuth2StateProvider - com.mohiva.play.silhouette.core.providers.OAuth2StateProvider</title>
+          <meta name="description" content="OAuth2StateProvider - com.mohiva.play.silhouette.core.providers.OAuth2StateProvider" />
+          <meta name="keywords" content="OAuth2StateProvider com.mohiva.play.silhouette.core.providers.OAuth2StateProvider" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'com.mohiva.play.silhouette.core.providers.OAuth2Provider$';
+            var hash = 'com.mohiva.play.silhouette.core.providers.OAuth2StateProvider';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -26,12 +26,12 @@
    	  </script>
     
         </head>
-        <body class="value">
+        <body class="type">
       <div id="definition">
-        <a href="OAuth2Provider.html" title="Go to companion"><img src="../../../../../../lib/object_to_class_big.png" /></a>
+        <img src="../../../../../../lib/trait_big.png" />
         <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.core">core</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.core.providers">providers</a></p>
-        <h1><a href="OAuth2Provider.html" title="Go to companion">OAuth2Provider</a></h1> <span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$" title="Permalink" target="_top">
+        <h1>OAuth2StateProvider</h1> <span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -40,18 +40,21 @@
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">object</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">OAuth2Provider</span>
+        <span class="name">OAuth2StateProvider</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The OAuth2Provider companion object.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Provides state for authentication providers.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
-        </div></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="../../contrib/providers/ouath2/CookieStateProvider.html" class="extype" name="com.mohiva.play.silhouette.contrib.providers.ouath2.CookieStateProvider">CookieStateProvider</a></div>
+          </div></div>
         
 
       <div id="mbrsel">
@@ -68,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.core.providers.OAuth2Provider"><span>OAuth2Provider</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.core.providers.OAuth2StateProvider"><span>OAuth2StateProvider</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -88,12 +91,92 @@
         <div id="allMembers">
         
 
-        
-
-        
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.core.providers.OAuth2StateProvider.State" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="State&lt;:com.mohiva.play.silhouette.core.providers.OAuth2State"></a>
+      <a id="State:State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">State</span><span class="result"> &lt;: <a href="OAuth2State.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2State">OAuth2State</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@State&lt;:com.mohiva.play.silhouette.core.providers.OAuth2State" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The type of the state implementation.</p>
+    </li></ol>
+            </div>
 
         <div id="values" class="values members">
-              <h3>Value Members</h3>
+              <h3>Abstract Value Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.core.providers.OAuth2StateProvider#build" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="build():scala.concurrent.Future[OAuth2StateProvider.this.State]"></a>
+      <a id="build():Future[State]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">build</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="#State&lt;:com.mohiva.play.silhouette.core.providers.OAuth2State" class="extmbr" name="com.mohiva.play.silhouette.core.providers.OAuth2StateProvider.State">State</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@build():scala.concurrent.Future[OAuth2StateProvider.this.State]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Builds the state.</p><div class="fullcomment"><div class="comment cmt"><p>Builds the state.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The build state.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2StateProvider#publish" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="publish(result:play.api.mvc.Result,state:OAuth2StateProvider.this.State)(implicitrequest:play.api.mvc.RequestHeader):play.api.mvc.Result"></a>
+      <a id="publish(Result,State)(RequestHeader):Result"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">publish</span><span class="params">(<span name="result">result: <a href="http://www.playframework.com/documentation/2.3.0/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>, <span name="state">state: <a href="#State&lt;:com.mohiva.play.silhouette.core.providers.OAuth2State" class="extmbr" name="com.mohiva.play.silhouette.core.providers.OAuth2StateProvider.State">State</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.0/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.0/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@publish(result:play.api.mvc.Result,state:OAuth2StateProvider.this.State)(implicitrequest:play.api.mvc.RequestHeader):play.api.mvc.Result" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Publishes the state to the client.</p><div class="fullcomment"><div class="comment cmt"><p>Publishes the state to the client.
+</p></div><dl class="paramcmts block"><dt class="param">result</dt><dd class="cmt"><p>The result to send to the client.</p></dd><dt class="param">state</dt><dd class="cmt"><p>The state to publish.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2StateProvider#validate" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="validate(id:String)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[OAuth2StateProvider.this.State]"></a>
+      <a id="validate(String)(RequestHeader):Future[State]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validate</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.0/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="#State&lt;:com.mohiva.play.silhouette.core.providers.OAuth2State" class="extmbr" name="com.mohiva.play.silhouette.core.providers.OAuth2StateProvider.State">State</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@validate(id:String)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[OAuth2StateProvider.this.State]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Validates the provider and the client state.</p><div class="fullcomment"><div class="comment cmt"><p>Validates the provider and the client state.
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The provider ID.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The state on success, otherwise an failure.
+</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
@@ -106,7 +189,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -123,7 +206,7 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@##():Int" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@##():Int" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -140,334 +223,11 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#AccessDenied" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="AccessDenied:String"></a>
-      <a id="AccessDenied:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">AccessDenied</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@AccessDenied:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#AccessToken" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="AccessToken:String"></a>
-      <a id="AccessToken:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">AccessToken</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@AccessToken:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#AuthorizationCode" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="AuthorizationCode:String"></a>
-      <a id="AuthorizationCode:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">AuthorizationCode</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@AuthorizationCode:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#AuthorizationError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="AuthorizationError:String"></a>
-      <a id="AuthorizationError:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">AuthorizationError</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@AuthorizationError:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">The error messages.</p>
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#ClientID" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ClientID:String"></a>
-      <a id="ClientID:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ClientID</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@ClientID:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">The OAuth2 constants.</p>
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#ClientSecret" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ClientSecret:String"></a>
-      <a id="ClientSecret:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ClientSecret</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@ClientSecret:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#Code" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Code:String"></a>
-      <a id="Code:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">Code</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@Code:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#Error" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Error:String"></a>
-      <a id="Error:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">Error</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@Error:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#Expires" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Expires:String"></a>
-      <a id="Expires:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">Expires</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@Expires:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#ExpiresIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ExpiresIn:String"></a>
-      <a id="ExpiresIn:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ExpiresIn</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@ExpiresIn:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#GrantType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="GrantType:String"></a>
-      <a id="GrantType:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">GrantType</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@GrantType:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#InvalidInfoFormat" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="InvalidInfoFormat:String"></a>
-      <a id="InvalidInfoFormat:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">InvalidInfoFormat</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@InvalidInfoFormat:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#InvalidState" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="InvalidState:String"></a>
-      <a id="InvalidState:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">InvalidState</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@InvalidState:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#RedirectURI" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="RedirectURI:String"></a>
-      <a id="RedirectURI:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">RedirectURI</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@RedirectURI:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#RefreshToken" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="RefreshToken:String"></a>
-      <a id="RefreshToken:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">RefreshToken</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@RefreshToken:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#ResponseType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ResponseType:String"></a>
-      <a id="ResponseType:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ResponseType</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@ResponseType:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#Scope" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Scope:String"></a>
-      <a id="Scope:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">Scope</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@Scope:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#State" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="State:String"></a>
-      <a id="State:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">State</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@State:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="com.mohiva.play.silhouette.core.providers.OAuth2Provider#TokenType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="TokenType:String"></a>
-      <a id="TokenType:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">TokenType</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@TokenType:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -480,7 +240,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -497,7 +257,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@clone():Object" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@clone():Object" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -520,7 +280,7 @@
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -537,7 +297,7 @@
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -554,7 +314,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -577,7 +337,7 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -594,7 +354,7 @@
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@hashCode():Int" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -611,7 +371,7 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -628,7 +388,7 @@
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -645,7 +405,7 @@
         <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@notify():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -662,7 +422,7 @@
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -679,7 +439,7 @@
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -696,7 +456,7 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@toString():String" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@toString():String" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -713,7 +473,7 @@
         <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@wait():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -736,7 +496,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -759,7 +519,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2Provider$@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.providers.OAuth2StateProvider@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
