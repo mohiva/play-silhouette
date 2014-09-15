@@ -176,7 +176,7 @@ object HeaderAuthenticatorService {
  *
  * @param headerName The header name.
  * @param authenticatorIdleTimeout The time in seconds an authenticator can be idle before it timed out. Defaults to 30 minutes.
- * @param authenticatorExpiry The expiry of the authenticator in minutes. Defaults to 12 hours.
+ * @param authenticatorExpiry The expiry of the authenticator in seconds. Defaults to 12 hours.
  */
 case class HeaderAuthenticatorSettings(
   headerName: String = "X-Auth-Token",
