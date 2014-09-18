@@ -38,3 +38,16 @@ Seed project for Play Framework with Silhouette, expose rest api for
 signup and signin.
 
 `Link <https://github.com/merle-/silhouette-rest-seed>`__
+
+--------------
+
+**Play 2.3 Multidomain Auth**
+
+Project for Play Framework with Silhouette, using a not strict implementation
+of Thin Cake Pattern and showing how to add an authentication and authorizaton
+layer. The project is splitted in two main subprojects: a public web page that
+uses a complete authentication layer (including sign up with email confirmation
+and reset passwords), and an administration web page that uses also a simple
+authorization layer based on roles.
+
+`Link <https://github.com/adrianhurt/play-multidomain-auth>`__
