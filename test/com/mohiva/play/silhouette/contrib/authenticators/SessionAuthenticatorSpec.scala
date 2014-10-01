@@ -170,7 +170,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
   }
 
   "The `init` method of the service" should {
-    "return the response with an unencrypted authenticator stored in the session" in new Context {
+    "return the response with an unencrypted authenticator stored in the session" in new WithApplication with Context {
       settings.encryptAuthenticator returns false
       implicit val request = FakeRequest()
       val result = service.init(authenticator, Future.successful(Results.Status(200)))
@@ -178,7 +178,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       session(result).get(settings.sessionKey) should beSome(Json.toJson(authenticator).toString())
     }
 
-    "return the response with an encrypted authenticator stored in the session" in new Context {
+    "return the response with an encrypted authenticator stored in the session" in new WithApplication with Context {
       settings.encryptAuthenticator returns true
       implicit val request = FakeRequest()
       val result = service.init(authenticator, Future.successful(Results.Status(200)))
@@ -188,7 +188,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
   }
 
   "The `update` method of the service" should {
-    "update the session with an unencrypted authenticator" in new Context {
+    "update the session with an unencrypted authenticator" in new WithApplication with Context {
       implicit val request = FakeRequest()
       val now = DateTime.now().plusHours(1)
 
@@ -204,7 +204,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       session(result).get(settings.sessionKey) should beSome(sessionVal)
     }
 
-    "update the session with an encrypted authenticator" in new Context {
+    "update the session with an encrypted authenticator" in new WithApplication with Context {
       implicit val request = FakeRequest()
       val now = DateTime.now().plusHours(1)
 
@@ -222,7 +222,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
   }
 
   "The `discard` method of the service" should {
-    "discard the the authenticator from session" in new Context {
+    "discard the the authenticator from session" in new WithApplication with Context {
       implicit val request = FakeRequest()
       val result = service.discard(authenticator, Future.successful(Results.Status(200).withSession(
         settings.sessionKey -> "test"
