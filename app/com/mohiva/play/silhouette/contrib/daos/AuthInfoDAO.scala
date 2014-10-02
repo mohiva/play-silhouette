@@ -36,7 +36,7 @@ trait AuthInfoDAO[T <: AuthInfo] {
   def save(loginInfo: LoginInfo, authInfo: T): Future[T]
 
   /**
-   * Finds the OAuth1 info which is linked with the specified login info.
+   * Finds the auth info which is linked with the specified login info.
    *
    * @param loginInfo The linked login info.
    * @return The retrieved auth info or None if no auth info could be retrieved for the given login info.
