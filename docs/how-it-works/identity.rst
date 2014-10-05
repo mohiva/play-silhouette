@@ -1,8 +1,10 @@
+.. _identity_impl:
+
 Identity
 ========
 
 Silhouette defines a user through its ``Identity`` trait. This trait
-doesn’t define any defaults expect the :ref:`glossary-login-info`
+doesn’t define any defaults expect the :ref:`login-info`
 which contains the data about the provider that authenticated that
 identity. This login information must be stored with the identity.
 If the application supports the concept of “merged identities”, i.e.,
@@ -29,6 +31,22 @@ name and email.
       loginInfo: LoginInfo,
       name: String,
       email: Option[String]) extends Identity
+
+
+.. _login-info:
+
+Login information
+^^^^^^^^^^^^^^^^^
+
+Contains the data about the provider that authenticated an identity.
+This information is mostly public available and it simply consists of a
+unique provider ID and a unique key which identifies a user on this
+provider (userID, email, …). This information will be represented by the
+`LoginInfo`_ trait.
+
+.. _LoginInfo: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/core/Identity.scala#L45
+
+.. _identity_service_impl:
 
 The identity service
 --------------------

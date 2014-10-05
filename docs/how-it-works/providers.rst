@@ -1,9 +1,30 @@
+.. _provider_impl:
+
 Providers
 =========
 
 In Silhouette a provider is a service that handles the authentication of
 an identity. It typically reads authorization information and returns
 information about an identity.
+
+
+Credentials provider
+--------------------
+
+Silhouette supports local form authentication with the credentials provider.
+This provider accepts credentials and returns the login information for an
+identity after a successful authentication. Typically credentials consists
+of an identifier(a username or email address) and a password.
+
+The provider supports the change of password hashing algorithms on the
+fly. Sometimes it may be possible to change the hashing algorithm used
+by the application. But the hashes stored in the backing store can’t be
+converted back into plain text passwords, to hash them again with the
+new algorithm. So if a user successfully authenticates after the
+application has changed the hashing algorithm, the provider hashes the
+entered password again with the new algorithm and stores the
+authentication info in the backing store.
+
 
 Social providers
 ----------------
@@ -32,23 +53,16 @@ OAuth2
 -  VKProvider (www.vk.com)
 
 
-Credentials provider
---------------------
+Social profile
+--------------
 
-Silhouette supports also local authentication with the credentials
-provider. This provider accepts credentials and returns the login
-information for an identity after a successful authentication. Typically
-credentials consists of an identifier(a username or email address) and a
-password.
+The social profile contains the profile data returned from the social providers.
+Silhouette provides a default social profile called `CommonSocialProfile`_,
+which contains the most common profile data a provider can return. But it is also
+possible to define an own social profile which can be consists of more
+data.
 
-The provider supports the change of password hashing algorithms on the
-fly. Sometimes it may be possible to change the hashing algorithm used
-by the application. But the hashes stored in the backing store can’t be
-converted back into plain text passwords, to hash them again with the
-new algorithm. So if a user successfully authenticates after the
-application has changed the hashing algorithm, the provider hashes the
-entered password again with the new algorithm and stores the
-authentication info in the backing store.
+.. _CommonSocialProfile: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/core/providers/SocialProvider.scala#L168
 
 Social profile builders
 -----------------------
@@ -75,7 +89,7 @@ keyword, you must call the apply method on its companion object.
 
 .. code-block:: scala
 
-    FacebookProvider(cacheLayer, httpLayer, oAuthSettings)
+    FacebookProvider(httpLayer, stateProvider, settings)
 
 .. Hint::
    All provider implementations are abstract, so they cannot be
@@ -94,17 +108,16 @@ social profile by the additional gender field.
 
 .. code-block:: scala
 
-    case class CustomSocialProfile[A <: AuthInfo](
+    case class CustomSocialProfile(
       loginInfo: LoginInfo,
-      authInfo: A,
       firstName: Option[String] = None,
       lastName: Option[String] = None,
       fullName: Option[String] = None,
       email: Option[String] = None,
       avatarURL: Option[String] = None,
-      gender: Option[String] = None) extends SocialProfile[A]
+      gender: Option[String] = None) extends SocialProfile
 
-Now we create a profile builder which can be mixed into to the Facebook
+Now we create a profile builder which can be mixed into the Facebook
 provider to return our previous defined custom profile.
 
 .. code-block:: scala
@@ -115,7 +128,7 @@ provider to return our previous defined custom profile.
       /**
        * Defines the profile to return by the provider.
        */
-      override type Profile = CustomSocialProfile[OAuth2Info]
+      override type Profile = CustomSocialProfile
 
       /**
        * Parses the profile from the Json response returned by the Facebook API.
@@ -126,7 +139,6 @@ provider to return our previous defined custom profile.
 
         CustomSocialProfile(
           loginInfo = commonProfile.loginInfo,
-          authInfo = commonProfile.authInfo,
           firstName = commonProfile.firstName,
           lastName = commonProfile.lastName,
           fullName = commonProfile.fullName,
@@ -145,4 +157,51 @@ provider with the profile builder.
 
 .. code-block:: scala
 
-    new FacebookProvider(cacheLayer, httpLayer, oAuthSettings) with CustomFacebookProfileBuilder
+    new FacebookProvider(httpLayer, stateProvider, settings) with CustomFacebookProfileBuilder
+
+
+OAuth2 state
+------------
+
+The OAuth2 protocol supports the `state parameter`_, that a client can be include in the request
+and the server returns as a parameter unmodified in the response. This parameter `should be used mainly`_
+to protect an application against `CSRF attacks`_. But it can also be used to remember some
+state about the user.
+
+To maintain the state in Silhouette, a state provider must be passed to every OAuth2 authentication
+provider. All state provider implementations can be found in the `contrib package`_.
+
+.. _state parameter: http://tools.ietf.org/html/rfc6749#section-4.1.1
+.. _CSRF attacks: http://www.oauthsecurity.com/#authorization-code-flow
+.. _should be used mainly: http://www.thread-safe.com/2014/05/the-correct-use-of-state-parameter-in.html
+.. _contrib package: https://github.com/mohiva/play-silhouette/tree/master/app/com/mohiva/play/silhouette/contrib/providers/ouath2
+
+List of OAuth2 states
+^^^^^^^^^^^^^^^^^^^^^
+
+We provide some built in states, but as noted above an own state can be implemented to remember
+some state about a user.
+
+CookieState
+'''''''''''
+
+The cookie state works by embedding the state in a cookie. This is one of the preferred methods
+from the `OAuth2 RFC`_ and it provides a stateless/scalable approach.
+
+.. Tip::
+   Please take a look on the :ref:`configuration settings <oaut2_cookie_state_settings>`, on how
+   to configure the provider for this state.
+
+.. _OAuth2 RFC: https://tools.ietf.org/html/rfc6749#section-10.12
+
+Authentication information
+--------------------------
+
+The authentication information contains secure data like access tokens, hashed passwords and so on, which
+should never be exposed to the public. To retrieve other than by Silhouette supported information from a
+provider, try to connect again with this information and fetch the missing data.
+
+Due its nature, the information will be represented by different implementations. Mostly every provider
+implementation defines its own `AuthInfo`_ implementation.
+
+.. _AuthInfo: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/core/services/AuthInfoService.scala#L60
