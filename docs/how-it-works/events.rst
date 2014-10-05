@@ -1,3 +1,5 @@
+.. _event_bus_impl:
+
 Events
 ======
 

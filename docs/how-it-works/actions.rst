@@ -1,6 +1,8 @@
 Actions
 =======
 
+.. _silhouette_actions:
+
 Securing your Actions
 ---------------------
 
@@ -11,8 +13,8 @@ your code is invoked.
 
 .. code-block:: scala
 
-    class Application(env: Environment[User, CachedCookieAuthenticator])
-      extends Silhouette[User, CachedCookieAuthenticator] {
+    class Application(env: Environment[User, CookieAuthenticator])
+      extends Silhouette[User, CookieAuthenticator] {
 
       /**
        * Renders the index page.
@@ -30,8 +32,8 @@ there isn’t one.
 
 .. code-block:: scala
 
-    class Application(env: Environment[User, CachedCookieAuthenticator])
-      extends Silhouette[User, CachedCookieAuthenticator] {
+    class Application(env: Environment[User, CookieAuthenticator])
+      extends Silhouette[User, CookieAuthenticator] {
 
       /**
        * Renders the index page.
@@ -86,8 +88,8 @@ precedence over the global fallback.
 
 .. code-block:: scala
 
-    class Application(env: Environment[User, CachedCookieAuthenticator])
-      extends Silhouette[User, CachedCookieAuthenticator] {
+    class Application(env: Environment[User, CookieAuthenticator])
+      extends Silhouette[User, CookieAuthenticator] {
 
       /**
        * Called when a user isn't authenticated.
@@ -202,8 +204,8 @@ precedence over the global fallback.
 
 .. code-block:: scala
 
-    class Application(env: Environment[User, CachedCookieAuthenticator])
-      extends Silhouette[User, CachedCookieAuthenticator] {
+    class Application(env: Environment[User, CookieAuthenticator])
+      extends Silhouette[User, CookieAuthenticator] {
 
       /**
        * Called when a user isn't authorized.
@@ -260,8 +262,8 @@ secured action and inside a fallback method for non-authenticated users.
 
 .. code-block:: scala
 
-    class Application(env: Environment[User, CachedCookieAuthenticator])
-      extends Silhouette[User, CachedCookieAuthenticator] {
+    class Application(env: Environment[User, CookieAuthenticator])
+      extends Silhouette[User, CookieAuthenticator] {
 
       /**
        * Called when a user isn't authenticated.
@@ -321,8 +323,8 @@ secured action and inside a fallback method for not-authenticated users.
 
 .. code-block:: scala
 
-    class Application(env: Environment[User, CachedCookieAuthenticator])
-      extends Silhouette[User, CachedCookieAuthenticator] {
+    class Application(env: Environment[User, CookieAuthenticator])
+      extends Silhouette[User, CookieAuthenticator] {
 
       /**
        * Called when a user isn't authenticated.

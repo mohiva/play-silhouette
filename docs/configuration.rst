@@ -4,11 +4,11 @@ Configuration
 Introduction
 ------------
 
-Silhouette doesn’t dictate the form and the location of the
-configuration. So you can configure it over a database, a configuration
-server or the Play Framework configuration mechanism.
+Silhouette doesn’t dictate the form and the location of the configuration.
+So you are able to configure it over a database, a configuration server or
+the Play Framework configuration mechanism.
 
-Generally configuration in Silhouette is handled over configuration
+Generally, configuration in Silhouette is handled over configuration
 objects. These objects must be filled with data and then passed to the
 instance to configure.
 
@@ -190,3 +190,30 @@ Your configuration could then have this format:
 
 To get the clientId/clientSecret keys you need to log into the developer
 site of each service and register your application.
+
+OAuth2 state
+------------
+
+.. _oaut2_cookie_state_settings:
+
+CookieState
+^^^^^^^^^^^
+
+
+Authenticators
+--------------
+
+.. _cookie_authenticator_settings:
+
+CookieAuthenticator
+^^^^^^^^^^^^^^^^^^^
+
+.. _session_authenticator_settings:
+
+SessionAuthenticator
+^^^^^^^^^^^^^^^^^^^^
+
+.. _header_authenticator_settings:
+
+HeaderAuthenticator
+^^^^^^^^^^^^^^^^^^^

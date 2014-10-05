@@ -12,8 +12,8 @@ See the current [list of contributors](https://github.com/mohiva/play-silhouette
 Some ways in which you can contribute are: reporting errors, improving documentation, adding examples, adding support for more services, fixing bugs, suggesting new features, adding test cases, translating messages, and whatever else you can think of that may be helpful. If in doubt, just ask.
 
 
-Workflow
---------
+Development workflow
+--------------------
 
 Development is coordinated via [GitHub](https://github.com/mohiva/play-silhouette). Ideas for improvements are discussed using [issues](https://github.com/mohiva/play-silhouette/issues).
 

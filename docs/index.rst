@@ -26,23 +26,25 @@ Basics
    basics/installation
    basics/examples
    basics/releases
+   basics/contribute
    basics/help
 
 
-Core
-----
+How it works
+------------
 
 .. toctree::
    :maxdepth: 3
 
-   core/actions
-   core/identity
-   core/providers
-   core/error-handling
-   core/caching
-   core/events
-   core/logging
-   core/glossary
+   how-it-works/environment
+   how-it-works/actions
+   how-it-works/identity
+   how-it-works/authenticator
+   how-it-works/providers
+   how-it-works/error-handling
+   how-it-works/caching
+   how-it-works/events
+   how-it-works/logging
 
 
 Configuration
