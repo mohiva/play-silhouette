@@ -47,7 +47,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A trait which provides a mockable implementation for a cache.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A trait which provides a cache API.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -95,60 +95,62 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.utils.CacheLayer#get" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="get[T](key:String)(implicitclassTag:scala.reflect.ClassTag[T]):scala.concurrent.Future[Option[T]]"></a>
-      <a id="get[T](String)(ClassTag[T]):Future[Option[T]]"></a>
+              <ol><li name="com.mohiva.play.silhouette.core.utils.CacheLayer#find" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="find[T](key:String)(implicitevidence$1:scala.reflect.ClassTag[T]):scala.concurrent.Future[Option[T]]"></a>
+      <a id="find[T](String)(ClassTag[T]):Future[Option[T]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">get</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="classTag">classTag: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.reflect.ClassTag" class="extype" target="_top">ClassTag</a>[<span class="extype" name="com.mohiva.play.silhouette.core.utils.CacheLayer.get.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.core.utils.CacheLayer.get.T">T</span>]]</span>
+        <span class="name">find</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.reflect.ClassTag" class="extype" target="_top">ClassTag</a>[<span class="extype" name="com.mohiva.play.silhouette.core.utils.CacheLayer.find.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.core.utils.CacheLayer.find.T">T</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.utils.CacheLayer@get[T](key:String)(implicitclassTag:scala.reflect.ClassTag[T]):scala.concurrent.Future[Option[T]]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.utils.CacheLayer@find[T](key:String)(implicitevidence$1:scala.reflect.ClassTag[T]):scala.concurrent.Future[Option[T]]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Retrieve a value from the cache.</p><div class="fullcomment"><div class="comment cmt"><p>Retrieve a value from the cache.
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the object to return.
-</p></dd><dt class="param">key</dt><dd class="cmt"><p>Item key.</p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.core.utils.CacheLayer#remove" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="remove(key:String):Unit"></a>
-      <a id="remove(String):Unit"></a>
+      <p class="shortcomment cmt">Finds a value in the cache.</p><div class="fullcomment"><div class="comment cmt"><p>Finds a value in the cache.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the object to return.</p></dd><dt class="param">key</dt><dd class="cmt"><p>The key of the item to found.</p></dd><dt>returns</dt><dd class="cmt"><p>The found value or None if no value could be found.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.utils.CacheLayer#remove" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="remove(key:String):scala.concurrent.Future[Unit]"></a>
+      <a id="remove(String):Future[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">remove</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">remove</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.utils.CacheLayer@remove(key:String):Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.utils.CacheLayer@remove(key:String):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Remove a value from the cache.</p>
-    </li><li name="com.mohiva.play.silhouette.core.utils.CacheLayer#set" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="set[T](key:String,value:T,expiration:Int):scala.concurrent.Future[Option[T]]"></a>
-      <a id="set[T](String,T,Int):Future[Option[T]]"></a>
+      <p class="shortcomment cmt">Remove a value from the cache.</p><div class="fullcomment"><div class="comment cmt"><p>Remove a value from the cache.
+</p></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>Item key.</p></dd><dt>returns</dt><dd class="cmt"><p>An empty future to wait for removal.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.utils.CacheLayer#save" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="save[T](key:String,value:T,expiration:Int):scala.concurrent.Future[T]"></a>
+      <a id="save[T](String,T,Int):Future[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">set</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="com.mohiva.play.silhouette.core.utils.CacheLayer.set.T">T</span></span>, <span name="expiration">expiration: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.core.utils.CacheLayer.set.T">T</span>]]</span>
+        <span class="name">save</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="com.mohiva.play.silhouette.core.utils.CacheLayer.save.T">T</span></span>, <span name="expiration">expiration: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.core.utils.CacheLayer.save.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.utils.CacheLayer@set[T](key:String,value:T,expiration:Int):scala.concurrent.Future[Option[T]]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.core.utils.CacheLayer@save[T](key:String,value:T,expiration:Int):scala.concurrent.Future[T]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Set a value into the cache.</p><div class="fullcomment"><div class="comment cmt"><p>Set a value into the cache.
-</p></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>Item key.</p></dd><dt class="param">value</dt><dd class="cmt"><p>Item value.</p></dd><dt class="param">expiration</dt><dd class="cmt"><p>Expiration time in seconds (0 second means eternity).
+      <p class="shortcomment cmt">Save a value in cache.</p><div class="fullcomment"><div class="comment cmt"><p>Save a value in cache.
+</p></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>The item key under which the value should be saved.</p></dd><dt class="param">value</dt><dd class="cmt"><p>The value to save.</p></dd><dt class="param">expiration</dt><dd class="cmt"><p>Expiration time in seconds (0 second means eternity).</p></dd><dt>returns</dt><dd class="cmt"><p>The value saved in cache.
 </p></dd></dl></div>
     </li></ol>
             </div>
