@@ -27,19 +27,19 @@ import org.specs2.specification.Scope
  */
 class PlayCacheLayerSpec extends PlaySpecification {
 
-  "The set method" should {
+  "The `save` method" should {
     "save value in cache" in new WithApplication with Context {
-      await(layer.set("id", value))
+      await(layer.save("id", value))
 
       Cache.getAs[DateTime]("id") should beSome(value)
     }
   }
 
-  "The get method" should {
+  "The `find` method" should {
     "return value from cache" in new WithApplication with Context {
       Cache.set("id", value)
 
-      await(layer.get[DateTime]("id")) should beSome(value)
+      await(layer.find[DateTime]("id")) should beSome(value)
     }
   }
 
@@ -47,7 +47,7 @@ class PlayCacheLayerSpec extends PlaySpecification {
     "removes value from cache" in new WithApplication with Context {
       Cache.set("id", value)
 
-      layer.remove("id")
+      await(layer.remove("id"))
 
       Cache.getAs[DateTime]("id") should beNone
     }

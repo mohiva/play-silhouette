@@ -55,6 +55,7 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
       implicit val req = FakeRequest()
       c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.successful(c.oAuthInfo)
       c.oAuthService.redirectUrl(any) returns c.oAuthSettings.authorizationURL
+      c.cacheLayer.save[OAuth1Info](any, any, any) returns Future.successful(c.oAuthInfo)
 
       result(c.provider.authenticate()) {
         case result =>
@@ -68,12 +69,13 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
       implicit val req = FakeRequest()
       c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.successful(c.oAuthInfo)
       c.oAuthService.redirectUrl(any) returns c.oAuthSettings.authorizationURL
+      c.cacheLayer.save[OAuth1Info](any, any, any) returns Future.successful(c.oAuthInfo)
 
       result(c.provider.authenticate()) {
         case result =>
           val cacheID = session(result).get(OAuth1Provider.CacheKey).get
 
-          there was one(c.cacheLayer).set(cacheID, c.oAuthInfo, CacheExpiration)
+          there was one(c.cacheLayer).save(cacheID, c.oAuthInfo, CacheExpiration)
       }
     }
 
@@ -87,7 +89,7 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
     "fail with an AuthenticationException if OAuthVerifier exists in URL but info doesn't exists in cache" in new WithApplication {
       val cacheID = UUID.randomUUID().toString
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
-      c.cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(None)
+      c.cacheLayer.find[OAuth1Info](cacheID) returns Future.successful(None)
 
       failed[AuthenticationException](c.provider.authenticate()) {
         case e => e.getMessage must startWith(CachedTokenDoesNotExists.format(c.provider.id, ""))
@@ -97,7 +99,7 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
     "fail with an AuthenticationException if access token cannot be retrieved" in new WithApplication {
       val cacheID = UUID.randomUUID().toString
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
-      c.cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(Some(c.oAuthInfo))
+      c.cacheLayer.find[OAuth1Info](cacheID) returns Future.successful(Some(c.oAuthInfo))
       c.oAuthService.retrieveAccessToken(c.oAuthInfo, "my.verifier") returns Future.failed(new Exception(""))
 
       failed[AuthenticationException](c.provider.authenticate()) {

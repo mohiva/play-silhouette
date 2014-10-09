@@ -37,7 +37,7 @@ class XingProviderSpec extends OAuth1ProviderSpec {
     "return the auth info" in new WithApplication with Context {
       val cacheID = UUID.randomUUID().toString
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
-      cacheLayer.get[OAuth1Info](cacheID) returns Future.successful(Some(oAuthInfo))
+      cacheLayer.find[OAuth1Info](cacheID) returns Future.successful(Some(oAuthInfo))
       oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(oAuthInfo)
 
       authInfo(provider.authenticate()) {
