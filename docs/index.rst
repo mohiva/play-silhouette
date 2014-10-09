@@ -1,5 +1,11 @@
-Welcome to Silhouette's documentation!
-======================================
+Welcome to Silhouette's documentation !
+=======================================
+
+.. ifconfig:: release.endswith('-SNAPSHOT')
+
+    .. warning::
+       This documentation is for version |release| of Silhouette currently under
+       development. Were you looking for version |last_stable| documentation?
 
 **Silhouette** is an authentication library for Play Framework
 applications that supports several authentication methods, including
