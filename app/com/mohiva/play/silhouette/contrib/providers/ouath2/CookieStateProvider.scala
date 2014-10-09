@@ -15,11 +15,9 @@
  */
 package com.mohiva.play.silhouette.contrib.providers.ouath2
 
-import javax.xml.bind.DatatypeConverter
 import com.mohiva.play.silhouette.core.exceptions.StateException
 import com.mohiva.play.silhouette.core.providers.{ OAuth2Provider, OAuth2StateProvider, OAuth2State }
-import com.mohiva.play.silhouette.core.utils.{ Clock, IDGenerator }
-import com.sun.xml.internal.messaging.saaj.util.Base64
+import com.mohiva.play.silhouette.core.utils.{ Base64, Clock, IDGenerator }
 import org.joda.time.DateTime
 import play.api.Play
 import play.api.Play.current
@@ -66,7 +64,7 @@ case class CookieState(expirationDate: DateTime, value: String) extends OAuth2St
    *
    * @return A serialized value of the state.
    */
-  def serialize = DatatypeConverter.printBase64Binary(Json.toJson(this).toString().getBytes("UTF-8"))
+  def serialize = Base64.encode(Json.toJson(this))
 }
 
 /**
@@ -163,7 +161,7 @@ class CookieStateProvider(
    * @return Some state on success, otherwise None.
    */
   private def unserializeState(str: String, id: String): Try[CookieState] = {
-    Try(Json.parse(Base64.base64Decode(str))) match {
+    Try(Json.parse(Base64.decode(str))) match {
       case Success(json) => json.validate[CookieState].asEither match {
         case Left(error) => Failure(new StateException(InvalidStateFormat.format(id, error)))
         case Right(authenticator) => Success(authenticator)

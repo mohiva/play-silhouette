@@ -15,18 +15,16 @@
  */
 package com.mohiva.play.silhouette.contrib.providers.oauth2
 
-import javax.xml.bind.DatatypeConverter
 import scala.concurrent.Future
 import play.api.mvc.{ Cookie, Results }
 import play.api.test.{ FakeRequest, WithApplication, PlaySpecification }
-import com.sun.xml.internal.messaging.saaj.util.Base64
 import org.joda.time.DateTime
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import com.mohiva.play.silhouette.contrib.providers.ouath2.{ CookieStateSettings, CookieState, CookieStateProvider }
 import com.mohiva.play.silhouette.core.exceptions.StateException
-import com.mohiva.play.silhouette.core.utils.{ IDGenerator, Clock }
+import com.mohiva.play.silhouette.core.utils.{ Base64, IDGenerator, Clock }
 import com.mohiva.play.silhouette.core.providers.OAuth2Provider._
 import CookieStateProvider._
 
@@ -48,7 +46,7 @@ class CookieStateProviderSpec extends PlaySpecification with Mockito with JsonMa
   "The `serialize` method of the state" should {
     "serialize the JSON as base64 encoded string" in new Context {
       val dateTime = new DateTime(2014, 8, 8, 0, 0, 0)
-      val decoded = Base64.base64Decode(state.copy(expirationDate = dateTime).serialize)
+      val decoded = Base64.decode(state.copy(expirationDate = dateTime).serialize)
 
       decoded must /("expirationDate" -> dateTime.getMillis)
       decoded must /("value" -> "value")
@@ -88,7 +86,7 @@ class CookieStateProviderSpec extends PlaySpecification with Mockito with JsonMa
     }
 
     "throw an StateException if client state contains invalid json" in new WithApplication with Context {
-      val invalidState = DatatypeConverter.printBase64Binary("{".getBytes("UTF-8"))
+      val invalidState = Base64.encode("{")
 
       implicit val req = FakeRequest(GET, s"?$State=${state.serialize}").withCookies(Cookie(settings.cookieName, invalidState))
 
@@ -98,7 +96,7 @@ class CookieStateProviderSpec extends PlaySpecification with Mockito with JsonMa
     }
 
     "throw an StateException if client state contains valid json but invalid state" in new WithApplication with Context {
-      val invalidState = DatatypeConverter.printBase64Binary("{ \"test\": \"test\" }".getBytes("UTF-8"))
+      val invalidState = Base64.encode("{ \"test\": \"test\" }")
 
       implicit val req = FakeRequest(GET, s"?$State=${state.serialize}").withCookies(Cookie(settings.cookieName, invalidState))
 
@@ -108,7 +106,7 @@ class CookieStateProviderSpec extends PlaySpecification with Mockito with JsonMa
     }
 
     "throw an StateException if provider state contains invalid json" in new WithApplication with Context {
-      val invalidState = DatatypeConverter.printBase64Binary("{".getBytes("UTF-8"))
+      val invalidState = Base64.encode("{")
 
       implicit val req = FakeRequest(GET, s"?$State=$invalidState").withCookies(Cookie(settings.cookieName, state.serialize))
 
@@ -118,7 +116,7 @@ class CookieStateProviderSpec extends PlaySpecification with Mockito with JsonMa
     }
 
     "throw an StateException if provider state contains valid json but invalid state" in new WithApplication with Context {
-      val invalidState = DatatypeConverter.printBase64Binary("{ \"test\": \"test\" }".getBytes("UTF-8"))
+      val invalidState = Base64.encode("{ \"test\": \"test\" }")
 
       implicit val req = FakeRequest(GET, s"?$State=$invalidState").withCookies(Cookie(settings.cookieName, state.serialize))
 
