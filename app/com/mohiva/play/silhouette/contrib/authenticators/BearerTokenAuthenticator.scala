@@ -1,9 +1,5 @@
 /**
- * Original work: SecureSocial (https://github.com/jaliss/securesocial)
- * Copyright 2013 Jorge Aliss (jaliss at gmail dot com) - twitter: @jaliss
- *
- * Derivative work: Silhouette (https://github.com/mohiva/play-silhouette)
- * Modifications Copyright 2014 Mohiva Organisation (license at mohiva dot com)
+ * Copyright 2014 Mohiva Organisation (license at mohiva dot com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,25 +15,23 @@
  */
 package com.mohiva.play.silhouette.contrib.authenticators
 
-import com.mohiva.play.silhouette.contrib.authenticators.CookieAuthenticatorService._
+import com.mohiva.play.silhouette.contrib.authenticators.BearerTokenAuthenticatorService._
 import com.mohiva.play.silhouette.contrib.daos.AuthenticatorDAO
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import com.mohiva.play.silhouette.core.services.AuthenticatorService
 import com.mohiva.play.silhouette.core.services.AuthenticatorService._
-import com.mohiva.play.silhouette.core.utils.{ Clock, FingerprintGenerator, IDGenerator }
+import com.mohiva.play.silhouette.core.utils.{ Clock, IDGenerator }
 import com.mohiva.play.silhouette.core.{ Authenticator, Logger, LoginInfo }
 import org.joda.time.DateTime
-import play.api.Play
-import play.api.Play.current
 import play.api.libs.concurrent.Execution.Implicits._
-import play.api.mvc.{ Cookie, DiscardingCookie, RequestHeader, Result }
+import play.api.mvc.{ RequestHeader, Result }
 import scala.concurrent.Future
 import scala.util.Try
 
 /**
- * An authenticator that uses a cookie based approach. It works by storing an ID in a cookie
- * to track the authenticated user and a server side backing store that maps the ID to an
- * authenticator instance.
+ * An authenticator that uses a header based based approach with the help of a bearer token.
+ * It works by transporting a token in a user defined header to track the authenticated user
+ * and a server side backing store that maps the token to an authenticator instance.
  *
  * The authenticator can use sliding window expiration. This means that the authenticator times
  * out after a certain time if it wasn't used. This can be controlled with the [[idleTimeout]]
@@ -50,15 +44,13 @@ import scala.util.Try
  * @param lastUsedDate The last used timestamp.
  * @param expirationDate The expiration time.
  * @param idleTimeout The time in seconds an authenticator can be idle before it timed out.
- * @param fingerprint Maybe a fingerprint of the user.
  */
-case class CookieAuthenticator(
+case class BearerTokenAuthenticator(
   id: String,
   loginInfo: LoginInfo,
   lastUsedDate: DateTime,
   expirationDate: DateTime,
-  idleTimeout: Option[Int],
-  fingerprint: Option[String])
+  idleTimeout: Option[Int])
     extends Authenticator {
 
   /**
@@ -86,21 +78,19 @@ case class CookieAuthenticator(
 }
 
 /**
- * The service that handles the cookie authenticator.
+ * The service that handles the bearer token authenticator.
  *
- * @param settings The cookie settings.
+ * @param settings The authenticator settings.
  * @param dao The DAO to store the authenticator.
- * @param fingerprintGenerator The fingerprint generator implementation.
  * @param idGenerator The ID generator used to create the authenticator ID.
  * @param clock The clock implementation.
  */
-class CookieAuthenticatorService(
-  settings: CookieAuthenticatorSettings,
-  dao: AuthenticatorDAO[CookieAuthenticator],
-  fingerprintGenerator: FingerprintGenerator,
+class BearerTokenAuthenticatorService(
+  settings: BearerTokenAuthenticatorSettings,
+  dao: AuthenticatorDAO[BearerTokenAuthenticator],
   idGenerator: IDGenerator,
   clock: Clock)
-    extends AuthenticatorService[CookieAuthenticator] with Logger {
+    extends AuthenticatorService[BearerTokenAuthenticator] with Logger {
 
   /**
    * Creates a new authenticator for the specified login info.
@@ -112,14 +102,12 @@ class CookieAuthenticatorService(
   def create(loginInfo: LoginInfo)(implicit request: RequestHeader) = {
     idGenerator.generate.map { id =>
       val now = clock.now
-      CookieAuthenticator(
+      BearerTokenAuthenticator(
         id = id,
         loginInfo = loginInfo,
         lastUsedDate = now,
         expirationDate = now.plusSeconds(settings.authenticatorExpiry),
-        idleTimeout = settings.authenticatorIdleTimeout,
-        fingerprint = if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
-      )
+        idleTimeout = settings.authenticatorIdleTimeout)
     }.recover {
       case e => throw new AuthenticationException(CreateError.format(ID, loginInfo), e)
     }
@@ -132,43 +120,25 @@ class CookieAuthenticatorService(
    * @return Some authenticator or None if no authenticator could be found in request.
    */
   def retrieve(implicit request: RequestHeader) = {
-    Future.fromTry(Try {
-      if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
-    }).flatMap { fingerprint =>
-      request.cookies.get(settings.cookieName) match {
-        case Some(cookie) => dao.find(cookie.value).map {
-          case Some(a) if fingerprint.isDefined && a.fingerprint != fingerprint =>
-            logger.info(InvalidFingerprint.format(ID, fingerprint, a))
-            None
-          case Some(a) => Some(a)
-          case None => None
-        }
-        case None => Future.successful(None)
-      }
+    Future.fromTry(Try(request.headers.get(settings.headerName))).flatMap {
+      case Some(token) => dao.find(token)
+      case None => Future.successful(None)
     }.recover {
       case e => throw new AuthenticationException(RetrieveError.format(ID), e)
     }
   }
 
   /**
-   * Creates a new cookie for the given authenticator and embeds it to the result. The authenticator
-   * will also be stored in the backing store.
+   * Creates a new bearer token for the given authenticator and adds a header with the token as value
+   * to the result. The authenticator will also be stored in the backing store.
    *
    * @param result The result to manipulate.
    * @param request The request header.
    * @return The manipulated result.
    */
-  def init(authenticator: CookieAuthenticator, result: Future[Result])(implicit request: RequestHeader) = {
+  def init(authenticator: BearerTokenAuthenticator, result: Future[Result])(implicit request: RequestHeader) = {
     dao.save(authenticator).flatMap { a =>
-      result.map(_.withCookies(Cookie(
-        name = settings.cookieName,
-        value = a.id,
-        maxAge = settings.cookieMaxAge,
-        path = settings.cookiePath,
-        domain = settings.cookieDomain,
-        secure = settings.secureCookie,
-        httpOnly = settings.httpOnlyCookie
-      )))
+      result.map(_.withHeaders(settings.headerName -> a.id))
     }.recover {
       case e => throw new AuthenticationException(InitError.format(ID, authenticator), e)
     }
@@ -177,7 +147,7 @@ class CookieAuthenticatorService(
   /**
    * Updates the authenticator with the new last used date in the backing store.
    *
-   * We needn't embed the cookie in the response here because the cookie itself will not be changed.
+   * We needn't embed the token in the response here because the token itself will not be changed.
    * Only the authenticator in the backing store will be changed.
    *
    * @param authenticator The authenticator to update.
@@ -185,7 +155,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def update(authenticator: CookieAuthenticator, result: CookieAuthenticator => Future[Result])(implicit request: RequestHeader) = {
+  def update(authenticator: BearerTokenAuthenticator, result: BearerTokenAuthenticator => Future[Result])(implicit request: RequestHeader) = {
     dao.save(authenticator.copy(lastUsedDate = clock.now)).flatMap { a =>
       result(a)
     }.recover {
@@ -194,15 +164,15 @@ class CookieAuthenticatorService(
   }
 
   /**
-   * Replaces the authenticator cookie with a new one. The old authenticator will be revoked in the backing store.
-   * After that it isn't possible to use a cookie which was bound to this authenticator.
+   * Replaces the bearer token header with a new one. The old authenticator will be revoked. After
+   * that it isn't possible to use a bearer token which was bound to this authenticator.
    *
    * @param authenticator The authenticator to update.
    * @param result A function which gets the updated authenticator and returns the original result.
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def renew(authenticator: CookieAuthenticator, result: CookieAuthenticator => Future[Result])(implicit request: RequestHeader) = {
+  def renew(authenticator: BearerTokenAuthenticator, result: BearerTokenAuthenticator => Future[Result])(implicit request: RequestHeader) = {
     dao.remove(authenticator.id).flatMap { _ =>
       create(authenticator.loginInfo).flatMap { a =>
         init(a, result(a))
@@ -213,19 +183,15 @@ class CookieAuthenticatorService(
   }
 
   /**
-   * Discards the cookie and remove the authenticator from backing store.
+   * Removes the authenticator from cache.
    *
    * @param result The result to manipulate.
    * @param request The request header.
    * @return The manipulated result.
    */
-  def discard(authenticator: CookieAuthenticator, result: Future[Result])(implicit request: RequestHeader) = {
+  def discard(authenticator: BearerTokenAuthenticator, result: Future[Result])(implicit request: RequestHeader) = {
     dao.remove(authenticator.id).flatMap { _ =>
-      result.map(_.discardingCookies(DiscardingCookie(
-        name = settings.cookieName,
-        path = settings.cookiePath,
-        domain = settings.cookieDomain,
-        secure = settings.secureCookie)))
+      result
     }.recover {
       case e => throw new AuthenticationException(DiscardError.format(ID, authenticator), e)
     }
@@ -235,39 +201,22 @@ class CookieAuthenticatorService(
 /**
  * The companion object of the authenticator service.
  */
-object CookieAuthenticatorService {
+object BearerTokenAuthenticatorService {
 
   /**
    * The ID of the authenticator.
    */
-  val ID = "cookie-authenticator"
-
-  /**
-   * The error messages.
-   */
-  val InvalidFingerprint = "[Silhouette][%s] Fingerprint %s doesn't match authenticator: %s"
+  val ID = "bearer-token-authenticator"
 }
 
 /**
- * The settings for the cookie authenticator.
+ * The settings for the bearer token authenticator.
  *
- * @param cookieName The cookie name.
- * @param cookiePath The cookie path.
- * @param cookieDomain The cookie domain.
- * @param secureCookie Whether this cookie is secured, sent only for HTTPS requests.
- * @param httpOnlyCookie Whether this cookie is HTTP only, i.e. not accessible from client-side JavaScript code.
- * @param useFingerprinting Indicates if a fingerprint of the user should be stored in the authenticator.
- * @param cookieMaxAge The cookie expiration date in seconds, `None` for a transient cookie. Defaults to 12 hours.
+ * @param headerName The name of the header in which the token will be transfered.
  * @param authenticatorIdleTimeout The time in seconds an authenticator can be idle before it timed out. Defaults to 30 minutes.
- * @param authenticatorExpiry The expiry of the authenticator in minutes. Defaults to 12 hours.
+ * @param authenticatorExpiry The expiry of the authenticator in seconds. Defaults to 12 hours.
  */
-case class CookieAuthenticatorSettings(
-  cookieName: String = "id",
-  cookiePath: String = "/",
-  cookieDomain: Option[String] = None,
-  secureCookie: Boolean = Play.isProd, // Default to sending only for HTTPS in production, but not for development and test.
-  httpOnlyCookie: Boolean = true,
-  useFingerprinting: Boolean = true,
-  cookieMaxAge: Option[Int] = Some(12 * 60 * 60),
+case class BearerTokenAuthenticatorSettings(
+  headerName: String = "X-Auth-Token",
   authenticatorIdleTimeout: Option[Int] = Some(30 * 60),
   authenticatorExpiry: Int = 12 * 60 * 60)

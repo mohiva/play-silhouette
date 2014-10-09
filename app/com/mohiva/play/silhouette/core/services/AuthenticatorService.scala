@@ -21,7 +21,7 @@ package com.mohiva.play.silhouette.core.services
 
 import scala.concurrent.Future
 import play.api.mvc.{ Result, RequestHeader }
-import com.mohiva.play.silhouette.core.{ Identity, Authenticator }
+import com.mohiva.play.silhouette.core.{ LoginInfo, Authenticator }
 
 /**
  * The authenticator store is in charge of persisting authenticators for the Silhouette module.
@@ -31,13 +31,13 @@ import com.mohiva.play.silhouette.core.{ Identity, Authenticator }
 trait AuthenticatorService[T <: Authenticator] {
 
   /**
-   * Creates a new authenticator for the specified identity.
+   * Creates a new authenticator for the specified login info.
    *
-   * @param identity The identity for which the authenticator should be created.
+   * @param loginInfo The login info for which the authenticator should be created.
    * @param request The request header.
    * @return An authenticator.
    */
-  def create[I <: Identity](identity: I)(implicit request: RequestHeader): Future[T]
+  def create(loginInfo: LoginInfo)(implicit request: RequestHeader): Future[T]
 
   /**
    * Retrieves the authenticator from request.
@@ -48,9 +48,9 @@ trait AuthenticatorService[T <: Authenticator] {
   def retrieve(implicit request: RequestHeader): Future[Option[T]]
 
   /**
-   * Manipulates the response and pushes authenticator specific data to the client.
+   * Embeds authenticator specific artifacts into the response.
    *
-   * This method gets called on authenticator initialization after an identity has logged in.
+   * This method should be called on authenticator initialization after an identity has logged in.
    *
    * @param authenticator The authenticator instance.
    * @param result The result to manipulate.
@@ -60,8 +60,9 @@ trait AuthenticatorService[T <: Authenticator] {
   def init(authenticator: T, result: Future[Result])(implicit request: RequestHeader): Future[Result]
 
   /**
-   * Updates authenticator specific data and maybe push it to the client.
+   * Updates authenticator specific data.
    *
+   * If the authenticator was updated, then the updated artifacts should be embedded into the response.
    * This method gets called on every subsequent request if an identity access a `SecuredAction` or
    * a `UserAwareAction`.
    *
@@ -73,7 +74,21 @@ trait AuthenticatorService[T <: Authenticator] {
   def update(authenticator: T, result: T => Future[Result])(implicit request: RequestHeader): Future[Result]
 
   /**
-   * Manipulates the response and removes authenticator specific data before sending it to the client.
+   * Renews the expiration of an authenticator.
+   *
+   * Based on the implementation, the renew method should revoke the given authenticator first, before
+   * creating a new one. If the authenticator was updated, then the updated artifacts should be embedded
+   * into the response.
+   *
+   * @param authenticator The authenticator to renew.
+   * @param result A function which gets the updated authenticator and returns the original or a manipulated result.
+   * @param request The request header.
+   * @return The original or a manipulated result.
+   */
+  def renew(authenticator: T, result: T => Future[Result])(implicit request: RequestHeader): Future[Result]
+
+  /**
+   * Manipulates the response and removes authenticator specific artifacts before sending it to the client.
    *
    * @param authenticator The authenticator instance.
    * @param result The result to manipulate.
@@ -81,4 +96,20 @@ trait AuthenticatorService[T <: Authenticator] {
    * @return The manipulated result.
    */
   def discard(authenticator: T, result: Future[Result])(implicit request: RequestHeader): Future[Result]
+}
+
+/**
+ * The companion object.
+ */
+object AuthenticatorService {
+
+  /**
+   * The error messages.
+   */
+  val CreateError = "[Silhouette][%s] Could not create authenticator for login info: %s"
+  val RetrieveError = "[Silhouette][%s] Could not retrieve authenticator"
+  val InitError = "[Silhouette][%s] Could not init authenticator: %s"
+  val UpdateError = "[Silhouette][%s] Could not update authenticator: %s"
+  val RenewError = "[Silhouette][%s] Could not renew authenticator: %s"
+  val DiscardError = "[Silhouette][%s] Could not discard authenticator: %s"
 }

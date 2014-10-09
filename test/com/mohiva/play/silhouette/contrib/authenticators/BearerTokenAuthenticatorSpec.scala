@@ -15,23 +15,23 @@
  */
 package com.mohiva.play.silhouette.contrib.authenticators
 
-import com.mohiva.play.silhouette.contrib.authenticators.CookieAuthenticatorService._
+import com.mohiva.play.silhouette.contrib.authenticators.BearerTokenAuthenticatorService._
 import com.mohiva.play.silhouette.contrib.daos.AuthenticatorDAO
 import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import com.mohiva.play.silhouette.core.services.AuthenticatorService._
-import com.mohiva.play.silhouette.core.utils.{ Clock, FingerprintGenerator, IDGenerator }
+import com.mohiva.play.silhouette.core.utils.{ Clock, IDGenerator }
 import com.mohiva.play.silhouette.core.{ Authenticator, LoginInfo }
 import org.joda.time.DateTime
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.mvc.{ Cookie, Results }
+import play.api.mvc.Results
 import play.api.test.{ FakeRequest, PlaySpecification }
 import scala.concurrent.Future
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.contrib.authenticators.CookieAuthenticator]].
+ * Test case for the [[com.mohiva.play.silhouette.contrib.authenticators.BearerTokenAuthenticator]].
  */
-class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
+class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
 
   "The `isValid` method of the authenticator" should {
     "return false if the authenticator is expired" in new Context {
@@ -53,27 +53,6 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
   }
 
   "The `create` method of the service" should {
-    "return a fingerprinted authenticator" in new Context {
-      implicit val request = FakeRequest()
-
-      idGenerator.generate returns Future.successful("test-id")
-      clock.now returns new DateTime
-      fingerprintGenerator.generate(any) returns "test"
-      settings.useFingerprinting returns true
-
-      await(service.create(loginInfo)).fingerprint must beSome("test")
-    }
-
-    "return a non fingerprinted authenticator" in new Context {
-      implicit val request = FakeRequest()
-
-      idGenerator.generate returns Future.successful("test-id")
-      clock.now returns new DateTime
-      settings.useFingerprinting returns false
-
-      await(service.create(loginInfo)).fingerprint must beNone
-    }
-
     "return an authenticator with the generated ID" in new Context {
       implicit val request = FakeRequest()
       val id = "test-id"
@@ -129,57 +108,32 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
   }
 
   "The `retrieve` method of the service" should {
-    "return None if no authenticator cookie exists" in new Context {
+    "return None if no authenticator header exists" in new Context {
       implicit val request = FakeRequest()
 
       await(service.retrieve) must beNone
     }
 
-    "return None if no authenticator is stored for the cookie" in new Context {
-      implicit val request = FakeRequest().withCookies(Cookie(settings.cookieName, authenticator.id))
+    "return None if no authenticator is stored for the header" in new Context {
+      implicit val request = FakeRequest().withHeaders(settings.headerName -> authenticator.id)
 
       dao.find(authenticator.id) returns Future.successful(None)
 
       await(service.retrieve) must beNone
     }
 
-    "return None if authenticator fingerprint doesn't match current fingerprint" in new Context {
-      implicit val request = FakeRequest().withCookies(Cookie(settings.cookieName, authenticator.id))
+    "return authenticator if an authenticator is stored for the header" in new Context {
+      implicit val request = FakeRequest().withHeaders(settings.headerName -> authenticator.id)
 
-      fingerprintGenerator.generate(any) returns "false"
-      settings.useFingerprinting returns true
-      authenticator.fingerprint returns Some("test")
-      dao.find(authenticator.id) returns Future.successful(Some(authenticator))
-
-      await(service.retrieve) must beNone
-    }
-
-    "return authenticator if authenticator fingerprint matches current fingerprint" in new Context {
-      implicit val request = FakeRequest().withCookies(Cookie(settings.cookieName, authenticator.id))
-
-      fingerprintGenerator.generate(any) returns "test"
-      settings.useFingerprinting returns true
-      authenticator.fingerprint returns Some("test")
-      dao.find(authenticator.id) returns Future.successful(Some(authenticator))
-
-      await(service.retrieve) must beSome(authenticator)
-    }
-
-    "return authenticator if fingerprinting is disabled" in new Context {
-      implicit val request = FakeRequest().withCookies(Cookie(settings.cookieName, authenticator.id))
-
-      settings.useFingerprinting returns false
       dao.find(authenticator.id) returns Future.successful(Some(authenticator))
 
       await(service.retrieve) must beSome(authenticator)
     }
 
     "throws an Authentication exception if an error occurred during retrieval" in new Context {
-      implicit val request = FakeRequest().withCookies(Cookie(settings.cookieName, authenticator.id))
+      implicit val request = FakeRequest().withHeaders(settings.headerName -> authenticator.id)
 
-      fingerprintGenerator.generate throws new RuntimeException("Could not generate ID")
-      settings.useFingerprinting returns true
-      dao.find(authenticator.id) returns Future.successful(Some(authenticator))
+      dao.find(authenticator.id) returns Future.failed(new RuntimeException("Cannot find authenticator"))
 
       await(service.retrieve) must throwA[AuthenticationException].like {
         case e =>
@@ -189,21 +143,13 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
   }
 
   "The `init` method of the service" should {
-    "return the response with a cookie if authenticator could be saved in backing store" in new Context {
-      dao.save(any) returns Future.successful(authenticator)
+    "return the response with a header if authenticator could be saved in backing store" in new Context {
+      dao.save(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
 
       implicit val request = FakeRequest()
       val result = service.init(authenticator, Future.successful(Results.Status(200)))
 
-      cookies(result).get(settings.cookieName) should beSome[Cookie].which { c =>
-        c.name must be equalTo settings.cookieName
-        c.value must be equalTo authenticator.id
-        c.maxAge must be equalTo settings.cookieMaxAge
-        c.path must be equalTo settings.cookiePath
-        c.domain must be equalTo settings.cookieDomain
-        c.secure must be equalTo settings.secureCookie
-        c.httpOnly must be equalTo settings.httpOnlyCookie
-      }
+      header(settings.headerName, result) should beSome(authenticator.id)
     }
 
     "throws an Authentication exception if error an occurred during initialization" in new Context {
@@ -232,12 +178,12 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
     }
 
     "return the result if the authenticator could be stored in backing store" in new Context {
-      dao.save(any) answers { p => Future.successful(p.asInstanceOf[CookieAuthenticator]) }
+      dao.save(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
       clock.now returns DateTime.now().plusHours(1)
 
-      // In this case the result must be 0 because the backing store returns the updated
-      // authenticator and this returned authenticator doesn't equal the passed authenticator
-      // because the lastUsedDate was updated
+      // In this case the result must be 0 because the backing store returns the updated authenticator
+      // and this returned authenticator doesn't equal the passed authenticator because the
+      // lastUsedDate was updated
       implicit val request = FakeRequest()
       val updatedResult = (a: Authenticator) => Future.successful(Results.Status(if (a == authenticator) 1 else 0))
       val result = service.update(authenticator, updatedResult)
@@ -265,7 +211,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       val id = "new-test-id"
 
       dao.remove(authenticator.id) returns Future.successful(())
-      dao.save(any) answers { p => Future.successful(p.asInstanceOf[CookieAuthenticator]) }
+      dao.save(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
@@ -274,28 +220,19 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       there was one(dao).remove(authenticator.id)
     }
 
-    "renew the authenticator and return the response with the updated cookie value" in new Context {
+    "renew the authenticator and return the response with a new bearer token" in new Context {
       implicit val request = FakeRequest()
       val now = new DateTime
       val id = "new-test-id"
 
       dao.remove(any) returns Future.successful(())
-      dao.save(any) answers { p => Future.successful(p.asInstanceOf[CookieAuthenticator]) }
+      dao.save(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
       val result = service.renew(authenticator, _ => Future.successful(Results.Status(200)))
 
-      cookies(result).get(settings.cookieName) should beSome[Cookie].which { c =>
-        c.name must be equalTo settings.cookieName
-        c.value must be equalTo id
-        c.maxAge must be equalTo settings.cookieMaxAge
-        c.path must be equalTo settings.cookiePath
-        c.domain must be equalTo settings.cookieDomain
-        c.secure must be equalTo settings.secureCookie
-        c.httpOnly must be equalTo settings.httpOnlyCookie
-      }
-      there was one(dao).save(any)
+      header(settings.headerName, result) should beSome(id)
     }
 
     "throws an Authentication exception if an error occurred during renewal" in new Context {
@@ -317,31 +254,13 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
   }
 
   "The `discard` method of the service" should {
-    "discard the cookie from response" in new Context {
+    "remove authenticator from backing store" in new Context {
       implicit val request = FakeRequest()
 
-      dao.remove(any) returns Future.successful(())
+      dao.remove(authenticator.id) returns Future.successful(authenticator)
 
-      val result = service.discard(authenticator, Future.successful(Results.Status(200).withCookies(
-        Cookie(
-          name = settings.cookieName,
-          value = authenticator.id,
-          maxAge = settings.cookieMaxAge,
-          path = settings.cookiePath,
-          domain = settings.cookieDomain,
-          secure = settings.secureCookie,
-          httpOnly = settings.httpOnlyCookie
-        )
-      )))
+      await(service.discard(authenticator, Future.successful(Results.Status(200))))
 
-      cookies(result).get(settings.cookieName) should beSome[Cookie].which { c =>
-        c.name must be equalTo settings.cookieName
-        c.value must be equalTo ""
-        c.maxAge must beSome[Int].which(_ < 0)
-        c.path must be equalTo settings.cookiePath
-        c.domain must be equalTo settings.cookieDomain
-        c.secure must be equalTo settings.secureCookie
-      }
       there was one(dao).remove(authenticator.id)
     }
 
@@ -349,7 +268,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       implicit val request = FakeRequest()
       val okResult = Future.successful(Results.Status(200))
 
-      dao.remove(any) returns Future.failed(new Exception("Cannot store authenticator"))
+      dao.remove(authenticator.id) returns Future.failed(new Exception("Cannot remove authenticator"))
 
       await(service.discard(authenticator, okResult)) must throwA[AuthenticationException].like {
         case e =>
@@ -366,12 +285,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
     /**
      * The backing store implementation.
      */
-    lazy val dao: AuthenticatorDAO[CookieAuthenticator] = mock[AuthenticatorDAO[CookieAuthenticator]]
-
-    /**
-     * The ID generator implementation.
-     */
-    lazy val fingerprintGenerator: FingerprintGenerator = mock[FingerprintGenerator]
+    lazy val dao: AuthenticatorDAO[BearerTokenAuthenticator] = mock[AuthenticatorDAO[BearerTokenAuthenticator]]
 
     /**
      * The ID generator implementation.
@@ -386,14 +300,8 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
     /**
      * The settings.
      */
-    lazy val settings = spy(CookieAuthenticatorSettings(
-      cookieName = "id",
-      cookiePath = "/",
-      cookieDomain = None,
-      secureCookie = true,
-      httpOnlyCookie = true,
-      useFingerprinting = true,
-      cookieMaxAge = Some(12 * 60 * 60),
+    lazy val settings = spy(BearerTokenAuthenticatorSettings(
+      headerName = "X-Auth-Token",
       authenticatorIdleTimeout = Some(30 * 60),
       authenticatorExpiry = 12 * 60 * 60
     ))
@@ -401,7 +309,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
     /**
      * The authenticator service instance to test.
      */
-    lazy val service = new CookieAuthenticatorService(settings, dao, fingerprintGenerator, idGenerator, clock)
+    lazy val service = new BearerTokenAuthenticatorService(settings, dao, idGenerator, clock)
 
     /**
      * The login info.
@@ -411,13 +319,12 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
     /**
      * An authenticator.
      */
-    lazy val authenticator = spy(new CookieAuthenticator(
+    lazy val authenticator = new BearerTokenAuthenticator(
       id = "test-id",
       loginInfo = LoginInfo("test", "1"),
       lastUsedDate = DateTime.now,
       expirationDate = DateTime.now.plusMinutes(12 * 60),
-      idleTimeout = settings.authenticatorIdleTimeout,
-      fingerprint = None
-    ))
+      idleTimeout = settings.authenticatorIdleTimeout
+    )
   }
 }

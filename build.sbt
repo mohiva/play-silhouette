@@ -10,10 +10,12 @@ import xerial.sbt.Sonatype._
 
 name := "play-silhouette"
 
-version := "1.1-SNAPSHOT"
+version := "2.0-SNAPSHOT"
 
 libraryDependencies ++= Seq(
   "org.mindrot" % "jbcrypt" % "0.3m",
+  "com.atlassian.jwt" % "jwt-core" % "1.2.1",
+  "com.atlassian.jwt" % "jwt-api" % "1.2.1",
   "org.mockito" % "mockito-core" % "1.9.5" % "test",
   "net.codingwell" %% "scala-guice" % "4.0.0-beta4" % "test",
   "com.typesafe.akka" %% "akka-testkit" % "2.3.3" % "test",
