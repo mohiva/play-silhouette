@@ -26,5 +26,5 @@ If you want to use the latest snapshot, add the following instead:
     resolvers += "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
 
     libraryDependencies ++= Seq(
-      "com.mohiva" %% "play-silhouette" % "1.1-SNAPSHOT"
+      "com.mohiva" %% "play-silhouette" % "2.0-SNAPSHOT"
     )
