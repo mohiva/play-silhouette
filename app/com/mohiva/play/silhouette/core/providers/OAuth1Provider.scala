@@ -171,12 +171,12 @@ trait OAuth1Service {
 /**
  * The OAuth1 settings.
  *
- * @param requestTokenURL The request token URL.
- * @param accessTokenURL The access token URL.
- * @param authorizationURL The authorization URL.
- * @param callbackURL The callback URL.
- * @param consumerKey The consumer ID.
- * @param consumerSecret The consumer secret.
+ * @param requestTokenURL The request token URL provided by the OAuth provider.
+ * @param accessTokenURL The access token URL provided by the OAuth provider.
+ * @param authorizationURL The authorization URL provided by the OAuth provider.
+ * @param callbackURL The callback URL to the application after a successful authentication on the OAuth provider.
+ * @param consumerKey The consumer ID provided by the OAuth provider.
+ * @param consumerSecret The consumer secret provided by the OAuth provider.
  */
 case class OAuth1Settings(
   requestTokenURL: String,

@@ -321,7 +321,7 @@ object JWTAuthenticatorService {
  * @param headerName The name of the header in which the token will be transfered.
  * @param issuerClaim The issuer claim identifies the principal that issued the JWT.
  * @param encryptSubject Indicates if the subject should be encrypted in JWT.
- * @param authenticatorIdleTimeout The time in seconds an authenticator can be idle before it timed out. Defaults to 30 minutes.
+ * @param authenticatorIdleTimeout The time in seconds an authenticator can be idle before it timed out.
  * @param authenticatorExpiry The expiry of the authenticator in minutes.
  * @param sharedSecret The shared secret to sign the JWT.
  */

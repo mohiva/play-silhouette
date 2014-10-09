@@ -248,12 +248,12 @@ trait OAuth2StateProvider {
 /**
  * The OAuth2 settings.
  *
- * @param authorizationURL The authorization URL.
- * @param accessTokenURL The access token URL.
- * @param redirectURL The redirect URL.
- * @param clientID The client ID.
- * @param clientSecret The client secret.
- * @param scope The scope.
+ * @param authorizationURL The authorization URL provided by the OAuth provider.
+ * @param accessTokenURL The access token URL provided by the OAuth provider.
+ * @param redirectURL The redirect URL to the application after a successful authentication on the OAuth provider.
+ * @param clientID The client ID provided by the OAuth provider.
+ * @param clientSecret The client secret provided by the OAuth provider.
+ * @param scope The OAuth2 scope parameter provided by the OAuth provider.
  * @param authorizationParams Additional params to add to the authorization request.
  * @param accessTokenParams Additional params to add to the access token request.
  * @param customProperties A map of custom properties for the different providers.
