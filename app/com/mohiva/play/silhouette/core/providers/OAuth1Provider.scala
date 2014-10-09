@@ -70,13 +70,14 @@ abstract class OAuth1Provider(
         }
         // The oauth_verifier field is not in the request.
         // This is the first step in the OAuth flow. We need to get the request tokens.
-        case _ => service.retrieveRequestToken(settings.callbackURL).map { info =>
+        case _ => service.retrieveRequestToken(settings.callbackURL).flatMap { info =>
           val cacheID = UUID.randomUUID().toString
           val url = service.redirectUrl(info.token)
           val redirect = Results.Redirect(url).withSession(request.session + (CacheKey -> cacheID))
           logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
-          cacheLayer.set(cacheID, info, CacheExpiration)
-          AuthenticationOngoing(redirect)
+          cacheLayer.save(cacheID, info, CacheExpiration).map(_ =>
+            AuthenticationOngoing(redirect)
+          )
         }.recover {
           case e => throw new AuthenticationException(ErrorRequestToken.format(id), e)
         }
@@ -92,7 +93,7 @@ abstract class OAuth1Provider(
    */
   private def cachedInfo(implicit request: RequestHeader): Future[(String, OAuth1Info)] = {
     request.session.get(CacheKey) match {
-      case Some(cacheID) => cacheLayer.get[OAuth1Info](cacheID).map {
+      case Some(cacheID) => cacheLayer.find[OAuth1Info](cacheID).map {
         case Some(state) => cacheID -> state
         case _ => throw new AuthenticationException(CachedTokenDoesNotExists.format(id, cacheID))
       }

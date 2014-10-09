@@ -19,6 +19,7 @@ import scala.reflect.ClassTag
 import scala.concurrent.Future
 import play.api.cache.Cache
 import play.api.Play.current
+import play.api.libs.concurrent.Execution.Implicits._
 import com.mohiva.play.silhouette.core.utils.CacheLayer
 
 /**
@@ -27,28 +28,32 @@ import com.mohiva.play.silhouette.core.utils.CacheLayer
 class PlayCacheLayer extends CacheLayer {
 
   /**
-   * Set a value into the cache.
+   * Save a value in cache.
    *
-   * @param key Item key.
-   * @param value Item value.
+   * @param key The item key under which the value should be saved.
+   * @param value The value to save.
    * @param expiration Expiration time in seconds (0 second means eternity).
-   * @tparam T The type of the object to store in cache.
+   * @return The value saved in cache.
    */
-  def set[T](key: String, value: T, expiration: Int = 0): Future[Option[T]] = {
+  def save[T](key: String, value: T, expiration: Int = 0): Future[T] = {
     Cache.set(key, value, expiration)
-    Future.successful(Some(value))
+    Future.successful(value)
   }
 
   /**
-   * Retrieve a value from the cache.
+   * Finds a value in the cache.
    *
-   * @param key Item key.
-   * @tparam T The type of the object to return from cache.
+   * @param key The key of the item to found.
+   * @tparam T The type of the object to return.
+   * @return The found value or None if no value could be found.
    */
-  def get[T](key: String)(implicit classTag: ClassTag[T]): Future[Option[T]] = Future.successful(Cache.getAs[T](key))
+  def find[T: ClassTag](key: String): Future[Option[T]] = Future(Cache.getAs[T](key))
 
   /**
    * Remove a value from the cache.
+   *
+   * @param key Item key.
+   * @return An empty future to wait for removal.
    */
-  def remove(key: String) = Cache.remove(key)
+  def remove(key: String) = Future(Cache.remove(key))
 }
