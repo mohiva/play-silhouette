@@ -223,7 +223,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
         case None =>
           env.eventBus.publish(NotAuthenticatedEvent(request, request2lang))
           handleNotAuthenticated(request)
-      }
+      }.recoverWith(exceptionHandler)
     }
   }
 
@@ -253,7 +253,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
         // No authenticator was found.
         case None =>
           block(RequestWithUser(None, None, request))
-      }
+      }.recoverWith(exceptionHandler)
     }
   }
 }

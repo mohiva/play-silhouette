@@ -53,6 +53,15 @@ action <silhouette_actions>`. Updated authenticator artifacts will be embed into
 framework result, before sending it to the client. If the service uses a backing store, then
 the authenticator instance will be updated in the store too.
 
+Renew an authenticator
+^^^^^^^^^^^^^^^^^^^^^^
+
+Authenticators have a fix expiration date. So with this method it's possible to renew the
+expiration of an authenticator by discarding the old one and creating a new one. Based on
+the implementation, the renew method revokes the given authenticator first, before creating
+a new one. If the authenticator was updated, then the updated artifacts will be embedded
+into the response.
+
 Discard an authenticator
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -71,8 +80,8 @@ implementations`_, which cover the most use cases. Now it's up to you to decide 
 authenticator fits best into your application architecture.
 
 .. Hint::
-  A good decision aid can give you the blog posts `Cookies vs Tokens. Getting auth right with
-  Angular.JS`_ and `10 Things You Should Know about Tokens`_ from Auth0.
+   A good decision aid can give you the blog posts `Cookies vs Tokens. Getting auth right with
+   Angular.JS`_ and `10 Things You Should Know about Tokens`_ from Auth0.
 
 .. _Cookies vs Tokens. Getting auth right with Angular.JS: https://auth0.com/blog/2014/01/07/angularjs-authentication-with-cookies-vs-token/
 .. _10 Things You Should Know about Tokens: https://auth0.com/blog/2014/01/27/ten-things-you-should-know-about-tokens-and-cookies/
@@ -84,6 +93,10 @@ CookieAuthenticator
 An authenticator that uses a stateful, cookie based approach. It works by storing the unique
 ID of the authenticator in a cookie. This ID gets then mapped to an authenticator instance
 in the server side backing store. This approach can also be named "server side session".
+
+The authenticator can use sliding window expiration. This means that the authenticator times
+out after a certain time if it wasn't used. This can be controlled with the [[idleTimeout]]
+property.
 
 **Pro**
 
@@ -109,6 +122,10 @@ SessionAuthenticator
 An authenticator that uses a stateless, session based approach. It works by storing a serialized
 authenticator instance in the Play Framework session cookie.
 
+The authenticator can use sliding window expiration. This means that the authenticator times
+out after a certain time if it wasn't used. This can be controlled with the [[idleTimeout]]
+property.
+
 **Pro**
 
 * No network throughput on the server side
@@ -127,12 +144,15 @@ authenticator instance in the Play Framework session cookie.
    Please take a look on the :ref:`configuration settings <session_authenticator_settings>`, on
    how to configure this authenticator.
 
-HeaderAuthenticator
-^^^^^^^^^^^^^^^^^^^
+BearerTokenAuthenticator
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-An authenticator that uses a stateful, header based approach. It works by using a user defined
-header to track the authenticated user and a server side backing store that maps the header to
-an authenticator instance.
+An authenticator that uses a header based based approach with the help of a bearer token. It works
+by transporting a token in a user defined header to track the authenticated user and a server side
+backing store that maps the token to an authenticator instance.
+
+The authenticator can use sliding window expiration. This means that the authenticator times out
+after a certain time if it wasn't used. This can be controlled with the [[idleTimeout]] property.
 
 **Pro**
 
@@ -149,11 +169,42 @@ an authenticator instance.
 * No client fingerprinting
 
 .. Tip::
-   Please take a look on the :ref:`configuration settings <header_authenticator_settings>`, on
+   Please take a look on the :ref:`configuration settings <bearer_token_authenticator_settings>`, on
+   how to configure this authenticator.
+
+JWTAuthenticator
+^^^^^^^^^^^^^^^^
+
+An authenticator that uses a header based based approach with the help of a `JWT`_. It works by using
+a JWT to transport the authenticator data inside a user defined header. It can be stateless with the
+disadvantages that the JWT can't be invalidated.
+
+The authenticator can use sliding window expiration. This means that the authenticator times out
+after a certain time if it wasn't used. This can be controlled with the [[idleTimeout]] property.
+If this feature is activated then a new token will be generated on every update. Make sure your
+application can handle this case.
+
+**Pro**
+
+* Larger network throughput on client side
+* Ideal for mobile or single page apps
+* Can be stateless (with the disadvantages it can't be invalidated)
+* Not vulnerable against `CSRF`_ attacks
+* Play well with `CORS`_
+
+**Cons**
+
+* Larger network throughput on the server side (if backing store is used)
+* Less than ideal for traditional browser based websites
+* No client fingerprinting
+
+.. Tip::
+   Please take a look on the :ref:`configuration settings <jwt_authenticator_settings>`, on
    how to configure this authenticator.
 
 .. _CSRF: http://en.wikipedia.org/wiki/Cross-site_request_forgery
 .. _CORS: http://en.wikipedia.org/wiki/Cross-origin_resource_sharing
+.. _JWT: https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-27
 
 
 .. ========================

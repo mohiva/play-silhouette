@@ -213,7 +213,12 @@ CookieAuthenticator
 SessionAuthenticator
 ^^^^^^^^^^^^^^^^^^^^
 
-.. _header_authenticator_settings:
+.. _bearer_token_authenticator_settings:
 
-HeaderAuthenticator
-^^^^^^^^^^^^^^^^^^^
+BearerTokenAuthenticator
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. _jwt_authenticator_settings:
+
+JWTAuthenticator
+^^^^^^^^^^^^^^^^
