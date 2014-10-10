@@ -47,8 +47,8 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An authenticator that uses a header based based approach with the help of a JWT. It works
-by using a JWT to transport the authenticator data inside a user defined header. It can
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An authenticator that uses a header based approach with the help of a JWT. It works by
+using a JWT to transport the authenticator data inside a user defined header. It can
 be stateless with the disadvantages that the JWT can't be invalidated.</p><p>The authenticator can use sliding window expiration. This means that the authenticator times
 out after a certain time if it wasn't used. This can be controlled with the <a href="#idleTimeout:Option[Int]" class="extmbr" name="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator#idleTimeout">idleTimeout</a>
 property. If this feature is activated then a new token will be generated on every update.

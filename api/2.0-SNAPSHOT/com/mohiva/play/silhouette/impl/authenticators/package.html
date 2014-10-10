@@ -106,8 +106,8 @@
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">An authenticator that uses a header based based approach with the help of a bearer token.</p><div class="fullcomment"><div class="comment cmt"><p>An authenticator that uses a header based based approach with the help of a bearer token.
-It works by transporting a token in a user defined header to track the authenticated user
+      <p class="shortcomment cmt">An authenticator that uses a header based approach with the help of a bearer token.</p><div class="fullcomment"><div class="comment cmt"><p>An authenticator that uses a header based approach with the help of a bearer token. It
+works by transporting a token in a user defined header to track the authenticated user
 and a server side backing store that maps the token to an authenticator instance.</p><p>The authenticator can use sliding window expiration. This means that the authenticator times
 out after a certain time if it wasn't used. This can be controlled with the <a href="BearerTokenAuthenticator.html#idleTimeout:Option[Int]" class="extmbr" name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator#idleTimeout">idleTimeout</a>
 property.</p><p>Note: If deploying to multiple nodes the backing store will need to synchronize.
@@ -224,8 +224,8 @@ property.</p><p>Note: If deploying to multiple nodes the backing store will need
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">An authenticator that uses a header based based approach with the help of a JWT.</p><div class="fullcomment"><div class="comment cmt"><p>An authenticator that uses a header based based approach with the help of a JWT. It works
-by using a JWT to transport the authenticator data inside a user defined header. It can
+      <p class="shortcomment cmt">An authenticator that uses a header based approach with the help of a JWT.</p><div class="fullcomment"><div class="comment cmt"><p>An authenticator that uses a header based approach with the help of a JWT. It works by
+using a JWT to transport the authenticator data inside a user defined header. It can
 be stateless with the disadvantages that the JWT can't be invalidated.</p><p>The authenticator can use sliding window expiration. This means that the authenticator times
 out after a certain time if it wasn't used. This can be controlled with the <a href="JWTAuthenticator.html#idleTimeout:Option[Int]" class="extmbr" name="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator#idleTimeout">idleTimeout</a>
 property. If this feature is activated then a new token will be generated on every update.
