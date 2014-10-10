@@ -25,7 +25,7 @@ import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import com.mohiva.play.silhouette.core.services.AuthenticatorService
 import com.mohiva.play.silhouette.core.services.AuthenticatorService._
 import com.mohiva.play.silhouette.core.utils.{ Clock, FingerprintGenerator, IDGenerator }
-import com.mohiva.play.silhouette.core.{ Authenticator, Logger, LoginInfo }
+import com.mohiva.play.silhouette.core.{ StorableAuthenticator, Logger, LoginInfo }
 import org.joda.time.DateTime
 import play.api.Play
 import play.api.Play.current
@@ -59,7 +59,7 @@ case class CookieAuthenticator(
   expirationDate: DateTime,
   idleTimeout: Option[Int],
   fingerprint: Option[String])
-    extends Authenticator {
+    extends StorableAuthenticator {
 
   /**
    * Checks if the authenticator isn't expired and isn't timed out.

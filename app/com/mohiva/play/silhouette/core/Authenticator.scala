@@ -38,3 +38,16 @@ trait Authenticator {
    */
   def isValid: Boolean
 }
+
+/**
+ * An authenticator which can be stored in a backing store.
+ */
+trait StorableAuthenticator extends Authenticator {
+
+  /**
+   * Gets the ID to reference the authenticator in the backing store.
+   *
+   * @return The ID to reference the authenticator in the backing store.
+   */
+  def id: String
+}

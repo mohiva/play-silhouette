@@ -23,7 +23,7 @@ import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import com.mohiva.play.silhouette.core.services.AuthenticatorService
 import com.mohiva.play.silhouette.core.services.AuthenticatorService._
 import com.mohiva.play.silhouette.core.utils.{ Base64, Clock, IDGenerator }
-import com.mohiva.play.silhouette.core.{ Authenticator, Logger, LoginInfo }
+import com.mohiva.play.silhouette.core.{ StorableAuthenticator, Logger, LoginInfo }
 import com.nimbusds.jose.JWSObject
 import com.nimbusds.jose.crypto.MACVerifier
 import com.nimbusds.jwt.JWTClaimsSet
@@ -60,7 +60,7 @@ case class JWTAuthenticator(
   lastUsedDate: DateTime,
   expirationDate: DateTime,
   idleTimeout: Option[Int])
-    extends Authenticator {
+    extends StorableAuthenticator {
 
   /**
    * Checks if the authenticator isn't expired and isn't timed out.
