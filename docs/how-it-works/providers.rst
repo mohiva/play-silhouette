@@ -62,7 +62,7 @@ which contains the most common profile data a provider can return. But it is als
 possible to define an own social profile which can be consists of more
 data.
 
-.. _CommonSocialProfile: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/core/providers/SocialProvider.scala#L168
+.. _CommonSocialProfile: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/impl/providers/SocialProvider.scala#L168
 
 Social profile builders
 -----------------------
@@ -169,12 +169,12 @@ to protect an application against `CSRF attacks`_. But it can also be used to re
 state about the user.
 
 To maintain the state in Silhouette, a state provider must be passed to every OAuth2 authentication
-provider. All state provider implementations can be found in the `contrib package`_.
+provider. All state provider implementations can be found in the `impl package`_.
 
 .. _state parameter: http://tools.ietf.org/html/rfc6749#section-4.1.1
 .. _CSRF attacks: http://www.oauthsecurity.com/#authorization-code-flow
 .. _should be used mainly: http://www.thread-safe.com/2014/05/the-correct-use-of-state-parameter-in.html
-.. _contrib package: https://github.com/mohiva/play-silhouette/tree/master/app/com/mohiva/play/silhouette/contrib/providers/ouath2
+.. _impl package: https://github.com/mohiva/play-silhouette/tree/master/app/com/mohiva/play/silhouette/impl/providers/oauth2/state
 
 List of OAuth2 states
 ^^^^^^^^^^^^^^^^^^^^^
@@ -204,4 +204,4 @@ provider, try to connect again with this information and fetch the missing data.
 Due its nature, the information will be represented by different implementations. Mostly every provider
 implementation defines its own `AuthInfo`_ implementation.
 
-.. _AuthInfo: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/core/services/AuthInfoService.scala#L60
+.. _AuthInfo: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/api/services/AuthInfoService.scala#L60

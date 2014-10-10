@@ -44,7 +44,7 @@ unique provider ID and a unique key which identifies a user on this
 provider (userID, email, …). This information will be represented by the
 `LoginInfo`_ trait.
 
-.. _LoginInfo: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/core/Identity.scala#L45
+.. _LoginInfo: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/api/Identity.scala#L45
 
 .. _identity_service_impl:
 

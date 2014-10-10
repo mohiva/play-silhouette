@@ -4,8 +4,8 @@ Events
 ======
 
 Silhouette provides event handling based on `Akka’s Event Bus`_. The
-following events are provided within the core of Silhouette, although
-only the three marked of them are fired from core.
+following events are provided by Silhouette, although only the three
+marked of them are fired from core.
 
 * SignUpEvent
 * LoginEvent

@@ -15,12 +15,13 @@
  */
 package test
 
-import org.specs2.execute.{ Result, AsResult }
+import org.specs2.execute.{ AsResult, Result }
 import org.specs2.mutable.Around
-import play.api.libs.json.{ JsValue, Json }
-import scala.io.{ Source, Codec }
 import play.api.Play
 import play.api.Play.current
+import play.api.libs.json.{ JsValue, Json }
+
+import scala.io.{ Codec, Source }
 
 /**
  * Executes a before method in the context of the around method.

@@ -16,4 +16,4 @@ or runtime dependency injection is preferred, Silhouette plays well with both of
 can find an example of both, runtime or compile time dependency injection on the
 :ref:`example page <examples>`.
 
-.. _Silhouette controller: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/core/Silhouette.scala
+.. _Silhouette controller: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/api/Silhouette.scala

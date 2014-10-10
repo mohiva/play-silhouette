@@ -4,6 +4,8 @@ import mohiva.sbt.Helper._
 import com.typesafe.sbt.SbtScalariform._
 import xerial.sbt.Sonatype._
 
+import scalariform.formatter.preferences.{PreserveDanglingCloseParenthesis, DoubleIndentClassDeclaration, FormatXml}
+
 //*******************************
 // Play settings
 //*******************************
@@ -112,6 +114,11 @@ scalacOptions in ScoverageTest ~= { (options: Seq[String]) =>
 //*******************************
 
 defaultScalariformSettings
+
+ScalariformKeys.preferences := ScalariformKeys.preferences.value
+  .setPreference(FormatXml, false)
+  .setPreference(DoubleIndentClassDeclaration, false)
+  .setPreference(PreserveDanglingCloseParenthesis, true)
 
 //*******************************
 // ScalaDoc settings

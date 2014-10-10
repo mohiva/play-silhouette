@@ -20,9 +20,18 @@ just ask.
 The project structure
 ---------------------
 
-The core package describes the interfaces of Silhouette and the
-contrib package contains the concrete implementations of all the
-interfaces.
+Silhouette is dived into the ``api`` and ``impl`` packages. The definition
+of these both packages is as follow:
+
+API Package
+^^^^^^^^^^^
+
+The collection of traits and utility classes that form the stable API of Silhouette.
+
+Impl Package
+^^^^^^^^^^^^
+
+The reference implementation of Silhouette.
 
 
 Development workflow
