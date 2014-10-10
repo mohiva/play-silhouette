@@ -43,7 +43,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">CookieAuthenticator</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loginInfo">loginInfo: <a href="../../core/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="lastUsedDate">lastUsedDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="expirationDate">expirationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="idleTimeout">idleTimeout: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>, <span name="fingerprint">fingerprint: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="../../core/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">CookieAuthenticator</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loginInfo">loginInfo: <a href="../../core/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>, <span name="lastUsedDate">lastUsedDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="expirationDate">expirationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="idleTimeout">idleTimeout: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>, <span name="fingerprint">fingerprint: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="../../core/StorableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.core.StorableAuthenticator">StorableAuthenticator</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -55,7 +55,7 @@ property.</p><p>Note: If deploying to multiple nodes the backing store will need
 </p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The authenticator ID.</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info for an identity.</p></dd><dt class="param">lastUsedDate</dt><dd class="cmt"><p>The last used timestamp.</p></dd><dt class="param">expirationDate</dt><dd class="cmt"><p>The expiration time.</p></dd><dt class="param">idleTimeout</dt><dd class="cmt"><p>The time in seconds an authenticator can be idle before it timed out.</p></dd><dt class="param">fingerprint</dt><dd class="cmt"><p>Maybe a fingerprint of the user.
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="../../core/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="../../core/StorableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.core.StorableAuthenticator">StorableAuthenticator</a>, <a href="../../core/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -73,7 +73,7 @@ property.</p><p>Note: If deploying to multiple nodes the backing store will need
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.contrib.authenticators.CookieAuthenticator"><span>CookieAuthenticator</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="com.mohiva.play.silhouette.core.Authenticator"><span>Authenticator</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.contrib.authenticators.CookieAuthenticator"><span>CookieAuthenticator</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="com.mohiva.play.silhouette.core.StorableAuthenticator"><span>StorableAuthenticator</span></li><li class="in" name="com.mohiva.play.silhouette.core.Authenticator"><span>Authenticator</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -302,7 +302,7 @@ property.</p><p>Note: If deploying to multiple nodes the backing store will need
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.contrib.authenticators.CookieAuthenticator#id" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.mohiva.play.silhouette.contrib.authenticators.CookieAuthenticator#id" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="id:String"></a>
       <a id="id:String"></a>
       <h4 class="signature">
@@ -318,7 +318,7 @@ property.</p><p>Note: If deploying to multiple nodes the backing store will need
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The authenticator ID.</p>
+      <p class="shortcomment cmt">The authenticator ID.</p><div class="fullcomment"><div class="comment cmt"><p>The authenticator ID.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.contrib.authenticators.CookieAuthenticator">CookieAuthenticator</a> → <a href="../../core/StorableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.core.StorableAuthenticator">StorableAuthenticator</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.contrib.authenticators.CookieAuthenticator#idleTimeout" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="idleTimeout:Option[Int]"></a>
       <a id="idleTimeout:Option[Int]"></a>
@@ -560,6 +560,8 @@ property.</p><p>Note: If deploying to multiple nodes the backing store will need
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
             </div><div class="parent" name="scala.Equals">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
+            </div><div class="parent" name="com.mohiva.play.silhouette.core.StorableAuthenticator">
+              <h3>Inherited from <a href="../../core/StorableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.core.StorableAuthenticator">StorableAuthenticator</a></h3>
             </div><div class="parent" name="com.mohiva.play.silhouette.core.Authenticator">
               <h3>Inherited from <a href="../../core/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a></h3>
             </div><div class="parent" name="scala.AnyRef">

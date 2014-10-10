@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Provider - com.mohiva.play.silhouette.core.Provider</title>
-          <meta name="description" content="Provider - com.mohiva.play.silhouette.core.Provider" />
-          <meta name="keywords" content="Provider com.mohiva.play.silhouette.core.Provider" />
+          <title>StorableAuthenticator - com.mohiva.play.silhouette.core.StorableAuthenticator</title>
+          <meta name="description" content="StorableAuthenticator - com.mohiva.play.silhouette.core.StorableAuthenticator" />
+          <meta name="keywords" content="StorableAuthenticator com.mohiva.play.silhouette.core.StorableAuthenticator" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../index.html';
-            var hash = 'com.mohiva.play.silhouette.core.Provider';
+            var hash = 'com.mohiva.play.silhouette.core.StorableAuthenticator';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -30,8 +30,8 @@
       <div id="definition">
         <img src="../../../../../lib/trait_big.png" />
         <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.core">core</a></p>
-        <h1>Provider</h1> <span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider" title="Permalink" target="_top">
+        <h1>StorableAuthenticator</h1> <span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -43,17 +43,17 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Provider</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">StorableAuthenticator</span><span class="result"> extends <a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A marker interface for all providers.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An authenticator which can be stored in a backing store.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="providers/CredentialsProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.CredentialsProvider">CredentialsProvider</a>, <a href="providers/oauth2/FacebookProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.oauth2.FacebookProvider">FacebookProvider</a>, <a href="providers/oauth2/FoursquareProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.oauth2.FoursquareProvider">FoursquareProvider</a>, <a href="providers/oauth2/GitHubProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.oauth2.GitHubProvider">GitHubProvider</a>, <a href="providers/oauth2/GoogleProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.oauth2.GoogleProvider">GoogleProvider</a>, <a href="providers/oauth2/InstagramProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.oauth2.InstagramProvider">InstagramProvider</a>, <a href="providers/oauth1/LinkedInProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.oauth1.LinkedInProvider">LinkedInProvider</a>, <a href="providers/oauth2/LinkedInProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.oauth2.LinkedInProvider">LinkedInProvider</a>, <a href="providers/OAuth1Provider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth1Provider">OAuth1Provider</a>, <a href="providers/OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.OAuth2Provider">OAuth2Provider</a>, <a href="providers/SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.SocialProvider">SocialProvider</a>, <a href="providers/oauth1/TwitterProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.oauth1.TwitterProvider">TwitterProvider</a>, <a href="providers/oauth2/VKProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.oauth2.VKProvider">VKProvider</a>, <a href="providers/oauth1/XingProvider.html" class="extype" name="com.mohiva.play.silhouette.core.providers.oauth1.XingProvider">XingProvider</a></div>
+            <div class="subClasses hiddenContent"><a href="../contrib/authenticators/BearerTokenAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.contrib.authenticators.BearerTokenAuthenticator">BearerTokenAuthenticator</a>, <a href="../contrib/authenticators/CookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.contrib.authenticators.CookieAuthenticator">CookieAuthenticator</a>, <a href="../contrib/authenticators/JWTAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.contrib.authenticators.JWTAuthenticator">JWTAuthenticator</a></div>
           </div></div>
         
 
@@ -71,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.core.Provider"><span>Provider</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.core.StorableAuthenticator"><span>StorableAuthenticator</span></li><li class="in" name="com.mohiva.play.silhouette.core.Authenticator"><span>Authenticator</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -95,7 +95,7 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.core.Provider#id" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="com.mohiva.play.silhouette.core.StorableAuthenticator#id" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="id:String"></a>
       <a id="id:String"></a>
       <h4 class="signature">
@@ -107,13 +107,51 @@
         <span class="name">id</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@id:String" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@id:String" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Gets the provider ID.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the provider ID.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The provider ID.
+      <p class="shortcomment cmt">Gets the ID to reference the authenticator in the backing store.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the ID to reference the authenticator in the backing store.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The ID to reference the authenticator in the backing store.
 </p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.Authenticator#isValid" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="isValid:Boolean"></a>
+      <a id="isValid:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isValid</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@isValid:Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Checks if the authenticator isn't expired and isn't timed out.</p><div class="fullcomment"><div class="comment cmt"><p>Checks if the authenticator isn't expired and isn't timed out.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>True if the authenticator isn't expired and isn't timed out.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.core.Authenticator#loginInfo" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="loginInfo:com.mohiva.play.silhouette.core.LoginInfo"></a>
+      <a id="loginInfo:LoginInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loginInfo</span><span class="result">: <a href="LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.core.LoginInfo">LoginInfo</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@loginInfo:com.mohiva.play.silhouette.core.LoginInfo" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Gets the linked login info for an identity.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the linked login info for an identity.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The linked login info for an identity.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -131,7 +169,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -148,7 +186,7 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@##():Int" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@##():Int" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -165,7 +203,7 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -182,7 +220,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -199,7 +237,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@clone():Object" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@clone():Object" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -222,7 +260,7 @@
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -239,7 +277,7 @@
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -256,7 +294,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -279,7 +317,7 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -296,7 +334,7 @@
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@hashCode():Int" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -313,7 +351,7 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -330,7 +368,7 @@
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -347,7 +385,7 @@
         <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@notify():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -364,7 +402,7 @@
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -381,7 +419,7 @@
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -398,7 +436,7 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@toString():String" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@toString():String" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -415,7 +453,7 @@
         <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@wait():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -438,7 +476,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -461,7 +499,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.Provider@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.core.StorableAuthenticator@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -481,7 +519,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="com.mohiva.play.silhouette.core.Authenticator">
+              <h3>Inherited from <a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.core.Authenticator">Authenticator</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
