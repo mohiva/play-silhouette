@@ -21,7 +21,7 @@ import com.mohiva.play.silhouette.core.exceptions.AuthenticationException
 import com.mohiva.play.silhouette.core.services.AuthenticatorService
 import com.mohiva.play.silhouette.core.services.AuthenticatorService._
 import com.mohiva.play.silhouette.core.utils.{ Clock, IDGenerator }
-import com.mohiva.play.silhouette.core.{ Authenticator, Logger, LoginInfo }
+import com.mohiva.play.silhouette.core.{ StorableAuthenticator, Logger, LoginInfo }
 import org.joda.time.DateTime
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ RequestHeader, Result }
@@ -51,7 +51,7 @@ case class BearerTokenAuthenticator(
   lastUsedDate: DateTime,
   expirationDate: DateTime,
   idleTimeout: Option[Int])
-    extends Authenticator {
+    extends StorableAuthenticator {
 
   /**
    * Checks if the authenticator isn't expired and isn't timed out.
