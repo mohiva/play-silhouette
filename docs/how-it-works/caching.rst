@@ -22,7 +22,7 @@ Play has its own cache plugin architecture. So the easiest way is to use
 another cache plugin for Play. You can then use the `PlayCacheLayer`_
 implementation and plug in a new cache into your application.
 
-.. _PlayCacheLayer: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/contrib/utils/PlayCacheLayer.scala
+.. _PlayCacheLayer: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/impl/util/PlayCacheLayer.scala
 
 
 Implement own cache layer
@@ -31,7 +31,7 @@ Implement own cache layer
 Silhouette provides a `CacheLayer`_ trait which can be used to create a
 custom cache implementation.
 
-.. _CacheLayer: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/core/utils/CacheLayer.scala
+.. _CacheLayer: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/api/util/CacheLayer.scala
 
 
 Clustered environment
@@ -52,7 +52,7 @@ This can be changed by overriding the shipped ``ehcache.xml`` from the
 jars, to persist the cache on the disk.
 
 To change this default behaviour you must copy the ``ehcache.xml`` to your
-configuration directory. Then add``<diskStore path="java.io.tmpdir"/>`` and
+configuration directory. Then add ``<diskStore path="java.io.tmpdir"/>`` and
 change ``diskPersistent`` to ``true``. The following example shows a possible
 configuration. Adapt it to fit your needs.
 

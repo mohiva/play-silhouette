@@ -21,7 +21,7 @@ detailed level for some components.
     <configuration debug="false">
         ...
         <logger name="com.mohiva" level="ERROR" />
-        <logger name="com.mohiva.play.silhouette.core.AccessDeniedException" level="INFO" />
+        <logger name="com.mohiva.play.silhouette.api.exceptions.AccessDeniedException" level="INFO" />
         ...
     </configuration>
 
