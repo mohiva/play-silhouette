@@ -1,5 +1,5 @@
-Welcome to Silhouette's documentation !
-=======================================
+Welcome to Silhouette's documentation!
+======================================
 
 .. ifconfig:: release.endswith('-SNAPSHOT')
 

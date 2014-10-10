@@ -37,8 +37,8 @@ import scala.concurrent.Future
 import scala.util.{ Failure, Success, Try }
 
 /**
- * An authenticator that uses a header based based approach with the help of a JWT. It works
- * by using a JWT to transport the authenticator data inside a user defined header. It can
+ * An authenticator that uses a header based approach with the help of a JWT. It works by
+ * using a JWT to transport the authenticator data inside a user defined header. It can
  * be stateless with the disadvantages that the JWT can't be invalidated.
  *
  * The authenticator can use sliding window expiration. This means that the authenticator times

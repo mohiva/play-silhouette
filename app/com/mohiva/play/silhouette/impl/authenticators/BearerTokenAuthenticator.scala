@@ -30,8 +30,8 @@ import scala.concurrent.Future
 import scala.util.Try
 
 /**
- * An authenticator that uses a header based based approach with the help of a bearer token.
- * It works by transporting a token in a user defined header to track the authenticated user
+ * An authenticator that uses a header based approach with the help of a bearer token. It
+ * works by transporting a token in a user defined header to track the authenticated user
  * and a server side backing store that maps the token to an authenticator instance.
  *
  * The authenticator can use sliding window expiration. This means that the authenticator times

@@ -42,8 +42,8 @@ bus instance:
 
     val listener = system.actorOf(Props(new Actor {
       def receive = {
-        case e @ LoginEvent(identity, request, lang) => println(e)
-        case e @ LogoutEvent(identity, request, lang) => println(e)
+        case e @ LoginEvent(identity: User, request, lang) => println(e)
+        case e @ LogoutEvent(identity: User, request, lang) => println(e)
       }
     }))
 
