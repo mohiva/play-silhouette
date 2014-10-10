@@ -95,8 +95,8 @@ ID of the authenticator in a cookie. This ID gets then mapped to an authenticato
 in the server side backing store. This approach can also be named "server side session".
 
 The authenticator can use sliding window expiration. This means that the authenticator times
-out after a certain time if it wasn't used. This can be controlled with the [[idleTimeout]]
-property.
+out after a certain time if it wasn't used. This can be controlled with the :ref:`authenticatorIdleTimeout
+<cookie_authenticator_settings>` property of the settings class.
 
 **Pro**
 
@@ -123,8 +123,8 @@ An authenticator that uses a stateless, session based approach. It works by stor
 authenticator instance in the Play Framework session cookie.
 
 The authenticator can use sliding window expiration. This means that the authenticator times
-out after a certain time if it wasn't used. This can be controlled with the [[idleTimeout]]
-property.
+out after a certain time if it wasn't used. This can be controlled with the :ref:`authenticatorIdleTimeout
+<session_authenticator_settings>` property of the settings class.
 
 **Pro**
 
@@ -147,19 +147,20 @@ property.
 BearerTokenAuthenticator
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-An authenticator that uses a header based based approach with the help of a bearer token. It works
-by transporting a token in a user defined header to track the authenticated user and a server side
+An authenticator that uses a header based approach with the help of a bearer token. It works by
+transporting a token in a user defined header to track the authenticated user and a server side
 backing store that maps the token to an authenticator instance.
 
 The authenticator can use sliding window expiration. This means that the authenticator times out
-after a certain time if it wasn't used. This can be controlled with the [[idleTimeout]] property.
+after a certain time if it wasn't used. This can be controlled with the :ref:`authenticatorIdleTimeout
+<bearer_token_authenticator_settings>` property of the settings class.
 
 **Pro**
 
 * Small network throughput on client side
 * Ideal for mobile or single page apps
 * Not vulnerable against `CSRF`_ attacks
-* Play well with `CORS`_
+* Plays well with `CORS`_
 
 **Cons**
 
@@ -175,25 +176,25 @@ after a certain time if it wasn't used. This can be controlled with the [[idleTi
 JWTAuthenticator
 ^^^^^^^^^^^^^^^^
 
-An authenticator that uses a header based based approach with the help of a `JWT`_. It works by using
-a JWT to transport the authenticator data inside a user defined header. It can be stateless with the
+An authenticator that uses a header based approach with the help of a `JWT`_. It works by using a
+JWT to transport the authenticator data inside a user defined header. It can be stateless with the
 disadvantages that the JWT can't be invalidated.
 
 The authenticator can use sliding window expiration. This means that the authenticator times out
-after a certain time if it wasn't used. This can be controlled with the [[idleTimeout]] property.
-If this feature is activated then a new token will be generated on every update. Make sure your
-application can handle this case.
+after a certain time if it wasn't used. This can be controlled with the :ref:`authenticatorIdleTimeout
+<jwt_authenticator_settings>` property of the settings class. If this feature is activated then a
+new token will be generated on every update. Make sure your application can handle this case.
 
 **Pro**
 
-* Larger network throughput on client side
 * Ideal for mobile or single page apps
 * Can be stateless (with the disadvantages it can't be invalidated)
 * Not vulnerable against `CSRF`_ attacks
-* Play well with `CORS`_
+* Plays well with `CORS`_
 
 **Cons**
 
+* Larger network throughput on client side
 * Larger network throughput on the server side (if backing store is used)
 * Less than ideal for traditional browser based websites
 * No client fingerprinting
