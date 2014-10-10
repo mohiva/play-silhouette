@@ -1,0 +1,604 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>api - com.mohiva.play.silhouette.api</title>
+          <meta name="description" content="api - com.mohiva.play.silhouette.api" />
+          <meta name="keywords" content="api com.mohiva.play.silhouette.api" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../index.html';
+            var hash = 'com.mohiva.play.silhouette.api.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a></p>
+        <h1>api</h1> <span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">api</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The collection of traits and utility classes that form the stable API of Silhouette.</p><p>The main API is exposed as controller actions by the <a href="Silhouette.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette">com.mohiva.play.silhouette.api.Silhouette</a> trait.
+</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="com.mohiva.play.silhouette.api"><span>api</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.api.AccessDeniedEvent" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="AccessDeniedEventextendsSilhouetteEventwithProductwithSerializable"></a>
+      <a id="AccessDeniedEvent:AccessDeniedEvent"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="AccessDeniedEvent.html"><span class="name">AccessDeniedEvent</span></a><span class="params">(<span name="request">request: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>, <span name="lang">lang: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.i18n.Lang" class="extype" target="_top">Lang</a></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@AccessDeniedEventextendsSilhouetteEventwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An event which will be published after the access was denied to an identity.</p><div class="fullcomment"><div class="comment cmt"><p>An event which will be published after the access was denied to an identity.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">lang</dt><dd class="cmt"><p>The lang associated for the current request.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.AuthenticatedEvent" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="AuthenticatedEvent[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsSilhouetteEventwithProductwithSerializable"></a>
+      <a id="AuthenticatedEvent[I&lt;:Identity]:AuthenticatedEvent[I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="AuthenticatedEvent.html"><span class="name">AuthenticatedEvent</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.AuthenticatedEvent.I">I</span></span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>, <span name="lang">lang: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.i18n.Lang" class="extype" target="_top">Lang</a></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@AuthenticatedEvent[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsSilhouetteEventwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An event which will be published if a request passes authentication.</p><div class="fullcomment"><div class="comment cmt"><p>An event which will be published if a request passes authentication.
+</p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.
+</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The logged in identity.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">lang</dt><dd class="cmt"><p>The lang associated for the current request.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.Authenticator" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AuthenticatorextendsAnyRef"></a>
+      <a id="Authenticator:Authenticator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Authenticator.html"><span class="name">Authenticator</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@AuthenticatorextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An authenticator tracks an authenticated user.</p>
+    </li><li name="com.mohiva.play.silhouette.api.Authorization" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Authorization[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsAnyRef"></a>
+      <a id="Authorization[I&lt;:Identity]:Authorization[I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Authorization.html"><span class="name">Authorization</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@Authorization[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A trait to define Authorization objects that let you hook
+an authorization implementation in SecuredActions.</p><div class="fullcomment"><div class="comment cmt"><p>A trait to define Authorization objects that let you hook
+an authorization implementation in SecuredActions.
+</p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.Environment" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Environment[I&lt;:com.mohiva.play.silhouette.api.Identity,T&lt;:com.mohiva.play.silhouette.api.Authenticator]extendsAnyRef"></a>
+      <a id="Environment[I&lt;:Identity,T&lt;:Authenticator]:Environment[I,T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Environment.html"><span class="name">Environment</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>, <span name="T">T &lt;: <a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@Environment[I&lt;:com.mohiva.play.silhouette.api.Identity,T&lt;:com.mohiva.play.silhouette.api.Authenticator]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The environment needed to instantiate a Silhouette controller.</p>
+    </li><li name="com.mohiva.play.silhouette.api.EventBus" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EventBusextendsActorEventBuswithLookupClassification"></a>
+      <a id="EventBus:EventBus"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="EventBus.html"><span class="name">EventBus</span></a><span class="result"> extends <span class="extype" name="akka.event.ActorEventBus">ActorEventBus</span> with <span class="extype" name="akka.event.LookupClassification">LookupClassification</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@EventBusextendsActorEventBuswithLookupClassification" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An event bus implementation which uses a class based lookup classification.</p>
+    </li><li name="com.mohiva.play.silhouette.api.Identity" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="IdentityextendsAnyRef"></a>
+      <a id="Identity:Identity"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Identity.html"><span class="name">Identity</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@IdentityextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait represents an authenticated user.</p>
+    </li><li name="com.mohiva.play.silhouette.api.Logger" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LoggerextendsAnyRef"></a>
+      <a id="Logger:Logger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Logger.html"><span class="name">Logger</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@LoggerextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implement this to get a named logger in scope.</p>
+    </li><li name="com.mohiva.play.silhouette.api.LoginEvent" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LoginEvent[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsSilhouetteEventwithProductwithSerializable"></a>
+      <a id="LoginEvent[I&lt;:Identity]:LoginEvent[I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="LoginEvent.html"><span class="name">LoginEvent</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.LoginEvent.I">I</span></span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>, <span name="lang">lang: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.i18n.Lang" class="extype" target="_top">Lang</a></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@LoginEvent[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsSilhouetteEventwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An event which will be published after an identity logged in.</p><div class="fullcomment"><div class="comment cmt"><p>An event which will be published after an identity logged in.
+</p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.
+</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The logged in identity.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">lang</dt><dd class="cmt"><p>The lang associated for the current request.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.LoginInfo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LoginInfoextendsProductwithSerializable"></a>
+      <a id="LoginInfo:LoginInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="LoginInfo.html"><span class="name">LoginInfo</span></a><span class="params">(<span name="providerID">providerID: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="providerKey">providerKey: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@LoginInfoextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Represents a linked login for an identity (i.</p><div class="fullcomment"><div class="comment cmt"><p>Represents a linked login for an identity (i.e. a local username/password or a Facebook/Google account).</p><p>The login info contains the data about the provider that authenticated that identity.
+</p></div><dl class="paramcmts block"><dt class="param">providerID</dt><dd class="cmt"><p>The ID of the provider.</p></dd><dt class="param">providerKey</dt><dd class="cmt"><p>A unique key which identifies a user on this provider (userID, email, ...).
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.LogoutEvent" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LogoutEvent[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsSilhouetteEventwithProductwithSerializable"></a>
+      <a id="LogoutEvent[I&lt;:Identity]:LogoutEvent[I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="LogoutEvent.html"><span class="name">LogoutEvent</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.LogoutEvent.I">I</span></span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>, <span name="lang">lang: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.i18n.Lang" class="extype" target="_top">Lang</a></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@LogoutEvent[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsSilhouetteEventwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An event which will be published after an identity logged out.</p><div class="fullcomment"><div class="comment cmt"><p>An event which will be published after an identity logged out.
+</p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.
+</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The logged out identity.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">lang</dt><dd class="cmt"><p>The lang associated for the current request.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.NotAuthenticatedEvent" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NotAuthenticatedEventextendsSilhouetteEventwithProductwithSerializable"></a>
+      <a id="NotAuthenticatedEvent:NotAuthenticatedEvent"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NotAuthenticatedEvent.html"><span class="name">NotAuthenticatedEvent</span></a><span class="params">(<span name="request">request: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>, <span name="lang">lang: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.i18n.Lang" class="extype" target="_top">Lang</a></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@NotAuthenticatedEventextendsSilhouetteEventwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An event which will be published if a request did not pass authentication.</p><div class="fullcomment"><div class="comment cmt"><p>An event which will be published if a request did not pass authentication.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">lang</dt><dd class="cmt"><p>The lang associated for the current request.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.NotAuthorizedEvent" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NotAuthorizedEvent[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsSilhouetteEventwithProductwithSerializable"></a>
+      <a id="NotAuthorizedEvent[I&lt;:Identity]:NotAuthorizedEvent[I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NotAuthorizedEvent.html"><span class="name">NotAuthorizedEvent</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.NotAuthorizedEvent.I">I</span></span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>, <span name="lang">lang: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.i18n.Lang" class="extype" target="_top">Lang</a></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@NotAuthorizedEvent[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsSilhouetteEventwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An event which will be published if a request did not pass authorization.</p><div class="fullcomment"><div class="comment cmt"><p>An event which will be published if a request did not pass authorization.
+</p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.
+</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The logged in identity.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">lang</dt><dd class="cmt"><p>The lang associated for the current request.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.Provider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ProviderextendsAnyRef"></a>
+      <a id="Provider:Provider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Provider.html"><span class="name">Provider</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@ProviderextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A marker interface for all providers.</p>
+    </li><li name="com.mohiva.play.silhouette.api.SecuredSettings" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SecuredSettingsextendsAnyRef"></a>
+      <a id="SecuredSettings:SecuredSettings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SecuredSettings.html"><span class="name">SecuredSettings</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@SecuredSettingsextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Can be mixed into the GlobalSettings object to define a global behaviour
+for not-authenticated and not-authorized actions.</p>
+    </li><li name="com.mohiva.play.silhouette.api.SignUpEvent" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SignUpEvent[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsSilhouetteEventwithProductwithSerializable"></a>
+      <a id="SignUpEvent[I&lt;:Identity]:SignUpEvent[I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SignUpEvent.html"><span class="name">SignUpEvent</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.SignUpEvent.I">I</span></span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>, <span name="lang">lang: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.i18n.Lang" class="extype" target="_top">Lang</a></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@SignUpEvent[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsSilhouetteEventwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An event which will be published after an identity signed up.</p><div class="fullcomment"><div class="comment cmt"><p>An event which will be published after an identity signed up.
+</p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.
+</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The newly created identity.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">lang</dt><dd class="cmt"><p>The lang associated for the current request.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.Silhouette" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Silhouette[I&lt;:com.mohiva.play.silhouette.api.Identity,A&lt;:com.mohiva.play.silhouette.api.Authenticator]extendsControllerwithLogger"></a>
+      <a id="Silhouette[I&lt;:Identity,A&lt;:Authenticator]:Silhouette[I,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Silhouette.html"><span class="name">Silhouette</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>, <span name="A">A &lt;: <a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a></span>]</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.Controller" class="extype" target="_top">Controller</a> with <a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@Silhouette[I&lt;:com.mohiva.play.silhouette.api.Identity,A&lt;:com.mohiva.play.silhouette.api.Authenticator]extendsControllerwithLogger" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Provides the actions that can be used to protect controllers and retrieve the current user
+if available.</p><div class="fullcomment"><div class="comment cmt"><p>Provides the actions that can be used to protect controllers and retrieve the current user
+if available.</p><pre><span class="kw">class</span> MyController(env: Environment[User, CookieAuthenticator])
+<span class="kw">extends</span> Silhouette[User, CookieAuthenticator] {
+
+<span class="kw">def</span> protectedAction = SecuredAction { <span class="kw">implicit</span> request <span class="kw">=&gt;</span>
+  Ok(<span class="lit">"Hello %s"</span>.format(request.identity.fullName))
+}
+}</pre></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.</p></dd><dt class="tparam">A</dt><dd class="cmt"><p>The type of the authenticator.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.SilhouetteEvent" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SilhouetteEventextendsAnyRef"></a>
+      <a id="SilhouetteEvent:SilhouetteEvent"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SilhouetteEvent.html"><span class="name">SilhouetteEvent</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@SilhouetteEventextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The base event.</p>
+    </li><li name="com.mohiva.play.silhouette.api.StorableAuthenticator" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StorableAuthenticatorextendsAuthenticator"></a>
+      <a id="StorableAuthenticator:StorableAuthenticator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StorableAuthenticator.html"><span class="name">StorableAuthenticator</span></a><span class="result"> extends <a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@StorableAuthenticatorextendsAuthenticator" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An authenticator which can be stored in a backing store.</p>
+    </li><li name="com.mohiva.play.silhouette.api.Token" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="TokenextendsAnyRef"></a>
+      <a id="Token:Token"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Token.html"><span class="name">Token</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@TokenextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A token used for reset password and sign up operations.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.api.Environment" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Environment"></a>
+      <a id="Environment:Environment"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Environment$.html"><span class="name">Environment</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@Environment" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.api.EventBus" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EventBus"></a>
+      <a id="EventBus:EventBus"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="EventBus$.html"><span class="name">EventBus</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@EventBus" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A global event bus instance.</p>
+    </li><li name="com.mohiva.play.silhouette.api.LoginInfo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LoginInfo"></a>
+      <a id="LoginInfo:LoginInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LoginInfo$.html"><span class="name">LoginInfo</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@LoginInfo" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object of the login info.</p>
+    </li><li name="com.mohiva.play.silhouette.api.exceptions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="exceptions"></a>
+      <a id="exceptions:exceptions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="exceptions/package.html"><span class="name">exceptions</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@exceptions" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Provides exceptions used by the API.</p>
+    </li><li name="com.mohiva.play.silhouette.api.services" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="services"></a>
+      <a id="services:services"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="services/package.html"><span class="name">services</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@services" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Provides services used by the API to call external or internal services.</p>
+    </li><li name="com.mohiva.play.silhouette.api.util" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="util"></a>
+      <a id="util:util"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="util/package.html"><span class="name">util</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@util" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Provides utilities used by the API.</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
