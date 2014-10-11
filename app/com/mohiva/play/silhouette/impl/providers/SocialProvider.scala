@@ -20,7 +20,6 @@ import com.mohiva.play.silhouette.api.{ LoginInfo, Provider }
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import play.api.libs.concurrent.Execution.Implicits._
-import play.api.libs.json.JsValue
 import play.api.mvc.{ RequestHeader, Result }
 
 import scala.concurrent.Future
@@ -104,9 +103,14 @@ trait SocialProfileBuilder[A <: AuthInfo] {
   type Profile <: SocialProfile
 
   /**
+   * The content type to parse.
+   */
+  type Content
+
+  /**
    * The parser signature.
    */
-  type Parser = (JsValue) => CommonSocialProfile
+  type Parser = (Content) => CommonSocialProfile
 
   /**
    * Gets the API URL to retrieve the profile data.
@@ -127,10 +131,10 @@ trait SocialProfileBuilder[A <: AuthInfo] {
    * Parses the social profile with the given Json parser.
    *
    * @param parser The Json parser to parse the most common profile.
-   * @param json The Json from the social provider.
+   * @param content The content returned from the provider.
    * @return The social profile from given result.
    */
-  protected def parseProfile(parser: Parser, json: JsValue): Try[Profile]
+  protected def parseProfile(parser: Parser, content: Content): Try[Profile]
 
   /**
    * Defines the parser which parses the most common profile supported by Silhouette.
@@ -191,8 +195,8 @@ trait CommonSocialProfileBuilder[A <: AuthInfo] {
    * Parses the social profile with the given Json parser.
    *
    * @param parser The Json parser to parse the most common profile.
-   * @param json The Json from the social provider.
+   * @param content The content returned from the provider.
    * @return The social profile from given result.
    */
-  protected def parseProfile(parser: Parser, json: JsValue): Try[Profile] = Try(parser(json))
+  protected def parseProfile(parser: Parser, content: Content): Try[Profile] = Try(parser(content))
 }

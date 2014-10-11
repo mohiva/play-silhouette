@@ -47,6 +47,11 @@ abstract class XingProvider(
   oAuth1Settings: OAuth1Settings) extends OAuth1Provider(cacheLayer, httpLayer, oAuth1Service, oAuth1Settings) {
 
   /**
+   * The content type returned from the provider.
+   */
+  type Content = JsValue
+
+  /**
    * Gets the provider ID.
    *
    * @return The provider ID.
