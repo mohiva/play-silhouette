@@ -43,6 +43,11 @@ abstract class GitHubProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
   extends OAuth2Provider(httpLayer, stateProvider, settings) {
 
   /**
+   * The content type returned from the provider.
+   */
+  type Content = JsValue
+
+  /**
    * A list with headers to send to the API.
    *
    * Without defining the accept header, the response will take the following form:

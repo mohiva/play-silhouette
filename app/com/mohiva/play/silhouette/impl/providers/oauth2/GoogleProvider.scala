@@ -45,6 +45,11 @@ abstract class GoogleProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
   extends OAuth2Provider(httpLayer, stateProvider, settings) {
 
   /**
+   * The content type returned from the provider.
+   */
+  type Content = JsValue
+
+  /**
    * Gets the provider ID.
    *
    * @return The provider ID.

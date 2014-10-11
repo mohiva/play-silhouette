@@ -48,6 +48,11 @@ abstract class LinkedInProvider(
   settings: OAuth1Settings) extends OAuth1Provider(cacheLayer, httpLayer, service, settings) {
 
   /**
+   * The content type returned from the provider.
+   */
+  type Content = JsValue
+
+  /**
    * Gets the provider ID.
    *
    * @return The provider ID.
