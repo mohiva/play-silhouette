@@ -56,14 +56,12 @@ abstract class TwitterProvider(
    *
    * @return The provider ID.
    */
-  def id = Twitter
+  val id = ID
 
   /**
-   * Gets the API URL to retrieve the profile data.
-   *
-   * @return The API URL to retrieve the profile data.
+   * Defines the URLs that are needed to retrieve the profile data.
    */
-  protected def profileAPI = API
+  protected val urls = Map("api" -> API)
 
   /**
    * Builds the social profile.
@@ -72,7 +70,7 @@ abstract class TwitterProvider(
    * @return On success the build social profile, otherwise a failure.
    */
   protected def buildProfile(authInfo: OAuth1Info): Future[Profile] = {
-    httpLayer.url(profileAPI).sign(oAuth1Service.sign(authInfo)).get().flatMap { response =>
+    httpLayer.url(urls("api")).sign(oAuth1Service.sign(authInfo)).get().flatMap { response =>
       val json = response.json
       (json \ "errors" \\ "code").headOption.map(_.as[Int]) match {
         case Some(code) =>
@@ -114,7 +112,7 @@ object TwitterProvider {
   /**
    * The LinkedIn constants.
    */
-  val Twitter = "twitter"
+  val ID = "twitter"
   val API = "https://api.twitter.com/1.1/account/verify_credentials.json"
 
   /**

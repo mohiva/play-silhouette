@@ -52,14 +52,12 @@ abstract class InstagramProvider(httpLayer: HTTPLayer, stateProvider: OAuth2Stat
    *
    * @return The provider ID.
    */
-  def id = ID
+  val id = ID
 
   /**
-   * Gets the API URL to retrieve the profile data.
-   *
-   * @return The API URL to retrieve the profile data.
+   * Defines the URLs that are needed to retrieve the profile data.
    */
-  protected def profileAPI = API
+  protected val urls = Map("api" -> API)
 
   /**
    * Builds the social profile.
@@ -68,7 +66,7 @@ abstract class InstagramProvider(httpLayer: HTTPLayer, stateProvider: OAuth2Stat
    * @return On success the build social profile, otherwise a failure.
    */
   protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
-    httpLayer.url(profileAPI.format(authInfo.accessToken)).get().flatMap { response =>
+    httpLayer.url(urls("api").format(authInfo.accessToken)).get().flatMap { response =>
       val json = response.json
       (json \ "meta" \ "code").asOpt[Int] match {
         case Some(code) if code != 200 =>
