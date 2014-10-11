@@ -112,8 +112,26 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder.Parser" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Parser=play.api.libs.json.JsValue=&gt;com.mohiva.play.silhouette.impl.providers.CommonSocialProfile"></a>
+              <ol><li name="com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider.Content" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Content=play.api.libs.json.JsValue"></a>
+      <a id="Content:Content"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Content</span><span class="result"> = <span class="extype" name="play.api.libs.json.JsValue">JsValue</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider@Content=play.api.libs.json.JsValue" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The content type returned from the provider.</p><div class="fullcomment"><div class="comment cmt"><p>The content type returned from the provider.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider">TwitterProvider</a> → <a href="../SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder.Parser" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Parser=SocialProfileBuilder.this.Content=&gt;com.mohiva.play.silhouette.impl.providers.CommonSocialProfile"></a>
       <a id="Parser:Parser"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -121,10 +139,10 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Parser</span><span class="result"> = (<span class="extype" name="play.api.libs.json.JsValue">JsValue</span>) ⇒ <a href="../CommonSocialProfile.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfile">CommonSocialProfile</a></span>
+        <span class="name">Parser</span><span class="result"> = (<a href="#Content=play.api.libs.json.JsValue" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider.Content">Content</a>) ⇒ <a href="../CommonSocialProfile.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfile">CommonSocialProfile</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider@Parser=play.api.libs.json.JsValue=&gt;com.mohiva.play.silhouette.impl.providers.CommonSocialProfile" title="Permalink" target="_top">
+      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider@Parser=SocialProfileBuilder.this.Content=&gt;com.mohiva.play.silhouette.impl.providers.CommonSocialProfile" title="Permalink" target="_top">
         <img src="../../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -154,23 +172,23 @@
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder#parseProfile" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="parseProfile(parser:SocialProfileBuilder.this.Parser,json:play.api.libs.json.JsValue):scala.util.Try[SocialProfileBuilder.this.Profile]"></a>
-      <a id="parseProfile(Parser,JsValue):Try[Profile]"></a>
+      <a id="parseProfile(parser:SocialProfileBuilder.this.Parser,content:SocialProfileBuilder.this.Content):scala.util.Try[SocialProfileBuilder.this.Profile]"></a>
+      <a id="parseProfile(Parser,Content):Try[Profile]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseProfile</span><span class="params">(<span name="parser">parser: <a href="#Parser=play.api.libs.json.JsValue=&gt;com.mohiva.play.silhouette.impl.providers.CommonSocialProfile" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider.Parser">Parser</a></span>, <span name="json">json: <span class="extype" name="play.api.libs.json.JsValue">JsValue</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.util.Try" class="extype" target="_top">Try</a>[<a href="#Profile&lt;:com.mohiva.play.silhouette.impl.providers.SocialProfile" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider.Profile">Profile</a>]</span>
+        <span class="name">parseProfile</span><span class="params">(<span name="parser">parser: <a href="#Parser=SocialProfileBuilder.this.Content=&gt;com.mohiva.play.silhouette.impl.providers.CommonSocialProfile" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider.Parser">Parser</a></span>, <span name="content">content: <a href="#Content=play.api.libs.json.JsValue" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider.Content">Content</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.util.Try" class="extype" target="_top">Try</a>[<a href="#Profile&lt;:com.mohiva.play.silhouette.impl.providers.SocialProfile" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider.Profile">Profile</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider@parseProfile(parser:SocialProfileBuilder.this.Parser,json:play.api.libs.json.JsValue):scala.util.Try[SocialProfileBuilder.this.Profile]" title="Permalink" target="_top">
+      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider@parseProfile(parser:SocialProfileBuilder.this.Parser,content:SocialProfileBuilder.this.Content):scala.util.Try[SocialProfileBuilder.this.Profile]" title="Permalink" target="_top">
         <img src="../../../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Parses the social profile with the given Json parser.</p><div class="fullcomment"><div class="comment cmt"><p>Parses the social profile with the given Json parser.
-</p></div><dl class="paramcmts block"><dt class="param">parser</dt><dd class="cmt"><p>The Json parser to parse the most common profile.</p></dd><dt class="param">json</dt><dd class="cmt"><p>The Json from the social provider.</p></dd><dt>returns</dt><dd class="cmt"><p>The social profile from given result.
+</p></div><dl class="paramcmts block"><dt class="param">parser</dt><dd class="cmt"><p>The Json parser to parse the most common profile.</p></dd><dt class="param">content</dt><dd class="cmt"><p>The content returned from the provider.</p></dd><dt>returns</dt><dd class="cmt"><p>The social profile from given result.
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a></dd></dl></div>
     </li></ol>
             </div>
@@ -511,7 +529,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parser</span><span class="result">: <a href="#Parser=play.api.libs.json.JsValue=&gt;com.mohiva.play.silhouette.impl.providers.CommonSocialProfile" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider.Parser">Parser</a></span>
+        <span class="name">parser</span><span class="result">: <a href="#Parser=SocialProfileBuilder.this.Content=&gt;com.mohiva.play.silhouette.impl.providers.CommonSocialProfile" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider.Parser">Parser</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider@parser:TwitterProvider.this.Parser" title="Permalink" target="_top">
