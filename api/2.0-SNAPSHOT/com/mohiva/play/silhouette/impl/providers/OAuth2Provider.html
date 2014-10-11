@@ -249,24 +249,25 @@
       <p class="shortcomment cmt">Defines the parser which parses the most common profile supported by Silhouette.</p><div class="fullcomment"><div class="comment cmt"><p>Defines the parser which parses the most common profile supported by Silhouette.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The parser which parses the most common profile supported by Silhouette.
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder#profileAPI" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="profileAPI:String"></a>
-      <a id="profileAPI:String"></a>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder#urls" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="urls:Map[String,String]"></a>
+      <a id="urls:Map[String,String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">profileAPI</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">urls</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2Provider@profileAPI:String" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2Provider@urls:Map[String,String]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Gets the API URL to retrieve the profile data.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the API URL to retrieve the profile data.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The API URL to retrieve the profile data.
+      <p class="shortcomment cmt">Gets the URLs that are needed to retrieve the profile data.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the URLs that are needed to retrieve the profile data.</p><p>Some providers need more than one request to different URLs to query the profile data.
+So we use a Map here to allow defining multiple URLs.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The URLs that are needed to retrieve the profile data.
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a></dd></dl></div>
     </li></ol>
             </div>

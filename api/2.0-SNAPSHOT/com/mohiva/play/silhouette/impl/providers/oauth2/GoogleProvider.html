@@ -477,7 +477,7 @@
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">def</span>
+        <span class="kind">val</span>
       </span>
       <span class="symbol">
         <span class="name">id</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
@@ -595,25 +595,6 @@
       <p class="shortcomment cmt">Defines the parser which parses the most common profile supported by Silhouette.</p><div class="fullcomment"><div class="comment cmt"><p>Defines the parser which parses the most common profile supported by Silhouette.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The parser which parses the most common profile supported by Silhouette.
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.GoogleProvider">GoogleProvider</a> → <a href="../SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.oauth2.GoogleProvider#profileAPI" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="profileAPI:String"></a>
-      <a id="profileAPI:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">profileAPI</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth2.GoogleProvider@profileAPI:String" title="Permalink" target="_top">
-        <img src="../../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Gets the API URL to retrieve the profile data.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the API URL to retrieve the profile data.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The API URL to retrieve the profile data.
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.GoogleProvider">GoogleProvider</a> → <a href="../SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProvider#retrieveProfile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="retrieveProfile(authInfo:A):scala.concurrent.Future[SocialProvider.this.Profile]"></a>
       <a id="retrieveProfile(OAuth2Info):Future[Profile]"></a>
@@ -668,6 +649,23 @@ identity.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.oauth2.GoogleProvider#urls" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="urls:scala.collection.immutable.Map[String,String]"></a>
+      <a id="urls:Map[String,String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">urls</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.collection.immutable.Map" class="extype" target="_top">Map</a>[<span class="extype" name="java.lang.String">String</span>, <span class="extype" name="java.lang.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth2.GoogleProvider@urls:scala.collection.immutable.Map[String,String]" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Defines the URLs that are needed to retrieve the profile data.</p><div class="fullcomment"><div class="comment cmt"><p>Defines the URLs that are needed to retrieve the profile data.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The URLs that are needed to retrieve the profile data.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.GoogleProvider">GoogleProvider</a> → <a href="../SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
