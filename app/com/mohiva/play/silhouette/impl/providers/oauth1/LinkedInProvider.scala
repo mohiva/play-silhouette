@@ -57,14 +57,12 @@ abstract class LinkedInProvider(
    *
    * @return The provider ID.
    */
-  def id = LinkedIn
+  val id = ID
 
   /**
-   * Gets the API URL to retrieve the profile data.
-   *
-   * @return The API URL to retrieve the profile data.
+   * Defines the URLs that are needed to retrieve the profile data.
    */
-  protected def profileAPI = API
+  protected val urls = Map("api" -> API)
 
   /**
    * Builds the social profile.
@@ -73,7 +71,7 @@ abstract class LinkedInProvider(
    * @return On success the build social profile, otherwise a failure.
    */
   protected def buildProfile(authInfo: OAuth1Info): Future[Profile] = {
-    httpLayer.url(profileAPI).sign(service.sign(authInfo)).get().flatMap { response =>
+    httpLayer.url(urls("api")).sign(service.sign(authInfo)).get().flatMap { response =>
       val json = response.json
       (json \ "errorCode").asOpt[Int] match {
         case Some(error) =>
@@ -124,7 +122,7 @@ object LinkedInProvider {
   /**
    * The LinkedIn constants.
    */
-  val LinkedIn = "linkedin"
+  val ID = "linkedin"
   val API = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,formatted-name,picture-url,email-address)?format=json"
 
   /**

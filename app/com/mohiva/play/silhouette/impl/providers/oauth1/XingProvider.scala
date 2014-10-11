@@ -56,14 +56,12 @@ abstract class XingProvider(
    *
    * @return The provider ID.
    */
-  def id = Xing
+  val id = ID
 
   /**
-   * Gets the API URL to retrieve the profile data.
-   *
-   * @return The API URL to retrieve the profile data.
+   * Defines the URLs that are needed to retrieve the profile data.
    */
-  protected def profileAPI = API
+  protected val urls = Map("api" -> API)
 
   /**
    * Builds the social profile.
@@ -72,7 +70,7 @@ abstract class XingProvider(
    * @return On success the build social profile, otherwise a failure.
    */
   protected def buildProfile(authInfo: OAuth1Info): Future[Profile] = {
-    httpLayer.url(profileAPI).sign(oAuth1Service.sign(authInfo)).get().flatMap { response =>
+    httpLayer.url(urls("api")).sign(oAuth1Service.sign(authInfo)).get().flatMap { response =>
       val json = response.json
       (json \ "error_name").asOpt[String] match {
         case Some(error) =>
@@ -121,7 +119,7 @@ object XingProvider {
   /**
    * The LinkedIn constants.
    */
-  val Xing = "xing"
+  val ID = "xing"
   val API = "https://api.xing.com/v1/users/me?fields=id,first_name,last_name,display_name,photo_urls.large,active_email"
 
   /**

@@ -113,11 +113,14 @@ trait SocialProfileBuilder[A <: AuthInfo] {
   type Parser = (Content) => CommonSocialProfile
 
   /**
-   * Gets the API URL to retrieve the profile data.
+   * Gets the URLs that are needed to retrieve the profile data.
    *
-   * @return The API URL to retrieve the profile data.
+   * Some providers need more than one request to different URLs to query the profile data.
+   * So we use a Map here to allow defining multiple URLs.
+   *
+   * @return The URLs that are needed to retrieve the profile data.
    */
-  protected def profileAPI: String
+  protected def urls: Map[String, String]
 
   /**
    * Subclasses need to implement this method to populate the profile information from the service provider.

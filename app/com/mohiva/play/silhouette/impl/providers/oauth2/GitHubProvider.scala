@@ -48,6 +48,18 @@ abstract class GitHubProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
   type Content = JsValue
 
   /**
+   * Gets the provider ID.
+   *
+   * @return The provider ID.
+   */
+  val id = ID
+
+  /**
+   * Defines the URLs that are needed to retrieve the profile data.
+   */
+  protected val urls = Map("api" -> API)
+
+  /**
    * A list with headers to send to the API.
    *
    * Without defining the accept header, the response will take the following form:
@@ -58,27 +70,13 @@ abstract class GitHubProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
   override protected val headers = Seq(HeaderNames.ACCEPT -> "application/json")
 
   /**
-   * Gets the provider ID.
-   *
-   * @return The provider ID.
-   */
-  def id = ID
-
-  /**
-   * Gets the API URL to retrieve the profile data.
-   *
-   * @return The API URL to retrieve the profile data.
-   */
-  protected def profileAPI = API
-
-  /**
    * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
   protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
-    httpLayer.url(profileAPI.format(authInfo.accessToken)).get().flatMap { response =>
+    httpLayer.url(urls("api").format(authInfo.accessToken)).get().flatMap { response =>
       val json = response.json
       (json \ "message").asOpt[String] match {
         case Some(msg) =>
