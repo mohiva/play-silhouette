@@ -27,10 +27,13 @@ import scala.util.Try
 
 /**
  * The base interface for all social providers.
- *
- * @tparam A The type of the auth info.
  */
-trait SocialProvider[A <: AuthInfo] extends Provider with SocialProfileBuilder[A] {
+trait SocialProvider extends Provider with SocialProfileBuilder {
+
+  /**
+   * The type of the auth info.
+   */
+  type A <: AuthInfo
 
   /**
    * Authenticates the user and returns the auth information.
@@ -42,7 +45,7 @@ trait SocialProvider[A <: AuthInfo] extends Provider with SocialProfileBuilder[A
    * @param request The request header.
    * @return Either a Result or the AuthInfo from the provider.
    */
-  def authenticate()(implicit request: RequestHeader): Future[AuthenticationResult]
+  def authenticate()(implicit request: RequestHeader): Future[Either[Result, A]]
 
   /**
    * Retrieves the user profile for the given auth info.
@@ -62,21 +65,6 @@ trait SocialProvider[A <: AuthInfo] extends Provider with SocialProfileBuilder[A
 }
 
 /**
- * The result of a request to Provider.authenticate().
- */
-sealed trait AuthenticationResult
-
-/**
- * Wraps a redirect response in the authentication flow.
- */
-case class AuthenticationOngoing(result: Result) extends AuthenticationResult
-
-/**
- * Means the authentication has been completed, the auth info is available.
- */
-case class AuthenticationCompleted[A <: AuthInfo](authInfo: A) extends AuthenticationResult
-
-/**
  * The social profile contains all the data returned from the social providers after authentication.
  */
 trait SocialProfile {
@@ -91,11 +79,9 @@ trait SocialProfile {
 
 /**
  * Builds the social profile.
- *
- * @tparam A The type of the auth info.
  */
-trait SocialProfileBuilder[A <: AuthInfo] {
-  self: SocialProvider[A] =>
+trait SocialProfileBuilder {
+  self: SocialProvider =>
 
   /**
    * The type of the profile.
@@ -183,11 +169,9 @@ case class CommonSocialProfile(
 
 /**
  * The profile builder for the common social profile.
- *
- * @tparam A The auth info type.
  */
-trait CommonSocialProfileBuilder[A <: AuthInfo] {
-  self: SocialProfileBuilder[A] =>
+trait CommonSocialProfileBuilder {
+  self: SocialProfileBuilder =>
 
   /**
    * The type of the profile.

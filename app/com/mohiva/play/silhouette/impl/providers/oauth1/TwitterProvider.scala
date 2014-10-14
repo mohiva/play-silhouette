@@ -128,6 +128,6 @@ object TwitterProvider {
     httpLayer: HTTPLayer,
     oAuth1Service: OAuth1Service,
     auth1Settings: OAuth1Settings) = {
-    new TwitterProvider(cacheLayer, httpLayer, oAuth1Service, auth1Settings) with CommonSocialProfileBuilder[OAuth1Info]
+    new TwitterProvider(cacheLayer, httpLayer, oAuth1Service, auth1Settings) with CommonSocialProfileBuilder
   }
 }

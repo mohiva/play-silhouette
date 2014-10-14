@@ -74,8 +74,13 @@ object OAuth2Info {
  * @param settings The provider settings.
  */
 abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
-  extends SocialProvider[OAuth2Info]
+  extends SocialProvider
   with Logger {
+
+  /**
+   * The type of the auth info.
+   */
+  type A = OAuth2Info
 
   /**
    * A list with headers to send to the API.
@@ -88,7 +93,7 @@ abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  def authenticate()(implicit request: RequestHeader): Future[AuthenticationResult] = {
+  def authenticate()(implicit request: RequestHeader): Future[Either[Result, OAuth2Info]] = {
     logger.debug("[Silhouette][%s] Query string: %s".format(id, request.rawQueryString))
     request.queryString.get(Error).flatMap(_.headOption).map {
       case e @ AccessDenied => new AccessDeniedException(AuthorizationError.format(id, e))
@@ -100,7 +105,7 @@ abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
         case Some(code) => stateProvider.validate(id).recoverWith {
           case e => Future.failed(new AuthenticationException(InvalidState.format(id), e))
         }.flatMap { state =>
-          getAccessToken(code).map(oauth2Info => AuthenticationCompleted(oauth2Info))
+          getAccessToken(code).map(oauth2Info => Right(oauth2Info))
         }
         // There's no code in the request, this is the first step in the OAuth flow
         case None => stateProvider.build().map { state =>
@@ -116,7 +121,7 @@ abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
           val redirect = stateProvider.publish(Results.Redirect(url), state)
           logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
           logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
-          AuthenticationOngoing(redirect)
+          Left(redirect)
         }
       }
     }

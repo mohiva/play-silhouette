@@ -36,9 +36,9 @@ abstract class SocialProviderSpec[A <: AuthInfo] extends PlaySpecification with 
    * @param b The matcher block to apply.
    * @return A specs2 match result.
    */
-  def result(providerResult: Future[AuthenticationResult])(b: Future[Result] => MatchResult[_]) = {
-    await(providerResult) must beLike[AuthenticationResult] {
-      case AuthenticationOngoing(result) => b(Future.successful(result))
+  def result(providerResult: Future[Either[Result, A]])(b: Future[Result] => MatchResult[_]) = {
+    await(providerResult) must beLeft[Result].like {
+      case result => b(Future.successful(result))
     }
   }
 
@@ -49,9 +49,9 @@ abstract class SocialProviderSpec[A <: AuthInfo] extends PlaySpecification with 
    * @param b The matcher block to apply.
    * @return A specs2 match result.
    */
-  def authInfo(providerResult: Future[AuthenticationResult])(b: A => MatchResult[_]) = {
-    await(providerResult) must beLike[AuthenticationResult] {
-      case r: AuthenticationCompleted[A] => b(r.authInfo)
+  def authInfo(providerResult: Future[Either[Result, A]])(b: A => MatchResult[_]) = {
+    await(providerResult) must beRight[A].like {
+      case authInfo => b(authInfo)
     }
   }
 

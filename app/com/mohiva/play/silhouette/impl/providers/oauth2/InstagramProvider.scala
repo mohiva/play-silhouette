@@ -122,6 +122,6 @@ object InstagramProvider {
    * @return An instance of this provider.
    */
   def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new InstagramProvider(httpLayer, stateProvider, settings) with CommonSocialProfileBuilder[OAuth2Info]
+    new InstagramProvider(httpLayer, stateProvider, settings) with CommonSocialProfileBuilder
   }
 }

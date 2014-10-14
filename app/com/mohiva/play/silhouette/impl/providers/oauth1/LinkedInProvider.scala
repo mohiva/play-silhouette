@@ -138,6 +138,6 @@ object LinkedInProvider {
     httpLayer: HTTPLayer,
     oAuth1Service: OAuth1Service,
     auth1Settings: OAuth1Settings) = {
-    new LinkedInProvider(cacheLayer, httpLayer, oAuth1Service, auth1Settings) with CommonSocialProfileBuilder[OAuth1Info]
+    new LinkedInProvider(cacheLayer, httpLayer, oAuth1Service, auth1Settings) with CommonSocialProfileBuilder
   }
 }

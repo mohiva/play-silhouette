@@ -149,6 +149,6 @@ object FacebookProvider {
    * @return An instance of this provider.
    */
   def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new FacebookProvider(httpLayer, stateProvider, settings) with CommonSocialProfileBuilder[OAuth2Info]
+    new FacebookProvider(httpLayer, stateProvider, settings) with CommonSocialProfileBuilder
   }
 }
