@@ -122,18 +122,18 @@ provider to return our previous defined custom profile.
 
 .. code-block:: scala
 
-    trait CustomFacebookProfileBuilder extends SocialProfileBuilder[OAuth2Info] {
+    trait CustomFacebookProfileBuilder extends SocialProfileBuilder {
       self: FacebookProvider =>
 
       /**
        * Defines the profile to return by the provider.
        */
-      override type Profile = CustomSocialProfile
+      type Profile = CustomSocialProfile
 
       /**
        * Parses the profile from the Json response returned by the Facebook API.
        */
-      override protected def parseProfile(parser: JsonParser, json: JsValue): Try[Profile] = Try {
+      protected def parseProfile(parser: JsonParser, json: JsValue): Try[Profile] = Try {
         val commonProfile = parser(json)
         val gender = (json \ "gender").asOpt[String]
 

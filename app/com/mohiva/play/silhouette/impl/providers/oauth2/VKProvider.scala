@@ -125,6 +125,6 @@ object VKProvider {
    * @return An instance of this provider.
    */
   def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new VKProvider(httpLayer, stateProvider, settings) with CommonSocialProfileBuilder[OAuth2Info]
+    new VKProvider(httpLayer, stateProvider, settings) with CommonSocialProfileBuilder
   }
 }

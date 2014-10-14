@@ -28,7 +28,7 @@ import com.mohiva.play.silhouette.api.util.{ CacheLayer, HTTPLayer }
 import com.mohiva.play.silhouette.impl.providers.OAuth1Provider._
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.ws.WSSignatureCalculator
-import play.api.mvc.{ RequestHeader, Results }
+import play.api.mvc.{ Result, RequestHeader, Results }
 
 import scala.concurrent.Future
 
@@ -44,7 +44,12 @@ abstract class OAuth1Provider(
   cacheLayer: CacheLayer,
   httpLayer: HTTPLayer,
   service: OAuth1Service,
-  settings: OAuth1Settings) extends SocialProvider[OAuth1Info] with Logger {
+  settings: OAuth1Settings) extends SocialProvider with Logger {
+
+  /**
+   * The type of the auth info.
+   */
+  type A = OAuth1Info
 
   /**
    * Starts the authentication process.
@@ -52,7 +57,7 @@ abstract class OAuth1Provider(
    * @param request The request header.
    * @return Either a Result or the auth info from the provider.
    */
-  def authenticate()(implicit request: RequestHeader): Future[AuthenticationResult] = {
+  def authenticate()(implicit request: RequestHeader): Future[Either[Result, OAuth1Info]] = {
     logger.debug("[Silhouette][%s] Query string: %s".format(id, request.rawQueryString))
     request.queryString.get(Denied) match {
       case Some(_) => Future.failed(new AccessDeniedException(AuthorizationError.format(id, Denied)))
@@ -63,7 +68,7 @@ abstract class OAuth1Provider(
           case (cacheID, cachedInfo) =>
             service.retrieveAccessToken(cachedInfo, seq.head).map { info =>
               cacheLayer.remove(cacheID)
-              AuthenticationCompleted(info)
+              Right(info)
             }.recover {
               case e => throw new AuthenticationException(ErrorAccessToken.format(id), e)
             }
@@ -76,7 +81,7 @@ abstract class OAuth1Provider(
           val redirect = Results.Redirect(url).withSession(request.session + (CacheKey -> cacheID))
           logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
           cacheLayer.save(cacheID, info, CacheExpiration).map(_ =>
-            AuthenticationOngoing(redirect)
+            Left(redirect)
           )
         }.recover {
           case e => throw new AuthenticationException(ErrorRequestToken.format(id), e)

@@ -135,6 +135,6 @@ object XingProvider {
     httpLayer: HTTPLayer,
     oAuth1Service: OAuth1Service,
     auth1Settings: OAuth1Settings) = {
-    new XingProvider(cacheLayer, httpLayer, oAuth1Service, auth1Settings) with CommonSocialProfileBuilder[OAuth1Info]
+    new XingProvider(cacheLayer, httpLayer, oAuth1Service, auth1Settings) with CommonSocialProfileBuilder
   }
 }

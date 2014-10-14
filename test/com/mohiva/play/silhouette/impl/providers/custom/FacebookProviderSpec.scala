@@ -188,11 +188,11 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
   /**
    * A custom Facebook profile builder for testing purpose.
    */
-  trait CustomFacebookProfileBuilder extends SocialProfileBuilder[OAuth2Info] {
+  trait CustomFacebookProfileBuilder extends SocialProfileBuilder {
     self: FacebookProvider =>
 
-    override type Profile = CustomSocialProfile
-    override protected def parseProfile(parser: Parser, json: JsValue): Try[Profile] = Try {
+    type Profile = CustomSocialProfile
+    protected def parseProfile(parser: Parser, json: JsValue): Try[Profile] = Try {
       val commonProfile = parser(json)
       val gender = (json \ "gender").as[String]
 
