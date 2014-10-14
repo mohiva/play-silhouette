@@ -43,14 +43,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">OAuth2Provider</span><span class="result"> extends <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a>[<a href="OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Info">OAuth2Info</a>] with <a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
+        <span class="name">OAuth2Provider</span><span class="result"> extends <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a> with <a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Base class for all OAuth2 providers.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a>, <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a>[<a href="OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Info">OAuth2Info</a>], <a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a>[<a href="OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Info">OAuth2Info</a>], <a href="../../api/Provider.html" class="extype" name="com.mohiva.play.silhouette.api.Provider">Provider</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a>, <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a>, <a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a>, <a href="../../api/Provider.html" class="extype" name="com.mohiva.play.silhouette.api.Provider">Provider</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="oauth2/FacebookProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.FacebookProvider">FacebookProvider</a>, <a href="oauth2/FoursquareProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.FoursquareProvider">FoursquareProvider</a>, <a href="oauth2/GitHubProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.GitHubProvider">GitHubProvider</a>, <a href="oauth2/GoogleProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.GoogleProvider">GoogleProvider</a>, <a href="oauth2/InstagramProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.InstagramProvider">InstagramProvider</a>, <a href="oauth2/LinkedInProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.LinkedInProvider">LinkedInProvider</a>, <a href="oauth2/VKProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.VKProvider">VKProvider</a></div>
@@ -114,7 +114,25 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder.Content" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider.A" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="A=com.mohiva.play.silhouette.impl.providers.OAuth2Info"></a>
+      <a id="A:A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">A</span><span class="result"> = <a href="OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Info">OAuth2Info</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2Provider@A=com.mohiva.play.silhouette.impl.providers.OAuth2Info" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The type of the auth info.</p><div class="fullcomment"><div class="comment cmt"><p>The type of the auth info.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider">OAuth2Provider</a> → <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder.Content" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Content"></a>
       <a id="Content:Content"></a>
       <h4 class="signature">
@@ -174,18 +192,18 @@
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder#buildProfile" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="buildProfile(authInfo:A):scala.concurrent.Future[SocialProfileBuilder.this.Profile]"></a>
-      <a id="buildProfile(OAuth2Info):Future[Profile]"></a>
+      <a id="buildProfile(authInfo:SocialProfileBuilder.this.A):scala.concurrent.Future[SocialProfileBuilder.this.Profile]"></a>
+      <a id="buildProfile(A):Future[Profile]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">buildProfile</span><span class="params">(<span name="authInfo">authInfo: <a href="OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Info">OAuth2Info</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="#Profile&lt;:com.mohiva.play.silhouette.impl.providers.SocialProfile" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider.Profile">Profile</a>]</span>
+        <span class="name">buildProfile</span><span class="params">(<span name="authInfo">authInfo: <a href="#A=com.mohiva.play.silhouette.impl.providers.OAuth2Info" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider.A">A</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="#Profile&lt;:com.mohiva.play.silhouette.impl.providers.SocialProfile" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider.Profile">Profile</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2Provider@buildProfile(authInfo:A):scala.concurrent.Future[SocialProfileBuilder.this.Profile]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2Provider@buildProfile(authInfo:SocialProfileBuilder.this.A):scala.concurrent.Future[SocialProfileBuilder.this.Profile]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -343,18 +361,18 @@ So we use a Map here to allow defining multiple URLs.
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider#authenticate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="authenticate()(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[com.mohiva.play.silhouette.impl.providers.AuthenticationResult]"></a>
-      <a id="authenticate()(RequestHeader):Future[AuthenticationResult]"></a>
+      <a id="authenticate()(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Either[play.api.mvc.Result,com.mohiva.play.silhouette.impl.providers.OAuth2Info]]"></a>
+      <a id="authenticate()(RequestHeader):Future[Either[Result,OAuth2Info]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">authenticate</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="AuthenticationResult.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.AuthenticationResult">AuthenticationResult</a>]</span>
+        <span class="name">authenticate</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="scala.Either">Either</span>[<a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>, <a href="OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Info">OAuth2Info</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2Provider@authenticate()(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[com.mohiva.play.silhouette.impl.providers.AuthenticationResult]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2Provider@authenticate()(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Either[play.api.mvc.Result,com.mohiva.play.silhouette.impl.providers.OAuth2Info]]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -618,18 +636,18 @@ So we use a Map here to allow defining multiple URLs.
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProvider#retrieveProfile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="retrieveProfile(authInfo:A):scala.concurrent.Future[SocialProvider.this.Profile]"></a>
-      <a id="retrieveProfile(OAuth2Info):Future[Profile]"></a>
+      <a id="retrieveProfile(authInfo:SocialProvider.this.A):scala.concurrent.Future[SocialProvider.this.Profile]"></a>
+      <a id="retrieveProfile(A):Future[Profile]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">retrieveProfile</span><span class="params">(<span name="authInfo">authInfo: <a href="OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Info">OAuth2Info</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="#Profile&lt;:com.mohiva.play.silhouette.impl.providers.SocialProfile" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider.Profile">Profile</a>]</span>
+        <span class="name">retrieveProfile</span><span class="params">(<span name="authInfo">authInfo: <a href="#A=com.mohiva.play.silhouette.impl.providers.OAuth2Info" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider.A">A</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="#Profile&lt;:com.mohiva.play.silhouette.impl.providers.SocialProfile" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider.Profile">Profile</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2Provider@retrieveProfile(authInfo:A):scala.concurrent.Future[SocialProvider.this.Profile]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2Provider@retrieveProfile(authInfo:SocialProvider.this.A):scala.concurrent.Future[SocialProvider.this.Profile]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -752,9 +770,9 @@ identity.
         <div class="parent" name="com.mohiva.play.silhouette.api.Logger">
               <h3>Inherited from <a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></h3>
             </div><div class="parent" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">
-              <h3>Inherited from <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a>[<a href="OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Info">OAuth2Info</a>]</h3>
+              <h3>Inherited from <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a></h3>
             </div><div class="parent" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">
-              <h3>Inherited from <a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a>[<a href="OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Info">OAuth2Info</a>]</h3>
+              <h3>Inherited from <a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a></h3>
             </div><div class="parent" name="com.mohiva.play.silhouette.api.Provider">
               <h3>Inherited from <a href="../../api/Provider.html" class="extype" name="com.mohiva.play.silhouette.api.Provider">Provider</a></h3>
             </div><div class="parent" name="scala.AnyRef">

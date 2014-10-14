@@ -91,59 +91,7 @@ for different schemes and services.
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.impl.providers.AuthenticationCompleted" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="AuthenticationCompleted[A&lt;:com.mohiva.play.silhouette.api.services.AuthInfo]extendsAuthenticationResultwithProductwithSerializable"></a>
-      <a id="AuthenticationCompleted[A&lt;:AuthInfo]:AuthenticationCompleted[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="AuthenticationCompleted.html"><span class="name">AuthenticationCompleted</span></a><span class="tparams">[<span name="A">A &lt;: <a href="../../api/services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthInfo">AuthInfo</a></span>]</span><span class="params">(<span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.impl.providers.AuthenticationCompleted.A">A</span></span>)</span><span class="result"> extends <a href="AuthenticationResult.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.AuthenticationResult">AuthenticationResult</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@AuthenticationCompleted[A&lt;:com.mohiva.play.silhouette.api.services.AuthInfo]extendsAuthenticationResultwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Means the authentication has been completed, the auth info is available.</p>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.AuthenticationOngoing" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="AuthenticationOngoingextendsAuthenticationResultwithProductwithSerializable"></a>
-      <a id="AuthenticationOngoing:AuthenticationOngoing"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="AuthenticationOngoing.html"><span class="name">AuthenticationOngoing</span></a><span class="params">(<span name="result">result: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>)</span><span class="result"> extends <a href="AuthenticationResult.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.AuthenticationResult">AuthenticationResult</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@AuthenticationOngoingextendsAuthenticationResultwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Wraps a redirect response in the authentication flow.</p>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.AuthenticationResult" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="AuthenticationResultextendsAnyRef"></a>
-      <a id="AuthenticationResult:AuthenticationResult"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">sealed </span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="AuthenticationResult.html"><span class="name">AuthenticationResult</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@AuthenticationResultextendsAnyRef" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">The result of a request to Provider.</p><div class="fullcomment"><div class="comment cmt"><p>The result of a request to Provider.authenticate().
-</p></div></div>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="CommonSocialProfileextendsSocialProfilewithProductwithSerializable"></a>
       <a id="CommonSocialProfile:CommonSocialProfile"></a>
       <h4 class="signature">
@@ -165,25 +113,23 @@ identity for the first authentication(which is also the registration) or to upda
 on every subsequent authentication.
 </p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info.</p></dd><dt class="param">firstName</dt><dd class="cmt"><p>Maybe the first name of the authenticated user.</p></dd><dt class="param">lastName</dt><dd class="cmt"><p>Maybe the last name of the authenticated user.</p></dd><dt class="param">fullName</dt><dd class="cmt"><p>Maybe the full name of the authenticated user.</p></dd><dt class="param">email</dt><dd class="cmt"><p>Maybe the email of the authenticated provider.</p></dd><dt class="param">avatarURL</dt><dd class="cmt"><p>Maybe the avatar URL of the authenticated provider.
 </p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="CommonSocialProfileBuilder[A&lt;:com.mohiva.play.silhouette.api.services.AuthInfo]extendsAnyRef"></a>
-      <a id="CommonSocialProfileBuilder[A&lt;:AuthInfo]:CommonSocialProfileBuilder[A]"></a>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="CommonSocialProfileBuilderextendsAnyRef"></a>
+      <a id="CommonSocialProfileBuilder:CommonSocialProfileBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="CommonSocialProfileBuilder.html"><span class="name">CommonSocialProfileBuilder</span></a><span class="tparams">[<span name="A">A &lt;: <a href="../../api/services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="CommonSocialProfileBuilder.html"><span class="name">CommonSocialProfileBuilder</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@CommonSocialProfileBuilder[A&lt;:com.mohiva.play.silhouette.api.services.AuthInfo]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@CommonSocialProfileBuilderextendsAnyRef" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The profile builder for the common social profile.</p><div class="fullcomment"><div class="comment cmt"><p>The profile builder for the common social profile.
-</p></div><dl class="paramcmts block"><dt class="tparam">A</dt><dd class="cmt"><p>The auth info type.
-</p></dd></dl></div>
+      <p class="shortcomment cmt">The profile builder for the common social profile.</p>
     </li><li name="com.mohiva.play.silhouette.impl.providers.Credentials" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="CredentialsextendsProductwithSerializable"></a>
       <a id="Credentials:Credentials"></a>
@@ -245,7 +191,7 @@ algorithm and stores the auth info in the backing store.
 </p></div><dl class="paramcmts block"><dt class="param">token</dt><dd class="cmt"><p>The consumer token.</p></dd><dt class="param">secret</dt><dd class="cmt"><p>The consumer secret.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth1Provider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="OAuth1ProviderextendsSocialProvider[com.mohiva.play.silhouette.impl.providers.OAuth1Info]withLogger"></a>
+      <a id="OAuth1ProviderextendsSocialProviderwithLogger"></a>
       <a id="OAuth1Provider:OAuth1Provider"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -253,10 +199,10 @@ algorithm and stores the auth info in the backing store.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="OAuth1Provider.html"><span class="name">OAuth1Provider</span></a><span class="result"> extends <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a>[<a href="OAuth1Info.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth1Info">OAuth1Info</a>] with <a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
+        <a href="OAuth1Provider.html"><span class="name">OAuth1Provider</span></a><span class="result"> extends <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a> with <a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@OAuth1ProviderextendsSocialProvider[com.mohiva.play.silhouette.impl.providers.OAuth1Info]withLogger" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@OAuth1ProviderextendsSocialProviderwithLogger" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -317,7 +263,7 @@ algorithm and stores the auth info in the backing store.
 </p></div><dl class="paramcmts block"><dt class="param">accessToken</dt><dd class="cmt"><p>The access token.</p></dd><dt class="param">tokenType</dt><dd class="cmt"><p>The token type.</p></dd><dt class="param">expiresIn</dt><dd class="cmt"><p>The number of seconds before the token expires.</p></dd><dt class="param">refreshToken</dt><dd class="cmt"><p>The refresh token.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="OAuth2ProviderextendsSocialProvider[com.mohiva.play.silhouette.impl.providers.OAuth2Info]withLogger"></a>
+      <a id="OAuth2ProviderextendsSocialProviderwithLogger"></a>
       <a id="OAuth2Provider:OAuth2Provider"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -325,10 +271,10 @@ algorithm and stores the auth info in the backing store.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="OAuth2Provider.html"><span class="name">OAuth2Provider</span></a><span class="result"> extends <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a>[<a href="OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Info">OAuth2Info</a>] with <a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
+        <a href="OAuth2Provider.html"><span class="name">OAuth2Provider</span></a><span class="result"> extends <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a> with <a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@OAuth2ProviderextendsSocialProvider[com.mohiva.play.silhouette.impl.providers.OAuth2Info]withLogger" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@OAuth2ProviderextendsSocialProviderwithLogger" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -440,44 +386,40 @@ algorithm and stores the auth info in the backing store.
       </a>
     </span>
       <p class="shortcomment cmt">The social profile contains all the data returned from the social providers after authentication.</p>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="SocialProfileBuilder[A&lt;:com.mohiva.play.silhouette.api.services.AuthInfo]extendsAnyRef"></a>
-      <a id="SocialProfileBuilder[A&lt;:AuthInfo]:SocialProfileBuilder[A]"></a>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SocialProfileBuilderextendsAnyRef"></a>
+      <a id="SocialProfileBuilder:SocialProfileBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="SocialProfileBuilder.html"><span class="name">SocialProfileBuilder</span></a><span class="tparams">[<span name="A">A &lt;: <a href="../../api/services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="SocialProfileBuilder.html"><span class="name">SocialProfileBuilder</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@SocialProfileBuilder[A&lt;:com.mohiva.play.silhouette.api.services.AuthInfo]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@SocialProfileBuilderextendsAnyRef" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Builds the social profile.</p><div class="fullcomment"><div class="comment cmt"><p>Builds the social profile.
-</p></div><dl class="paramcmts block"><dt class="tparam">A</dt><dd class="cmt"><p>The type of the auth info.
-</p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProvider" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="SocialProvider[A&lt;:com.mohiva.play.silhouette.api.services.AuthInfo]extendsProviderwithSocialProfileBuilder[A]"></a>
-      <a id="SocialProvider[A&lt;:AuthInfo]:SocialProvider[A]"></a>
+      <p class="shortcomment cmt">Builds the social profile.</p>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProvider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SocialProviderextendsProviderwithSocialProfileBuilder"></a>
+      <a id="SocialProvider:SocialProvider"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="SocialProvider.html"><span class="name">SocialProvider</span></a><span class="tparams">[<span name="A">A &lt;: <a href="../../api/services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <a href="../../api/Provider.html" class="extype" name="com.mohiva.play.silhouette.api.Provider">Provider</a> with <a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider.A">A</span>]</span>
+        <a href="SocialProvider.html"><span class="name">SocialProvider</span></a><span class="result"> extends <a href="../../api/Provider.html" class="extype" name="com.mohiva.play.silhouette.api.Provider">Provider</a> with <a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@SocialProvider[A&lt;:com.mohiva.play.silhouette.api.services.AuthInfo]extendsProviderwithSocialProfileBuilder[A]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@SocialProviderextendsProviderwithSocialProfileBuilder" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The base interface for all social providers.</p><div class="fullcomment"><div class="comment cmt"><p>The base interface for all social providers.
-</p></div><dl class="paramcmts block"><dt class="tparam">A</dt><dd class="cmt"><p>The type of the auth info.
-</p></dd></dl></div>
+      <p class="shortcomment cmt">The base interface for all social providers.</p>
     </li></ol>
             </div>
 
