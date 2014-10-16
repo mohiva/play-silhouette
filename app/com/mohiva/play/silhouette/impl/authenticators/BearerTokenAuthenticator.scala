@@ -145,6 +145,22 @@ class BearerTokenAuthenticatorService(
   }
 
   /**
+   * Creates a new bearer token for the given authenticator and adds it to the given the request. The
+   * authenticator will also be stored in the backing store.
+   *
+   * @param authenticator The authenticator instance.
+   * @param request The request header.
+   * @return The manipulated request header.
+   */
+  def init(authenticator: BearerTokenAuthenticator, request: RequestHeader): Future[RequestHeader] = {
+    dao.save(authenticator).map { a =>
+      request.copy(headers = AdditionalHeaders(request.headers, Seq(settings.headerName -> Seq(a.id))))
+    }.recover {
+      case e => throw new AuthenticationException(InitError.format(ID, authenticator), e)
+    }
+  }
+
+  /**
    * Updates the authenticator with the new last used date in the backing store.
    *
    * We needn't embed the token in the response here because the token itself will not be changed.

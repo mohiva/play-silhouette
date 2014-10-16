@@ -163,6 +163,22 @@ class JWTAuthenticatorService(
   }
 
   /**
+   * Creates a new JWT for the given authenticator and adds a header with the token as value to the request.
+   * If a backing store is defined, then the authenticator will be stored in it.
+   *
+   * @param authenticator The authenticator instance.
+   * @param request The request header.
+   * @return The manipulated request header.
+   */
+  def init(authenticator: JWTAuthenticator, request: RequestHeader): Future[RequestHeader] = {
+    dao.fold(Future.successful(authenticator))(_.save(authenticator)).map { a =>
+      request.copy(headers = AdditionalHeaders(request.headers, Seq(settings.headerName -> Seq(serialize(a)))))
+    }.recover {
+      case e => throw new AuthenticationException(InitError.format(ID, authenticator), e)
+    }
+  }
+
+  /**
    * Updates the authenticator based on the following settings.
    *
    * If idle timeout is disabled, then we needn't update the token. This prevents the creation of a new

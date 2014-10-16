@@ -29,8 +29,9 @@ import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import org.joda.time.DateTime
 import play.api.Play
 import play.api.Play.current
+import play.api.http.HeaderNames
 import play.api.libs.concurrent.Execution.Implicits._
-import play.api.mvc.{ Cookie, DiscardingCookie, RequestHeader, Result }
+import play.api.mvc._
 
 import scala.concurrent.Future
 import scala.util.Try
@@ -150,7 +151,7 @@ class CookieAuthenticatorService(
   }
 
   /**
-   * Creates a new cookie for the given authenticator and embeds it to the result. The authenticator
+   * Creates a new cookie for the given authenticator and embeds it into the result. The authenticator
    * will also be stored in the backing store.
    *
    * @param result The result to manipulate.
@@ -168,6 +169,33 @@ class CookieAuthenticatorService(
         secure = settings.secureCookie,
         httpOnly = settings.httpOnlyCookie
       )))
+    }.recover {
+      case e => throw new AuthenticationException(InitError.format(ID, authenticator), e)
+    }
+  }
+
+  /**
+   * Creates a new cookie for the given authenticator and embeds it into the request. The authenticator
+   * will also be stored in the backing store.
+   *
+   * @param authenticator The authenticator instance.
+   * @param request The request header.
+   * @return The manipulated request header.
+   */
+  def init(authenticator: CookieAuthenticator, request: RequestHeader): Future[RequestHeader] = {
+    dao.save(authenticator).map { a =>
+      val cookie = Cookie(
+        name = settings.cookieName,
+        value = a.id,
+        maxAge = settings.cookieMaxAge,
+        path = settings.cookiePath,
+        domain = settings.cookieDomain,
+        secure = settings.secureCookie,
+        httpOnly = settings.httpOnlyCookie
+      )
+      val cookies = Cookies.merge(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(cookie))
+      val additional = Seq(HeaderNames.COOKIE -> Seq(cookies))
+      request.copy(headers = AdditionalHeaders(request.headers, additional))
     }.recover {
       case e => throw new AuthenticationException(InitError.format(ID, authenticator), e)
     }

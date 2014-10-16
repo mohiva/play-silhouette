@@ -22,10 +22,11 @@ import com.mohiva.play.silhouette.api.util.{ Base64, Clock, FingerprintGenerator
 import com.mohiva.play.silhouette.api.{ Authenticator, Logger, LoginInfo }
 import com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService._
 import org.joda.time.DateTime
+import play.api.http.HeaderNames
 import play.api.libs.Crypto
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.Json
-import play.api.mvc.{ RequestHeader, Result }
+import play.api.mvc.{ Cookies, RequestHeader, Result, Session }
 
 import scala.concurrent.Future
 import scala.util.{ Failure, Success, Try }
@@ -152,6 +153,25 @@ class SessionAuthenticatorService(
   def init(authenticator: SessionAuthenticator, result: Future[Result])(implicit request: RequestHeader) = {
     result.map(_.withSession(request.session + (settings.sessionKey -> serialize(authenticator)))).recover {
       case e => throw new AuthenticationException(InitError.format(ID, authenticator), e)
+    }
+  }
+
+  /**
+   * Overrides the user session for the authenticator in request.
+   *
+   * @param authenticator The authenticator instance.
+   * @param request The request header.
+   * @return The manipulated request header.
+   */
+  def init(authenticator: SessionAuthenticator, request: RequestHeader): Future[RequestHeader] = {
+    Try {
+      val sessionCookie = Session.encodeAsCookie(request.session + (settings.sessionKey -> serialize(authenticator)))
+      val cookies = Cookies.merge(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(sessionCookie))
+      val additional = Seq(HeaderNames.COOKIE -> Seq(cookies))
+      request.copy(headers = AdditionalHeaders(request.headers, additional))
+    } match {
+      case Success(r) => Future.successful(r)
+      case Failure(e) => throw new AuthenticationException(InitError.format(ID, authenticator), e)
     }
   }
 
