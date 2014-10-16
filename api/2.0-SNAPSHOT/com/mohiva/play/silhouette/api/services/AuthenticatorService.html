@@ -92,7 +92,29 @@
         <div id="allMembers">
         
 
-        
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService.AdditionalHeaders" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="AdditionalHeadersextendsHeaderswithProductwithSerializable"></a>
+      <a id="AdditionalHeaders:AdditionalHeaders"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="AuthenticatorService$AdditionalHeaders.html"><span class="name">AdditionalHeaders</span></a><span class="params">(<span name="existing">existing: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.Headers" class="extype" target="_top">Headers</a></span>, <span name="additional">additional: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>])]</span>)</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.Headers" class="extype" target="_top">Headers</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@AdditionalHeadersextendsHeaderswithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Used to add additional headers to the existing headers.</p><div class="fullcomment"><div class="comment cmt"><p>Used to add additional headers to the existing headers.
+</p></div><dl class="paramcmts block"><dt class="param">existing</dt><dd class="cmt"><p>The existing headers.</p></dd><dt class="param">additional</dt><dd class="cmt"><p>The additional headers to add.
+</p></dd></dl></div>
+    </li></ol>
+            </div>
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
@@ -133,6 +155,28 @@
     </span>
       <p class="shortcomment cmt">Manipulates the response and removes authenticator specific artifacts before sending it to the client.</p><div class="fullcomment"><div class="comment cmt"><p>Manipulates the response and removes authenticator specific artifacts before sending it to the client.
 </p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator instance.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The manipulated result.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#init" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="init(authenticator:T,request:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.RequestHeader]"></a>
+      <a id="init(T,RequestHeader):Future[RequestHeader]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">init</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService.T">T</span></span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@init(authenticator:T,request:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.RequestHeader]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Embeds authenticator specific artifacts into the request.</p><div class="fullcomment"><div class="comment cmt"><p>Embeds authenticator specific artifacts into the request.</p><p>This method can be used to embed an authenticator in a existing request. This can be useful
+in Play filters. So before executing a SecuredAction we can embed the authenticator in
+the request to lead the action to believe that the request is a new request which contains
+a valid authenticator.</p><p>If an existing authenticator exists, then it will be overridden.
+</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator instance.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The manipulated request header.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#init" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="init(authenticator:T,result:scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]"></a>

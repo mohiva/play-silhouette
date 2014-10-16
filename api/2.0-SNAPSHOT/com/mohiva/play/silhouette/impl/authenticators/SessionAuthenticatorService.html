@@ -109,7 +109,29 @@
     </li></ol>
             </div>
 
-        
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService.AdditionalHeaders" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="AdditionalHeadersextendsHeaderswithProductwithSerializable"></a>
+      <a id="AdditionalHeaders:AdditionalHeaders"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="../../api/services/AuthenticatorService$AdditionalHeaders.html"><span class="name">AdditionalHeaders</span></a><span class="params">(<span name="existing">existing: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.Headers" class="extype" target="_top">Headers</a></span>, <span name="additional">additional: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>])]</span>)</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.Headers" class="extype" target="_top">Headers</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@AdditionalHeadersextendsHeaderswithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Used to add additional headers to the existing headers.</p><div class="fullcomment"><div class="comment cmt"><p>Used to add additional headers to the existing headers.
+</p></div><dl class="paramcmts block"><dt class="param">existing</dt><dd class="cmt"><p>The existing headers.</p></dd><dt class="param">additional</dt><dd class="cmt"><p>The additional headers to add.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
+    </li></ol>
+            </div>
 
         
 
@@ -334,6 +356,25 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService#init" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="init(authenticator:com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticator,request:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.RequestHeader]"></a>
+      <a id="init(SessionAuthenticator,RequestHeader):Future[RequestHeader]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">init</span><span class="params">(<span name="authenticator">authenticator: <a href="SessionAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticator">SessionAuthenticator</a></span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService@init(authenticator:com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticator,request:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.RequestHeader]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Overrides the user session for the authenticator in request.</p><div class="fullcomment"><div class="comment cmt"><p>Overrides the user session for the authenticator in request.
+</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator instance.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The manipulated request header.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService">SessionAuthenticatorService</a> → <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService#init" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="init(authenticator:com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticator,result:scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]"></a>
       <a id="init(SessionAuthenticator,Future[Result])(RequestHeader):Future[Result]"></a>
