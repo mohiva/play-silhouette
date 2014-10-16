@@ -39,11 +39,16 @@ Init an authenticator
 ^^^^^^^^^^^^^^^^^^^^^
 
 The initialization of an authenticator means, that all authenticator artifacts will be
-embedded into a Play framework result. This can by done by creating a cookie, storing
-data into the user session or sending the artifacts in a user defined header. If the
-service uses a backing store, then the authenticator instance will be stored in it. The
-initialization should be done after a successful authentication with a new created
+embedded into a Play framework request or result. This can by done by creating a cookie,
+storing data into the user session or sending the artifacts in a user defined header. If
+the service uses a backing store, then the authenticator instance will be stored in it.
+The initialization should be done after a successful authentication with a new created
 authenticator.
+
+Embedding the authenticator related data into the result means that the data will be send
+to the client. It may also be useful to embed the authenticator related data into an incoming
+request to lead the ``SecuredAction`` to believe that the request is a new request which
+contains a valid authenticator. This can be useful in Play filters.
 
 Update an authenticator
 ^^^^^^^^^^^^^^^^^^^^^^^

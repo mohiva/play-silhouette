@@ -20,7 +20,7 @@
 package com.mohiva.play.silhouette.api.services
 
 import com.mohiva.play.silhouette.api.{ Authenticator, LoginInfo }
-import play.api.mvc.{ RequestHeader, Result }
+import play.api.mvc.{ Headers, RequestHeader, Result }
 
 import scala.concurrent.Future
 
@@ -30,6 +30,16 @@ import scala.concurrent.Future
  * @tparam T The type of the authenticator this service is responsible for.
  */
 trait AuthenticatorService[T <: Authenticator] {
+
+  /**
+   * Used to add additional headers to the existing headers.
+   *
+   * @param existing The existing headers.
+   * @param additional The additional headers to add.
+   */
+  case class AdditionalHeaders(existing: Headers, additional: Seq[(String, Seq[String])]) extends Headers {
+    override protected val data: Seq[(String, Seq[String])] = (existing.toMap ++ additional).toSeq
+  }
 
   /**
    * Creates a new authenticator for the specified login info.
@@ -59,6 +69,22 @@ trait AuthenticatorService[T <: Authenticator] {
    * @return The manipulated result.
    */
   def init(authenticator: T, result: Future[Result])(implicit request: RequestHeader): Future[Result]
+
+  /**
+   * Embeds authenticator specific artifacts into the request.
+   *
+   * This method can be used to embed an authenticator in a existing request. This can be useful
+   * in Play filters. So before executing a SecuredAction we can embed the authenticator in
+   * the request to lead the action to believe that the request is a new request which contains
+   * a valid authenticator.
+   *
+   * If an existing authenticator exists, then it will be overridden.
+   *
+   * @param authenticator The authenticator instance.
+   * @param request The request header.
+   * @return The manipulated request header.
+   */
+  def init(authenticator: T, request: RequestHeader): Future[RequestHeader]
 
   /**
    * Updates authenticator specific data.
