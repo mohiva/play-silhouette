@@ -89,8 +89,7 @@ class BearerTokenAuthenticatorService(
   settings: BearerTokenAuthenticatorSettings,
   dao: AuthenticatorDAO[BearerTokenAuthenticator],
   idGenerator: IDGenerator,
-  clock: Clock)
-  extends AuthenticatorService[BearerTokenAuthenticator] with Logger {
+  clock: Clock) extends AuthenticatorService[BearerTokenAuthenticator] with Logger {
 
   /**
    * Creates a new authenticator for the specified login info.
@@ -161,19 +160,38 @@ class BearerTokenAuthenticatorService(
   }
 
   /**
+   * @inheritdoc
+   *
+   * @param authenticator The authenticator to touch.
+   * @return The touched authenticator on the left or the untouched authenticator on the right.
+   */
+  protected[silhouette] def touch(
+    authenticator: BearerTokenAuthenticator): Either[BearerTokenAuthenticator, BearerTokenAuthenticator] = {
+
+    if (authenticator.idleTimeout.isDefined) {
+      Left(authenticator.copy(lastUsedDate = clock.now))
+    } else {
+      Right(authenticator)
+    }
+  }
+
+  /**
    * Updates the authenticator with the new last used date in the backing store.
    *
    * We needn't embed the token in the response here because the token itself will not be changed.
    * Only the authenticator in the backing store will be changed.
    *
    * @param authenticator The authenticator to update.
-   * @param result A function which gets the updated authenticator and returns the original result.
+   * @param result The result to manipulate.
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def update(authenticator: BearerTokenAuthenticator, result: BearerTokenAuthenticator => Future[Result])(implicit request: RequestHeader) = {
-    dao.save(authenticator.copy(lastUsedDate = clock.now)).flatMap { a =>
-      result(a)
+  protected[silhouette] def update(
+    authenticator: BearerTokenAuthenticator,
+    result: Future[Result])(implicit request: RequestHeader) = {
+
+    dao.save(authenticator).flatMap { a =>
+      result
     }.recover {
       case e => throw new AuthenticationException(UpdateError.format(ID, authenticator), e)
     }
@@ -184,14 +202,17 @@ class BearerTokenAuthenticatorService(
    * that it isn't possible to use a bearer token which was bound to this authenticator.
    *
    * @param authenticator The authenticator to update.
-   * @param result A function which gets the updated authenticator and returns the original result.
+   * @param result The result to manipulate.
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def renew(authenticator: BearerTokenAuthenticator, result: BearerTokenAuthenticator => Future[Result])(implicit request: RequestHeader) = {
+  protected[silhouette] def renew(
+    authenticator: BearerTokenAuthenticator,
+    result: Future[Result])(implicit request: RequestHeader) = {
+
     dao.remove(authenticator.id).flatMap { _ =>
       create(authenticator.loginInfo).flatMap { a =>
-        init(a, result(a))
+        init(a, result)
       }
     }.recover {
       case e => throw new AuthenticationException(RenewError.format(ID, authenticator), e)
@@ -205,7 +226,10 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  def discard(authenticator: BearerTokenAuthenticator, result: Future[Result])(implicit request: RequestHeader) = {
+  protected[silhouette] def discard(
+    authenticator: BearerTokenAuthenticator,
+    result: Future[Result])(implicit request: RequestHeader) = {
+
     dao.remove(authenticator.id).flatMap { _ =>
       result
     }.recover {

@@ -136,6 +136,29 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
   }
 
   /**
+   * Handles a result for an authenticator.
+   *
+   * @param authenticator The authenticator to handle.
+   * @param result The result to handle with the authenticator.
+   * @param request The request header.
+   * @return The manipulated or the original result.
+   */
+  private def handleResult(authenticator: A, result: A => Future[Result])(implicit request: RequestHeader): Future[Result] = {
+    val eitherAuth = env.authenticatorService.touch(authenticator)
+    val anyAuth = eitherAuth.fold(identity, identity)
+    result(anyAuth).flatMap {
+      case r: Authenticator.Discard => env.authenticatorService.discard(anyAuth, Future.successful(r))
+      case r: Authenticator.Renew => env.authenticatorService.renew(anyAuth, Future.successful(r))
+      case r => eitherAuth match {
+        // Authenticator was touched so we update the authenticator and maybe the result
+        case Left(a) => env.authenticatorService.update(a, Future.successful(r))
+        // Authenticator was not touched so we return the original result
+        case Right(a) => Future.successful(r)
+      }
+    }
+  }
+
+  /**
    * A request that only allows access if an identity is authorized.
    */
   case class SecuredRequest[R](identity: I, authenticator: A, request: Request[R]) extends WrappedRequest(request)
@@ -186,7 +209,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
    * [[http://danielirvine.com/blog/2011/07/18/understanding-403-forbidden/ Understanding 403 Forbidden]],
    * [[http://stackoverflow.com/questions/3297048/403-forbidden-vs-401-unauthorized-http-responses/6937030#6937030 403 Forbidden vs 401 Unauthorized HTTP responses]].
    *
-   * @param authorize An Authorize object that checks if the user is authorized to invoke the action.
+   * @param authorize An Authorize object that checks if the user is authorized to invoke the action.y
    */
   class SecuredActionBuilder(authorize: Option[Authorization[I]] = None) extends ActionBuilder[SecuredRequest] {
 
@@ -206,11 +229,11 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
             // A user is both authenticated and authorized. The request will be granted.
             case Some(identity) if authorize.isEmpty || authorize.get.isAuthorized(identity) =>
               env.eventBus.publish(AuthenticatedEvent(identity, req, request2lang))
-              env.authenticatorService.update(authenticator, a => block(SecuredRequest(identity, a, request)))
+              handleResult(authenticator, a => block(SecuredRequest(identity, a, request)))
             // A user is authenticated but not authorized. The request will be forbidden.
             case Some(identity) =>
               env.eventBus.publish(NotAuthorizedEvent(identity, req, request2lang))
-              env.authenticatorService.update(authenticator, _ => handleNotAuthorized(request))
+              handleResult(authenticator, _ => handleNotAuthorized(request))
             // No user was found. The request will ask for authentication and the authenticator will be discarded.
             case None =>
               env.eventBus.publish(NotAuthenticatedEvent(req, request2lang))
@@ -246,11 +269,11 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
         // An valid authenticator was found. We try to find the identity for it.
         case Some(authenticator) if authenticator.isValid =>
           env.identityService.retrieve(authenticator.loginInfo).flatMap { identity =>
-            env.authenticatorService.update(authenticator, a => block(RequestWithUser(identity, Some(a), request)))
+            handleResult(authenticator, a => block(RequestWithUser(identity, Some(a), request)))
           }
         // An invalid authenticator was found. The authenticator will be discarded.
         case Some(authenticator) if !authenticator.isValid =>
-          env.authenticatorService.discard(authenticator, block(RequestWithUser(None, Some(authenticator), request)))
+          env.authenticatorService.discard(authenticator, block(RequestWithUser(None, None, request)))
         // No authenticator was found.
         case None =>
           block(RequestWithUser(None, None, request))

@@ -97,8 +97,7 @@ object SessionAuthenticator {
 class SessionAuthenticatorService(
   settings: SessionAuthenticatorSettings,
   fingerprintGenerator: FingerprintGenerator,
-  clock: Clock)
-  extends AuthenticatorService[SessionAuthenticator] with Logger {
+  clock: Clock) extends AuthenticatorService[SessionAuthenticator] with Logger {
 
   /**
    * Creates a new authenticator for the specified login info.
@@ -176,19 +175,37 @@ class SessionAuthenticatorService(
   }
 
   /**
+   * @inheritdoc
+   *
+   * @param authenticator The authenticator to touch.
+   * @return The touched authenticator on the left or the untouched authenticator on the right.
+   */
+  protected[silhouette] def touch(
+    authenticator: SessionAuthenticator): Either[SessionAuthenticator, SessionAuthenticator] = {
+
+    if (authenticator.idleTimeout.isDefined) {
+      Left(authenticator.copy(lastUsedDate = clock.now))
+    } else {
+      Right(authenticator)
+    }
+  }
+
+  /**
    * Updates the authenticator and store it in the user session.
    *
    * Because of the fact that we store the authenticator client side in the user session, we must update
    * the authenticator in the session on every subsequent request to keep the last used date in sync.
    *
    * @param authenticator The authenticator to update.
-   * @param result A function which gets the updated authenticator and returns the original result.
+   * @param result The result to manipulate.
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def update(authenticator: SessionAuthenticator, result: SessionAuthenticator => Future[Result])(implicit request: RequestHeader) = {
-    val a = authenticator.copy(lastUsedDate = clock.now)
-    result(a).map(_.withSession(request.session + (settings.sessionKey -> serialize(a)))).recover {
+  protected[silhouette] def update(
+    authenticator: SessionAuthenticator,
+    result: Future[Result])(implicit request: RequestHeader) = {
+
+    result.map(_.withSession(request.session + (settings.sessionKey -> serialize(authenticator)))).recover {
       case e => throw new AuthenticationException(UpdateError.format(ID, authenticator), e)
     }
   }
@@ -198,13 +215,16 @@ class SessionAuthenticatorService(
    * because we use a stateless approach here. So only one authenticator can be bound to a user session.
    *
    * @param authenticator The authenticator to update.
-   * @param result A function which gets the updated authenticator and returns the original result.
+   * @param result The result to manipulate.
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def renew(authenticator: SessionAuthenticator, result: SessionAuthenticator => Future[Result])(implicit request: RequestHeader) = {
+  protected[silhouette] def renew(
+    authenticator: SessionAuthenticator,
+    result: Future[Result])(implicit request: RequestHeader) = {
+
     create(authenticator.loginInfo).flatMap { a =>
-      init(a, result(a))
+      init(a, result)
     }.recover {
       case e => throw new AuthenticationException(RenewError.format(ID, authenticator), e)
     }
@@ -217,7 +237,10 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  def discard(authenticator: SessionAuthenticator, result: Future[Result])(implicit request: RequestHeader) = {
+  protected[silhouette] def discard(
+    authenticator: SessionAuthenticator,
+    result: Future[Result])(implicit request: RequestHeader) = {
+
     result.map(_.withSession(request.session - settings.sessionKey)).recover {
       case e => throw new AuthenticationException(DiscardError.format(ID, authenticator), e)
     }
