@@ -17,10 +17,10 @@ package com.mohiva.play.silhouette.impl.authenticators
 
 import java.util.regex.Pattern
 
+import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.util.{ Base64, Clock, IDGenerator }
-import com.mohiva.play.silhouette.api.{ Authenticator, LoginInfo }
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import org.joda.time.DateTime
@@ -346,65 +346,67 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
     }
   }
 
-  "The `update` method of the service" should {
-    "update the authenticator in backing store if DAO is enabled and send the token if " +
-      "idleTimeout is enabled" in new WithApplication with Context {
-        dao.save(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
-        clock.now returns DateTime.now().plusHours(1)
-        settings.authenticatorIdleTimeout returns Some(30 * 60)
+  "The `touch` method of the service" should {
+    "update the last used date if idle timeout is defined" in new WithApplication with Context {
+      settings.authenticatorIdleTimeout returns Some(1)
+      clock.now returns DateTime.now
 
-        // In this case the result must be 0 because the backing store returns the updated authenticator
-        // and this returned authenticator doesn't equal the passed authenticator because the
-        // lastUsedDate was updated
-        implicit val request = FakeRequest()
-        val updatedResult = (a: Authenticator) => Future.successful(Results.Status(if (a == authenticator) 1 else 0))
-        val result = service(Some(dao)).update(authenticator, updatedResult)
-
-        status(result) must be equalTo 0
-        header(settings.headerName, result) should beSome(service(None).serialize(authenticator.copy(
-          lastUsedDate = clock.now
-        )))
-        there was one(dao).save(authenticator.copy(lastUsedDate = clock.now))
+      service(None).touch(authenticator) must beLeft[JWTAuthenticator].like {
+        case a =>
+          a.lastUsedDate must be equalTo clock.now
       }
-
-    "update the authenticator if DAO is disabled and send the token if idleTimeout is enabled" in new WithApplication with Context {
-      clock.now returns DateTime.now().plusHours(1)
-      settings.authenticatorIdleTimeout returns Some(30 * 60)
-
-      // In this case the result must be 0 because the updated authenticator doesn't equal the
-      // passed authenticator because the lastUsedDate was updated
-      implicit val request = FakeRequest()
-      val updatedResult = (a: Authenticator) => Future.successful(Results.Status(if (a == authenticator) 1 else 0))
-      val result = service(None).update(authenticator, updatedResult)
-
-      status(result) must be equalTo 0
-      header(settings.headerName, result) should beSome(service(None).serialize(authenticator.copy(
-        lastUsedDate = clock.now
-      )))
-      there was no(dao).save(any)
     }
 
-    "not update the authenticator and not send the token if idleTimeout is disabled" in new WithApplication with Context {
-      clock.now returns DateTime.now().plusHours(1)
+    "do not update the last used date if idle timeout is not defined" in new WithApplication with Context {
       settings.authenticatorIdleTimeout returns None
+      clock.now returns DateTime.now
 
-      // In this case the result must be 1 because the lastUsedDate was not updated
-      // and therefore the authenticator will not be updated
+      service(None).touch(authenticator) must beRight[JWTAuthenticator].like {
+        case a =>
+          a.lastUsedDate must be equalTo authenticator.lastUsedDate
+      }
+    }
+  }
+
+  "The `update` method of the service" should {
+    "update the authenticator in backing store" in new Context {
+      dao.save(any) returns Future.successful(authenticator)
+
       implicit val request = FakeRequest()
-      val updatedResult = (a: Authenticator) => Future.successful(Results.Status(if (a == authenticator) 1 else 0))
-      val result = service(Some(dao)).update(authenticator, updatedResult)
 
-      status(result) must be equalTo 1
-      header(settings.headerName, result) should beNone
+      await(service(Some(dao)).update(authenticator, Future.successful(Results.Ok)))
+
+      there was one(dao).save(authenticator)
+    }
+
+    "return the result if the authenticator could be stored in backing store" in new Context {
+      dao.save(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
+
+      implicit val request = FakeRequest()
+      val result = service(Some(dao)).update(authenticator, Future.successful(Results.Ok))
+
+      status(result) must be equalTo OK
+      header(settings.headerName, result) should beSome(service(None).serialize(authenticator))
+      there was one(dao).save(authenticator)
+    }
+
+    "return the result if backing store is disabled" in new Context {
+      dao.save(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
+
+      implicit val request = FakeRequest()
+      val result = service(None).update(authenticator, Future.successful(Results.Ok))
+
+      status(result) must be equalTo OK
+      header(settings.headerName, result) should beSome(service(None).serialize(authenticator))
+      there was no(dao).save(any)
     }
 
     "throws an Authentication exception if an error occurred during update" in new Context {
       dao.save(any) returns Future.failed(new Exception("Cannot store authenticator"))
 
       implicit val request = FakeRequest()
-      val okResult = (a: Authenticator) => Future.successful(Results.Status(200))
 
-      await(service(Some(dao)).update(authenticator, okResult)) must throwA[AuthenticationException].like {
+      await(service(Some(dao)).update(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticationException].like {
         case e =>
           e.getMessage must startWith(UpdateError.format(ID, ""))
       }
@@ -422,7 +424,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
-      val result = service(Some(dao)).renew(authenticator, _ => Future.successful(Results.Status(200)))
+      val result = service(Some(dao)).renew(authenticator, Future.successful(Results.Ok))
 
       header(settings.headerName, result) should beSome(service(None).serialize(authenticator.copy(
         id = id,
@@ -440,7 +442,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
-      val result = service(None).renew(authenticator, _ => Future.successful(Results.Status(200)))
+      val result = service(None).renew(authenticator, Future.successful(Results.Ok))
 
       header(settings.headerName, result) should beSome(service(None).serialize(authenticator.copy(
         id = id,
@@ -453,7 +455,6 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
 
     "throws an Authentication exception if an error occurred during renewal" in new Context {
       implicit val request = FakeRequest()
-      val okResult = (a: Authenticator) => Future.successful(Results.Status(200))
       val now = new DateTime
       val id = "new-test-id"
 
@@ -462,7 +463,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
-      await(service(Some(dao)).renew(authenticator, okResult)) must throwA[AuthenticationException].like {
+      await(service(Some(dao)).renew(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticationException].like {
         case e =>
           e.getMessage must startWith(RenewError.format(ID, ""))
       }

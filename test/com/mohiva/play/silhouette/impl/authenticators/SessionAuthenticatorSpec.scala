@@ -267,59 +267,67 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
     "throws an Authentication exception if error an occurred during initialization" in new Context {
       implicit val request = spy(FakeRequest())
-      val okResult = Future.successful(Results.Status(200))
 
       request.session throws new RuntimeException("Cannot get session")
 
-      await(service.init(authenticator, okResult)) must throwA[AuthenticationException].like {
+      await(service.init(authenticator, request)) must throwA[AuthenticationException].like {
         case e =>
           e.getMessage must startWith(InitError.format(ID, ""))
       }
     }
   }
 
+  "The `touch` method of the service" should {
+    "update the last used date if idle timeout is defined" in new WithApplication with Context {
+      settings.authenticatorIdleTimeout returns Some(1)
+      clock.now returns DateTime.now
+
+      service.touch(authenticator) must beLeft[SessionAuthenticator].like {
+        case a =>
+          a.lastUsedDate must be equalTo clock.now
+      }
+    }
+
+    "do not update the last used date if idle timeout is not defined" in new WithApplication with Context {
+      settings.authenticatorIdleTimeout returns None
+      clock.now returns DateTime.now
+
+      service.touch(authenticator) must beRight[SessionAuthenticator].like {
+        case a =>
+          a.lastUsedDate must be equalTo authenticator.lastUsedDate
+      }
+    }
+  }
+
   "The `update` method of the service" should {
     "update the session with an unencrypted authenticator" in new WithApplication with Context {
-      implicit val request = FakeRequest()
-      val now = DateTime.now().plusHours(1)
-      val data = Base64.encode(Json.toJson(authenticator.copy(lastUsedDate = now)))
-
       settings.encryptAuthenticator returns false
-      clock.now returns now
 
-      // In this case the result must be 0 because the authenticator gets always updated and therefore
-      // it doesn't never equal the passed authenticator
-      val updatedResult = (a: Authenticator) => Future.successful(Results.Status(if (a == authenticator) 1 else 0))
-      val result = service.update(authenticator, updatedResult)
+      implicit val request = FakeRequest()
+      val data = Base64.encode(Json.toJson(authenticator))
+      val result = service.update(authenticator, Future.successful(Results.Ok))
 
-      status(result) must be equalTo 0
+      status(result) must be equalTo OK
       session(result).get(settings.sessionKey) should beSome(data)
     }
 
     "update the session with an encrypted authenticator" in new WithApplication with Context {
-      implicit val request = FakeRequest()
-      val now = DateTime.now().plusHours(1)
-      val data = Crypto.encryptAES(Json.toJson(authenticator.copy(lastUsedDate = now)).toString())
-
       settings.encryptAuthenticator returns true
-      clock.now returns now
 
-      // In this case the result must be 0 because the authenticator gets always updated and therefore
-      // it doesn't never equal the passed authenticator
-      val updatedResult = (a: Authenticator) => Future.successful(Results.Status(if (a == authenticator) 1 else 0))
-      val result = service.update(authenticator, updatedResult)
+      implicit val request = FakeRequest()
+      val data = Crypto.encryptAES(Json.toJson(authenticator).toString())
+      val result = service.update(authenticator, Future.successful(Results.Ok))
 
-      status(result) must be equalTo 0
+      status(result) must be equalTo OK
       session(result).get(settings.sessionKey) should beSome(data)
     }
 
     "throws an Authentication exception if an error occurred during update" in new Context {
       implicit val request = spy(FakeRequest())
-      val okResult = (a: Authenticator) => Future.successful(Results.Status(200))
 
       request.session throws new RuntimeException("Cannot get session")
 
-      await(service.update(authenticator, okResult)) must throwA[AuthenticationException].like {
+      await(service.update(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticationException].like {
         case e =>
           e.getMessage must startWith(UpdateError.format(ID, ""))
       }
@@ -330,7 +338,6 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
     "renew the session with an an unencrypted authenticator" in new WithApplication with Context {
       implicit val request = FakeRequest()
       val now = DateTime.now
-      val okResult = (a: Authenticator) => Future.successful(Results.Status(200))
       val data = Base64.encode(Json.toJson(authenticator.copy(
         lastUsedDate = now,
         expirationDate = now.plusSeconds(settings.authenticatorExpiry)
@@ -340,7 +347,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       settings.useFingerprinting returns false
       clock.now returns now
 
-      val result = service.renew(authenticator, okResult)
+      val result = service.renew(authenticator, Future.successful(Results.Ok))
 
       session(result).get(settings.sessionKey) should beSome(data)
     }
@@ -348,7 +355,6 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
     "renew the session with an encrypted authenticator" in new WithApplication with Context {
       implicit val request = FakeRequest()
       val now = DateTime.now
-      val okResult = (a: Authenticator) => Future.successful(Results.Status(200))
       val data = Crypto.encryptAES(Json.toJson(authenticator.copy(
         lastUsedDate = now,
         expirationDate = now.plusSeconds(settings.authenticatorExpiry)
@@ -358,7 +364,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       settings.useFingerprinting returns false
       clock.now returns now
 
-      val result = service.renew(authenticator, okResult)
+      val result = service.renew(authenticator, Future.successful(Results.Ok))
 
       session(result).get(settings.sessionKey) should beSome(data)
     }
@@ -372,7 +378,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       settings.useFingerprinting returns false
       clock.now returns now
 
-      await(service.renew(authenticator, okResult)) must throwA[AuthenticationException].like {
+      await(service.renew(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticationException].like {
         case e =>
           e.getMessage must startWith(RenewError.format(ID, ""))
       }

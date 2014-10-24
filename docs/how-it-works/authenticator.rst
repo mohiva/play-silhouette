@@ -50,6 +50,19 @@ to the client. It may also be useful to embed the authenticator related data int
 request to lead the ``SecuredAction`` to believe that the request is a new request which
 contains a valid authenticator. This can be useful in Play filters.
 
+.. Attention::
+   The following actions are only used for internal purposes inside a :ref:`Silhouette
+   action <silhouette_actions>`. But it might be useful to know how an authenticator
+   will be handled.
+
+Touch an authenticator
+^^^^^^^^^^^^^^^^^^^^^^
+
+If an authenticator uses sliding window expiration then this method updates the last used
+time on the authenticator. So to mark an authenticator as used it will be touched on every
+request to a :ref:`Silhouette action <silhouette_actions>`. If sliding window expiration
+is disabled then the authenticator will not be updated.
+
 Update an authenticator
 ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -67,6 +80,12 @@ the implementation, the renew method revokes the given authenticator first, befo
 a new one. If the authenticator was updated, then the updated artifacts will be embedded
 into the response.
 
+.. Note::
+   To renew an authenticator you must call the `renew` method of the authenticator instance
+   inside a :ref:`Silhouette action <silhouette_actions>`. This method accepts a `Result`
+   and returns a wrapped `Renew` result, which notifies the action to renew the
+   authenticator instead of updating it.
+
 Discard an authenticator
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -76,6 +95,11 @@ client side stored artifacts will be removed. If the service uses a backing stor
 authenticator will also be removed from it. To logout a user from a Silhouette application,
 the authenticator must also be discarded manually.
 
+.. Note::
+   To discard an authenticator you must call the `discard` method of the authenticator
+   instance inside a :ref:`Silhouette action <silhouette_actions>`. This method accepts a
+   `Result` and returns a wrapped `Discard` result, which notifies the action to discard
+   the authenticator instead of updating it.
 
 List of authenticators
 ----------------------

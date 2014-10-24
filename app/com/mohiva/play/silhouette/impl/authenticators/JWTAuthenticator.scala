@@ -179,28 +179,37 @@ class JWTAuthenticatorService(
   }
 
   /**
-   * Updates the authenticator based on the following settings.
+   * @inheritdoc
    *
-   * If idle timeout is disabled, then we needn't update the token. This prevents the creation of a new
-   * token on every request. The token will only embedded into the result, if an update on the authenticator
-   * occurred.
+   * @param authenticator The authenticator to touch.
+   * @return The touched authenticator on the left or the untouched authenticator on the right.
+   */
+  protected[silhouette] def touch(authenticator: JWTAuthenticator): Either[JWTAuthenticator, JWTAuthenticator] = {
+    if (authenticator.idleTimeout.isDefined) {
+      Left(authenticator.copy(lastUsedDate = clock.now))
+    } else {
+      Right(authenticator)
+    }
+  }
+
+  /**
+   * Updates the authenticator and embeds a new token in the result.
+   *
+   * To prevent the creation of a new token on every request, disable the idle timeout setting and this
+   * method will not be executed.
    *
    * @param authenticator The authenticator to update.
-   * @param result A function which gets the updated authenticator and returns the original result.
+   * @param result The result to manipulate.
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def update(authenticator: JWTAuthenticator, result: JWTAuthenticator => Future[Result])(implicit request: RequestHeader) = {
-    (authenticator.idleTimeout match {
-      // Idle timeout is enabled, so we must update the token
-      case Some(timeout) =>
-        val a = authenticator.copy(lastUsedDate = clock.now)
-        dao.fold(Future.successful(a))(_.save(a)).flatMap { a =>
-          result(a).map(_.withHeaders(settings.headerName -> serialize(a)))
-        }
-      // Idle timeout is disabled, so we needn't update the token
-      case None => result(authenticator)
-    }).recover {
+  protected[silhouette] def update(
+    authenticator: JWTAuthenticator,
+    result: Future[Result])(implicit request: RequestHeader) = {
+
+    dao.fold(Future.successful(authenticator))(_.save(authenticator)).flatMap { a =>
+      result.map(_.withHeaders(settings.headerName -> serialize(a)))
+    }.recover {
       case e => throw new AuthenticationException(UpdateError.format(ID, authenticator), e)
     }
   }
@@ -210,14 +219,17 @@ class JWTAuthenticatorService(
    * be revoked. After that it isn't possible to use a JWT which was bound to this authenticator.
    *
    * @param authenticator The authenticator to update.
-   * @param result A function which gets the updated authenticator and returns the original result.
+   * @param result The result to manipulate.
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def renew(authenticator: JWTAuthenticator, result: JWTAuthenticator => Future[Result])(implicit request: RequestHeader) = {
+  protected[silhouette] def renew(
+    authenticator: JWTAuthenticator,
+    result: Future[Result])(implicit request: RequestHeader) = {
+
     dao.fold(Future.successful(()))(_.remove(authenticator.id)).flatMap { _ =>
       create(authenticator.loginInfo).flatMap { a =>
-        init(a, result(a))
+        init(a, result)
       }
     }.recover {
       case e => throw new AuthenticationException(RenewError.format(ID, authenticator), e)
@@ -231,7 +243,10 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  def discard(authenticator: JWTAuthenticator, result: Future[Result])(implicit request: RequestHeader) = {
+  protected[silhouette] def discard(
+    authenticator: JWTAuthenticator,
+    result: Future[Result])(implicit request: RequestHeader) = {
+
     dao.fold(Future.successful(()))(_.remove(authenticator.id)).flatMap { _ =>
       result
     }.recover {
@@ -245,7 +260,7 @@ class JWTAuthenticatorService(
    * @param authenticator The authenticator to serialize.
    * @return The serialized authenticator.
    */
-  def serialize(authenticator: JWTAuthenticator): String = {
+  protected[silhouette] def serialize(authenticator: JWTAuthenticator): String = {
     val subject = Json.toJson(authenticator.loginInfo).toString()
     val jwtBuilder = new JsonSmartJwtJsonBuilder()
       .jwtId(authenticator.id)
@@ -265,7 +280,7 @@ class JWTAuthenticatorService(
    * @param str The string representation of the authenticator.
    * @return An authenticator on success, otherwise a failure.
    */
-  def unserialize(str: String): Try[JWTAuthenticator] = {
+  protected[silhouette] def unserialize(str: String): Try[JWTAuthenticator] = {
     Try {
       val verifier = new MACVerifier(settings.sharedSecret)
       val jwsObject = JWSObject.parse(str)
