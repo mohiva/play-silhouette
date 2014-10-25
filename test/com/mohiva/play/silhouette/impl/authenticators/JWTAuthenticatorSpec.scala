@@ -30,7 +30,7 @@ import org.specs2.specification.Scope
 import play.api.libs.Crypto
 import play.api.libs.json.Json
 import play.api.mvc.Results
-import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
+import play.api.test.{ WithApplication, FakeRequest, PlaySpecification }
 
 import scala.concurrent.Future
 
@@ -369,7 +369,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
   }
 
   "The `update` method of the service" should {
-    "update the authenticator in backing store" in new Context {
+    "update the authenticator in backing store" in new WithApplication with Context {
       dao.save(any) returns Future.successful(authenticator)
 
       implicit val request = FakeRequest()
@@ -379,7 +379,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       there was one(dao).save(authenticator)
     }
 
-    "return the result if the authenticator could be stored in backing store" in new Context {
+    "return the result if the authenticator could be stored in backing store" in new WithApplication with Context {
       dao.save(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
 
       implicit val request = FakeRequest()
@@ -390,7 +390,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       there was one(dao).save(authenticator)
     }
 
-    "return the result if backing store is disabled" in new Context {
+    "return the result if backing store is disabled" in new WithApplication with Context {
       dao.save(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
 
       implicit val request = FakeRequest()
@@ -401,7 +401,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       there was no(dao).save(any)
     }
 
-    "throws an Authentication exception if an error occurred during update" in new Context {
+    "throws an Authentication exception if an error occurred during update" in new WithApplication with Context {
       dao.save(any) returns Future.failed(new Exception("Cannot store authenticator"))
 
       implicit val request = FakeRequest()
