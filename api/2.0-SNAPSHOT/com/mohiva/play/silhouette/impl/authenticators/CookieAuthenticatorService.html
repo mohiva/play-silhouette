@@ -247,7 +247,7 @@
       <p class="shortcomment cmt">Creates a new authenticator for the specified login info.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a new authenticator for the specified login info.
 </p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the authenticator should be created.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>An authenticator.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService">CookieAuthenticatorService</a> → <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService#discard" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService#discard" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="discard(authenticator:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator,result:scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]"></a>
       <a id="discard(CookieAuthenticator,Future[Result])(RequestHeader):Future[Result]"></a>
       <h4 class="signature">
@@ -264,7 +264,7 @@
       </a>
     </span>
       <p class="shortcomment cmt">Discards the cookie and remove the authenticator from backing store.</p><div class="fullcomment"><div class="comment cmt"><p>Discards the cookie and remove the authenticator from backing store.</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator instance.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The manipulated result.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService">CookieAuthenticatorService</a> → <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">com.mohiva.play.silhouette</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService">CookieAuthenticatorService</a> → <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -481,26 +481,26 @@ will also be stored in the backing store.</p></div><dl class="paramcmts block"><
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService#renew" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="renew(authenticator:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator,result:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator=&gt;scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]"></a>
-      <a id="renew(CookieAuthenticator,(CookieAuthenticator)⇒Future[Result])(RequestHeader):Future[Result]"></a>
+    </li><li name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService#renew" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="renew(authenticator:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator,result:scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]"></a>
+      <a id="renew(CookieAuthenticator,Future[Result])(RequestHeader):Future[Result]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">renew</span><span class="params">(<span name="authenticator">authenticator: <a href="CookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator">CookieAuthenticator</a></span>, <span name="result">result: (<a href="CookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator">CookieAuthenticator</a>) ⇒ <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>
+        <span class="name">renew</span><span class="params">(<span name="authenticator">authenticator: <a href="CookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator">CookieAuthenticator</a></span>, <span name="result">result: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService@renew(authenticator:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator,result:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator=&gt;scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService@renew(authenticator:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator,result:scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Replaces the authenticator cookie with a new one.</p><div class="fullcomment"><div class="comment cmt"><p>Replaces the authenticator cookie with a new one. The old authenticator will be revoked in the backing store.
 After that it isn't possible to use a cookie which was bound to this authenticator.
-</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to update.</p></dd><dt class="param">result</dt><dd class="cmt"><p>A function which gets the updated authenticator and returns the original result.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The original or a manipulated result.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService">CookieAuthenticatorService</a> → <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to update.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The original or a manipulated result.
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">com.mohiva.play.silhouette</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService">CookieAuthenticatorService</a> → <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService#retrieve" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="retrieve(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Option[com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator]]"></a>
       <a id="retrieve(RequestHeader):Future[Option[CookieAuthenticator]]"></a>
@@ -554,26 +554,49 @@ After that it isn't possible to use a cookie which was bound to this authenticat
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService#update" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="update(authenticator:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator,result:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator=&gt;scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]"></a>
-      <a id="update(CookieAuthenticator,(CookieAuthenticator)⇒Future[Result])(RequestHeader):Future[Result]"></a>
+    </li><li name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService#touch" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="touch(authenticator:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator):Either[com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator,com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator]"></a>
+      <a id="touch(CookieAuthenticator):Either[CookieAuthenticator,CookieAuthenticator]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">update</span><span class="params">(<span name="authenticator">authenticator: <a href="CookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator">CookieAuthenticator</a></span>, <span name="result">result: (<a href="CookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator">CookieAuthenticator</a>) ⇒ <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>
+        <span class="name">touch</span><span class="params">(<span name="authenticator">authenticator: <a href="CookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator">CookieAuthenticator</a></span>)</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<a href="CookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator">CookieAuthenticator</a>, <a href="CookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator">CookieAuthenticator</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService@update(authenticator:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator,result:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator=&gt;scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService@touch(authenticator:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator):Either[com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator,com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Touches an authenticator.</p><div class="fullcomment"><div class="comment cmt"><p>Touches an authenticator.</p><p>An authenticator can use sliding window expiration. This means that the authenticator times
+out after a certain time if it wasn't used. So to mark an authenticator as used it will be
+touched on every request to a Silhouette action. If an authenticator should not be touched
+because of the fact that sliding window expiration is disabled, then it should be returned
+on the right, otherwise it should be returned on the left. An untouched authenticator needn't
+be updated later by the <a href="#update(authenticator:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator,result:scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" class="extmbr" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService#update">update</a> method.</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to touch.</p></dd><dt>returns</dt><dd class="cmt"><p>The touched authenticator on the left or the untouched authenticator on the right.
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">com.mohiva.play.silhouette</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService">CookieAuthenticatorService</a> → <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService#update" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="update(authenticator:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator,result:scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]"></a>
+      <a id="update(CookieAuthenticator,Future[Result])(RequestHeader):Future[Result]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">update</span><span class="params">(<span name="authenticator">authenticator: <a href="CookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator">CookieAuthenticator</a></span>, <span name="result">result: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.4/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService@update(authenticator:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator,result:scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Updates the authenticator with the new last used date in the backing store.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the authenticator with the new last used date in the backing store.</p><p>We needn't embed the cookie in the response here because the cookie itself will not be changed.
 Only the authenticator in the backing store will be changed.
-</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to update.</p></dd><dt class="param">result</dt><dd class="cmt"><p>A function which gets the updated authenticator and returns the original result.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The original or a manipulated result.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService">CookieAuthenticatorService</a> → <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to update.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The original or a manipulated result.
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">com.mohiva.play.silhouette</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService">CookieAuthenticatorService</a> → <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
