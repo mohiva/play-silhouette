@@ -88,6 +88,8 @@ parallelExecution in Test := false
 
 scalaVersion := "2.11.1"
 
+crossScalaVersions := Seq("2.10.4", "2.11.1")
+
 scalacOptions ++= Seq(
   "-deprecation", // Emit warning and location for usages of deprecated APIs.
   "-feature", // Emit warning and location for usages of features that should be imported explicitly.
@@ -107,6 +109,11 @@ scalacOptions in Test ~= { (options: Seq[String]) =>
 
 scalacOptions in ScoverageTest ~= { (options: Seq[String]) =>
   options filterNot ( _ == "-Ywarn-dead-code" )  // The same when running under scoverage.
+}
+
+unmanagedSourceDirectories in Compile <<= (unmanagedSourceDirectories in Compile, sourceDirectory in Compile, scalaVersion) { (sds: Seq[java.io.File], sd: java.io.File, v: String) =>
+  val extra = new java.io.File(sd, "scala_" + v)
+  (if (extra.exists) Seq(extra) else Seq()) ++ sds
 }
 
 //*******************************
