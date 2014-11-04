@@ -1,30 +1,31 @@
 Caching
 =======
 
-Silhouette caches some authentication artifacts. Here are some suggestions
-on configuring or implementing caching in your application architecture
-so that Silhouette can also use it.
+Silhouette caches some authentication artifacts. So here you can find
+some information on how you can configure or implement caching in a way
+that fits into your application architecture.
 
 
 Implement caching
 -----------------
 
-By default, Play is shipped with `EHCache`_, a
-lightweight, in-memory cache. If this is not enough for your application
-architecture, there are at least two other caching options to use with Silhouette.
+By default, Play gets shipped with `EHCache`_, which is configured as a
+lightweight, in-memory cache. Is this not enough for your application
+architecture, then there exists two possibilities to use another cache
+with Silhouette.
 
 
 Use another Play cache plugin
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Play has its own cache plugin architecture. So the easiest approach is to use
+Play has its own cache plugin architecture. So the easiest way is to use
 another cache plugin for Play. You can then use the `PlayCacheLayer`_
-implementation and plug a new cache into your application.
+implementation and plug in a new cache into your application.
 
 .. _PlayCacheLayer: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/impl/util/PlayCacheLayer.scala
 
 
-Implement your own cache layer
+Implement own cache layer
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Silhouette provides a `CacheLayer`_ trait which can be used to create a
@@ -44,14 +45,13 @@ artifacts must be synchronized between instances.
 Development mode
 ----------------
 
-When using the default Play cache in development mode, the cache will be
-cleaned after every app reload. This is because Play's cache (`EHCache`_)
-is configured to store the data only im memory by default.
+When using the default Play cache in development mode, then the cache gets
+cleaned after every app reload. This is because, by default, the `EHCache`_
+(the cache used by Play) is configured to store the data only im memory.
 This can be changed by overriding the shipped ``ehcache.xml`` from the
-jars to persist the cache on the disk.
+jars, to persist the cache on the disk.
 
-To change the default behaviour you must copy the ``ehcache.xml`` from the
-distribution jars to your
+To change this default behaviour you must copy the ``ehcache.xml`` to your
 configuration directory. Then add ``<diskStore path="java.io.tmpdir"/>`` and
 change ``diskPersistent`` to ``true``. The following example shows a possible
 configuration. Adapt it to fit your needs.
