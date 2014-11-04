@@ -26,7 +26,7 @@ your code is invoked.
       }
     }
 
-There is also a ``UserAwareAction`` that can be used in actions that
+There is also a ``UserAwareAction`` that can be used for actions that
 need to know if there is a current user but can be executed even if
 there isn’t one.
 
@@ -49,13 +49,13 @@ there isn’t one.
       }
     }
 
-For not authenticated users you can implement a global or local fallback
+For unauthenticated users you can implement a global or local fallback
 action.
 
 Global Fallback
 ^^^^^^^^^^^^^^^
 
-You can implement the ``SecuredSettings`` trait into your ``Global``
+You can mix the ``SecuredSettings`` trait into your ``Global``
 object. This trait provides a method called ``onNotAuthenticated``. If
 you implement this method, then every time a user calls a restricted
 action, the result specified in the global fallback method will be
@@ -80,10 +80,10 @@ returned.
 Local Fallback
 ^^^^^^^^^^^^^^
 
-Every controller which is derived from ``Silhouette`` base controller
+Every controller which is derived from the ``Silhouette`` base controller
 has a method called ``notAuthenticated``. If you override these method,
 then you can return a not-authenticated result similar to the global
-fallback but only for these specific controller. The local fallback has
+fallback but only for this specific controller. The local fallback has
 precedence over the global fallback.
 
 .. code-block:: scala
@@ -112,7 +112,7 @@ precedence over the global fallback.
     }
 
 .. Note::
-   If you don’t implement one of the both fallback methods, a 401 response with a simple
+   If you don’t implement one or both of the fallback methods, a 401 response with a simple
    message will be displayed to the user.
 
 Adding Authorization
@@ -120,10 +120,10 @@ Adding Authorization
 
 Silhouette provides a way to add authorization logic to your controller
 actions. This is done by implementing an ``Authorization`` object that
-is passed to the ``SecuredAction`` as a parameter.
+is passed to ``SecuredAction`` as a parameter.
 
 After checking if a user is authenticated the ``Authorization`` instance
-is used to verify if the execution should be allowed or not.
+is used to verify whether the execution should be allowed or not.
 
 .. code-block:: scala
 
@@ -165,13 +165,13 @@ Here’s how you would use it:
         // do something here
     }
 
-For not authorized users you can implement a global or local fallback
-action similar to the fallback for not-authenticated users.
+For unauthorized users you can implement a global or local fallback
+action similar to the fallback for unauthenticated users.
 
 Global Fallback
 ^^^^^^^^^^^^^^^
 
-You can implement the ``SecuredSettings`` trait into your ``Global``
+You can mix the ``SecuredSettings`` trait into your ``Global``
 object. This trait provides a method called ``onNotAuthorized``. If you
 implement this method, then every time a user calls an action on which
 he isn’t authorized, the result specified in the global fallback method
@@ -199,7 +199,7 @@ Local Fallback
 Every controller which is derived from ``Silhouette`` base controller
 has a method called ``notAuthorized``. If you override these method,
 then you can return a not-authorized result similar to the global
-fallback but only for these specific controller. The local fallback has
+fallback but only for this specific controller. The local fallback has
 precedence over the global fallback.
 
 .. code-block:: scala
@@ -234,11 +234,10 @@ precedence over the global fallback.
 Handle Ajax requests
 --------------------
 
-If you send Ajax and normal requests to your Play app, then you should
-tell your app that it should handle Ajax requests differently, so that
-it can respond with a JSON result, for example. There are two different
-methods to achieve this. The first method uses a non-standard HTTP
-request header. Then on the Play side you can check for this header and
+Applications that accept both Ajax and normal requests should likely provide
+a JSON result to the first and a different result to others. There are two different
+approaches to achieve this. The first approach uses a non-standard HTTP
+request header. The Play application can check for this header and
 respond with a suitable result. The second approach uses `Content
 negotiation`_ to serve different versions of a document based on the
 ``ACCEPT`` request header.
@@ -247,7 +246,7 @@ Non-standard header
 ^^^^^^^^^^^^^^^^^^^
 
 The example below uses a non-standard HTTP request header inside a
-secured action and inside a fallback method for non-authenticated users.
+secured action and inside a fallback method for unauthenticated users.
 
 **The JavaScript part with JQuery**
 
@@ -258,7 +257,7 @@ secured action and inside a fallback method for non-authenticated users.
         ...
     });
 
-**The Play part with a local fallback method for not-authenticated users**
+**The Play part with a local fallback method for unauthenticated users**
 
 .. code-block:: scala
 
@@ -305,7 +304,7 @@ implemented, Silhouette responds with the appropriate response based on
 the ``ACCEPT`` header defined by the user agent. The response format
 will default to plain text in case the request does not match one of the
 known media types. The example below uses content negotiation inside a
-secured action and inside a fallback method for not-authenticated users.
+secured action and inside a fallback method for unauthenticated users.
 
 **The JavaScript part with JQuery**
 
@@ -319,7 +318,7 @@ secured action and inside a fallback method for not-authenticated users.
         ...
     })
 
-**The Play part with a local fallback method for not-authenticated users**
+**The Play part with a local fallback method for unauthenticated users**
 
 .. code-block:: scala
 

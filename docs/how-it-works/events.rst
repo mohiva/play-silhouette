@@ -5,7 +5,7 @@ Events
 
 Silhouette provides event handling based on `Akka’s Event Bus`_. The
 following events are provided by Silhouette, although only the three
-marked of them are fired from core.
+marked events are fired from core.
 
 * SignUpEvent
 * LoginEvent
@@ -15,7 +15,7 @@ marked of them are fired from core.
 * NotAuthenticatedEvent \*
 * NotAuthorizedEvent \*
 
-It is very easy to propagate own events over the event bus by
+It is very easy to propagate your own events over the event bus by
 implementing the ``SilhouetteEvent`` trait.
 
 .. code-block:: scala
@@ -25,11 +25,11 @@ implementing the ``SilhouetteEvent`` trait.
 Use the event bus
 -----------------
 
-The event bus is available in every Silhouette controller over the
+The event bus is available in every Silhouette controller using the
 environment variable ``env.eventBus``. You can also inject the event bus
-into other classes like services or DAOs. You must only take care that
-you use the same event bus. There exists a singleton event bus by
-calling ``EventBus()``.
+into other classes like services or DAOs. 
+``EventBus()`` is a singleton you can call to ensure that you always use
+the same event bus.
 
 Listen for events
 -----------------
