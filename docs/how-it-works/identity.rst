@@ -4,9 +4,10 @@ Identity
 ========
 
 Silhouette defines a user through its ``Identity`` trait. This trait
-doesn’t define any defaults expect the :ref:`login-info`
+doesn’t define any defaults except the :ref:`login-info`
 which contains the data about the provider that authenticated that
 identity. This login information must be stored with the identity.
+
 If the application supports the concept of “merged identities”, i.e.,
 the same user being able to authenticate through different providers,
 then make sure that the login information gets stored separately. Later
@@ -15,10 +16,9 @@ you can see how this can be implemented.
 Implement an identity
 ---------------------
 
-As pointed out in the introduction of this chapter a user is an
-representation of an ``Identity``. So to define a user you must create a
-class that extends the ``Identity`` trait. Your user can contain any
-information. There are no restrictions how a user must be constructed.
+To define a user for your application, create a class that extends the
+``Identity`` trait. Your user class may contain any information, without
+restriction.
 
 Below we define a simple user with a unique ID, the login information for
 the provider which authenticates that user and some basic information like
@@ -38,11 +38,10 @@ name and email.
 Login information
 ^^^^^^^^^^^^^^^^^
 
-Contains the data about the provider that authenticated an identity.
-This information is mostly public available and it simply consists of a
-unique provider ID and a unique key which identifies a user on this
-provider (userID, email, …). This information will be represented by the
-`LoginInfo`_ trait.
+The `LoginInfo`_ trait contains the data about the provider that authenticated an identity.
+This information is mostly publicly available and it simply consists of a
+unique provider ID and a unique key which identifies a user to this
+provider (userID, email, …). 
 
 .. _LoginInfo: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/api/Identity.scala#L45
 
@@ -53,15 +52,15 @@ The identity service
 
 Silhouette relies on an implementation of ``IdentityService`` to handle
 all the operations related to retrieving identities. Using this
-delegation model you are not forced to use a particular model object or
-a persistence mechanism but rather provide a service that translates
+delegation model means you are not forced to use a particular model object or
+persistence mechanism. Instead, you provide a service that translates
 back and forth between your models and what Silhouette understands.
 
 The ``IdentityService`` defines a raw type which must be derived from
 ``Identity``. This has the advantage that your service implementation
-returns always your implemented ``Identity``.
+returns always your implemention of ``Identity``.
 
-Let’s illustrate how a user defined implementation can look like:
+Here's a sample implementation:
 
 .. code-block:: scala
 
@@ -83,7 +82,7 @@ Link an identity to multiple login information
 ----------------------------------------------
 
 Silhouette doesn’t provide built-in functionality to link multiple
-login information to a single user, but it makes this task very easy
+identities to a single user, but it makes this task very easy
 by providing the basics. In the abstract this task can be done by
 linking the different login information returned by each provider,
 with a single user identified by an unique ID. The unique user will

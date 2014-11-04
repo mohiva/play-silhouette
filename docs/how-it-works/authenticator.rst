@@ -12,10 +12,10 @@ for an identity.
 
 .. _authenticator_service_impl:
 
-Authenticator service
+Authenticator Service
 ---------------------
 
-To every Authenticator pertains an associated service which handles this authenticator.
+Every Authenticator has an associated Authenticator Service which handles that kind of authenticator.
 This service is responsible for the following actions:
 
 Create an authenticator
@@ -28,9 +28,9 @@ used to track the user on every subsequent request.
 Retrieve an authenticator
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Based on the authenticator a service is responsible for, it checks the incoming request
-for an existing authenticator artifact. This artifact can be embedded in every part(user
-session, cookie, user defined header field, request param) of an incoming HTTP request. Some
+An authenticator service is used to check an incoming request for an existing instance of
+its authenticator. An authenticator can be embedded in any part of the incoming HTTP request 
+(user session, cookie, user defined header field, request param). Some
 services can validate a retrieved authenticator, based on its ID, against a backing store.
 Silhouette automatically tries to retrieve an authenticator on every request to a
 :ref:`Silhouette action <silhouette_actions>`.
@@ -38,43 +38,42 @@ Silhouette automatically tries to retrieve an authenticator on every request to 
 Init an authenticator
 ^^^^^^^^^^^^^^^^^^^^^
 
-The initialization of an authenticator means, that all authenticator artifacts will be
+Authentictors need to be initialized, usually when they are created during a successful
+authentication. Initializing an authenticator causes it to be
 embedded into a Play framework request or result. This can by done by creating a cookie,
-storing data into the user session or sending the artifacts in a user defined header. If
+storing data into the user session or including the authenticator in a user defined header. If
 the service uses a backing store, then the authenticator instance will be stored in it.
-The initialization should be done after a successful authentication with a new created
-authenticator.
 
-Embedding the authenticator related data into the result means that the data will be send
+Embedding the authenticator related data into the result means that the data will be sent
 to the client. It may also be useful to embed the authenticator related data into an incoming
 request to lead the ``SecuredAction`` to believe that the request is a new request which
-contains a valid authenticator. This can be useful in Play filters.
+contains a valid authenticator. This typically done in a Play filter.
 
 .. Attention::
    The following actions are only used for internal purposes inside a :ref:`Silhouette
-   action <silhouette_actions>`. But it might be useful to know how an authenticator
-   will be handled.
+   action <silhouette_actions>`. It's provided here as background information and for
+   advanced users.
 
 Touch an authenticator
 ^^^^^^^^^^^^^^^^^^^^^^
 
-If an authenticator uses sliding window expiration then this method updates the last used
-time on the authenticator. So to mark an authenticator as used it will be touched on every
-request to a :ref:`Silhouette action <silhouette_actions>`. If sliding window expiration
-is disabled then the authenticator will not be updated.
+For authenticators that use a sliding window expiration, calling ``touch`` causes
+the last used time to be updated upon each request to a :ref:`Silhouette action 
+<silhouette_actions>`. Such updates are not needed for authenticators that do not use
+a sliding window expiration.
 
 Update an authenticator
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 Automatically updates the state of an authenticator on every request to a :ref:`Silhouette
-action <silhouette_actions>`. Updated authenticator artifacts will be embed into the Play
-framework result, before sending it to the client. If the service uses a backing store, then
-the authenticator instance will be updated in the store too.
+action <silhouette_actions>`. Updated authenticators will be embedded into the Play
+framework result before sending it to the client. If the service uses a backing store, then
+the authenticator instance will be updated in the store, too.
 
 Renew an authenticator
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Authenticators have a fix expiration date. So with this method it's possible to renew the
+Authenticators have a fix expiration date. With this method it's possible to renew the
 expiration of an authenticator by discarding the old one and creating a new one. Based on
 the implementation, the renew method revokes the given authenticator first, before creating
 a new one. If the authenticator was updated, then the updated artifacts will be embedded
@@ -89,11 +88,13 @@ into the response.
 Discard an authenticator
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-If an authenticator is invalid then Silhouette automatically discards an authenticator on
-every request to a :ref:`Silhouette action <silhouette_actions>`. Discarding means that all
+Every request to a :ref:`Silhouette action <silhouette_actions>` causes invalid authenticators 
+to be automatically discarded.
+Discarding means that all
 client side stored artifacts will be removed. If the service uses a backing store, then the
-authenticator will also be removed from it. To logout a user from a Silhouette application,
-the authenticator must also be discarded manually.
+authenticator will also be removed from it. 
+
+Logging a user out of a Silhouette application requires explicitly discarding the authenticator.
 
 .. Note::
    To discard an authenticator you must call the `discard` method of the authenticator
@@ -104,12 +105,12 @@ the authenticator must also be discarded manually.
 List of authenticators
 ----------------------
 
-We have put a great effort to build a whole set of stateless as well as stateful `authenticator
-implementations`_, which cover the most use cases. Now it's up to you to decide which
+Silhouette comes with a set of stateless as well as stateful `authenticator
+implementations`_ that cover most use cases. It's up to you to decide which
 authenticator fits best into your application architecture.
 
 .. Hint::
-   A good decision aid can give you the blog posts `Cookies vs Tokens. Getting auth right with
+   Good decision aids can be found in the blog posts `Cookies vs Tokens. Getting auth right with
    Angular.JS`_ and `10 Things You Should Know about Tokens`_ from Auth0.
 
 .. _Cookies vs Tokens. Getting auth right with Angular.JS: https://auth0.com/blog/2014/01/07/angularjs-authentication-with-cookies-vs-token/
@@ -119,15 +120,15 @@ authenticator fits best into your application architecture.
 CookieAuthenticator
 ^^^^^^^^^^^^^^^^^^^
 
-An authenticator that uses a stateful, cookie based approach. It works by storing the unique
+An authenticator that uses a stateful, cookie-based approach. It works by storing the unique
 ID of the authenticator in a cookie. This ID gets then mapped to an authenticator instance
-in the server side backing store. This approach can also be named "server side session".
+in the server side backing store. This approach could also be named "server side session".
 
-The authenticator can use sliding window expiration. This means that the authenticator times
-out after a certain time if it wasn't used. This can be controlled with the :ref:`authenticatorIdleTimeout
+The authenticator can use a sliding window expiration. This means that the authenticator times
+out after a certain time if it hasn't been used. This can be controlled with the :ref:`authenticatorIdleTimeout
 <cookie_authenticator_settings>` property of the settings class.
 
-**Pro**
+**Pros**
 
 * Small network throughput on client side
 * Ideal for traditional browser based websites
@@ -139,7 +140,7 @@ out after a certain time if it wasn't used. This can be controlled with the :ref
 * Not stateless (needs a synchronized backing store)
 * Less than ideal for mobile or single page apps
 * Can be vulnerable for `CSRF`_ attacks
-* Plays not well with `CORS`_
+* Does not play well with `CORS`_
 
 .. Tip::
    Please take a look on the :ref:`configuration settings <cookie_authenticator_settings>`, on
@@ -148,14 +149,14 @@ out after a certain time if it wasn't used. This can be controlled with the :ref
 SessionAuthenticator
 ^^^^^^^^^^^^^^^^^^^^
 
-An authenticator that uses a stateless, session based approach. It works by storing a serialized
+An authenticator that uses a stateless, session-based approach. It works by storing a serialized
 authenticator instance in the Play Framework session cookie.
 
-The authenticator can use sliding window expiration. This means that the authenticator times
-out after a certain time if it wasn't used. This can be controlled with the :ref:`authenticatorIdleTimeout
-<session_authenticator_settings>` property of the settings class.
+The authenticator can use a sliding window expiration. This means that the authenticator times
+out after a certain time if it hasn't been used. This can be controlled with the :ref:`authenticatorIdleTimeout
+<sessoion_authenticator_settings>` property of the settings class.
 
-**Pro**
+**Pros**
 
 * No network throughput on the server side
 * Ideal for traditional browser based websites
@@ -167,7 +168,7 @@ out after a certain time if it wasn't used. This can be controlled with the :ref
 * Larger network throughput on client side
 * Less than ideal for mobile or single page apps
 * Can be vulnerable for `CSRF`_ attacks
-* Plays not well with `CORS`_
+* Does not play well with `CORS`_
 
 .. Tip::
    Please take a look on the :ref:`configuration settings <session_authenticator_settings>`, on
@@ -176,15 +177,15 @@ out after a certain time if it wasn't used. This can be controlled with the :ref
 BearerTokenAuthenticator
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-An authenticator that uses a header based approach with the help of a bearer token. It works by
+An authenticator that uses a header-based approach with the help of a bearer token. It works by
 transporting a token in a user defined header to track the authenticated user and a server side
 backing store that maps the token to an authenticator instance.
 
-The authenticator can use sliding window expiration. This means that the authenticator times out
-after a certain time if it wasn't used. This can be controlled with the :ref:`authenticatorIdleTimeout
+The authenticator can use a sliding window expiration. This means that the authenticator times
+out after a certain time if it hasn't been used. This can be controlled with the :ref:`authenticatorIdleTimeout
 <bearer_token_authenticator_settings>` property of the settings class.
 
-**Pro**
+**Pros**
 
 * Small network throughput on client side
 * Ideal for mobile or single page apps
@@ -205,16 +206,16 @@ after a certain time if it wasn't used. This can be controlled with the :ref:`au
 JWTAuthenticator
 ^^^^^^^^^^^^^^^^
 
-An authenticator that uses a header based approach with the help of a `JWT`_. It works by using a
+An authenticator that uses a header-based approach with the help of a `JWT`_ (JSON Web Token). It works by using a
 JWT to transport the authenticator data inside a user defined header. It can be stateless with the
 disadvantages that the JWT can't be invalidated.
 
-The authenticator can use sliding window expiration. This means that the authenticator times out
-after a certain time if it wasn't used. This can be controlled with the :ref:`authenticatorIdleTimeout
+The authenticator can use a sliding window expiration. This means that the authenticator times
+out after a certain time if it hasn't been used. This can be controlled with the :ref:`authenticatorIdleTimeout
 <jwt_authenticator_settings>` property of the settings class. If this feature is activated then a
 new token will be generated on every update. Make sure your application can handle this case.
 
-**Pro**
+**Pros**
 
 * Ideal for mobile or single page apps
 * Can be stateless (with the disadvantages it can't be invalidated)
