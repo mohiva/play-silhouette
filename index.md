@@ -16,15 +16,17 @@ The project is named after the fictional crime fighter character [Silhouette](ht
 
 #### Easy to integrate
 
-Silhouette comes with an [Activator template](https://github.com/mohiva/play-silhouette-seed) that gives you a complete sample application which is 100% customizable. You must only select the template `play-silhouette-seed` in your Activator UI. It was never been easier to start a new Silhouette application.
+Silhouette comes with an [Activator template](https://github.com/mohiva/play-silhouette-seed) that gives you a complete sample application which is 100% customizable. Simply select the
+template `play-silhouette-seed` in your Activator UI. It has never been easier to start a new Silhouette application.
 
 #### Authentication support
 
-Out of the box support for leading social services such as Twitter, Facebook, Google, LinkedIn and GitHub. It also provides a credentials provider with supports local login functionality.
+Out of the box support for leading social services such as Twitter, Facebook, Google, LinkedIn and GitHub. Silhouette also includes a credentials provider that supports local login functionality.
 
 #### Asynchronous, non-blocking operations
 
-We follow the [Reactive Manifesto](http://www.reactivemanifesto.org/). This means that all requests and web service calls are asynchronous, non blocking operations. For the event handling part of Silhouette we use [Akka's Event Bus](http://doc.akka.io/docs/akka/2.2.4/scala/event-bus.html) implementation. And lastly all persistence interfaces are defined to return Scala Futures.
+We follow the [Reactive Manifesto](http://www.reactivemanifesto.org/). This means that all requests and web service calls are asynchronous, non-blocking operations. For the event handling part of Silhouette we use [Akka's Event Bus](http://doc.akka.io/docs/akka/2.2.4/scala/event-bus.html) implementation. Lastly, all persistence interfaces are defined to return Scala Futures.
+
 
 #### Very customizable, extendable and testable
 
@@ -32,11 +34,11 @@ From the ground up Silhouette was designed to be as customizable, extendable and
 
 #### Internationalization support
 
-Silhouette makes it very easy to internationalize your application by passing the Play Framework `Request` and `Lang` objects around, if internationalization comes into play.
+Silhouette makes it very easy to internationalize your application by making the Play Framework's ``Request`` and ``Lang`` available where they are needed.
 
 #### Well tested
 
-Silhouette is a security component which protects your users from being compromised by attackers. Therefore we try to cover the complete code with unit and integration tests.
+Silhouette is a security component which protects your users from being compromised by attackers. Therefore we aim for complete code coverage with unit and integration tests.
 
 #### Follows the OWASP Authentication Cheat Sheet
 
@@ -44,7 +46,7 @@ Silhouette implements and promotes best practices such as described by the [OWAS
 
 ## Documentation
 
-See [the project documentation](http://docs.silhouette.mohiva.com/en/latest/) for more information. If you need help with the integration of Silhouette into your project, don't hesitate and ask questions in our [mailing list](https://groups.google.com/forum/#!forum/play-silhouette) or on [Stack Overflow](http://stackoverflow.com/questions/tagged/playframework).
+See [the project documentation](http://docs.silhouette.mohiva.com/en/latest/) for more information. If you need help with the integration of Silhouette into your project, don't hesitate to ask questions in our [mailing list](https://groups.google.com/forum/#!forum/play-silhouette) or on [Stack Overflow](http://stackoverflow.com/questions/tagged/playframework).
 
 ## License
 
