@@ -15,7 +15,7 @@
  */
 package com.mohiva.play.silhouette.impl.daos
 
-import com.mohiva.play.silhouette.api.Authenticator
+import com.mohiva.play.silhouette.api.StorableAuthenticator
 
 import scala.concurrent.Future
 
@@ -24,13 +24,13 @@ import scala.concurrent.Future
  *
  * @tparam T The type of the authenticator to store.
  */
-trait AuthenticatorDAO[T <: Authenticator] {
+trait AuthenticatorDAO[T <: StorableAuthenticator] {
 
   /**
    * Saves the authenticator.
    *
    * @param authenticator The authenticator to save.
-   * @return The saved auth info.
+   * @return The saved authenticator.
    */
   def save(authenticator: T): Future[T]
 
