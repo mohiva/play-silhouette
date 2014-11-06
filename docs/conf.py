@@ -20,10 +20,14 @@ release = '2.0-SNAPSHOT'
 pygments_style = 'sphinx'
 rst_prolog = '''
 .. |last_stable| replace:: :silhouette-doc:`{0}`
-'''.format(last_stable)
+'''.format(last_stable, release)
 
 extlinks = {
-    'silhouette-doc':  ('http://docs.silhouette.mohiva.com/%s/', '')
+    'silhouette-doc':  ('http://docs.silhouette.mohiva.com/%s/', ''),
+    'silhouette-api-doc': ('http://silhouette.mohiva.com/api/%s/', ''),
+    'silhouette-htmlzip-doc': ('https://readthedocs.org/projects/silhouette/downloads/htmlzip/%s/', ''),
+    'silhouette-pdf-doc': ('https://readthedocs.org/projects/silhouette/downloads/pdf/%s/', ''),
+    'silhouette-epub-doc': ('https://readthedocs.org/projects/silhouette/downloads/epub/%s/', '')
 }
 
 # -- Options for HTML output ----------------------------------------------

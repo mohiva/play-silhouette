@@ -15,6 +15,7 @@ name := "play-silhouette"
 version := "2.0-SNAPSHOT"
 
 libraryDependencies ++= Seq(
+  "com.typesafe.play" %% "play-test" % "2.3.6",
   "org.mindrot" % "jbcrypt" % "0.3m",
   "com.atlassian.jwt" % "jwt-core" % "1.2.1",
   "com.atlassian.jwt" % "jwt-api" % "1.2.1",

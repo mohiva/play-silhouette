@@ -33,6 +33,11 @@ Impl Package
 
 The reference implementation of Silhouette.
 
+Test Package
+^^^^^^^^^^^^
+
+Contains helper classes and objects to easily test an application based on Silhouette.
+
 
 Development workflow
 --------------------
@@ -81,7 +86,7 @@ Edit on GitHub
 For small typo changes the documentation can be edited directly on
 GitHub. This is very easy by following the "Edit on GitHub" button
 at the top of th page. After you have made your changes you can commit
-it with a meaningful commit message. It will then automatically create 
+it with a meaningful commit message. It will then automatically create
 a new pull request with your proposed changes.
 
 
