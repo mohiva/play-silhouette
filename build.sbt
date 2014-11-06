@@ -112,11 +112,6 @@ scalacOptions in ScoverageTest ~= { (options: Seq[String]) =>
   options filterNot ( _ == "-Ywarn-dead-code" )  // The same when running under scoverage.
 }
 
-unmanagedSourceDirectories in Compile <<= (unmanagedSourceDirectories in Compile, sourceDirectory in Compile, scalaVersion) { (sds: Seq[java.io.File], sd: java.io.File, v: String) =>
-  val extra = new java.io.File(sd, "scala_" + v)
-  (if (extra.exists) Seq(extra) else Seq()) ++ sds
-}
-
 //*******************************
 // Scalariform settings
 //*******************************
