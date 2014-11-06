@@ -25,7 +25,7 @@ implementation and plug a new cache into your application.
 
 
 Implement your own cache layer
-^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Silhouette provides a `CacheLayer`_ trait which can be used to create a
 custom cache implementation.

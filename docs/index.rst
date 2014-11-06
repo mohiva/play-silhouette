@@ -29,7 +29,6 @@ Basics
    :maxdepth: 1
 
    basics/features
-   basics/installation
    basics/examples
    basics/releases
    basics/contribute
@@ -51,6 +50,7 @@ How it works
    how-it-works/caching
    how-it-works/events
    how-it-works/logging
+   how-it-works/testing
 
 
 Configuration
