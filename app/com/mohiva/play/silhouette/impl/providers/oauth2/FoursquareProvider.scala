@@ -19,6 +19,7 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth2
 
+import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
@@ -83,7 +84,7 @@ abstract class FoursquareProvider(httpLayer: HTTPLayer, stateProvider: OAuth2Sta
             logger.info("This implementation may be deprecated! Please contact the Silhouette team for a fix!")
           }
 
-          Future.fromTry(parseProfile(parser, json))
+          Future.from(parseProfile(parser, json))
       }
     }
   }

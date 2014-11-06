@@ -15,6 +15,7 @@
  */
 package com.mohiva.play.silhouette.impl.authenticators
 
+import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
 import com.mohiva.play.silhouette.api.services.AuthenticatorService
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
@@ -107,7 +108,7 @@ class SessionAuthenticatorService(
    * @return An authenticator.
    */
   def create(loginInfo: LoginInfo)(implicit request: RequestHeader) = {
-    Future.fromTry(Try {
+    Future.from(Try {
       val now = clock.now
       SessionAuthenticator(
         loginInfo = loginInfo,
@@ -128,7 +129,7 @@ class SessionAuthenticatorService(
    * @return Some authenticator or None if no authenticator could be found in request.
    */
   def retrieve(implicit request: RequestHeader) = {
-    Future.fromTry(Try {
+    Future.from(Try {
       if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
     }).map { fingerprint =>
       request.session.get(settings.sessionKey).flatMap(unserialize) match {

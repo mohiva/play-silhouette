@@ -15,6 +15,7 @@
  */
 package com.mohiva.play.silhouette.impl.authenticators
 
+import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
 import com.mohiva.play.silhouette.api.services.AuthenticatorService
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
@@ -119,7 +120,7 @@ class BearerTokenAuthenticatorService(
    * @return Some authenticator or None if no authenticator could be found in request.
    */
   def retrieve(implicit request: RequestHeader) = {
-    Future.fromTry(Try(request.headers.get(settings.headerName))).flatMap {
+    Future.from(Try(request.headers.get(settings.headerName))).flatMap {
       case Some(token) => dao.find(token)
       case None => Future.successful(None)
     }.recover {

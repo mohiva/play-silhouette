@@ -19,6 +19,7 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth1
 
+import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.{ CacheLayer, HTTPLayer }
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
@@ -77,7 +78,7 @@ abstract class XingProvider(
           val message = (json \ "message").asOpt[String]
 
           Future.failed(new ProfileRetrievalException(SpecifiedProfileError.format(id, error, message.getOrElse(""))))
-        case _ => Future.fromTry(parseProfile(parser, json))
+        case _ => Future.from(parseProfile(parser, json))
       }
     }
   }

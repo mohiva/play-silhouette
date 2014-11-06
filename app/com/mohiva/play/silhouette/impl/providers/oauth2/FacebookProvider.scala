@@ -19,6 +19,7 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth2
 
+import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
 import com.mohiva.play.silhouette.api.util.HTTPLayer
@@ -80,7 +81,7 @@ abstract class FacebookProvider(httpLayer: HTTPLayer, stateProvider: OAuth2State
           val errorCode = (error \ "code").as[Int]
 
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, errorMsg, errorType, errorCode))
-        case _ => Future.fromTry(parseProfile(parser, json))
+        case _ => Future.from(parseProfile(parser, json))
       }
     }
   }
