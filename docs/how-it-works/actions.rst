@@ -13,18 +13,18 @@ your code is invoked.
 
 .. code-block:: scala
 
-    class Application(env: Environment[User, CookieAuthenticator])
-      extends Silhouette[User, CookieAuthenticator] {
+  class Application(env: Environment[User, CookieAuthenticator])
+    extends Silhouette[User, CookieAuthenticator] {
 
-      /**
-       * Renders the index page.
-       *
-       * @returns The result to send to the client.
-       */
-      def index = SecuredAction { implicit request =>
-        Ok(views.html.index(request.identity))
-      }
+    /**
+     * Renders the index page.
+     *
+     * @returns The result to send to the client.
+     */
+    def index = SecuredAction { implicit request =>
+      Ok(views.html.index(request.identity))
     }
+  }
 
 There is also a ``UserAwareAction`` that can be used for actions that
 need to know if there is a current user but can be executed even if
@@ -32,25 +32,66 @@ there isn’t one.
 
 .. code-block:: scala
 
-    class Application(env: Environment[User, CookieAuthenticator])
-      extends Silhouette[User, CookieAuthenticator] {
+  class Application(env: Environment[User, CookieAuthenticator])
+    extends Silhouette[User, CookieAuthenticator] {
 
-      /**
-       * Renders the index page.
-       *
-       * @returns The result to send to the client.
-       */
-      def index = UserAwareAction { implicit request =>
-        val userName = request.identity match {
-          case Some(identity) => identity.fullName
-          case None => "Guest"
-        }
-        Ok("Hello %s".format(userName))
+    /**
+     * Renders the index page.
+     *
+     * @returns The result to send to the client.
+     */
+    def index = UserAwareAction { implicit request =>
+      val userName = request.identity match {
+        case Some(identity) => identity.fullName
+        case None => "Guest"
       }
+      Ok("Hello %s".format(userName))
     }
+  }
 
-For unauthenticated users you can implement a global or local fallback
-action.
+For unauthenticated users you can implement a :ref:`global <global_fallback>` or
+:ref:`local <local_fallback>` fallback action.
+
+Request Handlers
+^^^^^^^^^^^^^^^^
+
+The base implementations for these actions are encapsulated into request handlers. For
+the ``SecuredAction`` there exists a ``SecuredRequestHandler`` and for the ``UserAwareAction``
+there exists a ``UserAwareRequestHandler``. You can use these handlers in default Play
+actions.
+
+.. code-block:: scala
+
+  /**
+   * An example for a secured request handler.
+   */
+  def securedRequestHandler = Action.async { implicit request =>
+    SecuredRequestHandler { securedRequest =>
+      Future.successful(HandlerResult(Ok, Some(securedRequest.identity)))
+    }.map {
+      case HandlerResult(r, Some(user)) => Ok(Json.toJson(user.loginInfo))
+      case HandlerResult(r, None) => Unauthorized
+    }
+  }
+
+  /**
+   * An example for an user aware request handler.
+   */
+  def userAwareRequestHandler = Action.async { implicit request =>
+    UserAwareRequestHandler { userAwareRequest =>
+      Future.successful(HandlerResult(Ok, userAwareRequest.identity))
+    }.map {
+      case HandlerResult(r, Some(user)) => Ok(Json.toJson(user.loginInfo))
+      case HandlerResult(r, None) => Unauthorized
+    }
+  }
+
+Request handlers have the advantage that they can transport the ``Result`` to send to the client
+and additional data out of these handlers. This may be useful for securing `web sockets`_.
+
+.. _web sockets: https://www.playframework.com/documentation/latest/ScalaWebSockets
+
+.. _global_fallback:
 
 Global Fallback
 ^^^^^^^^^^^^^^^
@@ -63,19 +104,21 @@ returned.
 
 .. code-block:: scala
 
-    object Global extends GlobalSettings with SecuredSettings {
+  object Global extends GlobalSettings with SecuredSettings {
 
-      /**
-       * Called when a user isn't authenticated.
-       *
-       * @param request The request header.
-       * @param lang The current selected lang.
-       * @return The result to send to the client.
-       */
-      override def onNotAuthenticated(request: RequestHeader, lang: Lang) = {
-        Some(Future.successful(Unauthorized("No access")))
-      }
+    /**
+     * Called when a user isn't authenticated.
+     *
+     * @param request The request header.
+     * @param lang The current selected lang.
+     * @return The result to send to the client.
+     */
+    override def onNotAuthenticated(request: RequestHeader, lang: Lang) = {
+      Some(Future.successful(Unauthorized("No access")))
     }
+  }
+
+.. _local_fallback:
 
 Local Fallback
 ^^^^^^^^^^^^^^
@@ -88,28 +131,28 @@ precedence over the global fallback.
 
 .. code-block:: scala
 
-    class Application(env: Environment[User, CookieAuthenticator])
-      extends Silhouette[User, CookieAuthenticator] {
+  class Application(env: Environment[User, CookieAuthenticator])
+    extends Silhouette[User, CookieAuthenticator] {
 
-      /**
-       * Called when a user isn't authenticated.
-       *
-       * @param request The request header.
-       * @return The result to send to the client.
-       */
-      override def notAuthenticated(request: RequestHeader): Option[Future[SimpleResult]] = {
-        Some(Future.successful(Unauthorized("No access")))
-      }
-
-      /**
-       * Renders the index page.
-       *
-       * @returns The result to send to the client.
-       */
-      def index = SecuredAction { implicit request =>
-        Ok(views.html.index(request.identity))
-      }
+    /**
+     * Called when a user isn't authenticated.
+     *
+     * @param request The request header.
+     * @return The result to send to the client.
+     */
+    override def notAuthenticated(request: RequestHeader): Option[Future[SimpleResult]] = {
+      Some(Future.successful(Unauthorized("No access")))
     }
+
+    /**
+     * Renders the index page.
+     *
+     * @returns The result to send to the client.
+     */
+    def index = SecuredAction { implicit request =>
+      Ok(views.html.index(request.identity))
+    }
+  }
 
 .. Note::
    If you don’t implement one or both of the fallback methods, a 401 response with a simple
@@ -127,43 +170,43 @@ is used to verify whether the execution should be allowed or not.
 
 .. code-block:: scala
 
-    /**
-     * A trait to define Authorization objects that let you hook
-     * an authorization implementation in SecuredActions.
-     *
-     * @tparam I The type of the identity.
-     */
-    trait Authorization[I <: Identity] {
+  /**
+   * A trait to define Authorization objects that let you hook
+   * an authorization implementation in SecuredActions.
+   *
+   * @tparam I The type of the identity.
+   */
+  trait Authorization[I <: Identity] {
 
-      /**
-       * Checks whether the user is authorized to execute an action or not.
-       *
-       * @param identity The identity to check for.
-       * @param request The current request header.
-       * @param lang The current lang.
-       * @return True if the user is authorized, false otherwise.
-       */
-      def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang): Boolean
-    }
+    /**
+     * Checks whether the user is authorized to execute an action or not.
+     *
+     * @param identity The identity to check for.
+     * @param request The current request header.
+     * @param lang The current lang.
+     * @return True if the user is authorized, false otherwise.
+     */
+    def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang): Boolean
+  }
 
 This is a sample implementation that only grants access to users that
 logged in using a given provider:
 
 .. code-block:: scala
 
-    case class WithProvider(provider: String) extends Authorization[User] {
-      def isAuthorized(user: User)(implicit request: RequestHeader, lang: Lang) = {
-        user.identityId.providerId == provider
-      }
+  case class WithProvider(provider: String) extends Authorization[User] {
+    def isAuthorized(user: User)(implicit request: RequestHeader, lang: Lang) = {
+      user.identityId.providerId == provider
     }
+  }
 
 Here’s how you would use it:
 
 .. code-block:: scala
 
-    def myAction = SecuredAction(WithProvider("twitter")) { implicit request =>
-        // do something here
-    }
+  def myAction = SecuredAction(WithProvider("twitter")) { implicit request =>
+    // do something here
+  }
 
 For unauthorized users you can implement a global or local fallback
 action similar to the fallback for unauthenticated users.
@@ -179,19 +222,19 @@ will be returned.
 
 .. code-block:: scala
 
-    object Global extends GlobalSettings with SecuredSettings {
+  object Global extends GlobalSettings with SecuredSettings {
 
-      /**
-       * Called when a user isn't authorized.
-       *
-       * @param request The request header.
-       * @param lang The current selected lang.
-       * @return The result to send to the client.
-       */
-      override def onNotAuthorized(request: RequestHeader, lang: Lang) = {
-        Some(Future.successful(Forbidden("Not authorized")))
-      }
+    /**
+     * Called when a user isn't authorized.
+     *
+     * @param request The request header.
+     * @param lang The current selected lang.
+     * @return The result to send to the client.
+     */
+    override def onNotAuthorized(request: RequestHeader, lang: Lang) = {
+      Some(Future.successful(Forbidden("Not authorized")))
     }
+  }
 
 Local Fallback
 ^^^^^^^^^^^^^^
@@ -204,28 +247,28 @@ precedence over the global fallback.
 
 .. code-block:: scala
 
-    class Application(env: Environment[User, CookieAuthenticator])
-      extends Silhouette[User, CookieAuthenticator] {
+  class Application(env: Environment[User, CookieAuthenticator])
+    extends Silhouette[User, CookieAuthenticator] {
 
-      /**
-       * Called when a user isn't authorized.
-       *
-       * @param request The request header.
-       * @return The result to send to the client.
-       */
-      override def notAuthorized(request: RequestHeader): Option[Future[SimpleResult]] = {
-        Some(Future.successful(Forbidden("Not authorized")))
-      }
-
-      /**
-       * Renders the index page.
-       *
-       * @returns The result to send to the client.
-       */
-      def index = SecuredAction(WithProvider("twitter")) { implicit request =>
-        Ok(views.html.index(request.identity))
-      }
+    /**
+     * Called when a user isn't authorized.
+     *
+     * @param request The request header.
+     * @return The result to send to the client.
+     */
+    override def notAuthorized(request: RequestHeader): Option[Future[SimpleResult]] = {
+      Some(Future.successful(Forbidden("Not authorized")))
     }
+
+    /**
+     * Renders the index page.
+     *
+     * @returns The result to send to the client.
+     */
+    def index = SecuredAction(WithProvider("twitter")) { implicit request =>
+      Ok(views.html.index(request.identity))
+    }
+  }
 
 .. Note::
    If you don’t implement one of the both fallback methods, a 403
@@ -252,47 +295,47 @@ secured action and inside a fallback method for unauthenticated users.
 
 .. code-block:: javascript
 
-    $.ajax({
-        headers: { 'IsAjax': 'true' },
-        ...
-    });
+  $.ajax({
+      headers: { 'IsAjax': 'true' },
+      ...
+  });
 
 **The Play part with a local fallback method for unauthenticated users**
 
 .. code-block:: scala
 
-    class Application(env: Environment[User, CookieAuthenticator])
-      extends Silhouette[User, CookieAuthenticator] {
+  class Application(env: Environment[User, CookieAuthenticator])
+    extends Silhouette[User, CookieAuthenticator] {
 
-      /**
-       * Called when a user isn't authenticated.
-       *
-       * @param request The request header.
-       * @return The result to send to the client.
-       */
-      override def notAuthenticated(request: RequestHeader): Option[Future[SimpleResult]] = {
-        val result = request.headers.get("IsAjax") match {
-          case Some("true") => Json.obj("result" -> "No access")
-          case _ => "No access"
-        }
-
-        Some(Future.successful(Unauthorized(result)))
+    /**
+     * Called when a user isn't authenticated.
+     *
+     * @param request The request header.
+     * @return The result to send to the client.
+     */
+    override def notAuthenticated(request: RequestHeader): Option[Future[SimpleResult]] = {
+      val result = request.headers.get("IsAjax") match {
+        case Some("true") => Json.obj("result" -> "No access")
+        case _ => "No access"
       }
 
-      /**
-       * Renders the index page.
-       *
-       * @returns The result to send to the client.
-       */
-      def index = SecuredAction { implicit request =>
-        val result = request.headers.get("IsAjax") match {
-          case Some("true") => Json.obj("identity" -> request.identity)
-          case _ => views.html.index(request.identity)
-        }
-
-        Ok(result)
-      }
+      Some(Future.successful(Unauthorized(result)))
     }
+
+    /**
+     * Renders the index page.
+     *
+     * @returns The result to send to the client.
+     */
+    def index = SecuredAction { implicit request =>
+      val result = request.headers.get("IsAjax") match {
+        case Some("true") => Json.obj("identity" -> request.identity)
+        case _ => views.html.index(request.identity)
+      }
+
+      Ok(result)
+    }
+  }
 
 Content negotiation
 ^^^^^^^^^^^^^^^^^^^
@@ -310,49 +353,48 @@ secured action and inside a fallback method for unauthenticated users.
 
 .. code-block:: javascript
 
-    $.ajax({
-        headers: {
-            Accept : "application/json; charset=utf-8",
-            "Content-Type": "application/json; charset=utf-8"
-        },
-        ...
-    })
+  $.ajax({
+      headers: {
+          Accept : "application/json; charset=utf-8",
+          "Content-Type": "application/json; charset=utf-8"
+      },
+      ...
+  })
 
 **The Play part with a local fallback method for unauthenticated users**
 
 .. code-block:: scala
 
-    class Application(env: Environment[User, CookieAuthenticator])
-      extends Silhouette[User, CookieAuthenticator] {
+  class Application(env: Environment[User, CookieAuthenticator])
+    extends Silhouette[User, CookieAuthenticator] {
 
-      /**
-       * Called when a user isn't authenticated.
-       *
-       * @param request The request header.
-       * @return The result to send to the client.
-       */
-      override def notAuthenticated(request: RequestHeader): Option[Future[SimpleResult]] = {
-        val result = render {
-          case Accepts.Json() => Json.obj("result" -> "No access")
-          case Accepts.Html() => "No access"
-        }
-
-        Some(Future.successful(Unauthorized(result)))
+    /**
+     * Called when a user isn't authenticated.
+     *
+     * @param request The request header.
+     * @return The result to send to the client.
+     */
+    override def notAuthenticated(request: RequestHeader): Option[Future[SimpleResult]] = {
+      val result = render {
+        case Accepts.Json() => Json.obj("result" -> "No access")
+        case Accepts.Html() => "No access"
       }
 
-      /**
-       * Renders the index page.
-       *
-       * @returns The result to send to the client.
-       */
-      def index = SecuredAction { implicit request =>
-       val result = render {
-          case Accepts.Json() => Json.obj("identity" -> request.identity)
-          case Accepts.Html() => views.html.index(request.identity)
-        }
-
-        Ok(result)
-      }
+      Some(Future.successful(Unauthorized(result)))
     }
+
+    /**
+     * Renders the index page.
+     *
+     * @returns The result to send to the client.
+     */
+    def index = SecuredAction { implicit request =>
+      val result = render {
+        case Accepts.Json() => Json.obj("identity" -> request.identity)
+        case Accepts.Html() => views.html.index(request.identity)
+      }
+      Ok(result)
+    }
+  }
 
 .. _Content negotiation: http://www.playframework.com/documentation/2.2.1/ScalaContentNegotiation
