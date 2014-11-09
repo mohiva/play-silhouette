@@ -26,6 +26,7 @@ import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc._
 
 import scala.concurrent.Future
+import scala.language.higherKinds
 
 /**
  * Provides the actions that can be used to protect controllers and retrieve the current user
@@ -45,6 +46,13 @@ import scala.concurrent.Future
  * @tparam A The type of the authenticator.
  */
 trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logger {
+
+  /**
+   * Provides an `extract` method on an `Either` which contains the same types.
+   */
+  private implicit class ExtractEither[T](r: Either[T, T]) {
+    def extract: T = r.fold(identity, identity)
+  }
 
   /**
    * Gets the environment needed to instantiate a Silhouette controller.
@@ -135,67 +143,166 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
     }.getOrElse(DefaultActionHandler.handleUnauthorized)
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Base implementations for request handlers
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   /**
-   * Handles a result for an authenticator.
+   * A result which can transport a result as also additional data through the request handler process.
    *
-   * @param authenticator The authenticator to handle.
-   * @param result The result to handle with the authenticator.
-   * @param request The request header.
-   * @return The manipulated or the original result.
+   * @param result A Play Framework result.
+   * @param data Additional data to transport in the result.
+   * @tparam T The type of the data.
    */
-  private def handleResult(authenticator: A, result: A => Future[Result])(implicit request: RequestHeader): Future[Result] = {
-    val eitherAuth = env.authenticatorService.touch(authenticator)
-    val anyAuth = eitherAuth.fold(identity, identity)
-    result(anyAuth).flatMap {
-      case r: Authenticator.Discard => env.authenticatorService.discard(anyAuth, Future.successful(r))
-      case r: Authenticator.Renew => env.authenticatorService.renew(anyAuth, Future.successful(r))
-      case r => eitherAuth match {
-        // Authenticator was touched so we update the authenticator and maybe the result
-        case Left(a) => env.authenticatorService.update(a, Future.successful(r))
-        // Authenticator was not touched so we return the original result
-        case Right(a) => Future.successful(r)
+  case class HandlerResult[+T](result: Result, data: Option[T] = None)
+
+  /**
+   * A builder for building request handlers.
+   */
+  trait RequestHandlerBuilder[+R[_]] {
+
+    /**
+     * Constructs a request handler with default content.
+     *
+     * @param block The block of code to invoke.
+     * @param request The current request.
+     * @tparam T The type of the data included in the handler result.
+     * @return A handler result.
+     */
+    final def apply[T](block: R[AnyContent] => Future[HandlerResult[T]])(implicit request: Request[AnyContent]): Future[HandlerResult[T]] = {
+      invokeBlock(block)
+    }
+
+    /**
+     * Constructs a request handler with the content of the given request.
+     *
+     * @param request The current request.
+     * @param block The block of code to invoke.
+     * @tparam B The type of the request body.
+     * @tparam T The type of the data included in the handler result.
+     * @return A handler result.
+     */
+    final def apply[B, T](request: Request[B])(block: R[B] => Future[HandlerResult[T]]): Future[HandlerResult[T]] = {
+      invokeBlock(block)(request)
+    }
+
+    /**
+     * Invoke the block.
+     *
+     * This is the main method that an request handler has to implement.
+     *
+     * @param request The current request.
+     * @param block The block of code to invoke.
+     * @tparam B The type of the request body.
+     * @tparam T The type of the data included in the handler result.
+     * @return A handler result.
+     */
+    protected def invokeBlock[B, T](block: R[B] => Future[HandlerResult[T]])(implicit request: Request[B]): Future[HandlerResult[T]]
+
+    /**
+     * Handles a block for an authenticator.
+     *
+     * @param authenticator The authenticator to handle.
+     * @param block The block to handle with the authenticator.
+     * @param request The current request header.
+     * @return A handler result.
+     */
+    protected def handleBlock[T](authenticator: A, block: A => Future[HandlerResult[T]])(implicit request: RequestHeader) = {
+      val auth = env.authenticatorService.touch(authenticator)
+      block(auth.extract).flatMap {
+        case hr @ HandlerResult(pr: Authenticator.Discard, _) =>
+          env.authenticatorService.discard(auth.extract, Future.successful(pr)).map(pr => hr.copy(pr))
+        case hr @ HandlerResult(pr: Authenticator.Renew, _) =>
+          env.authenticatorService.renew(auth.extract, Future.successful(pr)).map(pr => hr.copy(pr))
+        case hr @ HandlerResult(pr, _) => auth match {
+          // Authenticator was touched so we update the authenticator and maybe the result
+          case Left(a) => env.authenticatorService.update(a, Future.successful(pr)).map(pr => hr.copy(pr))
+          // Authenticator was not touched so we return the original result
+          case Right(a) => Future.successful(hr)
+        }
+      }
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Implementations for secured actions and requests
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  /**
+   * A request that only allows access if an identity is authorized.
+   *
+   * @param identity The identity implementation.
+   * @param authenticator The authenticator implementation.
+   * @param request The current request.
+   * @tparam B The type of the request body.
+   */
+  case class SecuredRequest[B](identity: I, authenticator: A, request: Request[B]) extends WrappedRequest(request)
+
+  /**
+   * Handles secured requests.
+   *
+   * @param authorize An Authorize object that checks if the user is authorized to invoke the handler.
+   */
+  class SecuredRequestHandlerBuilder(authorize: Option[Authorization[I]] = None) extends RequestHandlerBuilder[SecuredRequest] {
+
+    /**
+     * Invokes the block.
+     *
+     * @param request The current request.
+     * @param block The block of code to invoke.
+     * @tparam B The type of the request body.
+     * @tparam T The type of the data included in the handler result.
+     * @return A handler result.
+     */
+    protected def invokeBlock[B, T](block: SecuredRequest[B] => Future[HandlerResult[T]])(implicit request: Request[B]): Future[HandlerResult[T]] = {
+      env.authenticatorService.retrieve.flatMap {
+        // A valid authenticator was found. We try to find the identity for it.
+        case Some(authenticator) if authenticator.isValid =>
+          env.identityService.retrieve(authenticator.loginInfo).flatMap {
+            // A user is both authenticated and authorized. The request will be granted.
+            case Some(identity) if authorize.isEmpty || authorize.get.isAuthorized(identity) =>
+              env.eventBus.publish(AuthenticatedEvent(identity, request, request2lang))
+              handleBlock(authenticator, a => block(SecuredRequest(identity, a, request)))
+            // A user is authenticated but not authorized. The request will be forbidden.
+            case Some(identity) =>
+              env.eventBus.publish(NotAuthorizedEvent(identity, request, request2lang))
+              handleBlock(authenticator, _ => handleNotAuthorized(request).map(r => HandlerResult(r)))
+            // No user was found. The request will ask for authentication and the authenticator will be discarded.
+            case None =>
+              env.eventBus.publish(NotAuthenticatedEvent(request, request2lang))
+              env.authenticatorService.discard(authenticator, handleNotAuthenticated(request)).map(r => HandlerResult(r))
+          }
+        // An invalid authenticator was found. The request will ask for authentication and the authenticator will be discarded.
+        case Some(authenticator) if !authenticator.isValid =>
+          env.eventBus.publish(NotAuthenticatedEvent(request, request2lang))
+          env.authenticatorService.discard(authenticator, handleNotAuthenticated(request)).map(r => HandlerResult(r))
+        // No authenticator was found. The request will ask for authentication.
+        case None =>
+          env.eventBus.publish(NotAuthenticatedEvent(request, request2lang))
+          handleNotAuthenticated(request).map(r => HandlerResult(r))
       }
     }
   }
 
   /**
-   * A request that only allows access if an identity is authorized.
+   * A secured request handler.
    */
-  case class SecuredRequest[R](identity: I, authenticator: A, request: Request[R]) extends WrappedRequest(request)
-
-  /**
-   * A request that adds the identity and the authenticator for the current call.
-   */
-  case class RequestWithUser[R](identity: Option[I], authenticator: Option[A], request: Request[R]) extends WrappedRequest(request)
-
-  /**
-   * A secured action.
-   *
-   * If the user is not authenticated or not authorized, the request is forwarded to
-   * the [[com.mohiva.play.silhouette.api.Silhouette.notAuthenticated]] or
-   * the [[com.mohiva.play.silhouette.api.Silhouette.notAuthorized]] methods.
-   *
-   * If these methods are not implemented, then
-   * the [[com.mohiva.play.silhouette.api.SecuredSettings.onNotAuthenticated]] or
-   * the [[com.mohiva.play.silhouette.api.SecuredSettings.onNotAuthorized]] methods
-   * will be called as fallback.
-   *
-   * If the [[com.mohiva.play.silhouette.api.SecuredSettings]] trait isn't implemented,
-   * a default message will be displayed.
-   */
-  object SecuredAction extends SecuredActionBuilder {
+  object SecuredRequestHandler extends SecuredRequestHandlerBuilder {
 
     /**
-     * Creates a secured action.
+     * Creates a secured action handler.
+     *
+     * @return A secured action handler.
      */
-    def apply() = new SecuredActionBuilder(None)
+    def apply() = new SecuredRequestHandlerBuilder(None)
 
     /**
-     * Creates a secured action.
+     * Creates a secured action handler.
      *
      * @param authorize An Authorize object that checks if the user is authorized to invoke the action.
+     * @return A secured action handler.
      */
-    def apply(authorize: Authorization[I]) = new SecuredActionBuilder(Some(authorize))
+    def apply(authorize: Authorization[I]) = new SecuredRequestHandlerBuilder(Some(authorize))
   }
 
   /**
@@ -216,68 +323,118 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
     /**
      * Invokes the block.
      *
-     * @param request The request.
+     * @param request The current request.
      * @param block The block of code to invoke.
-     * @return The result to send to the client.
+     * @tparam B The type of the request body.
+     * @return A handler result.
      */
-    def invokeBlock[R](request: Request[R], block: SecuredRequest[R] => Future[Result]) = {
-      implicit val req = request
+    def invokeBlock[B](request: Request[B], block: SecuredRequest[B] => Future[Result]) = {
+      val b = (r: SecuredRequest[B]) => block(r).map(r => HandlerResult(r))
+      (authorize match {
+        case Some(a) => SecuredRequestHandler(a)(request)(b)
+        case None => SecuredRequestHandler(request)(b)
+      }).map(_.result).recoverWith(exceptionHandler(request))
+    }
+  }
+
+  /**
+   * A secured action.
+   *
+   * If the user is not authenticated or not authorized, the request is forwarded to
+   * the [[com.mohiva.play.silhouette.api.Silhouette.notAuthenticated]] or
+   * the [[com.mohiva.play.silhouette.api.Silhouette.notAuthorized]] methods.
+   *
+   * If these methods are not implemented, then
+   * the [[com.mohiva.play.silhouette.api.SecuredSettings.onNotAuthenticated]] or
+   * the [[com.mohiva.play.silhouette.api.SecuredSettings.onNotAuthorized]] methods
+   * will be called as fallback.
+   *
+   * If the [[com.mohiva.play.silhouette.api.SecuredSettings]] trait isn't implemented,
+   * a default message will be displayed.
+   */
+  object SecuredAction extends SecuredActionBuilder {
+
+    /**
+     * Creates a secured action.
+     *
+     * @return A secured action builder.
+     */
+    def apply() = new SecuredActionBuilder(None)
+
+    /**
+     * Creates a secured action.
+     *
+     * @param authorize An Authorize object that checks if the user is authorized to invoke the action.
+     * @return A secured action builder.
+     */
+    def apply(authorize: Authorization[I]) = new SecuredActionBuilder(Some(authorize))
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Implementations for user aware actions and requests
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  /**
+   * A request that adds the identity and the authenticator for the current call.
+   *
+   * @param identity Some identity implementation if authentication was successful, None otherwise.
+   * @param authenticator Some authenticator implementation if authentication was successful, None otherwise.
+   * @param request The current request.
+   * @tparam B The type of the request body.
+   */
+  case class UserAwareRequest[B](identity: Option[I], authenticator: Option[A], request: Request[B]) extends WrappedRequest(request)
+
+  /**
+   * An handler that adds the current user in the request if it's available.
+   */
+  object UserAwareRequestHandler extends RequestHandlerBuilder[UserAwareRequest] {
+
+    /**
+     * Invokes the block.
+     *
+     * @param block The block of code to invoke.
+     * @param request The current request.
+     * @tparam B The type of the request body.
+     * @tparam T The type of the data included in the handler result.
+     * @return A handler result.
+     */
+    protected def invokeBlock[B, T](block: UserAwareRequest[B] => Future[HandlerResult[T]])(implicit request: Request[B]) = {
       env.authenticatorService.retrieve.flatMap {
-        // A valid authenticator was found. We try to find the identity for it.
+        // An valid authenticator was found. We try to find the identity for it.
         case Some(authenticator) if authenticator.isValid =>
-          env.identityService.retrieve(authenticator.loginInfo).flatMap {
-            // A user is both authenticated and authorized. The request will be granted.
-            case Some(identity) if authorize.isEmpty || authorize.get.isAuthorized(identity) =>
-              env.eventBus.publish(AuthenticatedEvent(identity, req, request2lang))
-              handleResult(authenticator, a => block(SecuredRequest(identity, a, request)))
-            // A user is authenticated but not authorized. The request will be forbidden.
-            case Some(identity) =>
-              env.eventBus.publish(NotAuthorizedEvent(identity, req, request2lang))
-              handleResult(authenticator, _ => handleNotAuthorized(request))
-            // No user was found. The request will ask for authentication and the authenticator will be discarded.
-            case None =>
-              env.eventBus.publish(NotAuthenticatedEvent(req, request2lang))
-              env.authenticatorService.discard(authenticator, handleNotAuthenticated(request))
+          env.identityService.retrieve(authenticator.loginInfo).flatMap { identity =>
+            handleBlock(authenticator, a => block(UserAwareRequest(identity, Some(a), request)))
           }
-        // An invalid authenticator was found. The request will ask for authentication and the authenticator will be discarded.
+        // An invalid authenticator was found. The authenticator will be discarded.
         case Some(authenticator) if !authenticator.isValid =>
-          env.eventBus.publish(NotAuthenticatedEvent(req, request2lang))
-          env.authenticatorService.discard(authenticator, handleNotAuthenticated(request))
-        // No authenticator was found. The request will ask for authentication.
+          block(UserAwareRequest(None, None, request)).flatMap {
+            case hr @ HandlerResult(pr, d) =>
+              env.authenticatorService.discard(authenticator, Future.successful(pr)).map(r => hr.copy(pr))
+          }
+        // No authenticator was found.
         case None =>
-          env.eventBus.publish(NotAuthenticatedEvent(request, request2lang))
-          handleNotAuthenticated(request)
-      }.recoverWith(exceptionHandler)
+          block(UserAwareRequest(None, None, request))
+      }
     }
   }
 
   /**
    * An action that adds the current user in the request if it's available.
    */
-  object UserAwareAction extends ActionBuilder[RequestWithUser] {
+  object UserAwareAction extends ActionBuilder[UserAwareRequest] {
 
     /**
-     * Invoke the block.
+     * Invokes the block.
      *
-     * @param request The request.
+     * @param request The current request.
      * @param block The block of code to invoke.
+     * @tparam B The type of the request body.
      * @return The result to send to the client.
      */
-    def invokeBlock[R](request: Request[R], block: RequestWithUser[R] => Future[Result]) = {
-      implicit val req = request
-      env.authenticatorService.retrieve.flatMap {
-        // An valid authenticator was found. We try to find the identity for it.
-        case Some(authenticator) if authenticator.isValid =>
-          env.identityService.retrieve(authenticator.loginInfo).flatMap { identity =>
-            handleResult(authenticator, a => block(RequestWithUser(identity, Some(a), request)))
-          }
-        // An invalid authenticator was found. The authenticator will be discarded.
-        case Some(authenticator) if !authenticator.isValid =>
-          env.authenticatorService.discard(authenticator, block(RequestWithUser(None, None, request)))
-        // No authenticator was found.
-        case None =>
-          block(RequestWithUser(None, None, request))
-      }.recoverWith(exceptionHandler)
+    def invokeBlock[B](request: Request[B], block: UserAwareRequest[B] => Future[Result]) = {
+      UserAwareRequestHandler(request) { r =>
+        block(r).map(r => HandlerResult(r))
+      }.map(_.result).recoverWith(exceptionHandler(request))
     }
   }
 }
