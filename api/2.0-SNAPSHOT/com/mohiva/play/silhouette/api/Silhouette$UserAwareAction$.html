@@ -43,14 +43,14 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">UserAwareAction</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionBuilder" class="extype" target="_top">ActionBuilder</a>[<a href="Silhouette$RequestWithUser.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestWithUser">RequestWithUser</a>]</span>
+        <span class="name">UserAwareAction</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionBuilder" class="extype" target="_top">ActionBuilder</a>[<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An action that adds the current user in the request if it's available.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionBuilder" class="extype" target="_top">ActionBuilder</a>[<a href="Silhouette$RequestWithUser.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestWithUser">RequestWithUser</a>], <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionFunction" class="extype" target="_top">ActionFunction</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>, <a href="Silhouette$RequestWithUser.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestWithUser">RequestWithUser</a>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionBuilder" class="extype" target="_top">ActionBuilder</a>[<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>], <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionFunction" class="extype" target="_top">ActionFunction</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>, <a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -147,14 +147,14 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="play.api.mvc.ActionBuilder#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="andThen[Q[_]](other:play.api.mvc.ActionFunction[R,Q]):play.api.mvc.ActionBuilder[Q]"></a>
-      <a id="andThen[Q[_]](ActionFunction[RequestWithUser,Q]):ActionBuilder[Q]"></a>
+      <a id="andThen[Q[_]](ActionFunction[UserAwareRequest,Q]):ActionBuilder[Q]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">andThen</span><span class="tparams">[<span name="Q">Q<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="other">other: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionFunction" class="extype" target="_top">ActionFunction</a>[<a href="Silhouette$RequestWithUser.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestWithUser">RequestWithUser</a>, <span class="extype" name="play.api.mvc.ActionBuilder.andThen.Q">Q</span>]</span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionBuilder" class="extype" target="_top">ActionBuilder</a>[<span class="extype" name="play.api.mvc.ActionBuilder.andThen.Q">Q</span>]</span>
+        <span class="name">andThen</span><span class="tparams">[<span name="Q">Q<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="other">other: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionFunction" class="extype" target="_top">ActionFunction</a>[<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>, <span class="extype" name="play.api.mvc.ActionBuilder.andThen.Q">Q</span>]</span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionBuilder" class="extype" target="_top">ActionBuilder</a>[<span class="extype" name="play.api.mvc.ActionBuilder.andThen.Q">Q</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareAction$@andThen[Q[_]](other:play.api.mvc.ActionFunction[R,Q]):play.api.mvc.ActionBuilder[Q]" title="Permalink" target="_top">
@@ -181,14 +181,14 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ActionBuilder</dd></dl></div>
     </li><li name="play.api.mvc.ActionBuilder#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="apply(block:R[play.api.mvc.AnyContent]=&gt;play.api.mvc.Result):play.api.mvc.Action[play.api.mvc.AnyContent]"></a>
-      <a id="apply((RequestWithUser[AnyContent])⇒Result):Action[AnyContent]"></a>
+      <a id="apply((UserAwareRequest[AnyContent])⇒Result):Action[AnyContent]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="block">block: (<a href="Silhouette$RequestWithUser.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestWithUser">RequestWithUser</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.AnyContent" class="extype" target="_top">AnyContent</a>]) ⇒ <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>)</span><span class="result">: <span class="extype" name="play.api.mvc.Action">Action</span>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.AnyContent" class="extype" target="_top">AnyContent</a>]</span>
+        <span class="name">apply</span><span class="params">(<span name="block">block: (<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.AnyContent" class="extype" target="_top">AnyContent</a>]) ⇒ <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>)</span><span class="result">: <span class="extype" name="play.api.mvc.Action">Action</span>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.AnyContent" class="extype" target="_top">AnyContent</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareAction$@apply(block:R[play.api.mvc.AnyContent]=&gt;play.api.mvc.Result):play.api.mvc.Action[play.api.mvc.AnyContent]" title="Permalink" target="_top">
@@ -198,14 +198,14 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ActionBuilder</dd></dl></div>
     </li><li name="play.api.mvc.ActionBuilder#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="apply[A](bodyParser:play.api.mvc.BodyParser[A])(block:R[A]=&gt;play.api.mvc.Result):play.api.mvc.Action[A]"></a>
-      <a id="apply[A](BodyParser[A])((RequestWithUser[A])⇒Result):Action[A]"></a>
+      <a id="apply[A](BodyParser[A])((UserAwareRequest[A])⇒Result):Action[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="bodyParser">bodyParser: <span class="extype" name="play.api.mvc.BodyParser">BodyParser</span>[<span class="extype" name="play.api.mvc.ActionBuilder.apply.A">A</span>]</span>)</span><span class="params">(<span name="block">block: (<a href="Silhouette$RequestWithUser.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestWithUser">RequestWithUser</a>[<span class="extype" name="play.api.mvc.ActionBuilder.apply.A">A</span>]) ⇒ <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>)</span><span class="result">: <span class="extype" name="play.api.mvc.Action">Action</span>[<span class="extype" name="play.api.mvc.ActionBuilder.apply.A">A</span>]</span>
+        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="bodyParser">bodyParser: <span class="extype" name="play.api.mvc.BodyParser">BodyParser</span>[<span class="extype" name="play.api.mvc.ActionBuilder.apply.A">A</span>]</span>)</span><span class="params">(<span name="block">block: (<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>[<span class="extype" name="play.api.mvc.ActionBuilder.apply.A">A</span>]) ⇒ <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>)</span><span class="result">: <span class="extype" name="play.api.mvc.Action">Action</span>[<span class="extype" name="play.api.mvc.ActionBuilder.apply.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareAction$@apply[A](bodyParser:play.api.mvc.BodyParser[A])(block:R[A]=&gt;play.api.mvc.Result):play.api.mvc.Action[A]" title="Permalink" target="_top">
@@ -232,14 +232,14 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="play.api.mvc.ActionBuilder#async" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="async[A&lt;:&lt;?&gt;](bodyParser:&lt;?&gt;)(block:&lt;?&gt;):play.api.mvc.Action[A]"></a>
-      <a id="async[A](BodyParser[A])((RequestWithUser[A])⇒Future[Result]):Action[A]"></a>
+      <a id="async[A](BodyParser[A])((UserAwareRequest[A])⇒Future[Result]):Action[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">async</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="bodyParser">bodyParser: <span class="extype" name="play.api.mvc.BodyParser">BodyParser</span>[<span class="extype" name="play.api.mvc.ActionBuilder.async.A">A</span>]</span>)</span><span class="params">(<span name="block">block: (<a href="Silhouette$RequestWithUser.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestWithUser">RequestWithUser</a>[<span class="extype" name="play.api.mvc.ActionBuilder.async.A">A</span>]) ⇒ <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>)</span><span class="result">: <span class="extype" name="play.api.mvc.Action">Action</span>[<span class="extype" name="play.api.mvc.ActionBuilder.async.A">A</span>]</span>
+        <span class="name">async</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="bodyParser">bodyParser: <span class="extype" name="play.api.mvc.BodyParser">BodyParser</span>[<span class="extype" name="play.api.mvc.ActionBuilder.async.A">A</span>]</span>)</span><span class="params">(<span name="block">block: (<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>[<span class="extype" name="play.api.mvc.ActionBuilder.async.A">A</span>]) ⇒ <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>)</span><span class="result">: <span class="extype" name="play.api.mvc.Action">Action</span>[<span class="extype" name="play.api.mvc.ActionBuilder.async.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareAction$@async[A](bodyParser:play.api.mvc.BodyParser[A])(block:R[A]=&gt;scala.concurrent.Future[play.api.mvc.Result]):play.api.mvc.Action[A]" title="Permalink" target="_top">
@@ -249,14 +249,14 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ActionBuilder</dd></dl></div>
     </li><li name="play.api.mvc.ActionBuilder#async" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="async(block:&lt;?&gt;):play.api.mvc.Action[play.api.mvc.AnyContent]"></a>
-      <a id="async((RequestWithUser[AnyContent])⇒Future[Result]):Action[AnyContent]"></a>
+      <a id="async((UserAwareRequest[AnyContent])⇒Future[Result]):Action[AnyContent]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">async</span><span class="params">(<span name="block">block: (<a href="Silhouette$RequestWithUser.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestWithUser">RequestWithUser</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.AnyContent" class="extype" target="_top">AnyContent</a>]) ⇒ <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>)</span><span class="result">: <span class="extype" name="play.api.mvc.Action">Action</span>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.AnyContent" class="extype" target="_top">AnyContent</a>]</span>
+        <span class="name">async</span><span class="params">(<span name="block">block: (<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.AnyContent" class="extype" target="_top">AnyContent</a>]) ⇒ <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>)</span><span class="result">: <span class="extype" name="play.api.mvc.Action">Action</span>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.AnyContent" class="extype" target="_top">AnyContent</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareAction$@async(block:R[play.api.mvc.AnyContent]=&gt;scala.concurrent.Future[play.api.mvc.Result]):play.api.mvc.Action[play.api.mvc.AnyContent]" title="Permalink" target="_top">
@@ -306,14 +306,14 @@
         </dd></dl></div>
     </li><li name="play.api.mvc.ActionFunction#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="compose(other:&lt;?&gt;):play.api.mvc.ActionBuilder[P]"></a>
-      <a id="compose(ActionBuilder[Request]):ActionBuilder[RequestWithUser]"></a>
+      <a id="compose(ActionBuilder[Request]):ActionBuilder[UserAwareRequest]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="params">(<span name="other">other: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionBuilder" class="extype" target="_top">ActionBuilder</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>]</span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionBuilder" class="extype" target="_top">ActionBuilder</a>[<a href="Silhouette$RequestWithUser.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestWithUser">RequestWithUser</a>]</span>
+        <span class="name">compose</span><span class="params">(<span name="other">other: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionBuilder" class="extype" target="_top">ActionBuilder</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>]</span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionBuilder" class="extype" target="_top">ActionBuilder</a>[<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareAction$@compose(other:play.api.mvc.ActionBuilder[R]):play.api.mvc.ActionBuilder[P]" title="Permalink" target="_top">
@@ -323,14 +323,14 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ActionFunction</dd></dl></div>
     </li><li name="play.api.mvc.ActionFunction#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="compose[Q&lt;:&lt;?&gt;](other:&lt;?&gt;):play.api.mvc.ActionFunction[Q,P]"></a>
-      <a id="compose[Q[_]](ActionFunction[Q,Request]):ActionFunction[Q,RequestWithUser]"></a>
+      <a id="compose[Q[_]](ActionFunction[Q,Request]):ActionFunction[Q,UserAwareRequest]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="Q">Q<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="other">other: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionFunction" class="extype" target="_top">ActionFunction</a>[<span class="extype" name="play.api.mvc.ActionFunction.compose.Q">Q</span>, <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>]</span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionFunction" class="extype" target="_top">ActionFunction</a>[<span class="extype" name="play.api.mvc.ActionFunction.compose.Q">Q</span>, <a href="Silhouette$RequestWithUser.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestWithUser">RequestWithUser</a>]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="Q">Q<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="other">other: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionFunction" class="extype" target="_top">ActionFunction</a>[<span class="extype" name="play.api.mvc.ActionFunction.compose.Q">Q</span>, <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>]</span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionFunction" class="extype" target="_top">ActionFunction</a>[<span class="extype" name="play.api.mvc.ActionFunction.compose.Q">Q</span>, <a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareAction$@compose[Q[_]](other:play.api.mvc.ActionFunction[Q,R]):play.api.mvc.ActionFunction[Q,P]" title="Permalink" target="_top">
@@ -481,23 +481,23 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.Silhouette.UserAwareAction#invokeBlock" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="invokeBlock[R](request:play.api.mvc.Request[R],block:Silhouette.this.RequestWithUser[R]=&gt;scala.concurrent.Future[play.api.mvc.Result]):scala.concurrent.Future[play.api.mvc.Result]"></a>
-      <a id="invokeBlock[R](Request[R],(RequestWithUser[R])⇒Future[Result]):Future[Result]"></a>
+      <a id="invokeBlock[B](request:play.api.mvc.Request[B],block:Silhouette.this.UserAwareRequest[B]=&gt;scala.concurrent.Future[play.api.mvc.Result]):scala.concurrent.Future[play.api.mvc.Result]"></a>
+      <a id="invokeBlock[B](Request[B],(UserAwareRequest[B])⇒Future[Result]):Future[Result]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">invokeBlock</span><span class="tparams">[<span name="R">R</span>]</span><span class="params">(<span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareAction.invokeBlock.R">R</span>]</span>, <span name="block">block: (<a href="Silhouette$RequestWithUser.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestWithUser">RequestWithUser</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareAction.invokeBlock.R">R</span>]) ⇒ <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>
+        <span class="name">invokeBlock</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareAction.invokeBlock.B">B</span>]</span>, <span name="block">block: (<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareAction.invokeBlock.B">B</span>]) ⇒ <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareAction$@invokeBlock[R](request:play.api.mvc.Request[R],block:Silhouette.this.RequestWithUser[R]=&gt;scala.concurrent.Future[play.api.mvc.Result]):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareAction$@invokeBlock[B](request:play.api.mvc.Request[B],block:Silhouette.this.UserAwareRequest[B]=&gt;scala.concurrent.Future[play.api.mvc.Result]):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Invoke the block.</p><div class="fullcomment"><div class="comment cmt"><p>Invoke the block.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request.</p></dd><dt class="param">block</dt><dd class="cmt"><p>The block of code to invoke.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client.
+      <p class="shortcomment cmt">Invokes the block.</p><div class="fullcomment"><div class="comment cmt"><p>Invokes the block.
+</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd><dt class="param">block</dt><dd class="cmt"><p>The block of code to invoke.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareAction">UserAwareAction</a> → ActionFunction</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -680,9 +680,9 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="play.api.mvc.ActionBuilder">
-              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionBuilder" class="extype" target="_top">ActionBuilder</a>[<a href="Silhouette$RequestWithUser.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestWithUser">RequestWithUser</a>]</h3>
+              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionBuilder" class="extype" target="_top">ActionBuilder</a>[<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>]</h3>
             </div><div class="parent" name="play.api.mvc.ActionFunction">
-              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionFunction" class="extype" target="_top">ActionFunction</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>, <a href="Silhouette$RequestWithUser.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestWithUser">RequestWithUser</a>]</h3>
+              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionFunction" class="extype" target="_top">ActionFunction</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>, <a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

@@ -509,23 +509,23 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.Silhouette.SecuredActionBuilder#invokeBlock" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="invokeBlock[R](request:play.api.mvc.Request[R],block:Silhouette.this.SecuredRequest[R]=&gt;scala.concurrent.Future[play.api.mvc.Result]):scala.concurrent.Future[play.api.mvc.Result]"></a>
-      <a id="invokeBlock[R](Request[R],(SecuredRequest[R])⇒Future[Result]):Future[Result]"></a>
+      <a id="invokeBlock[B](request:play.api.mvc.Request[B],block:Silhouette.this.SecuredRequest[B]=&gt;scala.concurrent.Future[play.api.mvc.Result]):scala.concurrent.Future[play.api.mvc.Result]"></a>
+      <a id="invokeBlock[B](Request[B],(SecuredRequest[B])⇒Future[Result]):Future[Result]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">invokeBlock</span><span class="tparams">[<span name="R">R</span>]</span><span class="params">(<span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredActionBuilder.invokeBlock.R">R</span>]</span>, <span name="block">block: (<a href="Silhouette$SecuredRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest">SecuredRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredActionBuilder.invokeBlock.R">R</span>]) ⇒ <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>
+        <span class="name">invokeBlock</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredActionBuilder.invokeBlock.B">B</span>]</span>, <span name="block">block: (<a href="Silhouette$SecuredRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest">SecuredRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredActionBuilder.invokeBlock.B">B</span>]) ⇒ <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$SecuredActionBuilder@invokeBlock[R](request:play.api.mvc.Request[R],block:Silhouette.this.SecuredRequest[R]=&gt;scala.concurrent.Future[play.api.mvc.Result]):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$SecuredActionBuilder@invokeBlock[B](request:play.api.mvc.Request[B],block:Silhouette.this.SecuredRequest[B]=&gt;scala.concurrent.Future[play.api.mvc.Result]):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Invokes the block.</p><div class="fullcomment"><div class="comment cmt"><p>Invokes the block.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request.</p></dd><dt class="param">block</dt><dd class="cmt"><p>The block of code to invoke.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client.
+</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd><dt class="param">block</dt><dd class="cmt"><p>The block of code to invoke.</p></dd><dt>returns</dt><dd class="cmt"><p>A handler result.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredActionBuilder">SecuredActionBuilder</a> → ActionFunction</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>

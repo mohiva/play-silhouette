@@ -97,23 +97,42 @@ if available.</p><pre><span class="kw">class</span> MyController(env: Environmen
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.api.Silhouette.RequestWithUser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="RequestWithUser[R]extendsWrappedRequest[R]withProductwithSerializable"></a>
-      <a id="RequestWithUser[R]:RequestWithUser[R]"></a>
+              <ol><li name="com.mohiva.play.silhouette.api.Silhouette.HandlerResult" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="HandlerResult[+T]extendsProductwithSerializable"></a>
+      <a id="HandlerResult[+T]:HandlerResult[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Silhouette$RequestWithUser.html"><span class="name">RequestWithUser</span></a><span class="tparams">[<span name="R">R</span>]</span><span class="params">(<span name="identity">identity: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.I">I</span>]</span>, <span name="authenticator">authenticator: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.A">A</span>]</span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestWithUser.R">R</span>]</span>)</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.WrappedRequest" class="extype" target="_top">WrappedRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestWithUser.R">R</span>] with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Silhouette$HandlerResult.html"><span class="name">HandlerResult</span></a><span class="tparams">[<span name="T">+T</span>]</span><span class="params">(<span name="result">result: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>, <span name="data">data: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.HandlerResult.T">T</span>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@RequestWithUser[R]extendsWrappedRequest[R]withProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@HandlerResult[+T]extendsProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">A request that adds the identity and the authenticator for the current call.</p>
+      <p class="shortcomment cmt">A result which can transport a result as also additional data through the request handler process.</p><div class="fullcomment"><div class="comment cmt"><p>A result which can transport a result as also additional data through the request handler process.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the data.
+</p></dd><dt class="param">result</dt><dd class="cmt"><p>A Play Framework result.</p></dd><dt class="param">data</dt><dd class="cmt"><p>Additional data to transport in the result.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="RequestHandlerBuilder[+R[_]]extendsAnyRef"></a>
+      <a id="RequestHandlerBuilder[+R[_]]:RequestHandlerBuilder[R]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Silhouette$RequestHandlerBuilder.html"><span class="name">RequestHandlerBuilder</span></a><span class="tparams">[<span name="R">+R<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@RequestHandlerBuilder[+R[_]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A builder for building request handlers.</p>
     </li><li name="com.mohiva.play.silhouette.api.Silhouette.SecuredActionBuilder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="SecuredActionBuilderextendsActionBuilder[Silhouette.this.SecuredRequest]"></a>
       <a id="SecuredActionBuilder:SecuredActionBuilder"></a>
@@ -136,23 +155,42 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
 <a href="http://danielirvine.com/blog/2011/07/18/understanding-403-forbidden/" target="_blank">Understanding 403 Forbidden</a>,
 <a href="http://stackoverflow.com/questions/3297048/403-forbidden-vs-401-unauthorized-http-responses/6937030#6937030" target="_blank">403 Forbidden vs 401 Unauthorized HTTP responses</a>.
 </p></div></div>
-    </li><li name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SecuredRequest[R]extendsWrappedRequest[R]withProductwithSerializable"></a>
-      <a id="SecuredRequest[R]:SecuredRequest[R]"></a>
+    </li><li name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SecuredRequest[B]extendsWrappedRequest[B]withProductwithSerializable"></a>
+      <a id="SecuredRequest[B]:SecuredRequest[B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Silhouette$SecuredRequest.html"><span class="name">SecuredRequest</span></a><span class="tparams">[<span name="R">R</span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.I">I</span></span>, <span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.A">A</span></span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.R">R</span>]</span>)</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.WrappedRequest" class="extype" target="_top">WrappedRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.R">R</span>] with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Silhouette$SecuredRequest.html"><span class="name">SecuredRequest</span></a><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.I">I</span></span>, <span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.A">A</span></span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.B">B</span>]</span>)</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.WrappedRequest" class="extype" target="_top">WrappedRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.B">B</span>] with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@SecuredRequest[R]extendsWrappedRequest[R]withProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@SecuredRequest[B]extendsWrappedRequest[B]withProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">A request that only allows access if an identity is authorized.</p>
+      <p class="shortcomment cmt">A request that only allows access if an identity is authorized.</p><div class="fullcomment"><div class="comment cmt"><p>A request that only allows access if an identity is authorized.
+</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.
+</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The identity implementation.</p></dd><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator implementation.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequestHandlerBuilder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SecuredRequestHandlerBuilderextendsSilhouette.this.RequestHandlerBuilder[Silhouette.this.SecuredRequest]"></a>
+      <a id="SecuredRequestHandlerBuilder:SecuredRequestHandlerBuilder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Silhouette$SecuredRequestHandlerBuilder.html"><span class="name">SecuredRequestHandlerBuilder</span></a><span class="result"> extends <a href="Silhouette$RequestHandlerBuilder.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder">RequestHandlerBuilder</a>[<a href="Silhouette$SecuredRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest">SecuredRequest</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@SecuredRequestHandlerBuilderextendsSilhouette.this.RequestHandlerBuilder[Silhouette.this.SecuredRequest]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Handles secured requests.</p>
     </li><li name="play.api.mvc.Results.Status" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="StatusextendsResult"></a>
       <a id="Status:Status"></a>
@@ -170,6 +208,25 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Results</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="UserAwareRequest[B]extendsWrappedRequest[B]withProductwithSerializable"></a>
+      <a id="UserAwareRequest[B]:UserAwareRequest[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Silhouette$UserAwareRequest.html"><span class="name">UserAwareRequest</span></a><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="identity">identity: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.I">I</span>]</span>, <span name="authenticator">authenticator: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.A">A</span>]</span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest.B">B</span>]</span>)</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.WrappedRequest" class="extype" target="_top">WrappedRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest.B">B</span>] with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@UserAwareRequest[B]extendsWrappedRequest[B]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A request that adds the identity and the authenticator for the current call.</p><div class="fullcomment"><div class="comment cmt"><p>A request that adds the identity and the authenticator for the current call.
+</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.
+</p></dd><dt class="param">identity</dt><dd class="cmt"><p>Some identity implementation if authentication was successful, None otherwise.</p></dd><dt class="param">authenticator</dt><dd class="cmt"><p>Some authenticator implementation if authentication was successful, None otherwise.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -2603,6 +2660,23 @@ the <a href="SecuredSettings.html#onNotAuthorized(request:play.api.mvc.RequestHe
 will be called as fallback.</p><p>If the <a href="SecuredSettings.html" class="extype" name="com.mohiva.play.silhouette.api.SecuredSettings">com.mohiva.play.silhouette.api.SecuredSettings</a> trait isn't implemented,
 a default message will be displayed.
 </p></div></div>
+    </li><li name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequestHandler" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SecuredRequestHandler"></a>
+      <a id="SecuredRequestHandler:SecuredRequestHandler"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Silhouette$SecuredRequestHandler$.html"><span class="name">SecuredRequestHandler</span></a><span class="result"> extends <a href="Silhouette$SecuredRequestHandlerBuilder.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequestHandlerBuilder">SecuredRequestHandlerBuilder</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@SecuredRequestHandler" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A secured request handler.</p>
     </li><li name="play.api.mvc.Results#SeeOther" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="SeeOther(url:String):play.api.mvc.Result"></a>
       <a id="SeeOther(String):Result"></a>
@@ -2986,7 +3060,7 @@ a default message will be displayed.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Silhouette$UserAwareAction$.html"><span class="name">UserAwareAction</span></a><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionBuilder" class="extype" target="_top">ActionBuilder</a>[<a href="Silhouette$RequestWithUser.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestWithUser">RequestWithUser</a>]</span>
+        <a href="Silhouette$UserAwareAction$.html"><span class="name">UserAwareAction</span></a><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionBuilder" class="extype" target="_top">ActionBuilder</a>[<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@UserAwareAction" title="Permalink" target="_top">
@@ -2994,6 +3068,23 @@ a default message will be displayed.
       </a>
     </span>
       <p class="shortcomment cmt">An action that adds the current user in the request if it's available.</p>
+    </li><li name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequestHandler" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UserAwareRequestHandler"></a>
+      <a id="UserAwareRequestHandler:UserAwareRequestHandler"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Silhouette$UserAwareRequestHandler$.html"><span class="name">UserAwareRequestHandler</span></a><span class="result"> extends <a href="Silhouette$RequestHandlerBuilder.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder">RequestHandlerBuilder</a>[<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@UserAwareRequestHandler" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An handler that adds the current user in the request if it's available.</p>
     </li><li name="play.api.http.HeaderNames#VARY" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="VARY:String"></a>
       <a id="VARY:String"></a>

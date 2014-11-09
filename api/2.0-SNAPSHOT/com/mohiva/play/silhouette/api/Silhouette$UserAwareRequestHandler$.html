@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Provider - com.mohiva.play.silhouette.api.Provider</title>
-          <meta name="description" content="Provider - com.mohiva.play.silhouette.api.Provider" />
-          <meta name="keywords" content="Provider com.mohiva.play.silhouette.api.Provider" />
+          <title>UserAwareRequestHandler - com.mohiva.play.silhouette.api.Silhouette.UserAwareRequestHandler</title>
+          <meta name="description" content="UserAwareRequestHandler - com.mohiva.play.silhouette.api.Silhouette.UserAwareRequestHandler" />
+          <meta name="keywords" content="UserAwareRequestHandler com.mohiva.play.silhouette.api.Silhouette.UserAwareRequestHandler" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../index.html';
-            var hash = 'com.mohiva.play.silhouette.api.Provider';
+            var hash = 'com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -26,12 +26,12 @@
    	  </script>
     
         </head>
-        <body class="type">
+        <body class="value">
       <div id="definition">
-        <img src="../../../../../lib/trait_big.png" />
-        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.api">api</a></p>
-        <h1>Provider</h1> <span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider" title="Permalink" target="_top">
+        <img src="../../../../../lib/object_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.api">api</a>.<a href="Silhouette.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette">Silhouette</a></p>
+        <h1>UserAwareRequestHandler</h1> <span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -40,21 +40,18 @@
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Provider</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">UserAwareRequestHandler</span><span class="result"> extends <a href="Silhouette$RequestHandlerBuilder.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder">RequestHandlerBuilder</a>[<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A marker interface for all providers.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An handler that adds the current user in the request if it's available.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
-        </div><div class="toggleContainer block">
-            <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="../impl/providers/CredentialsProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CredentialsProvider">CredentialsProvider</a>, <a href="../impl/providers/oauth2/FacebookProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.FacebookProvider">FacebookProvider</a>, <a href="../impl/providers/oauth2/FoursquareProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.FoursquareProvider">FoursquareProvider</a>, <a href="../impl/providers/oauth2/GitHubProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.GitHubProvider">GitHubProvider</a>, <a href="../impl/providers/oauth2/GoogleProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.GoogleProvider">GoogleProvider</a>, <a href="../impl/providers/oauth2/InstagramProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.InstagramProvider">InstagramProvider</a>, <a href="../impl/providers/oauth2/LinkedInProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.LinkedInProvider">LinkedInProvider</a>, <a href="../impl/providers/oauth1/LinkedInProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth1.LinkedInProvider">LinkedInProvider</a>, <a href="../impl/providers/OAuth1Provider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth1Provider">OAuth1Provider</a>, <a href="../impl/providers/OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider">OAuth2Provider</a>, <a href="../impl/providers/SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a>, <a href="../impl/providers/oauth1/TwitterProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider">TwitterProvider</a>, <a href="../impl/providers/oauth2/VKProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.VKProvider">VKProvider</a>, <a href="../impl/providers/oauth1/XingProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth1.XingProvider">XingProvider</a></div>
-          </div></div>
+          <div class="superTypes hiddenContent"><a href="Silhouette$RequestHandlerBuilder.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder">RequestHandlerBuilder</a>[<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -71,7 +68,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.api.Provider"><span>Provider</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequestHandler"><span>UserAwareRequestHandler</span></li><li class="in" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder"><span>RequestHandlerBuilder</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -93,32 +90,10 @@
 
         
 
-        <div id="values" class="values members">
-              <h3>Abstract Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.api.Provider#id" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="id:String"></a>
-      <a id="id:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">id</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@id:String" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Gets the provider ID.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the provider ID.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The provider ID.
-</p></dd></dl></div>
-    </li></ol>
-            </div>
+        
 
         <div id="values" class="values members">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
@@ -131,7 +106,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -148,7 +123,7 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@##():Int" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@##():Int" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -165,11 +140,49 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[B,T](request:play.api.mvc.Request[B])(block:R[B]=&gt;scala.concurrent.Future[Silhouette.this.HandlerResult[T]]):scala.concurrent.Future[Silhouette.this.HandlerResult[T]]"></a>
+      <a id="apply[B,T](Request[B])((UserAwareRequest[B])⇒Future[HandlerResult[T]]):Future[HandlerResult[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="B">B</span>, <span name="T">T</span>]</span><span class="params">(<span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder.apply.B">B</span>]</span>)</span><span class="params">(<span name="block">block: (<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder.apply.B">B</span>]) ⇒ <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="Silhouette$HandlerResult.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.HandlerResult">HandlerResult</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder.apply.T">T</span>]]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="Silhouette$HandlerResult.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.HandlerResult">HandlerResult</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder.apply.T">T</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@apply[B,T](request:play.api.mvc.Request[B])(block:R[B]=&gt;scala.concurrent.Future[Silhouette.this.HandlerResult[T]]):scala.concurrent.Future[Silhouette.this.HandlerResult[T]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Constructs a request handler with the content of the given request.</p><div class="fullcomment"><div class="comment cmt"><p>Constructs a request handler with the content of the given request.
+</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="tparam">T</dt><dd class="cmt"><p>The type of the data included in the handler result.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd><dt class="param">block</dt><dd class="cmt"><p>The block of code to invoke.</p></dd><dt>returns</dt><dd class="cmt"><p>A handler result.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Silhouette$RequestHandlerBuilder.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder">RequestHandlerBuilder</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[T](block:R[play.api.mvc.AnyContent]=&gt;scala.concurrent.Future[Silhouette.this.HandlerResult[T]])(implicitrequest:play.api.mvc.Request[play.api.mvc.AnyContent]):scala.concurrent.Future[Silhouette.this.HandlerResult[T]]"></a>
+      <a id="apply[T]((UserAwareRequest[AnyContent])⇒Future[HandlerResult[T]])(Request[AnyContent]):Future[HandlerResult[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="block">block: (<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.AnyContent" class="extype" target="_top">AnyContent</a>]) ⇒ <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="Silhouette$HandlerResult.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.HandlerResult">HandlerResult</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder.apply.T">T</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.AnyContent" class="extype" target="_top">AnyContent</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="Silhouette$HandlerResult.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.HandlerResult">HandlerResult</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder.apply.T">T</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@apply[T](block:R[play.api.mvc.AnyContent]=&gt;scala.concurrent.Future[Silhouette.this.HandlerResult[T]])(implicitrequest:play.api.mvc.Request[play.api.mvc.AnyContent]):scala.concurrent.Future[Silhouette.this.HandlerResult[T]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Constructs a request handler with default content.</p><div class="fullcomment"><div class="comment cmt"><p>Constructs a request handler with default content.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the data included in the handler result.</p></dd><dt class="param">block</dt><dd class="cmt"><p>The block of code to invoke.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd><dt>returns</dt><dd class="cmt"><p>A handler result.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Silhouette$RequestHandlerBuilder.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder">RequestHandlerBuilder</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -182,7 +195,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -199,7 +212,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@clone():Object" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@clone():Object" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -222,7 +235,7 @@
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -239,7 +252,7 @@
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -256,7 +269,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -279,11 +292,30 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder#handleBlock" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="handleBlock[T](authenticator:A,block:A=&gt;scala.concurrent.Future[Silhouette.this.HandlerResult[T]])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Silhouette.this.HandlerResult[T]]"></a>
+      <a id="handleBlock[T](A,(A)⇒Future[HandlerResult[T]])(RequestHeader):Future[HandlerResult[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">handleBlock</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.A">A</span></span>, <span name="block">block: (<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="Silhouette$HandlerResult.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.HandlerResult">HandlerResult</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder.handleBlock.T">T</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="Silhouette$HandlerResult.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.HandlerResult">HandlerResult</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder.handleBlock.T">T</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@handleBlock[T](authenticator:A,block:A=&gt;scala.concurrent.Future[Silhouette.this.HandlerResult[T]])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Silhouette.this.HandlerResult[T]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Handles a block for an authenticator.</p><div class="fullcomment"><div class="comment cmt"><p>Handles a block for an authenticator.
+</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to handle.</p></dd><dt class="param">block</dt><dd class="cmt"><p>The block to handle with the authenticator.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request header.</p></dd><dt>returns</dt><dd class="cmt"><p>A handler result.
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Silhouette$RequestHandlerBuilder.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder">RequestHandlerBuilder</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -296,11 +328,30 @@
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@hashCode():Int" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequestHandler#invokeBlock" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="invokeBlock[B,T](block:Silhouette.this.UserAwareRequest[B]=&gt;scala.concurrent.Future[Silhouette.this.HandlerResult[T]])(implicitrequest:play.api.mvc.Request[B]):scala.concurrent.Future[Silhouette.this.HandlerResult[T]]"></a>
+      <a id="invokeBlock[B,T]((UserAwareRequest[B])⇒Future[HandlerResult[T]])(Request[B]):Future[HandlerResult[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">invokeBlock</span><span class="tparams">[<span name="B">B</span>, <span name="T">T</span>]</span><span class="params">(<span name="block">block: (<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequestHandler.invokeBlock.B">B</span>]) ⇒ <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="Silhouette$HandlerResult.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.HandlerResult">HandlerResult</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequestHandler.invokeBlock.T">T</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequestHandler.invokeBlock.B">B</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="Silhouette$HandlerResult.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.HandlerResult">HandlerResult</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequestHandler.invokeBlock.T">T</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@invokeBlock[B,T](block:Silhouette.this.UserAwareRequest[B]=&gt;scala.concurrent.Future[Silhouette.this.HandlerResult[T]])(implicitrequest:play.api.mvc.Request[B]):scala.concurrent.Future[Silhouette.this.HandlerResult[T]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Invokes the block.</p><div class="fullcomment"><div class="comment cmt"><p>Invokes the block.
+</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="tparam">T</dt><dd class="cmt"><p>The type of the data included in the handler result.</p></dd><dt class="param">block</dt><dd class="cmt"><p>The block of code to invoke.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd><dt>returns</dt><dd class="cmt"><p>A handler result.
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequestHandler">UserAwareRequestHandler</a> → <a href="Silhouette$RequestHandlerBuilder.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder">RequestHandlerBuilder</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -313,7 +364,7 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -330,7 +381,7 @@
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -347,7 +398,7 @@
         <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@notify():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -364,7 +415,7 @@
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -381,7 +432,7 @@
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -398,7 +449,7 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@toString():String" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@toString():String" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -415,7 +466,7 @@
         <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@wait():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -438,7 +489,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -461,7 +512,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$UserAwareRequestHandler$@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -481,7 +532,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder">
+              <h3>Inherited from <a href="Silhouette$RequestHandlerBuilder.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder">RequestHandlerBuilder</a>[<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>]</h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

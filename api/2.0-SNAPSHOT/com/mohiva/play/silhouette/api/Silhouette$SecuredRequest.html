@@ -43,14 +43,15 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">SecuredRequest</span><span class="tparams">[<span name="R">R</span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.I">I</span></span>, <span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.A">A</span></span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.R">R</span>]</span>)</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.WrappedRequest" class="extype" target="_top">WrappedRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.R">R</span>] with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">SecuredRequest</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.I">I</span></span>, <span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.A">A</span></span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.B">B</span>]</span>)</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.WrappedRequest" class="extype" target="_top">WrappedRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.B">B</span>] with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A request that only allows access if an identity is authorized.
-</p></div><div class="toggleContainer block">
+</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.
+</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The identity implementation.</p></dd><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator implementation.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.WrappedRequest" class="extype" target="_top">WrappedRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.R">R</span>], <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.R">R</span>], <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.WrappedRequest" class="extype" target="_top">WrappedRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.B">B</span>], <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.B">B</span>], <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -88,23 +89,23 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(identity:I,authenticator:A,request:play.api.mvc.Request[R]):Silhouette.this.SecuredRequest[R]"></a>
-      <a id="&lt;init&gt;:SecuredRequest[R]"></a>
+              <ol><li name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(identity:I,authenticator:A,request:play.api.mvc.Request[B]):Silhouette.this.SecuredRequest[B]"></a>
+      <a id="&lt;init&gt;:SecuredRequest[B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">SecuredRequest</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.I">I</span></span>, <span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.A">A</span></span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.R">R</span>]</span>)</span>
+        <span class="name">SecuredRequest</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.I">I</span></span>, <span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.A">A</span></span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.B">B</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$SecuredRequest@&lt;init&gt;(identity:I,authenticator:A,request:play.api.mvc.Request[R]):Silhouette.this.SecuredRequest[R]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$SecuredRequest@&lt;init&gt;(identity:I,authenticator:A,request:play.api.mvc.Request[B]):Silhouette.this.SecuredRequest[B]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">identity</dt><dd class="cmt"><p>The identity implementation.</p></dd><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator implementation.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -249,17 +250,17 @@
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">The authenticator implementation.</p>
     </li><li name="play.api.mvc.WrappedRequest#body" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="body:A"></a>
-      <a id="body:R"></a>
+      <a id="body:B"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">body</span><span class="result">: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.R">R</span></span>
+        <span class="name">body</span><span class="result">: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.B">B</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$SecuredRequest@body:A" title="Permalink" target="_top">
@@ -533,7 +534,7 @@
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">The identity implementation.</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -553,14 +554,14 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="play.api.mvc.Request#map" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="map[B](f:A=&gt;B):play.api.mvc.Request[B]"></a>
-      <a id="map[B]((R)⇒B):Request[B]"></a>
+      <a id="map[B]((B)⇒B):Request[B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.R">R</span>) ⇒ <span class="extype" name="play.api.mvc.Request.map.B">B</span></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="play.api.mvc.Request.map.B">B</span>]</span>
+        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.B">B</span>) ⇒ <span class="extype" name="play.api.mvc.Request.map.B">B</span></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="play.api.mvc.Request.map.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$SecuredRequest@map[B](f:A=&gt;B):play.api.mvc.Request[B]" title="Permalink" target="_top">
@@ -722,22 +723,22 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>WrappedRequest → RequestHeader</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest#request" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="request:play.api.mvc.Request[R]"></a>
-      <a id="request:Request[R]"></a>
+      <a id="request:play.api.mvc.Request[B]"></a>
+      <a id="request:Request[B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">request</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.R">R</span>]</span>
+        <span class="name">request</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$SecuredRequest@request:play.api.mvc.Request[R]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$SecuredRequest@request:play.api.mvc.Request[B]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">The current request.</p>
     </li><li name="play.api.mvc.WrappedRequest#secure" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="secure:Boolean"></a>
       <a id="secure:Boolean"></a>
@@ -967,9 +968,9 @@
             </div><div class="parent" name="scala.Equals">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
             </div><div class="parent" name="play.api.mvc.WrappedRequest">
-              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.WrappedRequest" class="extype" target="_top">WrappedRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.R">R</span>]</h3>
+              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.WrappedRequest" class="extype" target="_top">WrappedRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.B">B</span>]</h3>
             </div><div class="parent" name="play.api.mvc.Request">
-              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.R">R</span>]</h3>
+              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.B">B</span>]</h3>
             </div><div class="parent" name="play.api.mvc.RequestHeader">
               <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></h3>
             </div><div class="parent" name="scala.AnyRef">
