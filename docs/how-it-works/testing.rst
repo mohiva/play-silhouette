@@ -11,6 +11,8 @@ scenarios.
 .. code-block:: scala
 
   import com.mohiva.play.silhouette.test._
+  
+This package is only available for play-silhouette 2.0-SNAPSHOT that is currently under development. 
 
 All helpers are test framework agnostic. You can use it with `Specs2`_, `ScalaTest`_ or every
 other testing framework. In our examples we use `Specs2`_ to demonstrate how to test Silhouette
