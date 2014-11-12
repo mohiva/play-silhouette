@@ -1,6 +1,8 @@
 Testing
 =======
 
+.. versionadded:: 2.0
+
 Test Helpers
 ------------
 

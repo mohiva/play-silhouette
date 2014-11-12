@@ -11,7 +11,7 @@ information about an identity.
 Credentials provider
 --------------------
 
-Silhouette supports local authentication, typically via an HTML form, 
+Silhouette supports local authentication, typically via an HTML form,
 with the credentials provider.
 This provider accepts credentials and returns the login information for an
 identity after a successful authentication. Typically credentials consist
@@ -59,7 +59,7 @@ Social profile
 
 The social profile contains the profile data returned from the social providers.
 Silhouette provides a default social profile called `CommonSocialProfile`_,
-which contains the most common profile data providers return. 
+which contains the most common profile data providers return.
 
 .. _CommonSocialProfile: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/impl/providers/SocialProvider.scala#L168
 
@@ -77,15 +77,15 @@ The default social profile builder
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 All provider implementations are abstract because a profile builder must be
-specified before an object can be instantiated. Silhouette ships with a 
-default profile builder, ``CommonSocialProfileBuilder``, which returns a 
+specified before an object can be instantiated. Silhouette ships with a
+default profile builder, ``CommonSocialProfileBuilder``, which returns a
 ``CommonSocialProfile`` after successful authentication. However, it can't
 be mixed into the provider by default because Scala doesn't allow us to override
 a concrete type with a different concrete type. That is, mixing in a default builder
 would prevent customization.
 
-Silhouette handles this problem by leaving the provider class abstract but making the 
-companion object's ``apply`` method handle the most common case -- 
+Silhouette handles this problem by leaving the provider class abstract but making the
+companion object's ``apply`` method handle the most common case --
 instantiating a provider with a ``CommonSocialProfileBuilder``. So in most
 cases you should simply call the apply method and instead of using the ``new`` keyword:
 
@@ -158,6 +158,8 @@ provider with the profile builder.
 OAuth2 state
 ------------
 
+.. versionadded:: 2.0
+
 The OAuth2 protocol supports the `state parameter`_, a value the client can include in the request
 and that the server returns as a parameter unmodified in the response. This parameter `should be used mainly`_
 to protect an application against `CSRF attacks`_. But it can also be used to remember some
@@ -174,7 +176,7 @@ provider. All state provider implementations can be found in the `impl package`_
 List of OAuth2 states
 ^^^^^^^^^^^^^^^^^^^^^
 
-We provide some built in state providers, but as noted above a customized 
+We provide some built in state providers, but as noted above a customized
 state can be implemented to remember some state about a user.
 
 CookieState
@@ -192,14 +194,14 @@ from the `OAuth2 RFC`_ and it provides a stateless/scalable approach.
 Authentication information
 --------------------------
 
-The `AuthInfo`_ implementation contains authentication information such 
+The `AuthInfo`_ implementation contains authentication information such
 as access tokens, hashed passwords, and so on -- which
-should never be exposed to the public. Each provider defines its own 
+should never be exposed to the public. Each provider defines its own
 `AuthInfo`_ implementation.
 
 As with other Silhouette structures that vary in their implementation,
 `AuthInfo`_ is managed by a `AuthInfoService`_ that saves and retrieves
-the information as needed.  
+the information as needed.
 
 .. _AuthInfoService: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/api/services/AuthInfoService.scala#L31
 .. _AuthInfo: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/api/services/AuthInfoService.scala#L61

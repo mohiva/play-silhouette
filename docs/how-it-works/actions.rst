@@ -55,6 +55,8 @@ For unauthenticated users you can implement a :ref:`global <global_fallback>` or
 Request Handlers
 ^^^^^^^^^^^^^^^^
 
+.. versionadded:: 2.0
+
 The base implementations for these actions are encapsulated into request handlers. For
 the ``SecuredAction`` there exists a ``SecuredRequestHandler`` and for the ``UserAwareAction``
 there exists a ``UserAwareRequestHandler``. You can use these handlers in default Play
