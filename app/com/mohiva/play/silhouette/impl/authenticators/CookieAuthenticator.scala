@@ -50,7 +50,7 @@ import scala.util.Try
  *
  * @param id The authenticator ID.
  * @param loginInfo The linked login info for an identity.
- * @param lastUsedDate The last used timestamp.
+ * @param lastUsedDate The last used time.
  * @param expirationDate The expiration time.
  * @param idleTimeout The time in seconds an authenticator can be idle before it timed out.
  * @param fingerprint Maybe a fingerprint of the user.
