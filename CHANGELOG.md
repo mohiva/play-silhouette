@@ -10,6 +10,7 @@
 - Documentation is now included in the repository and hosted on Read The Docs
 - Renamed packages "core" to "api", "contrib" to "impl", "utils" to "util"
 - Reorganized the project structure (moved all providers into the "impl" package, moved some classes/traits)
+- Add request handlers
 
 ## 1.0 (2014-06-12)
 

@@ -149,6 +149,8 @@ out after a certain time if it hasn't been used. This can be controlled with the
 SessionAuthenticator
 ^^^^^^^^^^^^^^^^^^^^
 
+.. versionadded:: 2.0
+
 An authenticator that uses a stateless, session-based approach. It works by storing a serialized
 authenticator instance in the Play Framework session cookie.
 
@@ -176,6 +178,8 @@ out after a certain time if it hasn't been used. This can be controlled with the
 
 BearerTokenAuthenticator
 ^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. versionadded:: 2.0
 
 An authenticator that uses a header-based approach with the help of a bearer token. It works by
 transporting a token in a user defined header to track the authenticated user and a server side
@@ -205,6 +209,8 @@ out after a certain time if it hasn't been used. This can be controlled with the
 
 JWTAuthenticator
 ^^^^^^^^^^^^^^^^
+
+.. versionadded:: 2.0
 
 An authenticator that uses a header-based approach with the help of a `JWT`_ (JSON Web Token). It works by using a
 JWT to transport the authenticator data inside a user defined header. It can be stateless with the
