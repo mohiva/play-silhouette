@@ -1,8 +1,9 @@
 Logging
 =======
 
-Silhouette uses named loggers for logging. This gives your application 
-fine-grained control over the log entries logged by Silhouette.
+Silhouette uses named loggers for logging. So in your application you
+have a more fine-grained control over the log entries logged by
+Silhouette.
 
 Configure logging
 -----------------
@@ -31,7 +32,7 @@ detailed level for some components.
 Use the logger
 --------------
 
-To use the named logger you only need to mix the ``Logger`` trait into your
+To use the named logger you must only implement the ``Logger`` trait into your
 class or trait. Then you can use the ``logger`` property to access the `Play
 logging API`_.
 

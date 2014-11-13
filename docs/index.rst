@@ -8,8 +8,8 @@ Welcome to Silhouette's documentation!
        development. Were you looking for version |last_stable| documentation?
 
 **Silhouette** is an authentication library for Play Framework
-applications. It supports several authentication methods, including
-OAuth1, OAuth2, OpenID, Credentials, and custom authentication schemes.
+applications that supports several authentication methods, including
+OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes.
 
 It can be integrated as is, or used as a building block and customized
 to meet specific application requirements, thanks to its loosely coupled

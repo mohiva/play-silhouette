@@ -19,6 +19,7 @@ import com.atlassian.jwt.SigningAlgorithm
 import com.atlassian.jwt.core.writer.{ JsonSmartJwtJsonBuilder, NimbusJwtWriterFactory }
 import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.api.services.SharedSecretService
 import com.mohiva.play.silhouette.api.services.AuthenticatorService
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.util.{ Base64, Clock, IDGenerator }
@@ -101,6 +102,7 @@ case class JWTAuthenticator(
 class JWTAuthenticatorService(
   settings: JWTAuthenticatorSettings,
   dao: Option[AuthenticatorDAO[JWTAuthenticator]],
+  sharedSecretService: SharedSecretService,
   idGenerator: IDGenerator,
   clock: Clock) extends AuthenticatorService[JWTAuthenticator] with Logger {
 
@@ -119,8 +121,7 @@ class JWTAuthenticatorService(
         loginInfo = loginInfo,
         lastUsedDate = now,
         expirationDate = now.plusSeconds(settings.authenticatorExpiry),
-        idleTimeout = settings.authenticatorIdleTimeout
-      )
+        idleTimeout = settings.authenticatorIdleTimeout)
     }.recover {
       case e => throw new AuthenticationException(CreateError.format(ID, loginInfo), e)
     }
@@ -271,7 +272,7 @@ class JWTAuthenticatorService(
       .expirationTime(authenticator.expirationDate.getMillis / 1000)
 
     new NimbusJwtWriterFactory()
-      .macSigningWriter(SigningAlgorithm.HS256, settings.sharedSecret)
+      .macSigningWriter(SigningAlgorithm.HS256, sharedSecretService.find(authenticator.loginInfo))
       .jsonToJwt(jwtBuilder.build())
   }
 
@@ -283,24 +284,29 @@ class JWTAuthenticatorService(
    */
   protected[silhouette] def unserialize(str: String): Try[JWTAuthenticator] = {
     Try {
-      val verifier = new MACVerifier(settings.sharedSecret)
       val jwsObject = JWSObject.parse(str)
-      if (!jwsObject.verify(verifier)) {
-        throw new IllegalArgumentException("Fraudulent JWT token: " + str)
-      }
 
-      JWTClaimsSet.parse(jwsObject.getPayload.toJSONObject)
-    }.flatMap { c =>
-      val subject = if (settings.encryptSubject) Crypto.decryptAES(c.getSubject) else Base64.decode(c.getSubject)
-      buildLoginInfo(subject).map { loginInfo =>
-        JWTAuthenticator(
-          id = c.getJWTID,
-          loginInfo = loginInfo,
-          lastUsedDate = new DateTime(c.getIssueTime),
-          expirationDate = new DateTime(c.getExpirationTime),
-          idleTimeout = settings.authenticatorIdleTimeout
-        )
-      }
+      val claims = JWTClaimsSet.parse(jwsObject.getPayload.toJSONObject)
+      (jwsObject, claims)
+    }.flatMap {
+      case (jws, c) =>
+        val subject = if (settings.encryptSubject) Crypto.decryptAES(c.getSubject) else Base64.decode(c.getSubject)
+        buildLoginInfo(subject).map { loginInfo =>
+          val auth = JWTAuthenticator(
+            id = c.getJWTID,
+            loginInfo = loginInfo,
+            lastUsedDate = new DateTime(c.getIssueTime),
+            expirationDate = new DateTime(c.getExpirationTime),
+            idleTimeout = settings.authenticatorIdleTimeout)
+            
+          // Make sure the JWT was valid to begin with.
+          val verifier = new MACVerifier(sharedSecretService.find(loginInfo))
+          if (!jws.verify(verifier)) {
+            throw new IllegalArgumentException("Fraudulent JWT token: " + str)
+          }
+          
+          auth
+        }
     }.recover {
       case e => throw new AuthenticationException(InvalidJWTToken.format(ID, str), e)
     }
@@ -354,12 +360,10 @@ object JWTAuthenticatorService {
  * @param encryptSubject Indicates if the subject should be encrypted in JWT.
  * @param authenticatorIdleTimeout The time in seconds an authenticator can be idle before it timed out.
  * @param authenticatorExpiry The expiry of the authenticator in minutes.
- * @param sharedSecret The shared secret to sign the JWT.
  */
 case class JWTAuthenticatorSettings(
   headerName: String = "X-Auth-Token",
   issuerClaim: String = "play-silhouette",
   encryptSubject: Boolean = true,
   authenticatorIdleTimeout: Option[Int] = None, // This feature is disabled by default to prevent the generation of a new JWT on every request
-  authenticatorExpiry: Int = 12 * 60 * 60,
-  sharedSecret: String)
+  authenticatorExpiry: Int = 12 * 60 * 60)
