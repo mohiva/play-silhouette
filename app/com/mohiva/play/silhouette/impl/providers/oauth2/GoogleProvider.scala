@@ -19,6 +19,7 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth2
 
+import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
@@ -76,7 +77,7 @@ abstract class GoogleProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
           val errorMsg = (error \ "message").as[String]
 
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, errorCode, errorMsg))
-        case _ => Future.fromTry(parseProfile(parser, json))
+        case _ => Future.from(parseProfile(parser, json))
       }
     }
   }

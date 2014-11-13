@@ -33,6 +33,11 @@ Impl Package
 
 The reference implementation of Silhouette.
 
+Test Package
+^^^^^^^^^^^^
+
+Contains helper classes and objects to easily test an application based on Silhouette.
+
 
 Development workflow
 --------------------
@@ -71,7 +76,7 @@ Help to improve the documentation
 Every software project is only as good as its documentation. So we do
 our best to cover all the code with a good structured, meaningful and
 up-to-date documentation. But like in the most open source projects,
-time is a precious commodity. So every help is appreciated to improve
+time is a precious commodity. We appreciate all help to improve
 the documentation.
 
 
@@ -81,7 +86,7 @@ Edit on GitHub
 For small typo changes the documentation can be edited directly on
 GitHub. This is very easy by following the "Edit on GitHub" button
 at the top of th page. After you have made your changes you can commit
-it with an meaningful commit message. It will then create automatically
+it with a meaningful commit message. It will then automatically create
 a new pull request with your proposed changes.
 
 
@@ -89,7 +94,7 @@ Edit it locally
 ^^^^^^^^^^^^^^^
 
 The documentation is written in `RST`_ which can be rendered by `Sphinx`_
-into many output formats like HTML, PDF and `a lot more`_. To render
+into many output formats like HTML, PDF and `many more`_. To render
 the documentation into static HTML which looks the same as this
 documentation on `"Read the docs"`_, you must install Sphinx and the
 `"Read the Docs" theme`_.
@@ -109,12 +114,12 @@ HTML files by executing the following command in the ``docs`` directory.
 
     make html
 
-The documentation can now be found in the ``_build/html`` directory.
+The documentation can then be found in the ``_build/html`` directory.
 Browse the ``index.html`` with your favorite browser to view the changes.
 
 .. _RST: http://docutils.sourceforge.net/docs/user/rst/quickref.html
 .. _Sphinx: http://sphinx-doc.org/
-.. _a lot more: http://sphinx-doc.org/builders.html
+.. _many more: http://sphinx-doc.org/builders.html
 .. _"Read the docs": https://readthedocs.org/
 .. _"Read the Docs" theme: https://github.com/snide/sphinx_rtd_theme
 

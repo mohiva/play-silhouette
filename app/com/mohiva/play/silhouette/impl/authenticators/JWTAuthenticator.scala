@@ -17,6 +17,7 @@ package com.mohiva.play.silhouette.impl.authenticators
 
 import com.atlassian.jwt.SigningAlgorithm
 import com.atlassian.jwt.core.writer.{ JsonSmartJwtJsonBuilder, NimbusJwtWriterFactory }
+import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
 import com.mohiva.play.silhouette.api.services.AuthenticatorService
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
@@ -134,7 +135,7 @@ class JWTAuthenticatorService(
    * @return Some authenticator or None if no authenticator could be found in request.
    */
   def retrieve(implicit request: RequestHeader) = {
-    Future.fromTry(Try(request.headers.get(settings.headerName))).flatMap {
+    Future.from(Try(request.headers.get(settings.headerName))).flatMap {
       case Some(token) => unserialize(token) match {
         case Success(authenticator) => dao.fold(Future.successful(Option(authenticator)))(_.find(authenticator.id))
         case Failure(e) =>

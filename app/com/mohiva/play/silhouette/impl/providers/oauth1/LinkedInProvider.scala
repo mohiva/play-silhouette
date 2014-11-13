@@ -19,6 +19,7 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth1
 
+import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.{ CacheLayer, HTTPLayer }
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
@@ -81,7 +82,7 @@ abstract class LinkedInProvider(
           val timestamp = (json \ "timestamp").asOpt[Long]
 
           Future.failed(new ProfileRetrievalException(SpecifiedProfileError.format(id, error, message, requestId, status, timestamp)))
-        case _ => Future.fromTry(parseProfile(parser, json))
+        case _ => Future.from(parseProfile(parser, json))
       }
     }
   }

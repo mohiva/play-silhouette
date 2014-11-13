@@ -19,6 +19,7 @@ import akka.actor.{ Actor, Props }
 import akka.testkit.TestProbe
 import com.mohiva.play.silhouette.api.exceptions.{ AccessDeniedException, AuthenticationException }
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorService, IdentityService }
+import com.mohiva.play.silhouette.test.{ FakeAuthenticator, FakeIdentity }
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
@@ -27,7 +28,7 @@ import play.api.i18n.{ Lang, Messages }
 import play.api.libs.concurrent.Akka
 import play.api.libs.json.Json
 import play.api.mvc.Results._
-import play.api.mvc.{ RequestHeader, Result }
+import play.api.mvc.{ Action, RequestHeader, Result }
 import play.api.test.{ FakeApplication, FakeRequest, PlaySpecification, WithApplication }
 
 import scala.concurrent.Future
@@ -45,7 +46,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         env.authenticatorService.retrieve returns Future.successful(None)
 
         val controller = new SecuredController(env)
-        val result = controller.protectedAction(request)
+        val result = controller.securedAction(request)
 
         status(result) must equalTo(UNAUTHORIZED)
         contentAsString(result) must contain(Messages("silhouette.not.authenticated"))
@@ -61,7 +62,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
       withEvent[NotAuthenticatedEvent] {
         val controller = new SecuredController(env)
-        val result = controller.protectedAction(request)
+        val result = controller.securedAction(request)
 
         status(result) must equalTo(UNAUTHORIZED)
         contentAsString(result) must contain(Messages("silhouette.not.authenticated"))
@@ -79,7 +80,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
       withEvent[NotAuthenticatedEvent] {
         val controller = new SecuredController(env)
-        val result = controller.protectedAction(request)
+        val result = controller.securedAction(request)
 
         status(result) must equalTo(UNAUTHORIZED)
         contentAsString(result) must contain(Messages("silhouette.not.authenticated"))
@@ -101,7 +102,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         }
       }
 
-      val result = controller.protectedAction(request)
+      val result = controller.securedAction(request)
 
       status(result) must equalTo(UNAUTHORIZED)
       contentAsString(result) must contain("local.not.authenticated")
@@ -115,7 +116,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(None)
 
       val controller = new SecuredController(env)
-      val result = controller.protectedAction(request)
+      val result = controller.securedAction(request)
 
       status(result) must equalTo(UNAUTHORIZED)
       contentAsString(result) must contain("global.not.authenticated")
@@ -129,7 +130,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(None)
 
       val controller = new SecuredController(env)
-      val result = controller.protectedAction(request)
+      val result = controller.securedAction(request)
 
       status(result) must equalTo(UNAUTHORIZED)
       contentAsString(result) must contain(Messages("silhouette.not.authenticated"))
@@ -143,9 +144,9 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      withEvent[NotAuthorizedEvent[TestIdentity]] {
+      withEvent[NotAuthorizedEvent[FakeIdentity]] {
         val controller = new SecuredController(env, SimpleAuthorization(isAuthorized = false))
-        val result = controller.protectedActionWithAuthorization(request)
+        val result = controller.securedActionWithAuthorization(request)
 
         status(result) must equalTo(FORBIDDEN)
         contentAsString(result) must contain(Messages("silhouette.not.authorized"))
@@ -168,7 +169,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         }
       }
 
-      val result = controller.protectedActionWithAuthorization(request)
+      val result = controller.securedActionWithAuthorization(request)
 
       status(result) must equalTo(FORBIDDEN)
       contentAsString(result) must contain("local.not.authorized")
@@ -185,7 +186,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
       val controller = new SecuredController(env, SimpleAuthorization(isAuthorized = false))
-      val result = controller.protectedActionWithAuthorization(request)
+      val result = controller.securedActionWithAuthorization(request)
 
       status(result) must equalTo(FORBIDDEN)
       contentAsString(result) must contain("global.not.authorized")
@@ -202,7 +203,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
       val controller = new SecuredController(env, SimpleAuthorization(isAuthorized = false))
-      val result = controller.protectedActionWithAuthorization(request)
+      val result = controller.securedActionWithAuthorization(request)
 
       status(result) must equalTo(FORBIDDEN)
       contentAsString(result) must contain(Messages("silhouette.not.authorized"))
@@ -218,9 +219,9 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      withEvent[AuthenticatedEvent[TestIdentity]] {
+      withEvent[AuthenticatedEvent[FakeIdentity]] {
         val controller = new SecuredController(env)
-        val result = controller.protectedAction(request)
+        val result = controller.securedAction(request)
 
         status(result) must equalTo(OK)
         contentAsString(result) must contain("full.access")
@@ -238,9 +239,9 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      withEvent[AuthenticatedEvent[TestIdentity]] {
+      withEvent[AuthenticatedEvent[FakeIdentity]] {
         val controller = new SecuredController(env)
-        val result = controller.protectedActionWithAuthorization(request)
+        val result = controller.securedActionWithAuthorization(request)
 
         status(result) must equalTo(OK)
         contentAsString(result) must contain("full.access")
@@ -255,9 +256,9 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.authenticatorService.touch(any) returns Right(authenticator)
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      withEvent[AuthenticatedEvent[TestIdentity]] {
+      withEvent[AuthenticatedEvent[FakeIdentity]] {
         val controller = new SecuredController(env)
-        val result = controller.protectedActionWithAuthorization(request)
+        val result = controller.securedActionWithAuthorization(request)
 
         status(result) must equalTo(OK)
         contentAsString(result) must contain("full.access")
@@ -275,9 +276,9 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      withEvent[AuthenticatedEvent[TestIdentity]] {
+      withEvent[AuthenticatedEvent[FakeIdentity]] {
         val controller = new SecuredController(env)
-        val result = controller.protectedRenewAction(request)
+        val result = controller.securedRenewAction(request)
 
         status(result) must equalTo(OK)
         contentAsString(result) must contain("renewed")
@@ -296,9 +297,9 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      withEvent[AuthenticatedEvent[TestIdentity]] {
+      withEvent[AuthenticatedEvent[FakeIdentity]] {
         val controller = new SecuredController(env)
-        val result = controller.protectedDiscardAction(request)
+        val result = controller.securedDiscardAction(request)
 
         status(result) must equalTo(OK)
         contentAsString(result) must contain("discarded")
@@ -319,9 +320,9 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      withEvent[AuthenticatedEvent[TestIdentity]] {
+      withEvent[AuthenticatedEvent[FakeIdentity]] {
         val controller = new SecuredController(env)
-        val result = controller.protectedAction(req)
+        val result = controller.securedAction(req)
 
         status(result) must equalTo(OK)
         contentType(result) must beSome("application/json")
@@ -330,6 +331,36 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         there was one(env.authenticatorService).update(any, any)(any)
         theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, req, lang))
       }
+    }
+  }
+
+  "The `SecureRequestHandler`" should {
+    "return status 401 if authentication was not successful" in new WithDefaultGlobal {
+      env.authenticatorService.retrieve returns Future.successful(None)
+
+      val controller = new SecuredController(env)
+      val result = controller.securedRequestHandler(request)
+
+      status(result) must equalTo(UNAUTHORIZED)
+      there was no(env.authenticatorService).touch(any)
+      there was no(env.authenticatorService).update(any, any)(any)
+    }
+
+    "return the user if authentication was successful" in new WithDefaultGlobal {
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.touch(any) returns Left(authenticator)
+      env.authenticatorService.update(any, any)(any) answers { (a, m) =>
+        a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
+      }
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
+
+      val controller = new SecuredController(env)
+      val result = controller.securedRequestHandler(request)
+
+      status(result) must equalTo(OK)
+      contentAsString(result) must */("providerID" -> "test") and */("providerKey" -> "1")
+      there was one(env.authenticatorService).touch(any)
+      there was one(env.authenticatorService).update(any, any)(any)
     }
   }
 
@@ -443,6 +474,36 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
   }
 
+  "The `UserAwareRequestHandler`" should {
+    "return status 401 if authentication was not successful" in new WithDefaultGlobal {
+      env.authenticatorService.retrieve returns Future.successful(None)
+
+      val controller = new SecuredController(env)
+      val result = controller.userAwareRequestHandler(request)
+
+      status(result) must equalTo(UNAUTHORIZED)
+      there was no(env.authenticatorService).touch(any)
+      there was no(env.authenticatorService).update(any, any)(any)
+    }
+
+    "return the user if authentication was successful" in new WithDefaultGlobal {
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.touch(any) returns Left(authenticator)
+      env.authenticatorService.update(any, any)(any) answers { (a, m) =>
+        a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
+      }
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
+
+      val controller = new SecuredController(env)
+      val result = controller.userAwareRequestHandler(request)
+
+      status(result) must equalTo(OK)
+      contentAsString(result) must */("providerID" -> "test") and */("providerKey" -> "1")
+      there was one(env.authenticatorService).touch(any)
+      there was one(env.authenticatorService).update(any, any)(any)
+    }
+  }
+
   "The `exceptionHandler` method" should {
     "translate an AccessDeniedException into a 403 Forbidden result" in new WithDefaultGlobal {
       env.authenticatorService.retrieve returns Future.successful(None)
@@ -472,20 +533,6 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
   }
 
   /**
-   * A test identity.
-   *
-   * @param loginInfo The linked login info.
-   */
-  case class TestIdentity(loginInfo: LoginInfo) extends Identity
-
-  /**
-   * A test authenticator.
-   *
-   * @param loginInfo The linked login info.
-   */
-  case class TestAuthenticator(loginInfo: LoginInfo, isValid: Boolean = true) extends Authenticator
-
-  /**
    * The context.
    */
   trait Context extends Scope {
@@ -494,9 +541,9 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     /**
      * The Silhouette environment.
      */
-    lazy val env = Environment[TestIdentity, TestAuthenticator](
-      mock[IdentityService[TestIdentity]],
-      mock[AuthenticatorService[TestAuthenticator]],
+    lazy val env = Environment[FakeIdentity, FakeAuthenticator](
+      mock[IdentityService[FakeIdentity]],
+      mock[AuthenticatorService[FakeAuthenticator]],
       Map(),
       new EventBus
     )
@@ -504,12 +551,12 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     /**
      * An identity.
      */
-    lazy val identity = new TestIdentity(LoginInfo("test", "1"))
+    lazy val identity = new FakeIdentity(LoginInfo("test", "1"))
 
     /**
      * An authenticator.
      */
-    lazy val authenticator = new TestAuthenticator(LoginInfo("test", "1"))
+    lazy val authenticator = new FakeAuthenticator(LoginInfo("test", "1"))
 
     /**
      * A fake request.
@@ -592,16 +639,16 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
    * @param authorization An authorization implementation.
    */
   class SecuredController(
-    val env: Environment[TestIdentity, TestAuthenticator],
-    val authorization: Authorization[TestIdentity] = SimpleAuthorization())
-    extends Silhouette[TestIdentity, TestAuthenticator] {
+    val env: Environment[FakeIdentity, FakeAuthenticator],
+    val authorization: Authorization[FakeIdentity] = SimpleAuthorization())
+    extends Silhouette[FakeIdentity, FakeAuthenticator] {
 
     /**
-     * A protected action.
+     * A secured action.
      *
      * @return The result to send to the client.
      */
-    def protectedAction = SecuredAction { implicit request =>
+    def securedAction = SecuredAction { implicit request =>
       render {
         case Accepts.Json() => Ok(Json.obj("result" -> "full.access"))
         case Accepts.Html() => Ok("full.access")
@@ -609,30 +656,42 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     /**
-     * A protected action with authorization.
+     * A secured action with authorization.
      *
      * @return The result to send to the client.
      */
-    def protectedActionWithAuthorization = SecuredAction(authorization) { implicit request: SecuredRequest[_] =>
+    def securedActionWithAuthorization = SecuredAction(authorization) { implicit request: SecuredRequest[_] =>
       Ok("full.access")
     }
 
     /**
-     * A renew action.
+     * A secured renew action.
      *
      * @return The result to send to the client.
      */
-    def protectedRenewAction = SecuredAction.async { implicit request =>
+    def securedRenewAction = SecuredAction.async { implicit request =>
       request.authenticator.renew(Future.successful(Ok("renewed")))
     }
 
     /**
-     * A discard action.
+     * A secured discard action.
      *
      * @return The result to send to the client.
      */
-    def protectedDiscardAction = SecuredAction.async { implicit request =>
+    def securedDiscardAction = SecuredAction.async { implicit request =>
       request.authenticator.discard(Future.successful(Ok("discarded")))
+    }
+
+    /**
+     * A secured request handler.
+     */
+    def securedRequestHandler = Action.async { implicit request =>
+      SecuredRequestHandler { securedRequest =>
+        Future.successful(HandlerResult(Ok, Some(securedRequest.identity)))
+      }.map {
+        case HandlerResult(r, Some(user)) => Ok(Json.toJson(user.loginInfo))
+        case HandlerResult(r, None) => Unauthorized
+      }
     }
 
     /**
@@ -675,6 +734,18 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     /**
+     * A user aware request handler.
+     */
+    def userAwareRequestHandler = Action.async { implicit request =>
+      UserAwareRequestHandler { userAwareRequest =>
+        Future.successful(HandlerResult(Ok, userAwareRequest.identity))
+      }.map {
+        case HandlerResult(r, Some(user)) => Ok(Json.toJson(user.loginInfo))
+        case HandlerResult(r, None) => Unauthorized
+      }
+    }
+
+    /**
      * Method to test the `exceptionHandler` method of the Silhouette controller.
      *
      * @param f The future to recover from.
@@ -691,7 +762,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
    *
    * @param isAuthorized True if the access is authorized, false otherwise.
    */
-  case class SimpleAuthorization(isAuthorized: Boolean = true) extends Authorization[TestIdentity] {
+  case class SimpleAuthorization(isAuthorized: Boolean = true) extends Authorization[FakeIdentity] {
 
     /**
      * Checks whether the user is authorized to execute an action or not.
@@ -701,6 +772,6 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      * @param lang The current lang.
      * @return True if the user is authorized, false otherwise.
      */
-    def isAuthorized(identity: TestIdentity)(implicit request: RequestHeader, lang: Lang): Boolean = isAuthorized
+    def isAuthorized(identity: FakeIdentity)(implicit request: RequestHeader, lang: Lang): Boolean = isAuthorized
   }
 }

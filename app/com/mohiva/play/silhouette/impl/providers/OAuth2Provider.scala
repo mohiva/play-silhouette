@@ -21,6 +21,7 @@ package com.mohiva.play.silhouette.impl.providers
 
 import java.net.URLEncoder._
 
+import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthInfo
@@ -141,7 +142,7 @@ abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
       Code -> Seq(code),
       RedirectURI -> Seq(settings.redirectURL)) ++ settings.accessTokenParams.mapValues(Seq(_))).flatMap { response =>
       logger.debug("[Silhouette][%s] Access token response: [%s]".format(id, response.body))
-      Future.fromTry(buildInfo(response))
+      Future.from(buildInfo(response))
     }
   }
 

@@ -15,6 +15,7 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth2.state
 
+import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.util.{ Base64, Clock, IDGenerator }
 import com.mohiva.play.silhouette.impl.exceptions.StateException
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
@@ -101,7 +102,7 @@ class CookieStateProvider(
    * @return The state on success, otherwise an failure.
    */
   def validate(id: String)(implicit request: RequestHeader) = {
-    Future.fromTry(clientState(id).flatMap(clientState => providerState(id).flatMap(providerState =>
+    Future.from(clientState(id).flatMap(clientState => providerState(id).flatMap(providerState =>
       if (clientState != providerState) Failure(new StateException(StateIsNotEqual.format(id)))
       else if (clientState.isExpired) Failure(new StateException(StateIsExpired.format(id)))
       else Success(clientState)

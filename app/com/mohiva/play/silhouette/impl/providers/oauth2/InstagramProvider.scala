@@ -19,6 +19,7 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth2
 
+import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
@@ -74,7 +75,7 @@ abstract class InstagramProvider(httpLayer: HTTPLayer, stateProvider: OAuth2Stat
           val errorMsg = (json \ "meta" \ "error_message").asOpt[String]
 
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, code, errorType, errorMsg))
-        case _ => Future.fromTry(parseProfile(parser, json))
+        case _ => Future.from(parseProfile(parser, json))
       }
     }
   }

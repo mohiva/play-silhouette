@@ -15,6 +15,7 @@ name := "play-silhouette"
 version := "2.0-SNAPSHOT"
 
 libraryDependencies ++= Seq(
+  "com.typesafe.play" %% "play-test" % "2.3.6",
   "org.mindrot" % "jbcrypt" % "0.3m",
   "com.atlassian.jwt" % "jwt-core" % "1.2.1",
   "com.atlassian.jwt" % "jwt-api" % "1.2.1",
@@ -109,11 +110,6 @@ scalacOptions in Test ~= { (options: Seq[String]) =>
 
 scalacOptions in ScoverageTest ~= { (options: Seq[String]) =>
   options filterNot ( _ == "-Ywarn-dead-code" )  // The same when running under scoverage.
-}
-
-unmanagedSourceDirectories in Compile <<= (unmanagedSourceDirectories in Compile, sourceDirectory in Compile, scalaVersion) { (sds: Seq[java.io.File], sd: java.io.File, v: String) =>
-  val extra = new java.io.File(sd, "scala_" + v)
-  (if (extra.exists) Seq(extra) else Seq()) ++ sds
 }
 
 //*******************************
