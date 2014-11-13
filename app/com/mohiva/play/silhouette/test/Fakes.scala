@@ -3,7 +3,7 @@ package com.mohiva.play.silhouette.test
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.services.{ AuthenticatorService, IdentityService }
+import com.mohiva.play.silhouette.api.services.{ AuthenticatorService, IdentityService, SharedSecretService }
 import com.mohiva.play.silhouette.api.util.Clock
 import com.mohiva.play.silhouette.impl.authenticators._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
@@ -113,11 +113,19 @@ case class FakeBearerTokenAuthenticatorService() extends BearerTokenAuthenticato
   Clock())
 
 /**
+ * A fake shared secret service.
+ */
+class FakeSharedSecretService(secret:String = UUID.randomUUID().toString) extends SharedSecretService {
+  def find(loginInfo:LoginInfo): String = secret
+}
+
+/**
  * A fake JWT authenticator service.
  */
 case class FakeJWTAuthenticatorService() extends JWTAuthenticatorService(
-  new JWTAuthenticatorSettings(sharedSecret = UUID.randomUUID().toString),
+  new JWTAuthenticatorSettings(),
   None,
+  new FakeSharedSecretService,
   new SecureRandomIDGenerator(),
   Clock())
 

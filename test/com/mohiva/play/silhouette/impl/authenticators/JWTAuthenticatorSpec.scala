@@ -23,6 +23,7 @@ import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.util.{ Base64, Clock, IDGenerator }
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
+import com.mohiva.play.silhouette.test.FakeSharedSecretService
 import org.joda.time.DateTime
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
@@ -530,15 +531,16 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       issuerClaim = "play-silhouette",
       encryptSubject = true,
       authenticatorIdleTimeout = Some(30 * 60),
-      authenticatorExpiry = 12 * 60 * 60,
-      sharedSecret = "fGhre3$56%43erfkl8)/§$dsdf345gsdfvsdf23kl"
+      authenticatorExpiry = 12 * 60 * 60
     ))
 
     /**
      * The authenticator service instance to test.
      */
     lazy val service = (dao: Option[AuthenticatorDAO[JWTAuthenticator]]) =>
-      new JWTAuthenticatorService(settings, dao, idGenerator, clock)
+      new JWTAuthenticatorService(settings, dao, 
+          new FakeSharedSecretService("fGhre3$56%43erfkl8)/§$dsdf345gsdfvsdf23kl"), 
+          idGenerator, clock)
 
     /**
      * The login info.
