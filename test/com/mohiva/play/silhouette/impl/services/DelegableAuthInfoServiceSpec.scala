@@ -18,8 +18,9 @@ package com.mohiva.play.silhouette.impl.services
 import com.google.inject.{ AbstractModule, Guice, Provides }
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.services.{ AuthInfo, AuthInfoService }
+import com.mohiva.play.silhouette.api.util.PasswordInfo
 import com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO
-import com.mohiva.play.silhouette.impl.providers.{ OAuth1Info, OAuth2Info, PasswordInfo }
+import com.mohiva.play.silhouette.impl.providers.{ OAuth1Info, OAuth2Info }
 import com.mohiva.play.silhouette.impl.services.DelegableAuthInfoService._
 import net.codingwell.scalaguice.ScalaModule
 import org.specs2.specification.Scope

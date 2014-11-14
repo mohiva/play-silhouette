@@ -202,18 +202,69 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
     /**
      * Handles a block for an authenticator.
      *
+     * Invokes the block with the authenticator and handles the result. See `handleInitializedAuthenticator` and
+     * `handleUninitializedAuthenticator` methods too see how the different authenticator types will be handled.
+     *
+     * @param authenticator An already initialized authenticator on the left and a new authenticator on the right.
+     * @param block The block to handle with the authenticator.
+     * @param request The current request header.
+     * @return A handler result.
+     */
+    protected def handleBlock[T](authenticator: Either[A, A], block: A => Future[HandlerResult[T]])(implicit request: RequestHeader) = {
+      authenticator match {
+        case Left(a) => handleInitializedAuthenticator(a, block)
+        case Right(a) => handleUninitializedAuthenticator(a, block)
+      }
+    }
+
+    /**
+     * Handles the authentication of an identity.
+     *
+     * As first it checks for authenticators in requests, then it tries to authenticate against a request provider.
+     * This method marks the returned authenticators by returning already initialized authenticators on the
+     * left and new authenticators on the right. All new authenticators must be initialized later in the flow,
+     * with the result returned from the invoked block.
+     *
+     * @param request The current request header.
+     * @return A tuple which consists of (maybe the existing authenticator on the left or a
+     *         new authenticator on the right -> maybe the identity).
+     */
+    protected def handleAuthentication(implicit request: RequestHeader): Future[(Option[Either[A, A]], Option[I])] = {
+      env.authenticatorService.retrieve.flatMap {
+        // A valid authenticator was found so we retrieve also the identity
+        case Some(a) if a.isValid => env.identityService.retrieve(a.loginInfo).map(i => Some(Left(a)) -> i)
+        // An invalid authenticator was found so we needn't retrieve the identity
+        case Some(a) if !a.isValid => Future.successful(Some(Left(a)) -> None)
+        // No authenticator was found so we try to authenticate with a request provider
+        case None => handleRequestProviderAuthentication.flatMap {
+          // Authentication was successful, so we retrieve the identity and create a new authenticator for it
+          case Some(loginInfo) => env.identityService.retrieve(loginInfo).flatMap { i =>
+            env.authenticatorService.create(loginInfo).map(a => Some(Right(a)) -> i)
+          }
+          // No identity and no authenticator was found
+          case None => Future.successful(None -> None)
+        }
+      }
+    }
+
+    /**
+     * Handles already initialized authenticators.
+     *
+     * The authenticator handled by this method was found in the current request. So it was initialized on
+     * a previous request and must now be updated if it was touched and no authenticator result was found.
+     *
      * @param authenticator The authenticator to handle.
      * @param block The block to handle with the authenticator.
      * @param request The current request header.
      * @return A handler result.
      */
-    protected def handleBlock[T](authenticator: A, block: A => Future[HandlerResult[T]])(implicit request: RequestHeader) = {
+    private def handleInitializedAuthenticator[T](authenticator: A, block: A => Future[HandlerResult[T]])(implicit request: RequestHeader) = {
       val auth = env.authenticatorService.touch(authenticator)
       block(auth.extract).flatMap {
         case hr @ HandlerResult(pr: Authenticator.Discard, _) =>
-          env.authenticatorService.discard(auth.extract, Future.successful(pr)).map(pr => hr.copy(pr))
+          env.authenticatorService.discard(authenticator, Future.successful(pr)).map(pr => hr.copy(pr))
         case hr @ HandlerResult(pr: Authenticator.Renew, _) =>
-          env.authenticatorService.renew(auth.extract, Future.successful(pr)).map(pr => hr.copy(pr))
+          env.authenticatorService.renew(authenticator, Future.successful(pr)).map(pr => hr.copy(pr))
         case hr @ HandlerResult(pr, _) => auth match {
           // Authenticator was touched so we update the authenticator and maybe the result
           case Left(a) => env.authenticatorService.update(a, Future.successful(pr)).map(pr => hr.copy(pr))
@@ -221,6 +272,64 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
           case Right(a) => Future.successful(hr)
         }
       }
+    }
+
+    /**
+     * Handles not initialized authenticators.
+     *
+     * The authenticator handled by this method was newly created after authentication with a request provider.
+     * So it must be initialized with the result of the invoked block if no authenticator result was found.
+     *
+     * @param authenticator The authenticator to handle.
+     * @param block The block to handle with the authenticator.
+     * @param request The current request header.
+     * @return A handler result.
+     */
+    private def handleUninitializedAuthenticator[T](authenticator: A, block: A => Future[HandlerResult[T]])(implicit request: RequestHeader) = {
+      block(authenticator).flatMap {
+        case hr @ HandlerResult(pr: Authenticator.Discard, _) =>
+          env.authenticatorService.discard(authenticator, Future.successful(pr)).map(pr => hr.copy(pr))
+        case hr @ HandlerResult(pr: Authenticator.Renew, _) =>
+          env.authenticatorService.renew(authenticator, Future.successful(pr)).map(pr => hr.copy(pr))
+        case hr @ HandlerResult(pr, _) =>
+          env.authenticatorService.init(authenticator, Future.successful(pr)).map(pr => hr.copy(pr))
+      }
+    }
+
+    /**
+     * Handles the authentication with the request providers.
+     *
+     * Silhouette supports chaining of request providers. So if more as one request provider is defined
+     * it tries to authenticate until one provider returns an identity. The order of the providers
+     * isn't guaranteed.
+     *
+     * @param request The current request header.
+     * @return Some identity or None if authentication was not successful.
+     */
+    private def handleRequestProviderAuthentication(implicit request: RequestHeader): Future[Option[LoginInfo]] = {
+      def auth(providers: Seq[RequestProvider]): Future[Option[LoginInfo]] = {
+        providers match {
+          case Nil => Future.successful(None)
+          case h :: t => h.authenticate(request).flatMap {
+            case Some(i) => Future.successful(Some(i))
+            case None => if (t.isEmpty) Future.successful(None) else auth(t)
+          }
+        }
+      }
+
+      auth(requestProviders)
+    }
+
+    /**
+     * Gets the list of request providers.
+     *
+     * @return The list of request providers.
+     */
+    private def requestProviders: Seq[RequestProvider] = {
+      env.providers.map {
+        case (id, provider: RequestProvider) => Some(provider)
+        case _ => None
+      }.flatten[RequestProvider].toSeq
     }
   }
 
@@ -255,29 +364,21 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @return A handler result.
      */
     protected def invokeBlock[B, T](block: SecuredRequest[B] => Future[HandlerResult[T]])(implicit request: Request[B]): Future[HandlerResult[T]] = {
-      env.authenticatorService.retrieve.flatMap {
-        // A valid authenticator was found. We try to find the identity for it.
-        case Some(authenticator) if authenticator.isValid =>
-          env.identityService.retrieve(authenticator.loginInfo).flatMap {
-            // A user is both authenticated and authorized. The request will be granted.
-            case Some(identity) if authorize.isEmpty || authorize.get.isAuthorized(identity) =>
-              env.eventBus.publish(AuthenticatedEvent(identity, request, request2lang))
-              handleBlock(authenticator, a => block(SecuredRequest(identity, a, request)))
-            // A user is authenticated but not authorized. The request will be forbidden.
-            case Some(identity) =>
-              env.eventBus.publish(NotAuthorizedEvent(identity, request, request2lang))
-              handleBlock(authenticator, _ => handleNotAuthorized(request).map(r => HandlerResult(r)))
-            // No user was found. The request will ask for authentication and the authenticator will be discarded.
-            case None =>
-              env.eventBus.publish(NotAuthenticatedEvent(request, request2lang))
-              env.authenticatorService.discard(authenticator, handleNotAuthenticated(request)).map(r => HandlerResult(r))
-          }
-        // An invalid authenticator was found. The request will ask for authentication and the authenticator will be discarded.
-        case Some(authenticator) if !authenticator.isValid =>
+      handleAuthentication.flatMap {
+        // A user is both authenticated and authorized. The request will be granted
+        case (Some(authenticator), Some(identity)) if authorize.isEmpty || authorize.get.isAuthorized(identity) =>
+          env.eventBus.publish(AuthenticatedEvent(identity, request, request2lang))
+          handleBlock(authenticator, a => block(SecuredRequest(identity, a, request)))
+        // A user is authenticated but not authorized. The request will be forbidden
+        case (Some(authenticator), Some(identity)) =>
+          env.eventBus.publish(NotAuthorizedEvent(identity, request, request2lang))
+          handleBlock(authenticator, _ => handleNotAuthorized(request).map(r => HandlerResult(r)))
+        // An authenticator but no user was found. The request will ask for authentication and the authenticator will be discarded
+        case (Some(authenticator), None) =>
           env.eventBus.publish(NotAuthenticatedEvent(request, request2lang))
-          env.authenticatorService.discard(authenticator, handleNotAuthenticated(request)).map(r => HandlerResult(r))
-        // No authenticator was found. The request will ask for authentication.
-        case None =>
+          env.authenticatorService.discard(authenticator.extract, handleNotAuthenticated(request)).map(r => HandlerResult(r))
+        // No authenticator and no user was found. The request will ask for authentication
+        case _ =>
           env.eventBus.publish(NotAuthenticatedEvent(request, request2lang))
           handleNotAuthenticated(request).map(r => HandlerResult(r))
       }
@@ -288,13 +389,6 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
    * A secured request handler.
    */
   object SecuredRequestHandler extends SecuredRequestHandlerBuilder {
-
-    /**
-     * Creates a secured action handler.
-     *
-     * @return A secured action handler.
-     */
-    def apply() = new SecuredRequestHandlerBuilder(None)
 
     /**
      * Creates a secured action handler.
@@ -357,13 +451,6 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
     /**
      * Creates a secured action.
      *
-     * @return A secured action builder.
-     */
-    def apply() = new SecuredActionBuilder(None)
-
-    /**
-     * Creates a secured action.
-     *
      * @param authorize An Authorize object that checks if the user is authorized to invoke the action.
      * @return A secured action builder.
      */
@@ -399,20 +486,18 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @return A handler result.
      */
     protected def invokeBlock[B, T](block: UserAwareRequest[B] => Future[HandlerResult[T]])(implicit request: Request[B]) = {
-      env.authenticatorService.retrieve.flatMap {
-        // An valid authenticator was found. We try to find the identity for it.
-        case Some(authenticator) if authenticator.isValid =>
-          env.identityService.retrieve(authenticator.loginInfo).flatMap { identity =>
-            handleBlock(authenticator, a => block(UserAwareRequest(identity, Some(a), request)))
-          }
-        // An invalid authenticator was found. The authenticator will be discarded.
-        case Some(authenticator) if !authenticator.isValid =>
+      handleAuthentication.flatMap {
+        // A valid authenticator was found and the identity may be exists
+        case (Some(authenticator), identity) if authenticator.extract.isValid =>
+          handleBlock(authenticator, a => block(UserAwareRequest(identity, Some(a), request)))
+        // An invalid authenticator was found. The authenticator will be discarded
+        case (Some(authenticator), identity) if !authenticator.extract.isValid =>
           block(UserAwareRequest(None, None, request)).flatMap {
             case hr @ HandlerResult(pr, d) =>
-              env.authenticatorService.discard(authenticator, Future.successful(pr)).map(r => hr.copy(pr))
+              env.authenticatorService.discard(authenticator.extract, Future.successful(pr)).map(r => hr.copy(pr))
           }
-        // No authenticator was found.
-        case None =>
+        // No authenticator and no user was found
+        case _ =>
           block(UserAwareRequest(None, None, request))
       }
     }
