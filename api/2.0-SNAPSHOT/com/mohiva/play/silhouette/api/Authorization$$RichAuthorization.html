@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Provider - com.mohiva.play.silhouette.api.Provider</title>
-          <meta name="description" content="Provider - com.mohiva.play.silhouette.api.Provider" />
-          <meta name="keywords" content="Provider com.mohiva.play.silhouette.api.Provider" />
+          <title>RichAuthorization - com.mohiva.play.silhouette.api.Authorization.RichAuthorization</title>
+          <meta name="description" content="RichAuthorization - com.mohiva.play.silhouette.api.Authorization.RichAuthorization" />
+          <meta name="keywords" content="RichAuthorization com.mohiva.play.silhouette.api.Authorization.RichAuthorization" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../index.html';
-            var hash = 'com.mohiva.play.silhouette.api.Provider';
+            var hash = 'com.mohiva.play.silhouette.api.Authorization$$RichAuthorization';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -28,10 +28,10 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../../../lib/trait_big.png" />
-        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.api">api</a></p>
-        <h1>Provider</h1> <span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider" title="Permalink" target="_top">
+        <img src="../../../../../lib/class_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.api">api</a>.<a href="Authorization$.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a></p>
+        <h1>RichAuthorization</h1> <span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -39,22 +39,19 @@
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="modifier">implicit final </span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">Provider</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">RichAuthorization</span><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A marker interface for all providers.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An rich authorization which will be able to do logic operator.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
-        </div><div class="toggleContainer block">
-            <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="../impl/providers/CredentialsProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CredentialsProvider">CredentialsProvider</a>, <a href="../impl/providers/oauth2/FacebookProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.FacebookProvider">FacebookProvider</a>, <a href="../impl/providers/oauth2/FoursquareProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.FoursquareProvider">FoursquareProvider</a>, <a href="../impl/providers/oauth2/GitHubProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.GitHubProvider">GitHubProvider</a>, <a href="../impl/providers/oauth2/GoogleProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.GoogleProvider">GoogleProvider</a>, <a href="../impl/providers/oauth2/InstagramProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.InstagramProvider">InstagramProvider</a>, <a href="../impl/providers/oauth1/LinkedInProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth1.LinkedInProvider">LinkedInProvider</a>, <a href="../impl/providers/oauth2/LinkedInProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.LinkedInProvider">LinkedInProvider</a>, <a href="../impl/providers/OAuth1Provider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth1Provider">OAuth1Provider</a>, <a href="../impl/providers/OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider">OAuth2Provider</a>, <a href="../impl/providers/SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a>, <a href="../impl/providers/oauth1/TwitterProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider">TwitterProvider</a>, <a href="../impl/providers/oauth2/VKProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.VKProvider">VKProvider</a>, <a href="../impl/providers/oauth1/XingProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth1.XingProvider">XingProvider</a></div>
-          </div></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -71,7 +68,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.api.Provider"><span>Provider</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization"><span>RichAuthorization</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -89,36 +86,35 @@
 
       <div id="template">
         <div id="allMembers">
-        
-
-        
-
-        <div id="values" class="values members">
-              <h3>Abstract Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.api.Provider#id" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="id:String"></a>
-      <a id="id:String"></a>
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(self:com.mohiva.play.silhouette.api.Authorization[I]):com.mohiva.play.silhouette.api.Authorization.RichAuthorization[I]"></a>
+      <a id="&lt;init&gt;:RichAuthorization[I]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
+        <span class="modifier"></span>
+        <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">id</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">RichAuthorization</span><span class="params">(<span name="self">self: <a href="Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.I">I</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@id:String" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@&lt;init&gt;(self:com.mohiva.play.silhouette.api.Authorization[I]):com.mohiva.play.silhouette.api.Authorization.RichAuthorization[I]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Gets the provider ID.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the provider ID.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The provider ID.
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">self</dt><dd class="cmt"><p>The authorization.
 </p></dd></dl></div>
     </li></ol>
             </div>
 
+        
+
+        
+
         <div id="values" class="values members">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
@@ -131,7 +127,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -148,11 +144,30 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@##():Int" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@##():Int" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization#&amp;&amp;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&amp;&amp;(authorization:com.mohiva.play.silhouette.api.Authorization[I]):com.mohiva.play.silhouette.api.Authorization[I]"></a>
+      <a id="&amp;&amp;(Authorization[I]):Authorization[I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $amp$amp" class="name">&amp;&amp;</span><span class="params">(<span name="authorization">authorization: <a href="Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.I">I</span>]</span>)</span><span class="result">: <a href="Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.I">I</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@&amp;&amp;(authorization:com.mohiva.play.silhouette.api.Authorization[I]):com.mohiva.play.silhouette.api.Authorization[I]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Conjuction (and) operator.</p><div class="fullcomment"><div class="comment cmt"><p>Conjuction (and) operator.
+</p></div><dl class="paramcmts block"><dt class="param">authorization</dt><dd class="cmt"><p>The authorization to be conjunction.</p></dd><dt>returns</dt><dd class="cmt"><p>The authorization
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
@@ -165,7 +180,7 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -182,7 +197,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -199,7 +214,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@clone():Object" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@clone():Object" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -222,7 +237,7 @@
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -239,7 +254,7 @@
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -256,7 +271,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -279,7 +294,7 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -296,7 +311,7 @@
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@hashCode():Int" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -313,7 +328,7 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -330,7 +345,7 @@
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -347,7 +362,7 @@
         <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@notify():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -364,7 +379,7 @@
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -381,7 +396,7 @@
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -398,11 +413,29 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@toString():String" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@toString():String" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization#unary_!" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="unary_!:com.mohiva.play.silhouette.api.Authorization[I]"></a>
+      <a id="unary_!:Authorization[I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: unary_$bang" class="name">unary_!</span><span class="result">: <a href="Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.I">I</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@unary_!:com.mohiva.play.silhouette.api.Authorization[I]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Negation (not) operator</p><div class="fullcomment"><div class="comment cmt"><p>Negation (not) operator</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The authorization
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -415,7 +448,7 @@
         <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@wait():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -438,7 +471,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -461,7 +494,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Provider@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -472,6 +505,25 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization#||" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="||(authorization:com.mohiva.play.silhouette.api.Authorization[I]):com.mohiva.play.silhouette.api.Authorization[I]"></a>
+      <a id="||(Authorization[I]):Authorization[I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bar$bar" class="name">||</span><span class="params">(<span name="authorization">authorization: <a href="Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.I">I</span>]</span>)</span><span class="result">: <a href="Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.I">I</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@||(authorization:com.mohiva.play.silhouette.api.Authorization[I]):com.mohiva.play.silhouette.api.Authorization[I]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Disjunction (or) operator.</p><div class="fullcomment"><div class="comment cmt"><p>Disjunction (or) operator.
+</p></div><dl class="paramcmts block"><dt class="param">authorization</dt><dd class="cmt"><p>The authorization to be disjunction.</p></dd><dt>returns</dt><dd class="cmt"><p>The authorization
+</p></dd></dl></div>
     </li></ol>
             </div>
 
