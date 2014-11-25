@@ -40,3 +40,51 @@ trait Authorization[I <: Identity] {
    */
   def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang): Boolean
 }
+
+/**
+ * The companion object.
+ */
+object Authorization {
+
+  /**
+   * An rich authorization which will be able to do logic operator.
+   *
+   * @param self The authorization.
+   */
+  implicit final class RichAuthorization[I <: Identity](self: Authorization[I]) {
+
+    /**
+     * Negation (not) operator
+     * @return The authorization
+     */
+    def unary_! : Authorization[I] = new Authorization[I] {
+      def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang): Boolean = {
+        !self.isAuthorized(identity)
+      }
+    }
+
+    /**
+     * Conjuction (and) operator.
+     *
+     * @param authorization The authorization to be conjunction.
+     * @return The authorization
+     */
+    def &&(authorization: Authorization[I]): Authorization[I] = new Authorization[I] {
+      def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang): Boolean = {
+        self.isAuthorized(identity) && authorization.isAuthorized(identity)
+      }
+    }
+
+    /**
+     * Disjunction (or) operator.
+     *
+     * @param authorization The authorization to be disjunction.
+     * @return The authorization
+     */
+    def ||(authorization: Authorization[I]): Authorization[I] = new Authorization[I] {
+      def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang): Boolean = {
+        self.isAuthorized(identity) || authorization.isAuthorized(identity)
+      }
+    }
+  }
+}

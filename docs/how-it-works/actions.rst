@@ -213,6 +213,29 @@ Here’s how you would use it:
 For unauthorized users you can implement a global or local fallback
 action similar to the fallback for unauthenticated users.
 
+Logic Operator
+^^^^^^^^^^^^^^^
+
+You can use logic operator (``NOT`` ``AND`` ``OR``) into your ``Authorization``
+
+.. code-block:: scala
+
+  def myAction = SecuredAction(!WithProvider("twitter")) { implicit request =>
+    // do something here
+  }
+
+.. code-block:: scala
+
+  def myAction = SecuredAction(WithProvider("twitter") || WithProvider("facebook")) { implicit request =>
+    // do something here
+  }
+
+.. code-block:: scala
+
+  def myAction = SecuredAction(WithProvider("twitter") && WithProvider("facebook")) { implicit request =>
+    // do something here
+  }
+
 Global Fallback
 ^^^^^^^^^^^^^^^
 

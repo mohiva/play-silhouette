@@ -155,6 +155,36 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
     }
 
+    "restrict access with logic operation" in new WithDefaultGlobal {
+      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.touch(any) returns Left(authenticator)
+      env.authenticatorService.update(any, any)(any) answers { (a, m) =>
+        a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
+      }
+      env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
+
+      def isAuthorized(authorization: Authorization[FakeIdentity], isAuth: Boolean) = {
+        val controller = new SecuredController(env, authorization)
+        val result = controller.securedActionWithAuthorization(request)
+        val resultStatus = if (isAuth) OK else FORBIDDEN
+        val resultContent = if (isAuth) "full.access" else Messages("silhouette.not.authorized")
+        status(result) must equalTo(resultStatus)
+        contentAsString(result) must contain(resultContent)
+      }
+
+      val andAuthorization = SimpleAuthorization(true) && SimpleAuthorization(true)
+      isAuthorized(andAuthorization, true)
+
+      val orAuthorization = SimpleAuthorization(false) || SimpleAuthorization(true)
+      isAuthorized(orAuthorization, true)
+
+      val notAuthorization = !SimpleAuthorization(false)
+      isAuthorized(notAuthorization, true)
+
+      val complexAuthorization = SimpleAuthorization(false) || !SimpleAuthorization(true) && SimpleAuthorization(false)
+      isAuthorized(complexAuthorization, false)
+    }
+
     "display local not-authorized result if user isn't authorized" in new WithSecuredGlobal {
       env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
