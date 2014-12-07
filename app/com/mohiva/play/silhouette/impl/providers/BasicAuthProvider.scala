@@ -1,0 +1,115 @@
+/**
+ * Copyright 2014 Mohiva Organisation (license at mohiva dot com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.mohiva.play.silhouette.impl.providers
+
+import com.mohiva.play.silhouette.api.exceptions.{ AccessDeniedException, AuthenticationException }
+import com.mohiva.play.silhouette.api.services.AuthInfoService
+import com.mohiva.play.silhouette.api.util.{ Base64, Credentials, PasswordHasher, PasswordInfo }
+import com.mohiva.play.silhouette.api.{ LoginInfo, RequestProvider }
+import com.mohiva.play.silhouette.impl.providers.BasicAuthProvider._
+import play.api.http.HeaderNames
+import play.api.libs.concurrent.Execution.Implicits._
+import play.api.mvc.RequestHeader
+
+import scala.concurrent.Future
+
+/**
+ * A request provider implementation which supports HTTP basic authentication.
+ *
+ * The provider supports the change of password hashing algorithms on the fly. Sometimes it may be possible to change
+ * the hashing algorithm used by the application. But the hashes stored in the backing store can't be converted back
+ * into plain text passwords, to hash them again with the new algorithm. So if a user successfully authenticates after
+ * the application has changed the hashing algorithm, the provider hashes the entered password again with the new
+ * algorithm and stores the auth info in the backing store.
+ *
+ * @param authInfoService The auth info service.
+ * @param passwordHasher The default password hasher used by the application.
+ * @param passwordHasherList List of password hasher supported by the application.
+ */
+class BasicAuthProvider(
+  authInfoService: AuthInfoService,
+  passwordHasher: PasswordHasher,
+  passwordHasherList: Seq[PasswordHasher]) extends RequestProvider {
+
+  /**
+   * Gets the provider ID.
+   *
+   * @return The provider ID.
+   */
+  def id = ID
+
+  /**
+   * Authenticates an identity based on credentials sent in a request.
+   *
+   * @param request The request header.
+   * @return Some login info on successful authentication or None if the authentication was unsuccessful.
+   */
+  def authenticate(request: RequestHeader): Future[Option[LoginInfo]] = {
+    getCredentials(request) match {
+      case Some(credentials) =>
+        val loginInfo = LoginInfo(id, credentials.identifier)
+        authInfoService.retrieve[PasswordInfo](loginInfo).map {
+          case Some(authInfo) => passwordHasherList.find(_.id == authInfo.hasher) match {
+            case Some(hasher) if hasher.matches(authInfo, credentials.password) =>
+              if (hasher != passwordHasher) {
+                authInfoService.save(loginInfo, passwordHasher.hash(credentials.password))
+              }
+              Some(loginInfo)
+            case Some(hasher) => throw new AccessDeniedException(InvalidPassword.format(id))
+            case None => throw new AuthenticationException(UnsupportedHasher.format(
+              id, authInfo.hasher, passwordHasherList.map(_.id).mkString(", ")
+            ))
+          }
+          case None => throw new AccessDeniedException(UnknownCredentials.format(id))
+        }
+      case None => Future.successful(None)
+    }
+  }
+
+  /**
+   * Encodes the credentials.
+   *
+   * @param request Contains the colon-separated name-value pairs in clear-text string format
+   * @return The users credentials as plaintext
+   */
+  def getCredentials(request: RequestHeader): Option[Credentials] = {
+    request.headers.get(HeaderNames.AUTHORIZATION) match {
+      case Some(header) => Base64.decode(header.replace("Basic ", "")).split(":") match {
+        case credentials if credentials.length == 2 => Some(Credentials(credentials(0), credentials(1)))
+        case _ => None
+      }
+      case None => None
+    }
+  }
+}
+
+/**
+ * The companion object.
+ */
+object BasicAuthProvider {
+
+  /**
+   * The error messages.
+   */
+  val UnknownCredentials = "[Silhouette][%s] Could not find auth info for given credentials"
+  val InvalidPassword = "[Silhouette][%s] Passwords does not match"
+  val UnsupportedHasher = "[Silhouette][%s] Stored hasher ID `%s` isn't contained in the list of supported hasher: %s"
+
+  /**
+   * The provider constants.
+   */
+  val ID = "basic-auth"
+}

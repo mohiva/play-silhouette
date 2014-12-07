@@ -12,7 +12,14 @@ been easier to start a new Silhouette application.
 
 Out of the box support for leading social services such as Twitter,
 Facebook, Google, LinkedIn and GitHub. Silhouette also includes a credentials
-provider that supports local login functionality.
+and basic authentication provider that supports local login functionality.
+
+**Client agnostic**
+
+Silhouette comes with a set of stateless as well as stateful :ref:`authenticator
+implementations <authenticator_list>` which allows an application to handle a wide
+range of different clients like traditional web browsers as also native(desktop,
+mobile, ...) apps.
 
 **Asynchronous, non-blocking operations**
 
@@ -31,8 +38,8 @@ coupled design.
 
 **Internationalization support**
 
-Silhouette makes it very easy to internationalize your application by 
-making the Play Framework's ``Request`` and ``Lang`` available where 
+Silhouette makes it very easy to internationalize your application by
+making the Play Framework's ``Request`` and ``Lang`` available where
 they are needed.
 
 **Well tested** |Coverage Status|
@@ -49,6 +56,7 @@ SSL Client Authentication or use of authentication protocols that
 require no password.
 
 .. _Activator template: https://github.com/mohiva/play-silhouette-seed
+.. _authenticator implementations: http://docs.silhouette.mohiva.com/en/latest/how-it-works/authenticator.html#list-of-authenticators
 .. _Reactive Manifesto: http://www.reactivemanifesto.org/
 .. _Akka’s Event Bus: http://doc.akka.io/docs/akka/2.2.4/scala/event-bus.html
 .. _OWASP Authentication Cheat Sheet: https://www.owasp.org/index.php/Authentication_Cheat_Sheet

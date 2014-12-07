@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.providers.credentials.hasher
+package com.mohiva.play.silhouette.impl.util
 
-import com.mohiva.play.silhouette.impl.providers.PasswordInfo
+import com.mohiva.play.silhouette.api.util.PasswordInfo
 import play.api.test.PlaySpecification
 
 /**

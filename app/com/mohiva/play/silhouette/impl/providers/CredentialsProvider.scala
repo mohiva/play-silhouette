@@ -21,7 +21,8 @@ package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.services.{ AuthInfo, AuthInfoService }
+import com.mohiva.play.silhouette.api.services.AuthInfoService
+import com.mohiva.play.silhouette.api.util.{ Credentials, PasswordInfo, PasswordHasher }
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider._
 import play.api.libs.concurrent.Execution.Implicits._
 
@@ -67,12 +68,12 @@ class CredentialsProvider(
             authInfoService.save(loginInfo, passwordHasher.hash(credentials.password))
           }
           loginInfo
-        case Some(hasher) => throw new AccessDeniedException(CredentialsProvider.InvalidPassword.format(id))
-        case None => throw new AuthenticationException(CredentialsProvider.UnsupportedHasher.format(
+        case Some(hasher) => throw new AccessDeniedException(InvalidPassword.format(id))
+        case None => throw new AuthenticationException(UnsupportedHasher.format(
           id, authInfo.hasher, passwordHasherList.map(_.id).mkString(", ")
         ))
       }
-      case None => throw new AccessDeniedException(CredentialsProvider.UnknownCredentials.format(id))
+      case None => throw new AccessDeniedException(UnknownCredentials.format(id))
     }
   }
 }
@@ -93,51 +94,4 @@ object CredentialsProvider {
    * The provider constants.
    */
   val ID = "credentials"
-}
-
-/**
- * The credentials to authenticate with.
- *
- * @param identifier The unique identifier to authenticate with.
- * @param password The password to authenticate with.
- */
-case class Credentials(identifier: String, password: String)
-
-/**
- * The password details.
- *
- * @param hasher The ID of the hasher used to hash this password.
- * @param password The hashed password.
- * @param salt The optional salt used when hashing.
- */
-case class PasswordInfo(hasher: String, password: String, salt: Option[String] = None) extends AuthInfo
-
-/**
- * A trait that defines the password hasher interface.
- */
-trait PasswordHasher {
-
-  /**
-   * Gets the ID of the hasher.
-   *
-   * @return The ID of the hasher.
-   */
-  def id: String
-
-  /**
-   * Hashes a password.
-   *
-   * @param plainPassword The password to hash.
-   * @return A PasswordInfo containing the hashed password and optional salt.
-   */
-  def hash(plainPassword: String): PasswordInfo
-
-  /**
-   * Checks whether a supplied password matches the hashed one.
-   *
-   * @param passwordInfo The password retrieved from the backing store.
-   * @param suppliedPassword The password supplied by the user trying to log in.
-   * @return True if the password matches, false otherwise.
-   */
-  def matches(passwordInfo: PasswordInfo, suppliedPassword: String): Boolean
 }

@@ -102,6 +102,8 @@ Logging a user out of a Silhouette application requires explicitly discarding th
    `Result` and returns a wrapped `Discard` result, which notifies the action to discard
    the authenticator instead of updating it.
 
+.. _authenticator_list:
+
 List of authenticators
 ----------------------
 

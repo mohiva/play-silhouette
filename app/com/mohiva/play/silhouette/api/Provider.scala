@@ -15,6 +15,10 @@
  */
 package com.mohiva.play.silhouette.api
 
+import play.api.mvc.RequestHeader
+
+import scala.concurrent.Future
+
 /**
  * A marker interface for all providers.
  */
@@ -26,4 +30,28 @@ trait Provider {
    * @return The provider ID.
    */
   def id: String
+}
+
+/**
+ * A provider which can be hooked into a request.
+ *
+ * It scans the request for credentials and returns the login info for it.
+ */
+trait RequestProvider extends Provider {
+
+  /**
+   * Authenticates an identity based on credentials sent in a request.
+   *
+   * Silhouette supports chaining of request providers. So if more as one request provider is defined
+   * it tries to authenticate until one provider returns an identity. To control the behaviour of the
+   * chaining you can use the return type by this method.
+   *
+   * None - If returning None, then the next provider in the chain will be executed.
+   * Some(identity) - If returning some identity, then this provider will be used for authentication.
+   * Exception - Throwing an exception breaks the chain. The error handler will also handle this exception.
+   *
+   * @param request The request header.
+   * @return Some login info on successful authentication or None if the authentication was unsuccessful.
+   */
+  def authenticate(request: RequestHeader): Future[Option[LoginInfo]]
 }

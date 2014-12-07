@@ -7,25 +7,49 @@ In Silhouette a provider is a service that handles the authentication of
 an identity. It typically reads authorization information and returns
 information about an identity.
 
+Request providers
+-----------------
+
+Request providers are special types of providers. They can be hocked directly into
+incoming requests which gets scanned for credentials and either gain or restrict
+access to the protected resources. This can be useful for machine authentication.
+
 
 Credentials provider
 --------------------
 
 Silhouette supports local authentication, typically via an HTML form,
-with the credentials provider.
-This provider accepts credentials and returns the login information for an
-identity after a successful authentication. Typically credentials consist
-of an identifier (a username or email address) and a password.
+with the credentials provider. This provider accepts credentials and returns
+the login information for an identity after a successful authentication.
+Typically credentials consist of an identifier (a username or email address)
+and a password.
 
 The credentials provider supports changing the password hashing algorithm on the
-fly. Sometimes it may be possible to change the hashing algorithm used
-by the application. But the hashes stored in the backing store can’t be
-converted back into plain text passwords to hash them again with the
-new algorithm. So if a user successfully authenticates after the
-application has changed the hashing algorithm, the provider hashes the
-entered password again with the new algorithm and stores the
+fly. Sometimes it may be possible to change the hashing algorithm used by the
+application. But the hashes stored in the backing store can’t be converted back
+into plain text passwords to hash them again with the new algorithm. So if a user
+successfully authenticates after the application has changed the hashing algorithm,
+the provider hashes the entered password again with the new algorithm and stores the
 authentication info in the backing store.
 
+
+Basic Authentication provider
+-----------------------------
+
+Silhouette supports `basic access authentication`_ as described in `RFC 2617`_.
+This provider is an implementation of a request provider which accepts the current
+request and returns the login information for an identity after a successful authentication.
+
+The basic authentication provider supports changing the password hashing algorithm
+on the fly. Sometimes it may be possible to change the hashing algorithm used by the
+application. But the hashes stored in the backing store can’t be converted back into
+plain text passwords to hash them again with the new algorithm. So if a user successfully
+authenticates after the application has changed the hashing algorithm, the provider
+hashes the entered password again with the new algorithm and stores the authentication
+info in the backing store.
+
+.. _basic access authentication: http://en.wikipedia.org/wiki/Basic_access_authentication
+.. _RFC 2617: https://www.ietf.org/rfc/rfc2617.txt
 
 Social providers
 ----------------
@@ -190,6 +214,7 @@ from the `OAuth2 RFC`_ and it provides a stateless/scalable approach.
    to configure the provider for this state.
 
 .. _OAuth2 RFC: https://tools.ietf.org/html/rfc6749#section-10.12
+
 
 Authentication information
 --------------------------

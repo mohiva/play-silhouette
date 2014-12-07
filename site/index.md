@@ -21,12 +21,15 @@ template `play-silhouette-seed` in your Activator UI. It has never been easier t
 
 #### Authentication support
 
-Out of the box support for leading social services such as Twitter, Facebook, Google, LinkedIn and GitHub. Silhouette also includes a credentials provider that supports local login functionality.
+Out of the box support for leading social services such as Twitter, Facebook, Google, LinkedIn and GitHub. Silhouette also includes a credentials and basic authentication provider that supports local login functionality.
+
+#### Client agnostic
+
+Silhouette comes with a set of stateless as well as stateful [authenticator implementations](http://docs.silhouette.mohiva.com/en/latest/how-it-works/authenticator.html#list-of-authenticators) which allows an application to handle a wide range of different clients like traditional web browsers as also native(desktop, mobile, ...) apps.
 
 #### Asynchronous, non-blocking operations
 
 We follow the [Reactive Manifesto](http://www.reactivemanifesto.org/). This means that all requests and web service calls are asynchronous, non-blocking operations. For the event handling part of Silhouette we use [Akka's Event Bus](http://doc.akka.io/docs/akka/2.2.4/scala/event-bus.html) implementation. Lastly, all persistence interfaces are defined to return Scala Futures.
-
 
 #### Very customizable, extendable and testable
 

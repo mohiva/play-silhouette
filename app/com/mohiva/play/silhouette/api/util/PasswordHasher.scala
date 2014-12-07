@@ -17,57 +17,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.providers.credentials.hasher
+package com.mohiva.play.silhouette.api.util
 
-import com.mohiva.play.silhouette.impl.providers.credentials.hasher.BCryptPasswordHasher._
-import com.mohiva.play.silhouette.impl.providers.{ PasswordHasher, PasswordInfo }
-import org.mindrot.jbcrypt.BCrypt
+import com.mohiva.play.silhouette.api.services.AuthInfo
 
 /**
- * Implementation of the password hasher based on BCrypt.
+ * The password details.
  *
- * @param logRounds The log2 of the number of rounds of hashing to apply.
- * @see [[http://www.mindrot.org/files/jBCrypt/jBCrypt-0.2-doc/BCrypt.html#gensalt(int) gensalt]]
+ * @param hasher The ID of the hasher used to hash this password.
+ * @param password The hashed password.
+ * @param salt The optional salt used when hashing.
  */
-class BCryptPasswordHasher(logRounds: Int = 10) extends PasswordHasher {
+case class PasswordInfo(hasher: String, password: String, salt: Option[String] = None) extends AuthInfo
+
+/**
+ * A trait that defines the password hasher interface.
+ */
+trait PasswordHasher {
 
   /**
    * Gets the ID of the hasher.
    *
    * @return The ID of the hasher.
    */
-  def id = ID
+  def id: String
 
   /**
    * Hashes a password.
    *
-   * This implementation does not return the salt separately because it is embedded in the hashed password.
-   * Other implementations might need to return it so it gets saved in the backing store.
-   *
    * @param plainPassword The password to hash.
-   * @return A PasswordInfo containing the hashed password.
+   * @return A PasswordInfo containing the hashed password and optional salt.
    */
-  def hash(plainPassword: String) = PasswordInfo(id, BCrypt.hashpw(plainPassword, BCrypt.gensalt(logRounds)))
+  def hash(plainPassword: String): PasswordInfo
 
   /**
-   * Checks if a password matches the hashed version.
+   * Checks whether a supplied password matches the hashed one.
    *
    * @param passwordInfo The password retrieved from the backing store.
    * @param suppliedPassword The password supplied by the user trying to log in.
    * @return True if the password matches, false otherwise.
    */
-  def matches(passwordInfo: PasswordInfo, suppliedPassword: String) = {
-    BCrypt.checkpw(suppliedPassword, passwordInfo.password)
-  }
-}
-
-/**
- * The companion object.
- */
-object BCryptPasswordHasher {
-
-  /**
-   * The ID of the hasher.
-   */
-  val ID = "bcrypt"
+  def matches(passwordInfo: PasswordInfo, suppliedPassword: String): Boolean
 }
