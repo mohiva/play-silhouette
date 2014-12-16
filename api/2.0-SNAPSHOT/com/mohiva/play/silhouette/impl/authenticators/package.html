@@ -208,6 +208,45 @@ property.</p><p>Note: If deploying to multiple nodes the backing store will need
       <p class="shortcomment cmt">The settings for the cookie authenticator.</p><div class="fullcomment"><div class="comment cmt"><p>The settings for the cookie authenticator.
 </p></div><dl class="paramcmts block"><dt class="param">cookieName</dt><dd class="cmt"><p>The cookie name.</p></dd><dt class="param">cookiePath</dt><dd class="cmt"><p>The cookie path.</p></dd><dt class="param">cookieDomain</dt><dd class="cmt"><p>The cookie domain.</p></dd><dt class="param">secureCookie</dt><dd class="cmt"><p>Whether this cookie is secured, sent only for HTTPS requests.</p></dd><dt class="param">httpOnlyCookie</dt><dd class="cmt"><p>Whether this cookie is HTTP only, i.e. not accessible from client-side JavaScript code.</p></dd><dt class="param">useFingerprinting</dt><dd class="cmt"><p>Indicates if a fingerprint of the user should be stored in the authenticator.</p></dd><dt class="param">cookieMaxAge</dt><dd class="cmt"><p>The cookie expiration date in seconds, <code>None</code> for a transient cookie. Defaults to 12 hours.</p></dd><dt class="param">authenticatorIdleTimeout</dt><dd class="cmt"><p>The time in seconds an authenticator can be idle before it timed out. Defaults to 30 minutes.</p></dd><dt class="param">authenticatorExpiry</dt><dd class="cmt"><p>The expiry of the authenticator in minutes. Defaults to 12 hours.
 </p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DummyAuthenticatorextendsAuthenticatorwithProductwithSerializable"></a>
+      <a id="DummyAuthenticator:DummyAuthenticator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DummyAuthenticator.html"><span class="name">DummyAuthenticator</span></a><span class="params">(<span name="loginInfo">loginInfo: <a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>)</span><span class="result"> extends <a href="../../api/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.package@DummyAuthenticatorextendsAuthenticatorwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An authenticator that can be used if a client doesn't need an authenticator to
+track a user.</p><div class="fullcomment"><div class="comment cmt"><p>An authenticator that can be used if a client doesn't need an authenticator to
+track a user. This can be useful for request providers, because authentication
+may occur here on every request to a protected resource.
+</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info for an identity.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DummyAuthenticatorServiceextendsAuthenticatorService[com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator]"></a>
+      <a id="DummyAuthenticatorService:DummyAuthenticatorService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="DummyAuthenticatorService.html"><span class="name">DummyAuthenticatorService</span></a><span class="result"> extends <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a>[<a href="DummyAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.package@DummyAuthenticatorServiceextendsAuthenticatorService[com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The service that handles the dummy token authenticator.</p>
     </li><li name="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="JWTAuthenticatorextendsStorableAuthenticatorwithProductwithSerializable"></a>
       <a id="JWTAuthenticator:JWTAuthenticator"></a>
@@ -366,6 +405,23 @@ property.
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.package@CookieAuthenticatorService" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object of the authenticator service.</p>
+    </li><li name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DummyAuthenticatorService"></a>
+      <a id="DummyAuthenticatorService:DummyAuthenticatorService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DummyAuthenticatorService$.html"><span class="name">DummyAuthenticatorService</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.package@DummyAuthenticatorService" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
