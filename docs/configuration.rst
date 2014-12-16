@@ -157,6 +157,14 @@ Your configuration could then have this format:
 
 .. code-block:: scala
 
+    dropbox {
+      authorizationUrl="https://www.dropbox.com/1/oauth2/authorize"
+      accessTokenUrl="https://api.dropbox.com/1/oauth2/token"
+      redirectURL="https://your.domain.tld/authenticate/dropbox"
+      clientId="your.client.id"
+      clientSecret="your.client.secret"
+    }
+
     facebook {
       authorizationUrl="https://graph.facebook.com/oauth/authorize"
       accessTokenUrl="https://graph.facebook.com/oauth/access_token"
