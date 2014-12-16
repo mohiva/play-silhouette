@@ -69,6 +69,7 @@ OAuth1
 OAuth2
 ^^^^^^
 
+-  DropboxProvider (www.dropbox.com)
 -  FacebookProvider (www.facebook.com)
 -  FoursquareProvider (www.foursquare.com)
 -  GitHubProvider (www.github.com)
