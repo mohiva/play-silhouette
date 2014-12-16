@@ -14,6 +14,9 @@ Request providers are special types of providers. They can be hocked directly in
 incoming requests which gets scanned for credentials and either gain or restrict
 access to the protected resources. This can be useful for machine authentication.
 
+When using a request provider, you should consider to use the :ref:`dummy authenticator
+<dummy_authenticator>`, because it doesn't have any network throughput or memory footprint
+compared to other authenticators.
 
 Credentials provider
 --------------------

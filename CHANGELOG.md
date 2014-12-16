@@ -1,7 +1,7 @@
 ## 2.0
 
 - Use lazy val to initialize SecureRandom, so that initialization occurs also async
-- Refactor authenticators and add BearerTokenAuthenticator, JWTAuthenticator and SessionAuthenticator
+- Refactor authenticators and add BearerTokenAuthenticator, JWTAuthenticator, SessionAuthenticator and DummyAuthenticator
 - Better error handling for authenticators
 - Authenticators now using an extra backing store instead of only the cache
 - Split up SocialProvider.authenticate method into authenticate and retrieveProfile methods
@@ -12,6 +12,7 @@
 - Reorganized the project structure (moved all providers into the "impl" package, moved some classes/traits)
 - Add request handlers
 - Add request providers in combination with HTTP basic auth provider
+- Add Dropbox provider
 
 ## 1.0 (2014-06-12)
 

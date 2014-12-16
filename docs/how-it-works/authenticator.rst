@@ -246,6 +246,29 @@ new token will be generated on every update. Make sure your application can hand
 .. _JWT: https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-27
 
 
+.. _dummy_authenticator:
+
+DummyAuthenticator
+^^^^^^^^^^^^^^^^^^
+
+.. versionadded:: 2.0
+
+An authenticator that can be used if a client doesn't need an authenticator to track a user.
+This can be useful for request providers, because authentication may occur here on every request
+to a protected resource.
+
+**Pros**
+
+* Ideal for request providers
+* Doesn't have any network throughput or memory footprint compared to other authenticators
+
+**Cons**
+
+* Cannot track users
+* Only useful for request providers
+
+
+
 .. ========================
    Some useful links as reference for the pro and cons sections
 
