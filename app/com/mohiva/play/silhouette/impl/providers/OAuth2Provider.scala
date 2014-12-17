@@ -134,7 +134,7 @@ abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
    * @param code The access code.
    * @return The info containing the access token.
    */
-  protected def getAccessToken(code: String): Future[OAuth2Info] = {
+  def getAccessToken(code: String): Future[OAuth2Info] = {
     httpLayer.url(settings.accessTokenURL).withHeaders(headers: _*).post(Map(
       ClientID -> Seq(settings.clientID),
       ClientSecret -> Seq(settings.clientSecret),
