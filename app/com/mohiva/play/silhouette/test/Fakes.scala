@@ -181,10 +181,15 @@ object FakeAuthenticator {
  * A fake environment implementation.
  *
  * @param identity The identity to return inside a Silhouette action.
+ * @param providers The list of authentication providers.
+ * @param eventBus The event bus implementation.
  * @tparam I The type of the identity.
  * @tparam T The type of the authenticator.
  */
-case class FakeEnvironment[I <: Identity, T <: Authenticator: TypeTag](identity: I) extends Environment[I, T] {
+case class FakeEnvironment[I <: Identity, T <: Authenticator: TypeTag](
+  identity: I,
+  providers: Map[String, Provider] = Map(),
+  eventBus: EventBus = EventBus()) extends Environment[I, T] {
 
   /**
    * Gets the identity service implementation.
@@ -199,18 +204,4 @@ case class FakeEnvironment[I <: Identity, T <: Authenticator: TypeTag](identity:
    * @return The authenticator service implementation.
    */
   val authenticatorService: AuthenticatorService[T] = FakeAuthenticatorService[T]()
-
-  /**
-   * Gets the list of authentication providers.
-   *
-   * @return The list of authentication providers.
-   */
-  val providers: Map[String, Provider] = Map()
-
-  /**
-   * The event bus implementation.
-   *
-   * @return The event bus implementation.
-   */
-  val eventBus: EventBus = EventBus()
 }
