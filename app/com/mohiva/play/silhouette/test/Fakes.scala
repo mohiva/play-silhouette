@@ -122,6 +122,11 @@ case class FakeJWTAuthenticatorService() extends JWTAuthenticatorService(
   Clock())
 
 /**
+ * A fake Dummy authenticator service.
+ */
+case class FakeDummyAuthenticatorService() extends DummyAuthenticatorService
+
+/**
  * A fake authenticator service factory.
  */
 object FakeAuthenticatorService {
@@ -138,6 +143,7 @@ object FakeAuthenticatorService {
       case t if t <:< typeOf[CookieAuthenticator] => FakeCookieAuthenticatorService()
       case t if t <:< typeOf[BearerTokenAuthenticator] => FakeBearerTokenAuthenticatorService()
       case t if t <:< typeOf[JWTAuthenticator] => FakeJWTAuthenticatorService()
+      case t if t <:< typeOf[DummyAuthenticator] => FakeDummyAuthenticatorService()
     }).asInstanceOf[AuthenticatorService[T]]
   }
 }

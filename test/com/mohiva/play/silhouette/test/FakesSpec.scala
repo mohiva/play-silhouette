@@ -85,6 +85,10 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     "return a `JWTAuthenticatorService`" in {
       FakeAuthenticatorService[JWTAuthenticator]() must beAnInstanceOf[JWTAuthenticatorService]
     }
+
+    "return a `DummyAuthenticatorService`" in {
+      FakeAuthenticatorService[DummyAuthenticator]() must beAnInstanceOf[DummyAuthenticatorService]
+    }
   }
 
   "The `FakeAuthenticator` factory" should {
@@ -122,6 +126,15 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
       implicit val request = FakeRequest()
 
       FakeAuthenticator[JWTAuthenticator](loginInfo) must beAnInstanceOf[JWTAuthenticator]
+    }
+
+    "return a `DummyAuthenticator`" in {
+      val loginInfo = LoginInfo("test", "test")
+      val identity = FakeIdentity(loginInfo)
+      implicit val env = FakeEnvironment[FakeIdentity, DummyAuthenticator](identity)
+      implicit val request = FakeRequest()
+
+      FakeAuthenticator[DummyAuthenticator](loginInfo) must beAnInstanceOf[DummyAuthenticator]
     }
   }
 
