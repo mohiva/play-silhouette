@@ -1,0 +1,1 @@
+libraryDependencies ++= Dependencies.coreDependencies

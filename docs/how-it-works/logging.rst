@@ -1,7 +1,7 @@
 Logging
 =======
 
-Silhouette uses named loggers for logging. This gives your application 
+Silhouette uses named loggers for logging. This gives your application
 fine-grained control over the log entries logged by Silhouette.
 
 Configure logging
@@ -20,7 +20,7 @@ detailed level for some components.
     <configuration debug="false">
         ...
         <logger name="com.mohiva" level="ERROR" />
-        <logger name="com.mohiva.play.silhouette.api.exceptions.AccessDeniedException" level="INFO" />
+        <logger name="com.mohiva.silhouette.exceptions.AccessDeniedException" level="INFO" />
         ...
     </configuration>
 
