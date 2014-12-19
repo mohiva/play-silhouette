@@ -13,20 +13,28 @@ object Dependencies {
   private val jwtCore = "com.atlassian.jwt" % "jwt-core" % "1.2.1"
   private val jwtApi = "com.atlassian.jwt" % "jwt-api" % "1.2.1"
 
+  private object Akka {
+    private val version = "2.3.8"
+    val actor = "com.typesafe.akka" %% "akka-actor" % version
+    val testkit = "com.typesafe.akka" %% "akka-testkit" % version
+    val http = "com.typesafe.akka" % "akka-http-core-experimental_2.11" % "1.0-M1"
+  }
+
   // -------------------------------------------------------------------------------------------------------------------
   // Dependecies
   // -------------------------------------------------------------------------------------------------------------------
   val coreDependencies = Seq(
     jodaTime, jodaConvert,
     jbcrypt,
-    jwtCore, jwtApi
+    jwtCore, jwtApi,
+    Akka.actor % "provided"
   )
 
   val playDependencies = Seq(
     "com.typesafe.play" %% "play-test" % "2.3.6",
     "org.mockito" % "mockito-core" % "1.9.5" % "test",
     "net.codingwell" %% "scala-guice" % "4.0.0-beta4" % "test",
-    "com.typesafe.akka" %% "akka-testkit" % "2.3.3" % "test",
+    Akka.testkit % "test",
     play.PlayImport.cache,
     play.PlayImport.ws
   )
@@ -36,6 +44,6 @@ object Dependencies {
   )
 
   val akkaHttpDependencies = Seq(
-
+    Akka.http
   )
 }

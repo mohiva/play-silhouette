@@ -27,7 +27,6 @@ import scala.concurrent.Future
  */
 trait Authenticator {
 
-  type Result
   /**
    * Gets the linked login info for an identity.
    *

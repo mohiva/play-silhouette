@@ -19,7 +19,7 @@
  */
 package com.mohiva.silhouette.services
 
-import com.mohiva.silhouette.{Authenticator, LoginInfo}
+import com.mohiva.silhouette.{Result, RequestHeader, Authenticator, LoginInfo}
 import scala.concurrent.Future
 
 /**
@@ -29,9 +29,6 @@ import scala.concurrent.Future
  */
 trait AuthenticatorService[T <: Authenticator] {
 
-  // FIXME
-  type RequestHeader
-  type Result
   /**
    * Used to add additional headers to the existing headers.
    *

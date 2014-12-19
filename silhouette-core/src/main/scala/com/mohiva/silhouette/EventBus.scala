@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.api
+package com.mohiva.silhouette
 
-import akka.event.{ ActorEventBus, LookupClassification }
-import com.mohiva.silhouette.Identity
-import play.api.i18n.Lang
-import play.api.mvc.RequestHeader
+import akka.event.ActorEventBus
+import akka.event.LookupClassification
 
 /**
  * The base event.

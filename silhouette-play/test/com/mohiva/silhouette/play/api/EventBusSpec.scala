@@ -17,16 +17,16 @@ package com.mohiva.play.silhouette.api
 
 import akka.actor.{ Actor, Props }
 import akka.testkit.TestProbe
-import com.mohiva.silhouette.{LoginInfo, Identity}
+import com.mohiva.silhouette._
 import org.specs2.specification.Scope
-import play.api.i18n.Lang
-import play.api.libs.concurrent.Akka
-import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
+import _root_.play.api.i18n.Lang
+import _root_.play.api.libs.concurrent.Akka
+import _root_.play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
 import scala.concurrent.duration._
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.api.EventBus]] class.
+ * Test case for the [[EventBus]] class.
  */
 class EventBusSpec extends PlaySpecification {
 

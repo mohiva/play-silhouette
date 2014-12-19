@@ -15,6 +15,8 @@
  */
 package com.mohiva.silhouette
 
+import com.mohiva.silhouette.services.{AuthenticatorService, IdentityService}
+
 /**
  * The environment needed to instantiate a Silhouette controller.
  */

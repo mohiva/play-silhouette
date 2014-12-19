@@ -26,9 +26,7 @@ package com.mohiva.silhouette
  * @tparam I The type of the identity.
  */
 trait Authorization[I <: Identity] {
-  // FIXME
-  type RequestHeader
-  type Lang
+
   /**
    * Checks whether the user is authorized to execute an action or not.
    *

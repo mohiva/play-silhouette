@@ -22,4 +22,5 @@ package object silhouette {
       case Failure(v) => Future.failed(v)
     }
   }
+
 }
