@@ -24,11 +24,11 @@ import java.util.UUID
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthInfo
-import com.mohiva.play.silhouette.api.util.{ CacheLayer, HTTPLayer }
+import com.mohiva.play.silhouette.api.util.{ CacheLayer, ExtractableRequest, HTTPLayer }
 import com.mohiva.play.silhouette.impl.providers.OAuth1Provider._
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.ws.WSSignatureCalculator
-import play.api.mvc.{ Result, RequestHeader, Results }
+import play.api.mvc._
 
 import scala.concurrent.Future
 
@@ -54,19 +54,18 @@ abstract class OAuth1Provider(
   /**
    * Starts the authentication process.
    *
-   * @param request The request header.
+   * @param request The request.
    * @return Either a Result or the auth info from the provider.
    */
-  def authenticate()(implicit request: RequestHeader): Future[Either[Result, OAuth1Info]] = {
-    logger.debug("[Silhouette][%s] Query string: %s".format(id, request.rawQueryString))
-    request.queryString.get(Denied) match {
+  def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[Either[Result, OAuth1Info]] = {
+    request.extractString(Denied) match {
       case Some(_) => Future.failed(new AccessDeniedException(AuthorizationError.format(id, Denied)))
-      case None => request.queryString.get(OAuthVerifier) match {
+      case None => request.extractString(OAuthVerifier) match {
         // Second step in the OAuth flow.
         // We have the request info in the cache, and we need to swap it for the access info.
-        case Some(seq) => cachedInfo.flatMap {
+        case Some(verifier) => cachedInfo.flatMap {
           case (cacheID, cachedInfo) =>
-            service.retrieveAccessToken(cachedInfo, seq.head).map { info =>
+            service.retrieveAccessToken(cachedInfo, verifier).map { info =>
               cacheLayer.remove(cacheID)
               Right(info)
             }.recover {

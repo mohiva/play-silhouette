@@ -15,7 +15,7 @@
  */
 package com.mohiva.play.silhouette.api
 
-import play.api.mvc.RequestHeader
+import play.api.mvc.Request
 
 import scala.concurrent.Future
 
@@ -50,8 +50,9 @@ trait RequestProvider extends Provider {
    * Some(identity) - If returning some identity, then this provider will be used for authentication.
    * Exception - Throwing an exception breaks the chain. The error handler will also handle this exception.
    *
-   * @param request The request header.
+   * @param request The request.
+   * @tparam B The type of the body.
    * @return Some login info on successful authentication or None if the authentication was unsuccessful.
    */
-  def authenticate(request: RequestHeader): Future[Option[LoginInfo]]
+  def authenticate[B](request: Request[B]): Future[Option[LoginInfo]]
 }

@@ -17,12 +17,12 @@ package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.exceptions.{ AccessDeniedException, AuthenticationException }
 import com.mohiva.play.silhouette.api.services.AuthInfoService
-import com.mohiva.play.silhouette.api.util.{ Base64, Credentials, PasswordHasher, PasswordInfo }
+import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.api.{ LoginInfo, RequestProvider }
 import com.mohiva.play.silhouette.impl.providers.BasicAuthProvider._
 import play.api.http.HeaderNames
 import play.api.libs.concurrent.Execution.Implicits._
-import play.api.mvc.RequestHeader
+import play.api.mvc.{ Request, RequestHeader }
 
 import scala.concurrent.Future
 
@@ -54,10 +54,11 @@ class BasicAuthProvider(
   /**
    * Authenticates an identity based on credentials sent in a request.
    *
-   * @param request The request header.
+   * @param request The request.
+   * @tparam B The type of the body.
    * @return Some login info on successful authentication or None if the authentication was unsuccessful.
    */
-  def authenticate(request: RequestHeader): Future[Option[LoginInfo]] = {
+  def authenticate[B](request: Request[B]): Future[Option[LoginInfo]] = {
     getCredentials(request) match {
       case Some(credentials) =>
         val loginInfo = LoginInfo(id, credentials.identifier)

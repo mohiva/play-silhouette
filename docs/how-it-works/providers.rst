@@ -220,6 +220,59 @@ from the `OAuth2 RFC`_ and it provides a stateless/scalable approach.
 .. _OAuth2 RFC: https://tools.ietf.org/html/rfc6749#section-10.12
 
 
+Request extractors
+------------------
+
+.. versionadded:: 2.0
+
+The default workflow for traditional web applications is it to send values in URL query
+parameters but for mobile applications there could be another workflow. So with request
+extractors it's possible to extract values send to the client from different parts of
+the request. By default Silhouette can read values from query parameters and from request
+body containing form-urlencoded, Json or XML data.
+
+As example, if a parameter with the name `code` is needed by Silhouette inside a provider,
+then the parameter could be send in the following parts of the request:
+
+**URL Query Parameter**
+
+.. code::
+
+    ?code=value
+
+**Form URL encoded body**
+
+.. code::
+
+    code=value
+
+**Json body**
+
+.. code-block:: json
+
+    {"code": "value"}
+
+**XML body**
+
+.. code-block:: xml
+
+    <code>value</code>
+
+.. Note::
+   Parameters send as query parameters have always precedence over parameters send in the
+   body of a request. So if a parameter is send in query and in body, then the query parameter
+   wins.
+
+
+Define custom request extractors
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+It is possible to define custom request extractors by providing an implicit `RequestExtractor`_
+implementation.
+
+.. _RequestExtractor: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/api/util/RequestExtractor.scala#L12
+
+
 Authentication information
 --------------------------
 

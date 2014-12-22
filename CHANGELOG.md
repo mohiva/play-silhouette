@@ -13,6 +13,7 @@
 - Add request handlers
 - Add request providers in combination with HTTP basic auth provider
 - Add Dropbox provider
+- Add request extractors
 
 ## 1.0 (2014-06-12)
 
