@@ -225,11 +225,12 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * left and new authenticators on the right. All new authenticators must be initialized later in the flow,
      * with the result returned from the invoked block.
      *
-     * @param request The current request header.
+     * @param request The current request.
+     * @tparam B The type of the request body.
      * @return A tuple which consists of (maybe the existing authenticator on the left or a
      *         new authenticator on the right -> maybe the identity).
      */
-    protected def handleAuthentication(implicit request: RequestHeader): Future[(Option[Either[A, A]], Option[I])] = {
+    protected def handleAuthentication[B](implicit request: Request[B]): Future[(Option[Either[A, A]], Option[I])] = {
       env.authenticatorService.retrieve.flatMap {
         // A valid authenticator was found so we retrieve also the identity
         case Some(a) if a.isValid => env.identityService.retrieve(a.loginInfo).map(i => Some(Left(a)) -> i)
@@ -303,10 +304,11 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * it tries to authenticate until one provider returns an identity. The order of the providers
      * isn't guaranteed.
      *
-     * @param request The current request header.
+     * @param request The current request.
+     * @tparam B The type of the request body.
      * @return Some identity or None if authentication was not successful.
      */
-    private def handleRequestProviderAuthentication(implicit request: RequestHeader): Future[Option[LoginInfo]] = {
+    private def handleRequestProviderAuthentication[B](implicit request: Request[B]): Future[Option[LoginInfo]] = {
       def auth(providers: Seq[RequestProvider]): Future[Option[LoginInfo]] = {
         providers match {
           case Nil => Future.successful(None)

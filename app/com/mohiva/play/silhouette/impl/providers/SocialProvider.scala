@@ -16,11 +16,12 @@
 package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.services.AuthInfo
+import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.api.{ LoginInfo, Provider }
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import play.api.libs.concurrent.Execution.Implicits._
-import play.api.mvc.{ RequestHeader, Result }
+import play.api.mvc.Result
 
 import scala.concurrent.Future
 import scala.util.Try
@@ -42,10 +43,10 @@ trait SocialProvider extends Provider with SocialProfileBuilder {
    * to the browser (e.g.: in the case of OAuth where the user needs to be redirected to
    * the service provider).
    *
-   * @param request The request header.
+   * @param request The request.
    * @return Either a Result or the AuthInfo from the provider.
    */
-  def authenticate()(implicit request: RequestHeader): Future[Either[Result, A]]
+  def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[Either[Result, A]]
 
   /**
    * Retrieves the user profile for the given auth info.

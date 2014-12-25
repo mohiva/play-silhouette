@@ -28,7 +28,7 @@ import play.api.i18n.{ Lang, Messages }
 import play.api.libs.concurrent.Akka
 import play.api.libs.json.Json
 import play.api.mvc.Results._
-import play.api.mvc.{ Action, RequestHeader, Result }
+import play.api.mvc._
 import play.api.test.{ FakeApplication, FakeRequest, PlaySpecification, WithApplication }
 
 import scala.concurrent.Future
@@ -43,7 +43,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
   "The `SecuredAction` action" should {
     "restrict access if no valid authenticator can be retrieved" in new WithDefaultGlobal {
       withEvent[NotAuthenticatedEvent] {
-        env.authenticatorService.retrieve returns Future.successful(None)
+        env.authenticatorService.retrieve(any) returns Future.successful(None)
 
         val controller = new SecuredController(env)
         val result = controller.securedAction(request)
@@ -55,7 +55,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "restrict access and discard authenticator if an invalid authenticator can be retrieved" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator.copy(isValid = false)))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator.copy(isValid = false)))
       env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
       }
@@ -72,7 +72,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "restrict access and discard authenticator if no identity could be found for an authenticator" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
       }
@@ -90,7 +90,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "display local not-authenticated result if user isn't authenticated" in new WithSecuredGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
       }
@@ -109,7 +109,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "display global not-authenticated result if user isn't authenticated" in new WithSecuredGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
       }
@@ -123,7 +123,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "display fallback message if user isn't authenticated and fallback methods aren't implemented" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
       }
@@ -137,7 +137,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "restrict access and update authenticator if a user is authenticated but not authorized" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.update(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
@@ -156,7 +156,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "restrict access with logic operation" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.update(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
@@ -172,21 +172,23 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         contentAsString(result) must contain(resultContent)
       }
 
-      val andAuthorization = SimpleAuthorization(true) && SimpleAuthorization(true)
-      isAuthorized(andAuthorization, true)
+      val andAuthorization = SimpleAuthorization(isAuthorized = true) && SimpleAuthorization(isAuthorized = true)
+      isAuthorized(andAuthorization, isAuth = true)
 
-      val orAuthorization = SimpleAuthorization(false) || SimpleAuthorization(true)
-      isAuthorized(orAuthorization, true)
+      val orAuthorization = SimpleAuthorization(isAuthorized = false) || SimpleAuthorization(isAuthorized = true)
+      isAuthorized(orAuthorization, isAuth = true)
 
-      val notAuthorization = !SimpleAuthorization(false)
-      isAuthorized(notAuthorization, true)
+      val notAuthorization = !SimpleAuthorization(isAuthorized = false)
+      isAuthorized(notAuthorization, isAuth = true)
 
-      val complexAuthorization = SimpleAuthorization(false) || !SimpleAuthorization(true) && SimpleAuthorization(false)
-      isAuthorized(complexAuthorization, false)
+      val complexAuthorization = SimpleAuthorization(isAuthorized = false) ||
+        !SimpleAuthorization(isAuthorized = true) &&
+        SimpleAuthorization(isAuthorized = false)
+      isAuthorized(complexAuthorization, isAuth = false)
     }
 
     "display local not-authorized result if user isn't authorized" in new WithSecuredGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.update(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
@@ -208,7 +210,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "display global not-authorized result if user isn't authorized" in new WithSecuredGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.update(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
@@ -225,7 +227,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "display fallback message if user isn't authorized and fallback methods aren't implemented" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.update(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
@@ -242,7 +244,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "invoke action without authorization if user is authenticated" in new WithSecuredGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.update(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
@@ -262,7 +264,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "invoke action with authorization if user is authenticated but not authorized" in new WithSecuredGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.update(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
@@ -284,8 +286,8 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     "use next request provider in the chain if first isn't responsible" in new WithSecuredGlobal with WithRequestProvider {
       tokenRequestProvider.authenticate(any) returns Future.successful(None)
       basicAuthRequestProvider.authenticate(any) returns Future.successful(Some(identity.loginInfo))
-      env.authenticatorService.retrieve returns Future.successful(None)
-      env.authenticatorService.create(identity.loginInfo) returns Future.successful(authenticator)
+      env.authenticatorService.retrieve(any) returns Future.successful(None)
+      env.authenticatorService.create(any)(any) returns Future.successful(authenticator)
       env.authenticatorService.init(any[FakeAuthenticator], any[Future[Result]])(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
       }
@@ -304,7 +306,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "update an initialized authenticator if it was touched" in new WithSecuredGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
       env.authenticatorService.update(any, any)(any) answers { (a, m) =>
@@ -324,7 +326,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "do not update an initialized authenticator if it was not touched" in new WithSecuredGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Right(authenticator)
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
@@ -342,8 +344,8 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "init an uninitialized authenticator" in new WithSecuredGlobal with WithRequestProvider {
       tokenRequestProvider.authenticate(any) returns Future.successful(Some(identity.loginInfo))
-      env.authenticatorService.retrieve returns Future.successful(None)
-      env.authenticatorService.create(identity.loginInfo) returns Future.successful(authenticator)
+      env.authenticatorService.retrieve(any) returns Future.successful(None)
+      env.authenticatorService.create(any)(any) returns Future.successful(authenticator)
       env.authenticatorService.init(any[FakeAuthenticator], any[Future[Result]])(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
       }
@@ -362,7 +364,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "renew an initialized authenticator" in new WithSecuredGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.renew(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
@@ -384,8 +386,8 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "renew an uninitialized authenticator" in new WithSecuredGlobal with WithRequestProvider {
       tokenRequestProvider.authenticate(any) returns Future.successful(Some(identity.loginInfo))
-      env.authenticatorService.retrieve returns Future.successful(None)
-      env.authenticatorService.create(identity.loginInfo) returns Future.successful(authenticator)
+      env.authenticatorService.retrieve(any) returns Future.successful(None)
+      env.authenticatorService.create(any)(any) returns Future.successful(authenticator)
       env.authenticatorService.renew(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
       }
@@ -404,7 +406,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "discard an initialized authenticator" in new WithSecuredGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
@@ -426,8 +428,8 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "discard an uninitialized authenticator" in new WithSecuredGlobal with WithRequestProvider {
       tokenRequestProvider.authenticate(any) returns Future.successful(Some(identity.loginInfo))
-      env.authenticatorService.retrieve returns Future.successful(None)
-      env.authenticatorService.create(identity.loginInfo) returns Future.successful(authenticator)
+      env.authenticatorService.retrieve(any) returns Future.successful(None)
+      env.authenticatorService.create(any)(any) returns Future.successful(authenticator)
       env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
       }
@@ -447,7 +449,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     "handle an Ajax request" in new WithSecuredGlobal {
       implicit val req = FakeRequest().withHeaders("Accept" -> "application/json")
 
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.update(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
@@ -470,7 +472,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
   "The `SecureRequestHandler`" should {
     "return status 401 if authentication was not successful" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(None)
+      env.authenticatorService.retrieve(any) returns Future.successful(None)
 
       val controller = new SecuredController(env)
       val result = controller.securedRequestHandler(request)
@@ -481,7 +483,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "return the user if authentication was successful" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.update(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
@@ -500,7 +502,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
   "The `UserAwareAction` action" should {
     "invoke action without identity and authenticator if no authenticator could be found" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(None)
+      env.authenticatorService.retrieve(any) returns Future.successful(None)
 
       val controller = new SecuredController(env)
       val result = controller.userAwareAction(request)
@@ -510,7 +512,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "invoke action without identity and authenticator if invalid authenticator was found" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator.copy(isValid = false)))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator.copy(isValid = false)))
       env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
       }
@@ -524,7 +526,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "invoke action with valid authenticator if no identity could be found" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.update(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
@@ -541,7 +543,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "invoke action with authenticator and identity" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.update(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
@@ -560,8 +562,8 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     "use next request provider in the chain if first isn't responsible" in new WithSecuredGlobal with WithRequestProvider {
       tokenRequestProvider.authenticate(any) returns Future.successful(None)
       basicAuthRequestProvider.authenticate(any) returns Future.successful(Some(identity.loginInfo))
-      env.authenticatorService.retrieve returns Future.successful(None)
-      env.authenticatorService.create(identity.loginInfo) returns Future.successful(authenticator)
+      env.authenticatorService.retrieve(any) returns Future.successful(None)
+      env.authenticatorService.create(any)(any) returns Future.successful(authenticator)
       env.authenticatorService.init(any[FakeAuthenticator], any[Future[Result]])(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
       }
@@ -577,7 +579,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "update an initialized authenticator if it was touched" in new WithSecuredGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
       env.authenticatorService.update(any, any)(any) answers { (a, m) =>
@@ -594,7 +596,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "do not update an initialized authenticator if it was not touched" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Right(authenticator)
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
@@ -609,8 +611,8 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "init an uninitialized authenticator" in new WithSecuredGlobal with WithRequestProvider {
       tokenRequestProvider.authenticate(any) returns Future.successful(Some(identity.loginInfo))
-      env.authenticatorService.retrieve returns Future.successful(None)
-      env.authenticatorService.create(identity.loginInfo) returns Future.successful(authenticator)
+      env.authenticatorService.retrieve(any) returns Future.successful(None)
+      env.authenticatorService.create(any)(any) returns Future.successful(authenticator)
       env.authenticatorService.init(any[FakeAuthenticator], any[Future[Result]])(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
       }
@@ -626,7 +628,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "renew an initialized authenticator" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.renew(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
@@ -645,8 +647,8 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "renew an uninitialized authenticator" in new WithSecuredGlobal with WithRequestProvider {
       tokenRequestProvider.authenticate(any) returns Future.successful(Some(identity.loginInfo))
-      env.authenticatorService.retrieve returns Future.successful(None)
-      env.authenticatorService.create(identity.loginInfo) returns Future.successful(authenticator)
+      env.authenticatorService.retrieve(any) returns Future.successful(None)
+      env.authenticatorService.create(any)(any) returns Future.successful(authenticator)
       env.authenticatorService.renew(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
       }
@@ -662,7 +664,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "discard an initialized authenticator" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
@@ -681,8 +683,8 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
     "discard an uninitialized authenticator" in new WithSecuredGlobal with WithRequestProvider {
       tokenRequestProvider.authenticate(any) returns Future.successful(Some(identity.loginInfo))
-      env.authenticatorService.retrieve returns Future.successful(None)
-      env.authenticatorService.create(identity.loginInfo) returns Future.successful(authenticator)
+      env.authenticatorService.retrieve(any) returns Future.successful(None)
+      env.authenticatorService.create(any)(any) returns Future.successful(authenticator)
       env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
       }
@@ -699,7 +701,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
   "The `UserAwareRequestHandler`" should {
     "return status 401 if authentication was not successful" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(None)
+      env.authenticatorService.retrieve(any) returns Future.successful(None)
 
       val controller = new SecuredController(env)
       val result = controller.userAwareRequestHandler(request)
@@ -710,7 +712,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "return the user if authentication was successful" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(Some(authenticator))
+      env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.update(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
@@ -729,7 +731,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
   "The `exceptionHandler` method" should {
     "translate an AccessDeniedException into a 403 Forbidden result" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(None)
+      env.authenticatorService.retrieve(any) returns Future.successful(None)
       env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
       }
@@ -742,7 +744,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
 
     "translate an AuthenticationException into a 401 Unauthorized result" in new WithDefaultGlobal {
-      env.authenticatorService.retrieve returns Future.successful(None)
+      env.authenticatorService.retrieve(any) returns Future.successful(None)
       env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
       }

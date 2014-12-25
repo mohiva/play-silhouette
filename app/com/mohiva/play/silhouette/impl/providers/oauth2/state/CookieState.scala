@@ -16,7 +16,7 @@
 package com.mohiva.play.silhouette.impl.providers.oauth2.state
 
 import com.mohiva.play.silhouette._
-import com.mohiva.play.silhouette.api.util.{ Base64, Clock, IDGenerator }
+import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, Base64, Clock, IDGenerator }
 import com.mohiva.play.silhouette.impl.exceptions.StateException
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.oauth2.state.CookieStateProvider._
@@ -99,9 +99,11 @@ class CookieStateProvider(
    * Validates the provider and the client state.
    *
    * @param id The provider ID.
+   * @param request The request.
+   * @tparam B The type of the request body.
    * @return The state on success, otherwise an failure.
    */
-  def validate(id: String)(implicit request: RequestHeader) = {
+  def validate[B](id: String)(implicit request: ExtractableRequest[B]) = {
     Future.from(clientState(id).flatMap(clientState => providerState(id).flatMap(providerState =>
       if (clientState != providerState) Failure(new StateException(StateIsNotEqual.format(id)))
       else if (clientState.isExpired) Failure(new StateException(StateIsExpired.format(id)))
@@ -114,9 +116,11 @@ class CookieStateProvider(
    *
    * @param result The result to send to the client.
    * @param state The state to publish.
+   * @param request The request.
+   * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
-  def publish(result: Result, state: State)(implicit request: RequestHeader) = {
+  def publish[B](result: Result, state: State)(implicit request: ExtractableRequest[B]) = {
     result.withCookies(Cookie(name = settings.cookieName,
       value = state.serialize,
       maxAge = Some(settings.expirationTime),
@@ -145,11 +149,12 @@ class CookieStateProvider(
    * with the access code.
    *
    * @param id The provider ID.
-   * @param request The request header.
+   * @param request The request.
+   * @tparam B The type of the request body.
    * @return The OAuth2 state on success, otherwise a failure.
    */
-  private def providerState(id: String)(implicit request: RequestHeader): Try[CookieState] = {
-    request.queryString.get(State).flatMap(_.headOption) match {
+  private def providerState[B](id: String)(implicit request: ExtractableRequest[B]): Try[CookieState] = {
+    request.extractString(State) match {
       case Some(state) => unserializeState(state, id)
       case _ => Failure(new StateException(ProviderStateDoesNotExists.format(id, State)))
     }
@@ -182,7 +187,7 @@ object CookieStateProvider {
    * The error messages.
    */
   val ClientStateDoesNotExists = "[Silhouette][%s] State cookie doesn't exists for name: %s"
-  val ProviderStateDoesNotExists = "[Silhouette][%s] State doesn't exists in query string for param: %s"
+  val ProviderStateDoesNotExists = "[Silhouette][%s] Couldn't find state in request for param: %s"
   val StateIsNotEqual = "[Silhouette][%s] State isn't equal"
   val StateIsExpired = "[Silhouette][%s] State is expired"
   val InvalidStateFormat = "[Silhouette][%s] Cannot build OAuth2State because of invalid Json format: %s"
