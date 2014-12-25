@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>BasicAuthProvider - com.mohiva.play.silhouette.impl.providers.BasicAuthProvider</title>
-          <meta name="description" content="BasicAuthProvider - com.mohiva.play.silhouette.impl.providers.BasicAuthProvider" />
-          <meta name="keywords" content="BasicAuthProvider com.mohiva.play.silhouette.impl.providers.BasicAuthProvider" />
+          <title>ExtractableRequest - com.mohiva.play.silhouette.api.util.ExtractableRequest</title>
+          <meta name="description" content="ExtractableRequest - com.mohiva.play.silhouette.api.util.ExtractableRequest" />
+          <meta name="keywords" content="ExtractableRequest com.mohiva.play.silhouette.api.util.ExtractableRequest" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'com.mohiva.play.silhouette.impl.providers.BasicAuthProvider';
+            var hash = 'com.mohiva.play.silhouette.api.util.ExtractableRequest$';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -26,12 +26,12 @@
    	  </script>
     
         </head>
-        <body class="type">
+        <body class="value">
       <div id="definition">
-        <a href="BasicAuthProvider$.html" title="Go to companion"><img src="../../../../../../lib/class_to_object_big.png" /></a>
-        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.impl">impl</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.impl.providers">providers</a></p>
-        <h1><a href="BasicAuthProvider$.html" title="Go to companion">BasicAuthProvider</a></h1> <span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider" title="Permalink" target="_top">
+        <a href="ExtractableRequest.html" title="Go to companion"><img src="../../../../../../lib/object_to_class_big.png" /></a>
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.api">api</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.api.util">util</a></p>
+        <h1><a href="ExtractableRequest.html" title="Go to companion">ExtractableRequest</a></h1> <span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -40,21 +40,17 @@
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">BasicAuthProvider</span><span class="result"> extends <a href="../../api/RequestProvider.html" class="extype" name="com.mohiva.play.silhouette.api.RequestProvider">RequestProvider</a></span>
+        <span class="name">ExtractableRequest</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A request provider implementation which supports HTTP basic authentication.</p><p>The provider supports the change of password hashing algorithms on the fly. Sometimes it may be possible to change
-the hashing algorithm used by the application. But the hashes stored in the backing store can't be converted back
-into plain text passwords, to hash them again with the new algorithm. So if a user successfully authenticates after
-the application has changed the hashing algorithm, the provider hashes the entered password again with the new
-algorithm and stores the auth info in the backing store.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The companion object.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../api/RequestProvider.html" class="extype" name="com.mohiva.play.silhouette.api.RequestProvider">RequestProvider</a>, <a href="../../api/Provider.html" class="extype" name="com.mohiva.play.silhouette.api.Provider">Provider</a>, <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -72,7 +68,7 @@ algorithm and stores the auth info in the backing store.
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.impl.providers.BasicAuthProvider"><span>BasicAuthProvider</span></li><li class="in" name="com.mohiva.play.silhouette.api.RequestProvider"><span>RequestProvider</span></li><li class="in" name="com.mohiva.play.silhouette.api.Provider"><span>Provider</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.api.util.ExtractableRequest"><span>ExtractableRequest</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -90,28 +86,7 @@ algorithm and stores the auth info in the backing store.
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="com.mohiva.play.silhouette.impl.providers.BasicAuthProvider#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(authInfoService:com.mohiva.play.silhouette.api.services.AuthInfoService,passwordHasher:com.mohiva.play.silhouette.api.util.PasswordHasher,passwordHasherList:Seq[com.mohiva.play.silhouette.api.util.PasswordHasher]):com.mohiva.play.silhouette.impl.providers.BasicAuthProvider"></a>
-      <a id="&lt;init&gt;:BasicAuthProvider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">BasicAuthProvider</span><span class="params">(<span name="authInfoService">authInfoService: <a href="../../api/services/AuthInfoService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthInfoService">AuthInfoService</a></span>, <span name="passwordHasher">passwordHasher: <a href="../../api/util/PasswordHasher.html" class="extype" name="com.mohiva.play.silhouette.api.util.PasswordHasher">PasswordHasher</a></span>, <span name="passwordHasherList">passwordHasherList: <span class="extype" name="scala.Seq">Seq</span>[<a href="../../api/util/PasswordHasher.html" class="extype" name="com.mohiva.play.silhouette.api.util.PasswordHasher">PasswordHasher</a>]</span>)</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@&lt;init&gt;(authInfoService:com.mohiva.play.silhouette.api.services.AuthInfoService,passwordHasher:com.mohiva.play.silhouette.api.util.PasswordHasher,passwordHasherList:Seq[com.mohiva.play.silhouette.api.util.PasswordHasher]):com.mohiva.play.silhouette.impl.providers.BasicAuthProvider" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">authInfoService</dt><dd class="cmt"><p>The auth info service.</p></dd><dt class="param">passwordHasher</dt><dd class="cmt"><p>The default password hasher used by the application.</p></dd><dt class="param">passwordHasherList</dt><dd class="cmt"><p>List of password hasher supported by the application.
-</p></dd></dl></div>
-    </li></ol>
-            </div>
+        
 
         
 
@@ -131,7 +106,7 @@ algorithm and stores the auth info in the backing store.
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -148,7 +123,7 @@ algorithm and stores the auth info in the backing store.
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@##():Int" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@##():Int" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -165,11 +140,30 @@ algorithm and stores the auth info in the backing store.
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.util.ExtractableRequest#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[B](implicitrequest:play.api.mvc.Request[B],implicitextractor:com.mohiva.play.silhouette.api.util.RequestExtractor[B]):com.mohiva.play.silhouette.api.util.ExtractableRequest[B]"></a>
+      <a id="apply[B](Request[B],RequestExtractor[B]):ExtractableRequest[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest.apply.B">B</span>]</span>, <span name="extractor">extractor: <a href="RequestExtractor.html" class="extype" name="com.mohiva.play.silhouette.api.util.RequestExtractor">RequestExtractor</a>[<span class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest.apply.B">B</span>]</span>)</span><span class="result">: <a href="ExtractableRequest.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest">ExtractableRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest.apply.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@apply[B](implicitrequest:play.api.mvc.Request[B],implicitextractor:com.mohiva.play.silhouette.api.util.RequestExtractor[B]):com.mohiva.play.silhouette.api.util.ExtractableRequest[B]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Creates an extractable request from an implicit request.</p><div class="fullcomment"><div class="comment cmt"><p>Creates an extractable request from an implicit request.
+</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The implicit request.</p></dd><dt class="param">extractor</dt><dd class="cmt"><p>The extractor to extract the value.</p></dd><dt>returns</dt><dd class="cmt"><p>An extractable request.
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -182,30 +176,11 @@ algorithm and stores the auth info in the backing store.
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.BasicAuthProvider#authenticate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="authenticate[B](request:play.api.mvc.Request[B]):scala.concurrent.Future[Option[com.mohiva.play.silhouette.api.LoginInfo]]"></a>
-      <a id="authenticate[B](Request[B]):Future[Option[LoginInfo]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">authenticate</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.providers.BasicAuthProvider.authenticate.B">B</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@authenticate[B](request:play.api.mvc.Request[B]):scala.concurrent.Future[Option[com.mohiva.play.silhouette.api.LoginInfo]]" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Authenticates an identity based on credentials sent in a request.</p><div class="fullcomment"><div class="comment cmt"><p>Authenticates an identity based on credentials sent in a request.
-</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the body.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request.</p></dd><dt>returns</dt><dd class="cmt"><p>Some login info on successful authentication or None if the authentication was unsuccessful.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.BasicAuthProvider">BasicAuthProvider</a> → <a href="../../api/RequestProvider.html" class="extype" name="com.mohiva.play.silhouette.api.RequestProvider">RequestProvider</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -218,7 +193,7 @@ algorithm and stores the auth info in the backing store.
         <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@clone():Object" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@clone():Object" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -229,6 +204,44 @@ algorithm and stores the auth info in the backing store.
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.util.ExtractableRequest#convertExplicit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="convertExplicit[B](request:play.api.mvc.Request[B])(implicitextractor:com.mohiva.play.silhouette.api.util.RequestExtractor[B]):com.mohiva.play.silhouette.api.util.ExtractableRequest[B]"></a>
+      <a id="convertExplicit[B](Request[B])(RequestExtractor[B]):ExtractableRequest[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">convertExplicit</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest.convertExplicit.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="extractor">extractor: <a href="RequestExtractor.html" class="extype" name="com.mohiva.play.silhouette.api.util.RequestExtractor">RequestExtractor</a>[<span class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest.convertExplicit.B">B</span>]</span>)</span><span class="result">: <a href="ExtractableRequest.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest">ExtractableRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest.convertExplicit.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@convertExplicit[B](request:play.api.mvc.Request[B])(implicitextractor:com.mohiva.play.silhouette.api.util.RequestExtractor[B]):com.mohiva.play.silhouette.api.util.ExtractableRequest[B]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Converts a <code>Request</code> to a <code>ExtractableRequest</code> instance.</p><div class="fullcomment"><div class="comment cmt"><p>Converts a <code>Request</code> to a <code>ExtractableRequest</code> instance.
+</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request to convert.</p></dd><dt class="param">extractor</dt><dd class="cmt"><p>The extractor to extract the value.</p></dd><dt>returns</dt><dd class="cmt"><p>An extractable request.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.util.ExtractableRequest#convertImplicit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="convertImplicit[B](implicitrequest:play.api.mvc.Request[B],implicitextractor:com.mohiva.play.silhouette.api.util.RequestExtractor[B]):com.mohiva.play.silhouette.api.util.ExtractableRequest[B]"></a>
+      <a id="convertImplicit[B](Request[B],RequestExtractor[B]):ExtractableRequest[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">convertImplicit</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest.convertImplicit.B">B</span>]</span>, <span name="extractor">extractor: <a href="RequestExtractor.html" class="extype" name="com.mohiva.play.silhouette.api.util.RequestExtractor">RequestExtractor</a>[<span class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest.convertImplicit.B">B</span>]</span>)</span><span class="result">: <a href="ExtractableRequest.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest">ExtractableRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest.convertImplicit.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@convertImplicit[B](implicitrequest:play.api.mvc.Request[B],implicitextractor:com.mohiva.play.silhouette.api.util.RequestExtractor[B]):com.mohiva.play.silhouette.api.util.ExtractableRequest[B]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Converts an implicit <code>Request</code> to a <code>ExtractableRequest</code> instance.</p><div class="fullcomment"><div class="comment cmt"><p>Converts an implicit <code>Request</code> to a <code>ExtractableRequest</code> instance.
+</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request to convert.</p></dd><dt class="param">extractor</dt><dd class="cmt"><p>The extractor to extract the value.</p></dd><dt>returns</dt><dd class="cmt"><p>An extractable request.
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -241,7 +254,7 @@ algorithm and stores the auth info in the backing store.
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -258,7 +271,7 @@ algorithm and stores the auth info in the backing store.
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -275,7 +288,7 @@ algorithm and stores the auth info in the backing store.
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -298,30 +311,11 @@ algorithm and stores the auth info in the backing store.
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.BasicAuthProvider#getCredentials" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getCredentials(request:play.api.mvc.RequestHeader):Option[com.mohiva.play.silhouette.api.util.Credentials]"></a>
-      <a id="getCredentials(RequestHeader):Option[Credentials]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">getCredentials</span><span class="params">(<span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../../api/util/Credentials.html" class="extype" name="com.mohiva.play.silhouette.api.util.Credentials">Credentials</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@getCredentials(request:play.api.mvc.RequestHeader):Option[com.mohiva.play.silhouette.api.util.Credentials]" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Encodes the credentials.</p><div class="fullcomment"><div class="comment cmt"><p>Encodes the credentials.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>Contains the colon-separated name-value pairs in clear-text string format</p></dd><dt>returns</dt><dd class="cmt"><p>The users credentials as plaintext
-</p></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -334,30 +328,11 @@ algorithm and stores the auth info in the backing store.
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@hashCode():Int" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.BasicAuthProvider#id" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="id:String"></a>
-      <a id="id:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">id</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@id:String" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Gets the provider ID.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the provider ID.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The provider ID.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.BasicAuthProvider">BasicAuthProvider</a> → <a href="../../api/Provider.html" class="extype" name="com.mohiva.play.silhouette.api.Provider">Provider</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -370,7 +345,7 @@ algorithm and stores the auth info in the backing store.
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -387,7 +362,7 @@ algorithm and stores the auth info in the backing store.
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -404,7 +379,7 @@ algorithm and stores the auth info in the backing store.
         <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@notify():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -421,7 +396,7 @@ algorithm and stores the auth info in the backing store.
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -438,7 +413,7 @@ algorithm and stores the auth info in the backing store.
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -455,7 +430,7 @@ algorithm and stores the auth info in the backing store.
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@toString():String" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@toString():String" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -472,7 +447,7 @@ algorithm and stores the auth info in the backing store.
         <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@wait():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -495,7 +470,7 @@ algorithm and stores the auth info in the backing store.
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -518,7 +493,7 @@ algorithm and stores the auth info in the backing store.
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.ExtractableRequest$@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -538,11 +513,7 @@ algorithm and stores the auth info in the backing store.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.mohiva.play.silhouette.api.RequestProvider">
-              <h3>Inherited from <a href="../../api/RequestProvider.html" class="extype" name="com.mohiva.play.silhouette.api.RequestProvider">RequestProvider</a></h3>
-            </div><div class="parent" name="com.mohiva.play.silhouette.api.Provider">
-              <h3>Inherited from <a href="../../api/Provider.html" class="extype" name="com.mohiva.play.silhouette.api.Provider">Provider</a></h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Any" class="extype" target="_top">Any</a></h3>

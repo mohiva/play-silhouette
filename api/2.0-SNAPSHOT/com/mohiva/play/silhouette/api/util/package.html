@@ -143,6 +143,42 @@
       <p class="shortcomment cmt">Credentials to authenticate with.</p><div class="fullcomment"><div class="comment cmt"><p>Credentials to authenticate with.
 </p></div><dl class="paramcmts block"><dt class="param">identifier</dt><dd class="cmt"><p>The unique identifier to authenticate with.</p></dd><dt class="param">password</dt><dd class="cmt"><p>The password to authenticate with.
 </p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.util.DefaultRequestExtractors" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DefaultRequestExtractorsextendsLowPriorityRequestExtractors"></a>
+      <a id="DefaultRequestExtractors:DefaultRequestExtractors"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DefaultRequestExtractors.html"><span class="name">DefaultRequestExtractors</span></a><span class="result"> extends <a href="LowPriorityRequestExtractors.html" class="extype" name="com.mohiva.play.silhouette.api.util.LowPriorityRequestExtractors">LowPriorityRequestExtractors</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.package@DefaultRequestExtractorsextendsLowPriorityRequestExtractors" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Contains the default request extractors.</p>
+    </li><li name="com.mohiva.play.silhouette.api.util.ExtractableRequest" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ExtractableRequest[B]extendsWrappedRequest[B]"></a>
+      <a id="ExtractableRequest[B]:ExtractableRequest[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ExtractableRequest.html"><span class="name">ExtractableRequest</span></a><span class="tparams">[<span name="B">B</span>]</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.WrappedRequest" class="extype" target="_top">WrappedRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.package@ExtractableRequest[B]extendsWrappedRequest[B]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A request which can extract values based on the request body.</p><div class="fullcomment"><div class="comment cmt"><p>A request which can extract values based on the request body.
+</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.
+</p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.util.FingerprintGenerator" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="FingerprintGeneratorextendsAnyRef"></a>
       <a id="FingerprintGenerator:FingerprintGenerator"></a>
@@ -194,6 +230,23 @@
       </a>
     </span>
       <p class="shortcomment cmt">A generator which creates an ID.</p>
+    </li><li name="com.mohiva.play.silhouette.api.util.LowPriorityRequestExtractors" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LowPriorityRequestExtractorsextendsAnyRef"></a>
+      <a id="LowPriorityRequestExtractors:LowPriorityRequestExtractors"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LowPriorityRequestExtractors.html"><span class="name">LowPriorityRequestExtractors</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.package@LowPriorityRequestExtractorsextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Default request extractors with lower priority.</p>
     </li><li name="com.mohiva.play.silhouette.api.util.PasswordHasher" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="PasswordHasherextendsAnyRef"></a>
       <a id="PasswordHasher:PasswordHasher"></a>
@@ -249,6 +302,23 @@
       <p class="shortcomment cmt">Implementation of the HTTP layer which uses the Play web service implementation.</p><div class="fullcomment"><div class="comment cmt"><p>Implementation of the HTTP layer which uses the Play web service implementation.</p><p>It makes no sense to move the HTTPLayer implementation to the contrib package, because the complete
 Silhouette module is bound to Play's HTTP implementation. So this layer exists only for mocking purpose.
 </p></div></div>
+    </li><li name="com.mohiva.play.silhouette.api.util.RequestExtractor" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="RequestExtractor[-B]extendsLogger"></a>
+      <a id="RequestExtractor[-B]:RequestExtractor[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="RequestExtractor.html"><span class="name">RequestExtractor</span></a><span class="tparams">[<span name="B">-B</span>]</span><span class="result"> extends <a href="../Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.package@RequestExtractor[-B]extendsLogger" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Adds the ability to extract values from a request.</p>
     </li></ol>
             </div>
 
@@ -307,6 +377,40 @@ Silhouette module is bound to Play's HTTP implementation. So this layer exists o
       </a>
     </span>
       <p class="shortcomment cmt">Provides default actions used by the core as a last fallback.</p>
+    </li><li name="com.mohiva.play.silhouette.api.util.ExtractableRequest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ExtractableRequest"></a>
+      <a id="ExtractableRequest:ExtractableRequest"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ExtractableRequest$.html"><span class="name">ExtractableRequest</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.package@ExtractableRequest" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.api.util.RequestExtractor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RequestExtractor"></a>
+      <a id="RequestExtractor:RequestExtractor"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RequestExtractor$.html"><span class="name">RequestExtractor</span></a><span class="result"> extends <a href="DefaultRequestExtractors.html" class="extype" name="com.mohiva.play.silhouette.api.util.DefaultRequestExtractors">DefaultRequestExtractors</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.package@RequestExtractor" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object.</p>
     </li></ol>
             </div>
 

@@ -322,18 +322,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder#handleAuthentication" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="handleAuthentication(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[(Option[Either[A,A]],Option[I])]"></a>
-      <a id="handleAuthentication(RequestHeader):Future[(Option[Either[A,A]],Option[I])]"></a>
+      <a id="handleAuthentication[B](implicitrequest:play.api.mvc.Request[B]):scala.concurrent.Future[(Option[Either[A,A]],Option[I])]"></a>
+      <a id="handleAuthentication[B](Request[B]):Future[(Option[Either[A,A]],Option[I])]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">handleAuthentication</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[(<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.A">A</span>, <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.A">A</span>]], <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.I">I</span>])]</span>
+        <span class="name">handleAuthentication</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder.handleAuthentication.B">B</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[(<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.A">A</span>, <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.A">A</span>]], <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.I">I</span>])]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$SecuredRequestHandlerBuilder@handleAuthentication(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[(Option[Either[A,A]],Option[I])]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$SecuredRequestHandlerBuilder@handleAuthentication[B](implicitrequest:play.api.mvc.Request[B]):scala.concurrent.Future[(Option[Either[A,A]],Option[I])]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -341,7 +341,7 @@
 This method marks the returned authenticators by returning already initialized authenticators on the
 left and new authenticators on the right. All new authenticators must be initialized later in the flow,
 with the result returned from the invoked block.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The current request header.</p></dd><dt>returns</dt><dd class="cmt"><p>A tuple which consists of (maybe the existing authenticator on the left or a
+</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd><dt>returns</dt><dd class="cmt"><p>A tuple which consists of (maybe the existing authenticator on the left or a
         new authenticator on the right -&gt; maybe the identity).
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Silhouette$RequestHandlerBuilder.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder">RequestHandlerBuilder</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder#handleBlock" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">

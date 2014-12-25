@@ -282,23 +282,23 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider#authenticate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="authenticate()(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Either[play.api.mvc.Result,com.mohiva.play.silhouette.impl.providers.OAuth2Info]]"></a>
-      <a id="authenticate()(RequestHeader):Future[Either[Result,OAuth2Info]]"></a>
+      <a id="authenticate[B]()(implicitrequest:com.mohiva.play.silhouette.api.util.ExtractableRequest[B]):scala.concurrent.Future[Either[play.api.mvc.Result,com.mohiva.play.silhouette.impl.providers.OAuth2Info]]"></a>
+      <a id="authenticate[B]()(ExtractableRequest[B]):Future[Either[Result,OAuth2Info]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">authenticate</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="scala.Either">Either</span>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>, <a href="../OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Info">OAuth2Info</a>]]</span>
+        <span class="name">authenticate</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="../../../api/util/ExtractableRequest.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest">ExtractableRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider.authenticate.B">B</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="scala.Either">Either</span>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>, <a href="../OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Info">OAuth2Info</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth2.VKProvider@authenticate()(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Either[play.api.mvc.Result,com.mohiva.play.silhouette.impl.providers.OAuth2Info]]" title="Permalink" target="_top">
+      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth2.VKProvider@authenticate[B]()(implicitrequest:com.mohiva.play.silhouette.api.util.ExtractableRequest[B]):scala.concurrent.Future[Either[play.api.mvc.Result,com.mohiva.play.silhouette.impl.providers.OAuth2Info]]" title="Permalink" target="_top">
         <img src="../../../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Starts the authentication process.</p><div class="fullcomment"><div class="comment cmt"><p>Starts the authentication process.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>Either a Result or the auth info from the provider.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request.</p></dd><dt>returns</dt><dd class="cmt"><p>Either a Result or the auth info from the provider.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider">OAuth2Provider</a> → <a href="../SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider#buildInfo" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="buildInfo(response:play.api.libs.ws.WSResponse):scala.util.Try[com.mohiva.play.silhouette.impl.providers.OAuth2Info]"></a>

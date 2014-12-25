@@ -135,42 +135,42 @@
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The build state.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider#publish" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="publish(result:play.api.mvc.Result,state:OAuth2StateProvider.this.State)(implicitrequest:play.api.mvc.RequestHeader):play.api.mvc.Result"></a>
-      <a id="publish(Result,State)(RequestHeader):Result"></a>
+      <a id="publish[B](result:play.api.mvc.Result,state:OAuth2StateProvider.this.State)(implicitrequest:com.mohiva.play.silhouette.api.util.ExtractableRequest[B]):play.api.mvc.Result"></a>
+      <a id="publish[B](Result,State)(ExtractableRequest[B]):Result"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">publish</span><span class="params">(<span name="result">result: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>, <span name="state">state: <a href="#State&lt;:com.mohiva.play.silhouette.impl.providers.OAuth2State" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider.State">State</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
+        <span class="name">publish</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="result">result: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>, <span name="state">state: <a href="#State&lt;:com.mohiva.play.silhouette.impl.providers.OAuth2State" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider.State">State</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="../../api/util/ExtractableRequest.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest">ExtractableRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider.publish.B">B</span>]</span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider@publish(result:play.api.mvc.Result,state:OAuth2StateProvider.this.State)(implicitrequest:play.api.mvc.RequestHeader):play.api.mvc.Result" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider@publish[B](result:play.api.mvc.Result,state:OAuth2StateProvider.this.State)(implicitrequest:com.mohiva.play.silhouette.api.util.ExtractableRequest[B]):play.api.mvc.Result" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Publishes the state to the client.</p><div class="fullcomment"><div class="comment cmt"><p>Publishes the state to the client.
-</p></div><dl class="paramcmts block"><dt class="param">result</dt><dd class="cmt"><p>The result to send to the client.</p></dd><dt class="param">state</dt><dd class="cmt"><p>The state to publish.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client.
+</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to send to the client.</p></dd><dt class="param">state</dt><dd class="cmt"><p>The state to publish.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider#validate" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="validate(id:String)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[OAuth2StateProvider.this.State]"></a>
-      <a id="validate(String)(RequestHeader):Future[State]"></a>
+      <a id="validate[B](id:String)(implicitrequest:com.mohiva.play.silhouette.api.util.ExtractableRequest[B]):scala.concurrent.Future[OAuth2StateProvider.this.State]"></a>
+      <a id="validate[B](String)(ExtractableRequest[B]):Future[State]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validate</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="#State&lt;:com.mohiva.play.silhouette.impl.providers.OAuth2State" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider.State">State</a>]</span>
+        <span class="name">validate</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="../../api/util/ExtractableRequest.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest">ExtractableRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider.validate.B">B</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="#State&lt;:com.mohiva.play.silhouette.impl.providers.OAuth2State" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider.State">State</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider@validate(id:String)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[OAuth2StateProvider.this.State]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider@validate[B](id:String)(implicitrequest:com.mohiva.play.silhouette.api.util.ExtractableRequest[B]):scala.concurrent.Future[OAuth2StateProvider.this.State]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Validates the provider and the client state.</p><div class="fullcomment"><div class="comment cmt"><p>Validates the provider and the client state.
-</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The provider ID.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The state on success, otherwise an failure.
+</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">id</dt><dd class="cmt"><p>The provider ID.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request.</p></dd><dt>returns</dt><dd class="cmt"><p>The state on success, otherwise an failure.
 </p></dd></dl></div>
     </li></ol>
             </div>

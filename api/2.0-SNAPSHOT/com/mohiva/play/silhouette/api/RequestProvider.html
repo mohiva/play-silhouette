@@ -96,18 +96,18 @@
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="com.mohiva.play.silhouette.api.RequestProvider#authenticate" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="authenticate(request:play.api.mvc.RequestHeader):scala.concurrent.Future[Option[com.mohiva.play.silhouette.api.LoginInfo]]"></a>
-      <a id="authenticate(RequestHeader):Future[Option[LoginInfo]]"></a>
+      <a id="authenticate[B](request:play.api.mvc.Request[B]):scala.concurrent.Future[Option[com.mohiva.play.silhouette.api.LoginInfo]]"></a>
+      <a id="authenticate[B](Request[B]):Future[Option[LoginInfo]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">authenticate</span><span class="params">(<span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a>]]</span>
+        <span class="name">authenticate</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.RequestProvider.authenticate.B">B</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.RequestProvider@authenticate(request:play.api.mvc.RequestHeader):scala.concurrent.Future[Option[com.mohiva.play.silhouette.api.LoginInfo]]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.RequestProvider@authenticate[B](request:play.api.mvc.Request[B]):scala.concurrent.Future[Option[com.mohiva.play.silhouette.api.LoginInfo]]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -116,7 +116,7 @@ it tries to authenticate until one provider returns an identity. To control the 
 chaining you can use the return type by this method.</p><p>None - If returning None, then the next provider in the chain will be executed.
 Some(identity) - If returning some identity, then this provider will be used for authentication.
 Exception - Throwing an exception breaks the chain. The error handler will also handle this exception.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>Some login info on successful authentication or None if the authentication was unsuccessful.
+</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the body.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request.</p></dd><dt>returns</dt><dd class="cmt"><p>Some login info on successful authentication or None if the authentication was unsuccessful.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.Provider#id" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="id:String"></a>
