@@ -37,7 +37,7 @@ class CredentialsProviderSpec extends PlaySpecification with Mockito {
 
       authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(None)
 
-      await(provider.authenticate(credentials)) must throwA[AccessDeniedException].like {
+      await(provider.authenticate(credentials)) must throwA[AuthenticationException].like {
         case e => e.getMessage must beEqualTo(UnknownCredentials.format(provider.id))
       }
     }
@@ -49,7 +49,7 @@ class CredentialsProviderSpec extends PlaySpecification with Mockito {
       fooHasher.matches(passwordInfo, credentials.password) returns false
       authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
-      await(provider.authenticate(credentials)) must throwA[AccessDeniedException].like {
+      await(provider.authenticate(credentials)) must throwA[AuthenticationException].like {
         case e => e.getMessage must beEqualTo(InvalidPassword.format(provider.id))
       }
     }

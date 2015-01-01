@@ -68,12 +68,12 @@ class CredentialsProvider(
             authInfoService.save(loginInfo, passwordHasher.hash(credentials.password))
           }
           loginInfo
-        case Some(hasher) => throw new AccessDeniedException(InvalidPassword.format(id))
+        case Some(hasher) => throw new AuthenticationException(InvalidPassword.format(id))
         case None => throw new AuthenticationException(UnsupportedHasher.format(
           id, authInfo.hasher, passwordHasherList.map(_.id).mkString(", ")
         ))
       }
-      case None => throw new AccessDeniedException(UnknownCredentials.format(id))
+      case None => throw new AuthenticationException(UnknownCredentials.format(id))
     }
   }
 }
