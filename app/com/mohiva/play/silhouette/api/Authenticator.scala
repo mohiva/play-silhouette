@@ -32,6 +32,11 @@ import scala.concurrent.Future
 trait Authenticator {
 
   /**
+   * The Type of the generated value an authenticator will be serialized to.
+   */
+  type Value
+
+  /**
    * Gets the linked login info for an identity.
    *
    * @return The linked login info for an identity.

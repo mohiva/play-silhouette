@@ -17,6 +17,7 @@ package com.mohiva.play.silhouette.impl.authenticators
 
 import com.mohiva.play.silhouette.api.services.AuthenticatorService
 import com.mohiva.play.silhouette.api.{ Authenticator, LoginInfo }
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ RequestHeader, Result }
 
 import scala.concurrent.Future
@@ -29,6 +30,11 @@ import scala.concurrent.Future
  * @param loginInfo The linked login info for an identity.
  */
 case class DummyAuthenticator(loginInfo: LoginInfo) extends Authenticator {
+
+  /**
+   * The Type of the generated value an authenticator will be serialized to.
+   */
+  type Value = Unit
 
   /**
    * Authenticator is always valid.
@@ -73,18 +79,40 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The manipulated result.
    */
+  @deprecated("Use `init` and `embed` instead; Will be removed in 2.0 final", "2.0-MASTER")
   def init(authenticator: DummyAuthenticator, result: Future[Result])(implicit request: RequestHeader) = {
+    init(authenticator).flatMap(s => embed(s, result))
+  }
+
+  /**
+   * Returns noting because this authenticator doesn't have a serialized representation.
+   *
+   * @param authenticator The authenticator instance.
+   * @param request The request header.
+   * @return The serialized authenticator value.
+   */
+  def init(authenticator: DummyAuthenticator)(implicit request: RequestHeader) = Future.successful(())
+
+  /**
+   * Returns the original result, because we needn't add the authenticator to the result.
+   *
+   * @param value The authenticator value to embed.
+   * @param result The result to manipulate.
+   * @param request The request header.
+   * @return The manipulated result.
+   */
+  def embed(value: Unit, result: Future[Result])(implicit request: RequestHeader) = {
     result
   }
 
   /**
    * Returns the original request, because we needn't add the authenticator to the request.
    *
-   * @param authenticator The authenticator instance.
+   * @param value The authenticator value to embed.
    * @param request The request header.
    * @return The manipulated request header.
    */
-  def init(authenticator: DummyAuthenticator, request: RequestHeader) = Future.successful(request)
+  def embed(value: Unit, request: RequestHeader) = request
 
   /**
    * @inheritdoc

@@ -293,7 +293,9 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
         case hr @ HandlerResult(pr: Authenticator.Renew, _) =>
           env.authenticatorService.renew(authenticator, Future.successful(pr)).map(pr => hr.copy(pr))
         case hr @ HandlerResult(pr, _) =>
-          env.authenticatorService.init(authenticator, Future.successful(pr)).map(pr => hr.copy(pr))
+          env.authenticatorService.init(authenticator).flatMap { value =>
+            env.authenticatorService.embed(value, Future.successful(pr))
+          }.map(pr => hr.copy(pr))
       }
     }
 

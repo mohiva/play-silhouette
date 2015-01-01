@@ -68,7 +68,28 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return The manipulated result.
    */
+  @deprecated("Use `init` and `embed` instead; Will be removed in 2.0 final", "2.0-MASTER")
   def init(authenticator: T, result: Future[Result])(implicit request: RequestHeader): Future[Result]
+
+  /**
+   * Initializes an authenticator and instead of embedding into the the request or result, it returns
+   * the serialized value.
+   *
+   * @param authenticator The authenticator instance.
+   * @param request The request header.
+   * @return The serialized authenticator value.
+   */
+  def init(authenticator: T)(implicit request: RequestHeader): Future[T#Value]
+
+  /**
+   * Embeds authenticator specific artifacts into the response.
+   *
+   * @param value The authenticator value to embed.
+   * @param result The result to manipulate.
+   * @param request The request header.
+   * @return The manipulated result.
+   */
+  def embed(value: T#Value, result: Future[Result])(implicit request: RequestHeader): Future[Result]
 
   /**
    * Embeds authenticator specific artifacts into the request.
@@ -80,11 +101,11 @@ trait AuthenticatorService[T <: Authenticator] {
    *
    * If an existing authenticator exists, then it will be overridden.
    *
-   * @param authenticator The authenticator instance.
+   * @param value The authenticator value to embed.
    * @param request The request header.
    * @return The manipulated request header.
    */
-  def init(authenticator: T, request: RequestHeader): Future[RequestHeader]
+  def embed(value: T#Value, request: RequestHeader): RequestHeader
 
   ///////////////////////////////////////////////////////////////////////////////////////////////
   //

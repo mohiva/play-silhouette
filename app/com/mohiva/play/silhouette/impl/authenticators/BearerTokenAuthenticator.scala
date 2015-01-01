@@ -55,6 +55,11 @@ case class BearerTokenAuthenticator(
   idleTimeout: Option[Int]) extends StorableAuthenticator {
 
   /**
+   * The Type of the generated value an authenticator will be serialized to.
+   */
+  type Value = String
+
+  /**
    * Checks if the authenticator isn't expired and isn't timed out.
    *
    * @return True if the authenticator isn't expired and isn't timed out.
@@ -136,28 +141,48 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
+  @deprecated("Use `init` and `embed` instead; Will be removed in 2.0 final", "2.0-MASTER")
   def init(authenticator: BearerTokenAuthenticator, result: Future[Result])(implicit request: RequestHeader) = {
-    dao.save(authenticator).flatMap { a =>
-      result.map(_.withHeaders(settings.headerName -> a.id))
+    init(authenticator).flatMap(s => embed(s, result))
+  }
+
+  /**
+   * Creates a new bearer token for the given authenticator and return it. The authenticator will also be
+   * stored in the backing store.
+   *
+   * @param authenticator The authenticator instance.
+   * @param request The request header.
+   * @return The serialized authenticator value.
+   */
+  def init(authenticator: BearerTokenAuthenticator)(implicit request: RequestHeader) = {
+    dao.save(authenticator).map { a =>
+      a.id
     }.recover {
       case e => throw new AuthenticationException(InitError.format(ID, authenticator), e)
     }
   }
 
   /**
-   * Creates a new bearer token for the given authenticator and adds it to the given the request. The
-   * authenticator will also be stored in the backing store.
+   * Adds a header with the token as value to the result.
    *
-   * @param authenticator The authenticator instance.
+   * @param token The token to embed.
+   * @param result The result to manipulate.
+   * @param request The request header.
+   * @return The manipulated result.
+   */
+  def embed(token: String, result: Future[Result])(implicit request: RequestHeader) = {
+    result.map(_.withHeaders(settings.headerName -> token))
+  }
+
+  /**
+   * Adds a header with the token as value to the request.
+   *
+   * @param token The token to embed.
    * @param request The request header.
    * @return The manipulated request header.
    */
-  def init(authenticator: BearerTokenAuthenticator, request: RequestHeader): Future[RequestHeader] = {
-    dao.save(authenticator).map { a =>
-      request.copy(headers = AdditionalHeaders(request.headers, Seq(settings.headerName -> Seq(a.id))))
-    }.recover {
-      case e => throw new AuthenticationException(InitError.format(ID, authenticator), e)
-    }
+  def embed(token: String, request: RequestHeader) = {
+    request.copy(headers = AdditionalHeaders(request.headers, Seq(settings.headerName -> Seq(token))))
   }
 
   /**
@@ -213,7 +238,7 @@ class BearerTokenAuthenticatorService(
 
     dao.remove(authenticator.id).flatMap { _ =>
       create(authenticator.loginInfo).flatMap { a =>
-        init(a, result)
+        init(a).flatMap(v => embed(v, result))
       }
     }.recover {
       case e => throw new AuthenticationException(RenewError.format(ID, authenticator), e)

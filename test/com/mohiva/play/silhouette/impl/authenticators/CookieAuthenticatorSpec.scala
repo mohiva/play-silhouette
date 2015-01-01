@@ -189,96 +189,65 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
     }
   }
 
-  "The result `init` method of the service" should {
-    "return the response with a cookie if authenticator could be saved in backing store" in new Context {
+  "The `init` method of the service" should {
+    "return a cookie if authenticator could be saved in backing store" in new Context {
       dao.save(any) returns Future.successful(authenticator)
 
       implicit val request = FakeRequest()
-      val result = service.init(authenticator, Future.successful(Results.Status(200)))
 
-      cookies(result).get(settings.cookieName) should beSome[Cookie].which { c =>
-        c.name must be equalTo settings.cookieName
-        c.value must be equalTo authenticator.id
-        c.maxAge must be equalTo settings.cookieMaxAge
-        c.path must be equalTo settings.cookiePath
-        c.domain must be equalTo settings.cookieDomain
-        c.secure must be equalTo settings.secureCookie
-        c.httpOnly must be equalTo settings.httpOnlyCookie
-      }
+      await(service.init(authenticator)) must be equalTo cookie
+      there was one(dao).save(any)
     }
 
-    "throws an Authentication exception if error an occurred during initialization" in new Context {
+    "throws an Authentication exception if an error occurred during initialization" in new Context {
       dao.save(any) returns Future.failed(new Exception("Cannot store authenticator"))
 
       implicit val request = FakeRequest()
-      val okResult = Future.successful(Results.Status(200))
 
-      await(service.init(authenticator, okResult)) must throwA[AuthenticationException].like {
+      await(service.init(authenticator)) must throwA[AuthenticationException].like {
         case e =>
           e.getMessage must startWith(InitError.format(ID, ""))
       }
     }
   }
 
-  "The request `init` method of the service" should {
-    "return the request with a cookie if authenticator could be saved in backing store" in new Context {
+  "The result `embed` method of the service" should {
+    "return the response with a cookie" in new Context {
       dao.save(any) returns Future.successful(authenticator)
 
-      val request = await(service.init(authenticator, FakeRequest()))
+      implicit val request = FakeRequest()
+      val result = service.embed(cookie, Future.successful(Results.Status(200)))
 
-      request.cookies.get(settings.cookieName) should beSome[Cookie].which { c =>
-        c.name must be equalTo settings.cookieName
-        c.value must be equalTo authenticator.id
-        c.maxAge must be equalTo settings.cookieMaxAge
-        c.path must be equalTo settings.cookiePath
-        c.domain must be equalTo settings.cookieDomain
-        c.secure must be equalTo settings.secureCookie
-        c.httpOnly must be equalTo settings.httpOnlyCookie
-      }
+      cookies(result).get(settings.cookieName) should beSome(cookie)
+    }
+  }
+
+  "The request `embed` method of the service" should {
+    "return the request with a cookie" in new Context {
+      dao.save(any) returns Future.successful(authenticator)
+
+      val request = service.embed(cookie, FakeRequest())
+
+      request.cookies.get(settings.cookieName) should beSome(cookie)
     }
 
     "override an existing cookie" in new Context {
       dao.save(any) returns Future.successful(authenticator)
 
-      val request = await(service.init(authenticator, FakeRequest().withCookies(Cookie(settings.cookieName, "test"))))
+      val request = service.embed(cookie, FakeRequest().withCookies(Cookie(settings.cookieName, "test")))
 
-      request.cookies.get(settings.cookieName) should beSome[Cookie].which { c =>
-        c.name must be equalTo settings.cookieName
-        c.value must be equalTo authenticator.id
-        c.maxAge must be equalTo settings.cookieMaxAge
-        c.path must be equalTo settings.cookiePath
-        c.domain must be equalTo settings.cookieDomain
-        c.secure must be equalTo settings.secureCookie
-        c.httpOnly must be equalTo settings.httpOnlyCookie
-      }
+      request.cookies.get(settings.cookieName) should beSome(cookie)
     }
 
     "keep non authenticator related cookies" in new Context {
       dao.save(any) returns Future.successful(authenticator)
 
-      val request = await(service.init(authenticator, FakeRequest().withCookies(Cookie("test", "test"))))
+      val request = service.embed(cookie, FakeRequest().withCookies(Cookie("test", "test")))
 
-      request.cookies.get(settings.cookieName) should beSome[Cookie].which { c =>
-        c.name must be equalTo settings.cookieName
-        c.value must be equalTo authenticator.id
-        c.maxAge must be equalTo settings.cookieMaxAge
-        c.path must be equalTo settings.cookiePath
-        c.domain must be equalTo settings.cookieDomain
-        c.secure must be equalTo settings.secureCookie
-        c.httpOnly must be equalTo settings.httpOnlyCookie
-      }
+      request.cookies.get(settings.cookieName) should beSome(cookie)
       request.cookies.get("test") should beSome[Cookie].which { c =>
         c.name must be equalTo "test"
         c.value must be equalTo "test"
-      }
-    }
-
-    "throws an Authentication exception if error an occurred during initialization" in new Context {
-      dao.save(any) returns Future.failed(new Exception("Cannot store authenticator"))
-
-      await(service.init(authenticator, FakeRequest())) must throwA[AuthenticationException].like {
-        case e =>
-          e.getMessage must startWith(InitError.format(ID, ""))
       }
     }
   }
@@ -400,17 +369,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
 
       dao.remove(any) returns Future.successful(())
 
-      val result = service.discard(authenticator, Future.successful(Results.Status(200).withCookies(
-        Cookie(
-          name = settings.cookieName,
-          value = authenticator.id,
-          maxAge = settings.cookieMaxAge,
-          path = settings.cookiePath,
-          domain = settings.cookieDomain,
-          secure = settings.secureCookie,
-          httpOnly = settings.httpOnlyCookie
-        )
-      )))
+      val result = service.discard(authenticator, Future.successful(Results.Status(200).withCookies(cookie)))
 
       cookies(result).get(settings.cookieName) should beSome[Cookie].which { c =>
         c.name must be equalTo settings.cookieName
@@ -497,5 +456,18 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       idleTimeout = settings.authenticatorIdleTimeout,
       fingerprint = None
     ))
+
+    /**
+     * A cookie instance.
+     */
+    lazy val cookie = Cookie(
+      name = settings.cookieName,
+      value = authenticator.id,
+      maxAge = settings.cookieMaxAge,
+      path = settings.cookiePath,
+      domain = settings.cookieDomain,
+      secure = settings.secureCookie,
+      httpOnly = settings.httpOnlyCookie
+    )
   }
 }
