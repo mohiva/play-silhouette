@@ -64,6 +64,11 @@ case class JWTAuthenticator(
   idleTimeout: Option[Int]) extends StorableAuthenticator {
 
   /**
+   * The Type of the generated value an authenticator will be serialized to.
+   */
+  type Value = String
+
+  /**
    * Checks if the authenticator isn't expired and isn't timed out.
    *
    * @return True if the authenticator isn't expired and isn't timed out.
@@ -155,28 +160,47 @@ class JWTAuthenticatorService(
    * @param result The result to manipulate.
    * @return The manipulated result.
    */
+  @deprecated("Use `init` and `embed` instead; Will be removed in 2.0 final", "2.0-MASTER")
   def init(authenticator: JWTAuthenticator, result: Future[Result])(implicit request: RequestHeader) = {
-    dao.fold(Future.successful(authenticator))(_.save(authenticator)).flatMap { a =>
-      result.map(_.withHeaders(settings.headerName -> serialize(a)))
+    init(authenticator).flatMap(s => embed(s, result))
+  }
+
+  /**
+   * Creates a new JWT for the given authenticator and return it. If a backing store is defined, then the
+   * authenticator will be stored in it.
+   *
+   * @param authenticator The authenticator instance.
+   * @param request The request header.
+   * @return The serialized authenticator value.
+   */
+  def init(authenticator: JWTAuthenticator)(implicit request: RequestHeader) = {
+    dao.fold(Future.successful(authenticator))(_.save(authenticator)).map { a =>
+      serialize(a)
     }.recover {
       case e => throw new AuthenticationException(InitError.format(ID, authenticator), e)
     }
   }
 
   /**
-   * Creates a new JWT for the given authenticator and adds a header with the token as value to the request.
-   * If a backing store is defined, then the authenticator will be stored in it.
+   * Adds a header with the token as value to the result.
    *
-   * @param authenticator The authenticator instance.
+   * @param token The token to embed.
+   * @param result The result to manipulate.
+   * @return The manipulated result.
+   */
+  def embed(token: String, result: Future[Result])(implicit request: RequestHeader) = {
+    result.map(_.withHeaders(settings.headerName -> token))
+  }
+
+  /**
+   * Adds a header with the token as value to the request.
+   *
+   * @param token The token to embed.
    * @param request The request header.
    * @return The manipulated request header.
    */
-  def init(authenticator: JWTAuthenticator, request: RequestHeader): Future[RequestHeader] = {
-    dao.fold(Future.successful(authenticator))(_.save(authenticator)).map { a =>
-      request.copy(headers = AdditionalHeaders(request.headers, Seq(settings.headerName -> Seq(serialize(a)))))
-    }.recover {
-      case e => throw new AuthenticationException(InitError.format(ID, authenticator), e)
-    }
+  def embed(token: String, request: RequestHeader) = {
+    request.copy(headers = AdditionalHeaders(request.headers, Seq(settings.headerName -> Seq(token))))
   }
 
   /**
@@ -230,7 +254,7 @@ class JWTAuthenticatorService(
 
     dao.fold(Future.successful(()))(_.remove(authenticator.id)).flatMap { _ =>
       create(authenticator.loginInfo).flatMap { a =>
-        init(a, result)
+        init(a).flatMap(v => embed(v, result))
       }
     }.recover {
       case e => throw new AuthenticationException(RenewError.format(ID, authenticator), e)
@@ -349,7 +373,7 @@ object JWTAuthenticatorService {
 /**
  * The settings for the JWT authenticator.
  *
- * @param headerName The name of the header in which the token will be transfered.
+ * @param headerName The name of the header in which the token will be transferred.
  * @param issuerClaim The issuer claim identifies the principal that issued the JWT.
  * @param encryptSubject Indicates if the subject should be encrypted in JWT.
  * @param authenticatorIdleTimeout The time in seconds an authenticator can be idle before it timed out.

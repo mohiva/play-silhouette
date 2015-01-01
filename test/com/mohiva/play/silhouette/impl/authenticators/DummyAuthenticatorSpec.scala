@@ -50,20 +50,28 @@ class DummyAuthenticatorSpec extends PlaySpecification with Mockito {
     }
   }
 
-  "The result `init` method of the service" should {
+  "The `init` method of the service" should {
+    "return unit" in new Context {
+      implicit val request = FakeRequest()
+
+      await(service.init(authenticator)) must be equalTo (())
+    }
+  }
+
+  "The result `embed` method of the service" should {
     "return the original response" in new Context {
       implicit val request = FakeRequest()
       val result = Future.successful(Results.Status(200))
 
-      service.init(authenticator, result) must be equalTo result
+      service.embed((), result) must be equalTo result
     }
   }
 
-  "The request `init` method of the service" should {
+  "The request `embed` method of the service" should {
     "return the original request" in new Context {
       val request = FakeRequest()
 
-      await(service.init(authenticator, request)) must be equalTo request
+      service.embed((), request) must be equalTo request
     }
   }
 

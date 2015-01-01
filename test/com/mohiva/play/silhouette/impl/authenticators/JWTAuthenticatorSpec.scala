@@ -257,92 +257,77 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
   }
 
   "The `init` method of the service" should {
-    "return the response with a header if DAO is enabled and authenticator could be saved in backing store" in new WithApplication with Context {
+    "return the token if DAO is enabled and authenticator could be saved in backing store" in new WithApplication with Context {
       dao.save(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
       implicit val request = FakeRequest()
 
-      val result = service(Some(dao)).init(authenticator, Future.successful(Results.Status(200)))
+      val token = await(service(Some(dao)).init(authenticator))
 
-      header(settings.headerName, result) should beSome(service(None).serialize(authenticator))
+      token must be equalTo service(None).serialize(authenticator)
+      there was one(dao).save(any)
     }
 
-    "return the response with a header if DAO is disabled" in new WithApplication with Context {
+    "return the token if DAO is disabled" in new WithApplication with Context {
       implicit val request = FakeRequest()
 
-      val result = service(None).init(authenticator, Future.successful(Results.Status(200)))
+      val token = await(service(None).init(authenticator))
 
-      header(settings.headerName, result) should beSome(service(None).serialize(authenticator))
+      token must be equalTo service(None).serialize(authenticator)
       there was no(dao).save(any)
     }
 
-    "throws an Authentication exception if error an occurred during initialization" in new Context {
+    "throws an Authentication exception if an error occurred during initialization" in new Context {
       dao.save(any) returns Future.failed(new Exception("Cannot store authenticator"))
 
       implicit val request = FakeRequest()
       val okResult = Future.successful(Results.Status(200))
 
-      await(service(Some(dao)).init(authenticator, okResult)) must throwA[AuthenticationException].like {
+      await(service(Some(dao)).init(authenticator)) must throwA[AuthenticationException].like {
         case e =>
           e.getMessage must startWith(InitError.format(ID, ""))
       }
     }
   }
 
-  "The request `init` method of the service" should {
-    "return the request with a header if DAO is enabled and authenticator could be saved in backing store" in new WithApplication with Context {
+  "The result `embed` method of the service" should {
+    "return the response with a header" in new WithApplication with Context {
+      dao.save(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
+      implicit val request = FakeRequest()
+      val token = service(None).serialize(authenticator)
+
+      val result = service(Some(dao)).embed(token, Future.successful(Results.Status(200)))
+
+      header(settings.headerName, result) should beSome(token)
+    }
+  }
+
+  "The request `embed` method of the service" should {
+    "return the request with a header " in new WithApplication with Context {
       dao.save(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
 
-      val request = await(service(Some(dao)).init(authenticator, FakeRequest()))
+      val token = service(None).serialize(authenticator)
+      val request = service(Some(dao)).embed(token, FakeRequest())
 
       request.headers.get(settings.headerName) should beSome(service(None).serialize(authenticator))
     }
 
-    "return the request with a header if DAO is disabled" in new WithApplication with Context {
-      val request = await(service(None).init(authenticator, FakeRequest()))
-
-      request.headers.get(settings.headerName) should beSome(service(None).serialize(authenticator))
-      there was no(dao).save(any)
-    }
-
-    "override an existing token if DAO is enabled" in new WithApplication with Context {
+    "override an existing token" in new WithApplication with Context {
       dao.save(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
 
-      val request = await(service(Some(dao)).init(authenticator, FakeRequest().withHeaders(settings.headerName -> "test")))
+      val token = service(None).serialize(authenticator)
+      val request = service(Some(dao)).embed(token, FakeRequest().withHeaders(settings.headerName -> "test"))
 
       request.headers.get(settings.headerName) should beSome(service(None).serialize(authenticator))
     }
 
-    "override an existing token if DAO is disabled" in new WithApplication with Context {
-      val request = await(service(None).init(authenticator, FakeRequest().withHeaders(settings.headerName -> "test")))
-
-      request.headers.get(settings.headerName) should beSome(service(None).serialize(authenticator))
-      there was no(dao).save(any)
-    }
-
-    "keep non authenticator related headers if DAO is enabled" in new WithApplication with Context {
+    "keep non authenticator related headers" in new WithApplication with Context {
       dao.save(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
 
-      val request = await(service(Some(dao)).init(authenticator, FakeRequest().withHeaders("test" -> "test")))
+      val token = service(None).serialize(authenticator)
+      val request = service(Some(dao)).embed(token, FakeRequest().withHeaders("test" -> "test"))
 
       request.headers.get(settings.headerName) should beSome(service(None).serialize(authenticator))
       request.headers.get("test") should beSome("test")
-    }
-
-    "keep non authenticator related headers if DAO is disabled" in new WithApplication with Context {
-      val request = await(service(None).init(authenticator, FakeRequest().withHeaders("test" -> "test")))
-
-      request.headers.get(settings.headerName) should beSome(service(None).serialize(authenticator))
-      request.headers.get("test") should beSome("test")
-      there was no(dao).save(any)
-    }
-
-    "throws an Authentication exception if error an occurred during initialization" in new Context {
-      dao.save(any) returns Future.failed(new Exception("Cannot store authenticator"))
-
-      await(service(Some(dao)).init(authenticator, FakeRequest())) must throwA[AuthenticationException].like {
-        case e =>
-          e.getMessage must startWith(InitError.format(ID, ""))
-      }
     }
   }
 

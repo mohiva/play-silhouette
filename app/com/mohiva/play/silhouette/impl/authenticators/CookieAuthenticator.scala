@@ -64,6 +64,11 @@ case class CookieAuthenticator(
   fingerprint: Option[String]) extends StorableAuthenticator {
 
   /**
+   * The Type of the generated value an authenticator will be serialized to.
+   */
+  type Value = Cookie
+
+  /**
    * Checks if the authenticator isn't expired and isn't timed out.
    *
    * @return True if the authenticator isn't expired and isn't timed out.
@@ -159,33 +164,22 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
+  @deprecated("Use `init` and `embed` instead; Will be removed in 2.0 final", "2.0-MASTER")
   def init(authenticator: CookieAuthenticator, result: Future[Result])(implicit request: RequestHeader) = {
-    dao.save(authenticator).flatMap { a =>
-      result.map(_.withCookies(Cookie(
-        name = settings.cookieName,
-        value = a.id,
-        maxAge = settings.cookieMaxAge,
-        path = settings.cookiePath,
-        domain = settings.cookieDomain,
-        secure = settings.secureCookie,
-        httpOnly = settings.httpOnlyCookie
-      )))
-    }.recover {
-      case e => throw new AuthenticationException(InitError.format(ID, authenticator), e)
-    }
+    init(authenticator).flatMap(s => embed(s, result))
   }
 
   /**
-   * Creates a new cookie for the given authenticator and embeds it into the request. The authenticator
-   * will also be stored in the backing store.
+   * Creates a new cookie for the given authenticator and return it. The authenticator will also be
+   * stored in the backing store.
    *
    * @param authenticator The authenticator instance.
    * @param request The request header.
-   * @return The manipulated request header.
+   * @return The serialized authenticator value.
    */
-  def init(authenticator: CookieAuthenticator, request: RequestHeader): Future[RequestHeader] = {
+  def init(authenticator: CookieAuthenticator)(implicit request: RequestHeader) = {
     dao.save(authenticator).map { a =>
-      val cookie = Cookie(
+      Cookie(
         name = settings.cookieName,
         value = a.id,
         maxAge = settings.cookieMaxAge,
@@ -194,12 +188,34 @@ class CookieAuthenticatorService(
         secure = settings.secureCookie,
         httpOnly = settings.httpOnlyCookie
       )
-      val cookies = Cookies.merge(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(cookie))
-      val additional = Seq(HeaderNames.COOKIE -> Seq(cookies))
-      request.copy(headers = AdditionalHeaders(request.headers, additional))
     }.recover {
       case e => throw new AuthenticationException(InitError.format(ID, authenticator), e)
     }
+  }
+
+  /**
+   * Embeds the cookie into the result.
+   *
+   * @param cookie The cookie to embed.
+   * @param result The result to manipulate.
+   * @param request The request header.
+   * @return The manipulated result.
+   */
+  def embed(cookie: Cookie, result: Future[Result])(implicit request: RequestHeader) = {
+    result.map(_.withCookies(cookie))
+  }
+
+  /**
+   * Embeds the cookie into the request.
+   *
+   * @param cookie The cookie to embed.
+   * @param request The request header.
+   * @return The manipulated request header.
+   */
+  def embed(cookie: Cookie, request: RequestHeader) = {
+    val cookies = Cookies.merge(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(cookie))
+    val additional = Seq(HeaderNames.COOKIE -> Seq(cookies))
+    request.copy(headers = AdditionalHeaders(request.headers, additional))
   }
 
   /**
@@ -255,7 +271,7 @@ class CookieAuthenticatorService(
 
     dao.remove(authenticator.id).flatMap { _ =>
       create(authenticator.loginInfo).flatMap { a =>
-        init(a, result)
+        init(a).flatMap(v => embed(v, result))
       }
     }.recover {
       case e => throw new AuthenticationException(RenewError.format(ID, authenticator), e)

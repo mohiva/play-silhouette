@@ -25,7 +25,7 @@ import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.libs.Crypto
 import play.api.libs.json.Json
-import play.api.mvc.Results
+import play.api.mvc.{ Session, Results }
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
 import scala.concurrent.Future
@@ -195,85 +195,70 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
     }
   }
 
-  "The result `init` method of the service" should {
-    "return the response with an unencrypted authenticator stored in the session" in new WithApplication with Context {
+  "The `init` method of the service" should {
+    "return a session with an unencrypted authenticator" in new WithApplication with Context {
       settings.encryptAuthenticator returns false
 
       implicit val request = FakeRequest()
       val data = Base64.encode(Json.toJson(authenticator))
-      val result = service.init(authenticator, Future.successful(Results.Status(200)))
+      val session = await(service.init(authenticator))
 
-      session(result).get(settings.sessionKey) should beSome(data)
+      session must be equalTo Session(Map(settings.sessionKey -> data))
     }
 
-    "return the response with an encrypted authenticator stored in the session" in new WithApplication with Context {
+    "return the session with an encrypted authenticator" in new WithApplication with Context {
       settings.encryptAuthenticator returns true
 
       implicit val request = FakeRequest()
-      val result = service.init(authenticator, Future.successful(Results.Status(200)))
+      val data = Crypto.encryptAES(Json.toJson(authenticator).toString())
+      val session = await(service.init(authenticator))
 
-      session(result).get(settings.sessionKey) should beSome(Crypto.encryptAES(Json.toJson(authenticator).toString()))
+      session must be equalTo Session(Map(settings.sessionKey -> data))
     }
 
-    "throws an Authentication exception if error an occurred during initialization" in new Context {
-      implicit val request = spy(FakeRequest())
-      val okResult = Future.successful(Results.Status(200))
+    "keep non authenticator related session data" in new WithApplication with Context {
+      settings.encryptAuthenticator returns false
 
-      request.session throws new RuntimeException("Cannot get session")
+      implicit val request = FakeRequest().withSession("test" -> "test")
+      val data = Base64.encode(Json.toJson(authenticator))
+      val session = await(service.init(authenticator))
 
-      await(service.init(authenticator, okResult)) must throwA[AuthenticationException].like {
-        case e =>
-          e.getMessage must startWith(InitError.format(ID, ""))
-      }
+      session.get(settings.sessionKey) should beSome(data)
+      session.get("test") should beSome("test")
     }
   }
 
-  "The request `init` method of the service" should {
-    "return the request with an unencrypted authenticator stored in the session" in new WithApplication with Context {
+  "The result `embed` method of the service" should {
+    "return the response with the session" in new WithApplication with Context {
+      settings.encryptAuthenticator returns false
+
+      implicit val request = FakeRequest()
+      val data = Crypto.encryptAES(Json.toJson(authenticator).toString())
+      val result = service.embed(Session(Map(settings.sessionKey -> data)), Future.successful(Results.Status(200)))
+
+      session(result).get(settings.sessionKey) should beSome(data)
+    }
+  }
+
+  "The request `embed` method of the service" should {
+    "return the request with the session" in new WithApplication with Context {
       settings.encryptAuthenticator returns false
 
       val data = Base64.encode(Json.toJson(authenticator))
-      val request = await(service.init(authenticator, FakeRequest()))
+      val session = Session(Map(settings.sessionKey -> data))
+      val request = service.embed(session, FakeRequest())
 
       request.session.get(settings.sessionKey) should beSome(data)
-    }
-
-    "return the request with an encrypted authenticator stored in the session" in new WithApplication with Context {
-      settings.encryptAuthenticator returns true
-
-      val request = await(service.init(authenticator, FakeRequest()))
-
-      request.session.get(settings.sessionKey) should beSome(Crypto.encryptAES(Json.toJson(authenticator).toString()))
     }
 
     "override an existing session" in new WithApplication with Context {
       settings.encryptAuthenticator returns false
 
       val data = Base64.encode(Json.toJson(authenticator))
-      val request = await(service.init(authenticator, FakeRequest().withSession(settings.sessionKey -> "test")))
+      val session = Session(Map(settings.sessionKey -> data))
+      val request = service.embed(session, FakeRequest().withSession(settings.sessionKey -> "test"))
 
       request.session.get(settings.sessionKey) should beSome(data)
-    }
-
-    "keep non authenticator related session data" in new WithApplication with Context {
-      settings.encryptAuthenticator returns false
-
-      val data = Base64.encode(Json.toJson(authenticator))
-      val request = await(service.init(authenticator, FakeRequest().withSession("test" -> "test")))
-
-      request.session.get(settings.sessionKey) should beSome(data)
-      request.session.get("test") should beSome("test")
-    }
-
-    "throws an Authentication exception if error an occurred during initialization" in new Context {
-      implicit val request = spy(FakeRequest())
-
-      request.session throws new RuntimeException("Cannot get session")
-
-      await(service.init(authenticator, request)) must throwA[AuthenticationException].like {
-        case e =>
-          e.getMessage must startWith(InitError.format(ID, ""))
-      }
     }
   }
 

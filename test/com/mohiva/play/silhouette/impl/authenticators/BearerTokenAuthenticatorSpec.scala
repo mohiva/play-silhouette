@@ -143,62 +143,60 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
     }
   }
 
-  "The result `init` method of the service" should {
-    "return the response with a header if authenticator could be saved in backing store" in new Context {
+  "The `init` method of the service" should {
+    "save the authenticator in backing store" in new Context {
       dao.save(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
 
       implicit val request = FakeRequest()
-      val result = service.init(authenticator, Future.successful(Results.Status(200)))
+      val token = await(service.init(authenticator))
 
-      header(settings.headerName, result) should beSome(authenticator.id)
+      token must be equalTo authenticator.id
+      there was one(dao).save(authenticator)
     }
 
-    "throws an Authentication exception if error an occurred during initialization" in new Context {
+    "throws an Authentication exception if an error occurred during initialization" in new Context {
       dao.save(any) returns Future.failed(new Exception("Cannot store authenticator"))
 
       implicit val request = FakeRequest()
-      val okResult = Future.successful(Results.Status(200))
 
-      await(service.init(authenticator, okResult)) must throwA[AuthenticationException].like {
+      await(service.init(authenticator)) must throwA[AuthenticationException].like {
         case e =>
           e.getMessage must startWith(InitError.format(ID, ""))
       }
     }
   }
 
-  "The request `init` method of the service" should {
-    "return the request with a header if authenticator could be saved in backing store" in new Context {
-      dao.save(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
+  "The result `embed` method of the service" should {
+    "return the response with a header" in new Context {
+      implicit val request = FakeRequest()
+      val value = authenticator.id
+      val result = service.embed(value, Future.successful(Results.Status(200)))
 
-      val request = await(service.init(authenticator, FakeRequest()))
+      header(settings.headerName, result) should beSome(authenticator.id)
+    }
+  }
+
+  "The request `embed` method of the service" should {
+    "return the request with a header" in new Context {
+      val value = authenticator.id
+      val request = service.embed(value, FakeRequest())
 
       request.headers.get(settings.headerName) should beSome(authenticator.id)
     }
 
     "override an existing header" in new Context {
-      dao.save(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
-
-      val request = await(service.init(authenticator, FakeRequest().withHeaders(settings.headerName -> "test")))
+      val value = authenticator.id
+      val request = service.embed(value, FakeRequest().withHeaders(settings.headerName -> "test"))
 
       request.headers.get(settings.headerName) should beSome(authenticator.id)
     }
 
     "keep non authenticator related headers" in new Context {
-      dao.save(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
-
-      val request = await(service.init(authenticator, FakeRequest().withHeaders("test" -> "test")))
+      val value = authenticator.id
+      val request = service.embed(value, FakeRequest().withHeaders("test" -> "test"))
 
       request.headers.get(settings.headerName) should beSome(authenticator.id)
       request.headers.get("test") should beSome("test")
-    }
-
-    "throws an Authentication exception if error an occurred during initialization" in new Context {
-      dao.save(any) returns Future.failed(new Exception("Cannot store authenticator"))
-
-      await(service.init(authenticator, FakeRequest())) must throwA[AuthenticationException].like {
-        case e =>
-          e.getMessage must startWith(InitError.format(ID, ""))
-      }
     }
   }
 

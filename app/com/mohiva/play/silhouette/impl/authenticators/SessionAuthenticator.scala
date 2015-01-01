@@ -54,6 +54,11 @@ case class SessionAuthenticator(
   fingerprint: Option[String]) extends Authenticator {
 
   /**
+   * The Type of the generated value an authenticator will be serialized to.
+   */
+  type Value = Session
+
+  /**
    * Checks if the authenticator isn't expired and isn't timed out.
    *
    * @return True if the authenticator isn't expired and isn't timed out.
@@ -150,29 +155,45 @@ class SessionAuthenticatorService(
    * @param result The result to manipulate.
    * @return The manipulated result.
    */
+  @deprecated("Use `init` and `embed` instead; Will be removed in 2.0 final", "2.0-MASTER")
   def init(authenticator: SessionAuthenticator, result: Future[Result])(implicit request: RequestHeader) = {
-    result.map(_.withSession(request.session + (settings.sessionKey -> serialize(authenticator)))).recover {
-      case e => throw new AuthenticationException(InitError.format(ID, authenticator), e)
-    }
+    init(authenticator).flatMap(s => embed(s, result))
   }
 
   /**
-   * Overrides the user session for the authenticator in request.
+   * Returns a new user session containing the authenticator.
    *
    * @param authenticator The authenticator instance.
    * @param request The request header.
+   * @return The serialized authenticator value.
+   */
+  def init(authenticator: SessionAuthenticator)(implicit request: RequestHeader) = {
+    Future.successful(request.session + (settings.sessionKey -> serialize(authenticator)))
+  }
+
+  /**
+   * Embeds the user session into the result.
+   *
+   * @param session The session to embed.
+   * @param result The result to manipulate.
+   * @return The manipulated result.
+   */
+  def embed(session: Session, result: Future[Result])(implicit request: RequestHeader) = {
+    result.map(_.withSession(session))
+  }
+
+  /**
+   * Overrides the user session in request.
+   *
+   * @param session The session to embed.
+   * @param request The request header.
    * @return The manipulated request header.
    */
-  def init(authenticator: SessionAuthenticator, request: RequestHeader): Future[RequestHeader] = {
-    Try {
-      val sessionCookie = Session.encodeAsCookie(request.session + (settings.sessionKey -> serialize(authenticator)))
-      val cookies = Cookies.merge(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(sessionCookie))
-      val additional = Seq(HeaderNames.COOKIE -> Seq(cookies))
-      request.copy(headers = AdditionalHeaders(request.headers, additional))
-    } match {
-      case Success(r) => Future.successful(r)
-      case Failure(e) => throw new AuthenticationException(InitError.format(ID, authenticator), e)
-    }
+  def embed(session: Session, request: RequestHeader) = {
+    val sessionCookie = Session.encodeAsCookie(session)
+    val cookies = Cookies.merge(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(sessionCookie))
+    val additional = Seq(HeaderNames.COOKIE -> Seq(cookies))
+    request.copy(headers = AdditionalHeaders(request.headers, additional))
   }
 
   /**
@@ -225,7 +246,7 @@ class SessionAuthenticatorService(
     result: Future[Result])(implicit request: RequestHeader) = {
 
     create(authenticator.loginInfo).flatMap { a =>
-      init(a, result)
+      init(a).flatMap(v => embed(v, result))
     }.recover {
       case e => throw new AuthenticationException(RenewError.format(ID, authenticator), e)
     }

@@ -38,10 +38,16 @@ Init an authenticator
 ^^^^^^^^^^^^^^^^^^^^^
 
 Authenticators need to be initialized, usually when they are created during a successful
-authentication. Initializing an authenticator causes it to be embedded into a Play framework
-request or result. This can by done by creating a cookie, storing data into the user session
-or including the authenticator in a user defined header. If the service uses a backing store,
-then the authenticator instance will be stored in it.
+authentication. If the service uses a backing store, then the authenticator instance will
+be stored in it, to check the validity of an authenticator on every subsequent request to
+the application.
+
+Embed an authenticator
+^^^^^^^^^^^^^^^^^^^^^^
+
+After initialization an authenticator must be embedded into a Play framework request or result.
+This can by done by creating a cookie, storing data into the user session or including the
+authenticator in a user defined header.
 
 Embedding the authenticator related data into the result means that the data will be sent
 to the client. It may also be useful to embed the authenticator related data into an incoming
