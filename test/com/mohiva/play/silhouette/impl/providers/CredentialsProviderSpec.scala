@@ -32,7 +32,7 @@ import scala.concurrent.Future
 class CredentialsProviderSpec extends PlaySpecification with Mockito {
 
   "The `authenticate` method" should {
-    "throw AccessDeniedException if no auth info could be found for the given credentials" in new WithApplication with Context {
+    "throw AuthenticationException if no auth info could be found for the given credentials" in new WithApplication with Context {
       val loginInfo = new LoginInfo(provider.id, credentials.identifier)
 
       authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(None)
@@ -42,7 +42,7 @@ class CredentialsProviderSpec extends PlaySpecification with Mockito {
       }
     }
 
-    "throw AccessDeniedException if passwords does not match" in new WithApplication with Context {
+    "throw AuthenticationException if passwords does not match" in new WithApplication with Context {
       val passwordInfo = PasswordInfo("foo", "hashed(s3cr3t)")
       val loginInfo = LoginInfo(provider.id, credentials.identifier)
 
