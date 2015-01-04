@@ -25,7 +25,7 @@ class RequestExtractorSpec extends PlaySpecification {
     }
   }
 
-  "The `anyContentAsEmptyExtractor`" should {
+  "The `anyContent`" should {
     "extract a value from query string" in new Context {
       implicit val request = FakeRequest("GET", "?code=value")
 
@@ -37,62 +37,38 @@ class RequestExtractorSpec extends PlaySpecification {
 
       extract("code") must beNone
     }
-  }
 
-  "The `anyContentAsFormUrlEncodedExtractor`" should {
-    "extract a value from query string" in new Context {
-      implicit val request = FakeRequest("GET", "?code=value").withFormUrlEncodedBody(("none", "value"))
-
-      extract("code") must beSome("value")
-    }
-
-    "extract a value from body" in new Context {
+    "extract a value from URL encoded body" in new Context {
       implicit val request = FakeRequest().withFormUrlEncodedBody(("code", "value"))
 
       extract("code") must beSome("value")
     }
 
-    "return None if no value could be found in query string or body" in new Context {
+    "return None if no value could be found in query string or URL encoded body" in new Context {
       implicit val request = FakeRequest().withFormUrlEncodedBody(("none", "value"))
 
       extract("code") must beNone
     }
-  }
 
-  "The `anyContentAsJsonExtractor`" should {
-    "extract a value from query string" in new Context {
-      implicit val request = FakeRequest("GET", "?code=value").withJsonBody(Json.obj("none" -> "value"))
-
-      extract("code") must beSome("value")
-    }
-
-    "extract a value from body" in new Context {
+    "extract a value from Json body" in new Context {
       implicit val request = FakeRequest().withJsonBody(Json.obj("code" -> "value"))
 
       extract("code") must beSome("value")
     }
 
-    "return None if no value could be found in query string or body" in new Context {
+    "return None if no value could be found in query string or Json body" in new Context {
       implicit val request = FakeRequest().withJsonBody(Json.obj("none" -> "value"))
 
       extract("code") must beNone
     }
-  }
 
-  "The `anyContentAsXmlExtractor`" should {
-    "extract a value from query string" in new Context {
-      implicit val request = FakeRequest("GET", "?code=value").withXmlBody(<none>value</none>)
-
-      extract("code") must beSome("value")
-    }
-
-    "extract a value from body" in new Context {
+    "extract a value from XML body" in new Context {
       implicit val request = FakeRequest().withXmlBody(<code>value</code>)
 
       extract("code") must beSome("value")
     }
 
-    "return None if no value could be found in query string or body" in new Context {
+    "return None if no value could be found in query string or XML body" in new Context {
       implicit val request = FakeRequest().withXmlBody(<none>value</none>)
 
       extract("code") must beNone
@@ -159,6 +135,14 @@ class RequestExtractorSpec extends PlaySpecification {
     }
   }
 
+  "The `anyExtractor`" should {
+    "be executed for not supported body types" in new Context {
+      implicit val request = FakeRequest().withBody("text")
+
+      extract("code") must beNone
+    }
+  }
+
   "An extractor" should {
     "be overridden" in new Context {
       import extractors._
@@ -166,6 +150,24 @@ class RequestExtractorSpec extends PlaySpecification {
       implicit val request = FakeRequest().withBody(Json.obj("test" -> Json.obj("code" -> "value")))
 
       extract("code") must beSome("value")
+    }
+  }
+
+  "The `ExtractableRequest`" should {
+    "be converted from explicit request" in new Context {
+      def test[B](request: ExtractableRequest[B]) = request
+
+      val request = FakeRequest().withBody(<none>value</none>)
+
+      test(request) must beAnInstanceOf[ExtractableRequest[_]]
+    }
+
+    "be converted from implicit request" in new Context {
+      def test[B](implicit request: ExtractableRequest[B]) = request
+
+      implicit val request = FakeRequest().withBody(<none>value</none>)
+
+      test must beAnInstanceOf[ExtractableRequest[_]]
     }
   }
 
