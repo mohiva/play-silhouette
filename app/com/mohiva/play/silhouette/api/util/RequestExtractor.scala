@@ -98,29 +98,22 @@ trait LowPriorityRequestExtractors {
 trait DefaultRequestExtractors extends LowPriorityRequestExtractors {
 
   /**
-   * Tries to extract the value from query string and then from form url encoded body.
+   * Tries to extract the value from query string and then it tries to extract the value from any
+   * content.
    */
-  implicit val anyContentAsFormUrlEncodedExtractor = new RequestExtractor[AnyContentAsFormUrlEncoded] {
-    def extractString(name: String)(implicit request: Request[AnyContentAsFormUrlEncoded]) = {
-      fromQueryString(name).orElse(fromFormUrlEncoded(name, request.body.data))
-    }
-  }
-
-  /**
-   * Tries to extract the value from query string and then from Json body.
-   */
-  implicit val anyContentAsJsonExtractor = new RequestExtractor[AnyContentAsJson] {
-    def extractString(name: String)(implicit request: Request[AnyContentAsJson]) = {
-      fromQueryString(name).orElse(fromJson(name, request.body.json))
-    }
-  }
-
-  /**
-   * Tries to extract the value from query string and then from Xml body.
-   */
-  implicit val anyContentAsXmlExtractor = new RequestExtractor[AnyContentAsXml] {
-    def extractString(name: String)(implicit request: Request[AnyContentAsXml]) = {
-      fromQueryString(name).orElse(fromXml(name, request.body.xml))
+  implicit val anyContentExtractor = new RequestExtractor[AnyContent] {
+    def extractString(name: String)(implicit request: Request[AnyContent]) = {
+      fromQueryString(name).orElse {
+        if (request.body.asFormUrlEncoded.isDefined) {
+          fromFormUrlEncoded(name, request.body.asFormUrlEncoded.get)
+        } else if (request.body.asJson.isDefined) {
+          fromJson(name, request.body.asJson.get)
+        } else if (request.body.asXml.isDefined) {
+          fromXml(name, request.body.asXml.get)
+        } else {
+          None
+        }
+      }
     }
   }
 
@@ -189,7 +182,7 @@ object ExtractableRequest {
   }
 
   /**
-   * Converts a `Request` to a `ExtractableRequest` instance.
+   * Converts a `Request` to an `ExtractableRequest` instance.
    *
    * @param request The request to convert.
    * @param extractor The extractor to extract the value.
@@ -201,7 +194,7 @@ object ExtractableRequest {
   }
 
   /**
-   * Converts an implicit `Request` to a `ExtractableRequest` instance.
+   * Converts an implicit `Request` to an `ExtractableRequest` instance.
    *
    * @param request The request to convert.
    * @param extractor The extractor to extract the value.
