@@ -32,18 +32,18 @@ import scala.concurrent.Future
 class BasicAuthProviderSpec extends PlaySpecification with Mockito {
 
   "The `authenticate` method" should {
-    "throw AccessDeniedException if no auth info could be found for the given credentials" in new WithApplication with Context {
+    "throw AuthenticationException if no auth info could be found for the given credentials" in new WithApplication with Context {
       val loginInfo = new LoginInfo(provider.id, credentials.identifier)
       val request = FakeRequest().withHeaders(AUTHORIZATION -> encodeCredentials(credentials))
 
       authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(None)
 
-      await(provider.authenticate(request)) must throwA[AccessDeniedException].like {
+      await(provider.authenticate(request)) must throwA[AuthenticationException].like {
         case e => e.getMessage must beEqualTo(UnknownCredentials.format(provider.id))
       }
     }
 
-    "throw AccessDeniedException if passwords does not match" in new WithApplication with Context {
+    "throw AuthenticationException if passwords does not match" in new WithApplication with Context {
       val passwordInfo = PasswordInfo("foo", "hashed(s3cr3t)")
       val loginInfo = LoginInfo(provider.id, credentials.identifier)
       val request = FakeRequest().withHeaders(AUTHORIZATION -> encodeCredentials(credentials))
@@ -51,7 +51,7 @@ class BasicAuthProviderSpec extends PlaySpecification with Mockito {
       fooHasher.matches(passwordInfo, credentials.password) returns false
       authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
-      await(provider.authenticate(request)) must throwA[AccessDeniedException].like {
+      await(provider.authenticate(request)) must throwA[AuthenticationException].like {
         case e => e.getMessage must beEqualTo(InvalidPassword.format(provider.id))
       }
     }

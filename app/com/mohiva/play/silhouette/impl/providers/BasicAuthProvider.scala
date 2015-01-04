@@ -15,7 +15,7 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
-import com.mohiva.play.silhouette.api.exceptions.{ AccessDeniedException, AuthenticationException }
+import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
 import com.mohiva.play.silhouette.api.services.AuthInfoService
 import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.api.{ LoginInfo, RequestProvider }
@@ -69,12 +69,12 @@ class BasicAuthProvider(
                 authInfoService.save(loginInfo, passwordHasher.hash(credentials.password))
               }
               Some(loginInfo)
-            case Some(hasher) => throw new AccessDeniedException(InvalidPassword.format(id))
+            case Some(hasher) => throw new AuthenticationException(InvalidPassword.format(id))
             case None => throw new AuthenticationException(UnsupportedHasher.format(
               id, authInfo.hasher, passwordHasherList.map(_.id).mkString(", ")
             ))
           }
-          case None => throw new AccessDeniedException(UnknownCredentials.format(id))
+          case None => throw new AuthenticationException(UnknownCredentials.format(id))
         }
       case None => Future.successful(None)
     }

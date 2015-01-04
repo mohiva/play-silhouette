@@ -20,9 +20,9 @@
 package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.exceptions._
+import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
 import com.mohiva.play.silhouette.api.services.AuthInfoService
-import com.mohiva.play.silhouette.api.util.{ Credentials, PasswordInfo, PasswordHasher }
+import com.mohiva.play.silhouette.api.util.{ Credentials, PasswordHasher, PasswordInfo }
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider._
 import play.api.libs.concurrent.Execution.Implicits._
 
