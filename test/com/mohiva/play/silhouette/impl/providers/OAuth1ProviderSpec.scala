@@ -15,10 +15,8 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
-import java.util.UUID
-
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.util.{ CacheLayer, HTTPLayer }
+import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.providers.OAuth1Provider._
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
@@ -34,6 +32,15 @@ import scala.concurrent.Future
  */
 abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
   isolated
+
+  "The provider" should {
+    val c = context
+    "throw a RuntimeException if the unsafe 1.0 specification should be used" in new WithApplication {
+      implicit val req = FakeRequest(GET, "?" + Denied + "=")
+      c.oAuthService.use10a returns false
+      c.provider.authenticate() must throwA[RuntimeException]
+    }
+  }
 
   "The authenticate method" should {
     val c = context
@@ -57,55 +64,29 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
       implicit val req = FakeRequest()
       c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.successful(c.oAuthInfo)
       c.oAuthService.redirectUrl(any) returns c.oAuthSettings.authorizationURL
-      c.cacheLayer.save[OAuth1Info](any, any, any) returns Future.successful(c.oAuthInfo)
 
       result(c.provider.authenticate()) {
         case result =>
           status(result) must equalTo(SEE_OTHER)
-          session(result).get(OAuth1Provider.CacheKey) must beSome.which(s => UUID.fromString(s).toString == s)
           redirectLocation(result) must beSome.which(_ == c.oAuthSettings.authorizationURL)
       }
     }
 
-    "cache the oauth info if request token could be retrieved" in new WithApplication {
-      implicit val req = FakeRequest()
-      c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.successful(c.oAuthInfo)
-      c.oAuthService.redirectUrl(any) returns c.oAuthSettings.authorizationURL
-      c.cacheLayer.save[OAuth1Info](any, any, any) returns Future.successful(c.oAuthInfo)
-
-      result(c.provider.authenticate()) {
-        case result =>
-          val cacheID = session(result).get(OAuth1Provider.CacheKey).get
-
-          there was one(c.cacheLayer).save(cacheID, c.oAuthInfo, CacheExpiration)
-      }
-    }
-
-    "fail with an AuthenticationException if OAuthVerifier exists in URL but info doesn't exists in session" in new WithApplication {
-      implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier")
-      failed[AuthenticationException](c.provider.authenticate()) {
-        case e => e.getMessage must startWith(CacheKeyNotInSession.format(c.provider.id, ""))
-      }
-    }
-
-    "fail with an AuthenticationException if OAuthVerifier exists in URL but info doesn't exists in cache" in new WithApplication {
-      val cacheID = UUID.randomUUID().toString
-      implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
-      c.cacheLayer.find[OAuth1Info](cacheID) returns Future.successful(None)
-
-      failed[AuthenticationException](c.provider.authenticate()) {
-        case e => e.getMessage must startWith(CachedTokenDoesNotExists.format(c.provider.id, ""))
-      }
-    }
-
     "fail with an AuthenticationException if access token cannot be retrieved" in new WithApplication {
-      val cacheID = UUID.randomUUID().toString
-      implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
-      c.cacheLayer.find[OAuth1Info](cacheID) returns Future.successful(Some(c.oAuthInfo))
+      implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier&" + OAuthToken + "=my.token")
       c.oAuthService.retrieveAccessToken(c.oAuthInfo, "my.verifier") returns Future.failed(new Exception(""))
 
       failed[AuthenticationException](c.provider.authenticate()) {
         case e => e.getMessage must startWith(ErrorAccessToken.format(c.provider.id, ""))
+      }
+    }
+
+    "return the auth info" in new WithApplication {
+      implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier&" + OAuthToken + "=my.token")
+      c.oAuthService.retrieveAccessToken(c.oAuthInfo, "my.verifier") returns Future.successful(c.oAuthInfo)
+
+      authInfo(c.provider.authenticate()) {
+        case authInfo => authInfo must be equalTo c.oAuthInfo
       }
     }
   }
@@ -124,11 +105,6 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
 trait OAuth1ProviderSpecContext extends Scope with Mockito with ThrownExpectations {
 
   /**
-   * The cache layer mock.
-   */
-  lazy val cacheLayer: CacheLayer = mock[CacheLayer]
-
-  /**
    * The HTTP layer mock.
    */
   lazy val httpLayer: HTTPLayer = mock[HTTPLayer]
@@ -136,12 +112,16 @@ trait OAuth1ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
   /**
    * A OAuth1 info.
    */
-  lazy val oAuthInfo = OAuth1Info("my.token", "my.secret")
+  lazy val oAuthInfo = OAuth1Info("my.token", "my.consumer.secret")
 
   /**
    * The OAuth1 service mock.
    */
-  lazy val oAuthService: OAuth1Service = mock[OAuth1Service]
+  lazy val oAuthService: OAuth1Service = {
+    val s = mock[OAuth1Service]
+    s.use10a returns true
+    s
+  }
 
   /**
    * The OAuth1 settings.

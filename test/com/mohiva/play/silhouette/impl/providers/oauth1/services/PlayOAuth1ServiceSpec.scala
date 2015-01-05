@@ -34,6 +34,20 @@ class PlayOAuth1ServiceSpec extends PlaySpecification with Mockito {
     }
   }
 
+  "The `use10a` method" should {
+    "return true if the safer 1.0a specification will be used" in new Context {
+      oauth.use10a returns true
+
+      service.use10a must beTrue
+    }
+
+    "return false if the unsafer 1.0 specification will be used" in new Context {
+      oauth.use10a returns false
+
+      service.use10a must beFalse
+    }
+  }
+
   "The `retrieveRequestToken` method" should {
     "throw exception if the token couldn't be retrieved" in new Context {
       oauth.retrieveRequestToken(settings.callbackURL) returns Left(new OAuthMessageSignerException(""))

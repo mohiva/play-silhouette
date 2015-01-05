@@ -15,16 +15,13 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth1
 
-import java.util.UUID
-
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
-import com.mohiva.play.silhouette.impl.providers.OAuth1Provider._
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth1.LinkedInProvider._
 import play.api.libs.ws.{ WSRequestHolder, WSResponse }
-import play.api.test.{ FakeRequest, WithApplication }
+import play.api.test.WithApplication
 import test.Helper
 
 import scala.concurrent.Future
@@ -33,21 +30,6 @@ import scala.concurrent.Future
  * Test case for the [[com.mohiva.play.silhouette.impl.providers.oauth1.LinkedInProvider]] class.
  */
 class LinkedInProviderSpec extends OAuth1ProviderSpec {
-
-  "The `authenticate` method" should {
-    "return the auth info" in new WithApplication with Context {
-      val cacheID = UUID.randomUUID().toString
-      implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier").withSession(CacheKey -> cacheID)
-      cacheLayer.find[OAuth1Info](cacheID) returns Future.successful(Some(oAuthInfo))
-      oAuthService.retrieveAccessToken(oAuthInfo, "my.verifier") returns Future.successful(oAuthInfo)
-
-      authInfo(provider.authenticate()) {
-        case authInfo => authInfo must be equalTo oAuthInfo
-      }
-
-      there was one(cacheLayer).remove(cacheID)
-    }
-  }
 
   "The `retrieveProfile` method" should {
     "fail with ProfileRetrievalException if API returns error" in new WithApplication with Context {
@@ -130,6 +112,6 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = LinkedInProvider(cacheLayer, httpLayer, oAuthService, oAuthSettings)
+    lazy val provider = LinkedInProvider(httpLayer, oAuthService, oAuthSettings)
   }
 }

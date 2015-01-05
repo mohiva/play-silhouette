@@ -19,12 +19,10 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
-import java.util.UUID
-
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthInfo
-import com.mohiva.play.silhouette.api.util.{ CacheLayer, ExtractableRequest, HTTPLayer }
+import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
 import com.mohiva.play.silhouette.impl.providers.OAuth1Provider._
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.ws.WSSignatureCalculator
@@ -35,16 +33,29 @@ import scala.concurrent.Future
 /**
  * Base class for all OAuth1 providers.
  *
- * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
  * @param service The OAuth1 service implementation.
  * @param settings The OAuth1 provider settings.
  */
 abstract class OAuth1Provider(
-  cacheLayer: CacheLayer,
   httpLayer: HTTPLayer,
   service: OAuth1Service,
   settings: OAuth1Settings) extends SocialProvider with Logger {
+
+  /**
+   * Check if services uses 1.0a specification because it address the session fixation attack identified
+   * in the OAuth Core 1.0 specification.
+   *
+   * We implement only the 1.0a specification with the new oauth_verifier parameter, so we throw an
+   * exception here if the old version was specified for the service.
+   *
+   * @see http://oauth.net/core/1.0a/
+   * @see http://oauth.net/advisories/2009-1/
+   */
+  if (!service.use10a) {
+    throw new RuntimeException("You must use the the 1.0a specification to address the session fixation " +
+      "attack identified in the OAuth Core 1.0 specification")
+  }
 
   /**
    * The type of the auth info.
@@ -60,48 +71,26 @@ abstract class OAuth1Provider(
   def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[Either[Result, OAuth1Info]] = {
     request.extractString(Denied) match {
       case Some(_) => Future.failed(new AccessDeniedException(AuthorizationError.format(id, Denied)))
-      case None => request.extractString(OAuthVerifier) match {
+      case None => request.extractString(OAuthVerifier) -> request.extractString(OAuthToken) match {
         // Second step in the OAuth flow.
         // We have the request info in the cache, and we need to swap it for the access info.
-        case Some(verifier) => cachedInfo.flatMap {
-          case (cacheID, cachedInfo) =>
-            service.retrieveAccessToken(cachedInfo, verifier).map { info =>
-              cacheLayer.remove(cacheID)
-              Right(info)
-            }.recover {
-              case e => throw new AuthenticationException(ErrorAccessToken.format(id), e)
-            }
-        }
+        case (Some(verifier), Some(token)) =>
+          service.retrieveAccessToken(OAuth1Info(token, settings.consumerSecret), verifier).map { info =>
+            Right(info)
+          }.recover {
+            case e => throw new AuthenticationException(ErrorAccessToken.format(id), e)
+          }
         // The oauth_verifier field is not in the request.
         // This is the first step in the OAuth flow. We need to get the request tokens.
         case _ => service.retrieveRequestToken(settings.callbackURL).flatMap { info =>
-          val cacheID = UUID.randomUUID().toString
           val url = service.redirectUrl(info.token)
-          val redirect = Results.Redirect(url).withSession(request.session + (CacheKey -> cacheID))
+          val redirect = Results.Redirect(url)
           logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
-          cacheLayer.save(cacheID, info, CacheExpiration).map(_ =>
-            Left(redirect)
-          )
+          Future.successful(Left(redirect))
         }.recover {
           case e => throw new AuthenticationException(ErrorRequestToken.format(id), e)
         }
       }
-    }
-  }
-
-  /**
-   * Gets the cached info if it's stored in cache.
-   *
-   * @param request The request header.
-   * @return A tuple contains the cache ID with the cached info.
-   */
-  private def cachedInfo(implicit request: RequestHeader): Future[(String, OAuth1Info)] = {
-    request.session.get(CacheKey) match {
-      case Some(cacheID) => cacheLayer.find[OAuth1Info](cacheID).map {
-        case Some(state) => cacheID -> state
-        case _ => throw new AuthenticationException(CachedTokenDoesNotExists.format(id, cacheID))
-      }
-      case _ => Future.failed(new AuthenticationException(CacheKeyNotInSession.format(id, CacheKey)))
     }
   }
 }
@@ -115,29 +104,32 @@ object OAuth1Provider {
    * The error messages.
    */
   val AuthorizationError = "[Silhouette][%s] Authorization server returned error: %s"
-  val CacheKeyNotInSession = "[Silhouette][%s] Session doesn't contain cache key: %s"
-  val CachedTokenDoesNotExists = "[Silhouette][%s] Token doesn't exists in cache for cache key: %s"
   val ErrorAccessToken = "[Silhouette][%s] Error retrieving access token"
   val ErrorRequestToken = "[Silhouette][%s] Error retrieving request token"
 
   /**
    * The OAuth1 constants.
    */
-  val CacheKey = "silhouetteOAuth1Cache"
   val Denied = "denied"
   val OAuthVerifier = "oauth_verifier"
-
-  /**
-   * Cache expiration. Provides sufficient time to log in, but not too much.
-   * This is a balance between convenience and security.
-   */
-  val CacheExpiration = 5 * 60 // 5 minutes
+  val OAuthToken = "oauth_token"
 }
 
 /**
  * The OAuth1 service trait.
  */
 trait OAuth1Service {
+
+  /**
+   * Indicates if the service uses the safer 1.0a specification which addresses the session fixation attack
+   * identified in the OAuth Core 1.0 specification.
+   *
+   * @see http://oauth.net/core/1.0a/
+   * @see http://oauth.net/advisories/2009-1/
+   *
+   * @return True if the services uses 1.0a specification, false otherwise.
+   */
+  def use10a: Boolean
 
   /**
    * Retrieves the request info and secret.
