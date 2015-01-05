@@ -43,14 +43,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">PlayOAuth1Service</span><span class="result"> extends <a href="../../OAuth1Service.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth1Service">OAuth1Service</a></span>
+        <span class="name">PlayOAuth1Service</span><span class="result"> extends <a href="../../OAuth1Service.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth1Service">OAuth1Service</a> with <a href="../../../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The OAuth1 service implementation which wraps Play Framework's OAuth implementation.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../OAuth1Service.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth1Service">OAuth1Service</a>, <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../../../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a>, <a href="../../OAuth1Service.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth1Service">OAuth1Service</a>, <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -68,7 +68,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.impl.providers.oauth1.services.PlayOAuth1Service"><span>PlayOAuth1Service</span></li><li class="in" name="com.mohiva.play.silhouette.impl.providers.OAuth1Service"><span>OAuth1Service</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.impl.providers.oauth1.services.PlayOAuth1Service"><span>PlayOAuth1Service</span></li><li class="in" name="com.mohiva.play.silhouette.api.Logger"><span>Logger</span></li><li class="in" name="com.mohiva.play.silhouette.impl.providers.OAuth1Service"><span>OAuth1Service</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -333,6 +333,24 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.Logger#logger" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logger:play.api.Logger"></a>
+      <a id="logger:Logger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logger</span><span class="result">: <span class="extype" name="play.api.Logger">Logger</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.services.PlayOAuth1Service@logger:play.api.Logger" title="Permalink" target="_top">
+        <img src="../../../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A named logger instance.</p><div class="fullcomment"><div class="comment cmt"><p>A named logger instance.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -494,6 +512,27 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.oauth1.services.PlayOAuth1Service#use10a" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="use10a:Boolean"></a>
+      <a id="use10a:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">use10a</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.services.PlayOAuth1Service@use10a:Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Indicates if the service uses the safer 1.</p><div class="fullcomment"><div class="comment cmt"><p>Indicates if the service uses the safer 1.0a specification which addresses the session fixation attack
+identified in the OAuth Core 1.0 specification.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>True if the services uses 1.0a specification, false otherwise.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth1.services.PlayOAuth1Service">PlayOAuth1Service</a> → <a href="../../OAuth1Service.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth1Service">OAuth1Service</a></dd><dt>See also</dt><dd><span class="cmt"><p>http://oauth.net/advisories/2009-1/
+</p></span><span class="cmt"><p>http://oauth.net/core/1.0a/</p></span></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -572,7 +611,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.mohiva.play.silhouette.impl.providers.OAuth1Service">
+        <div class="parent" name="com.mohiva.play.silhouette.api.Logger">
+              <h3>Inherited from <a href="../../../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></h3>
+            </div><div class="parent" name="com.mohiva.play.silhouette.impl.providers.OAuth1Service">
               <h3>Inherited from <a href="../../OAuth1Service.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth1Service">OAuth1Service</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
