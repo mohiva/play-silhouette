@@ -21,7 +21,7 @@ package com.mohiva.play.silhouette.impl.providers.oauth1
 
 import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.api.util.{ CacheLayer, HTTPLayer }
+import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth1.XingProvider._
@@ -33,7 +33,6 @@ import scala.concurrent.Future
 /**
  * A Xing OAuth1 Provider.
  *
- * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
  * @param oAuth1Service The OAuth1 service implementation.
  * @param oAuth1Settings The OAuth1 provider settings.
@@ -41,11 +40,8 @@ import scala.concurrent.Future
  * @see https://dev.xing.com/docs/get/users/me
  * @see https://dev.xing.com/docs/error_responses
  */
-abstract class XingProvider(
-  cacheLayer: CacheLayer,
-  httpLayer: HTTPLayer,
-  oAuth1Service: OAuth1Service,
-  oAuth1Settings: OAuth1Settings) extends OAuth1Provider(cacheLayer, httpLayer, oAuth1Service, oAuth1Settings) {
+abstract class XingProvider(httpLayer: HTTPLayer, oAuth1Service: OAuth1Service, oAuth1Settings: OAuth1Settings)
+  extends OAuth1Provider(httpLayer, oAuth1Service, oAuth1Settings) {
 
   /**
    * The content type returned from the provider.
@@ -126,16 +122,12 @@ object XingProvider {
   /**
    * Creates an instance of the provider.
    *
-   * @param cacheLayer The cache layer implementation.
    * @param httpLayer The HTTP layer implementation.
    * @param oAuth1Service The OAuth1 service implementation.
    * @param auth1Settings The OAuth1 provider settings.
    * @return An instance of this provider.
    */
-  def apply(cacheLayer: CacheLayer,
-    httpLayer: HTTPLayer,
-    oAuth1Service: OAuth1Service,
-    auth1Settings: OAuth1Settings) = {
-    new XingProvider(cacheLayer, httpLayer, oAuth1Service, auth1Settings) with CommonSocialProfileBuilder
+  def apply(httpLayer: HTTPLayer, oAuth1Service: OAuth1Service, auth1Settings: OAuth1Settings) = {
+    new XingProvider(httpLayer, oAuth1Service, auth1Settings) with CommonSocialProfileBuilder
   }
 }

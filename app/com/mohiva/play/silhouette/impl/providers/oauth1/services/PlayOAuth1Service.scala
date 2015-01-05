@@ -19,6 +19,7 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth1.services
 
+import com.mohiva.play.silhouette.api.Logger
 import com.mohiva.play.silhouette.impl.providers.oauth1.services.PlayOAuth1Service._
 import com.mohiva.play.silhouette.impl.providers.{ OAuth1Info, OAuth1Service, OAuth1Settings }
 import play.api.libs.concurrent.Execution.Implicits._
@@ -33,7 +34,7 @@ import scala.concurrent.Future
  * @param service The Play Framework OAuth implementation.
  * @param settings The service settings.
  */
-class PlayOAuth1Service(service: OAuth, settings: OAuth1Settings) extends OAuth1Service {
+class PlayOAuth1Service(service: OAuth, settings: OAuth1Settings) extends OAuth1Service with Logger {
 
   /**
    * Constructs the default Play Framework OAuth implementation.
@@ -42,6 +43,17 @@ class PlayOAuth1Service(service: OAuth, settings: OAuth1Settings) extends OAuth1
    * @return The OAuth1 service.
    */
   def this(settings: OAuth1Settings) = this(OAuth(serviceInfo(settings), use10a = true), settings)
+
+  /**
+   * Indicates if the service uses the safer 1.0a specification which addresses the session fixation attack
+   * identified in the OAuth Core 1.0 specification.
+   *
+   * @see http://oauth.net/core/1.0a/
+   * @see http://oauth.net/advisories/2009-1/
+   *
+   * @return True if the services uses 1.0a specification, false otherwise.
+   */
+  def use10a = service.use10a
 
   /**
    * Retrieves the request info and secret.

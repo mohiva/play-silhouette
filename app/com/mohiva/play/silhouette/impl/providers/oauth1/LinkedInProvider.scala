@@ -21,7 +21,7 @@ package com.mohiva.play.silhouette.impl.providers.oauth1
 
 import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.api.util.{ CacheLayer, HTTPLayer }
+import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth1.LinkedInProvider._
@@ -33,7 +33,6 @@ import scala.concurrent.Future
 /**
  * A LinkedIn OAuth1 Provider.
  *
- * @param cacheLayer The cache layer implementation.
  * @param httpLayer The HTTP layer implementation.
  * @param service The OAuth1 service implementation.
  * @param settings The OAuth1 provider settings.
@@ -42,11 +41,8 @@ import scala.concurrent.Future
  * @see https://developer.linkedin.com/documents/authentication
  * @see https://developer.linkedin.com/documents/inapiprofile
  */
-abstract class LinkedInProvider(
-  cacheLayer: CacheLayer,
-  httpLayer: HTTPLayer,
-  service: OAuth1Service,
-  settings: OAuth1Settings) extends OAuth1Provider(cacheLayer, httpLayer, service, settings) {
+abstract class LinkedInProvider(httpLayer: HTTPLayer, service: OAuth1Service, settings: OAuth1Settings)
+  extends OAuth1Provider(httpLayer, service, settings) {
 
   /**
    * The content type returned from the provider.
@@ -129,16 +125,12 @@ object LinkedInProvider {
   /**
    * Creates an instance of the provider.
    *
-   * @param cacheLayer The cache layer implementation.
    * @param httpLayer The HTTP layer implementation.
    * @param oAuth1Service The OAuth1 service implementation.
    * @param auth1Settings The OAuth1 provider settings.
    * @return An instance of this provider.
    */
-  def apply(cacheLayer: CacheLayer,
-    httpLayer: HTTPLayer,
-    oAuth1Service: OAuth1Service,
-    auth1Settings: OAuth1Settings) = {
-    new LinkedInProvider(cacheLayer, httpLayer, oAuth1Service, auth1Settings) with CommonSocialProfileBuilder
+  def apply(httpLayer: HTTPLayer, oAuth1Service: OAuth1Service, auth1Settings: OAuth1Settings) = {
+    new LinkedInProvider(httpLayer, oAuth1Service, auth1Settings) with CommonSocialProfileBuilder
   }
 }
