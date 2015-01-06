@@ -1,6 +1,7 @@
 language: scala
 scala:
-  - 2.11.1
+  - 2.10.4
+  - 2.11.4
 jdk:
 - oraclejdk7
 env:
@@ -10,6 +11,7 @@ before_script:
 - echo "TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG, TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST, TRAVIS_BRANCH=$TRAVIS_BRANCH"
 script: scripts/ci-build
 after_success:
+- scripts/coveralls
 - scripts/update-site-from-travis
 notifications:
   email: false

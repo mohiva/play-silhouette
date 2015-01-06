@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Builds the project in the continuous integration environment.
+# Publishes the coverage report to http://coveralls.io.
 #
 # Copyright 2014 Mohiva Organisation (license at mohiva dot com)
 #
@@ -19,17 +19,9 @@
 set -o nounset -o errexit
 
 echo ""
-echo "Compiling"
-scripts/sbt clean compile test:compile
+echo "Publish coverage report"
+scripts/sbt coveralls
 
 echo ""
-echo "Validating code formatting"
-scripts/validate-format
-
-echo ""
-echo "Testing and generating documentation"
-scripts/sbt coverage test doc
-
-echo ""
-echo "Build finished"
+echo "Report published"
 echo ""

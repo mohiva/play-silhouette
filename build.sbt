@@ -3,7 +3,6 @@ import play.core.PlayVersion
 import mohiva.sbt.Helper._
 import com.typesafe.sbt.SbtScalariform._
 import xerial.sbt.Sonatype._
-
 import scalariform.formatter.preferences.{PreserveDanglingCloseParenthesis, DoubleIndentClassDeclaration, FormatXml}
 
 //*******************************
@@ -14,27 +13,21 @@ name := "play-silhouette"
 
 version := "2.0-SNAPSHOT"
 
+resolvers := ("Atlassian Releases" at "https://maven.atlassian.com/public/") +: resolvers.value
+
 libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play-test" % "2.3.6",
+  "com.typesafe.play" %% "play-test" % "2.3.7",
   "org.mindrot" % "jbcrypt" % "0.3m",
-  "com.atlassian.jwt" % "jwt-core" % "1.2.1",
-  "com.atlassian.jwt" % "jwt-api" % "1.2.1",
+  "com.atlassian.jwt" % "jwt-core" % "1.2.3",
+  "com.atlassian.jwt" % "jwt-api" % "1.2.3",
   "org.mockito" % "mockito-core" % "1.9.5" % "test",
-  "net.codingwell" %% "scala-guice" % "4.0.0-beta4" % "test",
+  "net.codingwell" %% "scala-guice" % "4.0.0-beta5" % "test",
   "com.typesafe.akka" %% "akka-testkit" % "2.3.3" % "test",
   cache,
   ws
 )
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
-
-//*******************************
-// Coveralls settings
-//*******************************
-
-instrumentSettings
-
-CoverallsPlugin.coverallsSettings
 
 //*******************************
 // Maven settings
@@ -87,9 +80,9 @@ parallelExecution in Test := false
 // Compiler settings
 //*******************************
 
-scalaVersion := "2.11.1"
+scalaVersion := "2.11.4"
 
-crossScalaVersions := Seq("2.10.4", "2.11.1")
+crossScalaVersions := Seq("2.10.4", "2.11.4")
 
 scalacOptions ++= Seq(
   "-deprecation", // Emit warning and location for usages of deprecated APIs.
@@ -106,10 +99,6 @@ scalacOptions ++= Seq(
 
 scalacOptions in Test ~= { (options: Seq[String]) =>
   options filterNot ( _ == "-Ywarn-dead-code" )  // Allow dead code in tests (to support using mockito).
-}
-
-scalacOptions in ScoverageTest ~= { (options: Seq[String]) =>
-  options filterNot ( _ == "-Ywarn-dead-code" )  // The same when running under scoverage.
 }
 
 //*******************************
