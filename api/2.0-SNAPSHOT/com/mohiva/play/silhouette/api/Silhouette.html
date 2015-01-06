@@ -43,21 +43,21 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Silhouette</span><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>, <span name="A">A &lt;: <a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a></span>]</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Controller" class="extype" target="_top">Controller</a> with <a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
+        <span class="name">Silhouette</span><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>, <span name="A">A &lt;: <a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a></span>]</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Controller" class="extype" target="_top">Controller</a> with <a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Provides the actions that can be used to protect controllers and retrieve the current user
 if available.</p><pre><span class="kw">class</span> MyController(env: Environment[User, CookieAuthenticator])
-<span class="kw">extends</span> Silhouette[User, CookieAuthenticator] {
+  <span class="kw">extends</span> Silhouette[User, CookieAuthenticator] {
 
-<span class="kw">def</span> protectedAction = SecuredAction { <span class="kw">implicit</span> request <span class="kw">=&gt;</span>
-  Ok(<span class="lit">"Hello %s"</span>.format(request.identity.fullName))
-}
+  <span class="kw">def</span> protectedAction = SecuredAction { <span class="kw">implicit</span> request <span class="kw">=&gt;</span>
+    Ok(<span class="lit">"Hello %s"</span>.format(request.identity.fullName))
+  }
 }</pre></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.</p></dd><dt class="tparam">A</dt><dd class="cmt"><p>The type of the authenticator.
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a>, <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Controller" class="extype" target="_top">Controller</a>, <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Rendering" class="extype" target="_top">Rendering</a>, <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.RequestExtractors" class="extype" target="_top">RequestExtractors</a>, <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.AcceptExtractors" class="extype" target="_top">AcceptExtractors</a>, <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.http.ContentTypes" class="extype" target="_top">ContentTypes</a>, <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.http.HeaderNames" class="extype" target="_top">HeaderNames</a>, <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.http.Status" class="extype" target="_top">play.api.http.Status</a>, <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.http.HttpProtocol" class="extype" target="_top">HttpProtocol</a>, <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.BodyParsers" class="extype" target="_top">BodyParsers</a>, <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Results" class="extype" target="_top">Results</a>, <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a>, <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Controller" class="extype" target="_top">Controller</a>, <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Rendering" class="extype" target="_top">Rendering</a>, <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.RequestExtractors" class="extype" target="_top">RequestExtractors</a>, <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.AcceptExtractors" class="extype" target="_top">AcceptExtractors</a>, <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.http.ContentTypes" class="extype" target="_top">ContentTypes</a>, <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.http.HeaderNames" class="extype" target="_top">HeaderNames</a>, <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.http.Status" class="extype" target="_top">play.api.http.Status</a>, <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.http.HttpProtocol" class="extype" target="_top">HttpProtocol</a>, <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.BodyParsers" class="extype" target="_top">BodyParsers</a>, <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Results" class="extype" target="_top">Results</a>, <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -106,7 +106,7 @@ if available.</p><pre><span class="kw">class</span> MyController(env: Environmen
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Silhouette$HandlerResult.html"><span class="name">HandlerResult</span></a><span class="tparams">[<span name="T">+T</span>]</span><span class="params">(<span name="result">result: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>, <span name="data">data: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.HandlerResult.T">T</span>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Silhouette$HandlerResult.html"><span class="name">HandlerResult</span></a><span class="tparams">[<span name="T">+T</span>]</span><span class="params">(<span name="result">result: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>, <span name="data">data: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.HandlerResult.T">T</span>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@HandlerResult[+T]extendsProductwithSerializable" title="Permalink" target="_top">
@@ -125,7 +125,7 @@ if available.</p><pre><span class="kw">class</span> MyController(env: Environmen
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Silhouette$RequestHandlerBuilder.html"><span class="name">RequestHandlerBuilder</span></a><span class="tparams">[<span name="R">+R<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="Silhouette$RequestHandlerBuilder.html"><span class="name">RequestHandlerBuilder</span></a><span class="tparams">[<span name="R">+R<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@RequestHandlerBuilder[+R[_]]extendsAnyRef" title="Permalink" target="_top">
@@ -142,7 +142,7 @@ if available.</p><pre><span class="kw">class</span> MyController(env: Environmen
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Silhouette$SecuredActionBuilder.html"><span class="name">SecuredActionBuilder</span></a><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionBuilder" class="extype" target="_top">ActionBuilder</a>[<a href="Silhouette$SecuredRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest">SecuredRequest</a>]</span>
+        <a href="Silhouette$SecuredActionBuilder.html"><span class="name">SecuredActionBuilder</span></a><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.ActionBuilder" class="extype" target="_top">ActionBuilder</a>[<a href="Silhouette$SecuredRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest">SecuredRequest</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@SecuredActionBuilderextendsActionBuilder[Silhouette.this.SecuredRequest]" title="Permalink" target="_top">
@@ -164,7 +164,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Silhouette$SecuredRequest.html"><span class="name">SecuredRequest</span></a><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.I">I</span></span>, <span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.A">A</span></span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.B">B</span>]</span>)</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.WrappedRequest" class="extype" target="_top">WrappedRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.B">B</span>] with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Silhouette$SecuredRequest.html"><span class="name">SecuredRequest</span></a><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.I">I</span></span>, <span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.A">A</span></span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.B">B</span>]</span>)</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.WrappedRequest" class="extype" target="_top">WrappedRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequest.B">B</span>] with <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@SecuredRequest[B]extendsWrappedRequest[B]withProductwithSerializable" title="Permalink" target="_top">
@@ -200,7 +200,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">Status</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
+        <span class="name">Status</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@StatusextendsResult" title="Permalink" target="_top">
@@ -217,7 +217,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Silhouette$UserAwareRequest.html"><span class="name">UserAwareRequest</span></a><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="identity">identity: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.I">I</span>]</span>, <span name="authenticator">authenticator: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.A">A</span>]</span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest.B">B</span>]</span>)</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.WrappedRequest" class="extype" target="_top">WrappedRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest.B">B</span>] with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Silhouette$UserAwareRequest.html"><span class="name">UserAwareRequest</span></a><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="identity">identity: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.I">I</span>]</span>, <span name="authenticator">authenticator: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.A">A</span>]</span>, <span name="request">request: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Request" class="extype" target="_top">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest.B">B</span>]</span>)</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.WrappedRequest" class="extype" target="_top">WrappedRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest.B">B</span>] with <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@UserAwareRequest[B]extendsWrappedRequest[B]withProductwithSerializable" title="Permalink" target="_top">
@@ -265,7 +265,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@!=(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -282,7 +282,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@##():Int" title="Permalink" target="_top">
@@ -299,7 +299,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@==(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -333,7 +333,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">ACCEPTED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">ACCEPTED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@ACCEPTED:Int" title="Permalink" target="_top">
@@ -639,7 +639,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">BAD_GATEWAY</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">BAD_GATEWAY</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@BAD_GATEWAY:Int" title="Permalink" target="_top">
@@ -656,7 +656,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">BAD_REQUEST</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">BAD_REQUEST</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@BAD_REQUEST:Int" title="Permalink" target="_top">
@@ -775,7 +775,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">CONFLICT</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">CONFLICT</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@CONFLICT:Int" title="Permalink" target="_top">
@@ -962,7 +962,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">CONTINUE</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">CONTINUE</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@CONTINUE:Int" title="Permalink" target="_top">
@@ -996,7 +996,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">CREATED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">CREATED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@CREATED:Int" title="Permalink" target="_top">
@@ -1013,7 +1013,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">CSS</span><span class="params">(<span class="implicit">implicit </span><span name="codec">codec: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Codec" class="extype" target="_top">Codec</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">CSS</span><span class="params">(<span class="implicit">implicit </span><span name="codec">codec: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Codec" class="extype" target="_top">Codec</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@CSS(implicitcodec:play.api.mvc.Codec):String" title="Permalink" target="_top">
@@ -1098,7 +1098,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">EVENT_STREAM</span><span class="params">(<span class="implicit">implicit </span><span name="codec">codec: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Codec" class="extype" target="_top">Codec</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">EVENT_STREAM</span><span class="params">(<span class="implicit">implicit </span><span name="codec">codec: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Codec" class="extype" target="_top">Codec</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@EVENT_STREAM(implicitcodec:play.api.mvc.Codec):String" title="Permalink" target="_top">
@@ -1132,7 +1132,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">EXPECTATION_FAILED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">EXPECTATION_FAILED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@EXPECTATION_FAILED:Int" title="Permalink" target="_top">
@@ -1200,7 +1200,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">FAILED_DEPENDENCY</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">FAILED_DEPENDENCY</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@FAILED_DEPENDENCY:Int" title="Permalink" target="_top">
@@ -1217,7 +1217,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">FORBIDDEN</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">FORBIDDEN</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@FORBIDDEN:Int" title="Permalink" target="_top">
@@ -1234,7 +1234,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">FORM</span><span class="params">(<span class="implicit">implicit </span><span name="codec">codec: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Codec" class="extype" target="_top">Codec</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">FORM</span><span class="params">(<span class="implicit">implicit </span><span name="codec">codec: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Codec" class="extype" target="_top">Codec</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@FORM(implicitcodec:play.api.mvc.Codec):String" title="Permalink" target="_top">
@@ -1251,7 +1251,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">FOUND</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">FOUND</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@FOUND:Int" title="Permalink" target="_top">
@@ -1319,7 +1319,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">Found</span><span class="params">(<span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
+        <span class="name">Found</span><span class="params">(<span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@Found(url:String):play.api.mvc.Result" title="Permalink" target="_top">
@@ -1336,7 +1336,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">GATEWAY_TIMEOUT</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">GATEWAY_TIMEOUT</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@GATEWAY_TIMEOUT:Int" title="Permalink" target="_top">
@@ -1353,7 +1353,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">GONE</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">GONE</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@GONE:Int" title="Permalink" target="_top">
@@ -1421,7 +1421,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">HTML</span><span class="params">(<span class="implicit">implicit </span><span name="codec">codec: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Codec" class="extype" target="_top">Codec</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">HTML</span><span class="params">(<span class="implicit">implicit </span><span name="codec">codec: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Codec" class="extype" target="_top">Codec</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@HTML(implicitcodec:play.api.mvc.Codec):String" title="Permalink" target="_top">
@@ -1472,7 +1472,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">HTTP_VERSION_NOT_SUPPORTED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">HTTP_VERSION_NOT_SUPPORTED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@HTTP_VERSION_NOT_SUPPORTED:Int" title="Permalink" target="_top">
@@ -1591,7 +1591,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">INSUFFICIENT_STORAGE</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">INSUFFICIENT_STORAGE</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@INSUFFICIENT_STORAGE:Int" title="Permalink" target="_top">
@@ -1608,7 +1608,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">INTERNAL_SERVER_ERROR</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">INTERNAL_SERVER_ERROR</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@INTERNAL_SERVER_ERROR:Int" title="Permalink" target="_top">
@@ -1659,7 +1659,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">JAVASCRIPT</span><span class="params">(<span class="implicit">implicit </span><span name="codec">codec: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Codec" class="extype" target="_top">Codec</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">JAVASCRIPT</span><span class="params">(<span class="implicit">implicit </span><span name="codec">codec: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Codec" class="extype" target="_top">Codec</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@JAVASCRIPT(implicitcodec:play.api.mvc.Codec):String" title="Permalink" target="_top">
@@ -1676,7 +1676,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">JSON</span><span class="params">(<span class="implicit">implicit </span><span name="codec">codec: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Codec" class="extype" target="_top">Codec</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">JSON</span><span class="params">(<span class="implicit">implicit </span><span name="codec">codec: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Codec" class="extype" target="_top">Codec</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@JSON(implicitcodec:play.api.mvc.Codec):String" title="Permalink" target="_top">
@@ -1710,7 +1710,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">LENGTH_REQUIRED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">LENGTH_REQUIRED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@LENGTH_REQUIRED:Int" title="Permalink" target="_top">
@@ -1744,7 +1744,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">LOCKED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">LOCKED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@LOCKED:Int" title="Permalink" target="_top">
@@ -1795,7 +1795,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">METHOD_NOT_ALLOWED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">METHOD_NOT_ALLOWED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@METHOD_NOT_ALLOWED:Int" title="Permalink" target="_top">
@@ -1812,7 +1812,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">MOVED_PERMANENTLY</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">MOVED_PERMANENTLY</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@MOVED_PERMANENTLY:Int" title="Permalink" target="_top">
@@ -1829,7 +1829,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">MULTIPLE_CHOICES</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">MULTIPLE_CHOICES</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@MULTIPLE_CHOICES:Int" title="Permalink" target="_top">
@@ -1846,7 +1846,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">MULTI_STATUS</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">MULTI_STATUS</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@MULTI_STATUS:Int" title="Permalink" target="_top">
@@ -1880,7 +1880,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">MovedPermanently</span><span class="params">(<span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
+        <span class="name">MovedPermanently</span><span class="params">(<span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@MovedPermanently(url:String):play.api.mvc.Result" title="Permalink" target="_top">
@@ -1914,7 +1914,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">NON_AUTHORITATIVE_INFORMATION</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">NON_AUTHORITATIVE_INFORMATION</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@NON_AUTHORITATIVE_INFORMATION:Int" title="Permalink" target="_top">
@@ -1931,7 +1931,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">NOT_ACCEPTABLE</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">NOT_ACCEPTABLE</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@NOT_ACCEPTABLE:Int" title="Permalink" target="_top">
@@ -1948,7 +1948,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">NOT_FOUND</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">NOT_FOUND</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@NOT_FOUND:Int" title="Permalink" target="_top">
@@ -1965,7 +1965,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">NOT_IMPLEMENTED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">NOT_IMPLEMENTED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@NOT_IMPLEMENTED:Int" title="Permalink" target="_top">
@@ -1982,7 +1982,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">NOT_MODIFIED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">NOT_MODIFIED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@NOT_MODIFIED:Int" title="Permalink" target="_top">
@@ -1999,7 +1999,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">NO_CONTENT</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">NO_CONTENT</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@NO_CONTENT:Int" title="Permalink" target="_top">
@@ -2016,7 +2016,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">NoContent</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
+        <span class="name">NoContent</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@NoContent:play.api.mvc.Result" title="Permalink" target="_top">
@@ -2101,7 +2101,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">NotModified</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
+        <span class="name">NotModified</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@NotModified:play.api.mvc.Result" title="Permalink" target="_top">
@@ -2118,7 +2118,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">OK</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">OK</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@OK:Int" title="Permalink" target="_top">
@@ -2169,7 +2169,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">PARTIAL_CONTENT</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">PARTIAL_CONTENT</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@PARTIAL_CONTENT:Int" title="Permalink" target="_top">
@@ -2186,7 +2186,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">PAYMENT_REQUIRED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">PAYMENT_REQUIRED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@PAYMENT_REQUIRED:Int" title="Permalink" target="_top">
@@ -2220,7 +2220,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">PRECONDITION_FAILED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">PRECONDITION_FAILED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@PRECONDITION_FAILED:Int" title="Permalink" target="_top">
@@ -2254,7 +2254,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">PROXY_AUTHENTICATION_REQUIRED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">PROXY_AUTHENTICATION_REQUIRED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@PROXY_AUTHENTICATION_REQUIRED:Int" title="Permalink" target="_top">
@@ -2356,7 +2356,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">REQUESTED_RANGE_NOT_SATISFIABLE</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">REQUESTED_RANGE_NOT_SATISFIABLE</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@REQUESTED_RANGE_NOT_SATISFIABLE:Int" title="Permalink" target="_top">
@@ -2373,7 +2373,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">REQUEST_ENTITY_TOO_LARGE</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">REQUEST_ENTITY_TOO_LARGE</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@REQUEST_ENTITY_TOO_LARGE:Int" title="Permalink" target="_top">
@@ -2390,7 +2390,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">REQUEST_TIMEOUT</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">REQUEST_TIMEOUT</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@REQUEST_TIMEOUT:Int" title="Permalink" target="_top">
@@ -2407,7 +2407,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">REQUEST_URI_TOO_LONG</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">REQUEST_URI_TOO_LONG</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@REQUEST_URI_TOO_LONG:Int" title="Permalink" target="_top">
@@ -2424,7 +2424,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">RESET_CONTENT</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">RESET_CONTENT</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@RESET_CONTENT:Int" title="Permalink" target="_top">
@@ -2458,7 +2458,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">Redirect</span><span class="params">(<span name="call">call: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Call" class="extype" target="_top">Call</a></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
+        <span class="name">Redirect</span><span class="params">(<span name="call">call: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Call" class="extype" target="_top">Call</a></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@Redirect(call:play.api.mvc.Call):play.api.mvc.Result" title="Permalink" target="_top">
@@ -2475,7 +2475,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">Redirect</span><span class="params">(<span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="queryString">queryString: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>, <span name="status">status: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
+        <span class="name">Redirect</span><span class="params">(<span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="queryString">queryString: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>, <span name="status">status: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@Redirect(url:String,queryString:Map[String,Seq[String]],status:Int):play.api.mvc.Result" title="Permalink" target="_top">
@@ -2492,7 +2492,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">Redirect</span><span class="params">(<span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="status">status: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
+        <span class="name">Redirect</span><span class="params">(<span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="status">status: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@Redirect(url:String,status:Int):play.api.mvc.Result" title="Permalink" target="_top">
@@ -2526,7 +2526,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">ResetContent</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
+        <span class="name">ResetContent</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@ResetContent:play.api.mvc.Result" title="Permalink" target="_top">
@@ -2543,7 +2543,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">SEE_OTHER</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">SEE_OTHER</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@SEE_OTHER:Int" title="Permalink" target="_top">
@@ -2577,7 +2577,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">SERVICE_UNAVAILABLE</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">SERVICE_UNAVAILABLE</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@SERVICE_UNAVAILABLE:Int" title="Permalink" target="_top">
@@ -2628,7 +2628,7 @@ HTTP status codes 401 (Unauthorized) and 403 (Forbidden) will be returned when a
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">SWITCHING_PROTOCOLS</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">SWITCHING_PROTOCOLS</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@SWITCHING_PROTOCOLS:Int" title="Permalink" target="_top">
@@ -2686,7 +2686,7 @@ a default message will be displayed.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">SeeOther</span><span class="params">(<span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
+        <span class="name">SeeOther</span><span class="params">(<span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@SeeOther(url:String):play.api.mvc.Result" title="Permalink" target="_top">
@@ -2720,7 +2720,7 @@ a default message will be displayed.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">Status</span><span class="params">(<span name="code">code: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="#StatusextendsResult" class="extmbr" name="com.mohiva.play.silhouette.api.Silhouette.Status">Status</a></span>
+        <span class="name">Status</span><span class="params">(<span name="code">code: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="#StatusextendsResult" class="extmbr" name="com.mohiva.play.silhouette.api.Silhouette.Status">Status</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@Status(code:Int):Results.this.Status" title="Permalink" target="_top">
@@ -2754,7 +2754,7 @@ a default message will be displayed.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">TEMPORARY_REDIRECT</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">TEMPORARY_REDIRECT</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@TEMPORARY_REDIRECT:Int" title="Permalink" target="_top">
@@ -2771,7 +2771,7 @@ a default message will be displayed.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">TEXT</span><span class="params">(<span class="implicit">implicit </span><span name="codec">codec: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Codec" class="extype" target="_top">Codec</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">TEXT</span><span class="params">(<span class="implicit">implicit </span><span name="codec">codec: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Codec" class="extype" target="_top">Codec</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@TEXT(implicitcodec:play.api.mvc.Codec):String" title="Permalink" target="_top">
@@ -2788,7 +2788,7 @@ a default message will be displayed.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">TODO</span><span class="result">: <span class="extype" name="play.api.mvc.Action">Action</span>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.AnyContent" class="extype" target="_top">AnyContent</a>]</span>
+        <span class="name">TODO</span><span class="result">: <span class="extype" name="play.api.mvc.Action">Action</span>[<a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.AnyContent" class="extype" target="_top">AnyContent</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@TODO:play.api.mvc.Action[play.api.mvc.AnyContent]" title="Permalink" target="_top">
@@ -2805,7 +2805,7 @@ a default message will be displayed.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">TOO_MANY_REQUEST</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">TOO_MANY_REQUEST</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@TOO_MANY_REQUEST:Int" title="Permalink" target="_top">
@@ -2856,7 +2856,7 @@ a default message will be displayed.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">TemporaryRedirect</span><span class="params">(<span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
+        <span class="name">TemporaryRedirect</span><span class="params">(<span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@TemporaryRedirect(url:String):play.api.mvc.Result" title="Permalink" target="_top">
@@ -2890,7 +2890,7 @@ a default message will be displayed.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">UNAUTHORIZED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">UNAUTHORIZED</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@UNAUTHORIZED:Int" title="Permalink" target="_top">
@@ -2907,7 +2907,7 @@ a default message will be displayed.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">UNPROCESSABLE_ENTITY</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">UNPROCESSABLE_ENTITY</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@UNPROCESSABLE_ENTITY:Int" title="Permalink" target="_top">
@@ -2924,7 +2924,7 @@ a default message will be displayed.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">UNSUPPORTED_MEDIA_TYPE</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">UNSUPPORTED_MEDIA_TYPE</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@UNSUPPORTED_MEDIA_TYPE:Int" title="Permalink" target="_top">
@@ -2975,7 +2975,7 @@ a default message will be displayed.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">USE_PROXY</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">USE_PROXY</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@USE_PROXY:Int" title="Permalink" target="_top">
@@ -3060,7 +3060,7 @@ a default message will be displayed.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Silhouette$UserAwareAction$.html"><span class="name">UserAwareAction</span></a><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.ActionBuilder" class="extype" target="_top">ActionBuilder</a>[<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>]</span>
+        <a href="Silhouette$UserAwareAction$.html"><span class="name">UserAwareAction</span></a><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.ActionBuilder" class="extype" target="_top">ActionBuilder</a>[<a href="Silhouette$UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequest">UserAwareRequest</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@UserAwareAction" title="Permalink" target="_top">
@@ -3162,7 +3162,7 @@ a default message will be displayed.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">XML</span><span class="params">(<span class="implicit">implicit </span><span name="codec">codec: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Codec" class="extype" target="_top">Codec</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">XML</span><span class="params">(<span class="implicit">implicit </span><span name="codec">codec: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Codec" class="extype" target="_top">Codec</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@XML(implicitcodec:play.api.mvc.Codec):String" title="Permalink" target="_top">
@@ -3264,7 +3264,7 @@ a default message will be displayed.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">chunk</span><span class="params">(<span name="trailers">trailers: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="play.api.libs.iteratee.Iteratee">Iteratee</span>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Byte" class="extype" target="_top">Byte</a>], <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)]]]</span>)</span><span class="result">: <span class="extype" name="play.api.libs.iteratee.Enumeratee">Enumeratee</span>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Byte" class="extype" target="_top">Byte</a>], <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Byte" class="extype" target="_top">Byte</a>]]</span>
+        <span class="name">chunk</span><span class="params">(<span name="trailers">trailers: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="play.api.libs.iteratee.Iteratee">Iteratee</span>[<a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Byte" class="extype" target="_top">Byte</a>], <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)]]]</span>)</span><span class="result">: <span class="extype" name="play.api.libs.iteratee.Enumeratee">Enumeratee</span>[<a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Byte" class="extype" target="_top">Byte</a>], <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Byte" class="extype" target="_top">Byte</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@chunk(trailers:Option[play.api.libs.iteratee.Iteratee[Array[Byte],Seq[(String,String)]]]):play.api.libs.iteratee.Enumeratee[Array[Byte],Array[Byte]]" title="Permalink" target="_top">
@@ -3281,7 +3281,7 @@ a default message will be displayed.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">chunk</span><span class="result">: <span class="extype" name="play.api.libs.iteratee.Enumeratee">Enumeratee</span>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Byte" class="extype" target="_top">Byte</a>], <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Byte" class="extype" target="_top">Byte</a>]]</span>
+        <span class="name">chunk</span><span class="result">: <span class="extype" name="play.api.libs.iteratee.Enumeratee">Enumeratee</span>[<a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Byte" class="extype" target="_top">Byte</a>], <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Byte" class="extype" target="_top">Byte</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@chunk:play.api.libs.iteratee.Enumeratee[Array[Byte],Array[Byte]]" title="Permalink" target="_top">
@@ -3298,7 +3298,7 @@ a default message will be displayed.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@clone():Object" title="Permalink" target="_top">
@@ -3321,7 +3321,7 @@ a default message will be displayed.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">dechunk</span><span class="result">: <span class="extype" name="play.api.libs.iteratee.Enumeratee">Enumeratee</span>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Byte" class="extype" target="_top">Byte</a>], <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Byte" class="extype" target="_top">Byte</a>]]</span>
+        <span class="name">dechunk</span><span class="result">: <span class="extype" name="play.api.libs.iteratee.Enumeratee">Enumeratee</span>[<a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Byte" class="extype" target="_top">Byte</a>], <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Byte" class="extype" target="_top">Byte</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@dechunk:play.api.libs.iteratee.Enumeratee[Array[Byte],Array[Byte]]" title="Permalink" target="_top">
@@ -3338,7 +3338,7 @@ a default message will be displayed.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
@@ -3355,7 +3355,7 @@ a default message will be displayed.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@equals(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -3372,7 +3372,7 @@ a default message will be displayed.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">exceptionHandler</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[<span class="extype" name="scala.Throwable">Throwable</span>, <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]]</span>
+        <span class="name">exceptionHandler</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[<span class="extype" name="scala.Throwable">Throwable</span>, <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@exceptionHandler(implicitrequest:play.api.mvc.RequestHeader):PartialFunction[Throwable,scala.concurrent.Future[play.api.mvc.Result]]" title="Permalink" target="_top">
@@ -3394,7 +3394,7 @@ into a 401 Unauthorized result.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@finalize():Unit" title="Permalink" target="_top">
@@ -3434,7 +3434,7 @@ into a 401 Unauthorized result.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@hashCode():Int" title="Permalink" target="_top">
@@ -3451,7 +3451,7 @@ into a 401 Unauthorized result.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
@@ -3486,7 +3486,7 @@ into a 401 Unauthorized result.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
@@ -3503,7 +3503,7 @@ into a 401 Unauthorized result.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notAuthenticated</span><span class="params">(<span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]]</span>
+        <span class="name">notAuthenticated</span><span class="params">(<span name="request">request: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@notAuthenticated(request:play.api.mvc.RequestHeader):Option[scala.concurrent.Future[play.api.mvc.Result]]" title="Permalink" target="_top">
@@ -3522,7 +3522,7 @@ into a 401 Unauthorized result.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notAuthorized</span><span class="params">(<span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]]</span>
+        <span class="name">notAuthorized</span><span class="params">(<span name="request">request: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@notAuthorized(request:play.api.mvc.RequestHeader):Option[scala.concurrent.Future[play.api.mvc.Result]]" title="Permalink" target="_top">
@@ -3541,7 +3541,7 @@ into a 401 Unauthorized result.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@notify():Unit" title="Permalink" target="_top">
@@ -3558,7 +3558,7 @@ into a 401 Unauthorized result.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@notifyAll():Unit" title="Permalink" target="_top">
@@ -3592,7 +3592,7 @@ into a 401 Unauthorized result.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">request2flash</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Flash" class="extype" target="_top">Flash</a></span>
+        <span class="name">request2flash</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Flash" class="extype" target="_top">Flash</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@request2flash(implicitrequest:play.api.mvc.RequestHeader):play.api.mvc.Flash" title="Permalink" target="_top">
@@ -3609,7 +3609,7 @@ into a 401 Unauthorized result.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">request2lang</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.i18n.Lang" class="extype" target="_top">Lang</a></span>
+        <span class="name">request2lang</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.i18n.Lang" class="extype" target="_top">Lang</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@request2lang(implicitrequest:play.api.mvc.RequestHeader):play.api.i18n.Lang" title="Permalink" target="_top">
@@ -3626,7 +3626,7 @@ into a 401 Unauthorized result.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">request2session</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Session" class="extype" target="_top">Session</a></span>
+        <span class="name">request2session</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Session" class="extype" target="_top">Session</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@request2session(implicitrequest:play.api.mvc.RequestHeader):play.api.mvc.Session" title="Permalink" target="_top">
@@ -3677,7 +3677,7 @@ into a 401 Unauthorized result.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@wait():Unit" title="Permalink" target="_top">
@@ -3700,7 +3700,7 @@ into a 401 Unauthorized result.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
@@ -3723,7 +3723,7 @@ into a 401 Unauthorized result.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@wait(x$1:Long):Unit" title="Permalink" target="_top">
@@ -3746,7 +3746,7 @@ into a 401 Unauthorized result.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">withCharset</span><span class="params">(<span name="mimeType">mimeType: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="codec">codec: <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Codec" class="extype" target="_top">Codec</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">withCharset</span><span class="params">(<span name="mimeType">mimeType: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="codec">codec: <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Codec" class="extype" target="_top">Codec</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette@withCharset(mimeType:String)(implicitcodec:play.api.mvc.Codec):String" title="Permalink" target="_top">
@@ -3766,29 +3766,29 @@ into a 401 Unauthorized result.
         <div class="parent" name="com.mohiva.play.silhouette.api.Logger">
               <h3>Inherited from <a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></h3>
             </div><div class="parent" name="play.api.mvc.Controller">
-              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Controller" class="extype" target="_top">Controller</a></h3>
+              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Controller" class="extype" target="_top">Controller</a></h3>
             </div><div class="parent" name="play.api.mvc.Rendering">
-              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Rendering" class="extype" target="_top">Rendering</a></h3>
+              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Rendering" class="extype" target="_top">Rendering</a></h3>
             </div><div class="parent" name="play.api.mvc.RequestExtractors">
-              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.RequestExtractors" class="extype" target="_top">RequestExtractors</a></h3>
+              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.RequestExtractors" class="extype" target="_top">RequestExtractors</a></h3>
             </div><div class="parent" name="play.api.mvc.AcceptExtractors">
-              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.AcceptExtractors" class="extype" target="_top">AcceptExtractors</a></h3>
+              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.AcceptExtractors" class="extype" target="_top">AcceptExtractors</a></h3>
             </div><div class="parent" name="play.api.http.ContentTypes">
-              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.http.ContentTypes" class="extype" target="_top">ContentTypes</a></h3>
+              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.http.ContentTypes" class="extype" target="_top">ContentTypes</a></h3>
             </div><div class="parent" name="play.api.http.HeaderNames">
-              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.http.HeaderNames" class="extype" target="_top">HeaderNames</a></h3>
+              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.http.HeaderNames" class="extype" target="_top">HeaderNames</a></h3>
             </div><div class="parent" name="play.api.http.Status">
-              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.http.Status" class="extype" target="_top">play.api.http.Status</a></h3>
+              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.http.Status" class="extype" target="_top">play.api.http.Status</a></h3>
             </div><div class="parent" name="play.api.http.HttpProtocol">
-              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.http.HttpProtocol" class="extype" target="_top">HttpProtocol</a></h3>
+              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.http.HttpProtocol" class="extype" target="_top">HttpProtocol</a></h3>
             </div><div class="parent" name="play.api.mvc.BodyParsers">
-              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.BodyParsers" class="extype" target="_top">BodyParsers</a></h3>
+              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.BodyParsers" class="extype" target="_top">BodyParsers</a></h3>
             </div><div class="parent" name="play.api.mvc.Results">
-              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.6/api/scala/index.html#play.api.mvc.Results" class="extype" target="_top">Results</a></h3>
+              <h3>Inherited from <a href="http://www.playframework.com/documentation/2.3.7/api/scala/index.html#play.api.mvc.Results" class="extype" target="_top">Results</a></h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.1/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
             </div>
         
         </div>
