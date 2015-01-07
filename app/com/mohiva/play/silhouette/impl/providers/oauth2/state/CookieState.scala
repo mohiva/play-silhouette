@@ -37,13 +37,13 @@ import scala.util.{ Failure, Success, Try }
 object CookieState {
 
   /**
-   * Converts the State to Json and vice versa.
+   * Converts the [[CookieState]]] to Json and vice versa.
    */
   implicit val jsonFormat = Json.format[CookieState]
 }
 
 /**
- * The OAuth2 state.
+ * A state which gets persisted in a cookie.
  *
  * This is to prevent the client for CSRF attacks as described in the OAuth2 RFC.
  * @see https://tools.ietf.org/html/rfc6749#section-10.12
@@ -89,9 +89,11 @@ class CookieStateProvider(
   /**
    * Builds the state.
    *
+   * @param request The request.
+   * @tparam B The type of the request body.
    * @return The build state.
    */
-  def build(): Future[CookieState] = idGenerator.generate.map { id =>
+  def build[B](implicit request: ExtractableRequest[B]): Future[CookieState] = idGenerator.generate.map { id =>
     CookieState(clock.now.plusSeconds(settings.expirationTime), id)
   }
 
@@ -112,7 +114,7 @@ class CookieStateProvider(
   }
 
   /**
-   * Publishes the state to the client.
+   * Sends a cookie to the client containing the serialized state.
    *
    * @param result The result to send to the client.
    * @param state The state to publish.

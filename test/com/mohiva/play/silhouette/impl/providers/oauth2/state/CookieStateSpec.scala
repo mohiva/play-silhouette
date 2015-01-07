@@ -55,13 +55,14 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
 
   "The `build` method of the provider" should {
     "return a new state" in new Context {
+      implicit val req = FakeRequest()
       val dateTime = new DateTime(2014, 8, 8, 0, 0, 0)
       val value = "value"
 
       clock.now returns dateTime
       idGenerator.generate returns Future.successful(value)
 
-      val s = await(provider.build())
+      val s = await(provider.build)
 
       s.expirationDate must be equalTo dateTime.plusSeconds(settings.expirationTime)
       s.value must be equalTo value

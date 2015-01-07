@@ -61,7 +61,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
       val sessionValue = "session-value"
 
       c.state.serialize returns sessionValue
-      c.stateProvider.build() returns Future.successful(c.state)
+      c.stateProvider.build(any) returns Future.successful(c.state)
       c.stateProvider.publish(any, any)(any) answers { (a, m) =>
         val result = a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
         val state = a.asInstanceOf[Array[Any]](1).asInstanceOf[OAuth2State]
@@ -86,6 +86,21 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
               encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8")
             }.mkString("?", "&", ""))
           }
+      }
+    }
+
+    "not send state param if state is empty" in new WithApplication {
+      implicit val req = FakeRequest(GET, "/")
+
+      c.state.serialize returns ""
+      c.stateProvider.build(any) returns Future.successful(c.state)
+      c.stateProvider.publish(any, any)(any) answers { (a, m) =>
+        a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
+      }
+
+      result(c.provider.authenticate()) {
+        case result =>
+          redirectLocation(result) must beSome.which(_ must not contain State)
       }
     }
 

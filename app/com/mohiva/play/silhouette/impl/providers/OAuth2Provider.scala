@@ -25,8 +25,8 @@ import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthInfo
 import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
-import com.mohiva.play.silhouette.{ impl, _ }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
+import com.mohiva.play.silhouette.{ impl, _ }
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
@@ -107,12 +107,13 @@ abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
           getAccessToken(code).map(oauth2Info => Right(oauth2Info))
         }
         // There's no code in the request, this is the first step in the OAuth flow
-        case None => stateProvider.build().map { state =>
+        case None => stateProvider.build.map { state =>
+          val serializedState = state.serialize
+          val stateParam = if (serializedState.isEmpty) List() else List(State -> serializedState)
           val params = settings.scope.foldLeft(List(
             (ClientID, settings.clientID),
             (RedirectURI, settings.redirectURL),
-            (ResponseType, Code),
-            (State, state.serialize)) ++ settings.authorizationParams.toList) {
+            (ResponseType, Code)) ++ stateParam ++ settings.authorizationParams.toList) {
             case (p, s) => (Scope, s) :: p
           }
           val encodedParams = params.map { p => encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8") }
@@ -228,9 +229,11 @@ trait OAuth2StateProvider {
   /**
    * Builds the state.
    *
+   * @param request The request.
+   * @tparam B The type of the request body.
    * @return The build state.
    */
-  def build(): Future[State]
+  def build[B](implicit request: ExtractableRequest[B]): Future[State]
 
   /**
    * Validates the provider and the client state.
