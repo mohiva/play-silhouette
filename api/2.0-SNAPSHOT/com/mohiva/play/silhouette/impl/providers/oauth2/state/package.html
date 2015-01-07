@@ -82,7 +82,7 @@
         <img src="../../../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The OAuth2 state.</p><div class="fullcomment"><div class="comment cmt"><p>The OAuth2 state.</p><p>This is to prevent the client for CSRF attacks as described in the OAuth2 RFC.</p></div><dl class="paramcmts block"><dt class="param">expirationDate</dt><dd class="cmt"><p>The expiration time.</p></dd><dt class="param">value</dt><dd class="cmt"><p>A value that binds the request to the user-agent's authenticated state.
+      <p class="shortcomment cmt">A state which gets persisted in a cookie.</p><div class="fullcomment"><div class="comment cmt"><p>A state which gets persisted in a cookie.</p><p>This is to prevent the client for CSRF attacks as described in the OAuth2 RFC.</p></div><dl class="paramcmts block"><dt class="param">expirationDate</dt><dd class="cmt"><p>The expiration time.</p></dd><dt class="param">value</dt><dd class="cmt"><p>A value that binds the request to the user-agent's authenticated state.
 </p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>https://tools.ietf.org/html/rfc6749#section-10.12
 </p></span></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.oauth2.state.CookieStateProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
@@ -122,6 +122,42 @@
 </p></div><dl class="paramcmts block"><dt class="param">cookieName</dt><dd class="cmt"><p>The cookie name.</p></dd><dt class="param">cookiePath</dt><dd class="cmt"><p>The cookie path.</p></dd><dt class="param">cookieDomain</dt><dd class="cmt"><p>The cookie domain.</p></dd><dt class="param">secureCookie</dt><dd class="cmt"><p>Whether this cookie is secured, sent only for HTTPS requests.</p></dd><dt class="param">httpOnlyCookie</dt><dd class="cmt"><p>Whether this cookie is HTTP only, i.e. not accessible from client-side JavaScript code.</p></dd><dt class="param">expirationTime</dt><dd class="cmt"><p>State expiration. Defaults to 5 minutes which provides sufficient time to log in, but
                       not too much. This is a balance between convenience and security.
 </p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.oauth2.state.DummyState" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DummyStateextendsOAuth2StatewithProductwithSerializable"></a>
+      <a id="DummyState:DummyState"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DummyState.html"><span class="name">DummyState</span></a><span class="params">()</span><span class="result"> extends <a href="../../OAuth2State.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2State">OAuth2State</a> with <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth2.state.package@DummyStateextendsOAuth2StatewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A dummy state which can be used to avoid state validation.</p><div class="fullcomment"><div class="comment cmt"><p>A dummy state which can be used to avoid state validation. This can be useful if the state
+should be validated on client side.
+</p></div></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.oauth2.state.DummyStateProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DummyStateProviderextendsOAuth2StateProvider"></a>
+      <a id="DummyStateProvider:DummyStateProvider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="DummyStateProvider.html"><span class="name">DummyStateProvider</span></a><span class="result"> extends <a href="../../OAuth2StateProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider">OAuth2StateProvider</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth2.state.package@DummyStateProviderextendsOAuth2StateProvider" title="Permalink" target="_top">
+        <img src="../../../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Handles the dummy state.</p>
     </li></ol>
             </div>
 

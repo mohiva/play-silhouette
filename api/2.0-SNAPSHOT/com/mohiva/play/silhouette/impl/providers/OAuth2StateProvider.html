@@ -53,7 +53,7 @@
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="oauth2/state/CookieStateProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.state.CookieStateProvider">CookieStateProvider</a></div>
+            <div class="subClasses hiddenContent"><a href="oauth2/state/CookieStateProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.state.CookieStateProvider">CookieStateProvider</a>, <a href="oauth2/state/DummyStateProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.state.DummyStateProvider">DummyStateProvider</a></div>
           </div></div>
         
 
@@ -116,23 +116,23 @@
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider#build" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="build():scala.concurrent.Future[OAuth2StateProvider.this.State]"></a>
-      <a id="build():Future[State]"></a>
+      <a id="build[B](implicitrequest:com.mohiva.play.silhouette.api.util.ExtractableRequest[B]):scala.concurrent.Future[OAuth2StateProvider.this.State]"></a>
+      <a id="build[B](ExtractableRequest[B]):Future[State]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">build</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="#State&lt;:com.mohiva.play.silhouette.impl.providers.OAuth2State" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider.State">State</a>]</span>
+        <span class="name">build</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="../../api/util/ExtractableRequest.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest">ExtractableRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider.build.B">B</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="#State&lt;:com.mohiva.play.silhouette.impl.providers.OAuth2State" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider.State">State</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider@build():scala.concurrent.Future[OAuth2StateProvider.this.State]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider@build[B](implicitrequest:com.mohiva.play.silhouette.api.util.ExtractableRequest[B]):scala.concurrent.Future[OAuth2StateProvider.this.State]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Builds the state.</p><div class="fullcomment"><div class="comment cmt"><p>Builds the state.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The build state.
+</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request.</p></dd><dt>returns</dt><dd class="cmt"><p>The build state.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider#publish" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="publish[B](result:play.api.mvc.Result,state:OAuth2StateProvider.this.State)(implicitrequest:com.mohiva.play.silhouette.api.util.ExtractableRequest[B]):play.api.mvc.Result"></a>
