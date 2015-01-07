@@ -204,7 +204,7 @@ provider. All state provider implementations can be found in the `impl package`_
 List of OAuth2 states
 ^^^^^^^^^^^^^^^^^^^^^
 
-We provide some built in state providers, but as noted above a customized
+We provide some built in state providers. But as noted above a customized
 state can be implemented to remember some state about a user.
 
 CookieState
@@ -218,6 +218,13 @@ from the `OAuth2 RFC`_ and it provides a stateless/scalable approach.
    to configure the provider for this state.
 
 .. _OAuth2 RFC: https://tools.ietf.org/html/rfc6749#section-10.12
+
+
+DummyState
+''''''''''
+
+The dummy state can be used to avoid state validation. This can be useful if the state
+should be validated on client side.
 
 
 Request extractors
