@@ -305,7 +305,7 @@ Property                        Description
                                 cookie. Defaults to 12 hours
 ``authenticatorIdleTimeout``    The time in seconds an authenticator can be idle before it timed
                                 out. Defaults to 30 minutes
-``authenticatorExpiry``         The expiry of the authenticator in minutes. Defaults to 12 hours
+``authenticatorExpiry``         The expiry of the authenticator in seconds. Defaults to 12 hours
 ============================    ===================================================================
 
 .. _session_authenticator_settings:
@@ -333,7 +333,7 @@ Property                        Description
 ``useFingerprinting``           Indicates if a fingerprint of the user should be stored in the
 ``authenticatorIdleTimeout``    The time in seconds an authenticator can be idle before it timed
                                 out. Defaults to 30 minutes
-``authenticatorExpiry``         The expiry of the authenticator in minutes. Defaults to 12 hours
+``authenticatorExpiry``         The expiry of the authenticator in seconds. Defaults to 12 hours
 ============================    ===================================================================
 
 .. _bearer_token_authenticator_settings:
@@ -357,7 +357,7 @@ Property                        Description
 ``headerName``                  The name of the header in which the token will be transfered
 ``authenticatorIdleTimeout``    The time in seconds an authenticator can be idle before it timed
                                 out. Defaults to 30 minutes
-``authenticatorExpiry``         The expiry of the authenticator in minutes. Defaults to 12 hours
+``authenticatorExpiry``         The expiry of the authenticator in seconds. Defaults to 12 hours
 ============================    ===================================================================
 
 .. _jwt_authenticator_settings:
@@ -387,6 +387,6 @@ Property                        Description
 ``authenticatorIdleTimeout``    The time in seconds an authenticator can be idle before it timed
                                 out. This feature is disabled by default to prevent the generation
                                 of a new JWT on every request
-``authenticatorExpiry``         The expiry of the authenticator in minutes. Defaults to 12 hours
+``authenticatorExpiry``         The expiry of the authenticator in seconds. Defaults to 12 hours
 ``sharedSecret``                The shared secret to sign the JWT
 ============================    ===================================================================

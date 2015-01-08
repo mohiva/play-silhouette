@@ -42,13 +42,13 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
     "return false if the authenticator is timed out" in new Context {
       authenticator.copy(
-        lastUsedDate = DateTime.now.minusMinutes(settings.authenticatorIdleTimeout.get + 1)
+        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get + 1)
       ).isValid must beFalse
     }
 
     "return true if the authenticator is valid" in new Context {
       authenticator.copy(
-        lastUsedDate = DateTime.now.minusMinutes(settings.authenticatorIdleTimeout.get - 1),
+        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get - 10),
         expirationDate = DateTime.now.plusSeconds(5)
       ).isValid must beTrue
     }
