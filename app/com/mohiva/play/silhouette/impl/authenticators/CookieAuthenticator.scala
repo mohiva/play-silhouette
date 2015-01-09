@@ -89,7 +89,7 @@ case class CookieAuthenticator(
    *
    * @return True if sliding window expiration is activated and the authenticator is timed out, false otherwise.
    */
-  private def isTimedOut = idleTimeout.isDefined && lastUsedDate.plusMinutes(idleTimeout.get).isBeforeNow
+  private def isTimedOut = idleTimeout.isDefined && lastUsedDate.plusSeconds(idleTimeout.get).isBeforeNow
 }
 
 /**

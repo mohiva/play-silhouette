@@ -89,7 +89,7 @@ case class JWTAuthenticator(
    *
    * @return True if sliding window expiration is activated and the authenticator is timed out, false otherwise.
    */
-  private def isTimedOut = idleTimeout.isDefined && lastUsedDate.plusMinutes(idleTimeout.get).isBeforeNow
+  private def isTimedOut = idleTimeout.isDefined && lastUsedDate.plusSeconds(idleTimeout.get).isBeforeNow
 }
 
 /**
@@ -377,7 +377,7 @@ object JWTAuthenticatorService {
  * @param issuerClaim The issuer claim identifies the principal that issued the JWT.
  * @param encryptSubject Indicates if the subject should be encrypted in JWT.
  * @param authenticatorIdleTimeout The time in seconds an authenticator can be idle before it timed out.
- * @param authenticatorExpiry The expiry of the authenticator in minutes.
+ * @param authenticatorExpiry The expiry of the authenticator in seconds.
  * @param sharedSecret The shared secret to sign the JWT.
  */
 case class JWTAuthenticatorSettings(
