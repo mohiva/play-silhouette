@@ -19,7 +19,6 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth2
 
-import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
@@ -45,7 +44,7 @@ abstract class VKProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvid
   extends OAuth2Provider(httpLayer, stateProvider, settings) {
 
   /**
-   * The content type returned from the provider.
+   * The content type to parse a profile from.
    */
   type Content = JsValue
 
@@ -76,17 +75,24 @@ abstract class VKProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvid
           val errorMsg = (error \ "error_msg").as[String]
 
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, errorCode, errorMsg))
-        case _ => Future.from(parseProfile(parser, json))
+        case _ => profileParser.parse(json)
       }
     }
   }
+}
+
+/**
+ * The profile parser for the common social profile.
+ */
+class VKProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile] {
 
   /**
-   * Defines the parser which parses the most common profile supported by Silhouette.
+   * Parses the social profile.
    *
-   * @return The parser which parses the most common profile supported by Silhouette.
+   * @param json The content returned from the provider.
+   * @return The social profile from given result.
    */
-  protected def parser: Parser = (json: JsValue) => {
+  def parse(json: JsValue) = Future.successful {
     val response = (json \ "response").apply(0)
     val userId = (response \ "uid").as[Long]
     val firstName = (response \ "first_name").asOpt[String]
@@ -94,11 +100,23 @@ abstract class VKProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvid
     val avatarURL = (response \ "photo").asOpt[String]
 
     CommonSocialProfile(
-      loginInfo = LoginInfo(id, userId.toString),
+      loginInfo = LoginInfo(ID, userId.toString),
       firstName = firstName,
       lastName = lastName,
       avatarURL = avatarURL)
   }
+}
+
+/**
+ * The profile builder for the common social profile.
+ */
+trait VKProfileBuilder extends CommonSocialProfileBuilder {
+  self: VKProvider =>
+
+  /**
+   * The profile parser implementation.
+   */
+  val profileParser = new VKProfileParser
 }
 
 /**
@@ -126,6 +144,6 @@ object VKProvider {
    * @return An instance of this provider.
    */
   def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new VKProvider(httpLayer, stateProvider, settings) with CommonSocialProfileBuilder
+    new VKProvider(httpLayer, stateProvider, settings) with VKProfileBuilder
   }
 }

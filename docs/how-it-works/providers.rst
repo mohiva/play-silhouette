@@ -91,8 +91,8 @@ which contains the most common profile data providers return.
 
 .. _CommonSocialProfile: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/impl/providers/SocialProvider.scala#L168
 
-Social profile builders
------------------------
+Social profile builders and parsers
+-----------------------------------
 
 Some providers return a superset of the information in `CommonSocialProfile`_,
 for example the location or gender of the user. Silouette's “profile builders”
@@ -101,21 +101,26 @@ of overriding the provider to return the additional profile information, develop
 can mix in a profile builder which adds only the programming logic for the additional
 fields.
 
-The default social profile builder
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Every profile builder must define a profile parser, which transforms the content returned
+from the provider, into a social profile instance. Parsers can then be reused by other
+parsers to avoid code duplication.
+
+Default social profile builders
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 All provider implementations are abstract because a profile builder must be
-specified before an object can be instantiated. Silhouette ships with a
-default profile builder, ``CommonSocialProfileBuilder``, which returns a
-``CommonSocialProfile`` after successful authentication. However, it can't
-be mixed into the provider by default because Scala doesn't allow us to override
-a concrete type with a different concrete type. That is, mixing in a default builder
-would prevent customization.
+specified before an object can be instantiated. Every provider ships with a
+default profile builder, an implementation of ``CommonSocialProfileBuilder``,
+which returns a ``CommonSocialProfile`` after successful authentication. However,
+it can't be mixed into the provider by default because Scala doesn't allow us to
+override a concrete type with a different concrete type. That is, mixing in a
+default builder would prevent customization.
 
 Silhouette handles this problem by leaving the provider class abstract but making the
 companion object's ``apply`` method handle the most common case --
-instantiating a provider with a ``CommonSocialProfileBuilder``. So in most
-cases you should simply call the apply method and instead of using the ``new`` keyword:
+instantiating a provider with an implementation of ``CommonSocialProfileBuilder``.
+So in most cases you should simply call the apply method and instead of using the
+``new`` keyword:
 
 .. code-block:: scala
 
@@ -131,56 +136,75 @@ social profile by the additional gender field.
 
 .. code-block:: scala
 
-    case class CustomSocialProfile(
-      loginInfo: LoginInfo,
-      firstName: Option[String] = None,
-      lastName: Option[String] = None,
-      fullName: Option[String] = None,
-      email: Option[String] = None,
-      avatarURL: Option[String] = None,
-      gender: Option[String] = None) extends SocialProfile
+  case class CustomSocialProfile(
+    loginInfo: LoginInfo,
+    firstName: Option[String] = None,
+    lastName: Option[String] = None,
+    fullName: Option[String] = None,
+    email: Option[String] = None,
+    avatarURL: Option[String] = None,
+    gender: Option[String] = None) extends SocialProfile
 
-Now we create a profile builder which can be mixed into the Facebook
-provider to return our previously defined custom profile.
+As next we create the parser which uses the default Facebook profile
+parser to avoid code duplication.
 
 .. code-block:: scala
 
-    trait CustomFacebookProfileBuilder extends SocialProfileBuilder {
-      self: FacebookProvider =>
+  class CustomFacebookProfileParser extends SocialProfileParser[JsValue, CustomSocialProfile] {
 
-      /**
-       * Defines the profile to return by the provider.
-       */
-      type Profile = CustomSocialProfile
+    /**
+     * The common social profile parser.
+     */
+    val commonParser = new FacebookProfileParser
 
-      /**
-       * Parses the profile from the Json response returned by the Facebook API.
-       */
-      protected def parseProfile(parser: JsonParser, json: JsValue): Try[Profile] = Try {
-        val commonProfile = parser(json)
-        val gender = (json \ "gender").asOpt[String]
-
-        CustomSocialProfile(
-          loginInfo = commonProfile.loginInfo,
-          firstName = commonProfile.firstName,
-          lastName = commonProfile.lastName,
-          fullName = commonProfile.fullName,
-          avatarURL = commonProfile.avatarURL,
-          email = commonProfile.email,
-          gender = gender)
-      }
+    /**
+     * Parses the social profile.
+     *
+     * @param json The content returned from the provider.
+     * @return The social profile from given result.
+     */
+    def parse(json: JsValue) = commonParser.parse(json).map { commonProfile =>
+      val gender = (json \ "gender").as[String]
+      CustomSocialProfile(
+        loginInfo = commonProfile.loginInfo,
+        firstName = commonProfile.firstName,
+        lastName = commonProfile.lastName,
+        fullName = commonProfile.fullName,
+        avatarURL = commonProfile.avatarURL,
+        email = commonProfile.email,
+        gender = Some(gender))
     }
+  }
 
 As you can see there is no need to duplicate any Json parsing. The only
 thing to do is to query the gender field from the Json response returned
 by the Facebook API.
+
+As last we create a profile builder which can then be mixed into the Facebook
+provider to return our previously defined custom profile.
+
+.. code-block:: scala
+
+  trait CustomFacebookProfileBuilder {
+    self: FacebookProvider =>
+
+    /**
+     * The type of the profile a profile builder is responsible for.
+     */
+    type Profile = CustomSocialProfile
+
+    /**
+     * The profile parser.
+     */
+    val profileParser = new CustomFacebookProfileParser
+  }
 
 Now you can mixin the profile builder by instantiating the Facebook
 provider with the profile builder.
 
 .. code-block:: scala
 
-    new FacebookProvider(httpLayer, stateProvider, settings) with CustomFacebookProfileBuilder
+  new FacebookProvider(httpLayer, stateProvider, settings) with CustomFacebookProfileBuilder
 
 
 OAuth2 state

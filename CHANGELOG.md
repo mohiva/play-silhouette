@@ -14,6 +14,7 @@
 - Add request providers in combination with HTTP basic auth provider
 - Add Dropbox provider
 - Add request extractors
+- Better social profile builder implementation
 
 ## 1.0 (2014-06-12)
 

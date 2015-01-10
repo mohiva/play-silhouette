@@ -19,7 +19,6 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth2
 
-import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
@@ -46,7 +45,7 @@ abstract class GoogleProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
   extends OAuth2Provider(httpLayer, stateProvider, settings) {
 
   /**
-   * The content type returned from the provider.
+   * The content type to parse a profile from.
    */
   type Content = JsValue
 
@@ -77,17 +76,24 @@ abstract class GoogleProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
           val errorMsg = (error \ "message").as[String]
 
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, errorCode, errorMsg))
-        case _ => Future.from(parseProfile(parser, json))
+        case _ => profileParser.parse(json)
       }
     }
   }
+}
+
+/**
+ * The profile parser for the common social profile.
+ */
+class GoogleProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile] {
 
   /**
-   * Defines the parser which parses the most common profile supported by Silhouette.
+   * Parses the social profile.
    *
-   * @return The parser which parses the most common profile supported by Silhouette.
+   * @param json The content returned from the provider.
+   * @return The social profile from given result.
    */
-  protected def parser: Parser = (json: JsValue) => {
+  def parse(json: JsValue) = Future.successful {
     val userID = (json \ "id").as[String]
     val firstName = (json \ "name" \ "givenName").asOpt[String]
     val lastName = (json \ "name" \ "familyName").asOpt[String]
@@ -103,13 +109,25 @@ abstract class GoogleProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
     }
 
     CommonSocialProfile(
-      loginInfo = LoginInfo(id, userID),
+      loginInfo = LoginInfo(ID, userID),
       firstName = firstName,
       lastName = lastName,
       fullName = fullName,
       avatarURL = avatarURL,
       email = emailValue)
   }
+}
+
+/**
+ * The profile builder for the common social profile.
+ */
+trait GoogleProfileBuilder extends CommonSocialProfileBuilder {
+  self: GoogleProvider =>
+
+  /**
+   * The profile parser implementation.
+   */
+  val profileParser = new GoogleProfileParser
 }
 
 /**
@@ -137,6 +155,6 @@ object GoogleProvider {
    * @return An instance of this provider.
    */
   def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new GoogleProvider(httpLayer, stateProvider, settings) with CommonSocialProfileBuilder
+    new GoogleProvider(httpLayer, stateProvider, settings) with GoogleProfileBuilder
   }
 }

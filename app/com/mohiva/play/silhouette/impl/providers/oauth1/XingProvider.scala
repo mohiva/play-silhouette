@@ -19,7 +19,6 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth1
 
-import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
@@ -44,7 +43,7 @@ abstract class XingProvider(httpLayer: HTTPLayer, oAuth1Service: OAuth1Service, 
   extends OAuth1Provider(httpLayer, oAuth1Service, oAuth1Settings) {
 
   /**
-   * The content type returned from the provider.
+   * The content type to parse a profile from.
    */
   type Content = JsValue
 
@@ -74,17 +73,24 @@ abstract class XingProvider(httpLayer: HTTPLayer, oAuth1Service: OAuth1Service, 
           val message = (json \ "message").asOpt[String]
 
           Future.failed(new ProfileRetrievalException(SpecifiedProfileError.format(id, error, message.getOrElse(""))))
-        case _ => Future.from(parseProfile(parser, json))
+        case _ => profileParser.parse(json)
       }
     }
   }
+}
+
+/**
+ * The profile parser for the common social profile.
+ */
+class XingProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile] {
 
   /**
-   * Defines the parser which parses the most common profile supported by Silhouette.
+   * Parses the social profile.
    *
-   * @return The parser which parses the most common profile supported by Silhouette.
+   * @param json The content returned from the provider.
+   * @return The social profile from given result.
    */
-  protected def parser: Parser = (json: JsValue) => {
+  def parse(json: JsValue) = Future.successful {
     val users = (json \ "users").as[Seq[JsObject]].head
     val userID = (users \ "id").as[String]
     val firstName = (users \ "first_name").asOpt[String]
@@ -94,13 +100,25 @@ abstract class XingProvider(httpLayer: HTTPLayer, oAuth1Service: OAuth1Service, 
     val email = (users \ "active_email").asOpt[String]
 
     CommonSocialProfile(
-      loginInfo = LoginInfo(id, userID),
+      loginInfo = LoginInfo(ID, userID),
       firstName = firstName,
       lastName = lastName,
       fullName = fullName,
       avatarURL = avatarURL,
       email = email)
   }
+}
+
+/**
+ * The profile builder for the common social profile.
+ */
+trait XingProfileBuilder extends CommonSocialProfileBuilder {
+  self: XingProvider =>
+
+  /**
+   * The profile parser implementation.
+   */
+  val profileParser = new XingProfileParser
 }
 
 /**
@@ -128,6 +146,6 @@ object XingProvider {
    * @return An instance of this provider.
    */
   def apply(httpLayer: HTTPLayer, oAuth1Service: OAuth1Service, auth1Settings: OAuth1Settings) = {
-    new XingProvider(httpLayer, oAuth1Service, auth1Settings) with CommonSocialProfileBuilder
+    new XingProvider(httpLayer, oAuth1Service, auth1Settings) with XingProfileBuilder
   }
 }

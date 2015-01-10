@@ -19,7 +19,6 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth1
 
-import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
@@ -44,7 +43,7 @@ abstract class TwitterProvider(httpLayer: HTTPLayer, oAuth1Service: OAuth1Servic
   extends OAuth1Provider(httpLayer, oAuth1Service, oAuth1Settings) {
 
   /**
-   * The content type returned from the provider.
+   * The content type to parse a profile from.
    */
   type Content = JsValue
 
@@ -74,26 +73,45 @@ abstract class TwitterProvider(httpLayer: HTTPLayer, oAuth1Service: OAuth1Servic
           val message = (json \ "errors" \\ "message").headOption.map(_.as[String])
 
           Future.failed(new ProfileRetrievalException(SpecifiedProfileError.format(id, code, message)))
-        case _ => Future.from(parseProfile(parser, json))
+        case _ => profileParser.parse(json)
       }
     }
   }
+}
+
+/**
+ * The profile parser for the common social profile.
+ */
+class TwitterProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile] {
 
   /**
-   * Defines the parser which parses the most common profile supported by Silhouette.
+   * Parses the social profile.
    *
-   * @return The parser which parses the most common profile supported by Silhouette.
+   * @param json The content returned from the provider.
+   * @return The social profile from given result.
    */
-  protected def parser: Parser = (json: JsValue) => {
+  def parse(json: JsValue) = Future.successful {
     val userID = (json \ "id").as[Long]
     val fullName = (json \ "name").asOpt[String]
     val avatarURL = (json \ "profile_image_url_https").asOpt[String]
 
     CommonSocialProfile(
-      loginInfo = LoginInfo(id, userID.toString),
+      loginInfo = LoginInfo(ID, userID.toString),
       fullName = fullName,
       avatarURL = avatarURL)
   }
+}
+
+/**
+ * The profile builder for the common social profile.
+ */
+trait TwitterProfileBuilder extends CommonSocialProfileBuilder {
+  self: TwitterProvider =>
+
+  /**
+   * The profile parser implementation.
+   */
+  val profileParser = new TwitterProfileParser
 }
 
 /**
@@ -121,6 +139,6 @@ object TwitterProvider {
    * @return An instance of this provider.
    */
   def apply(httpLayer: HTTPLayer, oAuth1Service: OAuth1Service, auth1Settings: OAuth1Settings) = {
-    new TwitterProvider(httpLayer, oAuth1Service, auth1Settings) with CommonSocialProfileBuilder
+    new TwitterProvider(httpLayer, oAuth1Service, auth1Settings) with TwitterProfileBuilder
   }
 }
