@@ -51,7 +51,10 @@
 </p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder">CommonSocialProfileBuilder</a> with <a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.Any" class="extype" target="_top">Any</a></div>
-        </div></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="oauth2/DropboxProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.DropboxProfileBuilder">DropboxProfileBuilder</a>, <a href="oauth2/FacebookProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.FacebookProfileBuilder">FacebookProfileBuilder</a>, <a href="oauth2/FoursquareProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.FoursquareProfileBuilder">FoursquareProfileBuilder</a>, <a href="oauth2/GitHubProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.GitHubProfileBuilder">GitHubProfileBuilder</a>, <a href="oauth2/GoogleProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.GoogleProfileBuilder">GoogleProfileBuilder</a>, <a href="oauth2/InstagramProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.InstagramProfileBuilder">InstagramProfileBuilder</a>, <a href="oauth2/LinkedInProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.LinkedInProfileBuilder">LinkedInProfileBuilder</a>, <a href="oauth1/LinkedInProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth1.LinkedInProfileBuilder">LinkedInProfileBuilder</a>, <a href="oauth1/TwitterProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProfileBuilder">TwitterProfileBuilder</a>, <a href="oauth2/VKProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.VKProfileBuilder">VKProfileBuilder</a>, <a href="oauth1/XingProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth1.XingProfileBuilder">XingProfileBuilder</a></div>
+          </div></div>
         
 
       <div id="mbrsel">
@@ -106,7 +109,7 @@
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The type of the profile.</p>
+      <p class="shortcomment cmt">The type of the profile a profile builder is responsible for.</p>
     </li></ol>
             </div>
 
@@ -364,25 +367,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder#parseProfile" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="parseProfile(parser:CommonSocialProfileBuilder.this.Parser,content:CommonSocialProfileBuilder.this.Content):scala.util.Try[CommonSocialProfileBuilder.this.Profile]"></a>
-      <a id="parseProfile((CommonSocialProfileBuilder.this)#Parser,(CommonSocialProfileBuilder.this)#Content):Try[(CommonSocialProfileBuilder.this)#Profile]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">parseProfile</span><span class="params">(<span name="parser">parser: (<a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder">CommonSocialProfileBuilder</a>.this)#<span class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder.Parser">Parser</span></span>, <span name="content">content: (<a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder">CommonSocialProfileBuilder</a>.this)#<span class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder.Content">Content</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.4/index.html#scala.util.Try" class="extype" target="_top">Try</a>[(<a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder">CommonSocialProfileBuilder</a>.this)#<span class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder.Profile">Profile</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder@parseProfile(parser:CommonSocialProfileBuilder.this.Parser,content:CommonSocialProfileBuilder.this.Content):scala.util.Try[CommonSocialProfileBuilder.this.Profile]" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Parses the social profile with the given Json parser.</p><div class="fullcomment"><div class="comment cmt"><p>Parses the social profile with the given Json parser.
-</p></div><dl class="paramcmts block"><dt class="param">parser</dt><dd class="cmt"><p>The Json parser to parse the most common profile.</p></dd><dt class="param">content</dt><dd class="cmt"><p>The content returned from the provider.</p></dd><dt>returns</dt><dd class="cmt"><p>The social profile from given result.
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
