@@ -19,7 +19,6 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth2
 
-import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
@@ -41,11 +40,11 @@ import scala.concurrent.Future
  * @see https://developer.foursquare.com/overview/responses
  * @see https://developer.foursquare.com/docs/explore
  */
-abstract class FoursquareProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
+abstract class FoursquareProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, protected val settings: OAuth2Settings)
   extends OAuth2Provider(httpLayer, stateProvider, settings) {
 
   /**
-   * The content type returned from the provider.
+   * The content type to parse a profile from.
    */
   type Content = JsValue
 
@@ -84,17 +83,26 @@ abstract class FoursquareProvider(httpLayer: HTTPLayer, stateProvider: OAuth2Sta
             logger.info("This implementation may be deprecated! Please contact the Silhouette team for a fix!")
           }
 
-          Future.from(parseProfile(parser, json))
+          profileParser.parse(json)
       }
     }
   }
+}
+
+/**
+ * The profile parser for the common social profile.
+ *
+ * @param settings The provider settings.
+ */
+class FoursquareProfileParser(settings: OAuth2Settings) extends SocialProfileParser[JsValue, CommonSocialProfile] {
 
   /**
-   * Defines the parser which parses the most common profile supported by Silhouette.
+   * Parses the social profile.
    *
-   * @return The parser which parses the most common profile supported by Silhouette.
+   * @param json The content returned from the provider.
+   * @return The social profile from given result.
    */
-  protected def parser: Parser = (json: JsValue) => {
+  def parse(json: JsValue) = Future.successful {
     val user = json \ "response" \ "user"
     val userID = (user \ "id").as[String]
     val lastName = (user \ "lastName").asOpt[String]
@@ -105,12 +113,24 @@ abstract class FoursquareProvider(httpLayer: HTTPLayer, stateProvider: OAuth2Sta
     val resolution = settings.customProperties.getOrElse(AvatarResolution, DefaultAvatarResolution)
 
     CommonSocialProfile(
-      loginInfo = LoginInfo(id, userID),
+      loginInfo = LoginInfo(ID, userID),
       firstName = firstName,
       lastName = lastName,
       avatarURL = for (prefix <- avatarURLPart1; postfix <- avatarURLPart2) yield prefix + resolution + postfix,
       email = email)
   }
+}
+
+/**
+ * The profile builder for the common social profile.
+ */
+trait FoursquareProfileBuilder extends CommonSocialProfileBuilder {
+  self: FoursquareProvider =>
+
+  /**
+   * The profile parser implementation.
+   */
+  val profileParser = new FoursquareProfileParser(settings)
 }
 
 /**
@@ -156,6 +176,6 @@ object FoursquareProvider {
    * @return An instance of this provider.
    */
   def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new FoursquareProvider(httpLayer, stateProvider, settings) with CommonSocialProfileBuilder
+    new FoursquareProvider(httpLayer, stateProvider, settings) with FoursquareProfileBuilder
   }
 }

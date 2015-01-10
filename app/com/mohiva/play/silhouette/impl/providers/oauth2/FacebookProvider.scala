@@ -19,7 +19,6 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth2
 
-import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
 import com.mohiva.play.silhouette.api.util.HTTPLayer
@@ -49,7 +48,7 @@ abstract class FacebookProvider(httpLayer: HTTPLayer, stateProvider: OAuth2State
   extends OAuth2Provider(httpLayer, stateProvider, settings) {
 
   /**
-   * The content type returned from the provider.
+   * The content type to parse a profile from.
    */
   type Content = JsValue
 
@@ -81,31 +80,9 @@ abstract class FacebookProvider(httpLayer: HTTPLayer, stateProvider: OAuth2State
           val errorCode = (error \ "code").as[Int]
 
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, errorMsg, errorType, errorCode))
-        case _ => Future.from(parseProfile(parser, json))
+        case _ => profileParser.parse(json)
       }
     }
-  }
-
-  /**
-   * Defines the parser which parses the most common profile supported by Silhouette.
-   *
-   * @return The parser which parses the most common profile supported by Silhouette.
-   */
-  protected def parser: Parser = (json: JsValue) => {
-    val userID = (json \ "id").as[String]
-    val firstName = (json \ "first_name").asOpt[String]
-    val lastName = (json \ "last_name").asOpt[String]
-    val fullName = (json \ "name").asOpt[String]
-    val avatarURL = (json \ "picture" \ "data" \ "url").asOpt[String]
-    val email = (json \ "email").asOpt[String]
-
-    CommonSocialProfile(
-      loginInfo = LoginInfo(id, userID),
-      firstName = firstName,
-      lastName = lastName,
-      fullName = fullName,
-      avatarURL = avatarURL,
-      email = email)
   }
 
   /**
@@ -123,6 +100,47 @@ abstract class FacebookProvider(httpLayer: HTTPLayer, stateProvider: OAuth2State
       case _ => Failure(new AuthenticationException(InvalidInfoFormat.format(id, response.body)))
     }
   }
+}
+
+/**
+ * The profile parser for the common social profile.
+ */
+class FacebookProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile] {
+
+  /**
+   * Parses the social profile.
+   *
+   * @param json The content returned from the provider.
+   * @return The social profile from given result.
+   */
+  def parse(json: JsValue) = Future.successful {
+    val userID = (json \ "id").as[String]
+    val firstName = (json \ "first_name").asOpt[String]
+    val lastName = (json \ "last_name").asOpt[String]
+    val fullName = (json \ "name").asOpt[String]
+    val avatarURL = (json \ "picture" \ "data" \ "url").asOpt[String]
+    val email = (json \ "email").asOpt[String]
+
+    CommonSocialProfile(
+      loginInfo = LoginInfo(ID, userID),
+      firstName = firstName,
+      lastName = lastName,
+      fullName = fullName,
+      avatarURL = avatarURL,
+      email = email)
+  }
+}
+
+/**
+ * The profile builder for the common social profile.
+ */
+trait FacebookProfileBuilder extends CommonSocialProfileBuilder {
+  self: FacebookProvider =>
+
+  /**
+   * The profile parser implementation.
+   */
+  val profileParser = new FacebookProfileParser
 }
 
 /**
@@ -150,6 +168,6 @@ object FacebookProvider {
    * @return An instance of this provider.
    */
   def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new FacebookProvider(httpLayer, stateProvider, settings) with CommonSocialProfileBuilder
+    new FacebookProvider(httpLayer, stateProvider, settings) with FacebookProfileBuilder
   }
 }

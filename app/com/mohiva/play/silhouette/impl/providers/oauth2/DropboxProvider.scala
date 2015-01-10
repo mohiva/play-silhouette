@@ -19,7 +19,6 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth2
 
-import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
@@ -45,7 +44,7 @@ abstract class DropboxProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateP
   extends OAuth2Provider(httpLayer, stateProvider, settings) {
 
   /**
-   * The content type returned from the provider.
+   * The content type to parse a profile from.
    */
   type Content = JsValue
 
@@ -71,31 +70,50 @@ abstract class DropboxProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateP
     httpLayer.url(urls("api")).withHeaders(AUTHORIZATION -> s"Bearer ${authInfo.accessToken}").get().flatMap { response =>
       val json = response.json
       response.status match {
-        case 200 => Future.from(parseProfile(parser, json))
+        case 200 => profileParser.parse(json)
         case status =>
           val error = (json \ "error").as[String]
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, error, status))
       }
     }
   }
+}
+
+/**
+ * The profile parser for the common social profile.
+ */
+class DropboxProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile] {
 
   /**
-   * Defines the parser which parses the most common profile supported by Silhouette.
+   * Parses the social profile.
    *
-   * @return The parser which parses the most common profile supported by Silhouette.
+   * @param json The content returned from the provider.
+   * @return The social profile from given result.
    */
-  protected def parser: Parser = (json: JsValue) => {
+  def parse(json: JsValue) = Future.successful {
     val userID = (json \ "uid").as[Long]
     val firstName = (json \ "name_details" \ "given_name").asOpt[String]
     val lastName = (json \ "name_details" \ "surname").asOpt[String]
     val fullName = (json \ "display_name").asOpt[String]
 
     CommonSocialProfile(
-      loginInfo = LoginInfo(id, userID.toString),
+      loginInfo = LoginInfo(ID, userID.toString),
       firstName = firstName,
       lastName = lastName,
       fullName = fullName)
   }
+}
+
+/**
+ * The profile builder for the common social profile.
+ */
+trait DropboxProfileBuilder extends CommonSocialProfileBuilder {
+  self: DropboxProvider =>
+
+  /**
+   * The profile parser implementation.
+   */
+  val profileParser = new DropboxProfileParser
 }
 
 /**
@@ -123,6 +141,6 @@ object DropboxProvider {
    * @return An instance of this provider.
    */
   def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new DropboxProvider(httpLayer, stateProvider, settings) with CommonSocialProfileBuilder
+    new DropboxProvider(httpLayer, stateProvider, settings) with DropboxProfileBuilder
   }
 }

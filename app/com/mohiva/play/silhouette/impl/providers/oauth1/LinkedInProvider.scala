@@ -19,7 +19,6 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth1
 
-import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
@@ -45,7 +44,7 @@ abstract class LinkedInProvider(httpLayer: HTTPLayer, service: OAuth1Service, se
   extends OAuth1Provider(httpLayer, service, settings) {
 
   /**
-   * The content type returned from the provider.
+   * The content type to parse a profile from.
    */
   type Content = JsValue
 
@@ -78,17 +77,24 @@ abstract class LinkedInProvider(httpLayer: HTTPLayer, service: OAuth1Service, se
           val timestamp = (json \ "timestamp").asOpt[Long]
 
           Future.failed(new ProfileRetrievalException(SpecifiedProfileError.format(id, error, message, requestId, status, timestamp)))
-        case _ => Future.from(parseProfile(parser, json))
+        case _ => profileParser.parse(json)
       }
     }
   }
+}
+
+/**
+ * The profile parser for the common social profile.
+ */
+class LinkedInProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile] {
 
   /**
-   * Defines the parser which parses the most common profile supported by Silhouette.
+   * Parses the social profile.
    *
-   * @return The parser which parses the most common profile supported by Silhouette.
+   * @param json The content returned from the provider.
+   * @return The social profile from given result.
    */
-  protected def parser: Parser = (json: JsValue) => {
+  def parse(json: JsValue) = Future.successful {
     val userID = (json \ "id").as[String]
     val firstName = (json \ "firstName").asOpt[String]
     val lastName = (json \ "lastName").asOpt[String]
@@ -97,13 +103,25 @@ abstract class LinkedInProvider(httpLayer: HTTPLayer, service: OAuth1Service, se
     val email = (json \ "emailAddress").asOpt[String]
 
     CommonSocialProfile(
-      loginInfo = LoginInfo(id, userID),
+      loginInfo = LoginInfo(ID, userID),
       firstName = firstName,
       lastName = lastName,
       fullName = fullName,
       avatarURL = avatarURL,
       email = email)
   }
+}
+
+/**
+ * The profile builder for the common social profile.
+ */
+trait LinkedInProfileBuilder extends CommonSocialProfileBuilder {
+  self: LinkedInProvider =>
+
+  /**
+   * The profile parser implementation.
+   */
+  val profileParser = new LinkedInProfileParser
 }
 
 /**
@@ -131,6 +149,6 @@ object LinkedInProvider {
    * @return An instance of this provider.
    */
   def apply(httpLayer: HTTPLayer, oAuth1Service: OAuth1Service, auth1Settings: OAuth1Settings) = {
-    new LinkedInProvider(httpLayer, oAuth1Service, auth1Settings) with CommonSocialProfileBuilder
+    new LinkedInProvider(httpLayer, oAuth1Service, auth1Settings) with LinkedInProfileBuilder
   }
 }

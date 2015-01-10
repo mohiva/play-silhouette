@@ -19,7 +19,6 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth2
 
-import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
@@ -44,7 +43,7 @@ abstract class InstagramProvider(httpLayer: HTTPLayer, stateProvider: OAuth2Stat
   extends OAuth2Provider(httpLayer, stateProvider, settings) {
 
   /**
-   * The content type returned from the provider.
+   * The content type to parse a profile from.
    */
   type Content = JsValue
 
@@ -75,27 +74,46 @@ abstract class InstagramProvider(httpLayer: HTTPLayer, stateProvider: OAuth2Stat
           val errorMsg = (json \ "meta" \ "error_message").asOpt[String]
 
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, code, errorType, errorMsg))
-        case _ => Future.from(parseProfile(parser, json))
+        case _ => profileParser.parse(json)
       }
     }
   }
+}
+
+/**
+ * The profile parser for the common social profile.
+ */
+class InstagramProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile] {
 
   /**
-   * Defines the parser which parses the most common profile supported by Silhouette.
+   * Parses the social profile.
    *
-   * @return The parser which parses the most common profile supported by Silhouette.
+   * @param json The content returned from the provider.
+   * @return The social profile from given result.
    */
-  protected def parser: Parser = (json: JsValue) => {
+  def parse(json: JsValue) = Future.successful {
     val data = json \ "data"
     val userID = (data \ "id").as[String]
     val fullName = (data \ "full_name").asOpt[String]
     val avatarURL = (data \ "profile_picture").asOpt[String]
 
     CommonSocialProfile(
-      loginInfo = LoginInfo(id, userID),
+      loginInfo = LoginInfo(ID, userID),
       fullName = fullName,
       avatarURL = avatarURL)
   }
+}
+
+/**
+ * The profile builder for the common social profile.
+ */
+trait InstagramProfileBuilder extends CommonSocialProfileBuilder {
+  self: InstagramProvider =>
+
+  /**
+   * The profile parser implementation.
+   */
+  val profileParser = new InstagramProfileParser
 }
 
 /**
@@ -123,6 +141,6 @@ object InstagramProvider {
    * @return An instance of this provider.
    */
   def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new InstagramProvider(httpLayer, stateProvider, settings) with CommonSocialProfileBuilder
+    new InstagramProvider(httpLayer, stateProvider, settings) with InstagramProfileBuilder
   }
 }

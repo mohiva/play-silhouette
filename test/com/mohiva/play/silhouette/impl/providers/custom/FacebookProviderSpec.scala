@@ -21,15 +21,14 @@ import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import com.mohiva.play.silhouette.impl.providers._
-import com.mohiva.play.silhouette.impl.providers.oauth2.FacebookProvider
 import com.mohiva.play.silhouette.impl.providers.oauth2.FacebookProvider._
+import com.mohiva.play.silhouette.impl.providers.oauth2.{ FacebookProfileParser, FacebookProvider }
 import play.api.libs.json.JsValue
 import play.api.libs.ws.{ WSRequestHolder, WSResponse }
 import play.api.test.{ FakeRequest, WithApplication }
 import test.Helper
 
 import scala.concurrent.Future
-import scala.util.Try
 
 /**
  * Test case for the [[FacebookProvider]] class which uses a custom social profile.
@@ -186,16 +185,23 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
     gender: Option[String] = None) extends SocialProfile
 
   /**
-   * A custom Facebook profile builder for testing purpose.
+   * A custom Facebook profile parser for testing purpose.
    */
-  trait CustomFacebookProfileBuilder extends SocialProfileBuilder {
-    self: FacebookProvider =>
+  class CustomFacebookProfileParser extends SocialProfileParser[JsValue, CustomSocialProfile] {
 
-    type Profile = CustomSocialProfile
-    protected def parseProfile(parser: Parser, json: JsValue): Try[Profile] = Try {
-      val commonProfile = parser(json)
+    /**
+     * The common social profile parser.
+     */
+    val commonParser = new FacebookProfileParser
+
+    /**
+     * Parses the social profile.
+     *
+     * @param json The content returned from the provider.
+     * @return The social profile from given result.
+     */
+    def parse(json: JsValue) = commonParser.parse(json).map { commonProfile =>
       val gender = (json \ "gender").as[String]
-
       CustomSocialProfile(
         loginInfo = commonProfile.loginInfo,
         firstName = commonProfile.firstName,
@@ -205,5 +211,22 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
         email = commonProfile.email,
         gender = Some(gender))
     }
+  }
+
+  /**
+   * A custom Facebook profile builder for testing purpose.
+   */
+  trait CustomFacebookProfileBuilder {
+    self: FacebookProvider =>
+
+    /**
+     * The type of the profile a profile builder is responsible for.
+     */
+    type Profile = CustomSocialProfile
+
+    /**
+     * The profile parser.
+     */
+    val profileParser = new CustomFacebookProfileParser
   }
 }

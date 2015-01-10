@@ -24,7 +24,6 @@ import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.Result
 
 import scala.concurrent.Future
-import scala.util.Try
 
 /**
  * The base interface for all social providers.
@@ -79,25 +78,40 @@ trait SocialProfile {
 }
 
 /**
+ * Parses a social profile.
+ *
+ * A parser transforms the content returned from the provider into a social profile instance. Parsers can
+ * be reused by other parsers to avoid duplicating code.
+ *
+ * @tparam C The content type to parse a profile from.
+ * @tparam P The type of the profile to parse to.
+ */
+trait SocialProfileParser[C, P <: SocialProfile] {
+
+  /**
+   * Parses the social profile.
+   *
+   * @param content The content returned from the provider.
+   * @return The social profile from given result.
+   */
+  def parse(content: C): Future[P]
+}
+
+/**
  * Builds the social profile.
  */
 trait SocialProfileBuilder {
   self: SocialProvider =>
 
   /**
-   * The type of the profile.
-   */
-  type Profile <: SocialProfile
-
-  /**
-   * The content type to parse.
+   * The content type to parse a profile from.
    */
   type Content
 
   /**
-   * The parser signature.
+   * The type of the profile a profile builder is responsible for.
    */
-  type Parser = (Content) => CommonSocialProfile
+  type Profile <: SocialProfile
 
   /**
    * Gets the URLs that are needed to retrieve the profile data.
@@ -118,20 +132,11 @@ trait SocialProfileBuilder {
   protected def buildProfile(authInfo: A): Future[Profile]
 
   /**
-   * Parses the social profile with the given Json parser.
+   * Returns the profile parser implementation.
    *
-   * @param parser The Json parser to parse the most common profile.
-   * @param content The content returned from the provider.
-   * @return The social profile from given result.
+   * @return The profile parser implementation.
    */
-  protected def parseProfile(parser: Parser, content: Content): Try[Profile]
-
-  /**
-   * Defines the parser which parses the most common profile supported by Silhouette.
-   *
-   * @return The parser which parses the most common profile supported by Silhouette.
-   */
-  protected def parser: Parser
+  protected def profileParser: SocialProfileParser[Content, Profile]
 }
 
 /**
@@ -175,16 +180,7 @@ trait CommonSocialProfileBuilder {
   self: SocialProfileBuilder =>
 
   /**
-   * The type of the profile.
+   * The type of the profile a profile builder is responsible for.
    */
   type Profile = CommonSocialProfile
-
-  /**
-   * Parses the social profile with the given Json parser.
-   *
-   * @param parser The Json parser to parse the most common profile.
-   * @param content The content returned from the provider.
-   * @return The social profile from given result.
-   */
-  protected def parseProfile(parser: Parser, content: Content): Try[Profile] = Try(parser(content))
 }
