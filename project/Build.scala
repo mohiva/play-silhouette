@@ -1,14 +1,15 @@
 import sbt._
+import Keys._
 
 object Build extends Build {
 
   val silhouette = Project(
-    id = "silhouette",
+    id = "play-silhouette",
     base = file("silhouette")
   )
 
   val silhouetteTestkit = Project(
-    id = "silhouette-testkit",
+    id = "play-silhouette-testkit",
     base = file("silhouette-testkit"),
     dependencies = Seq(silhouette)
   )
@@ -16,7 +17,11 @@ object Build extends Build {
   val root = Project(
     id = "root",
     base = file("."),
-    aggregate = Seq(silhouette, silhouetteTestkit)
+    aggregate = Seq(silhouette, silhouetteTestkit),
+    settings = Defaults.coreDefaultSettings ++ Seq(
+      publishLocal := {},
+      publishM2 := {},
+      publishArtifact := false
+    )
   )
-
 }

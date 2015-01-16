@@ -18,4 +18,4 @@
 #
 set -o nounset -o errexit
 
-scripts/sbt scalariformFormat test:scalariformFormat
+scripts/sbt scalariformFormat test:scalariformFormat build:scalariformFormat
