@@ -80,10 +80,11 @@ To install this version add the following dependency to your build.sbt file.
 
 .. code-block:: scala
 
-    resolvers += "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
+    resolvers += Resolver.sonatypeRepo("snapshots")
 
     libraryDependencies ++= Seq(
-      "com.mohiva" %% "play-silhouette" % "2.0-SNAPSHOT"
+      "com.mohiva" %% "play-silhouette" % "2.0-SNAPSHOT",
+      "com.mohiva" %% "play-silhouette-testkit" % "2.0-SNAPSHOT" % "test"
     )
 
 

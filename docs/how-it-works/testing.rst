@@ -7,8 +7,16 @@ Test Helpers
 ------------
 
 Silhouette provides some test helpers that can be used to easily test your Silhouette
-application. This helpers can be used by importing the following package into your test
-scenarios.
+application. These helpers are located in the additional TestKit dependency.
+
+.. code-block:: scala
+
+    libraryDependencies ++= Seq(
+      "com.mohiva" %% "play-silhouette-testkit" % "version" % "test"
+    )
+
+After providing the dependency, the helpers can be used by importing the following package
+into your test scenarios.
 
 .. code-block:: scala
 
