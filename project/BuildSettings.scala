@@ -35,16 +35,34 @@ object BasicSettings extends AutoPlugin {
 object CodeFormatter extends AutoPlugin {
 
   import com.typesafe.sbt.SbtScalariform._
-  import scalariform.formatter.preferences.{DoubleIndentClassDeclaration, FormatXml, PreserveDanglingCloseParenthesis}
+  import scalariform.formatter.preferences.{ DoubleIndentClassDeclaration, FormatXml, PreserveDanglingCloseParenthesis }
 
-  override def trigger = allRequirements
+  lazy val BuildConfig = config("build") extend Compile
+  lazy val BuildSbtConfig = config("buildsbt") extend Compile
 
-  override def projectSettings = defaultScalariformSettings ++ Seq(
+  lazy val prefs = Seq(
     ScalariformKeys.preferences := ScalariformKeys.preferences.value
       .setPreference(FormatXml, false)
       .setPreference(DoubleIndentClassDeclaration, false)
       .setPreference(PreserveDanglingCloseParenthesis, true)
   )
+
+  override def trigger = allRequirements
+
+  override def projectSettings = defaultScalariformSettings ++ prefs ++
+    inConfig(BuildConfig)(configScalariformSettings) ++
+    inConfig(BuildSbtConfig)(configScalariformSettings) ++
+    Seq(
+      scalaSource in BuildConfig := baseDirectory.value / "project",
+      scalaSource in BuildSbtConfig := baseDirectory.value / "project",
+      includeFilter in (BuildConfig, ScalariformKeys.format) := ("*.scala": FileFilter),
+      includeFilter in (BuildSbtConfig, ScalariformKeys.format) := ("*.sbt": FileFilter),
+      ScalariformKeys.format in Compile := {
+        (ScalariformKeys.format in BuildSbtConfig).value
+        (ScalariformKeys.format in BuildConfig).value
+        (ScalariformKeys.format in Compile).value
+      }
+    )
 }
 
 ////*******************************
@@ -120,7 +138,7 @@ object Publish extends AutoPlugin {
     licenses := Seq("Apache License" -> url("https://github.com/mohiva/play-silhouette/blob/master/LICENSE")),
     publishMavenStyle := true,
     publishArtifact in Test := false,
-    pomIncludeRepository := { _ => false},
+    pomIncludeRepository := { _ => false },
     pomExtra := pom,
     credentials += Credentials(Path.userHome / ".sbt" / "sonatype.credentials")
   )
