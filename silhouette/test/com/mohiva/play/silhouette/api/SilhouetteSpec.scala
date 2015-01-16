@@ -19,7 +19,6 @@ import akka.actor.{ Actor, Props }
 import akka.testkit.TestProbe
 import com.mohiva.play.silhouette.api.exceptions.{ AccessDeniedException, AuthenticationException }
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorService, IdentityService }
-import com.mohiva.play.silhouette.test.{ FakeAuthenticator, FakeIdentity }
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
@@ -760,6 +759,20 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       status(result) must equalTo(UNAUTHORIZED)
     }
   }
+
+  /**
+   * A test identity.
+   *
+   * @param loginInfo The linked login info.
+   */
+  case class FakeIdentity(loginInfo: LoginInfo) extends Identity
+
+  /**
+   * A test authenticator.
+   *
+   * @param loginInfo The linked login info.
+   */
+  case class FakeAuthenticator(loginInfo: LoginInfo, isValid: Boolean = true) extends Authenticator
 
   /**
    * The context.
