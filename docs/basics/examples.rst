@@ -16,6 +16,16 @@ starting point which can be extended to fit your needs.
 
 --------------
 
+**Silhouette Angular Seed Template**
+
+The Silhouette Angular Seed project is an Activator template which shows
+how Silhouette can be used to create a SPA with AngularJS and Play. It’s a
+starting point which can be extended to fit your needs.
+
+`Link <https://github.com/mohiva/play-silhouette-angular-seed>`__
+
+--------------
+
 **Silhouette Slick Seed Template**
 
 A fork of the Silhouette Seed project which uses Slick as database
