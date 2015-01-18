@@ -19,7 +19,7 @@ from the Watchmen [graphic novel](http://en.wikipedia.org/wiki/Watchmen) and [mo
 
 #### Easy to integrate
 
-Silhouette comes with either an [Activator template for traditional web pages](https://github.com/mohiva/play-silhouette-seed)
+Silhouette comes either with an [Activator template for traditional web pages](https://github.com/mohiva/play-silhouette-seed)
 or an [Activator template for single-page applications](https://github.com/mohiva/play-silhouette-angular-seed)
 that gives you a complete sample application which is 100% customizable. Simply select the template ``play-silhouette-seed``
 or ``play-silhouette-angular-seed`` in your Activator UI. It has never been easier to start a new Silhouette
