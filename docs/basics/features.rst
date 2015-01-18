@@ -3,10 +3,15 @@ Features
 
 **Easy to integrate**
 
-Silhouette comes with an `Activator template`_ that gives you a complete
-sample application which is 100% customizable. Simply select the
-template ``play-silhouette-seed`` in your Activator UI. It has never
-been easier to start a new Silhouette application.
+Silhouette comes with either an `Activator template for traditional web pages`_
+or an `Activator template for single-page applications`_ that gives
+you a complete sample application which is 100% customizable. Simply select
+the template ``play-silhouette-seed`` or ``play-silhouette-angular-seed``
+in your Activator UI. It has never been easier to start a new Silhouette
+application.
+
+For other examples, please visit the :ref:`Examples <examples>` section
+in the `Documentation`_.
 
 **Authentication support**
 
@@ -55,8 +60,9 @@ the `OWASP Authentication Cheat Sheet`_ like Password Strength Controls,
 SSL Client Authentication or use of authentication protocols that
 require no password.
 
-.. _Activator template: https://github.com/mohiva/play-silhouette-seed
-.. _authenticator implementations: http://docs.silhouette.mohiva.com/en/latest/how-it-works/authenticator.html#list-of-authenticators
+.. _Activator template for traditional web pages: https://github.com/mohiva/play-silhouette-seed
+.. _Activator template for single-page applications: https://github.com/mohiva/play-silhouette-angular-seed
+.. _Documentation: http://docs.silhouette.mohiva.com/
 .. _Reactive Manifesto: http://www.reactivemanifesto.org/
 .. _Akka’s Event Bus: http://doc.akka.io/docs/akka/2.2.4/scala/event-bus.html
 .. _OWASP Authentication Cheat Sheet: https://www.owasp.org/index.php/Authentication_Cheat_Sheet
