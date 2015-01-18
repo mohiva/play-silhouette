@@ -3,7 +3,7 @@ Features
 
 **Easy to integrate**
 
-Silhouette comes with either an `Activator template for traditional web pages`_
+Silhouette comes either with an `Activator template for traditional web pages`_
 or an `Activator template for single-page applications`_ that gives
 you a complete sample application which is 100% customizable. Simply select
 the template ``play-silhouette-seed`` or ``play-silhouette-angular-seed``
