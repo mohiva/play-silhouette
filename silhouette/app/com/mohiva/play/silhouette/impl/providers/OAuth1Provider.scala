@@ -73,7 +73,7 @@ abstract class OAuth1Provider(
       case Some(_) => Future.failed(new AccessDeniedException(AuthorizationError.format(id, Denied)))
       case None => request.extractString(OAuthVerifier) -> request.extractString(OAuthToken) match {
         // Second step in the OAuth flow.
-        // We have the request info in the cache, and we need to swap it for the access info.
+        // We have received the verifier and the request token, and we need to swap it for the access token.
         case (Some(verifier), Some(token)) =>
           service.retrieveAccessToken(OAuth1Info(token, settings.consumerSecret), verifier).map { info =>
             Right(info)
