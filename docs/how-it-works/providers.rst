@@ -81,6 +81,11 @@ OAuth2
 -  LinkedInProvider (www.linkedin.com)
 -  VKProvider (www.vk.com)
 
+OpenID
+^^^^^^
+
+-  YahooProvider (www.yahoo.com)
+
 
 Social profile
 --------------
