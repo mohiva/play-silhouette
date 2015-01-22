@@ -196,8 +196,8 @@ logged in using a given provider:
 
 .. code-block:: scala
 
-  case class WithProvider(provider: String) extends Authorization[User] {
-    def isAuthorized(user: User)(implicit request: RequestHeader, lang: Lang) = {
+  case class WithProvider[I <: com.mohiva.play.silhouette.api.Identity](provider: String) extends Authorization[I] {
+    def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang) = {
       user.identityId.providerId == provider
     }
   }
@@ -206,7 +206,7 @@ Here’s how you would use it:
 
 .. code-block:: scala
 
-  def myAction = SecuredAction(WithProvider("twitter")) { implicit request =>
+  def myAction = SecuredAction[models.User](WithProvider("twitter")) { implicit request =>
     // do something here
   }
 
