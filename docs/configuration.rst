@@ -317,10 +317,16 @@ Your configuration could then have this format:
 
 .. code-block:: js
 
+    steam {
+      providerURL="https://steamcommunity.com/openid/"
+      callbackURL="https://your.domain.tld/authenticate/steam"
+      realm="https://your.domain.tld"
+    }
+
     yahoo {
       providerURL="https://me.yahoo.com/"
       callbackURL="https://your.domain.tld/authenticate/yahoo"
-      redirectURL={
+      axRequired={
         "fullname": "http://axschema.org/namePerson",
         "email": "http://axschema.org/contact/email",
         "image": "http://axschema.org/media/image/default"
