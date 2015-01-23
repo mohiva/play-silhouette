@@ -37,10 +37,8 @@ import scala.concurrent.Future
  * @param service The OAuth1 service implementation.
  * @param settings The OAuth1 provider settings.
  */
-abstract class OAuth1Provider(
-  httpLayer: HTTPLayer,
-  service: OAuth1Service,
-  settings: OAuth1Settings) extends SocialProvider with Logger {
+abstract class OAuth1Provider(httpLayer: HTTPLayer, service: OAuth1Service, settings: OAuth1Settings)
+  extends SocialProvider with Logger {
 
   /**
    * Check if services uses 1.0a specification because it address the session fixation attack identified
@@ -65,7 +63,8 @@ abstract class OAuth1Provider(
   /**
    * Starts the authentication process.
    *
-   * @param request The request.
+   * @param request The current request.
+   * @tparam B The type of the request body.
    * @return Either a Result or the auth info from the provider.
    */
   def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[Either[Result, OAuth1Info]] = {

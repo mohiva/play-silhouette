@@ -198,7 +198,7 @@ logged in using a given provider:
 
   case class WithProvider(provider: String) extends Authorization[User] {
     def isAuthorized(user: User)(implicit request: RequestHeader, lang: Lang) = {
-      user.identityId.providerId == provider
+      user.loginInfo.providerID == provider
     }
   }
 
@@ -214,7 +214,7 @@ For unauthorized users you can implement a global or local fallback
 action similar to the fallback for unauthenticated users.
 
 Logic Operator
-^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^
 
 You can use logic operator (``NOT`` ``AND`` ``OR``) into your ``Authorization``
 

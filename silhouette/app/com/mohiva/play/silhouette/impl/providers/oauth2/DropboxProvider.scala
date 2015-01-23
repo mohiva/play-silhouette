@@ -1,9 +1,5 @@
 /**
- * Original work: SecureSocial (https://github.com/jaliss/securesocial)
- * Copyright 2013 Jorge Aliss (jaliss at gmail dot com) - twitter: @jaliss
- *
- * Derivative work: Silhouette (https://github.com/mohiva/play-silhouette)
- * Modifications Copyright 2014 Mohiva Organisation (license at mohiva dot com)
+ * Copyright 2014 Mohiva Organisation (license at mohiva dot com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

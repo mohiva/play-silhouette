@@ -66,7 +66,7 @@ Example
 
 Your configuration could then have this format:
 
-.. code-block:: scala
+.. code-block:: js
 
     linkedin {
       requestTokenURL="https://api.linkedin.com/uas/oauth/requestToken"
@@ -155,7 +155,7 @@ Example
 
 Your configuration could then have this format:
 
-.. code-block:: scala
+.. code-block:: js
 
     dropbox {
       authorizationUrl="https://www.dropbox.com/1/oauth2/authorize"
@@ -262,6 +262,71 @@ Property                     Description
                              time to log in, but not too much. This is a balance between
                              convenience and security
 =========================    ===================================================================
+
+
+OpenID based providers
+----------------------
+
+To configure OpenID based providers you must use the ``OpenIDSettings``
+class. This class has the following form:
+
+.. code-block:: scala
+
+    case class OpenIDSettings(
+      providerURL: String,
+      callbackURL: String,
+      axRequired: Seq[(String, String)] = Seq.empty,
+      axOptional: Seq[(String, String)] = Seq.empty,
+      realm: Option[String] = None)
+
+=========================    ===================================================================
+Property                     Description
+=========================    ===================================================================
+``providerURL``              The OpenID provider URL used if no openID was given
+``callbackURL``              The callback URL to the application after a successful authentication
+                             on the OpenID provider.
+``axRequired``               Required attributes to return from the provider after a successful
+                             authentication
+``axOptional``               Optional attributes to return from the provider after a successful
+                             authentication
+``realm``                    An URL pattern that represents the part of URL-space for which an
+                             OpenID Authentication request is valid
+=========================    ===================================================================
+
+Callback URL
+^^^^^^^^^^^^
+
+The ``callbackURL`` must point to your action which is responsible for
+the authentication over your defined providers. So if you define the
+following route as example:
+
+.. code-block:: scala
+
+    GET  /authenticate/:provider  @controllers.SocialAuthController.authenticate(provider)
+
+Then your ``callbackURL`` must have the following format:
+
+.. code-block:: scala
+
+    callbackURL="https://your.domain.tld/authenticate/yahoo"
+
+Example
+^^^^^^^
+
+Your configuration could then have this format:
+
+.. code-block:: js
+
+    yahoo {
+      providerURL="https://me.yahoo.com/"
+      callbackURL="https://your.domain.tld/authenticate/yahoo"
+      redirectURL={
+        "fullname": "http://axschema.org/namePerson",
+        "email": "http://axschema.org/contact/email",
+        "image": "http://axschema.org/media/image/default"
+      }
+      realm="https://your.domain.tld"
+    }
 
 
 Authenticators

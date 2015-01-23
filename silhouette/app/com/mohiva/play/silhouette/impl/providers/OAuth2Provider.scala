@@ -74,8 +74,7 @@ object OAuth2Info {
  * @param settings The provider settings.
  */
 abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
-  extends SocialProvider
-  with Logger {
+  extends SocialProvider with Logger {
 
   /**
    * The type of the auth info.
@@ -90,7 +89,8 @@ abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
   /**
    * Starts the authentication process.
    *
-   * @param request The request.
+   * @param request The current request.
+   * @tparam B The type of the request body.
    * @return Either a Result or the auth info from the provider.
    */
   def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[Either[Result, OAuth2Info]] = {
