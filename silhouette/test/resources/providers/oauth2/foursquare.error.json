@@ -1,8 +1,8 @@
 {
-    "meta": {
-        "code": 400,
-        "errorType": "param_error",
-        "errorDetail": "Must provide a valid user ID or 'self.'"
-    },
-    "response": { }
+  "meta": {
+    "code": 400,
+    "errorType": "param_error",
+    "errorDetail": "Must provide a valid user ID or 'self.'"
+  },
+  "response": { }
 }

@@ -1,9 +1,9 @@
 {
-    "uid": 12345678,
-    "display_name": "Apollonia Vanova",
-    "name_details": {
-        "familiar_name": "Apollonia",
-        "given_name": "Apollonia",
-        "surname": "Vanova"
-    }
+  "uid": 12345678,
+  "display_name": "Apollonia Vanova",
+  "name_details": {
+    "familiar_name": "Apollonia",
+    "given_name": "Apollonia",
+    "surname": "Vanova"
+  }
 }

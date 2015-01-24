@@ -1,10 +1,10 @@
 {
-    "response": [
-        {
-            "uid": 66748,
-            "first_name": "Apollonia",
-            "last_name": "Vanova",
-            "photo": "http://vk.com/images/camera_b.gif"
-        }
-    ]
+  "response": [
+    {
+      "uid": 66748,
+      "first_name": "Apollonia",
+      "last_name": "Vanova",
+      "photo": "http://vk.com/images/camera_b.gif"
+    }
+  ]
 }

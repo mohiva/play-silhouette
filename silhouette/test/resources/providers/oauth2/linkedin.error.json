@@ -1,7 +1,7 @@
 {
-    "errorCode": 0,
-    "message": "Unknown authentication scheme",
-    "requestId": "LY860UAC5U",
-    "status": 401,
-    "timestamp": 1390421660154
+  "errorCode": 0,
+  "message": "Unknown authentication scheme",
+  "requestId": "LY860UAC5U",
+  "status": 401,
+  "timestamp": 1390421660154
 }

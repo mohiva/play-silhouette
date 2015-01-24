@@ -1,9 +1,9 @@
 {
-    "access_token": "my.access.token",
-    "user": {
-        "id": "1574083",
-        "username": "apollonia.vanova",
-        "full_name": "Apollonia Vanova",
-        "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_1574083_75sq_1295469061.jpg"
-    }
+  "access_token": "my.access.token",
+  "user": {
+    "id": "1574083",
+    "username": "apollonia.vanova",
+    "full_name": "Apollonia Vanova",
+    "profile_picture": "http://distillery.s3.amazonaws.com/profiles/profile_1574083_75sq_1295469061.jpg"
+  }
 }
