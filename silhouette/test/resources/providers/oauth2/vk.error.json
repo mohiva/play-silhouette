@@ -1,24 +1,24 @@
 {
-    "error": {
-        "error_code": 10,
-        "error_msg": "Internal server error: could not get application",
-        "request_params": [
-            {
-                "key": "oauth",
-                "value": "1"
-            },
-            {
-                "key": "method",
-                "value": "getProfiles"
-            },
-            {
-                "key": "fields",
-                "value": "uid,first_name,last_name,photo"
-            },
-            {
-                "key": "access_token",
-                "value":"test.token"
-            }
-        ]
-    }
+  "error": {
+    "error_code": 10,
+    "error_msg": "Internal server error: could not get application",
+    "request_params": [
+      {
+        "key": "oauth",
+        "value": "1"
+      },
+      {
+        "key": "method",
+        "value": "getProfiles"
+      },
+      {
+        "key": "fields",
+        "value": "uid,first_name,last_name,photo"
+      },
+      {
+        "key": "access_token",
+        "value":"test.token"
+      }
+    ]
+  }
 }

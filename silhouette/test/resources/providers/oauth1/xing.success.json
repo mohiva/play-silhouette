@@ -1,12 +1,14 @@
 {
-    "users": [{
-        "id": "1235468792",
-        "first_name": "Apollonia",
-        "last_name": "Vanova",
-        "display_name": "Apollonia Vanova",
-        "active_email": "apollonia.vanova@watchmen.com",
-        "photo_urls": {
-            "large": "http://www.xing.com/img/users/e/3/d/f94ef165a.123456,1.140x185.jpg"
-        }
-    }]
+  "users": [
+    {
+      "id": "1235468792",
+      "first_name": "Apollonia",
+      "last_name": "Vanova",
+      "display_name": "Apollonia Vanova",
+      "active_email": "apollonia.vanova@watchmen.com",
+      "photo_urls": {
+        "large": "http://www.xing.com/img/users/e/3/d/f94ef165a.123456,1.140x185.jpg"
+      }
+    }
+  ]
 }

@@ -1,5 +1,5 @@
 {
-    "access_token": "ABCDEFG",
-    "token_type": "bearer",
-    "uid": "12345"
+  "access_token": "ABCDEFG",
+  "token_type": "bearer",
+  "uid": "12345"
 }
