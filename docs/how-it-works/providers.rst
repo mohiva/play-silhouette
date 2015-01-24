@@ -84,6 +84,7 @@ OAuth2
 OpenID
 ^^^^^^
 
+-  SteamProvider (www.steamcommunity.com)
 -  YahooProvider (www.yahoo.com)
 
 

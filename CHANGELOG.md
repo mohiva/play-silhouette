@@ -15,6 +15,7 @@
 - Add Dropbox provider
 - Add request extractors
 - Better social profile builder implementation
+- Add OpenID providers Steam and Yahoo
 
 ## 1.0 (2014-06-12)
 
