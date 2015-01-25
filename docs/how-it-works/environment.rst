@@ -15,4 +15,4 @@ and should be provided through dependency injection. Silhouette plays well with 
 and runtime dependency injection. You can find examples of both approaches
 on the :ref:`example page <examples>`.
 
-.. _Silhouette controller: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/api/Silhouette.scala
+.. _Silhouette controller: https://github.com/mohiva/play-silhouette/blob/master/silhouette/app/com/mohiva/play/silhouette/api/Silhouette.scala
