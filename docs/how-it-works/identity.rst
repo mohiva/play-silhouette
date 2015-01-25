@@ -38,12 +38,12 @@ name and email.
 Login information
 ^^^^^^^^^^^^^^^^^
 
-The `LoginInfo`_ trait contains the data about the provider that authenticated an identity.
+The `LoginInfo`_ class contains the data about the provider that authenticated an identity.
 This information is mostly publicly available and it simply consists of a
 unique provider ID and a unique key which identifies a user to this
 provider (userID, email, …). 
 
-.. _LoginInfo: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/api/Identity.scala#L45
+.. _LoginInfo: https://github.com/mohiva/play-silhouette/blob/master/silhouette/app/com/mohiva/play/silhouette/api/Identity.scala#L45
 
 .. _identity_service_impl:
 
