@@ -95,7 +95,7 @@ The social profile contains the profile data returned from the social providers.
 Silhouette provides a default social profile called `CommonSocialProfile`_,
 which contains the most common profile data providers return.
 
-.. _CommonSocialProfile: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/impl/providers/SocialProvider.scala#L168
+.. _CommonSocialProfile: https://github.com/mohiva/play-silhouette/blob/master/silhouette/app/com/mohiva/play/silhouette/impl/providers/SocialProvider.scala#L168
 
 Social profile builders and parsers
 -----------------------------------
@@ -307,7 +307,7 @@ Define custom request extractors
 It is possible to define custom request extractors by providing an implicit `RequestExtractor`_
 implementation.
 
-.. _RequestExtractor: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/api/util/RequestExtractor.scala#L12
+.. _RequestExtractor: https://github.com/mohiva/play-silhouette/blob/master/silhouette/app/com/mohiva/play/silhouette/api/util/RequestExtractor.scala#L12
 
 
 Authentication information
@@ -322,5 +322,5 @@ As with other Silhouette structures that vary in their implementation,
 `AuthInfo`_ is managed by a `AuthInfoService`_ that saves and retrieves
 the information as needed.
 
-.. _AuthInfoService: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/api/services/AuthInfoService.scala#L31
-.. _AuthInfo: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/api/services/AuthInfoService.scala#L61
+.. _AuthInfoService: https://github.com/mohiva/play-silhouette/blob/master/silhouette/app/com/mohiva/play/silhouette/api/services/AuthInfoService.scala#L31
+.. _AuthInfo: https://github.com/mohiva/play-silhouette/blob/master/silhouette/app/com/mohiva/play/silhouette/api/services/AuthInfoService.scala#L61

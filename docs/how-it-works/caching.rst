@@ -21,7 +21,7 @@ Play has its own cache plugin architecture. So the easiest approach is to use
 another cache plugin for Play. You can then use the `PlayCacheLayer`_
 implementation and plug a new cache into your application.
 
-.. _PlayCacheLayer: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/impl/util/PlayCacheLayer.scala
+.. _PlayCacheLayer: https://github.com/mohiva/play-silhouette/blob/master/silhouette/app/com/mohiva/play/silhouette/impl/util/PlayCacheLayer.scala
 
 
 Implement your own cache layer
@@ -30,7 +30,7 @@ Implement your own cache layer
 Silhouette provides a `CacheLayer`_ trait which can be used to create a
 custom cache implementation.
 
-.. _CacheLayer: https://github.com/mohiva/play-silhouette/blob/master/app/com/mohiva/play/silhouette/api/util/CacheLayer.scala
+.. _CacheLayer: https://github.com/mohiva/play-silhouette/blob/master/silhouette/app/com/mohiva/play/silhouette/api/util/CacheLayer.scala
 
 
 Clustered environment
