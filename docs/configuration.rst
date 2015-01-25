@@ -157,6 +157,14 @@ Your configuration could then have this format:
 
 .. code-block:: js
 
+    clef {
+      authorizationUrl="https://clef.io/api/v1/authorize"
+      accessTokenUrl="https://clef.io/api/v1/authorize"
+      redirectURL="https://your.domain.tld/authenticate/clef"
+      clientId="your.client.id"
+      clientSecret="your.client.secret"
+    }
+
     dropbox {
       authorizationUrl="https://www.dropbox.com/1/oauth2/authorize"
       accessTokenUrl="https://api.dropbox.com/1/oauth2/token"

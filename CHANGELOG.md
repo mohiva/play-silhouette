@@ -13,6 +13,7 @@
 - Add request handlers
 - Add request providers in combination with HTTP basic auth provider
 - Add Dropbox provider
+- Add Clef provider
 - Add request extractors
 - Better social profile builder implementation
 - Add OpenID providers Steam and Yahoo

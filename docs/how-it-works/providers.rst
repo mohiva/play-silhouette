@@ -72,6 +72,7 @@ OAuth1
 OAuth2
 ^^^^^^
 
+-  ClefProvider (getclef.com)
 -  DropboxProvider (www.dropbox.com)
 -  FacebookProvider (www.facebook.com)
 -  FoursquareProvider (www.foursquare.com)
