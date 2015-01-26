@@ -41,7 +41,7 @@ class DefaultFingerprintGenerator(includeRemoteAddress: Boolean = false) extends
   def generate(implicit request: RequestHeader) = {
     Crypt.sha1(new StringBuilder()
       .append(request.headers.get(USER_AGENT).getOrElse("")).append(":")
-      .append(request.headers.get(ACCEPT).getOrElse("")).append(":")
+      .append(request.headers.get(ACCEPT_LANGUAGE).getOrElse("")).append(":")
       .append(if (includeRemoteAddress) request.remoteAddress else "")
       .toString()
     )
