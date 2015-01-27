@@ -230,7 +230,7 @@ provider. All state provider implementations can be found in the `impl package`_
 .. _state parameter: http://tools.ietf.org/html/rfc6749#section-4.1.1
 .. _CSRF attacks: http://www.oauthsecurity.com/#authorization-code-flow
 .. _should be used mainly: http://www.thread-safe.com/2014/05/the-correct-use-of-state-parameter-in.html
-.. _impl package: https://github.com/mohiva/play-silhouette/tree/master/app/com/mohiva/play/silhouette/impl/providers/oauth2/state
+.. _impl package: https://github.com/mohiva/play-silhouette/tree/master/silhouette/app/com/mohiva/play/silhouette/impl/providers/oauth2/state
 
 List of OAuth2 states
 ^^^^^^^^^^^^^^^^^^^^^

@@ -123,7 +123,7 @@ authenticator fits best into your application architecture.
 
 .. _Cookies vs Tokens. Getting auth right with Angular.JS: https://auth0.com/blog/2014/01/07/angularjs-authentication-with-cookies-vs-token/
 .. _10 Things You Should Know about Tokens: https://auth0.com/blog/2014/01/27/ten-things-you-should-know-about-tokens-and-cookies/
-.. _authenticator implementations: https://github.com/mohiva/play-silhouette/tree/master/app/com/mohiva/play/silhouette/impl/authenticators
+.. _authenticator implementations: https://github.com/mohiva/play-silhouette/tree/master/silhouette/app/com/mohiva/play/silhouette/impl/authenticators
 
 CookieAuthenticator
 ^^^^^^^^^^^^^^^^^^^
