@@ -8,7 +8,7 @@ a user after a successful authentication. The Authenticator itself is a small
 class which stores only some data like its validity and the linked login information
 for an identity.
 
-.. _Authenticator: https://github.com/mohiva/play-silhouette/blob/master/silhouette/app/com/mohiva/play/silhouette/api/Authenticator.scala#L25
+.. _Authenticator: https://github.com/mohiva/play-silhouette/blob/master/silhouette/app/com/mohiva/play/silhouette/api/Authenticator.scala#L32
 
 .. _authenticator_service_impl:
 
