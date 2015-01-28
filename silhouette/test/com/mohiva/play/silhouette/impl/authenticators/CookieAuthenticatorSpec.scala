@@ -22,6 +22,7 @@ import com.mohiva.play.silhouette.api.util.{ Clock, FingerprintGenerator, IDGene
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import org.joda.time.DateTime
+import org.specs2.matcher.MatchResult
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.mvc.{ Cookie, Results }
@@ -218,7 +219,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       implicit val request = FakeRequest()
       val result = service.embed(cookie, Future.successful(Results.Status(200)))
 
-      cookies(result).get(settings.cookieName) should beSome(cookie)
+      cookies(result).get(settings.cookieName) should beSome[Cookie].which(cookieMatcher)
     }
   }
 
@@ -228,7 +229,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
 
       val request = service.embed(cookie, FakeRequest())
 
-      request.cookies.get(settings.cookieName) should beSome(cookie)
+      request.cookies.get(settings.cookieName) should beSome[Cookie].which(cookieMatcher)
     }
 
     "override an existing cookie" in new Context {
@@ -236,7 +237,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
 
       val request = service.embed(cookie, FakeRequest().withCookies(Cookie(settings.cookieName, "test")))
 
-      request.cookies.get(settings.cookieName) should beSome(cookie)
+      request.cookies.get(settings.cookieName) should beSome[Cookie].which(cookieMatcher)
     }
 
     "keep non authenticator related cookies" in new Context {
@@ -244,7 +245,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
 
       val request = service.embed(cookie, FakeRequest().withCookies(Cookie("test", "test")))
 
-      request.cookies.get(settings.cookieName) should beSome(cookie)
+      request.cookies.get(settings.cookieName) should beSome[Cookie].which(cookieMatcher)
       request.cookies.get("test") should beSome[Cookie].which { c =>
         c.name must be equalTo "test"
         c.value must be equalTo "test"
@@ -337,7 +338,8 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       cookies(result).get(settings.cookieName) should beSome[Cookie].which { c =>
         c.name must be equalTo settings.cookieName
         c.value must be equalTo id
-        c.maxAge must be equalTo settings.cookieMaxAge
+        // https://github.com/mohiva/play-silhouette/issues/273
+        c.maxAge must beSome[Int].which(_ <= settings.cookieMaxAge.get)
         c.path must be equalTo settings.cookiePath
         c.domain must be equalTo settings.cookieDomain
         c.secure must be equalTo settings.secureCookie
@@ -469,5 +471,19 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       secure = settings.secureCookie,
       httpOnly = settings.httpOnlyCookie
     )
+
+    /**
+     * Matches a cookie.
+     */
+    def cookieMatcher: Cookie => MatchResult[Boolean] = { c =>
+      c.name must be equalTo settings.cookieName
+      c.value must be equalTo authenticator.id
+      // https://github.com/mohiva/play-silhouette/issues/273
+      c.maxAge must beSome[Int].which(_ <= settings.cookieMaxAge.get)
+      c.path must be equalTo settings.cookiePath
+      c.domain must be equalTo settings.cookieDomain
+      c.secure must be equalTo settings.secureCookie
+      c.httpOnly must be equalTo settings.httpOnlyCookie
+    }
   }
 }
