@@ -28,8 +28,11 @@ import play.api.mvc.RequestHeader
  * A generator which creates a SHA1 fingerprint from `User-Agent`, `Accept-Language`, `Accept-Charset`
  * and `Accept-Encoding` headers and if defined the remote address of the user.
  *
- * The `ACCEPT` header would also be a good candidate, but this header makes problems in applications
+ * The `Accept` header would also be a good candidate, but this header makes problems in applications
  * which uses content negotiation. So the default fingerprint generator doesn't include it.
+ *
+ * The same with `Accept-Encoding`. But in Chromium/Blink based browser the content of this header may
+ * be changed during requests. @see https://github.com/mohiva/play-silhouette/issues/277
  *
  * @param includeRemoteAddress Indicates if the remote address should be included into the fingerprint.
  */
@@ -46,7 +49,6 @@ class DefaultFingerprintGenerator(includeRemoteAddress: Boolean = false) extends
       .append(request.headers.get(USER_AGENT).getOrElse("")).append(":")
       .append(request.headers.get(ACCEPT_LANGUAGE).getOrElse("")).append(":")
       .append(request.headers.get(ACCEPT_CHARSET).getOrElse("")).append(":")
-      .append(request.headers.get(ACCEPT_ENCODING).getOrElse("")).append(":")
       .append(if (includeRemoteAddress) request.remoteAddress else "")
       .toString()
     )
