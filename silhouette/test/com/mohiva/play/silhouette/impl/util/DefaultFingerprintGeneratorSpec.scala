@@ -29,31 +29,56 @@ class DefaultFingerprintGeneratorSpec extends PlaySpecification {
       val generator = new DefaultFingerprintGenerator()
       implicit val request = FakeRequest().withHeaders(USER_AGENT -> userAgent)
 
-      generator.generate must be equalTo Crypt.sha1(userAgent + "::")
+      generator.generate must be equalTo Crypt.sha1(userAgent + "::::")
     }
 
-    "return fingerprint including the `Accept` header" in {
-      val accept = "test-accept"
+    "return fingerprint including the `Accept-Language` header" in {
+      val acceptLanguage = "test-accept-language"
       val generator = new DefaultFingerprintGenerator()
-      implicit val request = FakeRequest().withHeaders(ACCEPT -> accept)
+      implicit val request = FakeRequest().withHeaders(ACCEPT_LANGUAGE -> acceptLanguage)
 
-      generator.generate must be equalTo Crypt.sha1(":" + accept + ":")
+      generator.generate must be equalTo Crypt.sha1(":" + acceptLanguage + ":::")
+    }
+
+    "return fingerprint including the `Accept-Charset` header" in {
+      val acceptCharset = "test-accept-charset"
+      val generator = new DefaultFingerprintGenerator()
+      implicit val request = FakeRequest().withHeaders(ACCEPT_CHARSET -> acceptCharset)
+
+      generator.generate must be equalTo Crypt.sha1("::" + acceptCharset + "::")
+    }
+
+    "return fingerprint including the `Accept-Encoding` header" in {
+      val acceptEncoding = "test-accept-encoding"
+      val generator = new DefaultFingerprintGenerator()
+      implicit val request = FakeRequest().withHeaders(ACCEPT_ENCODING -> acceptEncoding)
+
+      generator.generate must be equalTo Crypt.sha1(":::" + acceptEncoding + ":")
     }
 
     "return fingerprint including the remote address" in {
       val generator = new DefaultFingerprintGenerator(true)
       implicit val request = FakeRequest()
 
-      generator.generate must be equalTo Crypt.sha1("::127.0.0.1")
+      generator.generate must be equalTo Crypt.sha1("::::127.0.0.1")
     }
 
     "return fingerprint including all values" in {
       val userAgent = "test-user-agent"
-      val accept = "test-accept"
+      val acceptLanguage = "test-accept-language"
+      val acceptCharset = "test-accept-charset"
+      val acceptEncoding = "test-accept-encoding"
       val generator = new DefaultFingerprintGenerator(true)
-      implicit val request = FakeRequest().withHeaders(USER_AGENT -> userAgent, ACCEPT -> accept)
+      implicit val request = FakeRequest().withHeaders(
+        USER_AGENT -> userAgent,
+        ACCEPT_LANGUAGE -> acceptLanguage,
+        ACCEPT_CHARSET -> acceptCharset,
+        ACCEPT_ENCODING -> acceptEncoding
+      )
 
-      generator.generate must be equalTo Crypt.sha1(userAgent + ":" + accept + ":127.0.0.1")
+      generator.generate must be equalTo Crypt.sha1(
+        userAgent + ":" + acceptLanguage + ":" + acceptCharset + ":" + acceptEncoding + ":127.0.0.1"
+      )
     }
   }
 }
