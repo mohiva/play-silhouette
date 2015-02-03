@@ -4,14 +4,26 @@ Identity
 ========
 
 Silhouette defines a user through its ``Identity`` trait. This trait
-doesn’t define any defaults except the :ref:`login-info`
-which contains the data about the provider that authenticated that
-identity. This login information must be stored with the identity.
+doesn't define any defaults. Thus, you are free to design your user
+according to your beliefs.
+
+.. _login-info:
+
+Login information
+-----------------
+
+The `LoginInfo`_ acts as Silhouette's identity ID and it's needed to identify
+a user in the Silhouette workflow. It contains the data about the provider that
+authenticated an identity. This information is mostly publicly available
+and it simply consists of a unique provider ID and a unique key which
+identifies a user to this provider (userID, email, …).
 
 If the application supports the concept of “merged identities”, i.e.,
 the same user being able to authenticate through different providers,
 then make sure that the login information gets stored separately. Later
 you can see how this can be implemented.
+
+.. _LoginInfo: https://github.com/mohiva/play-silhouette/blob/master/silhouette/app/com/mohiva/play/silhouette/api/LoginInfo.scala#L28
 
 Implement an identity
 ---------------------
@@ -33,18 +45,6 @@ name and email.
       email: Option[String]) extends Identity
 
 
-.. _login-info:
-
-Login information
-^^^^^^^^^^^^^^^^^
-
-The `LoginInfo`_ class contains the data about the provider that authenticated an identity.
-This information is mostly publicly available and it simply consists of a
-unique provider ID and a unique key which identifies a user to this
-provider (userID, email, …). 
-
-.. _LoginInfo: https://github.com/mohiva/play-silhouette/blob/master/silhouette/app/com/mohiva/play/silhouette/api/Identity.scala#L45
-
 .. _identity_service_impl:
 
 The identity service
@@ -58,7 +58,7 @@ back and forth between your models and what Silhouette understands.
 
 The ``IdentityService`` defines a raw type which must be derived from
 ``Identity``. This has the advantage that your service implementation
-returns always your implemention of ``Identity``.
+returns always your implementation of ``Identity``.
 
 Here's a sample implementation:
 
@@ -81,7 +81,7 @@ Here's a sample implementation:
 Link an identity to multiple login information
 ----------------------------------------------
 
-Silhouette doesn’t provide built-in functionality to link multiple
+Silhouette doesn't provide built-in functionality to link multiple
 identities to a single user, but it makes this task very easy
 by providing the basics. In the abstract this task can be done by
 linking the different login information returned by each provider,
