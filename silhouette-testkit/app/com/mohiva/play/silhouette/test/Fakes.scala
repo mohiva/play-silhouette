@@ -24,10 +24,11 @@ case class FakeIdentity(loginInfo: LoginInfo) extends Identity
 /**
  * A fake identity service implementation which can handle a predefined list of identities.
  *
- * @param identities The list of identities this service is responsible for.
+ * @param identities A list of (login info -> identity) pairs this service is responsible for.
  * @tparam I The type of the identity to handle.
  */
-class FakeIdentityService[I <: Identity](identities: I*) extends IdentityService[I] {
+class FakeIdentityService[I <: Identity](identities: (LoginInfo, I)*)
+  extends IdentityService[I] {
 
   /**
    * Retrieves an identity that matches the specified login info.
@@ -36,7 +37,7 @@ class FakeIdentityService[I <: Identity](identities: I*) extends IdentityService
    * @return The retrieved identity or None if no identity could be retrieved for the given login info.
    */
   def retrieve(loginInfo: LoginInfo): Future[Option[I]] = {
-    Future.successful(identities.find(_.loginInfo == loginInfo))
+    Future.successful(identities.find(_._1 == loginInfo).map(_._2))
   }
 }
 
@@ -180,23 +181,24 @@ object FakeAuthenticator {
 /**
  * A fake environment implementation.
  *
- * @param identity The identity to return inside a Silhouette action.
+ * @param identities A list of (login info -> identity) pairs to return inside a Silhouette action.
  * @param providers The list of authentication providers.
  * @param eventBus The event bus implementation.
  * @tparam I The type of the identity.
  * @tparam T The type of the authenticator.
  */
 case class FakeEnvironment[I <: Identity, T <: Authenticator: TypeTag](
-  identity: I,
+  identities: Seq[(LoginInfo, I)],
   providers: Map[String, Provider] = Map(),
-  eventBus: EventBus = EventBus()) extends Environment[I, T] {
+  eventBus: EventBus = EventBus())
+  extends Environment[I, T] {
 
   /**
    * Gets the identity service implementation.
    *
    * @return The identity service implementation.
    */
-  val identityService: IdentityService[I] = new FakeIdentityService[I](identity)
+  val identityService: IdentityService[I] = new FakeIdentityService[I](identities: _*)
 
   /**
    * Gets the authenticator service implementation.

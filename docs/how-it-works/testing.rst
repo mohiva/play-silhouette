@@ -69,18 +69,18 @@ FakeEnvironment
 ^^^^^^^^^^^^^^^
 
 The fake environment does all the annoying steps for you to create and instantiate all
-dependencies that you need for your test. You must only specify the identity that gets
-returned by calling ``request.identity`` in your action and the authenticator instance
-that should track this user.
+dependencies that you need for your test. You must only specify one or more ``LoginInfo ->
+Identity`` pairs that should be returned by calling ``request.identity`` in your action
+and the authenticator instance that should track this user.
 
 .. code-block:: scala
 
   val identity = User(LoginInfo("facebook", "apollonia.vanova@watchmen.com"))
-  implicit val env = FakeEnvironment[User, CookieAuthenticator](identity)
+  implicit val env = FakeEnvironment[User, CookieAuthenticator](Seq(identity.loginInfo -> identity))
 
 
 Under the hood, the environment instantiates a ``FakeIdentityService`` which stores
-your given identity and returns it if needed. It instantiates also the appropriate
+your given identities and returns it if needed. It instantiates also the appropriate
 ``AuthenticatorService`` based on your defined ``Authenticator`` type. All Authenticator
 services are real authenticator service instances set up with their default values and
 dependencies.
@@ -101,7 +101,7 @@ the request.
 .. code-block:: scala
 
   val identity = User(LoginInfo("facebook", "apollonia.vanova@watchmen.com"))
-  implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](identity)
+  implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(identity.loginInfo -> identity))
   val authenticator = new CookieAuthenticator("test", identity.loginInfo, ...)
   val request = FakeRequest().withAuthenticator(authenticator)
 
@@ -112,7 +112,7 @@ will be created and embedded into the request.
 .. code-block:: scala
 
   val identity = User(LoginInfo("facebook", "apollonia.vanova@watchmen.com"))
-  implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](identity)
+  implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(identity.loginInfo -> identity))
   val request = FakeRequest().withAuthenticator(identity.loginInfo)
 
 .. Note::
@@ -129,7 +129,7 @@ a complete controller test.
 Simulate a missing authenticator
 ````````````````````````````````
 
-To simulate that an authenticator couldn't be found for a request you must only
+To simulate that an authenticator couldn't be found for a request, you must only
 submit a request without an authenticator.
 
 .. code-block:: scala
@@ -139,7 +139,7 @@ submit a request without an authenticator.
     "The `user` method" should {
       "return status 401 if no authenticator was found" in new WithApplication {
         val identity = User(LoginInfo("facebook", "apollonia.vanova@watchmen.com"))
-        val env = FakeEnvironment[User, CookieAuthenticator](identity)
+        val env = FakeEnvironment[User, CookieAuthenticator](Seq(identity.loginInfo -> identity))
         val request = FakeRequest()
 
         val controller = new UserController(env)
@@ -152,7 +152,7 @@ submit a request without an authenticator.
     "The `isAuthenticated` method" should {
       "return status 401 if no authenticator was found" in new WithApplication {
         val identity = User(LoginInfo("facebook", "apollonia.vanova@watchmen.com"))
-        val env = FakeEnvironment[User, CookieAuthenticator](identity)
+        val env = FakeEnvironment[User, CookieAuthenticator](Seq(identity.loginInfo -> identity))
         val request = FakeRequest()
 
         val controller = new UserController(env)
@@ -167,7 +167,7 @@ submit a request without an authenticator.
 Simulate a missing identity
 ```````````````````````````
 
-To simulate that an identity couldn't be found for a valid authenticator you must pass
+To simulate that an identity couldn't be found for a valid authenticator, you must pass
 different login information to the user and the authenticator.
 
 .. code-block:: scala
@@ -177,7 +177,7 @@ different login information to the user and the authenticator.
     "The `user` method" should {
       "return status 401 if authenticator but no identity was found" in new WithApplication {
         val identity = User(LoginInfo("facebook", "apollonia.vanova@watchmen.com"))
-        implicit val env = FakeEnvironment[User, CookieAuthenticator](identity)
+        implicit val env = FakeEnvironment[User, CookieAuthenticator](Seq(identity.loginInfo -> identity))
         val request = FakeRequest()
           .withAuthenticator(LoginInfo("xing", "comedian@watchmen.com"))
 
@@ -191,7 +191,7 @@ different login information to the user and the authenticator.
     "The `isAuthenticated` method" should {
       "return status 401 if authenticator but no identity was found" in new WithApplication {
         val identity = User(LoginInfo("facebook", "apollonia.vanova@watchmen.com"))
-        implicit val env = FakeEnvironment[User, CookieAuthenticator](identity)
+        implicit val env = FakeEnvironment[User, CookieAuthenticator](Seq(identity.loginInfo -> identity))
         val request = FakeRequest()
           .withAuthenticator(LoginInfo("xing", "comedian@watchmen.com"))
 
@@ -216,7 +216,7 @@ the login information of both the authenticator and the identity must be the sam
     "The `user` method" should {
       "return status 200 if authenticator and identity was found" in new WithApplication {
         val identity = User(LoginInfo("facebook", "apollonia.vanova@watchmen.com"))
-        implicit val env = FakeEnvironment[User, CookieAuthenticator](identity)
+        implicit val env = FakeEnvironment[User, CookieAuthenticator](Seq(identity.loginInfo -> identity))
         val request = FakeRequest().withAuthenticator(identity.loginInfo)
 
         val controller = new UserController(env)
@@ -229,7 +229,7 @@ the login information of both the authenticator and the identity must be the sam
     "The `isAuthenticated` method" should {
       "return status 200 if authenticator and identity was found" in new WithApplication {
         val identity = User(LoginInfo("facebook", "apollonia.vanova@watchmen.com"))
-        implicit val env = FakeEnvironment[User, CookieAuthenticator](identity)
+        implicit val env = FakeEnvironment[User, CookieAuthenticator](Seq(identity.loginInfo -> identity))
         val request = FakeRequest().withAuthenticator(identity.loginInfo)
 
         val controller = new UserController(env)

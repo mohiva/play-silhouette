@@ -19,38 +19,7 @@
  */
 package com.mohiva.play.silhouette.api
 
-import play.api.libs.json.Json
-
 /**
  * This trait represents an authenticated user.
  */
-trait Identity {
-
-  /**
-   * Gets the linked login info for an identity.
-   *
-   * @return The linked login info for an identity.
-   */
-  def loginInfo: LoginInfo
-}
-
-/**
- * Represents a linked login for an identity (i.e. a local username/password or a Facebook/Google account).
- *
- * The login info contains the data about the provider that authenticated that identity.
- *
- * @param providerID The ID of the provider.
- * @param providerKey A unique key which identifies a user on this provider (userID, email, ...).
- */
-case class LoginInfo(providerID: String, providerKey: String)
-
-/**
- * The companion object of the login info.
- */
-object LoginInfo {
-
-  /**
-   * Converts the [[com.mohiva.play.silhouette.api.LoginInfo]] to Json and vice versa.
-   */
-  implicit val jsonFormat = Json.format[LoginInfo]
-}
+trait Identity

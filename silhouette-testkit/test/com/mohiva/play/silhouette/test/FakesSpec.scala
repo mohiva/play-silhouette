@@ -15,7 +15,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     "return the identity for the given login info" in {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
-      val service = new FakeIdentityService[FakeIdentity](identity)
+      val service = new FakeIdentityService[FakeIdentity](loginInfo -> identity)
 
       await(service.retrieve(loginInfo)) must beSome(identity)
     }
@@ -95,7 +95,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     "return a `SessionAuthenticator`" in {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
-      implicit val env = FakeEnvironment[FakeIdentity, SessionAuthenticator](identity)
+      implicit val env = FakeEnvironment[FakeIdentity, SessionAuthenticator](Seq(loginInfo -> identity))
       implicit val request = FakeRequest()
 
       FakeAuthenticator[SessionAuthenticator](loginInfo) must beAnInstanceOf[SessionAuthenticator]
@@ -104,7 +104,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     "return a `CookieAuthenticator`" in new WithApplication {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
-      implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](identity)
+      implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
       implicit val request = FakeRequest()
 
       FakeAuthenticator[CookieAuthenticator](loginInfo) must beAnInstanceOf[CookieAuthenticator]
@@ -113,7 +113,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     "return a `BearerTokenAuthenticator`" in {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
-      implicit val env = FakeEnvironment[FakeIdentity, BearerTokenAuthenticator](identity)
+      implicit val env = FakeEnvironment[FakeIdentity, BearerTokenAuthenticator](Seq(loginInfo -> identity))
       implicit val request = FakeRequest()
 
       FakeAuthenticator[BearerTokenAuthenticator](loginInfo) must beAnInstanceOf[BearerTokenAuthenticator]
@@ -122,7 +122,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     "return a `JWTAuthenticator`" in {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
-      implicit val env = FakeEnvironment[FakeIdentity, JWTAuthenticator](identity)
+      implicit val env = FakeEnvironment[FakeIdentity, JWTAuthenticator](Seq(loginInfo -> identity))
       implicit val request = FakeRequest()
 
       FakeAuthenticator[JWTAuthenticator](loginInfo) must beAnInstanceOf[JWTAuthenticator]
@@ -131,7 +131,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     "return a `DummyAuthenticator`" in {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
-      implicit val env = FakeEnvironment[FakeIdentity, DummyAuthenticator](identity)
+      implicit val env = FakeEnvironment[FakeIdentity, DummyAuthenticator](Seq(loginInfo -> identity))
       implicit val request = FakeRequest()
 
       FakeAuthenticator[DummyAuthenticator](loginInfo) must beAnInstanceOf[DummyAuthenticator]
@@ -142,7 +142,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     "return a 401 status code if no authenticator was found" in new WithApplication {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
-      val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](identity)
+      val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
       val request = FakeRequest()
 
       val controller = new SecuredController(env)
@@ -154,7 +154,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     "return a 401 status code if authenticator but no identity was found" in new WithApplication {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
-      implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](identity)
+      implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
       val request = FakeRequest().withAuthenticator[CookieAuthenticator](LoginInfo("invalid", "invalid"))
 
       val controller = new SecuredController(env)
@@ -166,7 +166,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     "return a 200 status code if authenticator and identity was found" in new WithApplication {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
-      implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](identity)
+      implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
       val request = FakeRequest().withAuthenticator[CookieAuthenticator](loginInfo)
 
       val controller = new SecuredController(env)
@@ -181,7 +181,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     "return a 401 status code if no authenticator was found" in new WithApplication {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
-      val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](identity)
+      val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
       val request = FakeRequest()
 
       val controller = new SecuredController(env)
@@ -193,7 +193,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     "return a 401 status code if authenticator but no identity was found" in new WithApplication {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
-      implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](identity)
+      implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
       val request = FakeRequest().withAuthenticator[CookieAuthenticator](LoginInfo("invalid", "invalid"))
 
       val controller = new SecuredController(env)
@@ -205,7 +205,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     "return a 200 status code if authenticator and identity was found" in new WithApplication {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
-      implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](identity)
+      implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
       val request = FakeRequest().withAuthenticator(loginInfo)
 
       val controller = new SecuredController(env)
