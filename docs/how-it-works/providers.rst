@@ -10,11 +10,11 @@ information about an identity.
 Request providers
 -----------------
 
-Request providers are special types of providers. They can be hocked directly into
+Request providers are special types of providers. They can be hooked directly into
 incoming requests which gets scanned for credentials and either gain or restrict
 access to the protected resources. This can be useful for machine authentication.
 
-When using a request provider, you should consider to use the :ref:`dummy authenticator
+When using a request provider, you should consider using the :ref:`dummy authenticator
 <dummy_authenticator>`, because it doesn't have any network throughput or memory footprint
 compared to other authenticators.
 
@@ -264,13 +264,13 @@ Request extractors
 .. versionadded:: 2.0
 
 The default workflow for traditional web applications is it to send values in URL query
-parameters but for mobile applications there could be another workflow. So with request
-extractors it's possible to extract values send to the client from different parts of
-the request. By default Silhouette can read values from query parameters and from request
+parameters, but for mobile applications there could be another workflow. With request
+extractors it's possible to extract values sent to the client in different parts of
+the request. By default Silhouette can read values from query parameters and from a request
 body containing form-urlencoded, Json or XML data.
 
-As example, if a parameter with the name `code` is needed by Silhouette inside a provider,
-then the parameter could be send in the following parts of the request:
+For example, if a parameter with the name `code` is needed by Silhouette inside a provider,
+then the parameter could be sent in the following parts of the request:
 
 **URL Query Parameter**
 
@@ -297,8 +297,8 @@ then the parameter could be send in the following parts of the request:
     <code>value</code>
 
 .. Note::
-   Parameters send as query parameters have always precedence over parameters send in the
-   body of a request. So if a parameter is send in query and in body, then the query parameter
+   Parameters sent as query parameters always have precedence over parameters sent in the
+   body of a request. So if a parameter is sent in query and in body, then the query parameter
    wins.
 
 
