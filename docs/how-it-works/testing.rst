@@ -60,10 +60,10 @@ As first lets look how a typical controller instance could look like:
     }
   }
 
-If you like to test this controller, you must provide an environment that can handle your
+If you would like to test this controller, you must provide an environment that can handle your
 ``User`` implementation and the ``CookieAuthenticator`` which is used to track your user
 after a successful authentication. For this case Silhouette provides a ``FakeEnvironment``
-which sets up automatically all components needed to test your specific actions.
+which automatically sets up all components needed to test your specific actions.
 
 FakeEnvironment
 ^^^^^^^^^^^^^^^
@@ -71,7 +71,7 @@ FakeEnvironment
 The fake environment does all the annoying steps for you to create and instantiate all
 dependencies that you need for your test. You must only specify one or more ``LoginInfo ->
 Identity`` pairs that should be returned by calling ``request.identity`` in your action
-and the authenticator instance that should track this user.
+and the authenticator instance that tracks this user.
 
 .. code-block:: scala
 
@@ -93,9 +93,9 @@ an anonymous function that handles a ``Request`` and returns a ``Result``. With
 this in mind we must now create a request that we can pass to our action. Play
 ships with a test helper called ``FakeRequest`` which does exactly what we want.
 But this helper cannot embed an authenticator into the created fake request.
-Therefore we have spend Play's fake request helper two additional methods.
+Therefore we have extend Play's fake request helper with two additional methods.
 
-The first method accepts an authenticator instance which will then embedded into
+The first method accepts an authenticator instance which is then embedded into
 the request.
 
 .. code-block:: scala
@@ -106,7 +106,7 @@ the request.
   val request = FakeRequest().withAuthenticator(authenticator)
 
 
-The second method accepts a ``LoginInfo`` instance for which then an authenticator
+The second method accepts a ``LoginInfo`` instance for which an authenticator
 will be created and embedded into the request.
 
 .. code-block:: scala
