@@ -35,9 +35,14 @@ import scala.concurrent.Future
  *
  * @param httpLayer The HTTP layer implementation.
  * @param service The OAuth1 service implementation.
+ * @param tokenSecretProvider The OAuth1 token secret provider implementation.
  * @param settings The OAuth1 provider settings.
  */
-abstract class OAuth1Provider(httpLayer: HTTPLayer, service: OAuth1Service, settings: OAuth1Settings)
+abstract class OAuth1Provider(
+  httpLayer: HTTPLayer,
+  service: OAuth1Service,
+  tokenSecretProvider: OAuth1TokenSecretProvider,
+  settings: OAuth1Settings)
   extends SocialProvider with Logger {
 
   /**
@@ -73,19 +78,24 @@ abstract class OAuth1Provider(httpLayer: HTTPLayer, service: OAuth1Service, sett
       case None => request.extractString(OAuthVerifier) -> request.extractString(OAuthToken) match {
         // Second step in the OAuth flow.
         // We have received the verifier and the request token, and we need to swap it for the access token.
-        case (Some(verifier), Some(token)) =>
-          service.retrieveAccessToken(OAuth1Info(token, settings.consumerSecret), verifier).map { info =>
+        case (Some(verifier), Some(token)) => tokenSecretProvider.retrieve(id).recover {
+          case e => throw new AuthenticationException(ErrorTokenSecret.format(id), e)
+        }.flatMap { tokenSecret =>
+          service.retrieveAccessToken(OAuth1Info(token, tokenSecret.value), verifier).map { info =>
             Right(info)
           }.recover {
             case e => throw new AuthenticationException(ErrorAccessToken.format(id), e)
           }
+        }
         // The oauth_verifier field is not in the request.
         // This is the first step in the OAuth flow. We need to get the request tokens.
         case _ => service.retrieveRequestToken(settings.callbackURL).flatMap { info =>
-          val url = service.redirectUrl(info.token)
-          val redirect = Results.Redirect(url)
-          logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
-          Future.successful(Left(redirect))
+          tokenSecretProvider.build(info).map { tokenSecret =>
+            val url = service.redirectUrl(info.token)
+            val redirect = Results.Redirect(url)
+            logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
+            Left(tokenSecretProvider.publish(redirect, tokenSecret))
+          }
         }.recover {
           case e => throw new AuthenticationException(ErrorRequestToken.format(id), e)
         }
@@ -105,6 +115,7 @@ object OAuth1Provider {
   val AuthorizationError = "[Silhouette][%s] Authorization server returned error: %s"
   val ErrorAccessToken = "[Silhouette][%s] Error retrieving access token"
   val ErrorRequestToken = "[Silhouette][%s] Error retrieving request token"
+  val ErrorTokenSecret = "[Silhouette][%s] Error retrieving token secret"
 
   /**
    * The OAuth1 constants.
@@ -162,6 +173,80 @@ trait OAuth1Service {
    * @return The signature calculator for the OAuth1 request.
    */
   def sign(oAuthInfo: OAuth1Info): WSSignatureCalculator
+}
+
+/**
+ * The OAuth1 token secret.
+ *
+ * This represents the oauth_token_secret returned from the provider with the request token and which
+ * is then needed to retrieve the access token. The secret must be stored between two requests and
+ * this implementation provides an abstract way to store the secret in different locations.
+ */
+trait OAuth1TokenSecret {
+
+  /**
+   * The secret.
+   *
+   * @return The secret.
+   */
+  def value: String
+
+  /**
+   * Checks if the secret is expired. This is an absolute timeout since the creation of
+   * the secret.
+   *
+   * @return True if the secret is expired, false otherwise.
+   */
+  def isExpired: Boolean
+
+  /**
+   * Returns a serialized value of the secret.
+   *
+   * @return A serialized value of the secret.
+   */
+  def serialize: String
+}
+
+/**
+ * Provides the token secret for OAuth1 authentication providers.
+ */
+trait OAuth1TokenSecretProvider {
+
+  /**
+   * The type of the secret implementation.
+   */
+  type Secret <: OAuth1TokenSecret
+
+  /**
+   * Builds the secret from OAuth info.
+   *
+   * @param info The OAuth info returned from the provider.
+   * @param request The current request.
+   * @tparam B The type of the request body.
+   * @return The build secret.
+   */
+  def build[B](info: OAuth1Info)(implicit request: ExtractableRequest[B]): Future[Secret]
+
+  /**
+   * Retrieves the token secret.
+   *
+   * @param id The provider ID.
+   * @param request The current request.
+   * @tparam B The type of the request body.
+   * @return A secret on success, otherwise an failure.
+   */
+  def retrieve[B](id: String)(implicit request: ExtractableRequest[B]): Future[Secret]
+
+  /**
+   * Publishes the secret to the client.
+   *
+   * @param result The result to send to the client.
+   * @param secret The secret to publish.
+   * @param request The current request.
+   * @tparam B The type of the request body.
+   * @return The result to send to the client.
+   */
+  def publish[B](result: Result, secret: Secret)(implicit request: ExtractableRequest[B]): Result
 }
 
 /**

@@ -229,7 +229,7 @@ trait OAuth2StateProvider {
   /**
    * Builds the state.
    *
-   * @param request The request.
+   * @param request The current request.
    * @tparam B The type of the request body.
    * @return The build state.
    */
@@ -239,7 +239,7 @@ trait OAuth2StateProvider {
    * Validates the provider and the client state.
    *
    * @param id The provider ID.
-   * @param request The request.
+   * @param request The current request.
    * @tparam B The type of the request body.
    * @return The state on success, otherwise an failure.
    */
@@ -250,7 +250,7 @@ trait OAuth2StateProvider {
    *
    * @param result The result to send to the client.
    * @param state The state to publish.
-   * @param request The request.
+   * @param request The current request.
    * @tparam B The type of the request body.
    * @return The result to send to the client.
    */

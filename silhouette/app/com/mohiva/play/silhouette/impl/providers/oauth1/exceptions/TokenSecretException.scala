@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.exceptions
+package com.mohiva.play.silhouette.impl.providers.oauth1.exceptions
 
 import com.mohiva.play.silhouette.api.exceptions.SilhouetteException
 
 /**
- * Indicates that an error occurred during state retrieval.
+ * Indicates that an error occurred during OAuth1 token secret retrieval.
  *
  * @param msg The exception message.
  * @param cause The exception cause.
  */
-class StateException(msg: String, cause: Throwable)
+class TokenSecretException(msg: String, cause: Throwable)
   extends Exception(msg, cause)
   with SilhouetteException {
 

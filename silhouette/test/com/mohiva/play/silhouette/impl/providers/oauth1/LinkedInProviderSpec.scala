@@ -112,6 +112,6 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = LinkedInProvider(httpLayer, oAuthService, oAuthSettings)
+    lazy val provider = LinkedInProvider(httpLayer, oAuthService, oAuthTokenSecretProvider, oAuthSettings)
   }
 }
