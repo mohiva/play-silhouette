@@ -33,14 +33,19 @@ import scala.concurrent.Future
  * A Twitter OAuth1 Provider.
  *
  * @param httpLayer The HTTP layer implementation.
- * @param oAuth1Service The OAuth1 service implementation.
- * @param oAuth1Settings The OAuth1 provider settings.
+ * @param service The OAuth1 service implementation.
+ * @param tokenSecretProvider The OAuth1 token secret provider implementation.
+ * @param settings The OAuth1 provider settings.
  *
  * @see https://dev.twitter.com/docs/user-profile-images-and-banners
  * @see https://dev.twitter.com/docs/entities#users
  */
-abstract class TwitterProvider(httpLayer: HTTPLayer, oAuth1Service: OAuth1Service, oAuth1Settings: OAuth1Settings)
-  extends OAuth1Provider(httpLayer, oAuth1Service, oAuth1Settings) {
+abstract class TwitterProvider(
+  httpLayer: HTTPLayer,
+  service: OAuth1Service,
+  tokenSecretProvider: OAuth1TokenSecretProvider,
+  settings: OAuth1Settings)
+  extends OAuth1Provider(httpLayer, service, tokenSecretProvider, settings) {
 
   /**
    * The content type to parse a profile from.
@@ -66,7 +71,7 @@ abstract class TwitterProvider(httpLayer: HTTPLayer, oAuth1Service: OAuth1Servic
    * @return On success the build social profile, otherwise a failure.
    */
   protected def buildProfile(authInfo: OAuth1Info): Future[Profile] = {
-    httpLayer.url(urls("api")).sign(oAuth1Service.sign(authInfo)).get().flatMap { response =>
+    httpLayer.url(urls("api")).sign(service.sign(authInfo)).get().flatMap { response =>
       val json = response.json
       (json \ "errors" \\ "code").headOption.map(_.as[Int]) match {
         case Some(code) =>
@@ -134,11 +139,12 @@ object TwitterProvider {
    * Creates an instance of the provider.
    *
    * @param httpLayer The HTTP layer implementation.
-   * @param oAuth1Service The OAuth1 service implementation.
-   * @param auth1Settings The OAuth1 provider settings.
+   * @param service The OAuth1 service implementation.
+   * @param tokenSecretProvider The OAuth1 token secret provider implementation.
+   * @param settings The OAuth1 provider settings.
    * @return An instance of this provider.
    */
-  def apply(httpLayer: HTTPLayer, oAuth1Service: OAuth1Service, auth1Settings: OAuth1Settings) = {
-    new TwitterProvider(httpLayer, oAuth1Service, auth1Settings) with TwitterProfileBuilder
+  def apply(httpLayer: HTTPLayer, service: OAuth1Service, tokenSecretProvider: OAuth1TokenSecretProvider, settings: OAuth1Settings) = {
+    new TwitterProvider(httpLayer, service, tokenSecretProvider, settings) with TwitterProfileBuilder
   }
 }

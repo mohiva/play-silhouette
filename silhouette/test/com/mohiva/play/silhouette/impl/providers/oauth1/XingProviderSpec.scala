@@ -109,6 +109,6 @@ class XingProviderSpec extends OAuth1ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = XingProvider(httpLayer, oAuthService, oAuthSettings)
+    lazy val provider = XingProvider(httpLayer, oAuthService, oAuthTokenSecretProvider, oAuthSettings)
   }
 }

@@ -6,6 +6,7 @@
 - Authenticators now using an extra backing store instead of only the cache
 - Split up SocialProvider.authenticate method into authenticate and retrieveProfile methods
 - Remove authInfo from SocialProfile
+- Add OAuth1 token secret implementation
 - Add OAuth2 state implementation
 - Documentation is now included in the repository and hosted on Read The Docs
 - Renamed packages "core" to "api", "contrib" to "impl", "utils" to "util"

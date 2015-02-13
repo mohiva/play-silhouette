@@ -106,6 +106,6 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = TwitterProvider(httpLayer, oAuthService, oAuthSettings)
+    lazy val provider = TwitterProvider(httpLayer, oAuthService, oAuthTokenSecretProvider, oAuthSettings)
   }
 }

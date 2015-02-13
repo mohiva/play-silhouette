@@ -214,6 +214,40 @@ provider with the profile builder.
   new FacebookProvider(httpLayer, stateProvider, settings) with CustomFacebookProfileBuilder
 
 
+OAuth1 token secret
+-------------------
+
+.. versionadded:: 2.0
+
+During a typical OAuth1 flow, a provider retrieves a request token in conjunction with a token
+secret. This token secret is then needed to create the signature for retrieving the access token
+from the OAuth1 provider. Due the fact that we leave our application during the OAuth flow to
+authorize against the provider, we must cache the token secret so that is available to obtain
+the access token, after redirecting back to our application.
+
+
+To maintain the token secret in Silhouette, a token secret provider must be passed to every
+OAuth1 authentication provider. All token secret provider implementations can be found in
+the `secrets package`_.
+
+.. _secrets package: https://github.com/mohiva/play-silhouette/tree/master/silhouette/app/com/mohiva/play/silhouette/impl/providers/oauth1/secrets
+
+List of OAuth1 token secret providers
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We provide some built in token secret providers.
+
+CookieSecret
+''''''''''''
+
+The cookie secret works by embedding an encrypted token secret in a cookie. This provides a
+stateless/scalable approach.
+
+.. Tip::
+   Please take a look on the :ref:`configuration settings <oauth1_cookie_secret_settings>`, on how
+   to configure the provider for this secret.
+
+
 OAuth2 state
 ------------
 
@@ -225,12 +259,12 @@ to protect an application against `CSRF attacks`_. But it can also be used to re
 state about the user.
 
 To maintain the state in Silhouette, a state provider must be passed to every OAuth2 authentication
-provider. All state provider implementations can be found in the `impl package`_.
+provider. All state provider implementations can be found in the `state package`_.
 
 .. _state parameter: http://tools.ietf.org/html/rfc6749#section-4.1.1
 .. _CSRF attacks: http://www.oauthsecurity.com/#authorization-code-flow
 .. _should be used mainly: http://www.thread-safe.com/2014/05/the-correct-use-of-state-parameter-in.html
-.. _impl package: https://github.com/mohiva/play-silhouette/tree/master/silhouette/app/com/mohiva/play/silhouette/impl/providers/oauth2/state
+.. _state package: https://github.com/mohiva/play-silhouette/tree/master/silhouette/app/com/mohiva/play/silhouette/impl/providers/oauth2/state
 
 List of OAuth2 states
 ^^^^^^^^^^^^^^^^^^^^^
@@ -245,7 +279,7 @@ The cookie state works by embedding the state in a cookie. This is one of the pr
 from the `OAuth2 RFC`_ and it provides a stateless/scalable approach.
 
 .. Tip::
-   Please take a look on the :ref:`configuration settings <oaut2_cookie_state_settings>`, on how
+   Please take a look on the :ref:`configuration settings <oauth2_cookie_state_settings>`, on how
    to configure the provider for this state.
 
 .. _OAuth2 RFC: https://tools.ietf.org/html/rfc6749#section-10.12
@@ -320,7 +354,7 @@ should never be exposed to the public. Each provider defines its own
 `AuthInfo`_ implementation.
 
 As with other Silhouette structures that vary in their implementation,
-`AuthInfo`_ is managed by a `AuthInfoService`_ that saves and retrieves
+`AuthInfo`_ is managed by an `AuthInfoService`_ that saves and retrieves
 the information as needed.
 
 .. _AuthInfoService: https://github.com/mohiva/play-silhouette/blob/master/silhouette/app/com/mohiva/play/silhouette/api/services/AuthInfoService.scala#L31

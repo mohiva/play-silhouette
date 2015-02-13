@@ -16,8 +16,8 @@
 package com.mohiva.play.silhouette.impl.providers.oauth2.state
 
 import com.mohiva.play.silhouette.api.util.{ Base64, Clock, IDGenerator }
-import com.mohiva.play.silhouette.impl.exceptions.StateException
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
+import com.mohiva.play.silhouette.impl.providers.oauth2.exceptions.StateException
 import com.mohiva.play.silhouette.impl.providers.oauth2.state.CookieStateProvider._
 import org.joda.time.DateTime
 import org.specs2.matcher.JsonMatchers

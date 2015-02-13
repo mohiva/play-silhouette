@@ -33,14 +33,19 @@ import scala.concurrent.Future
  * A Xing OAuth1 Provider.
  *
  * @param httpLayer The HTTP layer implementation.
- * @param oAuth1Service The OAuth1 service implementation.
- * @param oAuth1Settings The OAuth1 provider settings.
+ * @param service The OAuth1 service implementation.
+ * @param tokenSecretProvider The OAuth1 token secret provider implementation.
+ * @param settings The OAuth1 provider settings.
  *
  * @see https://dev.xing.com/docs/get/users/me
  * @see https://dev.xing.com/docs/error_responses
  */
-abstract class XingProvider(httpLayer: HTTPLayer, oAuth1Service: OAuth1Service, oAuth1Settings: OAuth1Settings)
-  extends OAuth1Provider(httpLayer, oAuth1Service, oAuth1Settings) {
+abstract class XingProvider(
+  httpLayer: HTTPLayer,
+  service: OAuth1Service,
+  tokenSecretProvider: OAuth1TokenSecretProvider,
+  settings: OAuth1Settings)
+  extends OAuth1Provider(httpLayer, service, tokenSecretProvider, settings) {
 
   /**
    * The content type to parse a profile from.
@@ -66,7 +71,7 @@ abstract class XingProvider(httpLayer: HTTPLayer, oAuth1Service: OAuth1Service, 
    * @return On success the build social profile, otherwise a failure.
    */
   protected def buildProfile(authInfo: OAuth1Info): Future[Profile] = {
-    httpLayer.url(urls("api")).sign(oAuth1Service.sign(authInfo)).get().flatMap { response =>
+    httpLayer.url(urls("api")).sign(service.sign(authInfo)).get().flatMap { response =>
       val json = response.json
       (json \ "error_name").asOpt[String] match {
         case Some(error) =>
@@ -141,11 +146,12 @@ object XingProvider {
    * Creates an instance of the provider.
    *
    * @param httpLayer The HTTP layer implementation.
-   * @param oAuth1Service The OAuth1 service implementation.
-   * @param auth1Settings The OAuth1 provider settings.
+   * @param service The OAuth1 service implementation.
+   * @param tokenSecretProvider The OAuth1 token secret provider implementation.
+   * @param settings The OAuth1 provider settings.
    * @return An instance of this provider.
    */
-  def apply(httpLayer: HTTPLayer, oAuth1Service: OAuth1Service, auth1Settings: OAuth1Settings) = {
-    new XingProvider(httpLayer, oAuth1Service, auth1Settings) with XingProfileBuilder
+  def apply(httpLayer: HTTPLayer, service: OAuth1Service, tokenSecretProvider: OAuth1TokenSecretProvider, settings: OAuth1Settings) = {
+    new XingProvider(httpLayer, service, tokenSecretProvider, settings) with XingProfileBuilder
   }
 }

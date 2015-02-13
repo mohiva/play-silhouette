@@ -21,6 +21,7 @@ import com.mohiva.play.silhouette.impl.providers.OAuth1Provider._
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
+import play.api.mvc.Result
 import play.api.test.{ FakeRequest, WithApplication }
 
 import scala.concurrent.Future
@@ -62,8 +63,14 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
 
     "redirect to authorization URL if request token could be retrieved" in new WithApplication {
       implicit val req = FakeRequest()
+      val serializedTokenSecret = "my.serialized.token.secret"
+
       c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.successful(c.oAuthInfo)
       c.oAuthService.redirectUrl(any) returns c.oAuthSettings.authorizationURL
+      c.oAuthTokenSecretProvider.build(any)(any) returns Future.successful(c.oAuthTokenSecret)
+      c.oAuthTokenSecretProvider.publish(any, any)(any) answers { (a, m) =>
+        a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
+      }
 
       result(c.provider.authenticate()) {
         case result =>
@@ -72,9 +79,22 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
       }
     }
 
-    "fail with an AuthenticationException if access token cannot be retrieved" in new WithApplication {
+    "fail with an AuthenticationException if token secret cannot be retrieved" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier&" + OAuthToken + "=my.token")
-      c.oAuthService.retrieveAccessToken(c.oAuthInfo, "my.verifier") returns Future.failed(new Exception(""))
+      c.oAuthTokenSecretProvider.retrieve(any)(any) returns Future.failed(new Exception(""))
+
+      failed[AuthenticationException](c.provider.authenticate()) {
+        case e => e.getMessage must startWith(ErrorTokenSecret.format(c.provider.id, ""))
+      }
+    }
+
+    "fail with an AuthenticationException if access token cannot be retrieved" in new WithApplication {
+      val tokenSecret = "my.token.secret"
+      implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier&" + OAuthToken + "=my.token")
+
+      c.oAuthTokenSecret.value returns tokenSecret
+      c.oAuthTokenSecretProvider.retrieve(any)(any) returns Future.successful(c.oAuthTokenSecret)
+      c.oAuthService.retrieveAccessToken(c.oAuthInfo.copy(secret = tokenSecret), "my.verifier") returns Future.failed(new Exception(""))
 
       failed[AuthenticationException](c.provider.authenticate()) {
         case e => e.getMessage must startWith(ErrorAccessToken.format(c.provider.id, ""))
@@ -82,8 +102,12 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
     }
 
     "return the auth info" in new WithApplication {
+      val tokenSecret = "my.token.secret"
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier&" + OAuthToken + "=my.token")
-      c.oAuthService.retrieveAccessToken(c.oAuthInfo, "my.verifier") returns Future.successful(c.oAuthInfo)
+
+      c.oAuthTokenSecret.value returns tokenSecret
+      c.oAuthTokenSecretProvider.retrieve(any)(any) returns Future.successful(c.oAuthTokenSecret)
+      c.oAuthService.retrieveAccessToken(c.oAuthInfo.copy(secret = tokenSecret), "my.verifier") returns Future.successful(c.oAuthInfo)
 
       authInfo(c.provider.authenticate()) {
         case authInfo => authInfo must be equalTo c.oAuthInfo
@@ -104,6 +128,11 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
  */
 trait OAuth1ProviderSpecContext extends Scope with Mockito with ThrownExpectations {
 
+  abstract class TestSecret extends OAuth1TokenSecret
+  abstract class TestStateProvider extends OAuth1TokenSecretProvider {
+    type Secret = TestSecret
+  }
+
   /**
    * The HTTP layer mock.
    */
@@ -122,6 +151,16 @@ trait OAuth1ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
     s.use10a returns true
     s
   }
+
+  /**
+   * A OAuth1 token secret.
+   */
+  lazy val oAuthTokenSecret: TestSecret = mock[TestSecret]
+
+  /**
+   * The OAuth1 token secret provider mock.
+   */
+  lazy val oAuthTokenSecretProvider: TestStateProvider = mock[TestStateProvider]
 
   /**
    * The OAuth1 settings.

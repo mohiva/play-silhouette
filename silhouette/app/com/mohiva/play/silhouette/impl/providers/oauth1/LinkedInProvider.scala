@@ -34,14 +34,19 @@ import scala.concurrent.Future
  *
  * @param httpLayer The HTTP layer implementation.
  * @param service The OAuth1 service implementation.
+ * @param tokenSecretProvider The OAuth1 token secret provider implementation.
  * @param settings The OAuth1 provider settings.
  *
  * @see https://developer.linkedin.com/documents/oauth-10a
  * @see https://developer.linkedin.com/documents/authentication
  * @see https://developer.linkedin.com/documents/inapiprofile
  */
-abstract class LinkedInProvider(httpLayer: HTTPLayer, service: OAuth1Service, settings: OAuth1Settings)
-  extends OAuth1Provider(httpLayer, service, settings) {
+abstract class LinkedInProvider(
+  httpLayer: HTTPLayer,
+  service: OAuth1Service,
+  tokenSecretProvider: OAuth1TokenSecretProvider,
+  settings: OAuth1Settings)
+  extends OAuth1Provider(httpLayer, service, tokenSecretProvider, settings) {
 
   /**
    * The content type to parse a profile from.
@@ -144,11 +149,12 @@ object LinkedInProvider {
    * Creates an instance of the provider.
    *
    * @param httpLayer The HTTP layer implementation.
-   * @param oAuth1Service The OAuth1 service implementation.
-   * @param auth1Settings The OAuth1 provider settings.
+   * @param service The OAuth1 service implementation.
+   * @param tokenSecretProvider The OAuth1 token secret provider implementation.
+   * @param settings The OAuth1 provider settings.
    * @return An instance of this provider.
    */
-  def apply(httpLayer: HTTPLayer, oAuth1Service: OAuth1Service, auth1Settings: OAuth1Settings) = {
-    new LinkedInProvider(httpLayer, oAuth1Service, auth1Settings) with LinkedInProfileBuilder
+  def apply(httpLayer: HTTPLayer, service: OAuth1Service, tokenSecretProvider: OAuth1TokenSecretProvider, settings: OAuth1Settings) = {
+    new LinkedInProvider(httpLayer, service, tokenSecretProvider, settings) with LinkedInProfileBuilder
   }
 }

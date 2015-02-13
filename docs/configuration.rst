@@ -98,6 +98,43 @@ Your configuration could then have this format:
 To get the consumerKey/consumerSecret keys you need to log into the
 developer site of each service and register your application.
 
+OAuth1 token secret
+-------------------
+
+.. _oauth1_cookie_secret_settings:
+
+CookieSecret
+^^^^^^^^^^^^
+
+To configure the ``CookieSecret`` provider you must use the ``CookieSecretSettings``
+class. This class has the following form:
+
+.. code-block:: scala
+
+   case class CookieSecretSettings(
+     cookieName: String = "OAuth1TokenSecret",
+     cookiePath: String = "/",
+     cookieDomain: Option[String] = None,
+     secureCookie: Boolean = Play.isProd,
+     httpOnlyCookie: Boolean = true,
+     expirationTime: Int = 5 * 60)
+
+=========================    ===================================================================
+Property                     Description
+=========================    ===================================================================
+``cookieName``               The cookie name
+``cookiePath``               The cookie path
+``cookieDomain``             The cookie domain
+``secureCookie``             Whether this cookie is secured, sent only for HTTPS requests.
+                             Default to sending only for HTTPS in production, but not for
+                             development and test
+``httpOnlyCookie``           Whether this cookie is HTTP only, i.e. not accessible from
+                             client-side JavaScript code
+``expirationTime``           Secret expiration. Defaults to 5 minutes which provides sufficient
+                             time to log in, but not too much. This is a balance between
+                             convenience and security
+=========================    ===================================================================
+
 
 OAuth2 based providers
 ----------------------
@@ -237,7 +274,7 @@ site of each service and register your application.
 OAuth2 state
 ------------
 
-.. _oaut2_cookie_state_settings:
+.. _oauth2_cookie_state_settings:
 
 CookieState
 ^^^^^^^^^^^
