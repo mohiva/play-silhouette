@@ -117,7 +117,9 @@ abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
             case (p, s) => (Scope, s) :: p
           }
           val encodedParams = params.map { p => encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8") }
-          val url = settings.authorizationURL + encodedParams.mkString("?", "&", "")
+          val url = settings.authorizationURL.getOrElse {
+            throw new AuthenticationException(AuthorizationURLUndefined.format(id))
+          } + encodedParams.mkString("?", "&", "")
           val redirect = stateProvider.publish(Results.Redirect(url), state)
           logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
           logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
@@ -167,6 +169,7 @@ object OAuth2Provider {
   /**
    * The error messages.
    */
+  val AuthorizationURLUndefined = "[Silhouette][%s] Authorization URL is undefined"
   val AuthorizationError = "[Silhouette][%s] Authorization server returned error: %s"
   val InvalidInfoFormat = "[Silhouette][%s] Cannot build OAuth2Info because of invalid response format  : %s"
   val InvalidState = "[Silhouette][%s] Invalid state"
@@ -271,7 +274,7 @@ trait OAuth2StateProvider {
  * @param customProperties A map of custom properties for the different providers.
  */
 case class OAuth2Settings(
-  authorizationURL: String,
+  authorizationURL: Option[String] = None,
   accessTokenURL: String,
   redirectURL: String,
   clientID: String,

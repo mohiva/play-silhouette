@@ -201,12 +201,12 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
     /**
      * The OAuth2 settings.
      */
-    lazy val oAuthSettings = OAuth2Settings(
-      authorizationURL = "https://foursquare.com/oauth2/authenticate",
+    lazy val oAuthSettings = spy(OAuth2Settings(
+      authorizationURL = Some("https://foursquare.com/oauth2/authenticate"),
       accessTokenURL = "https://foursquare.com/oauth2/access_token",
       redirectURL = "https://www.mohiva.com",
       clientID = "my.client.id",
-      clientSecret = "my.client.secret")
+      clientSecret = "my.client.secret"))
 
     /**
      * The OAuth2 info returned by Foursquare.

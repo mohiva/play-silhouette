@@ -136,13 +136,13 @@ class DropboxProviderSpec extends OAuth2ProviderSpec {
     /**
      * The OAuth2 settings.
      */
-    lazy val oAuthSettings = OAuth2Settings(
-      authorizationURL = "https://www.dropbox.com/1/oauth2/authorize",
+    lazy val oAuthSettings = spy(OAuth2Settings(
+      authorizationURL = Some("https://www.dropbox.com/1/oauth2/authorize"),
       accessTokenURL = "https://api.dropbox.com/1/oauth2/token",
       redirectURL = "https://www.mohiva.com",
       clientID = "my.client.id",
       clientSecret = "my.client.secret",
-      scope = None)
+      scope = None))
 
     /**
      * The OAuth2 info returned by Dropbox.

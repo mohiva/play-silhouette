@@ -158,13 +158,13 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
     /**
      * The OAuth2 settings.
      */
-    lazy val oAuthSettings = OAuth2Settings(
-      authorizationURL = "https://graph.facebook.com/oauth/authorize",
+    lazy val oAuthSettings = spy(OAuth2Settings(
+      authorizationURL = Some("https://graph.facebook.com/oauth/authorize"),
       accessTokenURL = "https://graph.facebook.com/oauth/access_token",
       redirectURL = "https://www.mohiva.com",
       clientID = "my.client.id",
       clientSecret = "my.client.secret",
-      scope = Some("email"))
+      scope = Some("email")))
 
     /**
      * The provider to test.

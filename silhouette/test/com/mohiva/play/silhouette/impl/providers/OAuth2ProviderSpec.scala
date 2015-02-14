@@ -55,52 +55,76 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
       }
     }
 
-    "redirect to authorization URL if authorization code doesn't exists in request" in new WithApplication {
-      implicit val req = FakeRequest(GET, "/")
-      val sessionKey = "session-key"
-      val sessionValue = "session-value"
+    "fail with an AuthenticationException if authorization URL is undefined when it's needed" in new WithApplication {
+      c.oAuthSettings.authorizationURL match {
+        case None => skipped("authorizationURL is not defined, so this step isn't needed for provider: " + c.provider.getClass)
+        case Some(authorizationURL) =>
+          implicit val req = FakeRequest(GET, "/")
 
-      c.state.serialize returns sessionValue
-      c.stateProvider.build(any) returns Future.successful(c.state)
-      c.stateProvider.publish(any, any)(any) answers { (a, m) =>
-        val result = a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
-        val state = a.asInstanceOf[Array[Any]](1).asInstanceOf[OAuth2State]
+          c.state.serialize returns "session-value"
+          c.stateProvider.build(any) returns Future.successful(c.state)
+          c.oAuthSettings.authorizationURL returns None
 
-        result.withSession(sessionKey -> state.serialize)
+          failed[AuthenticationException](c.provider.authenticate()) {
+            case e => e.getMessage must startWith(AuthorizationURLUndefined.format(c.provider.id))
+          }
       }
+    }
 
-      result(c.provider.authenticate()) {
-        case result =>
-          status(result) must equalTo(SEE_OTHER)
-          session(result).get(sessionKey) must beSome(c.state.serialize)
-          redirectLocation(result) must beSome.which { url =>
-            val urlParams = c.urlParams(url)
-            val params = c.oAuthSettings.scope.foldLeft(List(
-              (ClientID, c.oAuthSettings.clientID),
-              (RedirectURI, c.oAuthSettings.redirectURL),
-              (ResponseType, Code),
-              (State, urlParams(State))) ++ c.oAuthSettings.authorizationParams.toList) {
-              case (p, s) => (Scope, s) :: p
-            }
-            url must be equalTo (c.oAuthSettings.authorizationURL + params.map { p =>
-              encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8")
-            }.mkString("?", "&", ""))
+    "redirect to authorization URL if authorization code doesn't exists in request" in new WithApplication {
+      c.oAuthSettings.authorizationURL match {
+        case None => skipped("authorizationURL is not defined, so this step isn't needed for provider: " + c.provider.getClass)
+        case Some(authorizationURL) =>
+          implicit val req = FakeRequest(GET, "/")
+          val sessionKey = "session-key"
+          val sessionValue = "session-value"
+
+          c.state.serialize returns sessionValue
+          c.stateProvider.build(any) returns Future.successful(c.state)
+          c.stateProvider.publish(any, any)(any) answers { (a, m) =>
+            val result = a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
+            val state = a.asInstanceOf[Array[Any]](1).asInstanceOf[OAuth2State]
+
+            result.withSession(sessionKey -> state.serialize)
+          }
+
+          result(c.provider.authenticate()) {
+            case result =>
+              status(result) must equalTo(SEE_OTHER)
+              session(result).get(sessionKey) must beSome(c.state.serialize)
+              redirectLocation(result) must beSome.which { url =>
+                val urlParams = c.urlParams(url)
+                val params = c.oAuthSettings.scope.foldLeft(List(
+                  (ClientID, c.oAuthSettings.clientID),
+                  (RedirectURI, c.oAuthSettings.redirectURL),
+                  (ResponseType, Code),
+                  (State, urlParams(State))) ++ c.oAuthSettings.authorizationParams.toList) {
+                  case (p, s) => (Scope, s) :: p
+                }
+                url must be equalTo (authorizationURL + params.map { p =>
+                  encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8")
+                }.mkString("?", "&", ""))
+              }
           }
       }
     }
 
     "not send state param if state is empty" in new WithApplication {
-      implicit val req = FakeRequest(GET, "/")
+      c.oAuthSettings.authorizationURL match {
+        case None => skipped("authorizationURL is not defined, so this step isn't needed for provider: " + c.provider.getClass)
+        case Some(_) =>
+          implicit val req = FakeRequest(GET, "/")
 
-      c.state.serialize returns ""
-      c.stateProvider.build(any) returns Future.successful(c.state)
-      c.stateProvider.publish(any, any)(any) answers { (a, m) =>
-        a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
-      }
+          c.state.serialize returns ""
+          c.stateProvider.build(any) returns Future.successful(c.state)
+          c.stateProvider.publish(any, any)(any) answers { (a, m) =>
+            a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
+          }
 
-      result(c.provider.authenticate()) {
-        case result =>
-          redirectLocation(result) must beSome.which(_ must not contain State)
+          result(c.provider.authenticate()) {
+            case result =>
+              redirectLocation(result) must beSome.which(_ must not contain State)
+          }
       }
     }
 
