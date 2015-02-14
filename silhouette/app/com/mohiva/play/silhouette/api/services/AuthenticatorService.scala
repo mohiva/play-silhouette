@@ -3,7 +3,7 @@
  * Copyright 2013 Jorge Aliss (jaliss at gmail dot com) - twitter: @jaliss
  *
  * Derivative work: Silhouette (https://github.com/mohiva/play-silhouette)
- * Modifications Copyright 2014 Mohiva Organisation (license at mohiva dot com)
+ * Modifications Copyright 2015 Mohiva Organisation (license at mohiva dot com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,19 +57,6 @@ trait AuthenticatorService[T <: Authenticator] {
    * @return Some authenticator or None if no authenticator could be found in request.
    */
   def retrieve(implicit request: RequestHeader): Future[Option[T]]
-
-  /**
-   * Embeds authenticator specific artifacts into the response.
-   *
-   * This method should be called on authenticator initialization after an identity has logged in.
-   *
-   * @param authenticator The authenticator instance.
-   * @param result The result to manipulate.
-   * @param request The request header.
-   * @return The manipulated result.
-   */
-  @deprecated("Use `init` and `embed` instead; Will be removed in 2.0 final", "2.0-MASTER")
-  def init(authenticator: T, result: Future[Result])(implicit request: RequestHeader): Future[Result]
 
   /**
    * Initializes an authenticator and instead of embedding into the the request or result, it returns

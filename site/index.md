@@ -78,4 +78,4 @@ with the integration of Silhouette into your project, don't hesitate to ask ques
 The code is licensed under [Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0) and the documentation
 under [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/).
 
-Unless otherwise stated, all artifacts are Copyright 2014 Mohiva Organisation (license at mohiva dot com).
+Unless otherwise stated, all artifacts are Copyright 2015 Mohiva Organisation (license at mohiva dot com).

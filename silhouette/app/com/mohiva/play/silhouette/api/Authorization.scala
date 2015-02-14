@@ -3,7 +3,7 @@
  * Copyright 2013 Jorge Aliss (jaliss at gmail dot com) - twitter: @jaliss
  *
  * Derivative work: Silhouette (https://github.com/mohiva/play-silhouette)
- * Modifications Copyright 2014 Mohiva Organisation (license at mohiva dot com)
+ * Modifications Copyright 2015 Mohiva Organisation (license at mohiva dot com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,15 +47,16 @@ trait Authorization[I <: Identity] {
 object Authorization {
 
   /**
-   * An rich authorization which will be able to do logic operator.
+   * Defines additional methods on an Authorization instance.
    *
    * @param self The authorization.
    */
   implicit final class RichAuthorization[I <: Identity](self: Authorization[I]) {
 
     /**
-     * Negation (not) operator
-     * @return The authorization
+     * Negation (not) operator.
+     *
+     * @return The authorization.
      */
     def unary_! : Authorization[I] = new Authorization[I] {
       def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang): Boolean = {
@@ -64,10 +65,10 @@ object Authorization {
     }
 
     /**
-     * Conjuction (and) operator.
+     * Conjunction (and) operator.
      *
      * @param authorization The authorization to be conjunction.
-     * @return The authorization
+     * @return The authorization.
      */
     def &&(authorization: Authorization[I]): Authorization[I] = new Authorization[I] {
       def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang): Boolean = {
@@ -79,7 +80,7 @@ object Authorization {
      * Disjunction (or) operator.
      *
      * @param authorization The authorization to be disjunction.
-     * @return The authorization
+     * @return The authorization.
      */
     def ||(authorization: Authorization[I]): Authorization[I] = new Authorization[I] {
       def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang): Boolean = {

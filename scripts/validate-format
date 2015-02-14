@@ -4,7 +4,7 @@
 #
 # If there are style violations, outputs a message and exits with a non-zero status code.
 #
-# Copyright 2014 Mohiva Organisation (license at mohiva dot com)
+# Copyright 2015 Mohiva Organisation (license at mohiva dot com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
