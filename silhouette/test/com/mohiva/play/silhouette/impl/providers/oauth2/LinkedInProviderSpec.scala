@@ -133,13 +133,13 @@ class LinkedInProviderSpec extends OAuth2ProviderSpec {
     /**
      * The OAuth2 settings.
      */
-    lazy val oAuthSettings = OAuth2Settings(
-      authorizationURL = "https://www.linkedin.com/uas/oauth2/authorization",
+    lazy val oAuthSettings = spy(OAuth2Settings(
+      authorizationURL = Some("https://www.linkedin.com/uas/oauth2/authorization"),
       accessTokenURL = "https://www.linkedin.com/uas/oauth2/accessToken",
       redirectURL = "https://www.mohiva.com",
       clientID = "my.client.id",
       clientSecret = "my.client.secret",
-      scope = None)
+      scope = None))
 
     /**
      * The OAuth2 info returned by LinkedIn.

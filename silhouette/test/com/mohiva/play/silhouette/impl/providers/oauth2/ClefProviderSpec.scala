@@ -132,7 +132,6 @@ class ClefProviderSpec extends OAuth2ProviderSpec {
      * The OAuth2 settings.
      */
     lazy val oAuthSettings = OAuth2Settings(
-      authorizationURL = "https://clef.io/api/v1/authorize",
       accessTokenURL = "https://clef.io/api/v1/authorize",
       redirectURL = "https://www.mohiva.com",
       clientID = "my.client.id",

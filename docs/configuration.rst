@@ -145,7 +145,7 @@ class. This class has the following form:
 .. code-block:: scala
 
     case class OAuth2Settings(
-      authorizationURL: String,
+      authorizationURL: Option[String],
       accessTokenURL: String,
       redirectURL: String,
       clientID: String,
@@ -158,7 +158,9 @@ class. This class has the following form:
 =========================    ===================================================================
 Property                     Description
 =========================    ===================================================================
-``authorizationURL``         The authorization URL provided by the OAuth provider
+``authorizationURL``         The authorization URL provided by the OAuth provider. This isn't
+                             needed when using Silhouette in conjunction with client side
+                             authentication frameworks
 ``accessTokenURL``           The access token URL provided by the OAuth provider
 ``redirectURL``              The redirect URL to the application after a successful
                              authentication on the OAuth provider
@@ -195,7 +197,6 @@ Your configuration could then have this format:
 .. code-block:: js
 
     clef {
-      authorizationUrl="https://clef.io/api/v1/authorize"
       accessTokenUrl="https://clef.io/api/v1/authorize"
       redirectURL="https://your.domain.tld/authenticate/clef"
       clientId="your.client.id"

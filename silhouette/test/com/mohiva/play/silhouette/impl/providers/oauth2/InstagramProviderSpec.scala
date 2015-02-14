@@ -128,13 +128,13 @@ class InstagramProviderSpec extends OAuth2ProviderSpec {
     /**
      * The OAuth2 settings.
      */
-    lazy val oAuthSettings = OAuth2Settings(
-      authorizationURL = "https://api.instagram.com/oauth/authorize",
+    lazy val oAuthSettings = spy(OAuth2Settings(
+      authorizationURL = Some("https://api.instagram.com/oauth/authorize"),
       accessTokenURL = "https://api.instagram.com/oauth/access_token",
       redirectURL = "https://www.mohiva.com",
       clientID = "my.client.id",
       clientSecret = "my.client.secret",
-      scope = Some("basic"))
+      scope = Some("basic")))
 
     /**
      * The OAuth2 info returned by Instagram.
