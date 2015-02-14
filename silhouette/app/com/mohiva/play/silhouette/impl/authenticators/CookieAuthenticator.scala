@@ -3,7 +3,7 @@
  * Copyright 2013 Jorge Aliss (jaliss at gmail dot com) - twitter: @jaliss
  *
  * Derivative work: Silhouette (https://github.com/mohiva/play-silhouette)
- * Modifications Copyright 2014 Mohiva Organisation (license at mohiva dot com)
+ * Modifications Copyright 2015 Mohiva Organisation (license at mohiva dot com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -154,19 +154,6 @@ class CookieAuthenticatorService(
     }.recover {
       case e => throw new AuthenticationException(RetrieveError.format(ID), e)
     }
-  }
-
-  /**
-   * Creates a new cookie for the given authenticator and embeds it into the result. The authenticator
-   * will also be stored in the backing store.
-   *
-   * @param result The result to manipulate.
-   * @param request The request header.
-   * @return The manipulated result.
-   */
-  @deprecated("Use `init` and `embed` instead; Will be removed in 2.0 final", "2.0-MASTER")
-  def init(authenticator: CookieAuthenticator, result: Future[Result])(implicit request: RequestHeader) = {
-    init(authenticator).flatMap(s => embed(s, result))
   }
 
   /**

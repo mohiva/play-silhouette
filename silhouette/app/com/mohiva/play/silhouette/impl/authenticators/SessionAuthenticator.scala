@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 Mohiva Organisation (license at mohiva dot com)
+ * Copyright 2015 Mohiva Organisation (license at mohiva dot com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -147,17 +147,6 @@ class SessionAuthenticatorService(
     }.recover {
       case e => throw new AuthenticationException(RetrieveError.format(ID), e)
     }
-  }
-
-  /**
-   * Stores the authenticator in the user session.
-   *
-   * @param result The result to manipulate.
-   * @return The manipulated result.
-   */
-  @deprecated("Use `init` and `embed` instead; Will be removed in 2.0 final", "2.0-MASTER")
-  def init(authenticator: SessionAuthenticator, result: Future[Result])(implicit request: RequestHeader) = {
-    init(authenticator).flatMap(s => embed(s, result))
   }
 
   /**

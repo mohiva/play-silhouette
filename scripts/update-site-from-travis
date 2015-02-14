@@ -14,7 +14,7 @@
 # Copyright 2013 Ben Limmer (l1m5) - http://benlimmer.com/2013/12/26/automatically-publish-javadoc-to-gh-pages-with-travis-ci/
 #
 # Derivative work: Silhouette (https://github.com/mohiva/play-silhouette)
-# Modifications Copyright 2014 Mohiva Organisation (license at mohiva dot com)
+# Modifications Copyright 2015 Mohiva Organisation (license at mohiva dot com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 Mohiva Organisation (license at mohiva dot com)
+ * Copyright 2015 Mohiva Organisation (license at mohiva dot com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -131,19 +131,6 @@ class BearerTokenAuthenticatorService(
     }.recover {
       case e => throw new AuthenticationException(RetrieveError.format(ID), e)
     }
-  }
-
-  /**
-   * Creates a new bearer token for the given authenticator and adds a header with the token as value
-   * to the result. The authenticator will also be stored in the backing store.
-   *
-   * @param result The result to manipulate.
-   * @param request The request header.
-   * @return The manipulated result.
-   */
-  @deprecated("Use `init` and `embed` instead; Will be removed in 2.0 final", "2.0-MASTER")
-  def init(authenticator: BearerTokenAuthenticator, result: Future[Result])(implicit request: RequestHeader) = {
-    init(authenticator).flatMap(s => embed(s, result))
   }
 
   /**

@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 Mohiva Organisation (license at mohiva dot com)
+ * Copyright 2015 Mohiva Organisation (license at mohiva dot com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,18 +71,6 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @return Always None because .
    */
   def retrieve(implicit request: RequestHeader) = Future.successful(None)
-
-  /**
-   * Returns the original result, because we needn't add the authenticator to the result.
-   *
-   * @param result The result to manipulate.
-   * @param request The request header.
-   * @return The manipulated result.
-   */
-  @deprecated("Use `init` and `embed` instead; Will be removed in 2.0 final", "2.0-MASTER")
-  def init(authenticator: DummyAuthenticator, result: Future[Result])(implicit request: RequestHeader) = {
-    init(authenticator).flatMap(s => embed(s, result))
-  }
 
   /**
    * Returns noting because this authenticator doesn't have a serialized representation.
