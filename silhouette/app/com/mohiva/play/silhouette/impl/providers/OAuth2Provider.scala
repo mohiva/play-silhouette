@@ -43,12 +43,14 @@ import scala.util.{ Failure, Success, Try }
  * @param tokenType The token type.
  * @param expiresIn The number of seconds before the token expires.
  * @param refreshToken The refresh token.
+ * @param params Additional params transported in conjunction with the token.
  */
 case class OAuth2Info(
   accessToken: String,
   tokenType: Option[String] = None,
   expiresIn: Option[Int] = None,
-  refreshToken: Option[String] = None) extends AuthInfo
+  refreshToken: Option[String] = None,
+  params: Option[Map[String, String]] = None) extends AuthInfo
 
 /**
  * The Oauth2 info companion object.
@@ -63,7 +65,9 @@ object OAuth2Info {
     (__ \ TokenType).readNullable[String] and
     (__ \ ExpiresIn).readNullable[Int] and
     (__ \ RefreshToken).readNullable[String]
-  )(OAuth2Info.apply _)
+  )((accessToken: String, tokenType: Option[String], expiresIn: Option[Int], refreshToken: Option[String]) =>
+      new OAuth2Info(accessToken, tokenType, expiresIn, refreshToken)
+    )
 }
 
 /**

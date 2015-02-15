@@ -22,7 +22,7 @@ import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.VKProvider._
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsObject, Json }
 import play.api.libs.ws.{ WSRequestHolder, WSResponse }
 import play.api.test.{ FakeRequest, WithApplication }
 import test.Helper
@@ -94,7 +94,7 @@ class VKProviderSpec extends OAuth2ProviderSpec {
       }
     }
 
-    "return the social profile" in new WithApplication with Context {
+    "return the social profile with email" in new WithApplication with Context {
       val requestHolder = mock[WSRequestHolder]
       val response = mock[WSResponse]
       response.json returns Helper.loadJson("providers/oauth2/vk.success.json")
@@ -107,6 +107,26 @@ class VKProviderSpec extends OAuth2ProviderSpec {
             loginInfo = LoginInfo(provider.id, "66748"),
             firstName = Some("Apollonia"),
             lastName = Some("Vanova"),
+            email = Some("apollonia.vanova@watchmen.com"),
+            avatarURL = Some("http://vk.com/images/camera_b.gif")
+          )
+      }
+    }
+
+    "return the social profile without email" in new WithApplication with Context {
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
+      response.json returns Helper.loadJson("providers/oauth2/vk.success.json")
+      requestHolder.get() returns Future.successful(response)
+      httpLayer.url(API.format("my.access.token")) returns requestHolder
+
+      profile(provider.retrieveProfile((oAuthInfo.as[JsObject] - "email").as[OAuth2Info])) {
+        case p =>
+          p must be equalTo new CommonSocialProfile(
+            loginInfo = LoginInfo(provider.id, "66748"),
+            firstName = Some("Apollonia"),
+            lastName = Some("Vanova"),
+            email = None,
             avatarURL = Some("http://vk.com/images/camera_b.gif")
           )
       }
@@ -134,7 +154,7 @@ class VKProviderSpec extends OAuth2ProviderSpec {
       redirectURL = "https://www.mohiva.com",
       clientID = "my.client.id",
       clientSecret = "my.client.secret",
-      scope = None))
+      scope = Some("email")))
 
     /**
      * The OAuth2 info returned by VK.

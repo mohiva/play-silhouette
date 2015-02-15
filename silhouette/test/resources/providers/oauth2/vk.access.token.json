@@ -1,5 +1,6 @@
 {
   "access_token": "my.access.token",
   "expires_in": 43200,
-  "user_id": 6492
+  "user_id": 6492,
+  "email": "apollonia.vanova@watchmen.com"
 }
