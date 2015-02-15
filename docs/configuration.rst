@@ -267,6 +267,7 @@ Your configuration could then have this format:
       redirectURL="https://your.domain.tld/authenticate/vk"
       clientId="your.client.id"
       clientSecret="your.client.secret"
+      scope="email"
     }
 
 To get the clientId/clientSecret keys you need to log into the developer

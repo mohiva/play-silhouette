@@ -20,14 +20,19 @@
 package com.mohiva.play.silhouette.impl.providers.oauth2
 
 import com.mohiva.play.silhouette.api.LoginInfo
+import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
+import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.VKProvider._
 import play.api.libs.concurrent.Execution.Implicits._
-import play.api.libs.json.{ JsObject, JsValue }
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
+import play.api.libs.ws.WSResponse
 
 import scala.concurrent.Future
+import scala.util.{ Success, Failure, Try }
 
 /**
  * A Vk OAuth 2 provider.
@@ -46,7 +51,7 @@ abstract class VKProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvid
   /**
    * The content type to parse a profile from.
    */
-  type Content = JsValue
+  type Content = (JsValue, OAuth2Info)
 
   /**
    * Gets the provider ID.
@@ -75,24 +80,40 @@ abstract class VKProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvid
           val errorMsg = (error \ "error_msg").as[String]
 
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, errorCode, errorMsg))
-        case _ => profileParser.parse(json)
+        case _ => profileParser.parse(json -> authInfo)
       }
     }
+  }
+
+  /**
+   * Builds the OAuth2 info from response.
+   *
+   * VK provider needs it own Json reads to extract the email from response.
+   *
+   * @param response The response from the provider.
+   * @return The OAuth2 info on success, otherwise a failure.
+   */
+  override protected def buildInfo(response: WSResponse): Try[OAuth2Info] = {
+    response.json.validate[OAuth2Info].asEither.fold(
+      error => Failure(new AuthenticationException(InvalidInfoFormat.format(id, error))),
+      info => Success(info)
+    )
   }
 }
 
 /**
  * The profile parser for the common social profile.
  */
-class VKProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile] {
+class VKProfileParser extends SocialProfileParser[(JsValue, OAuth2Info), CommonSocialProfile] {
 
   /**
    * Parses the social profile.
    *
-   * @param json The content returned from the provider.
+   * @param data The data returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(json: JsValue) = Future.successful {
+  def parse(data: (JsValue, OAuth2Info)) = Future.successful {
+    val json = data._1
     val response = (json \ "response").apply(0)
     val userId = (response \ "uid").as[Long]
     val firstName = (response \ "first_name").asOpt[String]
@@ -103,6 +124,7 @@ class VKProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile] 
       loginInfo = LoginInfo(ID, userId.toString),
       firstName = firstName,
       lastName = lastName,
+      email = data._2.params.flatMap(_.get("email")),
       avatarURL = avatarURL)
   }
 }
@@ -134,6 +156,19 @@ object VKProvider {
    */
   val ID = "vk"
   val API = "https://api.vk.com/method/getProfiles?fields=uid,first_name,last_name,photo&access_token=%s"
+
+  /**
+   * Converts the JSON into a [[OAuth2Info]] object.
+   */
+  implicit val infoReads: Reads[OAuth2Info] = (
+    (__ \ AccessToken).read[String] and
+    (__ \ TokenType).readNullable[String] and
+    (__ \ ExpiresIn).readNullable[Int] and
+    (__ \ RefreshToken).readNullable[String] and
+    (__ \ "email").readNullable[String]
+  )((accessToken: String, tokenType: Option[String], expiresIn: Option[Int], refreshToken: Option[String], email: Option[String]) =>
+      new OAuth2Info(accessToken, tokenType, expiresIn, refreshToken, email.map(e => Map("email" -> e)))
+    )
 
   /**
    * Creates an instance of the provider.
