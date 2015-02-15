@@ -16,7 +16,7 @@ project = 'Silhouette'
 copyright = '2015, Christian Kaps'
 last_stable = '1.0'
 version = '2'
-release = '2.0-SNAPSHOT'
+release = '2.0-RC1'
 pygments_style = 'sphinx'
 rst_prolog = '''
 .. |last_stable| replace:: :silhouette-doc:`{0}`

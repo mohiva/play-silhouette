@@ -4,10 +4,36 @@ Releases
 Release Versions
 ^^^^^^^^^^^^^^^^
 
+Silhouette 2.0
+--------------
+
+This is the first release candidate of the next stable 2.0 release and it's available for Scala 2.10 / 2.11 and Play 2.3.
+
+Documentation
+`````````````
+
+  * :silhouette-doc:`HTML <2.0-RC1>`
+  * :silhouette-htmlzip-doc:`HTML (Zip) <2.0-RC1>`
+  * :silhouette-pdf-doc:`PDF <2.0-RC1>`
+  * :silhouette-epub-doc:`EPUB <2.0-RC1>`
+  * :silhouette-api-doc:`API <2.0-RC1>`
+
+Installation
+````````````
+
+To install this version add the following dependency to your build.sbt file.
+
+.. code-block:: scala
+
+    libraryDependencies ++= Seq(
+      "com.mohiva" %% "play-silhouette" % "2.0-RC1"
+    )
+
+
 Silhouette 1.0
 --------------
 
-This is the current stable release and it's available for Scala 2.10 / 2.11 and Play 2.3.
+This is the previous stable release and it's available for Scala 2.10 / 2.11 and Play 2.3.
 
 Documentation
 `````````````
@@ -29,10 +55,48 @@ To install this version add the following dependency to your build.sbt file.
       "com.mohiva" %% "play-silhouette" % "1.0"
     )
 
+
+..  Snapshot Version
+    ^^^^^^^^^^^^^^^^
+
+    Automatically published documentation for the latest SNAPSHOT version of Silhouette can be found here:
+
+    Silhouette 2.0-SNAPSHOT
+    -----------------------
+
+    This version is available for Scala 2.10 / 2.11 and Play 2.3.
+
+    Documentation
+    `````````````
+
+      * :silhouette-doc:`HTML <latest>`
+      * :silhouette-htmlzip-doc:`HTML (Zip) <latest>`
+      * :silhouette-pdf-doc:`PDF <latest>`
+      * :silhouette-epub-doc:`EPUB <latest>`
+      * :silhouette-api-doc:`API <2.0-SNAPSHOT>`
+
+    Installation
+    ````````````
+
+    To install this version add the following dependency to your build.sbt file.
+
+    .. code-block:: scala
+
+        resolvers += Resolver.sonatypeRepo("snapshots")
+
+        libraryDependencies ++= Seq(
+          "com.mohiva" %% "play-silhouette" % "2.0-SNAPSHOT",
+          "com.mohiva" %% "play-silhouette-testkit" % "2.0-SNAPSHOT" % "test"
+        )
+
+
+Old Versions
+^^^^^^^^^^^^
+
 Silhouette 0.9
 --------------
 
-This is the previous stable version and it's available for Scala 2.10 and Play 2.2.
+Available for Scala 2.10 and Play 2.2.
 
 Documentation
 `````````````
@@ -53,40 +117,6 @@ To install this version add the following dependency to your build.sbt file.
     libraryDependencies ++= Seq(
       "com.mohiva" %% "play-silhouette" % "0.9"
     )
-
-Snapshot Version
-^^^^^^^^^^^^^^^^
-
-Automatically published documentation for the latest SNAPSHOT version of Silhouette can be found here:
-
-Silhouette 2.0-SNAPSHOT
------------------------
-
-This version is available for Scala 2.10 / 2.11 and Play 2.3.
-
-Documentation
-`````````````
-
-  * :silhouette-doc:`HTML <latest>`
-  * :silhouette-htmlzip-doc:`HTML (Zip) <latest>`
-  * :silhouette-pdf-doc:`PDF <latest>`
-  * :silhouette-epub-doc:`EPUB <latest>`
-  * :silhouette-api-doc:`API <2.0-SNAPSHOT>`
-
-Installation
-````````````
-
-To install this version add the following dependency to your build.sbt file.
-
-.. code-block:: scala
-
-    resolvers += Resolver.sonatypeRepo("snapshots")
-
-    libraryDependencies ++= Seq(
-      "com.mohiva" %% "play-silhouette" % "2.0-SNAPSHOT",
-      "com.mohiva" %% "play-silhouette-testkit" % "2.0-SNAPSHOT" % "test"
-    )
-
 
 Notes
 ^^^^^
