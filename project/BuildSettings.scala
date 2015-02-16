@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import sbt.Keys._
 import sbt._
 
@@ -21,7 +22,7 @@ object BasicSettings extends AutoPlugin {
 
   override def projectSettings = Seq(
     organization := "com.mohiva",
-    version := "2.0-SNAPSHOT",
+    version := "2.0-RC1",
     resolvers ++= Dependencies.resolvers,
     scalaVersion := Dependencies.Versions.scalaVersion,
     crossScalaVersions := Dependencies.Versions.crossScala,
@@ -154,7 +155,6 @@ object Publish extends AutoPlugin {
     publishMavenStyle := true,
     publishArtifact in Test := false,
     pomIncludeRepository := { _ => false },
-    pomExtra := pom,
-    credentials += Credentials(Path.userHome / ".sbt" / "sonatype.credentials")
+    pomExtra := pom
   )
 }
