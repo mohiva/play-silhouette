@@ -49,7 +49,7 @@ for dependency injection.
 Seed project for Play Framework with Silhouette, exposing a rest api for
 signup and signin.
 
-`Link <https://github.com/merle-/silhouette-rest-seed>`__
+`Link <https://github.com/studiodev/silhouette-rest-seed>`__
 
 --------------
 
