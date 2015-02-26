@@ -132,7 +132,7 @@ case class FakeBearerTokenAuthenticatorService() extends BearerTokenAuthenticato
  * A fake JWT authenticator service.
  */
 case class FakeJWTAuthenticatorService() extends JWTAuthenticatorService(
-  new JWTAuthenticatorSettings(sharedSecret = UUID.randomUUID().toString),
+  new JWTAuthenticatorSettings(sharedSecret = UUID.randomUUID().toString, encryptSubject = false),
   None,
   new SecureRandomIDGenerator(),
   Clock())
