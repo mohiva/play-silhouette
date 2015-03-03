@@ -7,9 +7,9 @@ import play.api.mvc._
 import scala.concurrent._
 
 /**
- * Provides default actions used by the core as a last fallback.
+ * Provides default endpoints used by the core as a last fallback.
  */
-object DefaultActionHandler extends Controller {
+object DefaultEndpointHandler extends Controller {
 
   /**
    * Handles forbidden requests in a default way.

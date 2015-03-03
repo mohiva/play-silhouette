@@ -24,14 +24,14 @@ import play.api.mvc.RequestHeader
 
 /**
  * A trait to define Authorization objects that let you hook
- * an authorization implementation in SecuredActions.
+ * an authorization implementation in secured endpoints.
  *
  * @tparam I The type of the identity.
  */
 trait Authorization[I <: Identity] {
 
   /**
-   * Checks whether the user is authorized to execute an action or not.
+   * Checks whether the user is authorized to execute an endpoint or not.
    *
    * @param identity The identity to check for.
    * @param request The current request header.
