@@ -28,7 +28,7 @@ class AuthenticationException(msg: String, cause: Throwable)
   with SilhouetteException
   with Logger {
 
-  logger.error(msg, cause)
+  logger.info(msg, cause)
 
   /**
    * Constructs an exception with only a message.
