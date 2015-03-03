@@ -28,7 +28,7 @@ import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.libs.Crypto
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsNull, Json }
 import play.api.mvc.Results
 import play.api.test.{ WithApplication, FakeRequest, PlaySpecification }
 
@@ -97,6 +97,42 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
 
       json must /("iat" -> authenticator.lastUsedDate.getMillis / 1000)
     }
+
+    "throw an AuthenticationException if a reserved claim will be overriden" in new WithApplication with Context {
+      val claims = Json.obj(
+        "jti" -> "reserved"
+      )
+
+      service(None).serialize(authenticator.copy(customClaims = Some(claims))) must throwA[AuthenticationException].like {
+        case e => e.getMessage must startWith(OverrideReservedClaim.format(ID, "jti", ""))
+      }
+    }
+
+    "throw an AuthenticationException if an unexpected value was found in the arbitrary claims" in new WithApplication with Context {
+      val claims = Json.obj(
+        "null" -> JsNull
+      )
+
+      service(None).serialize(authenticator.copy(customClaims = Some(claims))) must throwA[AuthenticationException].like {
+        case e => e.getMessage must startWith(UnexpectedJsonValue.format(ID, ""))
+      }
+    }
+
+    "return a JWT with arbitrary claims" in new WithApplication with Context {
+      val jwt = service(None).serialize(authenticator.copy(customClaims = Some(customClaims)))
+      val json = Base64.decode(jwt.split('.').apply(1))
+
+      json must /("boolean" -> true)
+      json must /("string" -> "string")
+      json must /("number" -> 1234567890)
+      json must /("array") /# 0 / 1
+      json must /("array") /# 1 / 2
+      json must /("object") / "array" /# 0 / "string1"
+      json must /("object") / "array" /# 1 / "string2"
+      json must /("object") / "object" / "array" /# 0 / "string"
+      json must /("object") / "object" / "array" /# 1 / false
+      json must /("object") / "object" / "array" /# 2 / ("number" -> 1)
+    }
   }
 
   "The `unserialize` method of the service" should {
@@ -129,7 +165,6 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       settings.encryptSubject returns true
 
       val jwt = service(None).serialize(authenticator)
-      val msg = Pattern.quote(InvalidJWTToken.format(ID, jwt))
 
       service(None).unserialize(jwt) must beSuccessfulTry.withValue(authenticator.copy(
         expirationDate = authenticator.expirationDate.withMillisOfSecond(0),
@@ -141,12 +176,22 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       settings.encryptSubject returns false
 
       val jwt = service(None).serialize(authenticator)
-      val msg = Pattern.quote(InvalidJWTToken.format(ID, jwt))
 
       service(None).unserialize(jwt) must beSuccessfulTry.withValue(authenticator.copy(
         expirationDate = authenticator.expirationDate.withMillisOfSecond(0),
         lastUsedDate = authenticator.lastUsedDate.withMillisOfSecond(0)
       ))
+    }
+
+    "unserialize a JWT with arbitrary claims" in new WithApplication with Context {
+      settings.encryptSubject returns false
+
+      val jwt = service(None).serialize(authenticator.copy(customClaims = Some(customClaims)))
+
+      service(None).unserialize(jwt) must beSuccessfulTry.like {
+        case a =>
+          a.customClaims must beSome(customClaims)
+      }
     }
   }
 
@@ -539,6 +584,22 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       lastUsedDate = DateTime.now,
       expirationDate = DateTime.now.plusMinutes(12 * 60),
       idleTimeout = settings.authenticatorIdleTimeout
+    )
+
+    /**
+     * Some custom claims.
+     */
+    lazy val customClaims = Json.obj(
+      "boolean" -> true,
+      "string" -> "string",
+      "number" -> 1234567890,
+      "array" -> Json.arr(1, 2),
+      "object" -> Json.obj(
+        "array" -> Seq("string1", "string2"),
+        "object" -> Json.obj(
+          "array" -> Json.arr("string", false, Json.obj("number" -> 1))
+        )
+      )
     )
   }
 }

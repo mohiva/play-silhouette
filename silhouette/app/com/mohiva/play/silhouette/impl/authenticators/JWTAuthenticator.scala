@@ -31,9 +31,11 @@ import com.nimbusds.jwt.JWTClaimsSet
 import org.joda.time.DateTime
 import play.api.libs.Crypto
 import play.api.libs.concurrent.Execution.Implicits._
-import play.api.libs.json.Json
+import play.api.libs.json._
 import play.api.mvc.{ RequestHeader, Result }
 
+import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import scala.concurrent.Future
 import scala.util.{ Failure, Success, Try }
 
@@ -55,13 +57,15 @@ import scala.util.{ Failure, Success, Try }
  * @param lastUsedDate The last used timestamp.
  * @param expirationDate The expiration time.
  * @param idleTimeout The time in seconds an authenticator can be idle before it timed out.
+ * @param customClaims Custom claims to embed into the token.
  */
 case class JWTAuthenticator(
   id: String,
   loginInfo: LoginInfo,
   lastUsedDate: DateTime,
   expirationDate: DateTime,
-  idleTimeout: Option[Int]) extends StorableAuthenticator {
+  idleTimeout: Option[Int],
+  customClaims: Option[JsObject] = None) extends StorableAuthenticator {
 
   /**
    * The Type of the generated value an authenticator will be serialized to.
@@ -282,6 +286,16 @@ class JWTAuthenticatorService(
       .issuedAt(authenticator.lastUsedDate.getMillis / 1000)
       .expirationTime(authenticator.expirationDate.getMillis / 1000)
 
+    authenticator.customClaims.map { data =>
+      serializeCustomClaims(data).foreach {
+        case (key, value) =>
+          if (ReservedClaims.contains(key)) {
+            throw new AuthenticationException(OverrideReservedClaim.format(ID, key, ReservedClaims.mkString(", ")))
+          }
+          jwtBuilder.claim(key, value)
+      }
+    }
+
     new NimbusJwtWriterFactory()
       .macSigningWriter(SigningAlgorithm.HS256, settings.sharedSecret)
       .jsonToJwt(jwtBuilder.build())
@@ -305,17 +319,58 @@ class JWTAuthenticatorService(
     }.flatMap { c =>
       val subject = if (settings.encryptSubject) Crypto.decryptAES(c.getSubject) else Base64.decode(c.getSubject)
       buildLoginInfo(subject).map { loginInfo =>
+        val filteredClaims = c.getAllClaims.asScala.filterNot { case (k, v) => ReservedClaims.contains(k) || v == null }
+        val customClaims = unserializeCustomClaims(filteredClaims)
         JWTAuthenticator(
           id = c.getJWTID,
           loginInfo = loginInfo,
           lastUsedDate = new DateTime(c.getIssueTime),
           expirationDate = new DateTime(c.getExpirationTime),
-          idleTimeout = settings.authenticatorIdleTimeout
+          idleTimeout = settings.authenticatorIdleTimeout,
+          customClaims = if (customClaims.keys.isEmpty) None else Some(customClaims)
         )
       }
     }.recover {
       case e => throw new AuthenticationException(InvalidJWTToken.format(ID, str), e)
     }
+  }
+
+  /**
+   * Serializes recursively the custom claims.
+   *
+   * @param claims The custom claims to serialize.
+   * @return A map containing custom claims.
+   */
+  private def serializeCustomClaims(claims: JsObject): java.util.Map[String, Any] = {
+    def toJava(value: JsValue): Any = value match {
+      case v: JsString => v.value
+      case v: JsNumber => v.value
+      case v: JsBoolean => v.value
+      case v: JsObject => serializeCustomClaims(v)
+      case v: JsArray => v.value.map(toJava).asJava
+      case v => throw new AuthenticationException(UnexpectedJsonValue.format(ID, v))
+    }
+
+    claims.fieldSet.map { case (name, value) => name -> toJava(value) }.toMap.asJava
+  }
+
+  /**
+   * Unserializes recursively the custom claims.
+   *
+   * @param claims The custom claims to deserialize.
+   * @return A Json object representing the custom claims.
+   */
+  private def unserializeCustomClaims(claims: java.util.Map[String, Any]): JsObject = {
+    def toJson(value: Any): JsValue = value match {
+      case v: java.lang.String => JsString(v)
+      case v: java.lang.Number => JsNumber(BigDecimal(v.toString))
+      case v: java.lang.Boolean => JsBoolean(v)
+      case v: java.util.Map[_, _] => unserializeCustomClaims(v.asInstanceOf[java.util.Map[String, Any]])
+      case v: java.util.List[_] => JsArray(v.map(toJson))
+      case v => throw new AuthenticationException(UnexpectedJsonValue.format(ID, v))
+    }
+
+    JsObject(claims.map { case (name, value) => name -> toJson(value) }.toSeq)
   }
 
   /**
@@ -356,6 +411,13 @@ object JWTAuthenticatorService {
   val InvalidJWTToken = "[Silhouette][%s] Error on parsing JWT token: %s"
   val JsonParseError = "[Silhouette][%s] Cannot parse Json: %s"
   val InvalidJsonFormat = "[Silhouette][%s] Invalid Json format: %s"
+  val UnexpectedJsonValue = "[Silhouette][%s] Unexpected Json value: %s"
+  val OverrideReservedClaim = "[Silhouette][%s] Try to overriding a reserved claim `%s`; list of reserved claims: %s"
+
+  /**
+   * The reserved claims used by the authenticator.
+   */
+  val ReservedClaims = Seq("jti", "iss", "sub", "iat", "exp")
 }
 
 /**
