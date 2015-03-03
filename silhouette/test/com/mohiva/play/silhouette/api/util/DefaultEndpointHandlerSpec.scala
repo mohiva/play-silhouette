@@ -8,9 +8,9 @@ import play.api.test._
 import scala.concurrent._
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.api.util.DefaultActionHandler]] class.
+ * Test case for the [[com.mohiva.play.silhouette.api.util.DefaultEndpointHandler]] class.
  */
-class DefaultActionHandlerSpec extends PlaySpecification {
+class DefaultEndpointHandlerSpec extends PlaySpecification {
 
   "The `handleForbidden` method" should {
     "return an HTML response for an HTML request" in new WithApplication {
@@ -20,7 +20,7 @@ class DefaultActionHandlerSpec extends PlaySpecification {
         expectedContentType = HTML,
         expectedResponseFragment = "<html>",
         expectedMessage = "silhouette.not.authorized",
-        f = { r: RequestHeader => DefaultActionHandler.handleForbidden(r) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleForbidden(r) })
     }
 
     "return a JSON response for a JSON request" in new WithApplication {
@@ -30,7 +30,7 @@ class DefaultActionHandlerSpec extends PlaySpecification {
         expectedContentType = JSON,
         expectedResponseFragment = "\"success\":false",
         expectedMessage = "silhouette.not.authorized",
-        f = { r: RequestHeader => DefaultActionHandler.handleForbidden(r) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleForbidden(r) })
     }
 
     "return a XML response for a XML request" in new WithApplication {
@@ -40,7 +40,7 @@ class DefaultActionHandlerSpec extends PlaySpecification {
         expectedContentType = XML,
         expectedResponseFragment = "<success>false</success>",
         expectedMessage = "silhouette.not.authorized",
-        f = { r: RequestHeader => DefaultActionHandler.handleForbidden(r) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleForbidden(r) })
     }
 
     "return a plain text response for a plain text request" in new WithApplication {
@@ -50,7 +50,7 @@ class DefaultActionHandlerSpec extends PlaySpecification {
         expectedContentType = TEXT,
         expectedResponseFragment = Messages("silhouette.not.authorized"),
         expectedMessage = "silhouette.not.authorized",
-        f = { r: RequestHeader => DefaultActionHandler.handleForbidden(r) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleForbidden(r) })
     }
 
     "return a plain text response for other requests" in new WithApplication {
@@ -60,7 +60,7 @@ class DefaultActionHandlerSpec extends PlaySpecification {
         expectedContentType = TEXT,
         expectedResponseFragment = Messages("silhouette.not.authorized"),
         expectedMessage = "silhouette.not.authorized",
-        f = { r: RequestHeader => DefaultActionHandler.handleForbidden(r) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleForbidden(r) })
     }
 
     "return an HTML response for a request without an Accept header" in new WithApplication {
@@ -70,7 +70,7 @@ class DefaultActionHandlerSpec extends PlaySpecification {
         expectedContentType = HTML,
         expectedResponseFragment = Messages("silhouette.not.authorized"),
         expectedMessage = "silhouette.not.authorized",
-        f = { r: RequestHeader => DefaultActionHandler.handleForbidden(r) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleForbidden(r) })
     }
   }
 
@@ -82,7 +82,7 @@ class DefaultActionHandlerSpec extends PlaySpecification {
         expectedContentType = HTML,
         expectedResponseFragment = "<html>",
         expectedMessage = "silhouette.not.authenticated",
-        f = { r: RequestHeader => DefaultActionHandler.handleUnauthorized(r) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleUnauthorized(r) })
     }
 
     "return a JSON response for a JSON request" in new WithApplication {
@@ -92,7 +92,7 @@ class DefaultActionHandlerSpec extends PlaySpecification {
         expectedContentType = JSON,
         expectedResponseFragment = "\"success\":false",
         expectedMessage = "silhouette.not.authenticated",
-        f = { r: RequestHeader => DefaultActionHandler.handleUnauthorized(r) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleUnauthorized(r) })
     }
 
     "return a XML response for a XML request" in new WithApplication {
@@ -102,7 +102,7 @@ class DefaultActionHandlerSpec extends PlaySpecification {
         expectedContentType = XML,
         expectedResponseFragment = "<success>false</success>",
         expectedMessage = "silhouette.not.authenticated",
-        f = { r: RequestHeader => DefaultActionHandler.handleUnauthorized(r) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleUnauthorized(r) })
     }
 
     "return a plain text response for a plain text request" in new WithApplication {
@@ -112,7 +112,7 @@ class DefaultActionHandlerSpec extends PlaySpecification {
         expectedContentType = TEXT,
         expectedResponseFragment = Messages("silhouette.not.authenticated"),
         expectedMessage = "silhouette.not.authenticated",
-        f = { r: RequestHeader => DefaultActionHandler.handleUnauthorized(r) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleUnauthorized(r) })
     }
 
     "return a plain text response for other requests" in new WithApplication {
@@ -122,7 +122,7 @@ class DefaultActionHandlerSpec extends PlaySpecification {
         expectedContentType = TEXT,
         expectedResponseFragment = Messages("silhouette.not.authenticated"),
         expectedMessage = "silhouette.not.authenticated",
-        f = { r: RequestHeader => DefaultActionHandler.handleUnauthorized(r) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleUnauthorized(r) })
     }
 
     "return an HTML response for a request without an Accept header" in new WithApplication {
@@ -132,7 +132,7 @@ class DefaultActionHandlerSpec extends PlaySpecification {
         expectedContentType = HTML,
         expectedResponseFragment = Messages("silhouette.not.authenticated"),
         expectedMessage = "silhouette.not.authenticated",
-        f = { r: RequestHeader => DefaultActionHandler.handleUnauthorized(r) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleUnauthorized(r) })
     }
   }
 

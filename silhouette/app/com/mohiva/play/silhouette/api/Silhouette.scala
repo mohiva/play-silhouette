@@ -20,7 +20,7 @@
 package com.mohiva.play.silhouette.api
 
 import com.mohiva.play.silhouette.api.exceptions.{ AccessDeniedException, AuthenticationException }
-import com.mohiva.play.silhouette.api.util.DefaultActionHandler
+import com.mohiva.play.silhouette.api.util.DefaultEndpointHandler
 import play.api.Play
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc._
@@ -29,7 +29,7 @@ import scala.concurrent.Future
 import scala.language.higherKinds
 
 /**
- * Provides the actions that can be used to protect controllers and retrieve the current user
+ * Provides the mechanisms that can be used to protect endpoints and retrieve the current user
  * if available.
  *
  * {{{
@@ -97,8 +97,8 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
   }
 
   /**
-   * Produces a result indicating that the request will be forbidden
-   * because the authenticated user is not authorized to perform the requested action.
+   * Produces a result indicating that the request will be forbidden because the authenticated
+   * user is not authorized to access the requested endpoint.
    *
    * This should be called when the user is authenticated but authorization failed.
    * This indicates a permanent situation. Repeating the request with the same authenticated
@@ -117,12 +117,12 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
         case s: SecuredSettings => s.onNotAuthorized(request, request2lang)
         case _ => None
       }
-    }.getOrElse(DefaultActionHandler.handleForbidden)
+    }.getOrElse(DefaultEndpointHandler.handleForbidden)
   }
 
   /**
    * Produces a result indicating that the user must provide authentication before
-   * the requested action can be performed.
+   * the requested endpoint can be accessed.
    *
    * This should be called when the user is not authenticated.
    * This indicates a temporary condition. The user can authenticate and repeat the request.
@@ -140,7 +140,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
         case s: SecuredSettings => s.onNotAuthenticated(request, request2lang)
         case _ => None
       }
-    }.getOrElse(DefaultActionHandler.handleUnauthorized)
+    }.getOrElse(DefaultEndpointHandler.handleUnauthorized)
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
