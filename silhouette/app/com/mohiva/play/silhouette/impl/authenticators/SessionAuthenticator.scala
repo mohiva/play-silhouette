@@ -168,7 +168,7 @@ class SessionAuthenticatorService(
    * @return The manipulated result.
    */
   def embed(session: Session, result: Future[Result])(implicit request: RequestHeader) = {
-    result.map(_.withSession(session))
+    result.map(_.addingToSession(session.data.toSeq: _*))
   }
 
   /**
@@ -216,7 +216,7 @@ class SessionAuthenticatorService(
     authenticator: SessionAuthenticator,
     result: Future[Result])(implicit request: RequestHeader) = {
 
-    result.map(_.withSession(request.session + (settings.sessionKey -> serialize(authenticator)))).recover {
+    result.map(_.addingToSession(settings.sessionKey -> serialize(authenticator))).recover {
       case e => throw new AuthenticationException(UpdateError.format(ID, authenticator), e)
     }
   }
@@ -252,7 +252,7 @@ class SessionAuthenticatorService(
     authenticator: SessionAuthenticator,
     result: Future[Result])(implicit request: RequestHeader) = {
 
-    result.map(_.withSession(request.session - settings.sessionKey)).recover {
+    result.map(_.removingFromSession(settings.sessionKey)).recover {
       case e => throw new AuthenticationException(DiscardError.format(ID, authenticator), e)
     }
   }
