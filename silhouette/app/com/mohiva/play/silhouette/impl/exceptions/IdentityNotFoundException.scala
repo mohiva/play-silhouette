@@ -13,24 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.providers.oauth2.exceptions
+package com.mohiva.play.silhouette.impl.exceptions
 
-import com.mohiva.play.silhouette.api.exceptions.SilhouetteException
+import com.mohiva.play.silhouette.api.exceptions.ProviderException
 
 /**
- * Indicates that an error occurred during OAuth2 state retrieval.
+ * Signals that an identity could not found in a credential based provider.
  *
  * @param msg The exception message.
  * @param cause The exception cause.
  */
-class StateException(msg: String, cause: Throwable)
-  extends Exception(msg, cause)
-  with SilhouetteException {
-
-  /**
-   * Constructs an exception with only a message.
-   *
-   * @param msg The exception message.
-   */
-  def this(msg: String) = this(msg, null)
-}
+class IdentityNotFoundException(msg: String, cause: Throwable = null)
+  extends ProviderException(msg, cause)

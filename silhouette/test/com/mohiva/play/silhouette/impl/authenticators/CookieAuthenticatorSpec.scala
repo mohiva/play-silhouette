@@ -16,7 +16,7 @@
 package com.mohiva.play.silhouette.impl.authenticators
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.util.{ Clock, FingerprintGenerator, IDGenerator }
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService._
@@ -118,12 +118,12 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       await(service.create(loginInfo)).expirationDate must be equalTo now.plusSeconds(sixHours)
     }
 
-    "throws an Authentication exception if an error occurred during creation" in new Context {
+    "throws an AuthenticatorCreationException exception if an error occurred during creation" in new Context {
       implicit val request = FakeRequest()
 
       idGenerator.generate returns Future.failed(new Exception("Could not generate ID"))
 
-      await(service.create(loginInfo)) must throwA[AuthenticationException].like {
+      await(service.create(loginInfo)) must throwA[AuthenticatorCreationException].like {
         case e =>
           e.getMessage must startWith(CreateError.format(ID, ""))
       }
@@ -176,14 +176,14 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       await(service.retrieve) must beSome(authenticator)
     }
 
-    "throws an Authentication exception if an error occurred during retrieval" in new Context {
+    "throws an AuthenticatorRetrievalException exception if an error occurred during retrieval" in new Context {
       implicit val request = FakeRequest().withCookies(Cookie(settings.cookieName, authenticator.id))
 
       fingerprintGenerator.generate throws new RuntimeException("Could not generate ID")
       settings.useFingerprinting returns true
       dao.find(authenticator.id) returns Future.successful(Some(authenticator))
 
-      await(service.retrieve) must throwA[AuthenticationException].like {
+      await(service.retrieve) must throwA[AuthenticatorRetrievalException].like {
         case e =>
           e.getMessage must startWith(RetrieveError.format(ID, ""))
       }
@@ -200,12 +200,12 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       there was one(dao).save(any)
     }
 
-    "throws an Authentication exception if an error occurred during initialization" in new Context {
+    "throws an AuthenticatorInitializationException exception if an error occurred during initialization" in new Context {
       dao.save(any) returns Future.failed(new Exception("Cannot store authenticator"))
 
       implicit val request = FakeRequest()
 
-      await(service.init(authenticator)) must throwA[AuthenticationException].like {
+      await(service.init(authenticator)) must throwA[AuthenticatorInitializationException].like {
         case e =>
           e.getMessage must startWith(InitError.format(ID, ""))
       }
@@ -295,12 +295,12 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       status(result) must be equalTo OK
     }
 
-    "throws an Authentication exception if an error occurred during update" in new Context {
+    "throws an AuthenticatorUpdateException exception if an error occurred during update" in new Context {
       dao.save(any) returns Future.failed(new Exception("Cannot store authenticator"))
 
       implicit val request = FakeRequest()
 
-      await(service.update(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticationException].like {
+      await(service.update(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticatorUpdateException].like {
         case e =>
           e.getMessage must startWith(UpdateError.format(ID, ""))
       }
@@ -348,7 +348,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       there was one(dao).save(any)
     }
 
-    "throws an Authentication exception if an error occurred during renewal" in new Context {
+    "throws an AuthenticatorRenewalException exception if an error occurred during renewal" in new Context {
       implicit val request = FakeRequest()
       val now = new DateTime
       val id = "new-test-id"
@@ -358,7 +358,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
-      await(service.renew(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticationException].like {
+      await(service.renew(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticatorRenewalException].like {
         case e =>
           e.getMessage must startWith(RenewError.format(ID, ""))
       }
@@ -384,13 +384,13 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       there was one(dao).remove(authenticator.id)
     }
 
-    "throws an Authentication exception if an error occurred during discarding" in new Context {
+    "throws an AuthenticatorDiscardingException exception if an error occurred during discarding" in new Context {
       implicit val request = FakeRequest()
       val okResult = Future.successful(Results.Status(200))
 
       dao.remove(any) returns Future.failed(new Exception("Cannot store authenticator"))
 
-      await(service.discard(authenticator, okResult)) must throwA[AuthenticationException].like {
+      await(service.discard(authenticator, okResult)) must throwA[AuthenticatorDiscardingException].like {
         case e =>
           e.getMessage must startWith(DiscardError.format(ID, ""))
       }

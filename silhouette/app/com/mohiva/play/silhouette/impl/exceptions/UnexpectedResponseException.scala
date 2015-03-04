@@ -18,10 +18,10 @@ package com.mohiva.play.silhouette.impl.exceptions
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 
 /**
- * Indicates that an error occurred during profile retrieval in a social provider.
+ * Signals that an unexpected response was received from a social provider.
  *
  * @param msg The exception message.
  * @param cause The exception cause.
  */
-class ProfileRetrievalException(msg: String, cause: Throwable = null)
+class UnexpectedResponseException(msg: String, cause: Throwable = null)
   extends ProviderException(msg, cause)

@@ -15,25 +15,11 @@
  */
 package com.mohiva.play.silhouette.api.exceptions
 
-import com.mohiva.play.silhouette.api.Logger
-
 /**
- * An exception thrown when there is an error in the authentication flow.
+ * An exception thrown when there is an error during authenticator discarding.
  *
  * @param msg The exception message.
  * @param cause The exception cause.
  */
-class AuthenticationException(msg: String, cause: Throwable)
-  extends Exception(msg, cause)
-  with SilhouetteException
-  with Logger {
-
-  logger.error(msg, cause)
-
-  /**
-   * Constructs an exception with only a message.
-   *
-   * @param msg The exception message.
-   */
-  def this(msg: String) = this(msg, null)
-}
+class AuthenticatorDiscardingException(msg: String, cause: Throwable = null)
+  extends AuthenticatorException(msg, cause)

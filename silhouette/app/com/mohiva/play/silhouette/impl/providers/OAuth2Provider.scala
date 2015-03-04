@@ -25,11 +25,12 @@ import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthInfo
 import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
+import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.{ impl, _ }
 import play.api.libs.concurrent.Execution.Implicits._
-import play.api.libs.functional.syntax._
 import play.api.libs.json._
+import play.api.libs.functional.syntax._
 import play.api.libs.ws.WSResponse
 import play.api.mvc._
 
@@ -100,14 +101,12 @@ abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
   def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[Either[Result, OAuth2Info]] = {
     request.extractString(Error).map {
       case e @ AccessDenied => new AccessDeniedException(AuthorizationError.format(id, e))
-      case e => new AuthenticationException(AuthorizationError.format(id, e))
+      case e => new UnexpectedResponseException(AuthorizationError.format(id, e))
     } match {
       case Some(throwable) => Future.failed(throwable)
       case None => request.extractString(Code) match {
         // We're being redirected back from the authorization server with the access code
-        case Some(code) => stateProvider.validate(id).recoverWith {
-          case e => Future.failed(new AuthenticationException(InvalidState.format(id), e))
-        }.flatMap { state =>
+        case Some(code) => stateProvider.validate(id).flatMap { state =>
           getAccessToken(code).map(oauth2Info => Right(oauth2Info))
         }
         // There's no code in the request, this is the first step in the OAuth flow
@@ -122,7 +121,7 @@ abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
           }
           val encodedParams = params.map { p => encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8") }
           val url = settings.authorizationURL.getOrElse {
-            throw new AuthenticationException(AuthorizationURLUndefined.format(id))
+            throw new ConfigurationException(AuthorizationURLUndefined.format(id))
           } + encodedParams.mkString("?", "&", "")
           val redirect = stateProvider.publish(Results.Redirect(url), state)
           logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
@@ -159,7 +158,7 @@ abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
    */
   protected def buildInfo(response: WSResponse): Try[OAuth2Info] = {
     response.json.validate[OAuth2Info].asEither.fold(
-      error => Failure(new AuthenticationException(InvalidInfoFormat.format(id, error))),
+      error => Failure(new UnexpectedResponseException(InvalidInfoFormat.format(id, error))),
       info => Success(info)
     )
   }
@@ -175,8 +174,7 @@ object OAuth2Provider {
    */
   val AuthorizationURLUndefined = "[Silhouette][%s] Authorization URL is undefined"
   val AuthorizationError = "[Silhouette][%s] Authorization server returned error: %s"
-  val InvalidInfoFormat = "[Silhouette][%s] Cannot build OAuth2Info because of invalid response format  : %s"
-  val InvalidState = "[Silhouette][%s] Invalid state"
+  val InvalidInfoFormat = "[Silhouette][%s] Cannot build OAuth2Info because of invalid response format: %s"
 
   /**
    * The OAuth2 constants.

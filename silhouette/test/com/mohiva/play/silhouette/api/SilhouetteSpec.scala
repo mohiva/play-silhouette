@@ -17,7 +17,7 @@ package com.mohiva.play.silhouette.api
 
 import akka.actor.{ Actor, Props }
 import akka.testkit.TestProbe
-import com.mohiva.play.silhouette.api.exceptions.{ AccessDeniedException, AuthenticationException }
+import com.mohiva.play.silhouette.api.exceptions.{ NotAuthorizedException, NotAuthenticatedException }
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorService, IdentityService }
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
@@ -96,7 +96,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(None)
 
       val controller = new SecuredController(env) {
-        override def notAuthenticated(request: RequestHeader): Option[Future[Result]] = {
+        override def onNotAuthenticated(request: RequestHeader): Option[Future[Result]] = {
           Some(Future.successful(Unauthorized("local.not.authenticated")))
         }
       }
@@ -195,7 +195,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
       val controller = new SecuredController(env, SimpleAuthorization(isAuthorized = false)) {
-        override def notAuthorized(request: RequestHeader): Option[Future[Result]] = {
+        override def onNotAuthorized(request: RequestHeader): Option[Future[Result]] = {
           Some(Future.successful(Forbidden("local.not.authorized")))
         }
       }
@@ -733,27 +733,27 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
   }
 
   "The `exceptionHandler` method" should {
-    "translate an AccessDeniedException into a 403 Forbidden result" in new WithDefaultGlobal {
+    "translate an ForbiddenException into a 403 Forbidden result" in new WithDefaultGlobal {
       env.authenticatorService.retrieve(any) returns Future.successful(None)
       env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
       }
 
       val controller = new SecuredController(env)
-      val failed = Future.failed(new AccessDeniedException("Access denied"))
+      val failed = Future.failed(new NotAuthorizedException("Access denied"))
       val result = controller.recover(failed)
 
       status(result) must equalTo(FORBIDDEN)
     }
 
-    "translate an AuthenticationException into a 401 Unauthorized result" in new WithDefaultGlobal {
+    "translate an UnauthorizedException into a 401 Unauthorized result" in new WithDefaultGlobal {
       env.authenticatorService.retrieve(any) returns Future.successful(None)
       env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](1).asInstanceOf[Future[Result]]
       }
 
       val controller = new SecuredController(env)
-      val failed = Future.failed(new AuthenticationException("Not authenticated"))
+      val failed = Future.failed(new NotAuthenticatedException("Not authenticated"))
       val result = controller.recover(failed)
 
       status(result) must equalTo(UNAUTHORIZED)

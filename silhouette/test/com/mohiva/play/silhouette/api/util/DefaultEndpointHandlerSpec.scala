@@ -12,127 +12,127 @@ import scala.concurrent._
  */
 class DefaultEndpointHandlerSpec extends PlaySpecification {
 
-  "The `handleForbidden` method" should {
+  "The `handleNotAuthenticated` method" should {
     "return an HTML response for an HTML request" in new WithApplication {
       testResponse(
         acceptedMediaType = Some(HTML),
-        expectedStatus = FORBIDDEN,
+        expectedStatus = UNAUTHORIZED,
         expectedContentType = HTML,
         expectedResponseFragment = "<html>",
-        expectedMessage = "silhouette.not.authorized",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleForbidden(r) })
+        expectedMessage = "silhouette.not.authenticated",
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthenticated(r) })
     }
 
     "return a JSON response for a JSON request" in new WithApplication {
       testResponse(
         acceptedMediaType = Some(JSON),
-        expectedStatus = FORBIDDEN,
+        expectedStatus = UNAUTHORIZED,
         expectedContentType = JSON,
         expectedResponseFragment = "\"success\":false",
-        expectedMessage = "silhouette.not.authorized",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleForbidden(r) })
+        expectedMessage = "silhouette.not.authenticated",
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthenticated(r) })
     }
 
     "return a XML response for a XML request" in new WithApplication {
       testResponse(
         acceptedMediaType = Some(XML),
-        expectedStatus = FORBIDDEN,
+        expectedStatus = UNAUTHORIZED,
         expectedContentType = XML,
         expectedResponseFragment = "<success>false</success>",
-        expectedMessage = "silhouette.not.authorized",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleForbidden(r) })
+        expectedMessage = "silhouette.not.authenticated",
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthenticated(r) })
     }
 
     "return a plain text response for a plain text request" in new WithApplication {
       testResponse(
         acceptedMediaType = Some(TEXT),
-        expectedStatus = FORBIDDEN,
+        expectedStatus = UNAUTHORIZED,
         expectedContentType = TEXT,
-        expectedResponseFragment = Messages("silhouette.not.authorized"),
-        expectedMessage = "silhouette.not.authorized",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleForbidden(r) })
+        expectedResponseFragment = Messages("silhouette.not.authenticated"),
+        expectedMessage = "silhouette.not.authenticated",
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthenticated(r) })
     }
 
     "return a plain text response for other requests" in new WithApplication {
       testResponse(
         acceptedMediaType = Some(BINARY),
-        expectedStatus = FORBIDDEN,
+        expectedStatus = UNAUTHORIZED,
         expectedContentType = TEXT,
-        expectedResponseFragment = Messages("silhouette.not.authorized"),
-        expectedMessage = "silhouette.not.authorized",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleForbidden(r) })
+        expectedResponseFragment = Messages("silhouette.not.authenticated"),
+        expectedMessage = "silhouette.not.authenticated",
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthenticated(r) })
     }
 
     "return an HTML response for a request without an Accept header" in new WithApplication {
       testResponse(
         acceptedMediaType = None,
-        expectedStatus = FORBIDDEN,
+        expectedStatus = UNAUTHORIZED,
         expectedContentType = HTML,
-        expectedResponseFragment = Messages("silhouette.not.authorized"),
-        expectedMessage = "silhouette.not.authorized",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleForbidden(r) })
+        expectedResponseFragment = Messages("silhouette.not.authenticated"),
+        expectedMessage = "silhouette.not.authenticated",
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthenticated(r) })
     }
   }
 
-  "The `handleUnauthorized` method" should {
+  "The `handleNotAuthorized` method" should {
     "return an HTML response for an HTML request" in new WithApplication {
       testResponse(
         acceptedMediaType = Some(HTML),
-        expectedStatus = UNAUTHORIZED,
+        expectedStatus = FORBIDDEN,
         expectedContentType = HTML,
         expectedResponseFragment = "<html>",
-        expectedMessage = "silhouette.not.authenticated",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleUnauthorized(r) })
+        expectedMessage = "silhouette.not.authorized",
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthorized(r) })
     }
 
     "return a JSON response for a JSON request" in new WithApplication {
       testResponse(
         acceptedMediaType = Some(JSON),
-        expectedStatus = UNAUTHORIZED,
+        expectedStatus = FORBIDDEN,
         expectedContentType = JSON,
         expectedResponseFragment = "\"success\":false",
-        expectedMessage = "silhouette.not.authenticated",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleUnauthorized(r) })
+        expectedMessage = "silhouette.not.authorized",
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthorized(r) })
     }
 
     "return a XML response for a XML request" in new WithApplication {
       testResponse(
         acceptedMediaType = Some(XML),
-        expectedStatus = UNAUTHORIZED,
+        expectedStatus = FORBIDDEN,
         expectedContentType = XML,
         expectedResponseFragment = "<success>false</success>",
-        expectedMessage = "silhouette.not.authenticated",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleUnauthorized(r) })
+        expectedMessage = "silhouette.not.authorized",
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthorized(r) })
     }
 
     "return a plain text response for a plain text request" in new WithApplication {
       testResponse(
         acceptedMediaType = Some(TEXT),
-        expectedStatus = UNAUTHORIZED,
+        expectedStatus = FORBIDDEN,
         expectedContentType = TEXT,
-        expectedResponseFragment = Messages("silhouette.not.authenticated"),
-        expectedMessage = "silhouette.not.authenticated",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleUnauthorized(r) })
+        expectedResponseFragment = Messages("silhouette.not.authorized"),
+        expectedMessage = "silhouette.not.authorized",
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthorized(r) })
     }
 
     "return a plain text response for other requests" in new WithApplication {
       testResponse(
         acceptedMediaType = Some(BINARY),
-        expectedStatus = UNAUTHORIZED,
+        expectedStatus = FORBIDDEN,
         expectedContentType = TEXT,
-        expectedResponseFragment = Messages("silhouette.not.authenticated"),
-        expectedMessage = "silhouette.not.authenticated",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleUnauthorized(r) })
+        expectedResponseFragment = Messages("silhouette.not.authorized"),
+        expectedMessage = "silhouette.not.authorized",
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthorized(r) })
     }
 
     "return an HTML response for a request without an Accept header" in new WithApplication {
       testResponse(
         acceptedMediaType = None,
-        expectedStatus = UNAUTHORIZED,
+        expectedStatus = FORBIDDEN,
         expectedContentType = HTML,
-        expectedResponseFragment = Messages("silhouette.not.authenticated"),
-        expectedMessage = "silhouette.not.authenticated",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleUnauthorized(r) })
+        expectedResponseFragment = Messages("silhouette.not.authorized"),
+        expectedMessage = "silhouette.not.authorized",
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthorized(r) })
     }
   }
 

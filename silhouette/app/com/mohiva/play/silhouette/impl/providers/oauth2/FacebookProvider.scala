@@ -20,9 +20,8 @@
 package com.mohiva.play.silhouette.impl.providers.oauth2
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
 import com.mohiva.play.silhouette.api.util.HTTPLayer
-import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
+import com.mohiva.play.silhouette.impl.exceptions.{ UnexpectedResponseException, ProfileRetrievalException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.FacebookProvider._
@@ -97,7 +96,7 @@ abstract class FacebookProvider(httpLayer: HTTPLayer, stateProvider: OAuth2State
     response.body.split("&|=") match {
       case Array(AccessToken, token, Expires, expiresIn) => Success(OAuth2Info(token, None, Some(expiresIn.toInt)))
       case Array(AccessToken, token) => Success(OAuth2Info(token))
-      case _ => Failure(new AuthenticationException(InvalidInfoFormat.format(id, response.body)))
+      case _ => Failure(new UnexpectedResponseException(InvalidInfoFormat.format(id, response.body)))
     }
   }
 }

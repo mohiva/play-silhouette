@@ -15,10 +15,11 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
-import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.api.exceptions.ConfigurationException
 import com.mohiva.play.silhouette.api.services.AuthInfoService
 import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.api.{ LoginInfo, RequestProvider }
+import com.mohiva.play.silhouette.impl.exceptions.{ IdentityNotFoundException, InvalidPasswordException }
 import com.mohiva.play.silhouette.impl.providers.BasicAuthProvider._
 import play.api.http.HeaderNames
 import play.api.libs.concurrent.Execution.Implicits._
@@ -69,12 +70,12 @@ class BasicAuthProvider(
                 authInfoService.save(loginInfo, passwordHasher.hash(credentials.password))
               }
               Some(loginInfo)
-            case Some(hasher) => throw new AuthenticationException(InvalidPassword.format(id))
-            case None => throw new AuthenticationException(UnsupportedHasher.format(
+            case Some(hasher) => throw new InvalidPasswordException(InvalidPassword.format(id))
+            case None => throw new ConfigurationException(UnsupportedHasher.format(
               id, authInfo.hasher, passwordHasherList.map(_.id).mkString(", ")
             ))
           }
-          case None => throw new AuthenticationException(UnknownCredentials.format(id))
+          case None => throw new IdentityNotFoundException(UnknownCredentials.format(id))
         }
       case None => Future.successful(None)
     }

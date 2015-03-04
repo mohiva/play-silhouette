@@ -20,9 +20,8 @@
 package com.mohiva.play.silhouette.impl.providers.oauth2
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
 import com.mohiva.play.silhouette.api.util.HTTPLayer
-import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
+import com.mohiva.play.silhouette.impl.exceptions.{ UnexpectedResponseException, ProfileRetrievalException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.VKProvider._
@@ -95,7 +94,7 @@ abstract class VKProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvid
    */
   override protected def buildInfo(response: WSResponse): Try[OAuth2Info] = {
     response.json.validate[OAuth2Info].asEither.fold(
-      error => Failure(new AuthenticationException(InvalidInfoFormat.format(id, error))),
+      error => Failure(new UnexpectedResponseException(InvalidInfoFormat.format(id, error))),
       info => Success(info)
     )
   }

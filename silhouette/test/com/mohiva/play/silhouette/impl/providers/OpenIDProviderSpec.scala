@@ -17,8 +17,8 @@ package com.mohiva.play.silhouette.impl.providers
 
 import java.net.URLEncoder
 
-import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.util.HTTPLayer
+import com.mohiva.play.silhouette.impl.exceptions.UnexpectedResponseException
 import com.mohiva.play.silhouette.impl.providers.OpenIDProvider._
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
@@ -37,12 +37,12 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
 
   "The authenticate method" should {
     val c = context
-    "fail with an AuthenticationException if redirect URL couldn't be retrieved" in new WithApplication {
+    "fail with an UnexpectedResponseException if redirect URL couldn't be retrieved" in new WithApplication {
       implicit val req = FakeRequest()
 
       c.openIDService.redirectURL(any) returns Future.failed(new Exception(""))
 
-      failed[AuthenticationException](c.provider.authenticate()) {
+      failed[UnexpectedResponseException](c.provider.authenticate()) {
         case e => e.getMessage must startWith(ErrorRedirectURL.format(c.provider.id, ""))
       }
     }
@@ -91,11 +91,11 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
       }
     }
 
-    "fail with an AuthenticationException if auth info cannot be retrieved" in new WithApplication {
+    "fail with an UnexpectedResponseException if auth info cannot be retrieved" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + Mode + "=id_res")
       c.openIDService.verifiedID(any) returns Future.failed(new Exception(""))
 
-      failed[AuthenticationException](c.provider.authenticate()) {
+      failed[UnexpectedResponseException](c.provider.authenticate()) {
         case e => e.getMessage must startWith(ErrorVerification.format(c.provider.id, ""))
       }
     }

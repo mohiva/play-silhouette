@@ -16,7 +16,7 @@
 package com.mohiva.play.silhouette.impl.authenticators
 
 import com.mohiva.play.silhouette._
-import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthenticatorService
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.util.{ Clock, IDGenerator }
@@ -114,7 +114,7 @@ class BearerTokenAuthenticatorService(
         expirationDate = now.plusSeconds(settings.authenticatorExpiry),
         idleTimeout = settings.authenticatorIdleTimeout)
     }.recover {
-      case e => throw new AuthenticationException(CreateError.format(ID, loginInfo), e)
+      case e => throw new AuthenticatorCreationException(CreateError.format(ID, loginInfo), e)
     }
   }
 
@@ -129,7 +129,7 @@ class BearerTokenAuthenticatorService(
       case Some(token) => dao.find(token)
       case None => Future.successful(None)
     }.recover {
-      case e => throw new AuthenticationException(RetrieveError.format(ID), e)
+      case e => throw new AuthenticatorRetrievalException(RetrieveError.format(ID), e)
     }
   }
 
@@ -145,7 +145,7 @@ class BearerTokenAuthenticatorService(
     dao.save(authenticator).map { a =>
       a.id
     }.recover {
-      case e => throw new AuthenticationException(InitError.format(ID, authenticator), e)
+      case e => throw new AuthenticatorInitializationException(InitError.format(ID, authenticator), e)
     }
   }
 
@@ -206,7 +206,7 @@ class BearerTokenAuthenticatorService(
     dao.save(authenticator).flatMap { a =>
       result
     }.recover {
-      case e => throw new AuthenticationException(UpdateError.format(ID, authenticator), e)
+      case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
     }
   }
 
@@ -228,7 +228,7 @@ class BearerTokenAuthenticatorService(
         init(a).flatMap(v => embed(v, result))
       }
     }.recover {
-      case e => throw new AuthenticationException(RenewError.format(ID, authenticator), e)
+      case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
     }
   }
 
@@ -246,7 +246,7 @@ class BearerTokenAuthenticatorService(
     dao.remove(authenticator.id).flatMap { _ =>
       result
     }.recover {
-      case e => throw new AuthenticationException(DiscardError.format(ID, authenticator), e)
+      case e => throw new AuthenticatorDiscardingException(DiscardError.format(ID, authenticator), e)
     }
   }
 }

@@ -16,8 +16,7 @@
 package com.mohiva.play.silhouette.impl.providers.oauth2
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
-import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
+import com.mohiva.play.silhouette.impl.exceptions.{ ProfileRetrievalException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import com.mohiva.play.silhouette.impl.providers._
@@ -35,7 +34,7 @@ import scala.concurrent.Future
 class InstagramProviderSpec extends OAuth2ProviderSpec {
 
   "The `authenticate` method" should {
-    "fail with AuthenticationException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
+    "fail with UnexpectedResponseException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
       val requestHolder = mock[WSRequestHolder]
       val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
@@ -45,7 +44,7 @@ class InstagramProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       stateProvider.validate(any)(any) returns Future.successful(state)
 
-      failed[AuthenticationException](provider.authenticate()) {
+      failed[UnexpectedResponseException](provider.authenticate()) {
         case e => e.getMessage must startWith(InvalidInfoFormat.format(provider.id, ""))
       }
     }

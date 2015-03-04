@@ -15,8 +15,8 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
-import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.util.HTTPLayer
+import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth1Provider._
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
@@ -52,11 +52,11 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
       }
     }
 
-    "fail with an AuthenticationException if request token cannot be retrieved" in new WithApplication {
+    "fail with an UnexpectedResponseException if request token cannot be retrieved" in new WithApplication {
       implicit val req = FakeRequest()
       c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.failed(new Exception(""))
 
-      failed[AuthenticationException](c.provider.authenticate()) {
+      failed[UnexpectedResponseException](c.provider.authenticate()) {
         case e => e.getMessage must startWith(ErrorRequestToken.format(c.provider.id, ""))
       }
     }
@@ -79,16 +79,7 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
       }
     }
 
-    "fail with an AuthenticationException if token secret cannot be retrieved" in new WithApplication {
-      implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier&" + OAuthToken + "=my.token")
-      c.oAuthTokenSecretProvider.retrieve(any)(any) returns Future.failed(new Exception(""))
-
-      failed[AuthenticationException](c.provider.authenticate()) {
-        case e => e.getMessage must startWith(ErrorTokenSecret.format(c.provider.id, ""))
-      }
-    }
-
-    "fail with an AuthenticationException if access token cannot be retrieved" in new WithApplication {
+    "fail with an UnexpectedResponseException if access token cannot be retrieved" in new WithApplication {
       val tokenSecret = "my.token.secret"
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier&" + OAuthToken + "=my.token")
 
@@ -96,7 +87,7 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
       c.oAuthTokenSecretProvider.retrieve(any)(any) returns Future.successful(c.oAuthTokenSecret)
       c.oAuthService.retrieveAccessToken(c.oAuthInfo.copy(secret = tokenSecret), "my.verifier") returns Future.failed(new Exception(""))
 
-      failed[AuthenticationException](c.provider.authenticate()) {
+      failed[UnexpectedResponseException](c.provider.authenticate()) {
         case e => e.getMessage must startWith(ErrorAccessToken.format(c.provider.id, ""))
       }
     }

@@ -18,7 +18,7 @@ package com.mohiva.play.silhouette.impl.authenticators
 import com.atlassian.jwt.SigningAlgorithm
 import com.atlassian.jwt.core.writer.{ JsonSmartJwtJsonBuilder, NimbusJwtWriterFactory }
 import com.mohiva.play.silhouette._
-import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthenticatorService
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.util.{ Base64, Clock, IDGenerator }
@@ -131,7 +131,7 @@ class JWTAuthenticatorService(
         idleTimeout = settings.authenticatorIdleTimeout
       )
     }.recover {
-      case e => throw new AuthenticationException(CreateError.format(ID, loginInfo), e)
+      case e => throw new AuthenticatorCreationException(CreateError.format(ID, loginInfo), e)
     }
   }
 
@@ -153,7 +153,7 @@ class JWTAuthenticatorService(
       }
       case None => Future.successful(None)
     }.recover {
-      case e => throw new AuthenticationException(RetrieveError.format(ID), e)
+      case e => throw new AuthenticatorRetrievalException(RetrieveError.format(ID), e)
     }
   }
 
@@ -169,7 +169,7 @@ class JWTAuthenticatorService(
     dao.fold(Future.successful(authenticator))(_.save(authenticator)).map { a =>
       serialize(a)
     }.recover {
-      case e => throw new AuthenticationException(InitError.format(ID, authenticator), e)
+      case e => throw new AuthenticatorInitializationException(InitError.format(ID, authenticator), e)
     }
   }
 
@@ -227,7 +227,7 @@ class JWTAuthenticatorService(
     dao.fold(Future.successful(authenticator))(_.save(authenticator)).flatMap { a =>
       result.map(_.withHeaders(settings.headerName -> serialize(a)))
     }.recover {
-      case e => throw new AuthenticationException(UpdateError.format(ID, authenticator), e)
+      case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
     }
   }
 
@@ -249,7 +249,7 @@ class JWTAuthenticatorService(
         init(a).flatMap(v => embed(v, result))
       }
     }.recover {
-      case e => throw new AuthenticationException(RenewError.format(ID, authenticator), e)
+      case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
     }
   }
 
@@ -267,7 +267,7 @@ class JWTAuthenticatorService(
     dao.fold(Future.successful(()))(_.remove(authenticator.id)).flatMap { _ =>
       result
     }.recover {
-      case e => throw new AuthenticationException(DiscardError.format(ID, authenticator), e)
+      case e => throw new AuthenticatorDiscardingException(DiscardError.format(ID, authenticator), e)
     }
   }
 
@@ -290,7 +290,7 @@ class JWTAuthenticatorService(
       serializeCustomClaims(data).foreach {
         case (key, value) =>
           if (ReservedClaims.contains(key)) {
-            throw new AuthenticationException(OverrideReservedClaim.format(ID, key, ReservedClaims.mkString(", ")))
+            throw new AuthenticatorException(OverrideReservedClaim.format(ID, key, ReservedClaims.mkString(", ")))
           }
           jwtBuilder.claim(key, value)
       }
@@ -331,7 +331,7 @@ class JWTAuthenticatorService(
         )
       }
     }.recover {
-      case e => throw new AuthenticationException(InvalidJWTToken.format(ID, str), e)
+      case e => throw new AuthenticatorException(InvalidJWTToken.format(ID, str), e)
     }
   }
 
@@ -348,7 +348,7 @@ class JWTAuthenticatorService(
       case v: JsBoolean => v.value
       case v: JsObject => serializeCustomClaims(v)
       case v: JsArray => v.value.map(toJava).asJava
-      case v => throw new AuthenticationException(UnexpectedJsonValue.format(ID, v))
+      case v => throw new AuthenticatorException(UnexpectedJsonValue.format(ID, v))
     }
 
     claims.fieldSet.map { case (name, value) => name -> toJava(value) }.toMap.asJava
@@ -367,7 +367,7 @@ class JWTAuthenticatorService(
       case v: java.lang.Boolean => JsBoolean(v)
       case v: java.util.Map[_, _] => unserializeCustomClaims(v.asInstanceOf[java.util.Map[String, Any]])
       case v: java.util.List[_] => JsArray(v.map(toJson))
-      case v => throw new AuthenticationException(UnexpectedJsonValue.format(ID, v))
+      case v => throw new AuthenticatorException(UnexpectedJsonValue.format(ID, v))
     }
 
     JsObject(claims.map { case (name, value) => name -> toJson(value) }.toSeq)
@@ -390,7 +390,7 @@ class JWTAuthenticatorService(
       case Failure(error) =>
         // This error can occur if an authenticator was serialized with the setting encryptSubject=true
         // and deserialized with the setting encryptSubject=false
-        Failure(new AuthenticationException(JsonParseError.format(ID, str), error))
+        Failure(new AuthenticatorException(JsonParseError.format(ID, str), error))
     }
   }
 }

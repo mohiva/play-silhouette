@@ -18,4 +18,5 @@ package com.mohiva.play.silhouette.api.exceptions
 /**
  * A marker exception for the Silhouette project.
  */
-trait SilhouetteException extends Exception
+class SilhouetteException(msg: String, cause: Throwable = null)
+  extends Exception(msg, cause)
