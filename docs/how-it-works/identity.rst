@@ -38,7 +38,7 @@ name and email.
 
 .. code-block:: scala
 
-    case class User(,
+    case class User(
       userID: Long,
       loginInfo: LoginInfo,
       name: String,
