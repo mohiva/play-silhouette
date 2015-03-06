@@ -87,7 +87,7 @@ abstract class OAuth1Provider(
         }
         // The oauth_verifier field is not in the request.
         // This is the first step in the OAuth flow. We need to get the request tokens.
-        case _ => service.retrieveRequestToken(settings.callbackURL).flatMap { info =>
+        case _ => service.retrieveRequestToken(resolveCallbackURL(settings.callbackURL)).flatMap { info =>
           tokenSecretProvider.build(info).map { tokenSecret =>
             val url = service.redirectUrl(info.token)
             val redirect = Results.Redirect(url)
@@ -253,6 +253,7 @@ trait OAuth1TokenSecretProvider {
  * @param accessTokenURL The access token URL provided by the OAuth provider.
  * @param authorizationURL The authorization URL provided by the OAuth provider.
  * @param callbackURL The callback URL to the application after a successful authentication on the OAuth provider.
+ *                    The URL can be a relative path which will be resolved against the current request's host.
  * @param consumerKey The consumer ID provided by the OAuth provider.
  * @param consumerSecret The consumer secret provided by the OAuth provider.
  */

@@ -38,10 +38,11 @@ class PlayOpenIDService(settings: OpenIDSettings) extends OpenIDService {
    * Retrieve the URL where the user should be redirected to start the OpenID authentication process.
    *
    * @param openID The OpenID to use for authentication.
+   * @param resolvedCallbackURL The full callback URL to the application after a successful authentication.
    * @return The redirect URL where the user should be redirected to start the OpenID authentication process.
    */
-  def redirectURL(openID: String): Future[String] = Try {
-    OpenID.redirectURL(openID, settings.callbackURL, settings.axRequired, settings.axOptional, settings.realm)
+  def redirectURL(openID: String, resolvedCallbackURL: String): Future[String] = Try {
+    OpenID.redirectURL(openID, resolvedCallbackURL, settings.axRequired, settings.axOptional, settings.realm)
   } match {
     case Success(f) => f
     case Failure(e) => Future.failed(e)

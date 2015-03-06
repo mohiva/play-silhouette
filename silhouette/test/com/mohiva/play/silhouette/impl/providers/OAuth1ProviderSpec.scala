@@ -21,8 +21,9 @@ import com.mohiva.play.silhouette.impl.providers.OAuth1Provider._
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.mvc.Result
+import play.api.mvc.{ Results, Result }
 import play.api.test.{ FakeRequest, WithApplication }
+import play.mvc.Http.HeaderNames
 
 import scala.concurrent.Future
 
@@ -77,6 +78,32 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
           status(result) must equalTo(SEE_OTHER)
           redirectLocation(result) must beSome.which(_ == c.oAuthSettings.authorizationURL)
       }
+    }
+
+    "resolves relative redirectURLs before starting the flow" in new WithApplication {
+      verifyCallbackURLResolution("/callback-url", false, "http://www.example.com/callback-url")
+    }
+
+    "resolves path relative redirectURLS before starting the flow" in new WithApplication {
+      verifyCallbackURLResolution("callback-url", false, "http://www.example.com/request-path/callback-url")
+    }
+
+    "resolves relative redirectURLs before starting the flow over https" in new WithApplication {
+      verifyCallbackURLResolution("/callback-url", true, "https://www.example.com/callback-url")
+    }
+
+    def verifyCallbackURLResolution(callbackURL: String, secure: Boolean, resolvedCallbackURL: String) = {
+      implicit val req = spy(FakeRequest(GET, "/request-path/something").withHeaders(HeaderNames.HOST -> "www.example.com"))
+      req.secure returns secure
+      c.oAuthSettings.callbackURL returns callbackURL
+
+      c.oAuthService.retrieveRequestToken(any) returns Future.successful(c.oAuthInfo)
+      c.oAuthService.redirectUrl(c.oAuthInfo.token) returns c.oAuthSettings.authorizationURL
+      c.oAuthTokenSecretProvider.build(any)(any) returns Future.successful(c.oAuthTokenSecret)
+      c.oAuthTokenSecretProvider.publish(any, any)(any) returns Results.Redirect(c.oAuthSettings.authorizationURL)
+
+      await(c.provider.authenticate())
+      there was one(c.oAuthService).retrieveRequestToken(resolvedCallbackURL)
     }
 
     "fail with an UnexpectedResponseException if access token cannot be retrieved" in new WithApplication {
