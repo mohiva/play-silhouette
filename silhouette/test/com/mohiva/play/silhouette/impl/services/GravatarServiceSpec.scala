@@ -77,6 +77,17 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
 
       await(service.retrieveURL(email)) should beSome(URL.format(hash))
     }
+
+    "not trim leading zeros" in new Context {
+      val requestHolder = mock[WSRequestHolder]
+      val response = mock[WSResponse]
+
+      response.status returns 200
+      requestHolder.get() returns Future.successful(response)
+      httpLayer.url(any) returns requestHolder
+
+      await(service.retrieveURL("123test@test.com")) should beSome(URL.format("0d77aed6b4c5857473c9a04c2017f8b8"))
+    }
   }
 
   /**

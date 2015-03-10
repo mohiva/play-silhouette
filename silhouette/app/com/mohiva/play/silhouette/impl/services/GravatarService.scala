@@ -69,8 +69,7 @@ class GravatarService(httpLayer: HTTPLayer) extends AvatarService with Logger {
   private def hash(email: String): Option[String] = {
     val s = email.trim.toLowerCase
     if (s.length > 0) {
-      val out = MessageDigest.getInstance(MD5).digest(s.getBytes)
-      Some(BigInt(1, out).toString(16))
+      Some(MessageDigest.getInstance(MD5).digest(s.getBytes).map("%02x".format(_)).mkString)
     } else {
       None
     }
