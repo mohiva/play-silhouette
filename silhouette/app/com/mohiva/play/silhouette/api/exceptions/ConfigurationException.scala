@@ -15,26 +15,11 @@
  */
 package com.mohiva.play.silhouette.api.exceptions
 
-import com.mohiva.play.silhouette.api.Logger
-
 /**
- * An exception thrown when the user denies access to the application
- * in the login page of the 3rd party service.
+ * Indicates a misconfiguration of a Silhouette component.
  *
  * @param msg The exception message.
  * @param cause The exception cause.
  */
-class AccessDeniedException(msg: String, cause: Throwable)
-  extends Exception(msg, cause)
-  with SilhouetteException
-  with Logger {
-
-  logger.info(msg)
-
-  /**
-   * Constructs an exception with only a message.
-   *
-   * @param msg The exception message.
-   */
-  def this(msg: String) = this(msg, null)
-}
+class ConfigurationException(msg: String, cause: Throwable = null)
+  extends SilhouetteException(msg, cause)

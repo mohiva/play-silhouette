@@ -19,6 +19,7 @@ import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthInfoService
 import com.mohiva.play.silhouette.api.util.{ Credentials, PasswordHasher, PasswordInfo }
+import com.mohiva.play.silhouette.impl.exceptions.{ IdentityNotFoundException, InvalidPasswordException }
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider._
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
@@ -32,35 +33,35 @@ import scala.concurrent.Future
 class CredentialsProviderSpec extends PlaySpecification with Mockito {
 
   "The `authenticate` method" should {
-    "throw AuthenticationException if no auth info could be found for the given credentials" in new WithApplication with Context {
+    "throw IdentityNotFoundException if no auth info could be found for the given credentials" in new WithApplication with Context {
       val loginInfo = new LoginInfo(provider.id, credentials.identifier)
 
       authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(None)
 
-      await(provider.authenticate(credentials)) must throwA[AuthenticationException].like {
+      await(provider.authenticate(credentials)) must throwA[IdentityNotFoundException].like {
         case e => e.getMessage must beEqualTo(UnknownCredentials.format(provider.id))
       }
     }
 
-    "throw AuthenticationException if passwords does not match" in new WithApplication with Context {
+    "throw InvalidPasswordException if passwords does not match" in new WithApplication with Context {
       val passwordInfo = PasswordInfo("foo", "hashed(s3cr3t)")
       val loginInfo = LoginInfo(provider.id, credentials.identifier)
 
       fooHasher.matches(passwordInfo, credentials.password) returns false
       authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
-      await(provider.authenticate(credentials)) must throwA[AuthenticationException].like {
+      await(provider.authenticate(credentials)) must throwA[InvalidPasswordException].like {
         case e => e.getMessage must beEqualTo(InvalidPassword.format(provider.id))
       }
     }
 
-    "throw AuthenticationException if unsupported hasher is stored" in new WithApplication with Context {
+    "throw ConfigurationException if unsupported hasher is stored" in new WithApplication with Context {
       val passwordInfo = PasswordInfo("unknown", "hashed(s3cr3t)")
       val loginInfo = LoginInfo(provider.id, credentials.identifier)
 
       authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
-      await(provider.authenticate(credentials)) must throwA[AuthenticationException].like {
+      await(provider.authenticate(credentials)) must throwA[ConfigurationException].like {
         case e => e.getMessage must beEqualTo(UnsupportedHasher.format(provider.id, "unknown", "foo, bar"))
       }
     }

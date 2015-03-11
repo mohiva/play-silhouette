@@ -12,20 +12,7 @@ import scala.concurrent._
 object DefaultEndpointHandler extends Controller {
 
   /**
-   * Handles forbidden requests in a default way.
-   *
-   * The HTTP status code of the response will be 403 Forbidden, complying with
-   * [[https://tools.ietf.org/html/rfc2616#section-10.4.4 RFC 2616]].
-   *
-   * @param request The request header.
-   * @return A response indicating that access is forbidden.
-   */
-  def handleForbidden(implicit request: RequestHeader): Future[Result] = {
-    produceResponse(Forbidden, "silhouette.not.authorized")
-  }
-
-  /**
-   * Handles unauthorized requests in a default way.
+   * Handles not authenticated requests in a default way.
    *
    * The HTTP status code of the response will be 401 Unauthorized, complying with
    * [[https://tools.ietf.org/html/rfc2616#section-10.4.2 RFC 2616]].
@@ -33,8 +20,21 @@ object DefaultEndpointHandler extends Controller {
    * @param request The request header.
    * @return A response indicating that user authentication is required.
    */
-  def handleUnauthorized(implicit request: RequestHeader): Future[Result] = {
+  def handleNotAuthenticated(implicit request: RequestHeader): Future[Result] = {
     produceResponse(Unauthorized, "silhouette.not.authenticated")
+  }
+
+  /**
+   * Handles not authorized requests in a default way.
+   *
+   * The HTTP status code of the response will be 403 Forbidden, complying with
+   * [[https://tools.ietf.org/html/rfc2616#section-10.4.4 RFC 2616]].
+   *
+   * @param request The request header.
+   * @return A response indicating that access is forbidden.
+   */
+  def handleNotAuthorized(implicit request: RequestHeader): Future[Result] = {
+    produceResponse(Forbidden, "silhouette.not.authorized")
   }
 
   /**

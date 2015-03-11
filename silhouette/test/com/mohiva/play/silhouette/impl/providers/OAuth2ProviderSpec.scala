@@ -19,8 +19,8 @@ import java.net.URLEncoder._
 
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.util.HTTPLayer
+import com.mohiva.play.silhouette.impl.exceptions.{ UnexpectedResponseException, AccessDeniedException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
-import com.mohiva.play.silhouette.impl.providers.oauth2.exceptions.StateException
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
@@ -48,14 +48,14 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
       }
     }
 
-    "fail with an AuthenticationException if `error` key with unspecified value exists in query string" in new WithApplication {
+    "fail with an UnexpectedResponseException if `error` key with unspecified value exists in query string" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + Error + "=unspecified")
-      failed[AuthenticationException](c.provider.authenticate()) {
+      failed[UnexpectedResponseException](c.provider.authenticate()) {
         case e => e.getMessage must startWith(AuthorizationError.format(c.provider.id, "unspecified"))
       }
     }
 
-    "fail with an AuthenticationException if authorization URL is undefined when it's needed" in new WithApplication {
+    "fail with an ConfigurationException if authorization URL is undefined when it's needed" in new WithApplication {
       c.oAuthSettings.authorizationURL match {
         case None => skipped("authorizationURL is not defined, so this step isn't needed for provider: " + c.provider.getClass)
         case Some(authorizationURL) =>
@@ -65,7 +65,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           c.stateProvider.build(any) returns Future.successful(c.state)
           c.oAuthSettings.authorizationURL returns None
 
-          failed[AuthenticationException](c.provider.authenticate()) {
+          failed[ConfigurationException](c.provider.authenticate()) {
             case e => e.getMessage must startWith(AuthorizationURLUndefined.format(c.provider.id))
           }
       }
@@ -125,16 +125,6 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
             case result =>
               redirectLocation(result) must beSome.which(_ must not contain State)
           }
-      }
-    }
-
-    "fail with an AuthenticationException if state is invalid" in new WithApplication {
-      implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
-
-      c.stateProvider.validate(any)(any) returns Future.failed(new StateException("Invalid"))
-
-      failed[AuthenticationException](c.provider.authenticate()) {
-        case e => e.getMessage must startWith(InvalidState.format(c.provider.id))
       }
     }
 

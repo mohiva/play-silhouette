@@ -13,15 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.exceptions
-
-import com.mohiva.play.silhouette.api.exceptions.ProviderException
+package com.mohiva.play.silhouette.api.exceptions
 
 /**
- * Indicates that an error occurred during profile retrieval in a social provider.
+ * An exception thrown when there is an error during authenticator renewal.
  *
  * @param msg The exception message.
  * @param cause The exception cause.
  */
-class ProfileRetrievalException(msg: String, cause: Throwable = null)
-  extends ProviderException(msg, cause)
+class AuthenticatorRenewalException(msg: String, cause: Throwable = null)
+  extends AuthenticatorException(msg, cause)

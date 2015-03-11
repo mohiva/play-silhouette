@@ -15,7 +15,7 @@
  */
 package com.mohiva.play.silhouette.impl.authenticators
 
-import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.util.{ Base64, Clock, FingerprintGenerator }
 import com.mohiva.play.silhouette.api.{ Authenticator, LoginInfo }
@@ -103,12 +103,12 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       await(service.create(loginInfo)).expirationDate must be equalTo now.plusSeconds(sixHours)
     }
 
-    "throws an Authentication exception if an error occurred during creation" in new Context {
+    "throws an AuthenticatorCreationException exception if an error occurred during creation" in new Context {
       implicit val request = FakeRequest()
 
       clock.now throws new RuntimeException("Could not get date")
 
-      await(service.create(loginInfo)) must throwA[AuthenticationException].like {
+      await(service.create(loginInfo)) must throwA[AuthenticatorCreationException].like {
         case e =>
           e.getMessage must startWith(CreateError.format(ID, ""))
       }
@@ -181,14 +181,14 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       await(service.retrieve) must beSome(authenticator)
     }
 
-    "throws an Authentication exception if an error occurred during retrieval" in new WithApplication with Context {
+    "throws an AuthenticatorRetrievalException exception if an error occurred during retrieval" in new WithApplication with Context {
       implicit val request = FakeRequest().withSession(settings.sessionKey -> Base64.encode(Json.toJson(authenticator)))
 
       fingerprintGenerator.generate throws new RuntimeException("Could not generate ID")
       settings.useFingerprinting returns true
       settings.encryptAuthenticator returns false
 
-      await(service.retrieve) must throwA[AuthenticationException].like {
+      await(service.retrieve) must throwA[AuthenticatorRetrievalException].like {
         case e =>
           e.getMessage must startWith(RetrieveError.format(ID, ""))
       }
@@ -365,12 +365,12 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       session(result).get("result-other") should beSome("keep")
     }
 
-    "throws an Authentication exception if an error occurred during update" in new Context {
+    "throws an AuthenticatorUpdateException exception if an error occurred during update" in new Context {
       implicit val request = spy(FakeRequest())
 
       request.session throws new RuntimeException("Cannot get session")
 
-      await(service.update(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticationException].like {
+      await(service.update(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticatorUpdateException].like {
         case e =>
           e.getMessage must startWith(UpdateError.format(ID, ""))
       }
@@ -450,7 +450,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       session(result).get("result-other") should beSome("keep")
     }
 
-    "throws an Authentication exception if an error occurred during renewal" in new Context {
+    "throws an AuthenticatorRenewalException exception if an error occurred during renewal" in new Context {
       implicit val request = spy(FakeRequest())
       val now = DateTime.now
       val okResult = (a: Authenticator) => Future.successful(Results.Ok)
@@ -459,7 +459,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       settings.useFingerprinting returns false
       clock.now returns now
 
-      await(service.renew(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticationException].like {
+      await(service.renew(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticatorRenewalException].like {
         case e =>
           e.getMessage must startWith(RenewError.format(ID, ""))
       }
@@ -487,13 +487,13 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       session(result).get("result-other") should beSome("keep")
     }
 
-    "throws an Authentication exception if an error occurred during discarding" in new WithApplication with Context {
+    "throws an AuthenticatorDiscardingException exception if an error occurred during discarding" in new WithApplication with Context {
       implicit val request = spy(FakeRequest()).withSession(settings.sessionKey -> "test")
       val result = mock[Result]
 
       result.removingFromSession(any)(any) throws new RuntimeException("Cannot get session")
 
-      await(service.discard(authenticator, Future.successful(result))) must throwA[AuthenticationException].like {
+      await(service.discard(authenticator, Future.successful(result))) must throwA[AuthenticatorDiscardingException].like {
         case e =>
           e.getMessage must startWith(DiscardError.format(ID, ""))
       }

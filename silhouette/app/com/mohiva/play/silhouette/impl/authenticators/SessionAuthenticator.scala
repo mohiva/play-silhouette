@@ -16,7 +16,7 @@
 package com.mohiva.play.silhouette.impl.authenticators
 
 import com.mohiva.play.silhouette._
-import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
+import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthenticatorService
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.util.{ Base64, Clock, FingerprintGenerator }
@@ -123,7 +123,7 @@ class SessionAuthenticatorService(
         fingerprint = if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
       )
     }).recover {
-      case e => throw new AuthenticationException(CreateError.format(ID, loginInfo), e)
+      case e => throw new AuthenticatorCreationException(CreateError.format(ID, loginInfo), e)
     }
   }
 
@@ -145,7 +145,7 @@ class SessionAuthenticatorService(
         case None => None
       }
     }.recover {
-      case e => throw new AuthenticationException(RetrieveError.format(ID), e)
+      case e => throw new AuthenticatorRetrievalException(RetrieveError.format(ID), e)
     }
   }
 
@@ -217,7 +217,7 @@ class SessionAuthenticatorService(
     result: Future[Result])(implicit request: RequestHeader) = {
 
     result.map(_.addingToSession(settings.sessionKey -> serialize(authenticator))).recover {
-      case e => throw new AuthenticationException(UpdateError.format(ID, authenticator), e)
+      case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
     }
   }
 
@@ -237,7 +237,7 @@ class SessionAuthenticatorService(
     create(authenticator.loginInfo).flatMap { a =>
       init(a).flatMap(v => embed(v, result))
     }.recover {
-      case e => throw new AuthenticationException(RenewError.format(ID, authenticator), e)
+      case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
     }
   }
 
@@ -253,7 +253,7 @@ class SessionAuthenticatorService(
     result: Future[Result])(implicit request: RequestHeader) = {
 
     result.map(_.removingFromSession(settings.sessionKey)).recover {
-      case e => throw new AuthenticationException(DiscardError.format(ID, authenticator), e)
+      case e => throw new AuthenticatorDiscardingException(DiscardError.format(ID, authenticator), e)
     }
   }
 

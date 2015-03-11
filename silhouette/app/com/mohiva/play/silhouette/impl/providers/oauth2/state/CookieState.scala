@@ -17,8 +17,8 @@ package com.mohiva.play.silhouette.impl.providers.oauth2.state
 
 import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, Base64, Clock, IDGenerator }
+import com.mohiva.play.silhouette.impl.exceptions.OAuth2StateException
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
-import com.mohiva.play.silhouette.impl.providers.oauth2.exceptions.StateException
 import com.mohiva.play.silhouette.impl.providers.oauth2.state.CookieStateProvider._
 import com.mohiva.play.silhouette.impl.providers.{ OAuth2State, OAuth2StateProvider }
 import org.joda.time.DateTime
@@ -107,8 +107,8 @@ class CookieStateProvider(
    */
   def validate[B](id: String)(implicit request: ExtractableRequest[B]) = {
     Future.from(clientState(id).flatMap(clientState => providerState(id).flatMap(providerState =>
-      if (clientState != providerState) Failure(new StateException(StateIsNotEqual.format(id)))
-      else if (clientState.isExpired) Failure(new StateException(StateIsExpired.format(id)))
+      if (clientState != providerState) Failure(new OAuth2StateException(StateIsNotEqual.format(id)))
+      else if (clientState.isExpired) Failure(new OAuth2StateException(StateIsExpired.format(id)))
       else Success(clientState)
     )))
   }
@@ -142,7 +142,7 @@ class CookieStateProvider(
   private def clientState(id: String)(implicit request: RequestHeader): Try[CookieState] = {
     request.cookies.get(settings.cookieName) match {
       case Some(cookie) => unserializeState(cookie.value, id)
-      case None => Failure(new StateException(ClientStateDoesNotExists.format(id, settings.cookieName)))
+      case None => Failure(new OAuth2StateException(ClientStateDoesNotExists.format(id, settings.cookieName)))
     }
   }
 
@@ -158,7 +158,7 @@ class CookieStateProvider(
   private def providerState[B](id: String)(implicit request: ExtractableRequest[B]): Try[CookieState] = {
     request.extractString(State) match {
       case Some(state) => unserializeState(state, id)
-      case _ => Failure(new StateException(ProviderStateDoesNotExists.format(id, State)))
+      case _ => Failure(new OAuth2StateException(ProviderStateDoesNotExists.format(id, State)))
     }
   }
 
@@ -172,10 +172,10 @@ class CookieStateProvider(
   private def unserializeState(str: String, id: String): Try[CookieState] = {
     Try(Json.parse(Base64.decode(str))) match {
       case Success(json) => json.validate[CookieState].asEither match {
-        case Left(error) => Failure(new StateException(InvalidStateFormat.format(id, error)))
+        case Left(error) => Failure(new OAuth2StateException(InvalidStateFormat.format(id, error)))
         case Right(authenticator) => Success(authenticator)
       }
-      case Failure(error) => Failure(new StateException(InvalidStateFormat.format(id, error)))
+      case Failure(error) => Failure(new OAuth2StateException(InvalidStateFormat.format(id, error)))
     }
   }
 }

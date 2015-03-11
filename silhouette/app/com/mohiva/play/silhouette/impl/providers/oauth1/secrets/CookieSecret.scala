@@ -16,7 +16,7 @@
 package com.mohiva.play.silhouette.impl.providers.oauth1.secrets
 
 import com.mohiva.play.silhouette.api.util.{ Clock, ExtractableRequest }
-import com.mohiva.play.silhouette.impl.providers.oauth1.exceptions.TokenSecretException
+import com.mohiva.play.silhouette.impl.exceptions.OAuth1TokenSecretException
 import com.mohiva.play.silhouette.impl.providers.oauth1.secrets.CookieSecretProvider._
 import com.mohiva.play.silhouette.impl.providers.{ OAuth1Info, OAuth1TokenSecret, OAuth1TokenSecretProvider }
 import org.joda.time.DateTime
@@ -102,11 +102,11 @@ class CookieSecretProvider(
   def retrieve[B](id: String)(implicit request: ExtractableRequest[B]): Future[Secret] = {
     request.cookies.get(settings.cookieName) match {
       case Some(cookie) => unserializeSecret(cookie.value, id) match {
-        case Success(secret) if secret.isExpired => Future.failed(new TokenSecretException(SecretIsExpired.format(id)))
+        case Success(secret) if secret.isExpired => Future.failed(new OAuth1TokenSecretException(SecretIsExpired.format(id)))
         case Success(secret) => Future.successful(secret)
         case Failure(error) => Future.failed(error)
       }
-      case None => Future.failed(new TokenSecretException(ClientSecretDoesNotExists.format(id, settings.cookieName)))
+      case None => Future.failed(new OAuth1TokenSecretException(ClientSecretDoesNotExists.format(id, settings.cookieName)))
     }
   }
 
@@ -139,10 +139,10 @@ class CookieSecretProvider(
   private def unserializeSecret(str: String, id: String): Try[CookieSecret] = {
     Try(Json.parse(Crypto.decryptAES(str))) match {
       case Success(json) => json.validate[CookieSecret].asEither match {
-        case Left(error) => Failure(new TokenSecretException(InvalidSecretFormat.format(id, error)))
+        case Left(error) => Failure(new OAuth1TokenSecretException(InvalidSecretFormat.format(id, error)))
         case Right(authenticator) => Success(authenticator)
       }
-      case Failure(error) => Failure(new TokenSecretException(InvalidSecretFormat.format(id, error)))
+      case Failure(error) => Failure(new OAuth1TokenSecretException(InvalidSecretFormat.format(id, error)))
     }
   }
 }

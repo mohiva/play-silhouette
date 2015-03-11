@@ -19,7 +19,7 @@
  */
 package com.mohiva.play.silhouette.api
 
-import com.mohiva.play.silhouette.api.exceptions.{ AccessDeniedException, AuthenticationException }
+import com.mohiva.play.silhouette.api.exceptions.{ NotAuthenticatedException, NotAuthorizedException }
 import com.mohiva.play.silhouette.api.util.DefaultEndpointHandler
 import play.api.Play
 import play.api.libs.concurrent.Execution.Implicits._
@@ -69,7 +69,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
    * @param request The request header.
    * @return The result to send to the client.
    */
-  protected def notAuthenticated(request: RequestHeader): Option[Future[Result]] = None
+  protected def onNotAuthenticated(request: RequestHeader): Option[Future[Result]] = None
 
   /**
    * Implement this to return a result when the user is authenticated but not authorized.
@@ -79,21 +79,48 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
    * @param request The request header.
    * @return The result to send to the client.
    */
-  protected def notAuthorized(request: RequestHeader): Option[Future[Result]] = None
+  protected def onNotAuthorized(request: RequestHeader): Option[Future[Result]] = None
 
   /**
    * Default exception handler for silhouette exceptions which translates an exception into
    * the appropriate result.
    *
-   * Translates an AccessDeniedException into a 403 Forbidden result and an AuthenticationException
+   * Translates an ForbiddenException into a 403 Forbidden result and an UnauthorizedException
    * into a 401 Unauthorized result.
    *
    * @param request The request header.
    * @return The result to send to the client based on the exception.
    */
   protected def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[Result]] = {
-    case e: AccessDeniedException => handleNotAuthorized
-    case e: AuthenticationException => handleNotAuthenticated
+    case e: NotAuthenticatedException =>
+      logger.info(e.getMessage, e)
+      handleNotAuthenticated
+    case e: NotAuthorizedException =>
+      logger.info(e.getMessage, e)
+      handleNotAuthorized
+  }
+
+  /**
+   * Produces a result indicating that the user must provide authentication before
+   * the requested endpoint can be accessed.
+   *
+   * This should be called when the user is not authenticated.
+   * This indicates a temporary condition. The user can authenticate and repeat the request.
+   *
+   * As defined by RFC 2616, the status code of the response will be 401 Unauthorized.
+   *
+   * @param request The request header.
+   * @return The result to send to the client if the user isn't authenticated.
+   */
+  private def handleNotAuthenticated(implicit request: RequestHeader): Future[Result] = {
+    logger.debug("[Silhouette] Unauthenticated user trying to access '%s'".format(request.uri))
+
+    onNotAuthenticated(request).orElse {
+      Play.current.global match {
+        case s: SecuredSettings => s.onNotAuthenticated(request, request2lang)
+        case _ => None
+      }
+    }.getOrElse(DefaultEndpointHandler.handleNotAuthenticated)
   }
 
   /**
@@ -112,35 +139,12 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
   private def handleNotAuthorized(implicit request: RequestHeader): Future[Result] = {
     logger.debug("[Silhouette] Unauthorized user trying to access '%s'".format(request.uri))
 
-    notAuthorized(request).orElse {
+    onNotAuthorized(request).orElse {
       Play.current.global match {
         case s: SecuredSettings => s.onNotAuthorized(request, request2lang)
         case _ => None
       }
-    }.getOrElse(DefaultEndpointHandler.handleForbidden)
-  }
-
-  /**
-   * Produces a result indicating that the user must provide authentication before
-   * the requested endpoint can be accessed.
-   *
-   * This should be called when the user is not authenticated.
-   * This indicates a temporary condition. The user can authenticate and repeat the request.
-   *
-   * As defined by RFC 2616, the status code of the response will be 401 Unauthorized.
-   *
-   * @param request The request header.
-   * @return The result to send to the client if the user isn't authenticated.
-   */
-  private def handleNotAuthenticated(implicit request: RequestHeader): Future[Result] = {
-    logger.debug("[Silhouette] Unauthenticated user trying to access '%s'".format(request.uri))
-
-    notAuthenticated(request).orElse {
-      Play.current.global match {
-        case s: SecuredSettings => s.onNotAuthenticated(request, request2lang)
-        case _ => None
-      }
-    }.getOrElse(DefaultEndpointHandler.handleUnauthorized)
+    }.getOrElse(DefaultEndpointHandler.handleNotAuthorized)
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -439,8 +443,8 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
    * A secured action.
    *
    * If the user is not authenticated or not authorized, the request is forwarded to
-   * the [[com.mohiva.play.silhouette.api.Silhouette.notAuthenticated]] or
-   * the [[com.mohiva.play.silhouette.api.Silhouette.notAuthorized]] methods.
+   * the [[com.mohiva.play.silhouette.api.Silhouette.onNotAuthenticated]] or
+   * the [[com.mohiva.play.silhouette.api.Silhouette.onNotAuthorized]] methods.
    *
    * If these methods are not implemented, then
    * the [[com.mohiva.play.silhouette.api.SecuredSettings.onNotAuthenticated]] or

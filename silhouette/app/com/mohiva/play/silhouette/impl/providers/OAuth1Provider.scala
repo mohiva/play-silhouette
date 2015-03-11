@@ -20,9 +20,9 @@
 package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthInfo
 import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
+import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth1Provider._
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.ws.WSSignatureCalculator
@@ -78,13 +78,11 @@ abstract class OAuth1Provider(
       case None => request.extractString(OAuthVerifier) -> request.extractString(OAuthToken) match {
         // Second step in the OAuth flow.
         // We have received the verifier and the request token, and we need to swap it for the access token.
-        case (Some(verifier), Some(token)) => tokenSecretProvider.retrieve(id).recover {
-          case e => throw new AuthenticationException(ErrorTokenSecret.format(id), e)
-        }.flatMap { tokenSecret =>
+        case (Some(verifier), Some(token)) => tokenSecretProvider.retrieve(id).flatMap { tokenSecret =>
           service.retrieveAccessToken(OAuth1Info(token, tokenSecret.value), verifier).map { info =>
             Right(info)
           }.recover {
-            case e => throw new AuthenticationException(ErrorAccessToken.format(id), e)
+            case e => throw new UnexpectedResponseException(ErrorAccessToken.format(id), e)
           }
         }
         // The oauth_verifier field is not in the request.
@@ -97,7 +95,7 @@ abstract class OAuth1Provider(
             Left(tokenSecretProvider.publish(redirect, tokenSecret))
           }
         }.recover {
-          case e => throw new AuthenticationException(ErrorRequestToken.format(id), e)
+          case e => throw new UnexpectedResponseException(ErrorRequestToken.format(id), e)
         }
       }
     }
@@ -115,7 +113,6 @@ object OAuth1Provider {
   val AuthorizationError = "[Silhouette][%s] Authorization server returned error: %s"
   val ErrorAccessToken = "[Silhouette][%s] Error retrieving access token"
   val ErrorRequestToken = "[Silhouette][%s] Error retrieving request token"
-  val ErrorTokenSecret = "[Silhouette][%s] Error retrieving token secret"
 
   /**
    * The OAuth1 constants.

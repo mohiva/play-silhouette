@@ -23,7 +23,7 @@ import scala.concurrent.Future
 
 /**
  * Can be mixed into the GlobalSettings object to define a global behaviour
- * for not-authenticated and not-authorized actions.
+ * for unauthorized and forbidden endpoints.
  */
 trait SecuredSettings {
   this: GlobalSettings =>

@@ -18,9 +18,9 @@ package com.mohiva.play.silhouette.impl.providers
 import java.net.URLEncoder
 
 import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.exceptions.AuthenticationException
 import com.mohiva.play.silhouette.api.services.AuthInfo
 import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
+import com.mohiva.play.silhouette.impl.exceptions.UnexpectedResponseException
 import com.mohiva.play.silhouette.impl.providers.OpenIDProvider._
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc._
@@ -53,7 +53,7 @@ abstract class OpenIDProvider(httpLayer: HTTPLayer, service: OpenIDService, sett
     request.extractString(Mode) match {
       // Tries to verify the user after the provider has redirected back to the application
       case Some(_) => service.verifiedID.map(info => Right(info)).recover {
-        case e => throw new AuthenticationException(ErrorVerification.format(id, e.getMessage), e)
+        case e => throw new UnexpectedResponseException(ErrorVerification.format(id, e.getMessage), e)
       }
       // Starts the OpenID authentication process
       case None =>
@@ -64,7 +64,7 @@ abstract class OpenIDProvider(httpLayer: HTTPLayer, service: OpenIDService, sett
           logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
           Left(redirect)
         }.recover {
-          case e => throw new AuthenticationException(ErrorRedirectURL.format(id, e.getMessage), e)
+          case e => throw new UnexpectedResponseException(ErrorRedirectURL.format(id, e.getMessage), e)
         }
     }
   }

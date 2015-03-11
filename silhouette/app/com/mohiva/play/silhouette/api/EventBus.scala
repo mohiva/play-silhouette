@@ -55,14 +55,6 @@ case class LoginEvent[I <: Identity](identity: I, request: RequestHeader, lang: 
 case class LogoutEvent[I <: Identity](identity: I, request: RequestHeader, lang: Lang) extends SilhouetteEvent
 
 /**
- * An event which will be published after the access was denied to an identity.
- *
- * @param request The request header for the associated request.
- * @param lang The lang associated for the current request.
- */
-case class AccessDeniedEvent(request: RequestHeader, lang: Lang) extends SilhouetteEvent
-
-/**
  * An event which will be published if a request passes authentication.
  *
  * @param identity The logged in identity.

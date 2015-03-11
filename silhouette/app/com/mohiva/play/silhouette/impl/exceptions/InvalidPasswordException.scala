@@ -18,10 +18,10 @@ package com.mohiva.play.silhouette.impl.exceptions
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 
 /**
- * Indicates that an error occurred during profile retrieval in a social provider.
+ * Indicates that an invalid password was entered in a credential based provider.
  *
  * @param msg The exception message.
  * @param cause The exception cause.
  */
-class ProfileRetrievalException(msg: String, cause: Throwable = null)
+class InvalidPasswordException(msg: String, cause: Throwable = null)
   extends ProviderException(msg, cause)
