@@ -30,6 +30,23 @@ import scala.concurrent.duration._
 class EventBusSpec extends PlaySpecification {
 
   "The event bus" should {
+    "handle an subclass event" in new WithApplication with Context {
+      val eventBus = new EventBus
+      val listener = system.actorOf(Props(new Actor {
+        def receive = {
+          case e => theProbe.ref ! e
+        }
+      }))
+
+      eventBus.subscribe(listener, classOf[SilhouetteEvent])
+
+      eventBus.publish(loginEvent)
+      theProbe.expectMsg(500 millis, loginEvent)
+
+      eventBus.publish(logoutEvent)
+      theProbe.expectMsg(500 millis, logoutEvent)
+    }
+
     "handle an event" in new WithApplication with Context {
       val eventBus = new EventBus
       val listener = system.actorOf(Props(new Actor {
