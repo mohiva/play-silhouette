@@ -12,6 +12,5 @@ before_script:
 script: scripts/ci-build
 after_success:
 - scripts/coveralls
-- scripts/update-site-from-travis
 notifications:
   email: false
