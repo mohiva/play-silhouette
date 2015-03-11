@@ -834,7 +834,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         }
       }))
 
-      env.eventBus.subscribe(listener, ct.runtimeClass)
+      env.eventBus.subscribe(listener, ct.runtimeClass.asInstanceOf[Class[T]])
 
       block
     }

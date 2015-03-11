@@ -15,7 +15,8 @@
  */
 package com.mohiva.play.silhouette.api
 
-import akka.event.{ ActorEventBus, LookupClassification }
+import akka.event.{ SubchannelClassification, ActorEventBus, LookupClassification }
+import akka.util.Subclassification
 import play.api.i18n.Lang
 import play.api.mvc.RequestHeader
 
@@ -85,14 +86,17 @@ case class NotAuthorizedEvent[I <: Identity](identity: I, request: RequestHeader
 /**
  * An event bus implementation which uses a class based lookup classification.
  */
-class EventBus extends ActorEventBus with LookupClassification {
-  override type Classifier = Class[_]
-  override type Event = SilhouetteEvent
+class EventBus extends ActorEventBus with SubchannelClassification {
+  type Classifier = Class[_ <: SilhouetteEvent]
+  type Event = SilhouetteEvent
 
   /**
-   * This is a size hint for the number of Classifiers you expect to have (use powers of 2).
+   * The logic to form sub-class hierarchy
    */
-  protected def mapSize(): Int = 10
+  protected implicit val subclassification = new Subclassification[Classifier] {
+    def isEqual(x: Classifier, y: Classifier): Boolean = x == y
+    def isSubclass(x: Classifier, y: Classifier): Boolean = y.isAssignableFrom(x)
+  }
 
   /**
    * Publishes the given Event to the given Subscriber.
