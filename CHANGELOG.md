@@ -18,6 +18,7 @@
 - Add request extractors
 - Better social profile builder implementation
 - Add OpenID providers Steam and Yahoo
+- Better error handling
 
 ## 1.0 (2014-06-12)
 
