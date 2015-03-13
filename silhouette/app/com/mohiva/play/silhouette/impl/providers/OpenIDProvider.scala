@@ -59,7 +59,7 @@ abstract class OpenIDProvider(httpLayer: HTTPLayer, service: OpenIDService, sett
       case None =>
         // Either we get the openID from request or we use the provider ID to retrieve the redirect URL
         val openID = request.extractString(OpenID).getOrElse(settings.providerURL)
-        service.redirectURL(openID).map { url =>
+        service.redirectURL(openID, resolveCallbackURL(settings.callbackURL)).map { url =>
           val redirect = Results.Redirect(fix3749(url))
           logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
           Left(redirect)
@@ -121,9 +121,10 @@ trait OpenIDService {
    * Retrieve the URL where the user should be redirected to start the OpenID authentication process.
    *
    * @param openID The OpenID to use for authentication.
+   * @param resolvedCallbackURL The full callback URL to the application after a successful authentication.
    * @return The redirect URL where the user should be redirected to start the OpenID authentication process.
    */
-  def redirectURL(openID: String): Future[String]
+  def redirectURL(openID: String, resolvedCallbackURL: String): Future[String]
 
   /**
    * From a request corresponding to the callback from the OpenID server, check the identity of the current user.
@@ -140,6 +141,7 @@ trait OpenIDService {
  *
  * @param providerURL The OpenID provider URL used if no openID was given. @see https://willnorris.com/2009/07/openid-directed-identity-identifier-select
  * @param callbackURL The callback URL to the application after a successful authentication on the OpenID provider.
+ *                    The URL can be a relative path which will be resolved against the current request's host.
  * @param axRequired Required attributes to return from the provider after a successful authentication.
  * @param axOptional Optional attributes to return from the provider after a successful authentication.
  * @param realm An URL pattern that represents the part of URL-space for which an OpenID Authentication request is valid.

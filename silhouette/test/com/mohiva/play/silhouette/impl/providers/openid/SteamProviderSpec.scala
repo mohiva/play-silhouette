@@ -54,11 +54,11 @@ class SteamProviderSpec extends OpenIDProviderSpec {
     /**
      * The OpenID settings.
      */
-    lazy val openIDSettings = OpenIDSettings(
+    lazy val openIDSettings = spy(OpenIDSettings(
       providerURL = "https://steamcommunity.com/openid/",
       callbackURL = "http://localhost:9000/authenticate/steam",
       realm = Some("http://localhost:9000")
-    )
+    ))
 
     /**
      * The provider to test.

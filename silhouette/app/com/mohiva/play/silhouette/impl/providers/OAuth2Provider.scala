@@ -115,7 +115,7 @@ abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
           val stateParam = if (serializedState.isEmpty) List() else List(State -> serializedState)
           val params = settings.scope.foldLeft(List(
             (ClientID, settings.clientID),
-            (RedirectURI, settings.redirectURL),
+            (RedirectURI, resolveCallbackURL(settings.redirectURL)),
             (ResponseType, Code)) ++ stateParam ++ settings.authorizationParams.toList) {
             case (p, s) => (Scope, s) :: p
           }
@@ -136,15 +136,16 @@ abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
    * Gets the access token.
    *
    * @param code The access code.
+   * @param request The current request.
    * @return The info containing the access token.
    */
-  protected def getAccessToken(code: String): Future[OAuth2Info] = {
+  protected def getAccessToken(code: String)(implicit request: RequestHeader): Future[OAuth2Info] = {
     httpLayer.url(settings.accessTokenURL).withHeaders(headers: _*).post(Map(
       ClientID -> Seq(settings.clientID),
       ClientSecret -> Seq(settings.clientSecret),
       GrantType -> Seq(AuthorizationCode),
       Code -> Seq(code),
-      RedirectURI -> Seq(settings.redirectURL)) ++ settings.accessTokenParams.mapValues(Seq(_))).flatMap { response =>
+      RedirectURI -> Seq(resolveCallbackURL(settings.redirectURL))) ++ settings.accessTokenParams.mapValues(Seq(_))).flatMap { response =>
       logger.debug("[Silhouette][%s] Access token response: [%s]".format(id, response.body))
       Future.from(buildInfo(response))
     }
@@ -268,6 +269,7 @@ trait OAuth2StateProvider {
  * @param authorizationURL The authorization URL provided by the OAuth provider.
  * @param accessTokenURL The access token URL provided by the OAuth provider.
  * @param redirectURL The redirect URL to the application after a successful authentication on the OAuth provider.
+ *                    The URL can be a relative path which will be resolved against the current request's host.
  * @param clientID The client ID provided by the OAuth provider.
  * @param clientSecret The client secret provided by the OAuth provider.
  * @param scope The OAuth2 scope parameter provided by the OAuth provider.

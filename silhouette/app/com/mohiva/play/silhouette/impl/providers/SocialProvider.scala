@@ -15,13 +15,15 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
+import java.net.URI
+
 import com.mohiva.play.silhouette.api.services.AuthInfo
 import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.api.{ LoginInfo, Provider }
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import play.api.libs.concurrent.Execution.Implicits._
-import play.api.mvc.Result
+import play.api.mvc.{ RequestHeader, Result }
 
 import scala.concurrent.Future
 
@@ -61,6 +63,22 @@ trait SocialProvider extends Provider with SocialProfileBuilder {
       case e if !e.isInstanceOf[ProfileRetrievalException] =>
         Future.failed(new ProfileRetrievalException(UnspecifiedProfileError.format(id), e))
     }
+  }
+
+  /**
+   * Resolves the url to be absolute relative to the request.
+   *
+   * This will pass the url through if its already absolute.
+   *
+   * @param url The url to resolve.
+   * @param request The current request.
+   * @return The absolute url.
+   */
+  protected def resolveCallbackURL(url: String)(implicit request: RequestHeader): String = URI.create(url) match {
+    case uri if uri.isAbsolute => url
+    case uri =>
+      val scheme = if (request.secure) "https://" else "http://"
+      URI.create(scheme + request.host + request.path).resolve(uri).toString
   }
 }
 

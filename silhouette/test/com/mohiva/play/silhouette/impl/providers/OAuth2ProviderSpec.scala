@@ -28,6 +28,7 @@ import play.api.libs.json.{ JsValue, Json }
 import play.api.libs.ws.WSRequestHolder
 import play.api.mvc.Result
 import play.api.test.{ FakeRequest, WithApplication }
+import play.mvc.Http.HeaderNames
 
 import scala.concurrent.Future
 
@@ -104,6 +105,47 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
                 url must be equalTo (authorizationURL + params.map { p =>
                   encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8")
                 }.mkString("?", "&", ""))
+              }
+          }
+      }
+    }
+
+    "resolves relative redirectURLs before starting the flow" in new WithApplication {
+      verifyRelativeRedirectResolution("/redirect-url", false, "http://www.example.com/redirect-url")
+    }
+
+    "resolves path relative redirectURLs before starting the flow" in new WithApplication {
+      verifyRelativeRedirectResolution("redirect-url", false, "http://www.example.com/request-path/redirect-url")
+    }
+
+    "resolves relative redirectURLs before starting the flow over https" in new WithApplication {
+      verifyRelativeRedirectResolution("/redirect-url", true, "https://www.example.com/redirect-url")
+    }
+
+    def verifyRelativeRedirectResolution(redirectURL: String, secure: Boolean, resolvedRedirectURL: String) = {
+      c.oAuthSettings.authorizationURL match {
+        case None => skipped("authorizationURL is not defined, so this step isn't needed for provider: " + c.provider.getClass)
+        case Some(authorizationURL) =>
+          implicit val req = spy(FakeRequest(GET, "/request-path/something").withHeaders(HeaderNames.HOST -> "www.example.com"))
+          val sessionKey = "session-key"
+          val sessionValue = "session-value"
+
+          req.secure returns secure
+          c.oAuthSettings.redirectURL returns redirectURL
+
+          c.state.serialize returns sessionValue
+          c.stateProvider.build(any) returns Future.successful(c.state)
+          c.stateProvider.publish(any, any)(any) answers { (a, m) =>
+            val result = a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
+            val state = a.asInstanceOf[Array[Any]](1).asInstanceOf[OAuth2State]
+
+            result.withSession(sessionKey -> state.serialize)
+          }
+
+          result(c.provider.authenticate()) {
+            case result =>
+              redirectLocation(result) must beSome.which { url =>
+                url must contain(s"$RedirectURI=${encode(resolvedRedirectURL, "UTF-8")}")
               }
           }
       }

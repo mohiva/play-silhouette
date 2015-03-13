@@ -62,7 +62,7 @@ class YahooProviderSpec extends OpenIDProviderSpec {
     /**
      * The OpenID settings.
      */
-    lazy val openIDSettings = OpenIDSettings(
+    lazy val openIDSettings = spy(OpenIDSettings(
       providerURL = "https://me.yahoo.com/",
       callbackURL = "http://localhost:9000/authenticate/yahoo",
       axRequired = Seq(
@@ -71,7 +71,7 @@ class YahooProviderSpec extends OpenIDProviderSpec {
         "image" -> "http://axschema.org/media/image/default"
       ),
       realm = Some("http://localhost:9000")
-    )
+    ))
 
     /**
      * The provider to test.

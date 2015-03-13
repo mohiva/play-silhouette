@@ -24,6 +24,7 @@ import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.test.{ FakeRequest, WithApplication }
+import play.mvc.Http.HeaderNames
 
 import scala.concurrent.Future
 
@@ -40,7 +41,7 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
     "fail with an UnexpectedResponseException if redirect URL couldn't be retrieved" in new WithApplication {
       implicit val req = FakeRequest()
 
-      c.openIDService.redirectURL(any) returns Future.failed(new Exception(""))
+      c.openIDService.redirectURL(any, any) returns Future.failed(new Exception(""))
 
       failed[UnexpectedResponseException](c.provider.authenticate()) {
         case e => e.getMessage must startWith(ErrorRedirectURL.format(c.provider.id, ""))
@@ -49,7 +50,7 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
 
     "redirect to provider by using the provider URL" in new WithApplication {
       implicit val req = FakeRequest()
-      c.openIDService.redirectURL(any) returns Future.successful(c.openIDSettings.providerURL)
+      c.openIDService.redirectURL(any, any) returns Future.successful(c.openIDSettings.providerURL)
 
       result(c.provider.authenticate()) {
         case result =>
@@ -60,7 +61,7 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
 
     "redirect to provider by using a openID" in new WithApplication {
       implicit val req = FakeRequest(GET, "?openID=my.open.id")
-      c.openIDService.redirectURL(any) returns Future.successful(c.openIDSettings.providerURL)
+      c.openIDService.redirectURL(any, any) returns Future.successful(c.openIDSettings.providerURL)
 
       result(c.provider.authenticate()) {
         case result =>
@@ -72,7 +73,7 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
     "fix bug 3749" in new WithApplication {
       val e = (v: String) => URLEncoder.encode(v, "UTF-8")
       implicit val req = FakeRequest()
-      c.openIDService.redirectURL(any) returns Future.successful("https://domain.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0"
+      c.openIDService.redirectURL(any, any) returns Future.successful("https://domain.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0"
         + "&openid.mode=checkid_setup"
         + "&openid.claimed_id=" + e(c.openIDSettings.providerURL)
         + "&openid.identity=" + e(c.openIDSettings.providerURL)
@@ -89,6 +90,29 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
             + "&openid.return_to=http://www.mydomain.com/auth/domain"
             + "&openid.realm=http://www.mydomain.com")
       }
+    }
+
+    "resolves relative callbackURLs before starting the flow" in new WithApplication {
+      verifyRelativeCallbackURLResolution("/callback-url", false, "http://www.example.com/callback-url")
+    }
+
+    "resolves path relative callbackURLs before starting the flow" in new WithApplication {
+      verifyRelativeCallbackURLResolution("callback-url", false, "http://www.example.com/request-path/callback-url")
+    }
+
+    "resolves relative callbackURLs before starting the flow over https" in new WithApplication {
+      verifyRelativeCallbackURLResolution("/callback-url", true, "https://www.example.com/callback-url")
+    }
+
+    def verifyRelativeCallbackURLResolution(callbackURL: String, secure: Boolean, resolvedCallbackURL: String) = {
+      implicit val req = spy(FakeRequest(GET, "/request-path/something").withHeaders(HeaderNames.HOST -> "www.example.com"))
+
+      req.secure returns secure
+      c.openIDSettings.callbackURL returns callbackURL
+      c.openIDService.redirectURL(any, any) returns Future.successful(c.openIDSettings.providerURL)
+
+      await(c.provider.authenticate())
+      there was one(c.openIDService).redirectURL(any, ===(resolvedCallbackURL))
     }
 
     "fail with an UnexpectedResponseException if auth info cannot be retrieved" in new WithApplication {
