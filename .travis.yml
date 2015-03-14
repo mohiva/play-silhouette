@@ -11,6 +11,7 @@ before_script:
 - echo "TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG, TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST, TRAVIS_BRANCH=$TRAVIS_BRANCH"
 script: scripts/ci-build
 after_success:
+- scripts/api-doc
 - scripts/coveralls
 notifications:
   email: false

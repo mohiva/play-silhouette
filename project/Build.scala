@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import sbt.Keys._
 import sbt._
-import Keys._
 
 object Build extends Build {
 
@@ -33,10 +34,12 @@ object Build extends Build {
     id = "root",
     base = file("."),
     aggregate = Seq(silhouette, silhouetteTestkit),
-    settings = Defaults.coreDefaultSettings ++ Seq(
-      publishLocal := {},
-      publishM2 := {},
-      publishArtifact := false
-    )
+    settings = Defaults.coreDefaultSettings ++
+      APIDoc.settings ++
+      Seq(
+        publishLocal := {},
+        publishM2 := {},
+        publishArtifact := false
+      )
   )
 }

@@ -14,9 +14,19 @@
  * limitations under the License.
  */
 
+import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
+import com.typesafe.sbt.SbtGhPages.ghpages
+import com.typesafe.sbt.SbtGit.GitKeys._
+import com.typesafe.sbt.SbtGit.git
+import com.typesafe.sbt.SbtSite.SiteKeys._
+import com.typesafe.sbt.SbtSite.site
 import sbt.Keys._
 import sbt._
+import sbtunidoc.Plugin._
 
+////*******************************
+//// Basic settings
+////*******************************
 object BasicSettings extends AutoPlugin {
   override def trigger = allRequirements
 
@@ -51,6 +61,7 @@ object BasicSettings extends AutoPlugin {
 object CodeFormatter extends AutoPlugin {
 
   import com.typesafe.sbt.SbtScalariform._
+
   import scalariform.formatter.preferences.{ DoubleIndentClassDeclaration, FormatXml, PreserveDanglingCloseParenthesis }
 
   lazy val BuildConfig = config("build") extend Compile
@@ -90,7 +101,7 @@ object Doc extends AutoPlugin {
 
   override def projectSettings = Seq(
     autoAPIMappings := true,
-    apiURL := Some(url(s"http://silhouette.mohiva.com/api/$version/")),
+    apiURL := Some(url(s"http://api.silhouette.mohiva.com/$version/")),
     apiMappings ++= {
       implicit val cp = (fullClasspath in Compile).value
       Map(
@@ -118,6 +129,36 @@ object Doc extends AutoPlugin {
       jarFile = entry.data
     } yield jarFile).head
   }
+}
+
+////*******************************
+//// APIDoc settings
+////*******************************
+// @see https://github.com/paypal/horizon/blob/develop/src/main/scala/com/paypal/horizon/BuildUtilities.scala
+object APIDoc {
+
+  lazy val files = Seq(file("CNAME"))
+
+  lazy val settings = unidocSettings ++
+    site.settings ++
+    ghpages.settings ++
+    Seq(
+      // Create version
+      siteMappings <++= (mappings in (ScalaUnidoc, packageDoc), version).map { (mapping, ver) =>
+        for ((file, path) <- mapping) yield (file, s"$ver/$path")
+      },
+      // Add custom files from site directory
+      siteMappings <++= baseDirectory.map { dir =>
+        for (file <- files) yield (new File(dir.getAbsolutePath + "/site/" + file), file.name)
+      },
+      // Do not delete old versions
+      synchLocal <<= (privateMappings, updatedRepository, gitRunner, streams).map { (mappings, repo, git, s) =>
+        val betterMappings = mappings.map { case (file, tgt) => (file, repo / tgt) }
+        IO.copy(betterMappings)
+        repo
+      },
+      git.remoteRepo := "git@github.com:mohiva/play-silhouette.git"
+    )
 }
 
 ////*******************************
@@ -149,7 +190,7 @@ object Publish extends AutoPlugin {
   }
 
   override def projectSettings = sonatypeSettings ++ Seq(
-    description := "Authentication library for Play Framework applications that supports several authentication methods, including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes",
+    description := "Authentication library for Play Framework applications that supports several authentication methods, including OAuth1, OAuth2, OpenID, Credentials, Basic Authentication, Two Factor Authentication or custom authentication schemes",
     homepage := Some(url("http://silhouette.mohiva.com/")),
     licenses := Seq("Apache License" -> url("https://github.com/mohiva/play-silhouette/blob/master/LICENSE")),
     publishMavenStyle := true,

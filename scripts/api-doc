@@ -1,6 +1,6 @@
-#!/usr/bin/perl
+#!/bin/bash
 #
-# Outputs version specified in the standard input.
+# Updates the API-Doc in the 'gh-pages' branch.
 #
 # Copyright 2015 Mohiva Organisation (license at mohiva dot com)
 #
@@ -16,14 +16,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+set -o nounset -o errexit
 
-use strict;
-use warnings;
+if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
+  echo ""
+  echo "Starting API-Doc update process"
 
-while (<>) {
-  if ($_ =~ /^version := "(.*)"$/m) {
-    print "$1\n";
-    exit;
-  }
-}
-die "Version not found.\n";
+  git config --global user.email "travis@travis-ci.org"
+  git config --global user.name "travis-ci"
+  scripts/sbt ghpages-push-site
+
+  echo ""
+  echo "Finished API-Doc update process"
+else
+  echo ""
+  echo "Skipping API-Doc update"
+fi
