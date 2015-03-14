@@ -45,14 +45,14 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">FakeDummyAuthenticatorService</span><span class="params">()</span><span class="result"> extends <span class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">DummyAuthenticatorService</span> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">FakeDummyAuthenticatorService</span><span class="params">()</span><span class="result"> extends <a href="../impl/authenticators/DummyAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">DummyAuthenticatorService</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A fake Dummy authenticator service.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <span class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">DummyAuthenticatorService</span>, <span class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</span>[<span class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="../impl/authenticators/DummyAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">DummyAuthenticatorService</a>, <a href="../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a>[<a href="../impl/authenticators/DummyAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</a>], <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -121,14 +121,16 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">AdditionalHeaders</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Headers" class="extype" target="_top">Headers</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="../api/services/AuthenticatorService$AdditionalHeaders.html"><span class="name">AdditionalHeaders</span></a><span class="params">(<span name="existing">existing: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Headers" class="extype" target="_top">Headers</a></span>, <span name="additional">additional: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>])]</span>)</span><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Headers" class="extype" target="_top">Headers</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.test.FakeDummyAuthenticatorService@AdditionalHeadersextendsHeaderswithProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@AdditionalHeadersextendsHeaderswithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AuthenticatorService</dd></dl></div>
+      <p class="shortcomment cmt">Used to add additional headers to the existing headers.</p><div class="fullcomment"><div class="comment cmt"><p>Used to add additional headers to the existing headers.
+</p></div><dl class="paramcmts block"><dt class="param">existing</dt><dd class="cmt"><p>The existing headers.</p></dd><dt class="param">additional</dt><dd class="cmt"><p>The additional headers to add.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -145,7 +147,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.test.FakeDummyAuthenticatorService@!=(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -179,7 +181,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.test.FakeDummyAuthenticatorService@==(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -213,7 +215,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.test.FakeDummyAuthenticatorService@clone():Object" title="Permalink" target="_top">
@@ -236,14 +238,16 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">create</span><span class="params">(<span name="loginInfo">loginInfo: <span class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</span>]</span>
+        <span class="name">create</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="../impl/authenticators/DummyAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.test.FakeDummyAuthenticatorService@create(loginInfo:com.mohiva.play.silhouette.api.LoginInfo)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>DummyAuthenticatorService → AuthenticatorService</dd></dl></div>
+      <p class="shortcomment cmt">Creates a new authenticator for the specified login info.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a new authenticator for the specified login info.
+</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the authenticator should be created.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>An authenticator.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../impl/authenticators/DummyAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">DummyAuthenticatorService</a> → <a href="../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService#discard" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="discard(authenticator:com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator,result:scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]"></a>
       <a id="discard(DummyAuthenticator,Future[Result])(RequestHeader):Future[Result]"></a>
@@ -253,14 +257,15 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">discard</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</span></span>, <span name="result">result: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>
+        <span class="name">discard</span><span class="params">(<span name="authenticator">authenticator: <a href="../impl/authenticators/DummyAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</a></span>, <span name="result">result: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.test.FakeDummyAuthenticatorService@discard(authenticator:com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator,result:scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">com.mohiva.play.silhouette</a>] </dd><dt>Definition Classes</dt><dd>DummyAuthenticatorService → AuthenticatorService</dd></dl></div>
+      <p class="shortcomment cmt">Returns the original request, because we needn't discard the authenticator in the result.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the original request, because we needn't discard the authenticator in the result.</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator instance.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The manipulated result.
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">com.mohiva.play.silhouette</a>] </dd><dt>Definition Classes</dt><dd><a href="../impl/authenticators/DummyAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">DummyAuthenticatorService</a> → <a href="../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService#embed" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="embed(value:Unit,request:play.api.mvc.RequestHeader):play.api.mvc.RequestHeader"></a>
       <a id="embed(Unit,RequestHeader):RequestHeader"></a>
@@ -277,7 +282,9 @@
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>DummyAuthenticatorService → AuthenticatorService</dd></dl></div>
+      <p class="shortcomment cmt">Returns the original request, because we needn't add the authenticator to the request.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the original request, because we needn't add the authenticator to the request.
+</p></div><dl class="paramcmts block"><dt class="param">value</dt><dd class="cmt"><p>The authenticator value to embed.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The manipulated request header.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../impl/authenticators/DummyAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">DummyAuthenticatorService</a> → <a href="../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService#embed" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="embed(value:Unit,result:scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]"></a>
       <a id="embed(Unit,Future[Result])(RequestHeader):Future[Result]"></a>
@@ -294,7 +301,9 @@
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>DummyAuthenticatorService → AuthenticatorService</dd></dl></div>
+      <p class="shortcomment cmt">Returns the original result, because we needn't add the authenticator to the result.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the original result, because we needn't add the authenticator to the result.
+</p></div><dl class="paramcmts block"><dt class="param">value</dt><dd class="cmt"><p>The authenticator value to embed.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The manipulated result.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../impl/authenticators/DummyAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">DummyAuthenticatorService</a> → <a href="../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -304,7 +313,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.test.FakeDummyAuthenticatorService@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
@@ -361,14 +370,16 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">init</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">init</span><span class="params">(<span name="authenticator">authenticator: <a href="../impl/authenticators/DummyAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.test.FakeDummyAuthenticatorService@init(authenticator:com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>DummyAuthenticatorService → AuthenticatorService</dd></dl></div>
+      <p class="shortcomment cmt">Returns noting because this authenticator doesn't have a serialized representation.</p><div class="fullcomment"><div class="comment cmt"><p>Returns noting because this authenticator doesn't have a serialized representation.
+</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator instance.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The serialized authenticator value.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../impl/authenticators/DummyAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">DummyAuthenticatorService</a> → <a href="../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -395,7 +406,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.test.FakeDummyAuthenticatorService@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
@@ -446,14 +457,16 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">renew</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</span></span>, <span name="result">result: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>
+        <span class="name">renew</span><span class="params">(<span name="authenticator">authenticator: <a href="../impl/authenticators/DummyAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</a></span>, <span name="result">result: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.test.FakeDummyAuthenticatorService@renew(authenticator:com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator,result:scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">com.mohiva.play.silhouette</a>] </dd><dt>Definition Classes</dt><dd>DummyAuthenticatorService → AuthenticatorService</dd></dl></div>
+      <p class="shortcomment cmt">Returns the original request, because we needn't renew the authenticator in the result.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the original request, because we needn't renew the authenticator in the result.
+</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to update.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The original or a manipulated result.
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">com.mohiva.play.silhouette</a>] </dd><dt>Definition Classes</dt><dd><a href="../impl/authenticators/DummyAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">DummyAuthenticatorService</a> → <a href="../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService#retrieve" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="retrieve(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[None.type]"></a>
       <a id="retrieve(RequestHeader):Future[None.type]"></a>
@@ -470,7 +483,11 @@
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>DummyAuthenticatorService → AuthenticatorService</dd></dl></div>
+      <p class="shortcomment cmt">Retrieves the authenticator from request.</p><div class="fullcomment"><div class="comment cmt"><p>Retrieves the authenticator from request.</p><p>Doesn't need to return an authenticator here, because this method will not be called if
+a request provider grants access. If the authentication with a request provider has failed,
+then this method must return None to not grant access to the resource.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>Always None because .
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../impl/authenticators/DummyAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">DummyAuthenticatorService</a> → <a href="../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -497,14 +514,20 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">touch</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</span></span>)</span><span class="result">: <span class="extype" name="scala.util.Right">Right</span>[<span class="extype" name="scala.Nothing">Nothing</span>, <span class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</span>]</span>
+        <span class="name">touch</span><span class="params">(<span name="authenticator">authenticator: <a href="../impl/authenticators/DummyAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</a></span>)</span><span class="result">: <span class="extype" name="scala.util.Right">Right</span>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>, <a href="../impl/authenticators/DummyAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.test.FakeDummyAuthenticatorService@touch(authenticator:com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator):scala.util.Right[Nothing,com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">com.mohiva.play.silhouette</a>] </dd><dt>Definition Classes</dt><dd>DummyAuthenticatorService → AuthenticatorService</dd></dl></div>
+      <p class="shortcomment cmt">Touches an authenticator.</p><div class="fullcomment"><div class="comment cmt"><p>Touches an authenticator.</p><p>An authenticator can use sliding window expiration. This means that the authenticator times
+out after a certain time if it wasn't used. So to mark an authenticator as used it will be
+touched on every request to a Silhouette action. If an authenticator should not be touched
+because of the fact that sliding window expiration is disabled, then it should be returned
+on the right, otherwise it should be returned on the left. An untouched authenticator needn't
+be updated later by the <a href="../impl/authenticators/DummyAuthenticatorService.html#update(authenticator:com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator,result:scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" class="extmbr" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService#update">update</a> method.</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to touch.</p></dd><dt>returns</dt><dd class="cmt"><p>The touched authenticator on the left or the untouched authenticator on the right.
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">com.mohiva.play.silhouette</a>] </dd><dt>Definition Classes</dt><dd><a href="../impl/authenticators/DummyAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">DummyAuthenticatorService</a> → <a href="../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService#update" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="update(authenticator:com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator,result:scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]"></a>
       <a id="update(DummyAuthenticator,Future[Result])(RequestHeader):Future[Result]"></a>
@@ -514,14 +537,16 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">update</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</span></span>, <span name="result">result: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>
+        <span class="name">update</span><span class="params">(<span name="authenticator">authenticator: <a href="../impl/authenticators/DummyAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</a></span>, <span name="result">result: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.test.FakeDummyAuthenticatorService@update(authenticator:com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator,result:scala.concurrent.Future[play.api.mvc.Result])(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">com.mohiva.play.silhouette</a>] </dd><dt>Definition Classes</dt><dd>DummyAuthenticatorService → AuthenticatorService</dd></dl></div>
+      <p class="shortcomment cmt">Returns the original request, because we needn't update the authenticator in the result.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the original request, because we needn't update the authenticator in the result.
+</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to update.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The original or a manipulated result.
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">com.mohiva.play.silhouette</a>] </dd><dt>Definition Classes</dt><dd><a href="../impl/authenticators/DummyAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">DummyAuthenticatorService</a> → <a href="../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -609,13 +634,13 @@
             </div><div class="parent" name="scala.Equals">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
             </div><div class="parent" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">
-              <h3>Inherited from <span class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">DummyAuthenticatorService</span></h3>
+              <h3>Inherited from <a href="../impl/authenticators/DummyAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">DummyAuthenticatorService</a></h3>
             </div><div class="parent" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">
-              <h3>Inherited from <span class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</span>[<span class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</span>]</h3>
+              <h3>Inherited from <a href="../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a>[<a href="../impl/authenticators/DummyAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</a>]</h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
             </div>
         
         </div>
