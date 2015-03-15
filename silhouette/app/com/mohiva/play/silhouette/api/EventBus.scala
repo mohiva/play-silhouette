@@ -15,8 +15,6 @@
  */
 package com.mohiva.play.silhouette.api
 
-import akka.event.{ SubchannelClassification, ActorEventBus, LookupClassification }
-import akka.util.Subclassification
 import play.api.i18n.Lang
 import play.api.mvc.RequestHeader
 
@@ -84,51 +82,13 @@ case class NotAuthenticatedEvent(request: RequestHeader, lang: Lang) extends Sil
 case class NotAuthorizedEvent[I <: Identity](identity: I, request: RequestHeader, lang: Lang) extends SilhouetteEvent
 
 /**
- * An event bus implementation which uses a class based lookup classification.
+ * The EventBus api, used to publish authentication related events.
  */
-class EventBus extends ActorEventBus with SubchannelClassification {
-  type Classifier = Class[_ <: SilhouetteEvent]
-  type Event = SilhouetteEvent
+trait EventBus {
 
   /**
-   * The logic to form sub-class hierarchy
+   * Publishes the event.
+   * @param event The event to publish
    */
-  protected implicit val subclassification = new Subclassification[Classifier] {
-    def isEqual(x: Classifier, y: Classifier): Boolean = x == y
-    def isSubclass(x: Classifier, y: Classifier): Boolean = y.isAssignableFrom(x)
-  }
-
-  /**
-   * Publishes the given Event to the given Subscriber.
-   *
-   * @param event The Event to publish.
-   * @param subscriber The Subscriber to which the Event should be published.
-   */
-  protected def publish(event: Event, subscriber: Subscriber): Unit = subscriber ! event
-
-  /**
-   * Returns the Classifier associated with the given Event.
-   *
-   * @param event The event for which the Classifier should be returned.
-   * @return The Classifier for the given Event..
-   */
-  protected def classify(event: Event): Classifier = event.getClass
-}
-
-/**
- * A global event bus instance.
- */
-object EventBus {
-
-  /**
-   * Holds the global event bus instance.
-   */
-  private lazy val instance = new EventBus
-
-  /**
-   * Gets a global event bus instance.
-   *
-   * @return A global event bus instance.
-   */
-  def apply() = instance
+  def publish(event: SilhouetteEvent): Unit
 }
