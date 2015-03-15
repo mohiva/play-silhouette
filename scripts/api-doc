@@ -22,6 +22,13 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
   echo ""
   echo "Starting API-Doc update process"
 
+  GHPAGES_DIR="$HOME/.sbt/ghpages/com.mohiva/root"
+  GIT_DIR="$GHPAGES_DIR/.git"
+
+  mkdir -p "$(dirname ${GHPAGES_DIR})"
+  git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git "$GHPAGES_DIR" > /dev/null
+  git config credential.helper "store --file=$GIT_DIR/credentials"
+  echo "https://${GH_TOKEN}:@github.com" > "$GIT_DIR/credentials"
   git config --global user.email "travis@travis-ci.org"
   git config --global user.name "travis-ci"
   scripts/sbt ghpages-push-site
