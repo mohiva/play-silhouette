@@ -108,7 +108,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  protected[silhouette] def touch(authenticator: DummyAuthenticator) = Right(authenticator)
+  def touch(authenticator: DummyAuthenticator) = Right(authenticator)
 
   /**
    * Returns the original request, because we needn't update the authenticator in the result.
@@ -118,7 +118,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def update(
+  def update(
     authenticator: DummyAuthenticator,
     result: Future[Result])(implicit request: RequestHeader) = {
 
@@ -133,7 +133,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def renew(
+  def renew(
     authenticator: DummyAuthenticator,
     result: Future[Result])(implicit request: RequestHeader) = {
 
@@ -147,7 +147,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The manipulated result.
    */
-  protected[silhouette] def discard(
+  def discard(
     authenticator: DummyAuthenticator,
     result: Future[Result])(implicit request: RequestHeader) = {
 

@@ -211,7 +211,7 @@ class CookieAuthenticatorService(
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  protected[silhouette] def touch(
+  def touch(
     authenticator: CookieAuthenticator): Either[CookieAuthenticator, CookieAuthenticator] = {
 
     if (authenticator.idleTimeout.isDefined) {
@@ -232,7 +232,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def update(
+  def update(
     authenticator: CookieAuthenticator,
     result: Future[Result])(implicit request: RequestHeader) = {
 
@@ -252,7 +252,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def renew(
+  def renew(
     authenticator: CookieAuthenticator,
     result: Future[Result])(implicit request: RequestHeader) = {
 
@@ -272,7 +272,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  protected[silhouette] def discard(
+  def discard(
     authenticator: CookieAuthenticator,
     result: Future[Result])(implicit request: RequestHeader) = {
 
