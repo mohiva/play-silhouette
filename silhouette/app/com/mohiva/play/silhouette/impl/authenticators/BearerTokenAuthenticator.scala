@@ -178,7 +178,7 @@ class BearerTokenAuthenticatorService(
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  protected[silhouette] def touch(
+  def touch(
     authenticator: BearerTokenAuthenticator): Either[BearerTokenAuthenticator, BearerTokenAuthenticator] = {
 
     if (authenticator.idleTimeout.isDefined) {
@@ -199,7 +199,7 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def update(
+  def update(
     authenticator: BearerTokenAuthenticator,
     result: Future[Result])(implicit request: RequestHeader) = {
 
@@ -219,7 +219,7 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def renew(
+  def renew(
     authenticator: BearerTokenAuthenticator,
     result: Future[Result])(implicit request: RequestHeader) = {
 
@@ -239,7 +239,7 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  protected[silhouette] def discard(
+  def discard(
     authenticator: BearerTokenAuthenticator,
     result: Future[Result])(implicit request: RequestHeader) = {
 

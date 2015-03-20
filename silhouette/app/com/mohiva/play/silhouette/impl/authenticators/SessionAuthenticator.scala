@@ -191,7 +191,7 @@ class SessionAuthenticatorService(
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  protected[silhouette] def touch(
+  def touch(
     authenticator: SessionAuthenticator): Either[SessionAuthenticator, SessionAuthenticator] = {
 
     if (authenticator.idleTimeout.isDefined) {
@@ -212,7 +212,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def update(
+  def update(
     authenticator: SessionAuthenticator,
     result: Future[Result])(implicit request: RequestHeader) = {
 
@@ -230,7 +230,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def renew(
+  def renew(
     authenticator: SessionAuthenticator,
     result: Future[Result])(implicit request: RequestHeader) = {
 
@@ -248,7 +248,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  protected[silhouette] def discard(
+  def discard(
     authenticator: SessionAuthenticator,
     result: Future[Result])(implicit request: RequestHeader) = {
 

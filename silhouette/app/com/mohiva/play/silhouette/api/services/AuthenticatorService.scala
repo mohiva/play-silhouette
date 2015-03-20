@@ -128,7 +128,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  protected[silhouette] def touch(authenticator: T): Either[T, T]
+  def touch(authenticator: T): Either[T, T]
 
   /**
    * Updates a touched authenticator.
@@ -142,7 +142,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def update(authenticator: T, result: Future[Result])(implicit request: RequestHeader): Future[Result]
+  def update(authenticator: T, result: Future[Result])(implicit request: RequestHeader): Future[Result]
 
   /**
    * Renews the expiration of an authenticator.
@@ -156,7 +156,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def renew(authenticator: T, result: Future[Result])(implicit request: RequestHeader): Future[Result]
+  def renew(authenticator: T, result: Future[Result])(implicit request: RequestHeader): Future[Result]
 
   /**
    * Manipulates the response and removes authenticator specific artifacts before sending it to the client.
@@ -166,7 +166,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return The manipulated result.
    */
-  protected[silhouette] def discard(authenticator: T, result: Future[Result])(implicit request: RequestHeader): Future[Result]
+  def discard(authenticator: T, result: Future[Result])(implicit request: RequestHeader): Future[Result]
 }
 
 /**

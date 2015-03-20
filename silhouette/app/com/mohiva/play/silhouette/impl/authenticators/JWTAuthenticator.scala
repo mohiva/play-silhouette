@@ -201,7 +201,7 @@ class JWTAuthenticatorService(
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  protected[silhouette] def touch(authenticator: JWTAuthenticator): Either[JWTAuthenticator, JWTAuthenticator] = {
+  def touch(authenticator: JWTAuthenticator): Either[JWTAuthenticator, JWTAuthenticator] = {
     if (authenticator.idleTimeout.isDefined) {
       Left(authenticator.copy(lastUsedDate = clock.now))
     } else {
@@ -220,7 +220,7 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def update(
+  def update(
     authenticator: JWTAuthenticator,
     result: Future[Result])(implicit request: RequestHeader) = {
 
@@ -240,7 +240,7 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def renew(
+  def renew(
     authenticator: JWTAuthenticator,
     result: Future[Result])(implicit request: RequestHeader) = {
 
@@ -260,7 +260,7 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  protected[silhouette] def discard(
+  def discard(
     authenticator: JWTAuthenticator,
     result: Future[Result])(implicit request: RequestHeader) = {
 
@@ -277,7 +277,7 @@ class JWTAuthenticatorService(
    * @param authenticator The authenticator to serialize.
    * @return The serialized authenticator.
    */
-  protected[silhouette] def serialize(authenticator: JWTAuthenticator): String = {
+  def serialize(authenticator: JWTAuthenticator): String = {
     val subject = Json.toJson(authenticator.loginInfo).toString()
     val jwtBuilder = new JsonSmartJwtJsonBuilder()
       .jwtId(authenticator.id)
@@ -307,7 +307,7 @@ class JWTAuthenticatorService(
    * @param str The string representation of the authenticator.
    * @return An authenticator on success, otherwise a failure.
    */
-  protected[silhouette] def unserialize(str: String): Try[JWTAuthenticator] = {
+  def unserialize(str: String): Try[JWTAuthenticator] = {
     Try {
       val verifier = new MACVerifier(settings.sharedSecret)
       val jwsObject = JWSObject.parse(str)
