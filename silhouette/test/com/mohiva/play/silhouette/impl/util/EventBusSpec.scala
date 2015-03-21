@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.api
+package com.mohiva.play.silhouette.impl.util
 
 import akka.actor.{ Actor, Props }
 import akka.testkit.TestProbe
+import com.mohiva.play.silhouette.api._
 import org.specs2.specification.Scope
 import play.api.i18n.Lang
 import play.api.libs.concurrent.Akka
@@ -25,13 +26,13 @@ import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 import scala.concurrent.duration._
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.api.EventBus]] class.
+ * Test case for the [[AkkaEventBus]] class.
  */
 class EventBusSpec extends PlaySpecification {
 
   "The event bus" should {
     "handle an subclass event" in new WithApplication with Context {
-      val eventBus = new EventBus
+      val eventBus = new AkkaEventBus
       val listener = system.actorOf(Props(new Actor {
         def receive = {
           case e => theProbe.ref ! e
@@ -48,7 +49,7 @@ class EventBusSpec extends PlaySpecification {
     }
 
     "handle an event" in new WithApplication with Context {
-      val eventBus = new EventBus
+      val eventBus = new AkkaEventBus
       val listener = system.actorOf(Props(new Actor {
         def receive = {
           case e @ LoginEvent(_, _, _) => theProbe.ref ! e
@@ -62,7 +63,7 @@ class EventBusSpec extends PlaySpecification {
     }
 
     "handle multiple events" in new WithApplication with Context {
-      val eventBus = new EventBus
+      val eventBus = new AkkaEventBus
       val listener = system.actorOf(Props(new Actor {
         def receive = {
           case e @ LoginEvent(_, _, _) => theProbe.ref ! e
@@ -80,7 +81,7 @@ class EventBusSpec extends PlaySpecification {
     }
 
     "differentiate between event classes" in new WithApplication with Context {
-      val eventBus = new EventBus
+      val eventBus = new AkkaEventBus
       val listener = system.actorOf(Props(new Actor {
         def receive = {
           case e @ LoginEvent(_, _, _) => theProbe.ref ! e
@@ -94,7 +95,7 @@ class EventBusSpec extends PlaySpecification {
     }
 
     "not handle not subscribed events" in new WithApplication with Context {
-      val eventBus = new EventBus
+      val eventBus = new AkkaEventBus
       val listener = system.actorOf(Props(new Actor {
         def receive = {
           case e @ LoginEvent(_, _, _) => theProbe.ref ! e
@@ -107,8 +108,8 @@ class EventBusSpec extends PlaySpecification {
     }
 
     "not handle events between different event buses" in new WithApplication with Context {
-      val eventBus1 = new EventBus
-      val eventBus2 = new EventBus
+      val eventBus1 = new AkkaEventBus
+      val eventBus2 = new AkkaEventBus
 
       val listener = system.actorOf(Props(new Actor {
         def receive = {
@@ -123,8 +124,8 @@ class EventBusSpec extends PlaySpecification {
     }
 
     "returns a singleton event bus" in new WithApplication with Context {
-      val eventBus1 = EventBus()
-      val eventBus2 = EventBus()
+      val eventBus1 = AkkaEventBus()
+      val eventBus2 = AkkaEventBus()
 
       eventBus1 ==== eventBus2
     }

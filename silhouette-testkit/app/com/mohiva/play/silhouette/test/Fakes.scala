@@ -194,6 +194,18 @@ object FakeAuthenticator {
 }
 
 /**
+ * A fake event bus that discards all events.
+ */
+case class FakeEventBus() extends EventBus {
+
+  /**
+   * Publishes the event.
+   * @param event The event to publish
+   */
+  override def publish(event: SilhouetteEvent): Unit = ()
+}
+
+/**
  * A fake environment implementation.
  *
  * @param identities A list of (login info -> identity) pairs to return inside a Silhouette action.
@@ -205,7 +217,7 @@ object FakeAuthenticator {
 case class FakeEnvironment[I <: Identity, T <: Authenticator: TypeTag](
   identities: Seq[(LoginInfo, I)],
   providers: Map[String, Provider] = Map(),
-  eventBus: EventBus = EventBus())
+  eventBus: EventBus = FakeEventBus())
   extends Environment[I, T] {
 
   /**
