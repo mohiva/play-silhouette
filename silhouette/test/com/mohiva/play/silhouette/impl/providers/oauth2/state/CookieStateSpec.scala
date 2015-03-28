@@ -157,7 +157,7 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
   "The `publish` method of the provider" should {
     "add the state to the cookie" in new Context {
       implicit val req = FakeRequest(GET, "/")
-      val result = Future.successful(provider.publish(Results.Status(200), state))
+      val result = Future.successful(provider.publish(Results.Ok, state))
 
       cookies(result).get(settings.cookieName) should beSome[Cookie].which { c =>
         c.name must be equalTo settings.cookieName

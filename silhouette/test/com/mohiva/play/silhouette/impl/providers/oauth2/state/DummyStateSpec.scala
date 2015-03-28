@@ -57,7 +57,7 @@ class DummyStateSpec extends PlaySpecification with Mockito with JsonMatchers {
   "The `publish` method of the provider" should {
     "return the original result" in new Context {
       implicit val req = FakeRequest(GET, "/")
-      val result = Results.Status(200)
+      val result = Results.Ok
 
       provider.publish(result, state) must be equalTo result
     }

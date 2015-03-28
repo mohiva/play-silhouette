@@ -244,7 +244,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       implicit val request = FakeRequest()
       val data = Crypto.encryptAES(Json.toJson(authenticator).toString())
-      val result = service.embed(Session(Map(settings.sessionKey -> data)), Future.successful(Results.Ok))
+      val result = service.embed(Session(Map(settings.sessionKey -> data)), Results.Ok)
 
       session(result).get(settings.sessionKey) should beSome(data)
     }
@@ -254,7 +254,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       implicit val request = FakeRequest().withSession(settings.sessionKey -> "existing")
       val data = Crypto.encryptAES(Json.toJson(authenticator).toString())
-      val result = service.embed(Session(Map(settings.sessionKey -> data)), Future.successful(Results.Ok))
+      val result = service.embed(Session(Map(settings.sessionKey -> data)), Results.Ok)
 
       session(result).get(settings.sessionKey) should beSome(data)
     }
@@ -264,9 +264,9 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       implicit val request = FakeRequest().withSession("request-other" -> "keep")
       val data = Crypto.encryptAES(Json.toJson(authenticator).toString())
-      val result = service.embed(Session(Map(settings.sessionKey -> data)), Future.successful(Results.Ok.addingToSession(
+      val result = service.embed(Session(Map(settings.sessionKey -> data)), Results.Ok.addingToSession(
         "result-other" -> "keep"
-      )))
+      ))
 
       session(result).get(settings.sessionKey) should beSome(data)
       session(result).get("request-other") should beSome("keep")
@@ -324,7 +324,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       implicit val request = FakeRequest()
       val data = Base64.encode(Json.toJson(authenticator))
-      val result = service.update(authenticator, Future.successful(Results.Ok))
+      val result = service.update(authenticator, Results.Ok)
 
       status(result) must be equalTo OK
       session(result).get(settings.sessionKey) should beSome(data)
@@ -335,7 +335,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       implicit val request = FakeRequest()
       val data = Crypto.encryptAES(Json.toJson(authenticator).toString())
-      val result = service.update(authenticator, Future.successful(Results.Ok))
+      val result = service.update(authenticator, Results.Ok)
 
       status(result) must be equalTo OK
       session(result).get(settings.sessionKey) should beSome(data)
@@ -346,7 +346,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       implicit val request = FakeRequest().withSession(settings.sessionKey -> "existing")
       val data = Crypto.encryptAES(Json.toJson(authenticator).toString())
-      val result = service.update(authenticator, Future.successful(Results.Ok))
+      val result = service.update(authenticator, Results.Ok)
 
       session(result).get(settings.sessionKey) should beSome(data)
     }
@@ -356,9 +356,9 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       implicit val request = FakeRequest().withSession("request-other" -> "keep")
       val data = Crypto.encryptAES(Json.toJson(authenticator).toString())
-      val result = service.update(authenticator, Future.successful(Results.Ok.addingToSession(
+      val result = service.update(authenticator, Results.Ok.addingToSession(
         "result-other" -> "keep"
-      )))
+      ))
 
       session(result).get(settings.sessionKey) should beSome(data)
       session(result).get("request-other") should beSome("keep")
@@ -370,7 +370,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       request.session throws new RuntimeException("Cannot get session")
 
-      await(service.update(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticatorUpdateException].like {
+      await(service.update(authenticator, Results.Ok)) must throwA[AuthenticatorUpdateException].like {
         case e =>
           e.getMessage must startWith(UpdateError.format(ID, ""))
       }
@@ -390,7 +390,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       settings.useFingerprinting returns false
       clock.now returns now
 
-      val result = service.renew(authenticator, Future.successful(Results.Ok))
+      val result = service.renew(authenticator, Results.Ok)
 
       session(result).get(settings.sessionKey) should beSome(data)
     }
@@ -407,7 +407,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       settings.useFingerprinting returns false
       clock.now returns now
 
-      val result = service.renew(authenticator, Future.successful(Results.Ok))
+      val result = service.renew(authenticator, Results.Ok)
 
       session(result).get(settings.sessionKey) should beSome(data)
     }
@@ -424,7 +424,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       settings.useFingerprinting returns false
       clock.now returns now
 
-      val result = service.renew(authenticator, Future.successful(Results.Ok))
+      val result = service.renew(authenticator, Results.Ok)
 
       session(result).get(settings.sessionKey) should beSome(data)
     }
@@ -441,9 +441,9 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       settings.useFingerprinting returns false
       clock.now returns now
 
-      val result = service.renew(authenticator, Future.successful(Results.Ok.addingToSession(
+      val result = service.renew(authenticator, Results.Ok.addingToSession(
         "result-other" -> "keep"
-      )))
+      ))
 
       session(result).get(settings.sessionKey) should beSome(data)
       session(result).get("request-other") should beSome("keep")
@@ -459,7 +459,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       settings.useFingerprinting returns false
       clock.now returns now
 
-      await(service.renew(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticatorRenewalException].like {
+      await(service.renew(authenticator, Results.Ok)) must throwA[AuthenticatorRenewalException].like {
         case e =>
           e.getMessage must startWith(RenewError.format(ID, ""))
       }
@@ -469,18 +469,18 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
   "The `discard` method of the service" should {
     "discard the authenticator from session" in new WithApplication with Context {
       implicit val request = FakeRequest()
-      val result = service.discard(authenticator, Future.successful(Results.Ok.withSession(
+      val result = service.discard(authenticator, Results.Ok.withSession(
         settings.sessionKey -> "test"
-      )))
+      ))
 
       session(result).get(settings.sessionKey) should beNone
     }
 
     "non authenticator related session data" in new WithApplication with Context {
       implicit val request = FakeRequest().withSession("request-other" -> "keep", settings.sessionKey -> "test")
-      val result = service.discard(authenticator, Future.successful(Results.Ok.addingToSession(
+      val result = service.discard(authenticator, Results.Ok.addingToSession(
         "result-other" -> "keep"
-      )))
+      ))
 
       session(result).get(settings.sessionKey) should beNone
       session(result).get("request-other") should beSome("keep")
@@ -493,7 +493,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       result.removingFromSession(any)(any) throws new RuntimeException("Cannot get session")
 
-      await(service.discard(authenticator, Future.successful(result))) must throwA[AuthenticatorDiscardingException].like {
+      await(service.discard(authenticator, result)) must throwA[AuthenticatorDiscardingException].like {
         case e =>
           e.getMessage must startWith(DiscardError.format(ID, ""))
       }

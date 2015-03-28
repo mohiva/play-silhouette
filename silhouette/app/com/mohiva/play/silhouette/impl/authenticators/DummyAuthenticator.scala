@@ -89,8 +89,8 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The manipulated result.
    */
-  def embed(value: Unit, result: Future[Result])(implicit request: RequestHeader) = {
-    result
+  def embed(value: Unit, result: Result)(implicit request: RequestHeader) = {
+    Future.successful(result)
   }
 
   /**
@@ -120,9 +120,9 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    */
   protected[silhouette] def update(
     authenticator: DummyAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+    result: Result)(implicit request: RequestHeader) = {
 
-    result
+    Future.successful(result)
   }
 
   /**
@@ -135,9 +135,9 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    */
   protected[silhouette] def renew(
     authenticator: DummyAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+    result: Result)(implicit request: RequestHeader) = {
 
-    result
+    Future.successful(result)
   }
 
   /**
@@ -149,9 +149,9 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    */
   protected[silhouette] def discard(
     authenticator: DummyAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+    result: Result)(implicit request: RequestHeader) = {
 
-    result
+    Future.successful(result)
   }
 }
 

@@ -157,8 +157,10 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  def embed(token: String, result: Future[Result])(implicit request: RequestHeader) = {
-    result.map(_.withHeaders(settings.headerName -> token))
+  def embed(token: String, result: Result)(implicit request: RequestHeader) = {
+    Future.successful(
+      result.withHeaders(settings.headerName -> token)
+    )
   }
 
   /**
@@ -201,9 +203,9 @@ class BearerTokenAuthenticatorService(
    */
   protected[silhouette] def update(
     authenticator: BearerTokenAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+    result: Result)(implicit request: RequestHeader) = {
 
-    dao.save(authenticator).flatMap { a =>
+    dao.save(authenticator).map { a =>
       result
     }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
@@ -221,7 +223,7 @@ class BearerTokenAuthenticatorService(
    */
   protected[silhouette] def renew(
     authenticator: BearerTokenAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+    result: Result)(implicit request: RequestHeader) = {
 
     dao.remove(authenticator.id).flatMap { _ =>
       create(authenticator.loginInfo).flatMap { a =>
@@ -241,9 +243,9 @@ class BearerTokenAuthenticatorService(
    */
   protected[silhouette] def discard(
     authenticator: BearerTokenAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+    result: Result)(implicit request: RequestHeader) = {
 
-    dao.remove(authenticator.id).flatMap { _ =>
+    dao.remove(authenticator.id).map { _ =>
       result
     }.recover {
       case e => throw new AuthenticatorDiscardingException(DiscardError.format(ID, authenticator), e)

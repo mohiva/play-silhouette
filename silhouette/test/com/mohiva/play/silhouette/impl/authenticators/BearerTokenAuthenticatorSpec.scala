@@ -170,7 +170,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
     "return the response with a header" in new Context {
       implicit val request = FakeRequest()
       val value = authenticator.id
-      val result = service.embed(value, Future.successful(Results.Status(200)))
+      val result = service.embed(value, Results.Ok)
 
       header(settings.headerName, result) should beSome(authenticator.id)
     }
@@ -228,7 +228,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
 
       implicit val request = FakeRequest()
 
-      await(service.update(authenticator, Future.successful(Results.Ok)))
+      await(service.update(authenticator, Results.Ok))
 
       there was one(dao).save(authenticator)
     }
@@ -237,7 +237,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
       dao.save(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
 
       implicit val request = FakeRequest()
-      val result = service.update(authenticator, Future.successful(Results.Ok))
+      val result = service.update(authenticator, Results.Ok)
 
       status(result) must be equalTo OK
     }
@@ -247,7 +247,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
 
       implicit val request = FakeRequest()
 
-      await(service.update(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticatorUpdateException].like {
+      await(service.update(authenticator, Results.Ok)) must throwA[AuthenticatorUpdateException].like {
         case e =>
           e.getMessage must startWith(UpdateError.format(ID, ""))
       }
@@ -265,7 +265,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
-      await(service.renew(authenticator, Future.successful(Results.Ok)))
+      await(service.renew(authenticator, Results.Ok))
 
       there was one(dao).remove(authenticator.id)
     }
@@ -280,7 +280,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
-      val result = service.renew(authenticator, Future.successful(Results.Ok))
+      val result = service.renew(authenticator, Results.Ok)
 
       header(settings.headerName, result) should beSome(id)
     }
@@ -295,7 +295,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
-      await(service.renew(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticatorRenewalException].like {
+      await(service.renew(authenticator, Results.Ok)) must throwA[AuthenticatorRenewalException].like {
         case e =>
           e.getMessage must startWith(RenewError.format(ID, ""))
       }
@@ -308,14 +308,14 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
 
       dao.remove(authenticator.id) returns Future.successful(authenticator)
 
-      await(service.discard(authenticator, Future.successful(Results.Status(200))))
+      await(service.discard(authenticator, Results.Ok))
 
       there was one(dao).remove(authenticator.id)
     }
 
     "throws an AuthenticatorDiscardingException exception if an error occurred during discarding" in new Context {
       implicit val request = FakeRequest()
-      val okResult = Future.successful(Results.Status(200))
+      val okResult = Results.Ok
 
       dao.remove(authenticator.id) returns Future.failed(new Exception("Cannot remove authenticator"))
 
