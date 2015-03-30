@@ -48,9 +48,7 @@ abstract class InstagramProvider(httpLayer: HTTPLayer, stateProvider: OAuth2Stat
   type Content = JsValue
 
   /**
-   * Gets the provider ID.
-   *
-   * @return The provider ID.
+   * The provider ID.
    */
   val id = ID
 

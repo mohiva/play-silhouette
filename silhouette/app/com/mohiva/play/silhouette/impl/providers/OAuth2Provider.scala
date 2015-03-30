@@ -78,13 +78,18 @@ object OAuth2Info {
  * @param stateProvider The state provider implementation.
  * @param settings The provider settings.
  */
-abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
+abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, val settings: OAuth2Settings)
   extends SocialProvider with Logger {
 
   /**
    * The type of the auth info.
    */
   type A = OAuth2Info
+
+  /**
+   * The settings type.
+   */
+  type Settings = OAuth2Settings
 
   /**
    * A list with headers to send to the API.

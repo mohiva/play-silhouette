@@ -111,15 +111,15 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
     }
 
     "resolves relative redirectURLs before starting the flow" in new WithApplication {
-      verifyRelativeRedirectResolution("/redirect-url", false, "http://www.example.com/redirect-url")
+      verifyRelativeRedirectResolution("/redirect-url", secure = false, "http://www.example.com/redirect-url")
     }
 
     "resolves path relative redirectURLs before starting the flow" in new WithApplication {
-      verifyRelativeRedirectResolution("redirect-url", false, "http://www.example.com/request-path/redirect-url")
+      verifyRelativeRedirectResolution("redirect-url", secure = false, "http://www.example.com/request-path/redirect-url")
     }
 
     "resolves relative redirectURLs before starting the flow over https" in new WithApplication {
-      verifyRelativeRedirectResolution("/redirect-url", true, "https://www.example.com/redirect-url")
+      verifyRelativeRedirectResolution("/redirect-url", secure = true, "https://www.example.com/redirect-url")
     }
 
     def verifyRelativeRedirectResolution(redirectURL: String, secure: Boolean, resolvedRedirectURL: String) = {
@@ -199,6 +199,13 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
       failed[RuntimeException](c.provider.authenticate()) {
         case e => e.getMessage must startWith("success")
       }
+    }
+  }
+
+  "The `settings` method" should {
+    val c = context
+    "return the settings instance" in {
+      c.provider.settings must be equalTo c.oAuthSettings
     }
   }
 

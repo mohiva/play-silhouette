@@ -42,7 +42,7 @@ abstract class OAuth1Provider(
   httpLayer: HTTPLayer,
   service: OAuth1Service,
   tokenSecretProvider: OAuth1TokenSecretProvider,
-  settings: OAuth1Settings)
+  val settings: OAuth1Settings)
   extends SocialProvider with Logger {
 
   /**
@@ -64,6 +64,11 @@ abstract class OAuth1Provider(
    * The type of the auth info.
    */
   type A = OAuth1Info
+
+  /**
+   * The settings type.
+   */
+  type Settings = OAuth1Settings
 
   /**
    * Starts the authentication process.

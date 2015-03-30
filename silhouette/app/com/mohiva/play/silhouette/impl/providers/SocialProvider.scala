@@ -22,10 +22,12 @@ import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.api.{ LoginInfo, Provider }
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
+import org.apache.commons.lang3.reflect.TypeUtils
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ RequestHeader, Result }
 
 import scala.concurrent.Future
+import scala.reflect.ClassTag
 
 /**
  * The base interface for all social providers.
@@ -36,6 +38,18 @@ trait SocialProvider extends Provider with SocialProfileBuilder {
    * The type of the auth info.
    */
   type A <: AuthInfo
+
+  /**
+   * The settings type.
+   */
+  type Settings
+
+  /**
+   * Gets the provider settings.
+   *
+   * @return The provider settings.
+   */
+  def settings: Settings
 
   /**
    * Authenticates the user and returns the auth information.
@@ -80,6 +94,32 @@ trait SocialProvider extends Provider with SocialProfileBuilder {
       val scheme = if (request.secure) "https://" else "http://"
       URI.create(scheme + request.host + request.path).resolve(uri).toString
   }
+}
+
+/**
+ * A registry that holds and provides access to all social provider implementations.
+ *
+ * @param providers The list of social providers.
+ */
+case class SocialProviderRegistry(providers: Seq[SocialProvider]) {
+
+  /**
+   * Gets a specific provider by its type.
+   *
+   * @tparam T The type of the provider.
+   * @return Some specific provider type or None if no provider for the given type could be found.
+   */
+  def get[T: ClassTag]: Option[T] = {
+    providers.find(p => TypeUtils.isInstance(p, implicitly[ClassTag[T]].runtimeClass)).map(_.asInstanceOf[T])
+  }
+
+  /**
+   * Gets a specific provider by its ID.
+   *
+   * @param id The ID of the provider to return.
+   * @return Some social provider or None if no provider for the given ID could be found.
+   */
+  def get(id: String): Option[SocialProvider] = providers.find(_.id == id)
 }
 
 /**

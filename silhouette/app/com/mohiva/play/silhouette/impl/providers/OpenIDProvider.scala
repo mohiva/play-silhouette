@@ -34,13 +34,18 @@ import scala.concurrent.Future
  * @param service The OpenID service implementation.
  * @param settings The OpenID provider settings.
  */
-abstract class OpenIDProvider(httpLayer: HTTPLayer, service: OpenIDService, settings: OpenIDSettings)
+abstract class OpenIDProvider(httpLayer: HTTPLayer, service: OpenIDService, val settings: OpenIDSettings)
   extends SocialProvider with Logger {
 
   /**
    * The type of the auth info.
    */
   type A = OpenIDInfo
+
+  /**
+   * The settings type.
+   */
+  type Settings = OpenIDSettings
 
   /**
    * Starts the authentication process.

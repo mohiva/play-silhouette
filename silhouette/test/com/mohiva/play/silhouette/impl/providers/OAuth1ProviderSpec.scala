@@ -81,15 +81,15 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
     }
 
     "resolves relative redirectURLs before starting the flow" in new WithApplication {
-      verifyCallbackURLResolution("/callback-url", false, "http://www.example.com/callback-url")
+      verifyCallbackURLResolution("/callback-url", secure = false, "http://www.example.com/callback-url")
     }
 
     "resolves path relative redirectURLS before starting the flow" in new WithApplication {
-      verifyCallbackURLResolution("callback-url", false, "http://www.example.com/request-path/callback-url")
+      verifyCallbackURLResolution("callback-url", secure = false, "http://www.example.com/request-path/callback-url")
     }
 
     "resolves relative redirectURLs before starting the flow over https" in new WithApplication {
-      verifyCallbackURLResolution("/callback-url", true, "https://www.example.com/callback-url")
+      verifyCallbackURLResolution("/callback-url", secure = true, "https://www.example.com/callback-url")
     }
 
     def verifyCallbackURLResolution(callbackURL: String, secure: Boolean, resolvedCallbackURL: String) = {
@@ -130,6 +130,13 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
       authInfo(c.provider.authenticate()) {
         case authInfo => authInfo must be equalTo c.oAuthInfo
       }
+    }
+  }
+
+  "The `settings` method" should {
+    val c = context
+    "return the settings instance" in {
+      c.provider.settings must be equalTo c.oAuthSettings
     }
   }
 

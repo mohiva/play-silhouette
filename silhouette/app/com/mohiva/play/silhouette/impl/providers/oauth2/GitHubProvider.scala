@@ -48,9 +48,7 @@ abstract class GitHubProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
   type Content = JsValue
 
   /**
-   * Gets the provider ID.
-   *
-   * @return The provider ID.
+   * The provider ID.
    */
   val id = ID
 

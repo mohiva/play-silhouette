@@ -37,11 +37,11 @@ trait Environment[I <: Identity, T <: Authenticator] {
   def authenticatorService: AuthenticatorService[T]
 
   /**
-   * Gets the list of authentication providers.
+   * Gets the list of request providers.
    *
-   * @return The list of authentication providers.
+   * @return The list of request providers.
    */
-  def providers: Map[String, Provider]
+  def requestProviders: Seq[RequestProvider]
 
   /**
    * The event bus implementation.
@@ -58,11 +58,11 @@ object Environment {
   def apply[I <: Identity, T <: Authenticator](
     identityServiceImpl: IdentityService[I],
     authenticatorServiceImpl: AuthenticatorService[T],
-    providersImpl: Map[String, Provider],
+    requestProvidersImpl: Seq[RequestProvider],
     eventBusImpl: EventBus) = new Environment[I, T] {
     val identityService = identityServiceImpl
     val authenticatorService = authenticatorServiceImpl
-    val providers = providersImpl
+    val requestProviders = requestProvidersImpl
     val eventBus = eventBusImpl
   }
 }
