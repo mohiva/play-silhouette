@@ -76,7 +76,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return The manipulated result.
    */
-  def embed(value: T#Value, result: Future[Result])(implicit request: RequestHeader): Future[Result]
+  def embed(value: T#Value, result: Result)(implicit request: RequestHeader): Future[Result]
 
   /**
    * Embeds authenticator specific artifacts into the request.
@@ -142,7 +142,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def update(authenticator: T, result: Future[Result])(implicit request: RequestHeader): Future[Result]
+  protected[silhouette] def update(authenticator: T, result: Result)(implicit request: RequestHeader): Future[Result]
 
   /**
    * Renews the expiration of an authenticator.
@@ -156,7 +156,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def renew(authenticator: T, result: Future[Result])(implicit request: RequestHeader): Future[Result]
+  protected[silhouette] def renew(authenticator: T, result: Result)(implicit request: RequestHeader): Future[Result]
 
   /**
    * Manipulates the response and removes authenticator specific artifacts before sending it to the client.
@@ -166,7 +166,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return The manipulated result.
    */
-  protected[silhouette] def discard(authenticator: T, result: Future[Result])(implicit request: RequestHeader): Future[Result]
+  protected[silhouette] def discard(authenticator: T, result: Result)(implicit request: RequestHeader): Future[Result]
 }
 
 /**

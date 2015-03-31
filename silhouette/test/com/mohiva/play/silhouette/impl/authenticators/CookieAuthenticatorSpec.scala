@@ -217,7 +217,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       dao.save(any) returns Future.successful(authenticator)
 
       implicit val request = FakeRequest()
-      val result = service.embed(cookie, Future.successful(Results.Status(200)))
+      val result = service.embed(cookie, Results.Ok)
 
       cookies(result).get(settings.cookieName) should beSome[Cookie].which(cookieMatcher)
     }
@@ -281,7 +281,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
 
       implicit val request = FakeRequest()
 
-      await(service.update(authenticator, Future.successful(Results.Ok)))
+      await(service.update(authenticator, Results.Ok))
 
       there was one(dao).save(authenticator)
     }
@@ -290,7 +290,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       dao.save(any) answers { p => Future.successful(p.asInstanceOf[CookieAuthenticator]) }
 
       implicit val request = FakeRequest()
-      val result = service.update(authenticator, Future.successful(Results.Ok))
+      val result = service.update(authenticator, Results.Ok)
 
       status(result) must be equalTo OK
     }
@@ -300,7 +300,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
 
       implicit val request = FakeRequest()
 
-      await(service.update(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticatorUpdateException].like {
+      await(service.update(authenticator, Results.Ok)) must throwA[AuthenticatorUpdateException].like {
         case e =>
           e.getMessage must startWith(UpdateError.format(ID, ""))
       }
@@ -318,7 +318,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
-      await(service.renew(authenticator, Future.successful(Results.Ok)))
+      await(service.renew(authenticator, Results.Ok))
 
       there was one(dao).remove(authenticator.id)
     }
@@ -333,7 +333,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
-      val result = service.renew(authenticator, Future.successful(Results.Ok))
+      val result = service.renew(authenticator, Results.Ok)
 
       cookies(result).get(settings.cookieName) should beSome[Cookie].which { c =>
         c.name must be equalTo settings.cookieName
@@ -358,7 +358,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
-      await(service.renew(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticatorRenewalException].like {
+      await(service.renew(authenticator, Results.Ok)) must throwA[AuthenticatorRenewalException].like {
         case e =>
           e.getMessage must startWith(RenewError.format(ID, ""))
       }
@@ -371,7 +371,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
 
       dao.remove(any) returns Future.successful(())
 
-      val result = service.discard(authenticator, Future.successful(Results.Status(200).withCookies(cookie)))
+      val result = service.discard(authenticator, Results.Ok.withCookies(cookie))
 
       cookies(result).get(settings.cookieName) should beSome[Cookie].which { c =>
         c.name must be equalTo settings.cookieName
@@ -386,7 +386,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
 
     "throws an AuthenticatorDiscardingException exception if an error occurred during discarding" in new Context {
       implicit val request = FakeRequest()
-      val okResult = Future.successful(Results.Status(200))
+      val okResult = Results.Ok
 
       dao.remove(any) returns Future.failed(new Exception("Cannot store authenticator"))
 

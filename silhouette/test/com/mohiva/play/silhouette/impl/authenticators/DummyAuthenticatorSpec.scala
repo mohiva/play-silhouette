@@ -61,9 +61,9 @@ class DummyAuthenticatorSpec extends PlaySpecification with Mockito {
   "The result `embed` method of the service" should {
     "return the original response" in new Context {
       implicit val request = FakeRequest()
-      val result = Future.successful(Results.Status(200))
+      val result = Results.Ok
 
-      service.embed((), result) must be equalTo result
+      await(service.embed((), result)) must be equalTo result
     }
   }
 
@@ -87,27 +87,27 @@ class DummyAuthenticatorSpec extends PlaySpecification with Mockito {
   "The `update` method of the service" should {
     "return the original result" in new Context {
       implicit val request = FakeRequest()
-      val result = Future.successful(Results.Ok)
+      val result = Results.Ok
 
-      service.update(authenticator, result) must be equalTo result
+      await(service.update(authenticator, result)) must be equalTo result
     }
   }
 
   "The `renew` method of the service" should {
     "return the original result" in new Context {
       implicit val request = FakeRequest()
-      val result = Future.successful(Results.Ok)
+      val result = Results.Ok
 
-      service.renew(authenticator, result) must be equalTo result
+      await(service.renew(authenticator, result)) must be equalTo result
     }
   }
 
   "The `discard` method of the service" should {
     "return the original result" in new Context {
       implicit val request = FakeRequest()
-      val result = Future.successful(Results.Ok)
+      val result = Results.Ok
 
-      service.discard(authenticator, result) must be equalTo result
+      await(service.discard(authenticator, result)) must be equalTo result
     }
   }
 

@@ -180,8 +180,8 @@ class JWTAuthenticatorService(
    * @param result The result to manipulate.
    * @return The manipulated result.
    */
-  def embed(token: String, result: Future[Result])(implicit request: RequestHeader) = {
-    result.map(_.withHeaders(settings.headerName -> token))
+  def embed(token: String, result: Result)(implicit request: RequestHeader) = {
+    Future.successful(result.withHeaders(settings.headerName -> token))
   }
 
   /**
@@ -222,10 +222,10 @@ class JWTAuthenticatorService(
    */
   protected[silhouette] def update(
     authenticator: JWTAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+    result: Result)(implicit request: RequestHeader) = {
 
-    dao.fold(Future.successful(authenticator))(_.save(authenticator)).flatMap { a =>
-      result.map(_.withHeaders(settings.headerName -> serialize(a)))
+    dao.fold(Future.successful(authenticator))(_.save(authenticator)).map { a =>
+      result.withHeaders(settings.headerName -> serialize(a))
     }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
     }
@@ -242,7 +242,7 @@ class JWTAuthenticatorService(
    */
   protected[silhouette] def renew(
     authenticator: JWTAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+    result: Result)(implicit request: RequestHeader) = {
 
     dao.fold(Future.successful(()))(_.remove(authenticator.id)).flatMap { _ =>
       create(authenticator.loginInfo).flatMap { a =>
@@ -262,9 +262,9 @@ class JWTAuthenticatorService(
    */
   protected[silhouette] def discard(
     authenticator: JWTAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+    result: Result)(implicit request: RequestHeader) = {
 
-    dao.fold(Future.successful(()))(_.remove(authenticator.id)).flatMap { _ =>
+    dao.fold(Future.successful(()))(_.remove(authenticator.id)).map { _ =>
       result
     }.recover {
       case e => throw new AuthenticatorDiscardingException(DiscardError.format(ID, authenticator), e)

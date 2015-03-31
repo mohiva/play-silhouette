@@ -188,8 +188,8 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  def embed(cookie: Cookie, result: Future[Result])(implicit request: RequestHeader) = {
-    result.map(_.withCookies(cookie))
+  def embed(cookie: Cookie, result: Result)(implicit request: RequestHeader) = {
+    Future.successful(result.withCookies(cookie))
   }
 
   /**
@@ -234,9 +234,9 @@ class CookieAuthenticatorService(
    */
   protected[silhouette] def update(
     authenticator: CookieAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+    result: Result)(implicit request: RequestHeader) = {
 
-    dao.save(authenticator).flatMap { a =>
+    dao.save(authenticator).map { a =>
       result
     }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
@@ -254,7 +254,7 @@ class CookieAuthenticatorService(
    */
   protected[silhouette] def renew(
     authenticator: CookieAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+    result: Result)(implicit request: RequestHeader) = {
 
     dao.remove(authenticator.id).flatMap { _ =>
       create(authenticator.loginInfo).flatMap { a =>
@@ -274,14 +274,14 @@ class CookieAuthenticatorService(
    */
   protected[silhouette] def discard(
     authenticator: CookieAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+    result: Result)(implicit request: RequestHeader) = {
 
-    dao.remove(authenticator.id).flatMap { _ =>
-      result.map(_.discardingCookies(DiscardingCookie(
+    dao.remove(authenticator.id).map { _ =>
+      result.discardingCookies(DiscardingCookie(
         name = settings.cookieName,
         path = settings.cookiePath,
         domain = settings.cookieDomain,
-        secure = settings.secureCookie)))
+        secure = settings.secureCookie))
     }.recover {
       case e => throw new AuthenticatorDiscardingException(DiscardError.format(ID, authenticator), e)
     }

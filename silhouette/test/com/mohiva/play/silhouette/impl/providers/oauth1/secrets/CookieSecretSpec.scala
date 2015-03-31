@@ -117,7 +117,7 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
   "The `publish` method of the provider" should {
     "add the secret to the cookie" in new WithApplication with Context {
       implicit val req = FakeRequest(GET, "/")
-      val result = Future.successful(provider.publish(Results.Status(200), secret))
+      val result = Future.successful(provider.publish(Results.Ok, secret))
 
       cookies(result).get(settings.cookieName) should beSome[Cookie].which { c =>
         c.name must be equalTo settings.cookieName

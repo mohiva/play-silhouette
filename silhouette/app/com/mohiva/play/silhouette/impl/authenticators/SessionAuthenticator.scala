@@ -167,8 +167,8 @@ class SessionAuthenticatorService(
    * @param result The result to manipulate.
    * @return The manipulated result.
    */
-  def embed(session: Session, result: Future[Result])(implicit request: RequestHeader) = {
-    result.map(_.addingToSession(session.data.toSeq: _*))
+  def embed(session: Session, result: Result)(implicit request: RequestHeader) = {
+    Future.successful(result.addingToSession(session.data.toSeq: _*))
   }
 
   /**
@@ -214,11 +214,14 @@ class SessionAuthenticatorService(
    */
   protected[silhouette] def update(
     authenticator: SessionAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+    result: Result)(implicit request: RequestHeader) = {
 
-    result.map(_.addingToSession(settings.sessionKey -> serialize(authenticator))).recover {
+    Future {
+      result.addingToSession(settings.sessionKey -> serialize(authenticator))
+    }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
     }
+
   }
 
   /**
@@ -232,7 +235,7 @@ class SessionAuthenticatorService(
    */
   protected[silhouette] def renew(
     authenticator: SessionAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+    result: Result)(implicit request: RequestHeader) = {
 
     create(authenticator.loginInfo).flatMap { a =>
       init(a).flatMap(v => embed(v, result))
@@ -250,11 +253,14 @@ class SessionAuthenticatorService(
    */
   protected[silhouette] def discard(
     authenticator: SessionAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+    result: Result)(implicit request: RequestHeader) = {
 
-    result.map(_.removingFromSession(settings.sessionKey)).recover {
+    Future {
+      result.removingFromSession(settings.sessionKey)
+    }.recover {
       case e => throw new AuthenticatorDiscardingException(DiscardError.format(ID, authenticator), e)
     }
+
   }
 
   /**

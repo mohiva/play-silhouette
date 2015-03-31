@@ -267,12 +267,12 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
       val auth = env.authenticatorService.touch(authenticator)
       block(auth.extract).flatMap {
         case hr @ HandlerResult(pr: Authenticator.Discard, _) =>
-          env.authenticatorService.discard(authenticator, Future.successful(pr)).map(pr => hr.copy(pr))
+          env.authenticatorService.discard(authenticator, pr).map(pr => hr.copy(pr))
         case hr @ HandlerResult(pr: Authenticator.Renew, _) =>
-          env.authenticatorService.renew(authenticator, Future.successful(pr)).map(pr => hr.copy(pr))
+          env.authenticatorService.renew(authenticator, pr).map(pr => hr.copy(pr))
         case hr @ HandlerResult(pr, _) => auth match {
           // Authenticator was touched so we update the authenticator and maybe the result
-          case Left(a) => env.authenticatorService.update(a, Future.successful(pr)).map(pr => hr.copy(pr))
+          case Left(a) => env.authenticatorService.update(a, pr).map(pr => hr.copy(pr))
           // Authenticator was not touched so we return the original result
           case Right(a) => Future.successful(hr)
         }
@@ -293,12 +293,12 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
     private def handleUninitializedAuthenticator[T](authenticator: A, block: A => Future[HandlerResult[T]])(implicit request: RequestHeader) = {
       block(authenticator).flatMap {
         case hr @ HandlerResult(pr: Authenticator.Discard, _) =>
-          env.authenticatorService.discard(authenticator, Future.successful(pr)).map(pr => hr.copy(pr))
+          env.authenticatorService.discard(authenticator, pr).map(pr => hr.copy(pr))
         case hr @ HandlerResult(pr: Authenticator.Renew, _) =>
-          env.authenticatorService.renew(authenticator, Future.successful(pr)).map(pr => hr.copy(pr))
+          env.authenticatorService.renew(authenticator, pr).map(pr => hr.copy(pr))
         case hr @ HandlerResult(pr, _) =>
           env.authenticatorService.init(authenticator).flatMap { value =>
-            env.authenticatorService.embed(value, Future.successful(pr))
+            env.authenticatorService.embed(value, pr)
           }.map(pr => hr.copy(pr))
       }
     }
@@ -384,7 +384,10 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
         // An authenticator but no user was found. The request will ask for authentication and the authenticator will be discarded
         case (Some(authenticator), None) =>
           env.eventBus.publish(NotAuthenticatedEvent(request, request2lang))
-          env.authenticatorService.discard(authenticator.extract, handleNotAuthenticated(request)).map(r => HandlerResult(r))
+          for {
+            result <- handleNotAuthenticated(request)
+            discardedResult <- env.authenticatorService.discard(authenticator.extract, result)
+          } yield HandlerResult(discardedResult)
         // No authenticator and no user was found. The request will ask for authentication
         case _ =>
           env.eventBus.publish(NotAuthenticatedEvent(request, request2lang))
@@ -502,7 +505,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
         case (Some(authenticator), identity) if !authenticator.extract.isValid =>
           block(UserAwareRequest(None, None, request)).flatMap {
             case hr @ HandlerResult(pr, d) =>
-              env.authenticatorService.discard(authenticator.extract, Future.successful(pr)).map(r => hr.copy(pr))
+              env.authenticatorService.discard(authenticator.extract, pr).map(r => hr.copy(pr))
           }
         // No authenticator and no user was found
         case _ =>
