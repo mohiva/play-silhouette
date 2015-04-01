@@ -32,6 +32,7 @@ import play.api.test.{ FakeApplication, FakeRequest, PlaySpecification, WithAppl
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
+import scala.language.postfixOps
 import scala.reflect.ClassTag
 
 /**
@@ -950,7 +951,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      * @return The result to send to the client.
      */
     def securedRenewAction = SecuredAction.async { implicit request =>
-      request.authenticator.renew(Future.successful(Ok("renewed")))
+      env.authenticatorService.renew(request.authenticator, Ok("renewed"))
     }
 
     /**
@@ -959,7 +960,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      * @return The result to send to the client.
      */
     def securedDiscardAction = SecuredAction.async { implicit request =>
-      request.authenticator.discard(Future.successful(Ok("discarded")))
+      env.authenticatorService.discard(request.authenticator, Ok("discarded"))
     }
 
     /**
@@ -996,7 +997,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      */
     def userAwareRenewAction = UserAwareAction.async { implicit request =>
       request.authenticator match {
-        case Some(a) => a.renew(Future.successful(Ok("renewed")))
+        case Some(a) => env.authenticatorService.renew(a, Ok("renewed"))
         case None => Future.successful(Ok("not.renewed"))
       }
     }
@@ -1008,7 +1009,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      */
     def userAwareDiscardAction = UserAwareAction.async { implicit request =>
       request.authenticator match {
-        case Some(a) => a.discard(Future.successful(Ok("discarded")))
+        case Some(a) => env.authenticatorService.discard(a, Ok("discarded"))
         case None => Future.successful(Ok("not.discarded"))
       }
     }

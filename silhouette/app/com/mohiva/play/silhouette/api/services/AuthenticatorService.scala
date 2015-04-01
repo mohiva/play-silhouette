@@ -20,9 +20,52 @@
 package com.mohiva.play.silhouette.api.services
 
 import com.mohiva.play.silhouette.api.{ Authenticator, LoginInfo }
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ Headers, RequestHeader, Result }
 
 import scala.concurrent.Future
+import scala.language.implicitConversions
+import scala.util.Try
+
+/**
+ * A marker result which indicates that an operation on an authenticator was processed and
+ * therefore it shouldn't updated automatically.
+ *
+ * Due the fact that the update method gets called on every subsequent request to update the
+ * authenticator related data in the backing store and in the result, it isn't possible to
+ * discard or renew the authenticator simultaneously. This is because the "update" method would
+ * override the result created by the "renew" or "discard" method, because it will be executed
+ * as last in the chain.
+ *
+ * As example:
+ * If we discard the session in a Silhouette action then it will be removed from session. But
+ * at the end the update method will embed the session again, because it gets called with the
+ * result of the action.
+ *
+ * @param result The result to wrap.
+ */
+class AuthenticatorResult(result: Result) extends Result(result.header, result.body, result.connection)
+
+/**
+ * The companion object.
+ */
+object AuthenticatorResult {
+
+  /**
+   * Converts a [[Result]] into [[AuthenticatorResult]]
+   */
+  implicit def toAuthenticatorResult(result: Result): AuthenticatorResult = apply(result)
+  implicit def toAuthenticatorResultF(result: Future[Result]): Future[AuthenticatorResult] = result.map(apply)
+  implicit def toAuthenticatorResultT(result: Try[Result]): Try[AuthenticatorResult] = result.map(apply)
+
+  /**
+   * Instantiates a new authenticator result.
+   *
+   * @param result The result to wrap.
+   * @return An authenticator result.
+   */
+  def apply(result: Result) = new AuthenticatorResult(result)
+}
 
 /**
  * Handles authenticators for the Silhouette module.
@@ -76,7 +119,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return The manipulated result.
    */
-  def embed(value: T#Value, result: Result)(implicit request: RequestHeader): Future[Result]
+  def embed(value: T#Value, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult]
 
   /**
    * Embeds authenticator specific artifacts into the request.
@@ -94,27 +137,6 @@ trait AuthenticatorService[T <: Authenticator] {
    */
   def embed(value: T#Value, request: RequestHeader): RequestHeader
 
-  ///////////////////////////////////////////////////////////////////////////////////////////////
-  //
-  // Internal API
-  //
-  // Due the fact that the update method gets called on every subsequent request to update the
-  // authenticator related data in the backing store and in the result, it isn't possible to
-  // discard or renew the authenticator simultaneously. This is because the "update" method would
-  // override the result created by the "renew" or "discard" method, because it will be executed
-  // as last in the chain.
-  //
-  // As example:
-  // If we discard the session in a Silhouette action then it will be removed from session. But
-  // at the end the update method will embed the session again, because it gets called with the
-  // result of the action.
-  //
-  // So we restrict the access to this methods and force the developer to use the "renew" and
-  // "discard" methods on the Authenticator instance. These methods wrap the result into a marker
-  // result, for which we can execute the appropriate method on this service.
-  //
-  ///////////////////////////////////////////////////////////////////////////////////////////////
-
   /**
    * Touches an authenticator.
    *
@@ -128,7 +150,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  protected[silhouette] def touch(authenticator: T): Either[T, T]
+  def touch(authenticator: T): Either[T, T]
 
   /**
    * Updates a touched authenticator.
@@ -142,7 +164,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def update(authenticator: T, result: Result)(implicit request: RequestHeader): Future[Result]
+  def update(authenticator: T, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult]
 
   /**
    * Renews the expiration of an authenticator.
@@ -156,7 +178,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def renew(authenticator: T, result: Result)(implicit request: RequestHeader): Future[Result]
+  def renew(authenticator: T, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult]
 
   /**
    * Manipulates the response and removes authenticator specific artifacts before sending it to the client.
@@ -166,7 +188,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return The manipulated result.
    */
-  protected[silhouette] def discard(authenticator: T, result: Result)(implicit request: RequestHeader): Future[Result]
+  def discard(authenticator: T, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult]
 }
 
 /**

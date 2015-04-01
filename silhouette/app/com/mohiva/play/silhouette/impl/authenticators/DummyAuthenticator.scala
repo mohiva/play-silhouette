@@ -89,9 +89,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The manipulated result.
    */
-  def embed(value: Unit, result: Result)(implicit request: RequestHeader) = {
-    Future.successful(result)
-  }
+  def embed(value: Unit, result: Result)(implicit request: RequestHeader) = Future.successful(result)
 
   /**
    * Returns the original request, because we needn't add the authenticator to the request.
@@ -108,7 +106,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  protected[silhouette] def touch(authenticator: DummyAuthenticator) = Right(authenticator)
+  def touch(authenticator: DummyAuthenticator) = Right(authenticator)
 
   /**
    * Returns the original request, because we needn't update the authenticator in the result.
@@ -118,10 +116,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def update(
-    authenticator: DummyAuthenticator,
-    result: Result)(implicit request: RequestHeader) = {
-
+  def update(authenticator: DummyAuthenticator, result: Result)(implicit request: RequestHeader) = {
     Future.successful(result)
   }
 
@@ -133,10 +128,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def renew(
-    authenticator: DummyAuthenticator,
-    result: Result)(implicit request: RequestHeader) = {
-
+  def renew(authenticator: DummyAuthenticator, result: Result)(implicit request: RequestHeader) = {
     Future.successful(result)
   }
 
@@ -147,10 +139,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The manipulated result.
    */
-  protected[silhouette] def discard(
-    authenticator: DummyAuthenticator,
-    result: Result)(implicit request: RequestHeader) = {
-
+  def discard(authenticator: DummyAuthenticator, result: Result)(implicit request: RequestHeader) = {
     Future.successful(result)
   }
 }
