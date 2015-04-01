@@ -45,9 +45,7 @@ abstract class DropboxProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateP
   type Content = JsValue
 
   /**
-   * Gets the provider ID.
-   *
-   * @return The provider ID.
+   * The provider ID.
    */
   val id = ID
 

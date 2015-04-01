@@ -40,7 +40,7 @@ import scala.concurrent.Future
  * @see https://developer.foursquare.com/overview/responses
  * @see https://developer.foursquare.com/docs/explore
  */
-abstract class FoursquareProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, protected val settings: OAuth2Settings)
+abstract class FoursquareProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
   extends OAuth2Provider(httpLayer, stateProvider, settings) {
 
   /**
@@ -49,9 +49,7 @@ abstract class FoursquareProvider(httpLayer: HTTPLayer, stateProvider: OAuth2Sta
   type Content = JsValue
 
   /**
-   * Gets the provider ID.
-   *
-   * @return The provider ID.
+   * The provider ID.
    */
   val id = ID
 

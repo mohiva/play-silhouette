@@ -197,14 +197,14 @@ object FakeAuthenticator {
  * A fake environment implementation.
  *
  * @param identities A list of (login info -> identity) pairs to return inside a Silhouette action.
- * @param providers The list of authentication providers.
+ * @param requestProviders The list of request providers.
  * @param eventBus The event bus implementation.
  * @tparam I The type of the identity.
  * @tparam T The type of the authenticator.
  */
 case class FakeEnvironment[I <: Identity, T <: Authenticator: TypeTag](
   identities: Seq[(LoginInfo, I)],
-  providers: Map[String, Provider] = Map(),
+  requestProviders: Seq[RequestProvider] = Seq(),
   eventBus: EventBus = EventBus())
   extends Environment[I, T] {
 

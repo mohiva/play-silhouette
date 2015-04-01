@@ -786,7 +786,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     lazy val env = Environment[FakeIdentity, FakeAuthenticator](
       mock[IdentityService[FakeIdentity]],
       mock[AuthenticatorService[FakeAuthenticator]],
-      Map(),
+      Seq(),
       new EventBus
     )
 
@@ -861,7 +861,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     /**
      * A non request provider.
      */
-    lazy val nonRequestProvider = mock[Provider]
+    lazy val nonRequestProvider = mock[RequestProvider]
 
     /**
      * The Silhouette environment.
@@ -869,10 +869,10 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     override lazy val env = Environment[FakeIdentity, FakeAuthenticator](
       mock[IdentityService[FakeIdentity]],
       mock[AuthenticatorService[FakeAuthenticator]],
-      Map(
-        "token-request" -> tokenRequestProvider,
-        "basic-auth-request" -> basicAuthRequestProvider,
-        "non-request" -> nonRequestProvider
+      Seq(
+        tokenRequestProvider,
+        basicAuthRequestProvider,
+        nonRequestProvider
       ),
       new EventBus
     )

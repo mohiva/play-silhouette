@@ -43,9 +43,7 @@ abstract class ClefProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProv
   type Content = JsValue
 
   /**
-   * Gets the provider ID.
-   *
-   * @return The provider ID.
+   * The provider ID.
    */
   val id = ID
 

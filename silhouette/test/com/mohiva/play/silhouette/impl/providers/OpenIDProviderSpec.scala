@@ -93,15 +93,15 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
     }
 
     "resolves relative callbackURLs before starting the flow" in new WithApplication {
-      verifyRelativeCallbackURLResolution("/callback-url", false, "http://www.example.com/callback-url")
+      verifyRelativeCallbackURLResolution("/callback-url", secure = false, "http://www.example.com/callback-url")
     }
 
     "resolves path relative callbackURLs before starting the flow" in new WithApplication {
-      verifyRelativeCallbackURLResolution("callback-url", false, "http://www.example.com/request-path/callback-url")
+      verifyRelativeCallbackURLResolution("callback-url", secure = false, "http://www.example.com/request-path/callback-url")
     }
 
     "resolves relative callbackURLs before starting the flow over https" in new WithApplication {
-      verifyRelativeCallbackURLResolution("/callback-url", true, "https://www.example.com/callback-url")
+      verifyRelativeCallbackURLResolution("/callback-url", secure = true, "https://www.example.com/callback-url")
     }
 
     def verifyRelativeCallbackURLResolution(callbackURL: String, secure: Boolean, resolvedCallbackURL: String) = {
@@ -131,6 +131,13 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
       authInfo(c.provider.authenticate()) {
         case authInfo => authInfo must be equalTo c.openIDInfo
       }
+    }
+  }
+
+  "The `settings` method" should {
+    val c = context
+    "return the settings instance" in {
+      c.provider.settings must be equalTo c.openIDSettings
     }
   }
 

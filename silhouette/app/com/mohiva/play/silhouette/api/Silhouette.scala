@@ -325,19 +325,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
         }
       }
 
-      auth(requestProviders)
-    }
-
-    /**
-     * Gets the list of request providers.
-     *
-     * @return The list of request providers.
-     */
-    private def requestProviders: Seq[RequestProvider] = {
-      env.providers.map {
-        case (id, provider: RequestProvider) => Some(provider)
-        case _ => None
-      }.flatten[RequestProvider].toSeq
+      auth(env.requestProviders)
     }
   }
 
