@@ -158,9 +158,7 @@ class BearerTokenAuthenticatorService(
    * @return The manipulated result.
    */
   def embed(token: String, result: Result)(implicit request: RequestHeader) = {
-    Future.successful(
-      result.withHeaders(settings.headerName -> token)
-    )
+    Future.successful(result.withHeaders(settings.headerName -> token))
   }
 
   /**
@@ -180,9 +178,7 @@ class BearerTokenAuthenticatorService(
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  protected[silhouette] def touch(
-    authenticator: BearerTokenAuthenticator): Either[BearerTokenAuthenticator, BearerTokenAuthenticator] = {
-
+  def touch(authenticator: BearerTokenAuthenticator): Either[BearerTokenAuthenticator, BearerTokenAuthenticator] = {
     if (authenticator.idleTimeout.isDefined) {
       Left(authenticator.copy(lastUsedDate = clock.now))
     } else {
@@ -201,10 +197,8 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def update(
-    authenticator: BearerTokenAuthenticator,
-    result: Result)(implicit request: RequestHeader) = {
-
+  def update(authenticator: BearerTokenAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     dao.save(authenticator).map { a =>
       result
     }.recover {
@@ -221,10 +215,8 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def renew(
-    authenticator: BearerTokenAuthenticator,
-    result: Result)(implicit request: RequestHeader) = {
-
+  def renew(authenticator: BearerTokenAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     dao.remove(authenticator.id).flatMap { _ =>
       create(authenticator.loginInfo).flatMap { a =>
         init(a).flatMap(v => embed(v, result))
@@ -241,10 +233,8 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  protected[silhouette] def discard(
-    authenticator: BearerTokenAuthenticator,
-    result: Result)(implicit request: RequestHeader) = {
-
+  def discard(authenticator: BearerTokenAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     dao.remove(authenticator.id).map { _ =>
       result
     }.recover {

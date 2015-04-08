@@ -19,13 +19,6 @@
  */
 package com.mohiva.play.silhouette.api
 
-import com.mohiva.play.silhouette.api.Authenticator.Discard
-import com.mohiva.play.silhouette.api.Authenticator.Renew
-import play.api.libs.concurrent.Execution.Implicits._
-import play.api.mvc.Result
-
-import scala.concurrent.Future
-
 /**
  * An authenticator tracks an authenticated user.
  */
@@ -51,56 +44,21 @@ trait Authenticator {
   def isValid: Boolean
 
   /**
-   * Discards an authenticator.
+   * A flag which indicates that an operation on an authenticator was processed and
+   * therefore not updated automatically.
    *
-   * @param result The result to wrap into the [[com.mohiva.play.silhouette.api.Authenticator.Discard]] result.
-   * @return A [[com.mohiva.play.silhouette.api.Authenticator.Discard]] result.
-   */
-  def discard(result: Result): Result = new Discard(result)
-
-  /**
-   * Discards an authenticator.
+   * Due the fact that the update method gets called on every subsequent request to update the
+   * authenticator related data in the backing store and in the result, it isn't possible to
+   * discard or renew the authenticator simultaneously. This is because the "update" method would
+   * override the result created by the "renew" or "discard" method, because it will be executed
+   * as last in the chain.
    *
-   * @param result The result to wrap into the [[com.mohiva.play.silhouette.api.Authenticator.Discard]] result.
-   * @return A [[com.mohiva.play.silhouette.api.Authenticator.Discard]] result.
+   * As example:
+   * If we discard the session in a Silhouette action then it will be removed from session. But
+   * at the end the update method will embed the session again, because it gets called with the
+   * result of the action.
    */
-  def discard(result: Future[Result]): Future[Result] = result.map(r => discard(r))
-
-  /**
-   * Renews an authenticator.
-   *
-   * @param result The result to wrap into the [[com.mohiva.play.silhouette.api.Authenticator.Renew]] result.
-   * @return A [[com.mohiva.play.silhouette.api.Authenticator.Renew]] result.
-   */
-  def renew(result: Result): Result = new Renew(result)
-
-  /**
-   * Renews an authenticator.
-   *
-   * @param result The result to wrap into the [[com.mohiva.play.silhouette.api.Authenticator.Renew]] result.
-   * @return A [[com.mohiva.play.silhouette.api.Authenticator.Renew]] result.
-   */
-  def renew(result: Future[Result]): Future[Result] = result.map(r => renew(r))
-}
-
-/**
- * The companion object.
- */
-object Authenticator {
-
-  /**
-   * A marker result which indicates that an authenticator should be discarded.
-   *
-   * @param result The wrapped result.
-   */
-  class Discard(result: Result) extends Result(result.header, result.body, result.connection)
-
-  /**
-   * A marker result which indicates that an authenticator should be renewed.
-   *
-   * @param result The wrapped result.
-   */
-  class Renew(result: Result) extends Result(result.header, result.body, result.connection)
+  private[silhouette] var skipUpdate = false
 }
 
 /**

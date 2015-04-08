@@ -201,7 +201,7 @@ class JWTAuthenticatorService(
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  protected[silhouette] def touch(authenticator: JWTAuthenticator): Either[JWTAuthenticator, JWTAuthenticator] = {
+  def touch(authenticator: JWTAuthenticator): Either[JWTAuthenticator, JWTAuthenticator] = {
     if (authenticator.idleTimeout.isDefined) {
       Left(authenticator.copy(lastUsedDate = clock.now))
     } else {
@@ -220,10 +220,8 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def update(
-    authenticator: JWTAuthenticator,
-    result: Result)(implicit request: RequestHeader) = {
-
+  def update(authenticator: JWTAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     dao.fold(Future.successful(authenticator))(_.save(authenticator)).map { a =>
       result.withHeaders(settings.headerName -> serialize(a))
     }.recover {
@@ -240,10 +238,8 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def renew(
-    authenticator: JWTAuthenticator,
-    result: Result)(implicit request: RequestHeader) = {
-
+  def renew(authenticator: JWTAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     dao.fold(Future.successful(()))(_.remove(authenticator.id)).flatMap { _ =>
       create(authenticator.loginInfo).flatMap { a =>
         init(a).flatMap(v => embed(v, result))
@@ -260,10 +256,8 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  protected[silhouette] def discard(
-    authenticator: JWTAuthenticator,
-    result: Result)(implicit request: RequestHeader) = {
-
+  def discard(authenticator: JWTAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     dao.fold(Future.successful(()))(_.remove(authenticator.id)).map { _ =>
       result
     }.recover {
@@ -286,7 +280,7 @@ class JWTAuthenticatorService(
       .issuedAt(authenticator.lastUsedDate.getMillis / 1000)
       .expirationTime(authenticator.expirationDate.getMillis / 1000)
 
-    authenticator.customClaims.map { data =>
+    authenticator.customClaims.foreach { data =>
       serializeCustomClaims(data).foreach {
         case (key, value) =>
           if (ReservedClaims.contains(key)) {

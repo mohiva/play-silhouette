@@ -211,9 +211,7 @@ class CookieAuthenticatorService(
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  protected[silhouette] def touch(
-    authenticator: CookieAuthenticator): Either[CookieAuthenticator, CookieAuthenticator] = {
-
+  def touch(authenticator: CookieAuthenticator): Either[CookieAuthenticator, CookieAuthenticator] = {
     if (authenticator.idleTimeout.isDefined) {
       Left(authenticator.copy(lastUsedDate = clock.now))
     } else {
@@ -232,10 +230,8 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def update(
-    authenticator: CookieAuthenticator,
-    result: Result)(implicit request: RequestHeader) = {
-
+  def update(authenticator: CookieAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     dao.save(authenticator).map { a =>
       result
     }.recover {
@@ -252,10 +248,8 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def renew(
-    authenticator: CookieAuthenticator,
-    result: Result)(implicit request: RequestHeader) = {
-
+  def renew(authenticator: CookieAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     dao.remove(authenticator.id).flatMap { _ =>
       create(authenticator.loginInfo).flatMap { a =>
         init(a).flatMap(v => embed(v, result))
@@ -272,10 +266,8 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  protected[silhouette] def discard(
-    authenticator: CookieAuthenticator,
-    result: Result)(implicit request: RequestHeader) = {
-
+  def discard(authenticator: CookieAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     dao.remove(authenticator.id).map { _ =>
       result.discardingCookies(DiscardingCookie(
         name = settings.cookieName,

@@ -368,6 +368,9 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.renew(any, any)(any) answers { (a, m) =>
+        val authenticator = a.asInstanceOf[Array[Any]](0).asInstanceOf[Authenticator]
+        authenticator.skipUpdate = true
+
         Future.successful(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result])
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
@@ -390,6 +393,9 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.authenticatorService.retrieve(any) returns Future.successful(None)
       env.authenticatorService.create(any)(any) returns Future.successful(authenticator)
       env.authenticatorService.renew(any, any)(any) answers { (a, m) =>
+        val authenticator = a.asInstanceOf[Array[Any]](0).asInstanceOf[Authenticator]
+        authenticator.skipUpdate = true
+
         Future.successful(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result])
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
@@ -410,6 +416,9 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
+        val authenticator = a.asInstanceOf[Array[Any]](0).asInstanceOf[Authenticator]
+        authenticator.skipUpdate = true
+
         Future.successful(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result])
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
@@ -432,6 +441,9 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.authenticatorService.retrieve(any) returns Future.successful(None)
       env.authenticatorService.create(any)(any) returns Future.successful(authenticator)
       env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
+        val authenticator = a.asInstanceOf[Array[Any]](0).asInstanceOf[Authenticator]
+        authenticator.skipUpdate = true
+
         Future.successful(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result])
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
@@ -634,6 +646,9 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.renew(any, any)(any) answers { (a, m) =>
+        val authenticator = a.asInstanceOf[Array[Any]](0).asInstanceOf[Authenticator]
+        authenticator.skipUpdate = true
+
         Future.successful(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result])
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
@@ -653,6 +668,9 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.authenticatorService.retrieve(any) returns Future.successful(None)
       env.authenticatorService.create(any)(any) returns Future.successful(authenticator)
       env.authenticatorService.renew(any, any)(any) answers { (a, m) =>
+        val authenticator = a.asInstanceOf[Array[Any]](0).asInstanceOf[Authenticator]
+        authenticator.skipUpdate = true
+
         Future.successful(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result])
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
@@ -670,6 +688,9 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
       env.authenticatorService.touch(any) returns Left(authenticator)
       env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
+        val authenticator = a.asInstanceOf[Array[Any]](0).asInstanceOf[Authenticator]
+        authenticator.skipUpdate = true
+
         Future.successful(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result])
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
@@ -689,6 +710,9 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.authenticatorService.retrieve(any) returns Future.successful(None)
       env.authenticatorService.create(any)(any) returns Future.successful(authenticator)
       env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
+        val authenticator = a.asInstanceOf[Array[Any]](0).asInstanceOf[Authenticator]
+        authenticator.skipUpdate = true
+
         Future.successful(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result])
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
@@ -950,7 +974,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      * @return The result to send to the client.
      */
     def securedRenewAction = SecuredAction.async { implicit request =>
-      request.authenticator.renew(Future.successful(Ok("renewed")))
+      env.authenticatorService.renew(request.authenticator, Ok("renewed"))
     }
 
     /**
@@ -959,7 +983,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      * @return The result to send to the client.
      */
     def securedDiscardAction = SecuredAction.async { implicit request =>
-      request.authenticator.discard(Future.successful(Ok("discarded")))
+      env.authenticatorService.discard(request.authenticator, Ok("discarded"))
     }
 
     /**
@@ -996,7 +1020,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      */
     def userAwareRenewAction = UserAwareAction.async { implicit request =>
       request.authenticator match {
-        case Some(a) => a.renew(Future.successful(Ok("renewed")))
+        case Some(a) => env.authenticatorService.renew(a, Ok("renewed"))
         case None => Future.successful(Ok("not.renewed"))
       }
     }
@@ -1008,7 +1032,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      */
     def userAwareDiscardAction = UserAwareAction.async { implicit request =>
       request.authenticator match {
-        case Some(a) => a.discard(Future.successful(Ok("discarded")))
+        case Some(a) => env.authenticatorService.discard(a, Ok("discarded"))
         case None => Future.successful(Ok("not.discarded"))
       }
     }
