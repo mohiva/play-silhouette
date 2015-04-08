@@ -42,6 +42,23 @@ trait Authenticator {
    * @return True if the authenticator isn't expired and isn't timed out.
    */
   def isValid: Boolean
+
+  /**
+   * A flag which indicates that an operation on an authenticator was processed and
+   * therefore not updated automatically.
+   *
+   * Due the fact that the update method gets called on every subsequent request to update the
+   * authenticator related data in the backing store and in the result, it isn't possible to
+   * discard or renew the authenticator simultaneously. This is because the "update" method would
+   * override the result created by the "renew" or "discard" method, because it will be executed
+   * as last in the chain.
+   *
+   * As example:
+   * If we discard the session in a Silhouette action then it will be removed from session. But
+   * at the end the update method will embed the session again, because it gets called with the
+   * result of the action.
+   */
+  private[silhouette] var skipUpdate = false
 }
 
 /**

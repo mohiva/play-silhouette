@@ -198,6 +198,7 @@ class BearerTokenAuthenticatorService(
    * @return The original or a manipulated result.
    */
   def update(authenticator: BearerTokenAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     dao.save(authenticator).map { a =>
       result
     }.recover {
@@ -215,6 +216,7 @@ class BearerTokenAuthenticatorService(
    * @return The original or a manipulated result.
    */
   def renew(authenticator: BearerTokenAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     dao.remove(authenticator.id).flatMap { _ =>
       create(authenticator.loginInfo).flatMap { a =>
         init(a).flatMap(v => embed(v, result))
@@ -232,6 +234,7 @@ class BearerTokenAuthenticatorService(
    * @return The manipulated result.
    */
   def discard(authenticator: BearerTokenAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     dao.remove(authenticator.id).map { _ =>
       result
     }.recover {

@@ -211,6 +211,7 @@ class SessionAuthenticatorService(
    * @return The original or a manipulated result.
    */
   def update(authenticator: SessionAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     Future.from(Try {
       result.addingToSession(settings.sessionKey -> serialize(authenticator))
     }.recover {
@@ -228,6 +229,7 @@ class SessionAuthenticatorService(
    * @return The original or a manipulated result.
    */
   def renew(authenticator: SessionAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     create(authenticator.loginInfo).flatMap { a =>
       init(a).flatMap(v => embed(v, result))
     }.recover {
@@ -243,6 +245,7 @@ class SessionAuthenticatorService(
    * @return The manipulated result.
    */
   def discard(authenticator: SessionAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     Future.from(Try {
       result.removingFromSession(settings.sessionKey)
     }.recover {

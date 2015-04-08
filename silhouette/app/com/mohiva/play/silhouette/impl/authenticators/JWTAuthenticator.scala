@@ -221,6 +221,7 @@ class JWTAuthenticatorService(
    * @return The original or a manipulated result.
    */
   def update(authenticator: JWTAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     dao.fold(Future.successful(authenticator))(_.save(authenticator)).map { a =>
       result.withHeaders(settings.headerName -> serialize(a))
     }.recover {
@@ -238,6 +239,7 @@ class JWTAuthenticatorService(
    * @return The original or a manipulated result.
    */
   def renew(authenticator: JWTAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     dao.fold(Future.successful(()))(_.remove(authenticator.id)).flatMap { _ =>
       create(authenticator.loginInfo).flatMap { a =>
         init(a).flatMap(v => embed(v, result))
@@ -255,6 +257,7 @@ class JWTAuthenticatorService(
    * @return The manipulated result.
    */
   def discard(authenticator: JWTAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     dao.fold(Future.successful(()))(_.remove(authenticator.id)).map { _ =>
       result
     }.recover {

@@ -117,6 +117,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @return The original or a manipulated result.
    */
   def update(authenticator: DummyAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     Future.successful(result)
   }
 
@@ -129,6 +130,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @return The original or a manipulated result.
    */
   def renew(authenticator: DummyAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     Future.successful(result)
   }
 
@@ -140,6 +142,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @return The manipulated result.
    */
   def discard(authenticator: DummyAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    authenticator.skipUpdate = true
     Future.successful(result)
   }
 }

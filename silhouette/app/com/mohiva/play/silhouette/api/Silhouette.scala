@@ -20,7 +20,6 @@
 package com.mohiva.play.silhouette.api
 
 import com.mohiva.play.silhouette.api.exceptions.{ NotAuthenticatedException, NotAuthorizedException }
-import com.mohiva.play.silhouette.api.services.AuthenticatorResult
 import com.mohiva.play.silhouette.api.util.DefaultEndpointHandler
 import play.api.Play
 import play.api.libs.concurrent.Execution.Implicits._
@@ -267,7 +266,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
     private def handleInitializedAuthenticator[T](authenticator: A, block: A => Future[HandlerResult[T]])(implicit request: RequestHeader) = {
       val auth = env.authenticatorService.touch(authenticator)
       block(auth.extract).flatMap {
-        case hr @ HandlerResult(pr: AuthenticatorResult, _) => Future.successful(hr)
+        case hr @ HandlerResult(pr, _) if authenticator.skipUpdate => Future.successful(hr)
         case hr @ HandlerResult(pr, _) => auth match {
           // Authenticator was touched so we update the authenticator and maybe the result
           case Left(a) => env.authenticatorService.update(a, pr).map(pr => hr.copy(pr))
@@ -290,7 +289,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      */
     private def handleUninitializedAuthenticator[T](authenticator: A, block: A => Future[HandlerResult[T]])(implicit request: RequestHeader) = {
       block(authenticator).flatMap {
-        case hr @ HandlerResult(pr: AuthenticatorResult, _) => Future.successful(hr)
+        case hr @ HandlerResult(pr, _) if authenticator.skipUpdate => Future.successful(hr)
         case hr @ HandlerResult(pr, _) =>
           env.authenticatorService.init(authenticator).flatMap { value =>
             env.authenticatorService.embed(value, pr)
