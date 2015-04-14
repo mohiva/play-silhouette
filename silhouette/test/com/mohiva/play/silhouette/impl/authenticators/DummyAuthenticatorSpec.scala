@@ -16,6 +16,7 @@
 package com.mohiva.play.silhouette.impl.authenticators
 
 import com.mohiva.play.silhouette.api.LoginInfo
+import com.mohiva.play.silhouette.api.services.AuthenticatorResult
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.mvc.Results
@@ -61,7 +62,7 @@ class DummyAuthenticatorSpec extends PlaySpecification with Mockito {
   "The result `embed` method of the service" should {
     "return the original response" in new Context {
       implicit val request = FakeRequest()
-      val result = Results.Ok
+      val result = AuthenticatorResult(Results.Ok)
 
       await(service.embed((), result)) must be equalTo result
     }
@@ -87,7 +88,7 @@ class DummyAuthenticatorSpec extends PlaySpecification with Mockito {
   "The `update` method of the service" should {
     "return the original result" in new Context {
       implicit val request = FakeRequest()
-      val result = Results.Ok
+      val result = AuthenticatorResult(Results.Ok)
 
       await(service.update(authenticator, result)) must be equalTo result
     }
@@ -96,7 +97,7 @@ class DummyAuthenticatorSpec extends PlaySpecification with Mockito {
   "The `renew` method of the service" should {
     "return the original result" in new Context {
       implicit val request = FakeRequest()
-      val result = Results.Ok
+      val result = AuthenticatorResult(Results.Ok)
 
       await(service.renew(authenticator, result)) must be equalTo result
     }
@@ -105,7 +106,7 @@ class DummyAuthenticatorSpec extends PlaySpecification with Mockito {
   "The `discard` method of the service" should {
     "return the original result" in new Context {
       implicit val request = FakeRequest()
-      val result = Results.Ok
+      val result = AuthenticatorResult(Results.Ok)
 
       await(service.discard(authenticator, result)) must be equalTo result
     }

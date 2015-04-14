@@ -19,7 +19,7 @@ import com.atlassian.jwt.SigningAlgorithm
 import com.atlassian.jwt.core.writer.{ JsonSmartJwtJsonBuilder, NimbusJwtWriterFactory }
 import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.services.AuthenticatorService
+import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.util.{ Base64, Clock, IDGenerator }
 import com.mohiva.play.silhouette.api.{ Logger, LoginInfo, StorableAuthenticator }
@@ -181,7 +181,7 @@ class JWTAuthenticatorService(
    * @return The manipulated result.
    */
   def embed(token: String, result: Result)(implicit request: RequestHeader) = {
-    Future.successful(result.withHeaders(settings.headerName -> token))
+    Future.successful(AuthenticatorResult(result.withHeaders(settings.headerName -> token)))
   }
 
   /**
@@ -201,7 +201,7 @@ class JWTAuthenticatorService(
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  protected[silhouette] def touch(authenticator: JWTAuthenticator): Either[JWTAuthenticator, JWTAuthenticator] = {
+  def touch(authenticator: JWTAuthenticator): Either[JWTAuthenticator, JWTAuthenticator] = {
     if (authenticator.idleTimeout.isDefined) {
       Left(authenticator.copy(lastUsedDate = clock.now))
     } else {
@@ -220,35 +220,46 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def update(
-    authenticator: JWTAuthenticator,
-    result: Result)(implicit request: RequestHeader) = {
-
+  def update(authenticator: JWTAuthenticator, result: Result)(implicit request: RequestHeader) = {
     dao.fold(Future.successful(authenticator))(_.save(authenticator)).map { a =>
-      result.withHeaders(settings.headerName -> serialize(a))
+      AuthenticatorResult(result.withHeaders(settings.headerName -> serialize(a)))
     }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
     }
   }
 
   /**
-   * Replaces the JWT header with a new one. If a backing store is defined, the old authenticator will
-   * be revoked. After that it isn't possible to use a JWT which was bound to this authenticator.
+   * Renews an authenticator.
+   *
+   * After that it isn't possible to use a JWT which was bound to this authenticator. This method
+   * doesn't embed the the authenticator into the result. This must be done manually if needed
+   * or use the other renew method otherwise.
+   *
+   * @param authenticator The authenticator to renew.
+   * @param request The request header.
+   * @return The serialized expression of the authenticator.
+   */
+  def renew(authenticator: JWTAuthenticator)(implicit request: RequestHeader) = {
+    dao.fold(Future.successful(()))(_.remove(authenticator.id)).flatMap { _ =>
+      create(authenticator.loginInfo).flatMap(init)
+    }.recover {
+      case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
+    }
+  }
+
+  /**
+   * Renews an authenticator and teplaces the JWT header with a new one.
+   *
+   * If a backing store is defined, the old authenticator will be revoked. After that it isn't
+   * possible to use a JWT which was bound to this authenticator.
    *
    * @param authenticator The authenticator to update.
    * @param result The result to manipulate.
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def renew(
-    authenticator: JWTAuthenticator,
-    result: Result)(implicit request: RequestHeader) = {
-
-    dao.fold(Future.successful(()))(_.remove(authenticator.id)).flatMap { _ =>
-      create(authenticator.loginInfo).flatMap { a =>
-        init(a).flatMap(v => embed(v, result))
-      }
-    }.recover {
+  def renew(authenticator: JWTAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    renew(authenticator).flatMap(v => embed(v, result)).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
     }
   }
@@ -260,12 +271,9 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  protected[silhouette] def discard(
-    authenticator: JWTAuthenticator,
-    result: Result)(implicit request: RequestHeader) = {
-
+  def discard(authenticator: JWTAuthenticator, result: Result)(implicit request: RequestHeader) = {
     dao.fold(Future.successful(()))(_.remove(authenticator.id)).map { _ =>
-      result
+      AuthenticatorResult(result)
     }.recover {
       case e => throw new AuthenticatorDiscardingException(DiscardError.format(ID, authenticator), e)
     }
@@ -286,7 +294,7 @@ class JWTAuthenticatorService(
       .issuedAt(authenticator.lastUsedDate.getMillis / 1000)
       .expirationTime(authenticator.expirationDate.getMillis / 1000)
 
-    authenticator.customClaims.map { data =>
+    authenticator.customClaims.foreach { data =>
       serializeCustomClaims(data).foreach {
         case (key, value) =>
           if (ReservedClaims.contains(key)) {

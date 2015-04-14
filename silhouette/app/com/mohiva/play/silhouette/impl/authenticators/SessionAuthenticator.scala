@@ -17,7 +17,7 @@ package com.mohiva.play.silhouette.impl.authenticators
 
 import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.services.AuthenticatorService
+import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.util.{ Base64, Clock, FingerprintGenerator }
 import com.mohiva.play.silhouette.api.{ Authenticator, Logger, LoginInfo }
@@ -168,7 +168,7 @@ class SessionAuthenticatorService(
    * @return The manipulated result.
    */
   def embed(session: Session, result: Result)(implicit request: RequestHeader) = {
-    Future.successful(result.addingToSession(session.data.toSeq: _*))
+    Future.successful(AuthenticatorResult(result.addingToSession(session.data.toSeq: _*)))
   }
 
   /**
@@ -191,9 +191,7 @@ class SessionAuthenticatorService(
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  protected[silhouette] def touch(
-    authenticator: SessionAuthenticator): Either[SessionAuthenticator, SessionAuthenticator] = {
-
+  def touch(authenticator: SessionAuthenticator): Either[SessionAuthenticator, SessionAuthenticator] = {
     if (authenticator.idleTimeout.isDefined) {
       Left(authenticator.copy(lastUsedDate = clock.now))
     } else {
@@ -212,34 +210,44 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def update(
-    authenticator: SessionAuthenticator,
-    result: Result)(implicit request: RequestHeader) = {
-
-    Future {
-      result.addingToSession(settings.sessionKey -> serialize(authenticator))
+  def update(authenticator: SessionAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    Future.from(Try {
+      AuthenticatorResult(result.addingToSession(settings.sessionKey -> serialize(authenticator)))
     }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
-    }
-
+    })
   }
 
   /**
-   * Replaces the authenticator in session with a new one. The old authenticator needn't be revoked
-   * because we use a stateless approach here. So only one authenticator can be bound to a user session.
+   * Renews an authenticator.
+   *
+   * The old authenticator needn't be revoked because we use a stateless approach here. So only
+   * one authenticator can be bound to a user session. This method doesn't embed the the authenticator
+   * into the result. This must be done manually if needed or use the other renew method otherwise.
+   *
+   * @param authenticator The authenticator to renew.
+   * @param request The request header.
+   * @return The serialized expression of the authenticator.
+   */
+  def renew(authenticator: SessionAuthenticator)(implicit request: RequestHeader) = {
+    create(authenticator.loginInfo).flatMap(init).recover {
+      case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
+    }
+  }
+
+  /**
+   * Renews an authenticator and replaces the authenticator in session with a new one.
+   *
+   * The old authenticator needn't be revoked because we use a stateless approach here. So only
+   * one authenticator can be bound to a user session.
    *
    * @param authenticator The authenticator to update.
    * @param result The result to manipulate.
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def renew(
-    authenticator: SessionAuthenticator,
-    result: Result)(implicit request: RequestHeader) = {
-
-    create(authenticator.loginInfo).flatMap { a =>
-      init(a).flatMap(v => embed(v, result))
-    }.recover {
+  def renew(authenticator: SessionAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    renew(authenticator).flatMap(v => embed(v, result)).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
     }
   }
@@ -251,16 +259,12 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  protected[silhouette] def discard(
-    authenticator: SessionAuthenticator,
-    result: Result)(implicit request: RequestHeader) = {
-
-    Future {
-      result.removingFromSession(settings.sessionKey)
+  def discard(authenticator: SessionAuthenticator, result: Result)(implicit request: RequestHeader) = {
+    Future.from(Try {
+      AuthenticatorResult(result.removingFromSession(settings.sessionKey))
     }.recover {
       case e => throw new AuthenticatorDiscardingException(DiscardError.format(ID, authenticator), e)
-    }
-
+    })
   }
 
   /**
