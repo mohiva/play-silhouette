@@ -125,6 +125,33 @@
     </span>
       <p class="shortcomment cmt">A trait that provides the means to find and save auth information
 for the Silhouette module.</p>
+    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorResult" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="AuthenticatorResultextendsResult"></a>
+      <a id="AuthenticatorResult:AuthenticatorResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AuthenticatorResult.html"><span class="name">AuthenticatorResult</span></a><span class="result"> extends <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.package@AuthenticatorResultextendsResult" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A marker result which indicates that an operation on an authenticator was processed and
+therefore it shouldn't updated automatically.</p><div class="fullcomment"><div class="comment cmt"><p>A marker result which indicates that an operation on an authenticator was processed and
+therefore it shouldn't updated automatically.</p><p>Due the fact that the update method gets called on every subsequent request to update the
+authenticator related data in the backing store and in the result, it isn't possible to
+discard or renew the authenticator simultaneously. This is because the &quot;update&quot; method would
+override the result created by the &quot;renew&quot; or &quot;discard&quot; method, because it will be executed
+as last in the chain.</p><p>As example:
+If we discard the session in a Silhouette action then it will be removed from session. But
+at the end the update method will embed the session again, because it gets called with the
+result of the action.
+</p></div></div>
     </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="AuthenticatorService[T&lt;:com.mohiva.play.silhouette.api.Authenticator]extendsAnyRef"></a>
       <a id="AuthenticatorService[T&lt;:Authenticator]:AuthenticatorService[T]"></a>
@@ -204,7 +231,24 @@ one in a third-party system.
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="com.mohiva.play.silhouette.api.services.AuthenticatorResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AuthenticatorResult"></a>
+      <a id="AuthenticatorResult:AuthenticatorResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AuthenticatorResult$.html"><span class="name">AuthenticatorResult</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.package@AuthenticatorResult" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="AuthenticatorService"></a>
       <a id="AuthenticatorService:AuthenticatorService"></a>
       <h4 class="signature">

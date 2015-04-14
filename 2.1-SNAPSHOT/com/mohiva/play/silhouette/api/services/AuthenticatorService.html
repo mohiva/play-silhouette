@@ -141,25 +141,25 @@
       <p class="shortcomment cmt">Creates a new authenticator for the specified login info.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a new authenticator for the specified login info.
 </p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the authenticator should be created.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>An authenticator.
 </p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#discard" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="discard(authenticator:T,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]"></a>
-      <a id="discard(T,Result)(RequestHeader):Future[Result]"></a>
+    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#discard" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="discard(authenticator:T,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[com.mohiva.play.silhouette.api.services.AuthenticatorResult]"></a>
+      <a id="discard(T,Result)(RequestHeader):Future[AuthenticatorResult]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">discard</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService.T">T</span></span>, <span name="result">result: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>
+        <span class="name">discard</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService.T">T</span></span>, <span name="result">result: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="AuthenticatorResult.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorResult">AuthenticatorResult</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@discard(authenticator:T,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@discard(authenticator:T,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[com.mohiva.play.silhouette.api.services.AuthenticatorResult]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Manipulates the response and removes authenticator specific artifacts before sending it to the client.</p><div class="fullcomment"><div class="comment cmt"><p>Manipulates the response and removes authenticator specific artifacts before sending it to the client.
 </p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator instance.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The manipulated result.
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">com.mohiva.play.silhouette</a>] </dd></dl></div>
+</p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#embed" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="embed(value:T#Value,request:play.api.mvc.RequestHeader):play.api.mvc.RequestHeader"></a>
       <a id="embed(T.Value,RequestHeader):RequestHeader"></a>
@@ -183,18 +183,18 @@ a valid authenticator.</p><p>If an existing authenticator exists, then it will b
 </p></div><dl class="paramcmts block"><dt class="param">value</dt><dd class="cmt"><p>The authenticator value to embed.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The manipulated request header.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#embed" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="embed(value:T#Value,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]"></a>
-      <a id="embed(T.Value,Result)(RequestHeader):Future[Result]"></a>
+      <a id="embed(value:T#Value,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[com.mohiva.play.silhouette.api.services.AuthenticatorResult]"></a>
+      <a id="embed(T.Value,Result)(RequestHeader):Future[AuthenticatorResult]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">embed</span><span class="params">(<span name="value">value: <span class="extype" name="com.mohiva.play.silhouette.api.Authenticator.Value">T.Value</span></span>, <span name="result">result: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>
+        <span class="name">embed</span><span class="params">(<span name="value">value: <span class="extype" name="com.mohiva.play.silhouette.api.Authenticator.Value">T.Value</span></span>, <span name="result">result: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="AuthenticatorResult.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorResult">AuthenticatorResult</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@embed(value:T#Value,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@embed(value:T#Value,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[com.mohiva.play.silhouette.api.services.AuthenticatorResult]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -222,19 +222,39 @@ the serialized value.</p><div class="fullcomment"><div class="comment cmt"><p>In
 the serialized value.
 </p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator instance.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The serialized authenticator value.
 </p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#renew" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="renew(authenticator:T,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]"></a>
-      <a id="renew(T,Result)(RequestHeader):Future[Result]"></a>
+    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#renew" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="renew(authenticator:T)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[T#Value]"></a>
+      <a id="renew(T)(RequestHeader):Future[T.Value]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">renew</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService.T">T</span></span>, <span name="result">result: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>
+        <span class="name">renew</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService.T">T</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authenticator.Value">T.Value</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@renew(authenticator:T,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@renew(authenticator:T)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[T#Value]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Renews the expiration of an authenticator without embedding it into the result.</p><div class="fullcomment"><div class="comment cmt"><p>Renews the expiration of an authenticator without embedding it into the result.</p><p>Based on the implementation, the renew method should revoke the given authenticator first, before
+creating a new one. If the authenticator was updated, then the updated artifacts should be returned.
+</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to renew.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The serialized expression of the authenticator.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#renew" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="renew(authenticator:T,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[com.mohiva.play.silhouette.api.services.AuthenticatorResult]"></a>
+      <a id="renew(T,Result)(RequestHeader):Future[AuthenticatorResult]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">renew</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService.T">T</span></span>, <span name="result">result: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="AuthenticatorResult.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorResult">AuthenticatorResult</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@renew(authenticator:T,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[com.mohiva.play.silhouette.api.services.AuthenticatorResult]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -242,7 +262,7 @@ the serialized value.
 creating a new one. If the authenticator was updated, then the updated artifacts should be embedded
 into the response.
 </p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to renew.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The original or a manipulated result.
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">com.mohiva.play.silhouette</a>] </dd></dl></div>
+</p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#retrieve" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="retrieve(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Option[T]]"></a>
       <a id="retrieve(RequestHeader):Future[Option[T]]"></a>
@@ -262,7 +282,7 @@ into the response.
       <p class="shortcomment cmt">Retrieves the authenticator from request.</p><div class="fullcomment"><div class="comment cmt"><p>Retrieves the authenticator from request.
 </p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>Some authenticator or None if no authenticator could be found in request.
 </p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#touch" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#touch" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="touch(authenticator:T):Either[T,T]"></a>
       <a id="touch(T):Either[T,T]"></a>
       <h4 class="signature">
@@ -283,22 +303,22 @@ out after a certain time if it wasn't used. So to mark an authenticator as used 
 touched on every request to a Silhouette action. If an authenticator should not be touched
 because of the fact that sliding window expiration is disabled, then it should be returned
 on the right, otherwise it should be returned on the left. An untouched authenticator needn't
-be updated later by the <a href="#update(authenticator:T,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" class="extmbr" name="com.mohiva.play.silhouette.api.services.AuthenticatorService#update">update</a> method.
+be updated later by the <a href="#update(authenticator:T,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[com.mohiva.play.silhouette.api.services.AuthenticatorResult]" class="extmbr" name="com.mohiva.play.silhouette.api.services.AuthenticatorService#update">update</a> method.
 </p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to touch.</p></dd><dt>returns</dt><dd class="cmt"><p>The touched authenticator on the left or the untouched authenticator on the right.
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">com.mohiva.play.silhouette</a>] </dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#update" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="update(authenticator:T,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]"></a>
-      <a id="update(T,Result)(RequestHeader):Future[Result]"></a>
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#update" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="update(authenticator:T,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[com.mohiva.play.silhouette.api.services.AuthenticatorResult]"></a>
+      <a id="update(T,Result)(RequestHeader):Future[AuthenticatorResult]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">update</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService.T">T</span></span>, <span name="result">result: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a>]</span>
+        <span class="name">update</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService.T">T</span></span>, <span name="result">result: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.Result" class="extype" target="_top">Result</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="http://www.playframework.com/documentation/2.3.8/api/scala/index.html#play.api.mvc.RequestHeader" class="extype" target="_top">RequestHeader</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="AuthenticatorResult.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorResult">AuthenticatorResult</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@update(authenticator:T,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@update(authenticator:T,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[com.mohiva.play.silhouette.api.services.AuthenticatorResult]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -306,7 +326,7 @@ be updated later by the <a href="#update(authenticator:T,result:play.api.mvc.Res
 This method gets called on every subsequent request if an identity accesses a Silhouette action,
 expect the authenticator was not touched.
 </p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to update.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The original or a manipulated result.
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">com.mohiva.play.silhouette</a>] </dd></dl></div>
+</p></dd></dl></div>
     </li></ol>
             </div>
 
