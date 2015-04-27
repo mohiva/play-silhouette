@@ -201,8 +201,8 @@ class CookieAuthenticatorService(
    */
   def embed(cookie: Cookie, request: RequestHeader) = {
     val cookies = Cookies.merge(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(cookie))
-    val additional = Seq(HeaderNames.COOKIE -> Seq(cookies))
-    request.copy(headers = AdditionalHeaders(request.headers, additional))
+    val additional = Seq(HeaderNames.COOKIE -> cookies)
+    request.copy(headers = request.headers.replace(additional: _*))
   }
 
   /**

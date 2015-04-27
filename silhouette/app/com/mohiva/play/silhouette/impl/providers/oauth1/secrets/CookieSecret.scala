@@ -38,6 +38,30 @@ object CookieSecret {
    * Converts the [[CookieSecret]]] to Json and vice versa.
    */
   implicit val jsonFormat = Json.format[CookieSecret]
+
+  /**
+   * Returns a serialized value of the secret.
+   *
+   * @param secret The secret to serialize.
+   * @return A serialized value of the secret.
+   */
+  def serialize(secret: CookieSecret) = Crypto.encryptAES(Json.toJson(secret).toString())
+
+  /**
+   * Unserializes the secret.
+   *
+   * @param str The string representation of the secret.
+   * @return Some secret on success, otherwise None.
+   */
+  def unserialize(str: String): Try[CookieSecret] = {
+    Try(Json.parse(Crypto.decryptAES(str))) match {
+      case Success(json) => json.validate[CookieSecret].asEither match {
+        case Left(error) => Failure(new OAuth1TokenSecretException(InvalidSecretFormat.format(error)))
+        case Right(authenticator) => Success(authenticator)
+      }
+      case Failure(error) => Failure(new OAuth1TokenSecretException(InvalidSecretFormat.format(error)))
+    }
+  }
 }
 
 /**
@@ -61,7 +85,7 @@ case class CookieSecret(value: String, expirationDate: DateTime) extends OAuth1T
    *
    * @return A serialized value of the secret.
    */
-  def serialize = Crypto.encryptAES(Json.toJson(this).toString())
+  def serialize = CookieSecret.serialize(this)
 }
 
 /**
@@ -94,19 +118,18 @@ class CookieSecretProvider(
   /**
    * Retrieves the token secret.
    *
-   * @param id The provider ID.
    * @param request The current request.
    * @tparam B The type of the request body.
    * @return A secret on success, otherwise an failure.
    */
-  def retrieve[B](id: String)(implicit request: ExtractableRequest[B]): Future[Secret] = {
+  def retrieve[B](implicit request: ExtractableRequest[B]): Future[Secret] = {
     request.cookies.get(settings.cookieName) match {
-      case Some(cookie) => unserializeSecret(cookie.value, id) match {
-        case Success(secret) if secret.isExpired => Future.failed(new OAuth1TokenSecretException(SecretIsExpired.format(id)))
+      case Some(cookie) => CookieSecret.unserialize(cookie.value) match {
+        case Success(secret) if secret.isExpired => Future.failed(new OAuth1TokenSecretException(SecretIsExpired))
         case Success(secret) => Future.successful(secret)
         case Failure(error) => Future.failed(error)
       }
-      case None => Future.failed(new OAuth1TokenSecretException(ClientSecretDoesNotExists.format(id, settings.cookieName)))
+      case None => Future.failed(new OAuth1TokenSecretException(ClientSecretDoesNotExists.format(settings.cookieName)))
     }
   }
 
@@ -128,23 +151,6 @@ class CookieSecretProvider(
       secure = settings.secureCookie,
       httpOnly = settings.httpOnlyCookie))
   }
-
-  /**
-   * Unserializes the secret.
-   *
-   * @param str The string representation of the secret.
-   * @param id The provider ID.
-   * @return Some secret on success, otherwise None.
-   */
-  private def unserializeSecret(str: String, id: String): Try[CookieSecret] = {
-    Try(Json.parse(Crypto.decryptAES(str))) match {
-      case Success(json) => json.validate[CookieSecret].asEither match {
-        case Left(error) => Failure(new OAuth1TokenSecretException(InvalidSecretFormat.format(id, error)))
-        case Right(authenticator) => Success(authenticator)
-      }
-      case Failure(error) => Failure(new OAuth1TokenSecretException(InvalidSecretFormat.format(id, error)))
-    }
-  }
 }
 
 /**
@@ -155,9 +161,9 @@ object CookieSecretProvider {
   /**
    * The error messages.
    */
-  val ClientSecretDoesNotExists = "[Silhouette][%s] Secret cookie doesn't exists for name: %s"
-  val SecretIsExpired = "[Silhouette][%s] Secret is expired"
-  val InvalidSecretFormat = "[Silhouette][%s] Cannot build token secret because of invalid Json format: %s"
+  val ClientSecretDoesNotExists = "[Silhouette][CookieSecretProvider] Secret cookie doesn't exists for name: %s"
+  val SecretIsExpired = "[Silhouette][CookieSecretProvider] Secret is expired"
+  val InvalidSecretFormat = "[Silhouette][CookieSecretProvider] Cannot build token secret because of invalid Json format: %s"
 }
 
 /**

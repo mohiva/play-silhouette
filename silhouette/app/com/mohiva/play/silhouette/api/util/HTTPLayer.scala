@@ -28,7 +28,7 @@ trait HTTPLayer {
    *
    * @param url the URL to request
    */
-  def url(url: String): WSRequestHolder
+  def url(url: String): WSRequest
 }
 
 /**
@@ -44,5 +44,5 @@ class PlayHTTPLayer extends HTTPLayer {
    *
    * @param url the URL to request
    */
-  def url(url: String): WSRequestHolder = WS.url(url)
+  def url(url: String): WSRequest = WS.url(url)
 }

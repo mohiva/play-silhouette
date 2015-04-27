@@ -17,8 +17,8 @@ package com.mohiva.play.silhouette.impl.authenticators
 
 import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
+import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
 import com.mohiva.play.silhouette.api.util.{ Base64, Clock, FingerprintGenerator }
 import com.mohiva.play.silhouette.api.{ Authenticator, Logger, LoginInfo }
 import com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService._
@@ -85,12 +85,59 @@ case class SessionAuthenticator(
 /**
  * The companion object of the authenticator.
  */
-object SessionAuthenticator {
+object SessionAuthenticator extends Logger {
 
   /**
    * Converts the SessionAuthenticator to Json and vice versa.
    */
   implicit val jsonFormat = Json.format[SessionAuthenticator]
+
+  /**
+   * Serializes the authenticator.
+   *
+   * @param authenticator The authenticator to serialize.
+   * @param settings The authenticator settings.
+   * @return The serialized authenticator.
+   */
+  def serialize(authenticator: SessionAuthenticator)(settings: SessionAuthenticatorSettings) = {
+    if (settings.encryptAuthenticator) {
+      Crypto.encryptAES(Json.toJson(authenticator).toString())
+    } else {
+      Base64.encode(Json.toJson(authenticator))
+    }
+  }
+
+  /**
+   * Unserializes the authenticator.
+   *
+   * @param str The string representation of the authenticator.
+   * @param settings The authenticator settings.
+   * @return Some authenticator on success, otherwise None.
+   */
+  def unserialize(str: String)(settings: SessionAuthenticatorSettings): Option[SessionAuthenticator] = {
+    if (settings.encryptAuthenticator) buildAuthenticator(Crypto.decryptAES(str))
+    else buildAuthenticator(Base64.decode(str))
+  }
+
+  /**
+   * Builds the authenticator from Json.
+   *
+   * @param str The string representation of the authenticator.
+   * @return Some authenticator on success, otherwise None.
+   */
+  private def buildAuthenticator(str: String): Option[SessionAuthenticator] = {
+    Try(Json.parse(str)) match {
+      case Success(json) => json.validate[SessionAuthenticator].asEither match {
+        case Left(error) =>
+          logger.info(InvalidJsonFormat.format(ID, error))
+          None
+        case Right(authenticator) => Some(authenticator)
+      }
+      case Failure(error) =>
+        logger.info(JsonParseError.format(ID, str), error)
+        None
+    }
+  }
 }
 
 /**
@@ -104,6 +151,8 @@ class SessionAuthenticatorService(
   settings: SessionAuthenticatorSettings,
   fingerprintGenerator: FingerprintGenerator,
   clock: Clock) extends AuthenticatorService[SessionAuthenticator] with Logger {
+
+  import SessionAuthenticator._
 
   /**
    * Creates a new authenticator for the specified login info.
@@ -137,7 +186,7 @@ class SessionAuthenticatorService(
     Future.from(Try {
       if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
     }).map { fingerprint =>
-      request.session.get(settings.sessionKey).flatMap(unserialize) match {
+      request.session.get(settings.sessionKey).flatMap(v => unserialize(v)(settings)) match {
         case Some(a) if fingerprint.isDefined && a.fingerprint != fingerprint =>
           logger.info(InvalidFingerprint.format(ID, fingerprint, a))
           None
@@ -157,7 +206,7 @@ class SessionAuthenticatorService(
    * @return The serialized authenticator value.
    */
   def init(authenticator: SessionAuthenticator)(implicit request: RequestHeader) = {
-    Future.successful(request.session + (settings.sessionKey -> serialize(authenticator)))
+    Future.successful(request.session + (settings.sessionKey -> serialize(authenticator)(settings)))
   }
 
   /**
@@ -181,8 +230,8 @@ class SessionAuthenticatorService(
   def embed(session: Session, request: RequestHeader) = {
     val sessionCookie = Session.encodeAsCookie(session)
     val cookies = Cookies.merge(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(sessionCookie))
-    val additional = Seq(HeaderNames.COOKIE -> Seq(cookies))
-    request.copy(headers = AdditionalHeaders(request.headers, additional))
+    val additional = Seq(HeaderNames.COOKIE -> cookies)
+    request.copy(headers = request.headers.replace(additional: _*))
   }
 
   /**
@@ -212,7 +261,7 @@ class SessionAuthenticatorService(
    */
   def update(authenticator: SessionAuthenticator, result: Result)(implicit request: RequestHeader) = {
     Future.from(Try {
-      AuthenticatorResult(result.addingToSession(settings.sessionKey -> serialize(authenticator)))
+      AuthenticatorResult(result.addingToSession(settings.sessionKey -> serialize(authenticator)(settings)))
     }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
     })
@@ -265,51 +314,6 @@ class SessionAuthenticatorService(
     }.recover {
       case e => throw new AuthenticatorDiscardingException(DiscardError.format(ID, authenticator), e)
     })
-  }
-
-  /**
-   * Serializes the authenticator.
-   *
-   * @param authenticator The authenticator to serialize.
-   * @return The serialized authenticator.
-   */
-  private def serialize(authenticator: SessionAuthenticator) = {
-    if (settings.encryptAuthenticator) {
-      Crypto.encryptAES(Json.toJson(authenticator).toString())
-    } else {
-      Base64.encode(Json.toJson(authenticator))
-    }
-  }
-
-  /**
-   * Unserializes the authenticator.
-   *
-   * @param str The string representation of the authenticator.
-   * @return Some authenticator on success, otherwise None.
-   */
-  private def unserialize(str: String): Option[SessionAuthenticator] = {
-    if (settings.encryptAuthenticator) buildAuthenticator(Crypto.decryptAES(str))
-    else buildAuthenticator(Base64.decode(str))
-  }
-
-  /**
-   * Builds the authenticator from Json.
-   *
-   * @param str The string representation of the authenticator.
-   * @return Some authenticator on success, otherwise None.
-   */
-  private def buildAuthenticator(str: String): Option[SessionAuthenticator] = {
-    Try(Json.parse(str)) match {
-      case Success(json) => json.validate[SessionAuthenticator].asEither match {
-        case Left(error) =>
-          logger.info(InvalidJsonFormat.format(ID, error))
-          None
-        case Right(authenticator) => Some(authenticator)
-      }
-      case Failure(error) =>
-        logger.info(JsonParseError.format(ID, str), error)
-        None
-    }
   }
 }
 

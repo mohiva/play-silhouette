@@ -21,7 +21,7 @@ import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.FacebookProvider._
-import play.api.libs.ws.{ WSRequestHolder, WSResponse }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.{ FakeRequest, WithApplication }
 import test.Helper
 
@@ -34,14 +34,14 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
 
   "The `authenticate` method" should {
     "fail with UnexpectedResponseException if OAuth2Info can be build because of an invalid response" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
       response.body returns ""
       requestHolder.withHeaders(any) returns requestHolder
-      requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
+      requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      stateProvider.validate(any)(any) returns Future.successful(state)
+      stateProvider.validate(any) returns Future.successful(state)
 
       failed[UnexpectedResponseException](provider.authenticate()) {
         case e => e.getMessage must equalTo(InvalidInfoFormat.format(provider.id, ""))
@@ -49,14 +49,14 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
     }
 
     "return the auth info with expires value" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
       response.body returns AccessToken + "=my.access.token&" + Expires + "=1"
       requestHolder.withHeaders(any) returns requestHolder
-      requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
+      requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      stateProvider.validate(any)(any) returns Future.successful(state)
+      stateProvider.validate(any) returns Future.successful(state)
 
       authInfo(provider.authenticate()) {
         case authInfo => authInfo must be equalTo OAuth2Info(
@@ -68,14 +68,14 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
     }
 
     "return the auth info without expires value" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
       response.body returns AccessToken + "=my.access.token&"
       requestHolder.withHeaders(any) returns requestHolder
-      requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
+      requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      stateProvider.validate(any)(any) returns Future.successful(state)
+      stateProvider.validate(any) returns Future.successful(state)
 
       authInfo(provider.authenticate()) {
         case authInfo => authInfo must be equalTo OAuth2Info(
@@ -89,7 +89,7 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
 
   "The `retrieveProfile` method" should {
     "fail with ProfileRetrievalException if API returns error" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       response.json returns Helper.loadJson("providers/oauth2/facebook.error.json")
       requestHolder.get() returns Future.successful(response)
@@ -105,7 +105,7 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
     }
 
     "fail with ProfileRetrievalException if an unexpected error occurred" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       response.json throws new RuntimeException("")
       requestHolder.get() returns Future.successful(response)
@@ -117,7 +117,7 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
     }
 
     "return the social profile and the auth info with expires value" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       response.json returns Helper.loadJson("providers/oauth2/facebook.success.json")
       requestHolder.get() returns Future.successful(response)
@@ -137,7 +137,7 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
     }
 
     "return the social profile and the auth info without expires value" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       response.json returns Helper.loadJson("providers/oauth2/facebook.success.json")
       requestHolder.get() returns Future.successful(response)

@@ -48,7 +48,7 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
       val dateTime = new DateTime(2014, 8, 8, 0, 0, 0)
       val decoded = Base64.decode(state.copy(expirationDate = dateTime).serialize)
 
-      decoded must /("expirationDate" -> dateTime.getMillis)
+      decoded must /("expirationDate" -> dateTime.getMillis.toDouble)
       decoded must /("value" -> "value")
     }
   }
@@ -73,16 +73,16 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
     "throw an StateException if client state doesn't exists" in new Context {
       implicit val req = FakeRequest(GET, s"?$State=${state.serialize}")
 
-      await(provider.validate("test")) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(ClientStateDoesNotExists.format("test", ""))
+      await(provider.validate) must throwA[OAuth2StateException].like {
+        case e => e.getMessage must startWith(ClientStateDoesNotExists.format(""))
       }
     }
 
     "throw an StateException if provider state doesn't exists" in new WithApplication with Context {
       implicit val req = FakeRequest(GET, "/").withCookies(Cookie(settings.cookieName, state.serialize))
 
-      await(provider.validate("test")) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(ProviderStateDoesNotExists.format("test", ""))
+      await(provider.validate) must throwA[OAuth2StateException].like {
+        case e => e.getMessage must startWith(ProviderStateDoesNotExists.format(""))
       }
     }
 
@@ -91,8 +91,8 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
 
       implicit val req = FakeRequest(GET, s"?$State=${state.serialize}").withCookies(Cookie(settings.cookieName, invalidState))
 
-      await(provider.validate("test")) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(InvalidStateFormat.format("test", ""))
+      await(provider.validate) must throwA[OAuth2StateException].like {
+        case e => e.getMessage must startWith(InvalidStateFormat.format(""))
       }
     }
 
@@ -101,8 +101,8 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
 
       implicit val req = FakeRequest(GET, s"?$State=${state.serialize}").withCookies(Cookie(settings.cookieName, invalidState))
 
-      await(provider.validate("test")) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(InvalidStateFormat.format("test", ""))
+      await(provider.validate) must throwA[OAuth2StateException].like {
+        case e => e.getMessage must startWith(InvalidStateFormat.format(""))
       }
     }
 
@@ -111,8 +111,8 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
 
       implicit val req = FakeRequest(GET, s"?$State=$invalidState").withCookies(Cookie(settings.cookieName, state.serialize))
 
-      await(provider.validate("test")) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(InvalidStateFormat.format("test", ""))
+      await(provider.validate) must throwA[OAuth2StateException].like {
+        case e => e.getMessage must startWith(InvalidStateFormat.format(""))
       }
     }
 
@@ -121,8 +121,8 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
 
       implicit val req = FakeRequest(GET, s"?$State=$invalidState").withCookies(Cookie(settings.cookieName, state.serialize))
 
-      await(provider.validate("test")) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(InvalidStateFormat.format("test", ""))
+      await(provider.validate) must throwA[OAuth2StateException].like {
+        case e => e.getMessage must startWith(InvalidStateFormat.format(""))
       }
     }
 
@@ -132,8 +132,8 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
 
       implicit val req = FakeRequest(GET, s"?$State=${providerState.serialize}").withCookies(Cookie(settings.cookieName, clientState.serialize))
 
-      await(provider.validate("test")) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(StateIsNotEqual.format("test"))
+      await(provider.validate) must throwA[OAuth2StateException].like {
+        case e => e.getMessage must startWith(StateIsNotEqual.format())
       }
     }
 
@@ -142,15 +142,15 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
 
       implicit val req = FakeRequest(GET, s"?$State=${expiredState.serialize}").withCookies(Cookie(settings.cookieName, expiredState.serialize))
 
-      await(provider.validate("test")) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(StateIsExpired.format("test"))
+      await(provider.validate) must throwA[OAuth2StateException].like {
+        case e => e.getMessage must startWith(StateIsExpired.format())
       }
     }
 
     "return the state if it's valid" in new WithApplication with Context {
       implicit val req = FakeRequest(GET, s"?$State=${state.serialize}").withCookies(Cookie(settings.cookieName, state.serialize))
 
-      await(provider.validate("test")) must be equalTo state
+      await(provider.validate) must be equalTo state
     }
   }
 
