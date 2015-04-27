@@ -2,6 +2,7 @@ package com.mohiva.play.silhouette.api.util
 
 import play.api.http.ContentTypes._
 import play.api.i18n.Messages
+import play.api.i18n.Messages.Implicits._
 import play.api.mvc._
 import play.api.test._
 
@@ -142,7 +143,7 @@ class DefaultEndpointHandlerSpec extends PlaySpecification {
     expectedContentType: String,
     expectedResponseFragment: String,
     expectedMessage: String,
-    f: RequestHeader => Future[Result]) = {
+    f: RequestHeader => Future[Result])(implicit messages: Messages) = {
     implicit val request = acceptedMediaType match {
       case Some(mediaType) => FakeRequest().withHeaders(ACCEPT -> mediaType)
       case None => FakeRequest()

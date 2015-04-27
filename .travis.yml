@@ -3,7 +3,7 @@ scala:
 - 2.10.5
 - 2.11.6
 jdk:
-- oraclejdk7
+- oraclejdk8
 env:
   global:
     secure: V6KuFtIP8++7MVr4uXe+VoyUGtjpw9fy/WjdTM5F7cN0w0Nns6JQpbbo4MwWBPIrcx2/fiPWH0hY53HKdhhi27tWSq0lGJO55TU8KtNyVi/UmBhyOp2DYKulXkYmcrOeCv0g5PXwXmrXxPW6SJZ6PR+cG8UhRQAF627jEdKsxBY=

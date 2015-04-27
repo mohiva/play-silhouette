@@ -83,7 +83,7 @@ abstract class OAuth1Provider(
       case None => request.extractString(OAuthVerifier) -> request.extractString(OAuthToken) match {
         // Second step in the OAuth flow.
         // We have received the verifier and the request token, and we need to swap it for the access token.
-        case (Some(verifier), Some(token)) => tokenSecretProvider.retrieve(id).flatMap { tokenSecret =>
+        case (Some(verifier), Some(token)) => tokenSecretProvider.retrieve.flatMap { tokenSecret =>
           service.retrieveAccessToken(OAuth1Info(token, tokenSecret.value), verifier).map { info =>
             Right(info)
           }.recover {
@@ -232,12 +232,11 @@ trait OAuth1TokenSecretProvider {
   /**
    * Retrieves the token secret.
    *
-   * @param id The provider ID.
    * @param request The current request.
    * @tparam B The type of the request body.
    * @return A secret on success, otherwise an failure.
    */
-  def retrieve[B](id: String)(implicit request: ExtractableRequest[B]): Future[Secret]
+  def retrieve[B](implicit request: ExtractableRequest[B]): Future[Secret]
 
   /**
    * Publishes the secret to the client.

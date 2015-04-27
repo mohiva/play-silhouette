@@ -19,7 +19,7 @@ import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.services.GravatarService._
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.libs.ws.{ WSRequestHolder, WSResponse }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.PlaySpecification
 
 import scala.concurrent.Future
@@ -35,7 +35,7 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
     }
 
     "return None if HTTP status code isn't 200" in new Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
 
       response.status returns 404
@@ -46,7 +46,7 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
     }
 
     "return None if HTTP status code isn't 200" in new Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
 
       response.status returns 404
@@ -57,7 +57,7 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
     }
 
     "return None if exception will be thrown during API request" in new Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
 
       response.status throws new RuntimeException("Timeout error")
@@ -68,7 +68,7 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
     }
 
     "return Avatar url" in new Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
 
       response.status returns 200
@@ -79,7 +79,7 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
     }
 
     "not trim leading zeros" in new Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
 
       response.status returns 200

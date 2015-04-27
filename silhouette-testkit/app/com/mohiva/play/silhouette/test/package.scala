@@ -62,7 +62,7 @@ package object test {
         body = f.body,
         method = rh.method,
         version = rh.version,
-        headers = FakeHeaders(rh.headers.toMap.toSeq),
+        headers = FakeHeaders(rh.headers.headers),
         remoteAddress = rh.remoteAddress,
         secure = rh.secure
       )

@@ -24,6 +24,7 @@ import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.GlobalSettings
 import play.api.i18n.{ Lang, Messages }
+import play.api.i18n.Messages.Implicits._
 import play.api.libs.concurrent.Akka
 import play.api.libs.json.Json
 import play.api.mvc.Results._
@@ -32,6 +33,7 @@ import play.api.test.{ FakeApplication, FakeRequest, PlaySpecification, WithAppl
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.reflect.ClassTag
 
 /**

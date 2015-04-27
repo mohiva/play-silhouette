@@ -20,7 +20,7 @@ import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth1.XingProvider._
-import play.api.libs.ws.{ WSRequestHolder, WSResponse }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.WithApplication
 import test.Helper
 
@@ -33,7 +33,7 @@ class XingProviderSpec extends OAuth1ProviderSpec {
 
   "The `retrieveProfile` method" should {
     "fail with ProfileRetrievalException if API returns error" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
@@ -49,7 +49,7 @@ class XingProviderSpec extends OAuth1ProviderSpec {
     }
 
     "throw ProfileRetrievalException if an unexpected error occurred" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
@@ -62,7 +62,7 @@ class XingProviderSpec extends OAuth1ProviderSpec {
     }
 
     "return the social profile" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)

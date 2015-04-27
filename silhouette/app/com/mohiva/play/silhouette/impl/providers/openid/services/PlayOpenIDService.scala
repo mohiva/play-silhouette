@@ -23,6 +23,7 @@ import com.mohiva.play.silhouette.impl.providers.{ OpenIDInfo, OpenIDService, Op
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.openid.OpenID
 import play.api.mvc.Request
+import play.api.Play.current
 
 import scala.concurrent.Future
 import scala.util.{ Failure, Success, Try }

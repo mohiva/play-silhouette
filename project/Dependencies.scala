@@ -23,7 +23,8 @@ object Dependencies {
   }
 
   val resolvers = Seq(
-    "Atlassian Releases" at "https://maven.atlassian.com/public/"
+    "Atlassian Releases" at "https://maven.atlassian.com/public/",
+    "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
   )
 
   object Library {
@@ -33,13 +34,20 @@ object Dependencies {
       val ws = "com.typesafe.play" %% "play-ws" % version
       val cache = "com.typesafe.play" %% "play-cache" % version
       val test = "com.typesafe.play" %% "play-test" % version
+      val specs2 = "com.typesafe.play" %% "play-specs2" % version
+    }
+
+    object Specs2 {
+      private val version = "3.4"
+      val matcherExtra = "org.specs2" %% "specs2-matcher-extra" % version
+      val mock = "org.specs2" %% "specs2-mock" % version
     }
 
     val jbcrypt = "org.mindrot" % "jbcrypt" % "0.3m"
-    val jwtCore = "com.atlassian.jwt" % "jwt-core" % "1.2.3"
-    val jwtApi = "com.atlassian.jwt" % "jwt-api" % "1.2.3"
-    val mockito = "org.mockito" % "mockito-core" % "1.9.5"
+    val jwtCore = "com.atlassian.jwt" % "jwt-core" % "1.2.4"
+    val jwtApi = "com.atlassian.jwt" % "jwt-api" % "1.2.4"
+    val mockito = "org.mockito" % "mockito-core" % "1.10.19"
     val scalaGuice = "net.codingwell" %% "scala-guice" % "4.0.0-beta5"
-    val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % "2.3.3"
+    val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % "2.3.10"
   }
 }

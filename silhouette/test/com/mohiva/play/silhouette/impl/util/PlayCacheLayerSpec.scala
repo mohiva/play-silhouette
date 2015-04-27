@@ -17,7 +17,6 @@ package com.mohiva.play.silhouette.impl.util
 
 import org.joda.time.DateTime
 import org.specs2.specification.Scope
-import play.api.Play.current
 import play.api.cache.Cache
 import play.api.test.{ PlaySpecification, WithApplication }
 import test.AfterWithinAround
@@ -57,7 +56,7 @@ class PlayCacheLayerSpec extends PlaySpecification {
    * The context.
    */
   trait Context extends Scope with AfterWithinAround {
-
+    self: WithApplication =>
     /**
      * The layer to test.
      */
