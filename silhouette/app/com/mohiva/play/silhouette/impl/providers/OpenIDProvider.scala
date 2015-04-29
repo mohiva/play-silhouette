@@ -18,7 +18,6 @@ package com.mohiva.play.silhouette.impl.providers
 import java.net.URLEncoder
 
 import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.services.AuthInfo
 import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
 import com.mohiva.play.silhouette.impl.exceptions.UnexpectedResponseException
 import com.mohiva.play.silhouette.impl.providers.OpenIDProvider._

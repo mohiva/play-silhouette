@@ -298,7 +298,7 @@ class JWTAuthenticatorService(
    * @return The serialized authenticator value.
    */
   def init(authenticator: JWTAuthenticator)(implicit request: RequestHeader) = {
-    dao.fold(Future.successful(authenticator))(_.save(authenticator)).map { a =>
+    dao.fold(Future.successful(authenticator))(_.add(authenticator)).map { a =>
       serialize(a)(settings)
     }.recover {
       case e => throw new AuthenticatorInitializationException(InitError.format(ID, authenticator), e)
@@ -354,7 +354,7 @@ class JWTAuthenticatorService(
    * @return The original or a manipulated result.
    */
   def update(authenticator: JWTAuthenticator, result: Result)(implicit request: RequestHeader) = {
-    dao.fold(Future.successful(authenticator))(_.save(authenticator)).map { a =>
+    dao.fold(Future.successful(authenticator))(_.update(authenticator)).map { a =>
       AuthenticatorResult(result.withHeaders(settings.headerName -> serialize(a)(settings)))
     }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)

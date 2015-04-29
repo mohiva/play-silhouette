@@ -20,7 +20,6 @@
 package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.services.AuthInfo
 import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth1Provider._

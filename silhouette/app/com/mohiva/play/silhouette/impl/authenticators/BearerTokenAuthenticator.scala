@@ -142,7 +142,7 @@ class BearerTokenAuthenticatorService(
    * @return The serialized authenticator value.
    */
   def init(authenticator: BearerTokenAuthenticator)(implicit request: RequestHeader) = {
-    dao.save(authenticator).map { a =>
+    dao.add(authenticator).map { a =>
       a.id
     }.recover {
       case e => throw new AuthenticatorInitializationException(InitError.format(ID, authenticator), e)
@@ -199,7 +199,7 @@ class BearerTokenAuthenticatorService(
    * @return The original or a manipulated result.
    */
   def update(authenticator: BearerTokenAuthenticator, result: Result)(implicit request: RequestHeader) = {
-    dao.save(authenticator).map { a =>
+    dao.update(authenticator).map { a =>
       AuthenticatorResult(result)
     }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)

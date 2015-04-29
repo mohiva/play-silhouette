@@ -23,7 +23,6 @@ import java.net.URLEncoder._
 
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.services.AuthInfo
 import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._

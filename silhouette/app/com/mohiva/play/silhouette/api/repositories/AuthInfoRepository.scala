@@ -13,50 +13,59 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.daos
+package com.mohiva.play.silhouette.api.repositories
 
 import com.mohiva.play.silhouette.api.{ AuthInfo, LoginInfo }
 
 import scala.concurrent.Future
+import scala.reflect.ClassTag
 
 /**
- * The DAO to persist the auth info.
+ * A trait that provides the means to persist authentication information for the Silhouette module.
  *
- * @tparam T The type of the auth info to store.
+ * If the application supports the concept of "merged identities", i.e., the same user being
+ * able to authenticate through different providers, then make sure that the auth info for
+ * every linked login info gets stored separately.
  */
-trait AuthInfoDAO[T <: AuthInfo] {
+trait AuthInfoRepository {
 
   /**
-   * Finds the auth info which is linked to the specified login info.
+   * Finds the auth info which is linked with the specified login info.
    *
    * @param loginInfo The linked login info.
+   * @param tag The class tag of the auth info.
+   * @tparam T The type of the auth info to handle.
    * @return The found auth info or None if no auth info could be found for the given login info.
    */
-  def find(loginInfo: LoginInfo): Future[Option[T]]
+  def find[T <: AuthInfo](loginInfo: LoginInfo)(implicit tag: ClassTag[T]): Future[Option[T]]
 
   /**
    * Adds new auth info for the given login info.
    *
-   * @param loginInfo The login info for which the auth info should be added.
-   * @param authInfo The auth info to add.
-   * @return The added auth info.
+   * @param loginInfo The login info for which the auth info should be saved.
+   * @param authInfo The auth info to save.
+   * @tparam T The type of the auth info to handle.
+   * @return The saved auth info.
    */
-  def add(loginInfo: LoginInfo, authInfo: T): Future[T]
+  def add[T <: AuthInfo](loginInfo: LoginInfo, authInfo: T): Future[T]
 
   /**
    * Updates the auth info for the given login info.
    *
    * @param loginInfo The login info for which the auth info should be updated.
    * @param authInfo The auth info to update.
+   * @tparam T The type of the auth info to handle.
    * @return The updated auth info.
    */
-  def update(loginInfo: LoginInfo, authInfo: T): Future[T]
+  def update[T <: AuthInfo](loginInfo: LoginInfo, authInfo: T): Future[T]
 
   /**
    * Removes the auth info for the given login info.
    *
    * @param loginInfo The login info for which the auth info should be removed.
+   * @param tag The class tag of the auth info.
+   * @tparam T The type of the auth info to handle.
    * @return A future to wait for the process to be completed.
    */
-  def remove(loginInfo: LoginInfo): Future[Unit]
+  def remove[T <: AuthInfo](loginInfo: LoginInfo)(implicit tag: ClassTag[T]): Future[Unit]
 }
