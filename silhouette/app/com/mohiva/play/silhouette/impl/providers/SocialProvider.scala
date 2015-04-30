@@ -16,10 +16,8 @@
 package com.mohiva.play.silhouette.impl.providers
 
 import java.net.URI
-
-import com.mohiva.play.silhouette.api.services.AuthInfo
 import com.mohiva.play.silhouette.api.util.ExtractableRequest
-import com.mohiva.play.silhouette.api.{ LoginInfo, Provider }
+import com.mohiva.play.silhouette.api.{ AuthInfo, LoginInfo, Provider }
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import org.apache.commons.lang3.reflect.TypeUtils

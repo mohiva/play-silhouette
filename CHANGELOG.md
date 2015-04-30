@@ -1,4 +1,9 @@
-## 2.0
+## 3.0
+
+- Update to Play 2.4
+- Fix a lot of inconsistencies in the API
+
+## 2.0 (2015-03-28)
 
 - Use lazy val to initialize SecureRandom, so that initialization occurs also async
 - Refactor authenticators and add BearerTokenAuthenticator, JWTAuthenticator, SessionAuthenticator and DummyAuthenticator

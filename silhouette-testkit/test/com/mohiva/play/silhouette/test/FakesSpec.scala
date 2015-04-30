@@ -43,23 +43,13 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     }
   }
 
-  "The `save` method of the `FakeAuthenticatorDAO`" should {
-    "save an authenticator" in {
-      val loginInfo = LoginInfo("test", "test")
-      val authenticator = new FakeAuthenticator(loginInfo)
-      val dao = new FakeAuthenticatorDAO[FakeAuthenticator]()
-
-      await(dao.save(authenticator)) must be equalTo authenticator
-    }
-  }
-
   "The `find` method of the `FakeAuthenticatorDAO`" should {
     "return an authenticator for the given ID" in {
       val loginInfo = LoginInfo("test", "test")
       val authenticator = new FakeAuthenticator(loginInfo, "test")
       val dao = new FakeAuthenticatorDAO[FakeAuthenticator]()
 
-      await(dao.save(authenticator))
+      await(dao.add(authenticator))
 
       await(dao.find("test")) must beSome(authenticator)
     }
@@ -71,13 +61,33 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     }
   }
 
+  "The `add` method of the `FakeAuthenticatorDAO`" should {
+    "add an authenticator" in {
+      val loginInfo = LoginInfo("test", "test")
+      val authenticator = new FakeAuthenticator(loginInfo)
+      val dao = new FakeAuthenticatorDAO[FakeAuthenticator]()
+
+      await(dao.add(authenticator)) must be equalTo authenticator
+    }
+  }
+
+  "The `update` method of the `FakeAuthenticatorDAO`" should {
+    "update an authenticator" in {
+      val loginInfo = LoginInfo("test", "test")
+      val authenticator = new FakeAuthenticator(loginInfo)
+      val dao = new FakeAuthenticatorDAO[FakeAuthenticator]()
+
+      await(dao.update(authenticator)) must be equalTo authenticator
+    }
+  }
+
   "The `remove` method of the `FakeAuthenticatorDAO`" should {
     "remove an authenticator" in {
       val loginInfo = LoginInfo("test", "test")
       val authenticator = new FakeAuthenticator(loginInfo, "test")
       val dao = new FakeAuthenticatorDAO[FakeAuthenticator]()
 
-      await(dao.save(authenticator))
+      await(dao.add(authenticator))
       await(dao.find("test")) must beSome(authenticator)
       await(dao.remove("test"))
       await(dao.find("test")) must beNone

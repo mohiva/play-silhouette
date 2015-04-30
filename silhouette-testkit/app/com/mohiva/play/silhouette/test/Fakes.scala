@@ -69,17 +69,6 @@ class FakeAuthenticatorDAO[T <: StorableAuthenticator] extends AuthenticatorDAO[
   var data: mutable.HashMap[String, T] = mutable.HashMap()
 
   /**
-   * Saves the authenticator.
-   *
-   * @param authenticator The authenticator to save.
-   * @return The saved auth authenticator.
-   */
-  def save(authenticator: T): Future[T] = {
-    data += (authenticator.id -> authenticator)
-    Future.successful(authenticator)
-  }
-
-  /**
    * Finds the authenticator for the given ID.
    *
    * @param id The authenticator ID.
@@ -87,6 +76,28 @@ class FakeAuthenticatorDAO[T <: StorableAuthenticator] extends AuthenticatorDAO[
    */
   def find(id: String): Future[Option[T]] = {
     Future.successful(data.get(id))
+  }
+
+  /**
+   * Adds a new authenticator.
+   *
+   * @param authenticator The authenticator to add.
+   * @return The added authenticator.
+   */
+  def add(authenticator: T): Future[T] = {
+    data += (authenticator.id -> authenticator)
+    Future.successful(authenticator)
+  }
+
+  /**
+   * Updates an already existing authenticator.
+   *
+   * @param authenticator The authenticator to update.
+   * @return The updated authenticator.
+   */
+  def update(authenticator: T): Future[T] = {
+    data += (authenticator.id -> authenticator)
+    Future.successful(authenticator)
   }
 
   /**
