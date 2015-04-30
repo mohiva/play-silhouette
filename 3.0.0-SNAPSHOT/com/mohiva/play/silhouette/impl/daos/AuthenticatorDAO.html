@@ -98,7 +98,26 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO#find" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO#add" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="add(authenticator:T):scala.concurrent.Future[T]"></a>
+      <a id="add(T):Future[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">add</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO@add(authenticator:T):scala.concurrent.Future[T]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Adds a new authenticator.</p><div class="fullcomment"><div class="comment cmt"><p>Adds a new authenticator.
+</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to add.</p></dd><dt>returns</dt><dd class="cmt"><p>The added authenticator.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO#find" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="find(id:String):scala.concurrent.Future[Option[T]]"></a>
       <a id="find(String):Future[Option[T]]"></a>
       <h4 class="signature">
@@ -136,24 +155,24 @@
       <p class="shortcomment cmt">Removes the authenticator for the given ID.</p><div class="fullcomment"><div class="comment cmt"><p>Removes the authenticator for the given ID.
 </p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The authenticator ID.</p></dd><dt>returns</dt><dd class="cmt"><p>An empty future.
 </p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO#save" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="save(authenticator:T):scala.concurrent.Future[T]"></a>
-      <a id="save(T):Future[T]"></a>
+    </li><li name="com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO#update" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="update(authenticator:T):scala.concurrent.Future[T]"></a>
+      <a id="update(T):Future[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">save</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO.T">T</span>]</span>
+        <span class="name">update</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO@save(authenticator:T):scala.concurrent.Future[T]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO@update(authenticator:T):scala.concurrent.Future[T]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Saves the authenticator.</p><div class="fullcomment"><div class="comment cmt"><p>Saves the authenticator.
-</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to save.</p></dd><dt>returns</dt><dd class="cmt"><p>The saved authenticator.
+      <p class="shortcomment cmt">Updates an already existing authenticator.</p><div class="fullcomment"><div class="comment cmt"><p>Updates an already existing authenticator.
+</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to update.</p></dd><dt>returns</dt><dd class="cmt"><p>The updated authenticator.
 </p></dd></dl></div>
     </li></ol>
             </div>

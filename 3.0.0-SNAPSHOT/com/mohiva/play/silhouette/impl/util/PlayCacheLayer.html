@@ -90,8 +90,8 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="com.mohiva.play.silhouette.impl.util.PlayCacheLayer#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;():com.mohiva.play.silhouette.impl.util.PlayCacheLayer"></a>
+              <ol><li name="com.mohiva.play.silhouette.impl.util.PlayCacheLayer#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(cacheApi:play.api.cache.CacheApi):com.mohiva.play.silhouette.impl.util.PlayCacheLayer"></a>
       <a id="&lt;init&gt;:PlayCacheLayer"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -99,14 +99,18 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">PlayCacheLayer</span><span class="params">()</span>
+        <span class="name">PlayCacheLayer</span><span class="params">(<span name="cacheApi">cacheApi: <span class="extype" name="play.api.cache.CacheApi">CacheApi</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.util.PlayCacheLayer@&lt;init&gt;():com.mohiva.play.silhouette.impl.util.PlayCacheLayer" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.util.PlayCacheLayer@&lt;init&gt;(cacheApi:play.api.cache.CacheApi):com.mohiva.play.silhouette.impl.util.PlayCacheLayer" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">cacheApi</dt><dd class="cmt"><p>Plays cache API implementation.
+</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Inject</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li></ol>
             </div>
 
@@ -405,18 +409,18 @@
 </p></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>Item key.</p></dd><dt>returns</dt><dd class="cmt"><p>An empty future to wait for removal.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.util.PlayCacheLayer">PlayCacheLayer</a> → <a href="../../api/util/CacheLayer.html" class="extype" name="com.mohiva.play.silhouette.api.util.CacheLayer">CacheLayer</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.util.PlayCacheLayer#save" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="save[T](key:String,value:T,expiration:Int):scala.concurrent.Future[T]"></a>
-      <a id="save[T](String,T,Int):Future[T]"></a>
+      <a id="save[T](key:String,value:T,expiration:scala.concurrent.duration.Duration):scala.concurrent.Future[T]"></a>
+      <a id="save[T](String,T,Duration):Future[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">save</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="com.mohiva.play.silhouette.impl.util.PlayCacheLayer.save.T">T</span></span>, <span name="expiration">expiration: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.util.PlayCacheLayer.save.T">T</span>]</span>
+        <span class="name">save</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="com.mohiva.play.silhouette.impl.util.PlayCacheLayer.save.T">T</span></span>, <span name="expiration">expiration: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a> = <span class="symbol">Duration.Inf</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.util.PlayCacheLayer.save.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.util.PlayCacheLayer@save[T](key:String,value:T,expiration:Int):scala.concurrent.Future[T]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.util.PlayCacheLayer@save[T](key:String,value:T,expiration:scala.concurrent.duration.Duration):scala.concurrent.Future[T]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>

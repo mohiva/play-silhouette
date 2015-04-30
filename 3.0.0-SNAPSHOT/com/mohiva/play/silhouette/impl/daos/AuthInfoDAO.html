@@ -45,7 +45,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">AuthInfoDAO</span><span class="tparams">[<span name="T">T &lt;: <a href="../../api/services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">AuthInfoDAO</span><span class="tparams">[<span name="T">T &lt;: <a href="../../api/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4>
       
@@ -98,7 +98,26 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO#find" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO#add" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="add(loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]"></a>
+      <a id="add(LoginInfo,T):Future[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">add</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.AuthInfoDAO@add(loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Adds new auth info for the given login info.</p><div class="fullcomment"><div class="comment cmt"><p>Adds new auth info for the given login info.
+</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be added.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info to add.</p></dd><dt>returns</dt><dd class="cmt"><p>The added auth info.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO#find" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="find(loginInfo:com.mohiva.play.silhouette.api.LoginInfo):scala.concurrent.Future[Option[T]]"></a>
       <a id="find(LoginInfo):Future[Option[T]]"></a>
       <h4 class="signature">
@@ -114,27 +133,46 @@
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Finds the auth info which is linked with the specified login info.</p><div class="fullcomment"><div class="comment cmt"><p>Finds the auth info which is linked with the specified login info.
+      <p class="shortcomment cmt">Finds the auth info which is linked to the specified login info.</p><div class="fullcomment"><div class="comment cmt"><p>Finds the auth info which is linked to the specified login info.
 </p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info.</p></dd><dt>returns</dt><dd class="cmt"><p>The found auth info or None if no auth info could be found for the given login info.
 </p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO#save" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="save(loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]"></a>
-      <a id="save(LoginInfo,T):Future[T]"></a>
+    </li><li name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO#remove" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="remove(loginInfo:com.mohiva.play.silhouette.api.LoginInfo):scala.concurrent.Future[Unit]"></a>
+      <a id="remove(LoginInfo):Future[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">save</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO.T">T</span>]</span>
+        <span class="name">remove</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.AuthInfoDAO@save(loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.AuthInfoDAO@remove(loginInfo:com.mohiva.play.silhouette.api.LoginInfo):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Saves the auth info.</p><div class="fullcomment"><div class="comment cmt"><p>Saves the auth info.
-</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be saved.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info to save.</p></dd><dt>returns</dt><dd class="cmt"><p>The saved auth info.
+      <p class="shortcomment cmt">Removes the auth info for the given login info.</p><div class="fullcomment"><div class="comment cmt"><p>Removes the auth info for the given login info.
+</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be removed.</p></dd><dt>returns</dt><dd class="cmt"><p>A future to wait for the process to be completed.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO#update" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="update(loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]"></a>
+      <a id="update(LoginInfo,T):Future[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">update</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.AuthInfoDAO@update(loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Updates the auth info for the given login info.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the auth info for the given login info.
+</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be updated.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info to update.</p></dd><dt>returns</dt><dd class="cmt"><p>The updated auth info.
 </p></dd></dl></div>
     </li></ol>
             </div>

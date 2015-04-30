@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>DelegableAuthInfoDAO - com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO</title>
-          <meta name="description" content="DelegableAuthInfoDAO - com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO" />
-          <meta name="keywords" content="DelegableAuthInfoDAO com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO" />
+          <title>DelegableAuthInfoRepository - com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository</title>
+          <meta name="description" content="DelegableAuthInfoRepository - com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository" />
+          <meta name="keywords" content="DelegableAuthInfoRepository com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO';
+            var hash = 'com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -28,12 +28,14 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../../../../lib/class_big.png" />
-        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.impl">impl</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.impl.daos">daos</a></p>
-        <h1>DelegableAuthInfoDAO</h1><h3><span class="morelinks"><div>Related Doc:
-            <a href="package.html" class="extype" name="com.mohiva.play.silhouette.impl.daos">package daos</a>
+        <a href="DelegableAuthInfoRepository$.html" title="See companion object"><img src="../../../../../../lib/class_to_object_big.png" /></a>
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.impl">impl</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.impl.repositories">repositories</a></p>
+        <h1><a href="DelegableAuthInfoRepository$.html" title="See companion object">DelegableAuthInfoRepository</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="DelegableAuthInfoRepository$.html" title="See companion object">object DelegableAuthInfoRepository</a>
+            | <a href="package.html" class="extype" name="com.mohiva.play.silhouette.impl.repositories">package repositories</a>
           </div></span></h3><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -41,22 +43,23 @@
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
+        <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">DelegableAuthInfoDAO</span><span class="tparams">[<span name="T">T &lt;: <a href="../../api/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <a href="AuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO">AuthInfoDAO</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO.T">T</span>]</span>
+        <span class="name">DelegableAuthInfoRepository</span><span class="result"> extends <a href="../../api/repositories/AuthInfoRepository.html" class="extype" name="com.mohiva.play.silhouette.api.repositories.AuthInfoRepository">AuthInfoRepository</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An implementation of the auth info DAO.</p><p>This abstract implementation of the <a href="AuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO">com.mohiva.play.silhouette.impl.daos.AuthInfoDAO</a> trait
-allows us to get the class tag of the auth info it is responsible for. Based on the class tag
-the <a href="../repositories/DelegableAuthInfoRepository.html" class="extype" name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository">com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository</a> class can
-delegate operations to the DAO which is responsible for the currently handled auth info.
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the auth info to store.
-</p></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An implementation of the auth info repository which delegates the storage of an auth info instance to its
+appropriate DAO.</p><p>Due the nature of the different auth information it is hard to persist the data in a single data structure,
+expect the data gets stored in a serialized format. With this implementation it is possible to store the
+different auth info in different backing stores. If we speak of a relational database, then the auth info
+can be stored in different tables. And the tables represents the internal data structure of each auth info
+object.
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="AuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO">AuthInfoDAO</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO.T">T</span>], <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../../api/repositories/AuthInfoRepository.html" class="extype" name="com.mohiva.play.silhouette.api.repositories.AuthInfoRepository">AuthInfoRepository</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -74,7 +77,7 @@ delegate operations to the DAO which is responsible for the currently handled au
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO"><span>DelegableAuthInfoDAO</span></li><li class="in" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO"><span>AuthInfoDAO</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository"><span>DelegableAuthInfoRepository</span></li><li class="in" name="com.mohiva.play.silhouette.api.repositories.AuthInfoRepository"><span>AuthInfoRepository</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -94,111 +97,33 @@ delegate operations to the DAO which is responsible for the currently handled au
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;()(implicitclassTag:scala.reflect.ClassTag[T]):com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO[T]"></a>
-      <a id="&lt;init&gt;:DelegableAuthInfoDAO[T]"></a>
+              <ol><li name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(daos:com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO[_]*):com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository"></a>
+      <a id="&lt;init&gt;:DelegableAuthInfoRepository"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">DelegableAuthInfoDAO</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="classTag">classTag: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.reflect.ClassTag" class="extype" target="_top">ClassTag</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO.T">T</span>]</span>)</span>
+        <span class="name">DelegableAuthInfoRepository</span><span class="params">(<span name="daos">daos: <a href="../daos/DelegableAuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO">DelegableAuthInfoDAO</a>[_]*</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@&lt;init&gt;()(implicitclassTag:scala.reflect.ClassTag[T]):com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO[T]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@&lt;init&gt;(daos:com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO[_]*):com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">classTag</dt><dd class="cmt"><p>The class tag for the type parameter.</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">daos</dt><dd class="cmt"><p>The auth info DAO implementations.
+</p></dd></dl></div>
     </li></ol>
             </div>
 
         
 
-        <div id="values" class="values members">
-              <h3>Abstract Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO#add" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="add(loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]"></a>
-      <a id="add(LoginInfo,T):Future[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">add</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO.T">T</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@add(loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Adds new auth info for the given login info.</p><div class="fullcomment"><div class="comment cmt"><p>Adds new auth info for the given login info.
-</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be added.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info to add.</p></dd><dt>returns</dt><dd class="cmt"><p>The added auth info.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO">AuthInfoDAO</a></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO#find" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="find(loginInfo:com.mohiva.play.silhouette.api.LoginInfo):scala.concurrent.Future[Option[T]]"></a>
-      <a id="find(LoginInfo):Future[Option[T]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">find</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO.T">T</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@find(loginInfo:com.mohiva.play.silhouette.api.LoginInfo):scala.concurrent.Future[Option[T]]" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Finds the auth info which is linked to the specified login info.</p><div class="fullcomment"><div class="comment cmt"><p>Finds the auth info which is linked to the specified login info.
-</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info.</p></dd><dt>returns</dt><dd class="cmt"><p>The found auth info or None if no auth info could be found for the given login info.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO">AuthInfoDAO</a></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO#remove" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="remove(loginInfo:com.mohiva.play.silhouette.api.LoginInfo):scala.concurrent.Future[Unit]"></a>
-      <a id="remove(LoginInfo):Future[Unit]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">remove</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@remove(loginInfo:com.mohiva.play.silhouette.api.LoginInfo):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Removes the auth info for the given login info.</p><div class="fullcomment"><div class="comment cmt"><p>Removes the auth info for the given login info.
-</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be removed.</p></dd><dt>returns</dt><dd class="cmt"><p>A future to wait for the process to be completed.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO">AuthInfoDAO</a></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO#update" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="update(loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]"></a>
-      <a id="update(LoginInfo,T):Future[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">update</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO.T">T</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@update(loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Updates the auth info for the given login info.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the auth info for the given login info.
-</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be updated.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info to update.</p></dd><dt>returns</dt><dd class="cmt"><p>The updated auth info.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO">AuthInfoDAO</a></dd></dl></div>
-    </li></ol>
-            </div>
+        
 
         <div id="values" class="values members">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
@@ -211,7 +136,7 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -228,7 +153,7 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@##():Int" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@##():Int" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -245,11 +170,30 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository#add" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="add[T&lt;:com.mohiva.play.silhouette.api.AuthInfo](loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]"></a>
+      <a id="add[T&lt;:AuthInfo](LoginInfo,T):Future[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">add</span><span class="tparams">[<span name="T">T &lt;: <a href="../../api/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.AuthInfo">AuthInfo</a></span>]</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository.add.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository.add.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@add[T&lt;:com.mohiva.play.silhouette.api.AuthInfo](loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Adds new auth info for the given login info.</p><div class="fullcomment"><div class="comment cmt"><p>Adds new auth info for the given login info.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the auth info to handle.</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be saved.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info to save.</p></dd><dt>returns</dt><dd class="cmt"><p>The saved auth info.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository">DelegableAuthInfoRepository</a> → <a href="../../api/repositories/AuthInfoRepository.html" class="extype" name="com.mohiva.play.silhouette.api.repositories.AuthInfoRepository">AuthInfoRepository</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -262,28 +206,11 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO#classTag" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="classTag:scala.reflect.ClassTag[T]"></a>
-      <a id="classTag:ClassTag[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">classTag</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.reflect.ClassTag" class="extype" target="_top">ClassTag</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO.T">T</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@classTag:scala.reflect.ClassTag[T]" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">The class tag for the type parameter.</p>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -296,7 +223,7 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@clone():Object" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@clone():Object" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -319,7 +246,7 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -336,7 +263,7 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -353,7 +280,7 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -364,6 +291,25 @@ delegate operations to the DAO which is responsible for the currently handled au
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository#find" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="find[T&lt;:com.mohiva.play.silhouette.api.AuthInfo](loginInfo:com.mohiva.play.silhouette.api.LoginInfo)(implicittag:scala.reflect.ClassTag[T]):scala.concurrent.Future[Option[T]]"></a>
+      <a id="find[T&lt;:AuthInfo](LoginInfo)(ClassTag[T]):Future[Option[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">find</span><span class="tparams">[<span name="T">T &lt;: <a href="../../api/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.AuthInfo">AuthInfo</a></span>]</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tag">tag: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.reflect.ClassTag" class="extype" target="_top">ClassTag</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository.find.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository.find.T">T</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@find[T&lt;:com.mohiva.play.silhouette.api.AuthInfo](loginInfo:com.mohiva.play.silhouette.api.LoginInfo)(implicittag:scala.reflect.ClassTag[T]):scala.concurrent.Future[Option[T]]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Finds the auth info which is linked with the specified login info.</p><div class="fullcomment"><div class="comment cmt"><p>Finds the auth info which is linked with the specified login info.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the auth info to handle.</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info.</p></dd><dt class="param">tag</dt><dd class="cmt"><p>The class tag of the auth info.</p></dd><dt>returns</dt><dd class="cmt"><p>The found auth info or None if no auth info could be found for the given login info.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository">DelegableAuthInfoRepository</a> → <a href="../../api/repositories/AuthInfoRepository.html" class="extype" name="com.mohiva.play.silhouette.api.repositories.AuthInfoRepository">AuthInfoRepository</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -376,7 +322,7 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -393,7 +339,7 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@hashCode():Int" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -410,7 +356,7 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -427,7 +373,7 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -444,7 +390,7 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@notify():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -461,11 +407,30 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository#remove" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="remove[T&lt;:com.mohiva.play.silhouette.api.AuthInfo](loginInfo:com.mohiva.play.silhouette.api.LoginInfo)(implicittag:scala.reflect.ClassTag[T]):scala.concurrent.Future[Unit]"></a>
+      <a id="remove[T&lt;:AuthInfo](LoginInfo)(ClassTag[T]):Future[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">remove</span><span class="tparams">[<span name="T">T &lt;: <a href="../../api/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.AuthInfo">AuthInfo</a></span>]</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tag">tag: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.reflect.ClassTag" class="extype" target="_top">ClassTag</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository.remove.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@remove[T&lt;:com.mohiva.play.silhouette.api.AuthInfo](loginInfo:com.mohiva.play.silhouette.api.LoginInfo)(implicittag:scala.reflect.ClassTag[T]):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Removes the auth info for the given login info.</p><div class="fullcomment"><div class="comment cmt"><p>Removes the auth info for the given login info.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the auth info to handle.</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be removed.</p></dd><dt class="param">tag</dt><dd class="cmt"><p>The class tag of the auth info.</p></dd><dt>returns</dt><dd class="cmt"><p>A future to wait for the process to be completed.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository">DelegableAuthInfoRepository</a> → <a href="../../api/repositories/AuthInfoRepository.html" class="extype" name="com.mohiva.play.silhouette.api.repositories.AuthInfoRepository">AuthInfoRepository</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -478,7 +443,7 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -495,11 +460,30 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@toString():String" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@toString():String" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository#update" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="update[T&lt;:com.mohiva.play.silhouette.api.AuthInfo](loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]"></a>
+      <a id="update[T&lt;:AuthInfo](LoginInfo,T):Future[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">update</span><span class="tparams">[<span name="T">T &lt;: <a href="../../api/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.AuthInfo">AuthInfo</a></span>]</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository.update.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository.update.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@update[T&lt;:com.mohiva.play.silhouette.api.AuthInfo](loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Updates the auth info for the given login info.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the auth info for the given login info.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the auth info to handle.</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be updated.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info to update.</p></dd><dt>returns</dt><dd class="cmt"><p>The updated auth info.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository">DelegableAuthInfoRepository</a> → <a href="../../api/repositories/AuthInfoRepository.html" class="extype" name="com.mohiva.play.silhouette.api.repositories.AuthInfoRepository">AuthInfoRepository</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -512,7 +496,7 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@wait():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -535,7 +519,7 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -558,7 +542,7 @@ delegate operations to the DAO which is responsible for the currently handled au
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -578,8 +562,8 @@ delegate operations to the DAO which is responsible for the currently handled au
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO">
-              <h3>Inherited from <a href="AuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO">AuthInfoDAO</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO.T">T</span>]</h3>
+        <div class="parent" name="com.mohiva.play.silhouette.api.repositories.AuthInfoRepository">
+              <h3>Inherited from <a href="../../api/repositories/AuthInfoRepository.html" class="extype" name="com.mohiva.play.silhouette.api.repositories.AuthInfoRepository">AuthInfoRepository</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

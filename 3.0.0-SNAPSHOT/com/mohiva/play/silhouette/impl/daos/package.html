@@ -91,7 +91,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="AuthInfoDAO[T&lt;:com.mohiva.play.silhouette.api.services.AuthInfo]extendsAnyRef"></a>
+      <a id="AuthInfoDAO[T&lt;:com.mohiva.play.silhouette.api.AuthInfo]extendsAnyRef"></a>
       <a id="AuthInfoDAO[T&lt;:AuthInfo]:AuthInfoDAO[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -99,10 +99,10 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="AuthInfoDAO.html"><span class="name">AuthInfoDAO</span></a><span class="tparams">[<span name="T">T &lt;: <a href="../../api/services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="AuthInfoDAO.html"><span class="name">AuthInfoDAO</span></a><span class="tparams">[<span name="T">T &lt;: <a href="../../api/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.package@AuthInfoDAO[T&lt;:com.mohiva.play.silhouette.api.services.AuthInfo]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.package@AuthInfoDAO[T&lt;:com.mohiva.play.silhouette.api.AuthInfo]extendsAnyRef" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -148,7 +148,7 @@
 </p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the authenticator to store.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="DelegableAuthInfoDAO[T&lt;:com.mohiva.play.silhouette.api.services.AuthInfo]extendsAuthInfoDAO[T]"></a>
+      <a id="DelegableAuthInfoDAO[T&lt;:com.mohiva.play.silhouette.api.AuthInfo]extendsAuthInfoDAO[T]"></a>
       <a id="DelegableAuthInfoDAO[T&lt;:AuthInfo]:DelegableAuthInfoDAO[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -156,17 +156,17 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="DelegableAuthInfoDAO.html"><span class="name">DelegableAuthInfoDAO</span></a><span class="tparams">[<span name="T">T &lt;: <a href="../../api/services/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <a href="AuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO">AuthInfoDAO</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO.T">T</span>]</span>
+        <a href="DelegableAuthInfoDAO.html"><span class="name">DelegableAuthInfoDAO</span></a><span class="tparams">[<span name="T">T &lt;: <a href="../../api/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <a href="AuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO">AuthInfoDAO</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.package@DelegableAuthInfoDAO[T&lt;:com.mohiva.play.silhouette.api.services.AuthInfo]extendsAuthInfoDAO[T]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.daos.package@DelegableAuthInfoDAO[T&lt;:com.mohiva.play.silhouette.api.AuthInfo]extendsAuthInfoDAO[T]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">An implementation of the auth info DAO.</p><div class="fullcomment"><div class="comment cmt"><p>An implementation of the auth info DAO.</p><p>This abstract implementation of the <a href="AuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthInfoDAO">com.mohiva.play.silhouette.impl.daos.AuthInfoDAO</a> trait
 allows us to get the class tag of the auth info it is responsible for. Based on the class tag
-the <a href="../services/DelegableAuthInfoService.html" class="extype" name="com.mohiva.play.silhouette.impl.services.DelegableAuthInfoService">com.mohiva.play.silhouette.impl.services.DelegableAuthInfoService</a> class can delegate
-operations to the DAO which is responsible for the currently handled auth info.
+the <a href="../repositories/DelegableAuthInfoRepository.html" class="extype" name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository">com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository</a> class can
+delegate operations to the DAO which is responsible for the currently handled auth info.
 </p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the auth info to store.
 </p></dd></dl></div>
     </li></ol>

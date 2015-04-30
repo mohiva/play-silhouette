@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>services - com.mohiva.play.silhouette.impl.services</title>
-          <meta name="description" content="services - com.mohiva.play.silhouette.impl.services" />
-          <meta name="keywords" content="services com.mohiva.play.silhouette.impl.services" />
+          <title>repositories - com.mohiva.play.silhouette.api.repositories</title>
+          <meta name="description" content="repositories - com.mohiva.play.silhouette.api.repositories" />
+          <meta name="keywords" content="repositories com.mohiva.play.silhouette.api.repositories" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'com.mohiva.play.silhouette.impl.services.package';
+            var hash = 'com.mohiva.play.silhouette.api.repositories.package';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -29,9 +29,9 @@
         <body class="value">
       <div id="definition">
         <img src="../../../../../../lib/package_big.png" />
-        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.impl">impl</a></p>
-        <h1>services</h1><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.services.package" title="Permalink" target="_top">
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.api">api</a></p>
+        <h1>repositories</h1><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.repositories.package" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -43,11 +43,11 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <span class="name">services</span>
+        <span class="name">repositories</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Provides implementations of the services.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Provides repositories used by the API to persist entities.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
@@ -68,7 +68,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.impl.services"><span>services</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.api.repositories"><span>repositories</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -90,49 +90,32 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.impl.services.GravatarService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="GravatarServiceextendsAvatarServicewithLogger"></a>
-      <a id="GravatarService:GravatarService"></a>
+              <ol><li name="com.mohiva.play.silhouette.api.repositories.AuthInfoRepository" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="AuthInfoRepositoryextendsAnyRef"></a>
+      <a id="AuthInfoRepository:AuthInfoRepository"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="GravatarService.html"><span class="name">GravatarService</span></a><span class="result"> extends <a href="../../api/services/AvatarService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AvatarService">AvatarService</a> with <a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
+        <a href="AuthInfoRepository.html"><span class="name">AuthInfoRepository</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.services.package@GravatarServiceextendsAvatarServicewithLogger" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.repositories.package@AuthInfoRepositoryextendsAnyRef" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Retrieves avatar URLs from the Gravatar service.</p>
+      <p class="shortcomment cmt">A trait that provides the means to persist authentication information for the Silhouette module.</p><div class="fullcomment"><div class="comment cmt"><p>A trait that provides the means to persist authentication information for the Silhouette module.</p><p>If the application supports the concept of &quot;merged identities&quot;, i.e., the same user being
+able to authenticate through different providers, then make sure that the auth info for
+every linked login info gets stored separately.
+</p></div></div>
     </li></ol>
             </div>
 
         
 
-        <div id="values" class="values members">
-              <h3>Value Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.impl.services.GravatarService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="GravatarService"></a>
-      <a id="GravatarService:GravatarService"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="GravatarService$.html"><span class="name">GravatarService</span></a>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.services.package@GravatarService" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">The companion object.</p>
-    </li></ol>
-            </div>
+        
 
         
 
