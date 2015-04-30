@@ -23,6 +23,7 @@ import com.mohiva.play.silhouette.api.exceptions.{ NotAuthenticatedException, No
 import com.mohiva.play.silhouette.api.services.AuthenticatorResult
 import com.mohiva.play.silhouette.api.util.DefaultEndpointHandler
 import play.api.Play
+import play.api.i18n.{ MessagesApi, I18nSupport }
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc._
 
@@ -46,7 +47,12 @@ import scala.language.higherKinds
  * @tparam I The type of the identity.
  * @tparam A The type of the authenticator.
  */
-trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logger {
+trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logger with I18nSupport {
+
+  /**
+   * Defines the messages API.
+   */
+  val messagesApi: MessagesApi = env.messagesApi
 
   /**
    * Provides an `extract` method on an `Either` which contains the same types.
@@ -118,7 +124,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
 
     onNotAuthenticated(request).orElse {
       Play.current.global match {
-        case s: SecuredSettings => s.onNotAuthenticated(request, request2lang)
+        case s: SecuredSettings => s.onNotAuthenticated(request, request2Messages)
         case _ => None
       }
     }.getOrElse(DefaultEndpointHandler.handleNotAuthenticated)
@@ -142,7 +148,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
 
     onNotAuthorized(request).orElse {
       Play.current.global match {
-        case s: SecuredSettings => s.onNotAuthorized(request, request2lang)
+        case s: SecuredSettings => s.onNotAuthorized(request, request2Messages)
         case _ => None
       }
     }.getOrElse(DefaultEndpointHandler.handleNotAuthorized)
@@ -358,22 +364,22 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
       handleAuthentication.flatMap {
         // A user is both authenticated and authorized. The request will be granted
         case (Some(authenticator), Some(identity)) if authorize.isEmpty || authorize.get.isAuthorized(identity) =>
-          env.eventBus.publish(AuthenticatedEvent(identity, request, request2lang))
+          env.eventBus.publish(AuthenticatedEvent(identity, request, request2Messages))
           handleBlock(authenticator, a => block(SecuredRequest(identity, a, request)))
         // A user is authenticated but not authorized. The request will be forbidden
         case (Some(authenticator), Some(identity)) =>
-          env.eventBus.publish(NotAuthorizedEvent(identity, request, request2lang))
+          env.eventBus.publish(NotAuthorizedEvent(identity, request, request2Messages))
           handleBlock(authenticator, _ => handleNotAuthorized(request).map(r => HandlerResult(r)))
         // An authenticator but no user was found. The request will ask for authentication and the authenticator will be discarded
         case (Some(authenticator), None) =>
-          env.eventBus.publish(NotAuthenticatedEvent(request, request2lang))
+          env.eventBus.publish(NotAuthenticatedEvent(request, request2Messages))
           for {
             result <- handleNotAuthenticated(request)
             discardedResult <- env.authenticatorService.discard(authenticator.extract, result)
           } yield HandlerResult(discardedResult)
         // No authenticator and no user was found. The request will ask for authentication
         case _ =>
-          env.eventBus.publish(NotAuthenticatedEvent(request, request2lang))
+          env.eventBus.publish(NotAuthenticatedEvent(request, request2Messages))
           handleNotAuthenticated(request).map(r => HandlerResult(r))
       }
     }
