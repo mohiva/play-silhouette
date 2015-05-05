@@ -89,11 +89,12 @@ class BasicAuthProvider(
    */
   def getCredentials(request: RequestHeader): Option[Credentials] = {
     request.headers.get(HeaderNames.AUTHORIZATION) match {
-      case Some(header) => Base64.decode(header.replace("Basic ", "")).split(":") match {
-        case credentials if credentials.length == 2 => Some(Credentials(credentials(0), credentials(1)))
-        case _ => None
-      }
-      case None => None
+      case Some(header) if header.startsWith("Basic ") =>
+        Base64.decode(header.replace("Basic ", "")).split(":") match {
+          case credentials if credentials.length == 2 => Some(Credentials(credentials(0), credentials(1)))
+          case _ => None
+        }
+      case _ => None
     }
   }
 }
