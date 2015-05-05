@@ -102,6 +102,12 @@ class BasicAuthProviderSpec extends PlaySpecification with Mockito {
       await(provider.authenticate(request)) must beSome(loginInfo)
       there was one(authInfoRepository).update(loginInfo, passwordInfo)
     }
+
+    "return None if Authorization method is not Basic and Base64 decoded header has ':'" in new WithApplication with Context {
+      val request = FakeRequest().withHeaders(AUTHORIZATION -> Base64.encode("NotBasic foo:bar"))
+
+      await(provider.authenticate(request)) must beNone
+    }
   }
 
   /**
