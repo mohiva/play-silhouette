@@ -116,7 +116,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="AuthenticatedEvent.html"><span class="name">AuthenticatedEvent</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.AuthenticatedEvent.I">I</span></span>, <span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="lang">lang: <span class="extype" name="play.api.i18n.Lang">Lang</span></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="AuthenticatedEvent.html"><span class="name">AuthenticatedEvent</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.AuthenticatedEvent.I">I</span></span>, <span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="messages">messages: <span class="extype" name="play.api.i18n.Messages">Messages</span></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@AuthenticatedEvent[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsSilhouetteEventwithProductwithSerializable" title="Permalink" target="_top">
@@ -125,7 +125,7 @@
     </span>
       <p class="shortcomment cmt">An event which will be published if a request passes authentication.</p><div class="fullcomment"><div class="comment cmt"><p>An event which will be published if a request passes authentication.
 </p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.
-</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The logged in identity.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">lang</dt><dd class="cmt"><p>The lang associated for the current request.</p></dd></dl></div>
+</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The logged in identity.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">messages</dt><dd class="cmt"><p>The messages for the current language.</p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.Authenticator" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="AuthenticatorextendsAnyRef"></a>
       <a id="Authenticator:Authenticator"></a>
@@ -241,7 +241,7 @@ an authorization implementation in secured endpoints.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="LoginEvent.html"><span class="name">LoginEvent</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.LoginEvent.I">I</span></span>, <span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="lang">lang: <span class="extype" name="play.api.i18n.Lang">Lang</span></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="LoginEvent.html"><span class="name">LoginEvent</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.LoginEvent.I">I</span></span>, <span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="messages">messages: <span class="extype" name="play.api.i18n.Messages">Messages</span></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@LoginEvent[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsSilhouetteEventwithProductwithSerializable" title="Permalink" target="_top">
@@ -250,7 +250,7 @@ an authorization implementation in secured endpoints.
     </span>
       <p class="shortcomment cmt">An event which will be published after an identity logged in.</p><div class="fullcomment"><div class="comment cmt"><p>An event which will be published after an identity logged in.
 </p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.
-</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The logged in identity.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">lang</dt><dd class="cmt"><p>The lang associated for the current request.</p></dd></dl></div>
+</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The logged in identity.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">messages</dt><dd class="cmt"><p>The messages for the current language.</p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.LoginInfo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="LoginInfoextendsProductwithSerializable"></a>
       <a id="LoginInfo:LoginInfo"></a>
@@ -279,7 +279,7 @@ an authorization implementation in secured endpoints.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="LogoutEvent.html"><span class="name">LogoutEvent</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.LogoutEvent.I">I</span></span>, <span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="lang">lang: <span class="extype" name="play.api.i18n.Lang">Lang</span></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="LogoutEvent.html"><span class="name">LogoutEvent</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.LogoutEvent.I">I</span></span>, <span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="messages">messages: <span class="extype" name="play.api.i18n.Messages">Messages</span></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@LogoutEvent[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsSilhouetteEventwithProductwithSerializable" title="Permalink" target="_top">
@@ -288,7 +288,7 @@ an authorization implementation in secured endpoints.
     </span>
       <p class="shortcomment cmt">An event which will be published after an identity logged out.</p><div class="fullcomment"><div class="comment cmt"><p>An event which will be published after an identity logged out.
 </p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.
-</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The logged out identity.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">lang</dt><dd class="cmt"><p>The lang associated for the current request.</p></dd></dl></div>
+</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The logged out identity.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">messages</dt><dd class="cmt"><p>The messages for the current language.</p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.NotAuthenticatedEvent" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="NotAuthenticatedEventextendsSilhouetteEventwithProductwithSerializable"></a>
       <a id="NotAuthenticatedEvent:NotAuthenticatedEvent"></a>
@@ -298,7 +298,7 @@ an authorization implementation in secured endpoints.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="NotAuthenticatedEvent.html"><span class="name">NotAuthenticatedEvent</span></a><span class="params">(<span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="lang">lang: <span class="extype" name="play.api.i18n.Lang">Lang</span></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="NotAuthenticatedEvent.html"><span class="name">NotAuthenticatedEvent</span></a><span class="params">(<span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="messages">messages: <span class="extype" name="play.api.i18n.Messages">Messages</span></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@NotAuthenticatedEventextendsSilhouetteEventwithProductwithSerializable" title="Permalink" target="_top">
@@ -306,7 +306,7 @@ an authorization implementation in secured endpoints.
       </a>
     </span>
       <p class="shortcomment cmt">An event which will be published if a request did not pass authentication.</p><div class="fullcomment"><div class="comment cmt"><p>An event which will be published if a request did not pass authentication.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">lang</dt><dd class="cmt"><p>The lang associated for the current request.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">messages</dt><dd class="cmt"><p>The messages for the current language.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.NotAuthorizedEvent" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="NotAuthorizedEvent[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsSilhouetteEventwithProductwithSerializable"></a>
@@ -317,7 +317,7 @@ an authorization implementation in secured endpoints.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="NotAuthorizedEvent.html"><span class="name">NotAuthorizedEvent</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.NotAuthorizedEvent.I">I</span></span>, <span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="lang">lang: <span class="extype" name="play.api.i18n.Lang">Lang</span></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="NotAuthorizedEvent.html"><span class="name">NotAuthorizedEvent</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.NotAuthorizedEvent.I">I</span></span>, <span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="messages">messages: <span class="extype" name="play.api.i18n.Messages">Messages</span></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@NotAuthorizedEvent[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsSilhouetteEventwithProductwithSerializable" title="Permalink" target="_top">
@@ -326,7 +326,7 @@ an authorization implementation in secured endpoints.
     </span>
       <p class="shortcomment cmt">An event which will be published if a request did not pass authorization.</p><div class="fullcomment"><div class="comment cmt"><p>An event which will be published if a request did not pass authorization.
 </p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.
-</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The logged in identity.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">lang</dt><dd class="cmt"><p>The lang associated for the current request.</p></dd></dl></div>
+</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The logged in identity.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">messages</dt><dd class="cmt"><p>The messages for the current language.</p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.Provider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ProviderextendsAnyRef"></a>
       <a id="Provider:Provider"></a>
@@ -389,7 +389,7 @@ for unauthorized and forbidden endpoints.</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="SignUpEvent.html"><span class="name">SignUpEvent</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.SignUpEvent.I">I</span></span>, <span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="lang">lang: <span class="extype" name="play.api.i18n.Lang">Lang</span></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="SignUpEvent.html"><span class="name">SignUpEvent</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.SignUpEvent.I">I</span></span>, <span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="messages">messages: <span class="extype" name="play.api.i18n.Messages">Messages</span></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@SignUpEvent[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsSilhouetteEventwithProductwithSerializable" title="Permalink" target="_top">
@@ -398,9 +398,9 @@ for unauthorized and forbidden endpoints.</p>
     </span>
       <p class="shortcomment cmt">An event which will be published after an identity signed up.</p><div class="fullcomment"><div class="comment cmt"><p>An event which will be published after an identity signed up.
 </p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.
-</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The newly created identity.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">lang</dt><dd class="cmt"><p>The lang associated for the current request.</p></dd></dl></div>
+</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The newly created identity.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">messages</dt><dd class="cmt"><p>The messages for the current language.</p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.Silhouette" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Silhouette[I&lt;:com.mohiva.play.silhouette.api.Identity,A&lt;:com.mohiva.play.silhouette.api.Authenticator]extendsControllerwithLogger"></a>
+      <a id="Silhouette[I&lt;:com.mohiva.play.silhouette.api.Identity,A&lt;:com.mohiva.play.silhouette.api.Authenticator]extendsControllerwithLoggerwithI18nSupport"></a>
       <a id="Silhouette[I&lt;:Identity,A&lt;:Authenticator]:Silhouette[I,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -408,10 +408,10 @@ for unauthorized and forbidden endpoints.</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Silhouette.html"><span class="name">Silhouette</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>, <span name="A">A &lt;: <a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a></span>]</span><span class="result"> extends <span class="extype" name="play.api.mvc.Controller">Controller</span> with <a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
+        <a href="Silhouette.html"><span class="name">Silhouette</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>, <span name="A">A &lt;: <a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a></span>]</span><span class="result"> extends <span class="extype" name="play.api.mvc.Controller">Controller</span> with <a href="Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a> with <span class="extype" name="play.api.i18n.I18nSupport">I18nSupport</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@Silhouette[I&lt;:com.mohiva.play.silhouette.api.Identity,A&lt;:com.mohiva.play.silhouette.api.Authenticator]extendsControllerwithLogger" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@Silhouette[I&lt;:com.mohiva.play.silhouette.api.Identity,A&lt;:com.mohiva.play.silhouette.api.Authenticator]extendsControllerwithLoggerwithI18nSupport" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>

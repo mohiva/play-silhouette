@@ -45,12 +45,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">NotAuthenticatedEvent</span><span class="params">(<span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="lang">lang: <span class="extype" name="play.api.i18n.Lang">Lang</span></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">NotAuthenticatedEvent</span><span class="params">(<span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="messages">messages: <span class="extype" name="play.api.i18n.Messages">Messages</span></span>)</span><span class="result"> extends <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An event which will be published if a request did not pass authentication.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">lang</dt><dd class="cmt"><p>The lang associated for the current request.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">messages</dt><dd class="cmt"><p>The messages for the current language.
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="SilhouetteEvent.html" class="extype" name="com.mohiva.play.silhouette.api.SilhouetteEvent">SilhouetteEvent</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
@@ -92,7 +92,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.mohiva.play.silhouette.api.NotAuthenticatedEvent#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(request:play.api.mvc.RequestHeader,lang:play.api.i18n.Lang):com.mohiva.play.silhouette.api.NotAuthenticatedEvent"></a>
+      <a id="&lt;init&gt;(request:play.api.mvc.RequestHeader,messages:play.api.i18n.Messages):com.mohiva.play.silhouette.api.NotAuthenticatedEvent"></a>
       <a id="&lt;init&gt;:NotAuthenticatedEvent"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -100,14 +100,14 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">NotAuthenticatedEvent</span><span class="params">(<span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="lang">lang: <span class="extype" name="play.api.i18n.Lang">Lang</span></span>)</span>
+        <span class="name">NotAuthenticatedEvent</span><span class="params">(<span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="messages">messages: <span class="extype" name="play.api.i18n.Messages">Messages</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.NotAuthenticatedEvent@&lt;init&gt;(request:play.api.mvc.RequestHeader,lang:play.api.i18n.Lang):com.mohiva.play.silhouette.api.NotAuthenticatedEvent" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.NotAuthenticatedEvent@&lt;init&gt;(request:play.api.mvc.RequestHeader,messages:play.api.i18n.Messages):com.mohiva.play.silhouette.api.NotAuthenticatedEvent" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">lang</dt><dd class="cmt"><p>The lang associated for the current request.
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header for the associated request.</p></dd><dt class="param">messages</dt><dd class="cmt"><p>The messages for the current language.
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -283,23 +283,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.api.NotAuthenticatedEvent#lang" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="lang:play.api.i18n.Lang"></a>
-      <a id="lang:Lang"></a>
+    </li><li name="com.mohiva.play.silhouette.api.NotAuthenticatedEvent#messages" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="messages:play.api.i18n.Messages"></a>
+      <a id="messages:Messages"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">lang</span><span class="result">: <span class="extype" name="play.api.i18n.Lang">Lang</span></span>
+        <span class="name">messages</span><span class="result">: <span class="extype" name="play.api.i18n.Messages">Messages</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.NotAuthenticatedEvent@lang:play.api.i18n.Lang" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.NotAuthenticatedEvent@messages:play.api.i18n.Messages" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The lang associated for the current request.</p>
+      <p class="shortcomment cmt">The messages for the current language.</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

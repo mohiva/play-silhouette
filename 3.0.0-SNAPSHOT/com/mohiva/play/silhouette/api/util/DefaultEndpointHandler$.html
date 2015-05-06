@@ -3274,44 +3274,44 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.util.DefaultEndpointHandler#handleNotAuthenticated" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="handleNotAuthenticated(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]"></a>
-      <a id="handleNotAuthenticated(RequestHeader):Future[Result]"></a>
+      <a id="handleNotAuthenticated(implicitrequest:play.api.mvc.RequestHeader,implicitmessages:play.api.i18n.Messages):scala.concurrent.Future[play.api.mvc.Result]"></a>
+      <a id="handleNotAuthenticated(RequestHeader,Messages):Future[Result]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">handleNotAuthenticated</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="play.api.mvc.Result">Result</span>]</span>
+        <span class="name">handleNotAuthenticated</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="messages">messages: <span class="extype" name="play.api.i18n.Messages">Messages</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="play.api.mvc.Result">Result</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.DefaultEndpointHandler$@handleNotAuthenticated(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.DefaultEndpointHandler$@handleNotAuthenticated(implicitrequest:play.api.mvc.RequestHeader,implicitmessages:play.api.i18n.Messages):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Handles not authenticated requests in a default way.</p><div class="fullcomment"><div class="comment cmt"><p>Handles not authenticated requests in a default way.</p><p>The HTTP status code of the response will be 401 Unauthorized, complying with
 <a href="https://tools.ietf.org/html/rfc2616#section-10.4.2" target="_blank">RFC 2616</a>.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>A response indicating that user authentication is required.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt class="param">messages</dt><dd class="cmt"><p>The messages for the current language.</p></dd><dt>returns</dt><dd class="cmt"><p>A response indicating that user authentication is required.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.util.DefaultEndpointHandler#handleNotAuthorized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="handleNotAuthorized(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]"></a>
-      <a id="handleNotAuthorized(RequestHeader):Future[Result]"></a>
+      <a id="handleNotAuthorized(implicitrequest:play.api.mvc.RequestHeader,implicitmessages:play.api.i18n.Messages):scala.concurrent.Future[play.api.mvc.Result]"></a>
+      <a id="handleNotAuthorized(RequestHeader,Messages):Future[Result]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">handleNotAuthorized</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="play.api.mvc.Result">Result</span>]</span>
+        <span class="name">handleNotAuthorized</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="messages">messages: <span class="extype" name="play.api.i18n.Messages">Messages</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="play.api.mvc.Result">Result</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.DefaultEndpointHandler$@handleNotAuthorized(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.DefaultEndpointHandler$@handleNotAuthorized(implicitrequest:play.api.mvc.RequestHeader,implicitmessages:play.api.i18n.Messages):scala.concurrent.Future[play.api.mvc.Result]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Handles not authorized requests in a default way.</p><div class="fullcomment"><div class="comment cmt"><p>Handles not authorized requests in a default way.</p><p>The HTTP status code of the response will be 403 Forbidden, complying with
 <a href="https://tools.ietf.org/html/rfc2616#section-10.4.4" target="_blank">RFC 2616</a>.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>A response indicating that access is forbidden.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt class="param">messages</dt><dd class="cmt"><p>The messages for the current language.</p></dd><dt>returns</dt><dd class="cmt"><p>A response indicating that access is forbidden.
 </p></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>

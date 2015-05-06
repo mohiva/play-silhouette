@@ -348,42 +348,42 @@ for unauthorized and forbidden endpoints.
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.SecuredSettings#onNotAuthenticated" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="onNotAuthenticated(request:play.api.mvc.RequestHeader,lang:play.api.i18n.Lang):Option[scala.concurrent.Future[play.api.mvc.Result]]"></a>
-      <a id="onNotAuthenticated(RequestHeader,Lang):Option[Future[Result]]"></a>
+      <a id="onNotAuthenticated(request:play.api.mvc.RequestHeader,messages:play.api.i18n.Messages):Option[scala.concurrent.Future[play.api.mvc.Result]]"></a>
+      <a id="onNotAuthenticated(RequestHeader,Messages):Option[Future[Result]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">onNotAuthenticated</span><span class="params">(<span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="lang">lang: <span class="extype" name="play.api.i18n.Lang">Lang</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="play.api.mvc.Result">Result</span>]]</span>
+        <span class="name">onNotAuthenticated</span><span class="params">(<span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="messages">messages: <span class="extype" name="play.api.i18n.Messages">Messages</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="play.api.mvc.Result">Result</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.SecuredSettings@onNotAuthenticated(request:play.api.mvc.RequestHeader,lang:play.api.i18n.Lang):Option[scala.concurrent.Future[play.api.mvc.Result]]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.SecuredSettings@onNotAuthenticated(request:play.api.mvc.RequestHeader,messages:play.api.i18n.Messages):Option[scala.concurrent.Future[play.api.mvc.Result]]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Called when a user is not authenticated.</p><div class="fullcomment"><div class="comment cmt"><p>Called when a user is not authenticated.</p><p>As defined by RFC 2616, the status code of the response should be 401 Unauthorized.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt class="param">lang</dt><dd class="cmt"><p>The currently selected language.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt class="param">messages</dt><dd class="cmt"><p>The messages for the current language.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.SecuredSettings#onNotAuthorized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="onNotAuthorized(request:play.api.mvc.RequestHeader,lang:play.api.i18n.Lang):Option[scala.concurrent.Future[play.api.mvc.Result]]"></a>
-      <a id="onNotAuthorized(RequestHeader,Lang):Option[Future[Result]]"></a>
+      <a id="onNotAuthorized(request:play.api.mvc.RequestHeader,messages:play.api.i18n.Messages):Option[scala.concurrent.Future[play.api.mvc.Result]]"></a>
+      <a id="onNotAuthorized(RequestHeader,Messages):Option[Future[Result]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">onNotAuthorized</span><span class="params">(<span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="lang">lang: <span class="extype" name="play.api.i18n.Lang">Lang</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="play.api.mvc.Result">Result</span>]]</span>
+        <span class="name">onNotAuthorized</span><span class="params">(<span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="messages">messages: <span class="extype" name="play.api.i18n.Messages">Messages</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="play.api.mvc.Result">Result</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.SecuredSettings@onNotAuthorized(request:play.api.mvc.RequestHeader,lang:play.api.i18n.Lang):Option[scala.concurrent.Future[play.api.mvc.Result]]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.SecuredSettings@onNotAuthorized(request:play.api.mvc.RequestHeader,messages:play.api.i18n.Messages):Option[scala.concurrent.Future[play.api.mvc.Result]]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Called when a user is authenticated but not authorized.</p><div class="fullcomment"><div class="comment cmt"><p>Called when a user is authenticated but not authorized.</p><p>As defined by RFC 2616, the status code of the response should be 403 Forbidden.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt class="param">lang</dt><dd class="cmt"><p>The currently selected language.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt class="param">messages</dt><dd class="cmt"><p>The messages for the current language.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client.
 </p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
