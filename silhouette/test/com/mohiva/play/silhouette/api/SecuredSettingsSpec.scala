@@ -15,8 +15,9 @@
  */
 package com.mohiva.play.silhouette.api
 
+import org.specs2.specification.Scope
 import play.api.GlobalSettings
-import play.api.i18n.Lang
+import play.api.i18n.{ Lang, Messages, MessagesApi }
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
 /**
@@ -25,14 +26,31 @@ import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 class SecuredSettingsSpec extends PlaySpecification {
 
   "The `SecuredSettings` implementation" should {
-    "return None as default value for onNotAuthenticated method " in new WithApplication() {
+    "return None as default value for onNotAuthenticated method " in new WithApplication with Context {
       val settings = new SecuredSettings with GlobalSettings {}
-      settings.onNotAuthenticated(FakeRequest(GET, "/"), Lang("en-US")) should beNone
+      settings.onNotAuthenticated(FakeRequest(GET, "/"), messages) should beNone
     }
 
-    "return None as default value for onNotAuthenticated method " in new WithApplication() {
+    "return None as default value for onNotAuthenticated method " in new WithApplication with Context {
       val settings = new SecuredSettings with GlobalSettings {}
-      settings.onNotAuthorized(FakeRequest(GET, "/"), Lang("en-US")) should beNone
+      settings.onNotAuthorized(FakeRequest(GET, "/"), messages) should beNone
     }
+  }
+
+  /**
+   * The context.
+   */
+  trait Context extends Scope {
+    self: WithApplication =>
+
+    /**
+     * The messages API.
+     */
+    val messagesAPI = app.injector.instanceOf[MessagesApi]
+
+    /**
+     * The messages for the current language.
+     */
+    val messages = Messages(Lang("en-US"), messagesAPI)
   }
 }

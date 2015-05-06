@@ -23,6 +23,7 @@ import com.mohiva.play.silhouette.api.util.Clock
 import com.mohiva.play.silhouette.impl.authenticators._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import com.mohiva.play.silhouette.impl.util.{ DefaultFingerprintGenerator, SecureRandomIDGenerator }
+import play.api.i18n.MessagesApi
 import play.api.mvc.RequestHeader
 
 import scala.collection.mutable
@@ -210,13 +211,15 @@ object FakeAuthenticator {
  * @param identities A list of (login info -> identity) pairs to return inside a Silhouette action.
  * @param requestProviders The list of request providers.
  * @param eventBus The event bus implementation.
+ * @param messagesApi The Play messages API.
  * @tparam I The type of the identity.
  * @tparam T The type of the authenticator.
  */
 case class FakeEnvironment[I <: Identity, T <: Authenticator: TypeTag](
   identities: Seq[(LoginInfo, I)],
   requestProviders: Seq[RequestProvider] = Seq(),
-  eventBus: EventBus = EventBus())
+  eventBus: EventBus = EventBus())(
+    implicit val messagesApi: MessagesApi)
   extends Environment[I, T] {
 
   /**

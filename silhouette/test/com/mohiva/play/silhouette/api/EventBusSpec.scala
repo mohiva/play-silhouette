@@ -18,7 +18,7 @@ package com.mohiva.play.silhouette.api
 import akka.actor.{ Actor, Props }
 import akka.testkit.TestProbe
 import org.specs2.specification.Scope
-import play.api.i18n.Lang
+import play.api.i18n._
 import play.api.libs.concurrent.Akka
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
@@ -154,9 +154,14 @@ class EventBusSpec extends PlaySpecification {
     lazy val request = FakeRequest()
 
     /**
-     * A language.
+     * The messages API.
      */
-    lazy val lang = Lang("en-US")
+    val messagesAPI = app.injector.instanceOf[MessagesApi]
+
+    /**
+     * The messages for the current language.
+     */
+    val messages = Messages(Lang("en-US"), messagesAPI)
 
     /**
      * The Play actor system.
@@ -171,7 +176,7 @@ class EventBusSpec extends PlaySpecification {
     /**
      * Some events.
      */
-    lazy val loginEvent = new LoginEvent[TestIdentity](identity, request, lang)
-    lazy val logoutEvent = new LogoutEvent[TestIdentity](identity, request, lang)
+    lazy val loginEvent = new LoginEvent[TestIdentity](identity, request, messages)
+    lazy val logoutEvent = new LogoutEvent[TestIdentity](identity, request, messages)
   }
 }

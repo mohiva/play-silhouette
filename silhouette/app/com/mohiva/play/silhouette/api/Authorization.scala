@@ -19,7 +19,7 @@
  */
 package com.mohiva.play.silhouette.api
 
-import play.api.i18n.Lang
+import play.api.i18n.Messages
 import play.api.mvc.RequestHeader
 
 /**
@@ -35,10 +35,10 @@ trait Authorization[I <: Identity] {
    *
    * @param identity The identity to check for.
    * @param request The current request header.
-   * @param lang The current lang.
+   * @param messages The messages for the current language.
    * @return True if the user is authorized, false otherwise.
    */
-  def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang): Boolean
+  def isAuthorized(identity: I)(implicit request: RequestHeader, messages: Messages): Boolean
 }
 
 /**
@@ -59,7 +59,7 @@ object Authorization {
      * @return The authorization.
      */
     def unary_! : Authorization[I] = new Authorization[I] {
-      def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang): Boolean = {
+      def isAuthorized(identity: I)(implicit request: RequestHeader, messages: Messages): Boolean = {
         !self.isAuthorized(identity)
       }
     }
@@ -71,7 +71,7 @@ object Authorization {
      * @return The authorization.
      */
     def &&(authorization: Authorization[I]): Authorization[I] = new Authorization[I] {
-      def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang): Boolean = {
+      def isAuthorized(identity: I)(implicit request: RequestHeader, messages: Messages): Boolean = {
         self.isAuthorized(identity) && authorization.isAuthorized(identity)
       }
     }
@@ -83,7 +83,7 @@ object Authorization {
      * @return The authorization.
      */
     def ||(authorization: Authorization[I]): Authorization[I] = new Authorization[I] {
-      def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang): Boolean = {
+      def isAuthorized(identity: I)(implicit request: RequestHeader, messages: Messages): Boolean = {
         self.isAuthorized(identity) || authorization.isAuthorized(identity)
       }
     }
