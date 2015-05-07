@@ -1060,6 +1060,8 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      * @param messages The messages for the current language.
      * @return True if the user is authorized, false otherwise.
      */
-    def isAuthorized(identity: FakeIdentity)(implicit request: RequestHeader, messages: Messages): Boolean = isAuthorized
+    def isAuthorized(identity: FakeIdentity)(implicit request: RequestHeader, messages: Messages): Future[Boolean] = {
+      Future.successful(isAuthorized)
+    }
   }
 }
