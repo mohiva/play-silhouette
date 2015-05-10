@@ -24,10 +24,10 @@ import com.mohiva.play.silhouette.api.services.AuthenticatorResult
 import com.mohiva.play.silhouette.api.util.DefaultEndpointHandler
 import play.api.Play
 import play.api.i18n.{ MessagesApi, I18nSupport }
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc._
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 import scala.language.higherKinds
 
 /**
@@ -76,7 +76,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
    * @param request The request header.
    * @return The result to send to the client.
    */
-  protected def onNotAuthenticated(request: RequestHeader): Option[Future[Result]] = None
+  protected def onNotAuthenticated(request: RequestHeader)(implicit ec: ExecutionContext): Option[Future[Result]] = None
 
   /**
    * Implement this to return a result when the user is authenticated but not authorized.
@@ -86,7 +86,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
    * @param request The request header.
    * @return The result to send to the client.
    */
-  protected def onNotAuthorized(request: RequestHeader): Option[Future[Result]] = None
+  protected def onNotAuthorized(request: RequestHeader)(implicit ec: ExecutionContext): Option[Future[Result]] = None
 
   /**
    * Default exception handler for silhouette exceptions which translates an exception into
@@ -98,7 +98,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
    * @param request The request header.
    * @return The result to send to the client based on the exception.
    */
-  protected def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[Result]] = {
+  protected def exceptionHandler(implicit request: RequestHeader, ec: ExecutionContext): PartialFunction[Throwable, Future[Result]] = {
     case e: NotAuthenticatedException =>
       logger.info(e.getMessage, e)
       handleNotAuthenticated
@@ -119,7 +119,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
    * @param request The request header.
    * @return The result to send to the client if the user isn't authenticated.
    */
-  private def handleNotAuthenticated(implicit request: RequestHeader): Future[Result] = {
+  private def handleNotAuthenticated(implicit request: RequestHeader, ec: ExecutionContext): Future[Result] = {
     logger.debug("[Silhouette] Unauthenticated user trying to access '%s'".format(request.uri))
 
     onNotAuthenticated(request).orElse {
@@ -143,7 +143,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
    * @param request The request header.
    * @return The result to send to the client if the user isn't authorized.
    */
-  private def handleNotAuthorized(implicit request: RequestHeader): Future[Result] = {
+  private def handleNotAuthorized(implicit request: RequestHeader, ec: ExecutionContext): Future[Result] = {
     logger.debug("[Silhouette] Unauthorized user trying to access '%s'".format(request.uri))
 
     onNotAuthorized(request).orElse {
@@ -180,7 +180,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @tparam T The type of the data included in the handler result.
      * @return A handler result.
      */
-    final def apply[T](block: R[AnyContent] => Future[HandlerResult[T]])(implicit request: Request[AnyContent]): Future[HandlerResult[T]] = {
+    final def apply[T](block: R[AnyContent] => Future[HandlerResult[T]])(implicit request: Request[AnyContent], ec: ExecutionContext): Future[HandlerResult[T]] = {
       invokeBlock(block)
     }
 
@@ -193,8 +193,8 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @tparam T The type of the data included in the handler result.
      * @return A handler result.
      */
-    final def apply[B, T](request: Request[B])(block: R[B] => Future[HandlerResult[T]]): Future[HandlerResult[T]] = {
-      invokeBlock(block)(request)
+    final def apply[B, T](request: Request[B])(block: R[B] => Future[HandlerResult[T]])(implicit ec: ExecutionContext): Future[HandlerResult[T]] = {
+      invokeBlock(block)(request, ec)
     }
 
     /**
@@ -208,7 +208,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @tparam T The type of the data included in the handler result.
      * @return A handler result.
      */
-    protected def invokeBlock[B, T](block: R[B] => Future[HandlerResult[T]])(implicit request: Request[B]): Future[HandlerResult[T]]
+    protected def invokeBlock[B, T](block: R[B] => Future[HandlerResult[T]])(implicit request: Request[B], ec: ExecutionContext): Future[HandlerResult[T]]
 
     /**
      * Handles a block for an authenticator.
@@ -221,7 +221,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @param request The current request header.
      * @return A handler result.
      */
-    protected def handleBlock[T](authenticator: Either[A, A], block: A => Future[HandlerResult[T]])(implicit request: RequestHeader) = {
+    protected def handleBlock[T](authenticator: Either[A, A], block: A => Future[HandlerResult[T]])(implicit request: RequestHeader, ec: ExecutionContext) = {
       authenticator match {
         case Left(a) => handleInitializedAuthenticator(a, block)
         case Right(a) => handleUninitializedAuthenticator(a, block)
@@ -241,10 +241,10 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @return A tuple which consists of (maybe the existing authenticator on the left or a
      *         new authenticator on the right -> maybe the identity).
      */
-    protected def handleAuthentication[B](implicit request: Request[B]): Future[(Option[Either[A, A]], Option[I])] = {
+    protected def handleAuthentication[B](implicit request: Request[B], ec: ExecutionContext): Future[(Option[Either[A, A]], Option[I])] = {
       env.authenticatorService.retrieve.flatMap {
         // A valid authenticator was found so we retrieve also the identity
-        case Some(a) if a.isValid => env.identityService.retrieve(a.loginInfo).map(i => Some(Left(a)) -> i)
+        case Some(a) if a.isValid => env.identityService.retrieve(a.loginInfo)(ec).map(i => Some(Left(a)) -> i)
         // An invalid authenticator was found so we needn't retrieve the identity
         case Some(a) if !a.isValid => Future.successful(Some(Left(a)) -> None)
         // No authenticator was found so we try to authenticate with a request provider
@@ -270,7 +270,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @param request The current request header.
      * @return A handler result.
      */
-    private def handleInitializedAuthenticator[T](authenticator: A, block: A => Future[HandlerResult[T]])(implicit request: RequestHeader) = {
+    private def handleInitializedAuthenticator[T](authenticator: A, block: A => Future[HandlerResult[T]])(implicit request: RequestHeader, ec: ExecutionContext) = {
       val auth = env.authenticatorService.touch(authenticator)
       block(auth.extract).flatMap {
         case hr @ HandlerResult(pr: AuthenticatorResult, _) => Future.successful(hr)
@@ -294,7 +294,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @param request The current request header.
      * @return A handler result.
      */
-    private def handleUninitializedAuthenticator[T](authenticator: A, block: A => Future[HandlerResult[T]])(implicit request: RequestHeader) = {
+    private def handleUninitializedAuthenticator[T](authenticator: A, block: A => Future[HandlerResult[T]])(implicit request: RequestHeader, ec: ExecutionContext) = {
       block(authenticator).flatMap {
         case hr @ HandlerResult(pr: AuthenticatorResult, _) => Future.successful(hr)
         case hr @ HandlerResult(pr, _) =>
@@ -315,7 +315,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @tparam B The type of the request body.
      * @return Some identity or None if authentication was not successful.
      */
-    private def handleRequestProviderAuthentication[B](implicit request: Request[B]): Future[Option[LoginInfo]] = {
+    private def handleRequestProviderAuthentication[B](implicit request: Request[B], ec: ExecutionContext): Future[Option[LoginInfo]] = {
       def auth(providers: Seq[RequestProvider]): Future[Option[LoginInfo]] = {
         providers match {
           case Nil => Future.successful(None)
@@ -342,7 +342,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
    * @param request The current request.
    * @tparam B The type of the request body.
    */
-  case class SecuredRequest[B](identity: I, authenticator: A, request: Request[B]) extends WrappedRequest(request)
+  case class SecuredRequest[B](identity: I, authenticator: A, request: Request[B])(implicit val ec: ExecutionContext) extends WrappedRequest(request)
 
   /**
    * Handles secured requests.
@@ -360,7 +360,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @tparam T The type of the data included in the handler result.
      * @return A handler result.
      */
-    protected def invokeBlock[B, T](block: SecuredRequest[B] => Future[HandlerResult[T]])(implicit request: Request[B]): Future[HandlerResult[T]] = {
+    protected def invokeBlock[B, T](block: SecuredRequest[B] => Future[HandlerResult[T]])(implicit request: Request[B], ec: ExecutionContext): Future[HandlerResult[T]] = {
       withAuthorization(handleAuthentication).flatMap {
         // A user is both authenticated and authorized. The request will be granted
         case (Some(authenticator), Some(identity), Some(authorized)) if authorized =>
@@ -369,18 +369,18 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
         // A user is authenticated but not authorized. The request will be forbidden
         case (Some(authenticator), Some(identity), _) =>
           env.eventBus.publish(NotAuthorizedEvent(identity, request, request2Messages))
-          handleBlock(authenticator, _ => handleNotAuthorized(request).map(r => HandlerResult(r)))
+          handleBlock(authenticator, _ => handleNotAuthorized(request, ec).map(r => HandlerResult(r)))
         // An authenticator but no user was found. The request will ask for authentication and the authenticator will be discarded
         case (Some(authenticator), None, _) =>
           env.eventBus.publish(NotAuthenticatedEvent(request, request2Messages))
           for {
-            result <- handleNotAuthenticated(request)
+            result <- handleNotAuthenticated(request, ec)
             discardedResult <- env.authenticatorService.discard(authenticator.extract, result)
           } yield HandlerResult(discardedResult)
         // No authenticator and no user was found. The request will ask for authentication
         case _ =>
           env.eventBus.publish(NotAuthenticatedEvent(request, request2Messages))
-          handleNotAuthenticated(request).map(r => HandlerResult(r))
+          handleNotAuthenticated(request, ec).map(r => HandlerResult(r))
       }
     }
 
@@ -391,7 +391,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @param request The current request header.
      * @return The authentication result with the additional authorization status.
      */
-    private def withAuthorization(result: Future[(Option[Either[A, A]], Option[I])])(implicit request: RequestHeader) = {
+    private def withAuthorization(result: Future[(Option[Either[A, A]], Option[I])])(implicit request: RequestHeader, ec: ExecutionContext) = {
       result.flatMap {
         case (a, Some(i)) =>
           authorize.map(_.isAuthorized(i)).getOrElse(Future.successful(true)).map(b => (a, Some(i), Some(b)))
@@ -439,11 +439,11 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @return A handler result.
      */
     def invokeBlock[B](request: Request[B], block: SecuredRequest[B] => Future[Result]) = {
-      val b = (r: SecuredRequest[B]) => block(r).map(r => HandlerResult(r))
+      val b = (r: SecuredRequest[B]) => block(r).map(r => HandlerResult(r))(executionContext)
       (authorize match {
-        case Some(a) => SecuredRequestHandler(a)(request)(b)
-        case None => SecuredRequestHandler(request)(b)
-      }).map(_.result).recoverWith(exceptionHandler(request))
+        case Some(a) => SecuredRequestHandler(a)(request)(b)(executionContext)
+        case None => SecuredRequestHandler(request)(b)(executionContext)
+      }).map(_.result)(executionContext).recoverWith(exceptionHandler(request, executionContext))(executionContext)
     }
   }
 
@@ -501,7 +501,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @tparam T The type of the data included in the handler result.
      * @return A handler result.
      */
-    protected def invokeBlock[B, T](block: UserAwareRequest[B] => Future[HandlerResult[T]])(implicit request: Request[B]) = {
+    protected def invokeBlock[B, T](block: UserAwareRequest[B] => Future[HandlerResult[T]])(implicit request: Request[B], ec: ExecutionContext) = {
       handleAuthentication.flatMap {
         // A valid authenticator was found and the identity may be exists
         case (Some(authenticator), identity) if authenticator.extract.isValid =>
@@ -534,8 +534,8 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      */
     def invokeBlock[B](request: Request[B], block: UserAwareRequest[B] => Future[Result]) = {
       UserAwareRequestHandler(request) { r =>
-        block(r).map(r => HandlerResult(r))
-      }.map(_.result).recoverWith(exceptionHandler(request))
+        block(r).map(r => HandlerResult(r))(executionContext)
+      }(executionContext).map(_.result)(executionContext).recoverWith(exceptionHandler(request, executionContext))(executionContext)
     }
   }
 }

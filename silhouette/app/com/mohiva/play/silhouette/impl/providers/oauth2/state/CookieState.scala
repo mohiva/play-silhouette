@@ -24,11 +24,11 @@ import com.mohiva.play.silhouette.impl.providers.{ OAuth2State, OAuth2StateProvi
 import org.joda.time.DateTime
 import play.api.Play
 import play.api.Play.current
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.Json
 import play.api.mvc.{ Cookie, RequestHeader, Result }
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -117,7 +117,7 @@ class CookieStateProvider(
    * @tparam B The type of the request body.
    * @return The build state.
    */
-  def build[B](implicit request: ExtractableRequest[B]): Future[CookieState] = idGenerator.generate.map { id =>
+  def build[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[CookieState] = idGenerator.generate.map { id =>
     CookieState(clock.now.plusSeconds(settings.expirationTime), id)
   }
 
@@ -128,7 +128,7 @@ class CookieStateProvider(
    * @tparam B The type of the request body.
    * @return The state on success, otherwise an failure.
    */
-  def validate[B](implicit request: ExtractableRequest[B]) = {
+  def validate[B](implicit request: ExtractableRequest[B], ec: ExecutionContext) = {
     Future.from(clientState.flatMap(clientState => providerState.flatMap(providerState =>
       if (clientState != providerState) Failure(new OAuth2StateException(StateIsNotEqual))
       else if (clientState.isExpired) Failure(new OAuth2StateException(StateIsExpired))
@@ -145,7 +145,7 @@ class CookieStateProvider(
    * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
-  def publish[B](result: Result, state: State)(implicit request: ExtractableRequest[B]) = {
+  def publish[B](result: Result, state: State)(implicit request: ExtractableRequest[B], ec: ExecutionContext) = {
     result.withCookies(Cookie(name = settings.cookieName,
       value = state.serialize,
       maxAge = Some(settings.expirationTime),

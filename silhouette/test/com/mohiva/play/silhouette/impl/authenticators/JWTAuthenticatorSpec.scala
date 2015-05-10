@@ -34,6 +34,8 @@ import play.api.mvc.Results
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator]].
@@ -288,30 +290,32 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
         expirationDate = authenticator.expirationDate.withMillisOfSecond(0),
         lastUsedDate = authenticator.lastUsedDate.withMillisOfSecond(0)
       ))
-      there was no(dao).find(any)
+      there was no(dao).find(any)(any)
     }
 
     "throws an AuthenticatorRetrievalException exception if an error occurred during retrieval" in new WithApplication with Context {
       implicit val request = FakeRequest().withHeaders(settings.headerName -> serialize(authenticator)(settings))
 
-      dao.find(authenticator.id) returns Future.failed(new RuntimeException("Cannot find authenticator"))
+      dao.find(===(authenticator.id))(any) returns Future.failed(new RuntimeException("Cannot find authenticator"))
 
-      await(service(Some(dao)).retrieve) must throwA[AuthenticatorRetrievalException].like {
+      await(service(Some(dao)).retrieve(request, global)) must throwA[AuthenticatorRetrievalException].like {
         case e =>
           e.getMessage must startWith(RetrieveError.format(ID, ""))
       }
     }
   }
 
+  def projectFuture[T](n: Int): Any => Future[T] = x => Future.successful { x.asInstanceOf[Array[Any]](n).asInstanceOf[T] }
+
   "The `init` method of the service" should {
     "return the token if DAO is enabled and authenticator could be saved in backing store" in new WithApplication with Context {
-      dao.add(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
+      dao.add(any)(any) answers { projectFuture[JWTAuthenticator](0) }
       implicit val request = FakeRequest()
 
       val token = await(service(Some(dao)).init(authenticator))
 
       unserialize(token)(settings).get must be equalTo authenticator
-      there was one(dao).add(any)
+      there was one(dao).add(any)(any)
     }
 
     "return the token if DAO is disabled" in new WithApplication with Context {
@@ -320,11 +324,11 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       val token = await(service(None).init(authenticator))
 
       unserialize(token)(settings).get must be equalTo authenticator
-      there was no(dao).add(any)
+      there was no(dao).add(any)(any)
     }
 
     "throws an AuthenticatorInitializationException exception if an error occurred during initialization" in new Context {
-      dao.add(any) returns Future.failed(new Exception("Cannot store authenticator"))
+      dao.add(any)(any) returns Future.failed(new Exception("Cannot store authenticator"))
 
       implicit val request = FakeRequest()
       val okResult = Future.successful(Results.Ok)
@@ -395,7 +399,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
 
   "The `update` method of the service" should {
     "update the authenticator in backing store" in new WithApplication with Context {
-      dao.update(any) returns Future.successful(authenticator)
+      dao.update(any)(any) returns Future.successful(authenticator)
 
       implicit val request = FakeRequest()
 
@@ -405,7 +409,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
     }
 
     "return the result if the authenticator could be stored in backing store" in new WithApplication with Context {
-      dao.update(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
+      dao.update(any)(any) answers projectFuture[JWTAuthenticator](0)
 
       implicit val request = FakeRequest()
       val result = service(Some(dao)).update(authenticator, Results.Ok)
@@ -416,18 +420,18 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
     }
 
     "return the result if backing store is disabled" in new WithApplication with Context {
-      dao.update(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
+      dao.update(any)(any) answers { projectFuture[JWTAuthenticator](0) }
 
       implicit val request = FakeRequest()
       val result = service(None).update(authenticator, Results.Ok)
 
       status(result) must be equalTo OK
       unserialize(header(settings.headerName, result).get)(settings).get must be equalTo authenticator
-      there was no(dao).update(any)
+      there was no(dao).update(any)(any)
     }
 
     "throws an AuthenticatorUpdateException exception if an error occurred during update" in new WithApplication with Context {
-      dao.update(any) returns Future.failed(new Exception("Cannot store authenticator"))
+      dao.update(any)(any) returns Future.failed(new Exception("Cannot store authenticator"))
 
       implicit val request = FakeRequest()
 
@@ -444,8 +448,8 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       val now = new DateTime(2015, 2, 25, 19, 0, 0, 0)
       val id = "new-test-id"
 
-      dao.remove(any) returns Future.successful(())
-      dao.add(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
+      dao.remove(any)(any) returns Future.successful(())
+      dao.add(any)(any) answers { projectFuture[JWTAuthenticator](0) }
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
@@ -457,8 +461,8 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
         lastUsedDate = clock.now
       )
 
-      there was one(dao).add(any)
-      there was one(dao).remove(authenticator.id)
+      there was one(dao).add(any)(any)
+      there was one(dao).remove(authenticator.id)(implicitly[ExecutionContext])
     }
 
     "renew the authenticator and return the response with a new JWT if DAO is disabled" in new WithApplication with Context {
@@ -476,8 +480,8 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
         expirationDate = clock.now.plusSeconds(settings.authenticatorExpiry),
         lastUsedDate = clock.now
       )
-      there was no(dao).remove(any)
-      there was no(dao).add(any)
+      there was no(dao).remove(any)(any)
+      there was no(dao).add(any)(any)
     }
 
     "throws an AuthenticatorRenewalException exception if an error occurred during renewal" in new Context {
@@ -485,8 +489,8 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       val now = new DateTime
       val id = "new-test-id"
 
-      dao.remove(any) returns Future.successful(())
-      dao.add(any) returns Future.failed(new Exception("Cannot store authenticator"))
+      dao.remove(any)(any) returns Future.successful(())
+      dao.add(any)(any) returns Future.failed(new Exception("Cannot store authenticator"))
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
@@ -505,7 +509,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
 
       await(service(Some(dao)).discard(authenticator, Results.Ok))
 
-      there was one(dao).remove(authenticator.id)
+      there was one(dao).remove(authenticator.id)(implicitly[ExecutionContext])
     }
 
     "do not remove the authenticator from backing store if DAO is disabled" in new Context {
@@ -513,7 +517,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
 
       await(service(None).discard(authenticator, Results.Ok))
 
-      there was no(dao).remove(authenticator.id)
+      there was no(dao).remove(authenticator.id)(implicitly[ExecutionContext])
     }
 
     "throws an AuthenticatorDiscardingException exception if an error occurred during discarding" in new Context {

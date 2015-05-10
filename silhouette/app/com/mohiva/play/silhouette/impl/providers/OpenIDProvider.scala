@@ -21,10 +21,10 @@ import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
 import com.mohiva.play.silhouette.impl.exceptions.UnexpectedResponseException
 import com.mohiva.play.silhouette.impl.providers.OpenIDProvider._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc._
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * Base class for all OpenID providers.
@@ -53,7 +53,7 @@ abstract class OpenIDProvider(httpLayer: HTTPLayer, service: OpenIDService, val 
    * @tparam B The type of the request body.
    * @return Either a Result or the auth info from the provider.
    */
-  def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[Either[Result, OpenIDInfo]] = {
+  def authenticate[B]()(implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Either[Result, OpenIDInfo]] = {
     request.extractString(Mode) match {
       // Tries to verify the user after the provider has redirected back to the application
       case Some(_) => service.verifiedID.map(info => Right(info)).recover {
@@ -128,7 +128,7 @@ trait OpenIDService {
    * @param resolvedCallbackURL The full callback URL to the application after a successful authentication.
    * @return The redirect URL where the user should be redirected to start the OpenID authentication process.
    */
-  def redirectURL(openID: String, resolvedCallbackURL: String): Future[String]
+  def redirectURL(openID: String, resolvedCallbackURL: String)(implicit ec: ExecutionContext): Future[String]
 
   /**
    * From a request corresponding to the callback from the OpenID server, check the identity of the current user.
@@ -137,7 +137,7 @@ trait OpenIDService {
    * @tparam B The type of the request body.
    * @return A OpenIDInfo in case of success, Exception otherwise.
    */
-  def verifiedID[B](implicit request: Request[B]): Future[OpenIDInfo]
+  def verifiedID[B](implicit request: Request[B], ec: ExecutionContext): Future[OpenIDInfo]
 }
 
 /**

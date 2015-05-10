@@ -20,6 +20,7 @@
 package com.mohiva.play.silhouette.api.services
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * Service to retrieve avatar URLs from an avatar service such as Gravatar.
@@ -32,5 +33,5 @@ trait AvatarService {
    * @param id The identifier for the avatar.
    * @return Maybe an avatar URL or None if no URL could be found for the given identifier.
    */
-  def retrieveURL(id: String): Future[Option[String]]
+  def retrieveURL(id: String)(implicit ec: ExecutionContext): Future[Option[String]]
 }

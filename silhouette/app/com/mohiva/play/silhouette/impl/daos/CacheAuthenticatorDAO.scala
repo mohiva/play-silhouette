@@ -21,6 +21,7 @@ import com.mohiva.play.silhouette.api.util.CacheLayer
 import scala.concurrent.Future
 import scala.concurrent.duration.Duration
 import scala.reflect.ClassTag
+import scala.concurrent.ExecutionContext
 
 /**
  * Implementation of the authenticator DAO which uses the cache layer to persist the authenticator.
@@ -36,7 +37,7 @@ class CacheAuthenticatorDAO[T <: StorableAuthenticator: ClassTag](cacheLayer: Ca
    * @param id The authenticator ID.
    * @return The found authenticator or None if no authenticator could be found for the given ID.
    */
-  def find(id: String): Future[Option[T]] = cacheLayer.find[T](id)
+  def find(id: String)(implicit ec: ExecutionContext): Future[Option[T]] = cacheLayer.find[T](id)
 
   /**
    * Adds a new authenticator.
@@ -44,7 +45,7 @@ class CacheAuthenticatorDAO[T <: StorableAuthenticator: ClassTag](cacheLayer: Ca
    * @param authenticator The authenticator to add.
    * @return The added authenticator.
    */
-  def add(authenticator: T): Future[T] = cacheLayer.save[T](authenticator.id, authenticator, Duration.Inf)
+  def add(authenticator: T)(implicit ec: ExecutionContext): Future[T] = cacheLayer.save[T](authenticator.id, authenticator, Duration.Inf)
 
   /**
    * Updates an already existing authenticator.
@@ -52,7 +53,7 @@ class CacheAuthenticatorDAO[T <: StorableAuthenticator: ClassTag](cacheLayer: Ca
    * @param authenticator The authenticator to update.
    * @return The updated authenticator.
    */
-  def update(authenticator: T): Future[T] = cacheLayer.save[T](authenticator.id, authenticator, Duration.Inf)
+  def update(authenticator: T)(implicit ec: ExecutionContext): Future[T] = cacheLayer.save[T](authenticator.id, authenticator, Duration.Inf)
 
   /**
    * Removes the authenticator for the given ID.
@@ -60,5 +61,5 @@ class CacheAuthenticatorDAO[T <: StorableAuthenticator: ClassTag](cacheLayer: Ca
    * @param id The authenticator ID.
    * @return An empty future.
    */
-  def remove(id: String): Future[Unit] = cacheLayer.remove(id)
+  def remove(id: String)(implicit ec: ExecutionContext): Future[Unit] = cacheLayer.remove(id)
 }

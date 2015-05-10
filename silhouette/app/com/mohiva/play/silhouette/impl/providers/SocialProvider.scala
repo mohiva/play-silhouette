@@ -21,10 +21,10 @@ import com.mohiva.play.silhouette.api.{ AuthInfo, LoginInfo, Provider }
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import org.apache.commons.lang3.reflect.TypeUtils
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ RequestHeader, Result }
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 import scala.reflect.ClassTag
 
 /**
@@ -59,7 +59,7 @@ trait SocialProvider extends Provider with SocialProfileBuilder {
    * @param request The request.
    * @return Either a Result or the AuthInfo from the provider.
    */
-  def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[Either[Result, A]]
+  def authenticate[B]()(implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Either[Result, A]]
 
   /**
    * Retrieves the user profile for the given auth info.
@@ -70,7 +70,7 @@ trait SocialProvider extends Provider with SocialProfileBuilder {
    * @param authInfo The auth info for which the profile information should be retrieved.
    * @return The profile information for the given auth info.
    */
-  def retrieveProfile(authInfo: A): Future[Profile] = {
+  def retrieveProfile(authInfo: A)(implicit ec: ExecutionContext): Future[Profile] = {
     buildProfile(authInfo).recoverWith {
       case e if !e.isInstanceOf[ProfileRetrievalException] =>
         Future.failed(new ProfileRetrievalException(UnspecifiedProfileError.format(id), e))
@@ -150,7 +150,7 @@ trait SocialProfileParser[C, P <: SocialProfile] {
    * @param content The content returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(content: C): Future[P]
+  def parse(content: C)(implicit ec: ExecutionContext): Future[P]
 }
 
 /**
@@ -185,7 +185,7 @@ trait SocialProfileBuilder {
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: A): Future[Profile]
+  protected def buildProfile(authInfo: A)(implicit ec: ExecutionContext): Future[Profile]
 
   /**
    * Returns the profile parser implementation.

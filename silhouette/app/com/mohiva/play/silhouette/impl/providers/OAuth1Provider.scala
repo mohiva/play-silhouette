@@ -23,11 +23,11 @@ import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth1Provider._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.ws.WSSignatureCalculator
 import play.api.mvc._
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * Base class for all OAuth1 providers.
@@ -76,7 +76,7 @@ abstract class OAuth1Provider(
    * @tparam B The type of the request body.
    * @return Either a Result or the auth info from the provider.
    */
-  def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[Either[Result, OAuth1Info]] = {
+  def authenticate[B]()(implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Either[Result, OAuth1Info]] = {
     request.extractString(Denied) match {
       case Some(_) => Future.failed(new AccessDeniedException(AuthorizationError.format(id, Denied)))
       case None => request.extractString(OAuthVerifier) -> request.extractString(OAuthToken) match {
@@ -148,7 +148,7 @@ trait OAuth1Service {
    * @param callbackURL The URL where the provider should redirect to (usually a URL on the current app).
    * @return A OAuth1Info in case of success, Exception otherwise.
    */
-  def retrieveRequestToken(callbackURL: String): Future[OAuth1Info]
+  def retrieveRequestToken(callbackURL: String)(implicit ec: ExecutionContext): Future[OAuth1Info]
 
   /**
    * Exchange a request info for an access info.
@@ -157,7 +157,7 @@ trait OAuth1Service {
    * @param verifier A string you got through your user with redirection.
    * @return A OAuth1Info in case of success, Exception otherwise.
    */
-  def retrieveAccessToken(oAuthInfo: OAuth1Info, verifier: String): Future[OAuth1Info]
+  def retrieveAccessToken(oAuthInfo: OAuth1Info, verifier: String)(implicit ec: ExecutionContext): Future[OAuth1Info]
 
   /**
    * The URL to which the user needs to be redirected to grant authorization to your application.
@@ -226,7 +226,7 @@ trait OAuth1TokenSecretProvider {
    * @tparam B The type of the request body.
    * @return The build secret.
    */
-  def build[B](info: OAuth1Info)(implicit request: ExtractableRequest[B]): Future[Secret]
+  def build[B](info: OAuth1Info)(implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Secret]
 
   /**
    * Retrieves the token secret.
@@ -235,7 +235,7 @@ trait OAuth1TokenSecretProvider {
    * @tparam B The type of the request body.
    * @return A secret on success, otherwise an failure.
    */
-  def retrieve[B](implicit request: ExtractableRequest[B]): Future[Secret]
+  def retrieve[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Secret]
 
   /**
    * Publishes the secret to the client.
@@ -246,7 +246,7 @@ trait OAuth1TokenSecretProvider {
    * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
-  def publish[B](result: Result, secret: Secret)(implicit request: ExtractableRequest[B]): Result
+  def publish[B](result: Result, secret: Secret)(implicit request: ExtractableRequest[B], ec: ExecutionContext): Result
 }
 
 /**

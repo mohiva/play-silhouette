@@ -22,7 +22,7 @@ package com.mohiva.play.silhouette.api
 import play.api.i18n.Messages
 import play.api.mvc.RequestHeader
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 
 /**
  * A trait to define Authorization objects that let you hook
@@ -40,7 +40,7 @@ trait Authorization[I <: Identity] {
    * @param messages The messages for the current language.
    * @return True if the user is authorized, false otherwise.
    */
-  def isAuthorized(identity: I)(implicit request: RequestHeader, messages: Messages): Future[Boolean]
+  def isAuthorized(identity: I)(implicit request: RequestHeader, messages: Messages, ec: ExecutionContext): Future[Boolean]
 }
 
 /**
@@ -61,7 +61,7 @@ object Authorization {
      * @return The authorization.
      */
     def unary_! : Authorization[I] = new Authorization[I] {
-      def isAuthorized(identity: I)(implicit request: RequestHeader, messages: Messages): Future[Boolean] = {
+      def isAuthorized(identity: I)(implicit request: RequestHeader, messages: Messages, ec: ExecutionContext): Future[Boolean] = {
         self.isAuthorized(identity).map(x => !x)
       }
     }
@@ -73,7 +73,7 @@ object Authorization {
      * @return The authorization.
      */
     def &&(authorization: Authorization[I]): Authorization[I] = new Authorization[I] {
-      def isAuthorized(identity: I)(implicit request: RequestHeader, messages: Messages): Future[Boolean] = {
+      def isAuthorized(identity: I)(implicit request: RequestHeader, messages: Messages, ec: ExecutionContext): Future[Boolean] = {
         val leftF = self.isAuthorized(identity)
         val rightF = authorization.isAuthorized(identity)
         for {
@@ -90,7 +90,7 @@ object Authorization {
      * @return The authorization.
      */
     def ||(authorization: Authorization[I]): Authorization[I] = new Authorization[I] {
-      def isAuthorized(identity: I)(implicit request: RequestHeader, messages: Messages): Future[Boolean] = {
+      def isAuthorized(identity: I)(implicit request: RequestHeader, messages: Messages, ec: ExecutionContext): Future[Boolean] = {
         val leftF = self.isAuthorized(identity)
         val rightF = authorization.isAuthorized(identity)
         for {

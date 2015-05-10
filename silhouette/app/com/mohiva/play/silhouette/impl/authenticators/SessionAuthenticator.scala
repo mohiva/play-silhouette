@@ -25,11 +25,11 @@ import com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorServic
 import org.joda.time.DateTime
 import play.api.http.HeaderNames
 import play.api.libs.Crypto
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.Json
 import play.api.mvc.{ Cookies, RequestHeader, Result, Session }
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -161,7 +161,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return An authenticator.
    */
-  def create(loginInfo: LoginInfo)(implicit request: RequestHeader) = {
+  def create(loginInfo: LoginInfo)(implicit request: RequestHeader, ec: ExecutionContext) = {
     Future.from(Try {
       val now = clock.now
       SessionAuthenticator(
@@ -182,7 +182,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return Some authenticator or None if no authenticator could be found in request.
    */
-  def retrieve(implicit request: RequestHeader) = {
+  def retrieve(implicit request: RequestHeader, ec: ExecutionContext) = {
     Future.from(Try {
       if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
     }).map { fingerprint =>
@@ -205,7 +205,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The serialized authenticator value.
    */
-  def init(authenticator: SessionAuthenticator)(implicit request: RequestHeader) = {
+  def init(authenticator: SessionAuthenticator)(implicit request: RequestHeader, ec: ExecutionContext) = {
     Future.successful(request.session + (settings.sessionKey -> serialize(authenticator)(settings)))
   }
 
@@ -216,7 +216,7 @@ class SessionAuthenticatorService(
    * @param result The result to manipulate.
    * @return The manipulated result.
    */
-  def embed(session: Session, result: Result)(implicit request: RequestHeader) = {
+  def embed(session: Session, result: Result)(implicit request: RequestHeader, ec: ExecutionContext) = {
     Future.successful(AuthenticatorResult(result.addingToSession(session.data.toSeq: _*)))
   }
 
@@ -259,7 +259,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def update(authenticator: SessionAuthenticator, result: Result)(implicit request: RequestHeader) = {
+  def update(authenticator: SessionAuthenticator, result: Result)(implicit request: RequestHeader, ec: ExecutionContext) = {
     Future.from(Try {
       AuthenticatorResult(result.addingToSession(settings.sessionKey -> serialize(authenticator)(settings)))
     }.recover {
@@ -278,7 +278,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The serialized expression of the authenticator.
    */
-  def renew(authenticator: SessionAuthenticator)(implicit request: RequestHeader) = {
+  def renew(authenticator: SessionAuthenticator)(implicit request: RequestHeader, ec: ExecutionContext) = {
     create(authenticator.loginInfo).flatMap(init).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
     }
@@ -295,7 +295,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def renew(authenticator: SessionAuthenticator, result: Result)(implicit request: RequestHeader) = {
+  def renew(authenticator: SessionAuthenticator, result: Result)(implicit request: RequestHeader, ec: ExecutionContext) = {
     renew(authenticator).flatMap(v => embed(v, result)).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
     }
@@ -308,7 +308,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  def discard(authenticator: SessionAuthenticator, result: Result)(implicit request: RequestHeader) = {
+  def discard(authenticator: SessionAuthenticator, result: Result)(implicit request: RequestHeader, ec: ExecutionContext) = {
     Future.from(Try {
       AuthenticatorResult(result.removingFromSession(settings.sessionKey))
     }.recover {

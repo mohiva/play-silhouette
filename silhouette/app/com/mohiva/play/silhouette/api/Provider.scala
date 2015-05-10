@@ -18,6 +18,7 @@ package com.mohiva.play.silhouette.api
 import play.api.mvc.Request
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * A marker interface for all providers.
@@ -54,5 +55,5 @@ trait RequestProvider extends Provider {
    * @tparam B The type of the body.
    * @return Some login info on successful authentication or None if the authentication was unsuccessful.
    */
-  def authenticate[B](request: Request[B]): Future[Option[LoginInfo]]
+  def authenticate[B](request: Request[B])(implicit ec: ExecutionContext): Future[Option[LoginInfo]]
 }

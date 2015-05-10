@@ -16,6 +16,7 @@
 package com.mohiva.play.silhouette.api.util
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.Duration
 import scala.reflect.ClassTag
 
@@ -31,7 +32,7 @@ trait CacheLayer {
    * @tparam T The type of the object to return.
    * @return The found value or None if no value could be found.
    */
-  def find[T: ClassTag](key: String): Future[Option[T]]
+  def find[T: ClassTag](key: String)(implicit ec: ExecutionContext): Future[Option[T]]
 
   /**
    * Save a value in cache.
@@ -41,7 +42,7 @@ trait CacheLayer {
    * @param expiration Expiration time in seconds (0 second means eternity).
    * @return The value saved in cache.
    */
-  def save[T](key: String, value: T, expiration: Duration = Duration.Inf): Future[T]
+  def save[T](key: String, value: T, expiration: Duration = Duration.Inf)(implicit ec: ExecutionContext): Future[T]
 
   /**
    * Remove a value from the cache.
@@ -49,5 +50,5 @@ trait CacheLayer {
    * @param key Item key.
    * @return An empty future to wait for removal.
    */
-  def remove(key: String): Future[Unit]
+  def remove(key: String)(implicit ec: ExecutionContext): Future[Unit]
 }

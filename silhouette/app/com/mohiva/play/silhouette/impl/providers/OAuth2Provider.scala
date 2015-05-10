@@ -27,13 +27,13 @@ import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.{ impl, _ }
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.ws.WSResponse
 import play.api.mvc._
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -102,7 +102,7 @@ abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
    * @tparam B The type of the request body.
    * @return Either a Result or the auth info from the provider.
    */
-  def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[Either[Result, OAuth2Info]] = {
+  def authenticate[B]()(implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Either[Result, OAuth2Info]] = {
     request.extractString(Error).map {
       case e @ AccessDenied => new AccessDeniedException(AuthorizationError.format(id, e))
       case e => new UnexpectedResponseException(AuthorizationError.format(id, e))
@@ -143,7 +143,7 @@ abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
    * @param request The current request.
    * @return The info containing the access token.
    */
-  protected def getAccessToken(code: String)(implicit request: RequestHeader): Future[OAuth2Info] = {
+  protected def getAccessToken(code: String)(implicit request: RequestHeader, ec: ExecutionContext): Future[OAuth2Info] = {
     httpLayer.url(settings.accessTokenURL).withHeaders(headers: _*).post(Map(
       ClientID -> Seq(settings.clientID),
       ClientSecret -> Seq(settings.clientSecret),
@@ -243,7 +243,7 @@ trait OAuth2StateProvider {
    * @tparam B The type of the request body.
    * @return The build state.
    */
-  def build[B](implicit request: ExtractableRequest[B]): Future[State]
+  def build[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[State]
 
   /**
    * Validates the provider and the client state.
@@ -252,7 +252,7 @@ trait OAuth2StateProvider {
    * @tparam B The type of the request body.
    * @return The state on success, otherwise an failure.
    */
-  def validate[B](implicit request: ExtractableRequest[B]): Future[State]
+  def validate[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[State]
 
   /**
    * Publishes the state to the client.
@@ -263,7 +263,7 @@ trait OAuth2StateProvider {
    * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
-  def publish[B](result: Result, state: State)(implicit request: ExtractableRequest[B]): Result
+  def publish[B](result: Result, state: State)(implicit request: ExtractableRequest[B], ec: ExecutionContext): Result
 }
 
 /**

@@ -16,6 +16,8 @@
 package com.mohiva.play.silhouette.impl.util
 
 import play.api.test.PlaySpecification
+import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.util.SecureRandomIDGenerator]] class.

@@ -20,6 +20,7 @@ import com.mohiva.play.silhouette.api.{ Authenticator, LoginInfo }
 import play.api.mvc.{ RequestHeader, Result }
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * An authenticator that can be used if a client doesn't need an authenticator to
@@ -55,7 +56,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return An authenticator.
    */
-  def create(loginInfo: LoginInfo)(implicit request: RequestHeader) = {
+  def create(loginInfo: LoginInfo)(implicit request: RequestHeader, ec: ExecutionContext) = {
     Future.successful(DummyAuthenticator(loginInfo))
   }
 
@@ -69,7 +70,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return Always None because .
    */
-  def retrieve(implicit request: RequestHeader) = Future.successful(None)
+  def retrieve(implicit request: RequestHeader, ec: ExecutionContext) = Future.successful(None)
 
   /**
    * Returns noting because this authenticator doesn't have a serialized representation.
@@ -78,7 +79,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The serialized authenticator value.
    */
-  def init(authenticator: DummyAuthenticator)(implicit request: RequestHeader) = Future.successful(())
+  def init(authenticator: DummyAuthenticator)(implicit request: RequestHeader, ec: ExecutionContext) = Future.successful(())
 
   /**
    * Returns the original result, because we needn't add the authenticator to the result.
@@ -88,7 +89,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The manipulated result.
    */
-  def embed(value: Unit, result: Result)(implicit request: RequestHeader) = {
+  def embed(value: Unit, result: Result)(implicit request: RequestHeader, ec: ExecutionContext) = {
     Future.successful(AuthenticatorResult(result))
   }
 
@@ -117,7 +118,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def update(authenticator: DummyAuthenticator, result: Result)(implicit request: RequestHeader) = {
+  def update(authenticator: DummyAuthenticator, result: Result)(implicit request: RequestHeader, ec: ExecutionContext) = {
     Future.successful(AuthenticatorResult(result))
   }
 
@@ -128,7 +129,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The serialized expression of the authenticator.
    */
-  def renew(authenticator: DummyAuthenticator)(implicit request: RequestHeader) = Future.successful(())
+  def renew(authenticator: DummyAuthenticator)(implicit request: RequestHeader, ec: ExecutionContext) = Future.successful(())
 
   /**
    * Returns the original request, because we needn't renew the authenticator in the result.
@@ -138,7 +139,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def renew(authenticator: DummyAuthenticator, result: Result)(implicit request: RequestHeader) = {
+  def renew(authenticator: DummyAuthenticator, result: Result)(implicit request: RequestHeader, ec: ExecutionContext) = {
     Future.successful(AuthenticatorResult(result))
   }
 
@@ -149,7 +150,7 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The manipulated result.
    */
-  def discard(authenticator: DummyAuthenticator, result: Result)(implicit request: RequestHeader) = {
+  def discard(authenticator: DummyAuthenticator, result: Result)(implicit request: RequestHeader, ec: ExecutionContext) = {
     Future.successful(AuthenticatorResult(result))
   }
 }

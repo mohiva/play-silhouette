@@ -27,6 +27,8 @@ import play.api.test.{ FakeRequest, WithApplication }
 import play.mvc.Http.HeaderNames
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Abstract test case for the [[OpenIDProvider]] class.
@@ -41,7 +43,7 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
     "fail with an UnexpectedResponseException if redirect URL couldn't be retrieved" in new WithApplication {
       implicit val req = FakeRequest()
 
-      c.openIDService.redirectURL(any, any) returns Future.failed(new Exception(""))
+      c.openIDService.redirectURL(any, any)(any) returns Future.failed(new Exception(""))
 
       failed[UnexpectedResponseException](c.provider.authenticate()) {
         case e => e.getMessage must startWith(ErrorRedirectURL.format(c.provider.id, ""))
@@ -50,7 +52,7 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
 
     "redirect to provider by using the provider URL" in new WithApplication {
       implicit val req = FakeRequest()
-      c.openIDService.redirectURL(any, any) returns Future.successful(c.openIDSettings.providerURL)
+      c.openIDService.redirectURL(any, any)(any) returns Future.successful(c.openIDSettings.providerURL)
 
       result(c.provider.authenticate()) {
         case result =>
@@ -61,7 +63,7 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
 
     "redirect to provider by using a openID" in new WithApplication {
       implicit val req = FakeRequest(GET, "?openID=my.open.id")
-      c.openIDService.redirectURL(any, any) returns Future.successful(c.openIDSettings.providerURL)
+      c.openIDService.redirectURL(any, any)(any) returns Future.successful(c.openIDSettings.providerURL)
 
       result(c.provider.authenticate()) {
         case result =>
@@ -73,7 +75,7 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
     "fix bug 3749" in new WithApplication {
       val e = (v: String) => URLEncoder.encode(v, "UTF-8")
       implicit val req = FakeRequest()
-      c.openIDService.redirectURL(any, any) returns Future.successful("https://domain.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0"
+      c.openIDService.redirectURL(any, any)(any) returns Future.successful("https://domain.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0"
         + "&openid.mode=checkid_setup"
         + "&openid.claimed_id=" + e(c.openIDSettings.providerURL)
         + "&openid.identity=" + e(c.openIDSettings.providerURL)
@@ -109,15 +111,15 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
 
       req.secure returns secure
       c.openIDSettings.callbackURL returns callbackURL
-      c.openIDService.redirectURL(any, any) returns Future.successful(c.openIDSettings.providerURL)
+      c.openIDService.redirectURL(any, any)(any) returns Future.successful(c.openIDSettings.providerURL)
 
       await(c.provider.authenticate())
-      there was one(c.openIDService).redirectURL(any, ===(resolvedCallbackURL))
+      there was one(c.openIDService).redirectURL(any, ===(resolvedCallbackURL))(any)
     }
 
     "fail with an UnexpectedResponseException if auth info cannot be retrieved" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + Mode + "=id_res")
-      c.openIDService.verifiedID(any) returns Future.failed(new Exception(""))
+      c.openIDService.verifiedID(any, any) returns Future.failed(new Exception(""))
 
       failed[UnexpectedResponseException](c.provider.authenticate()) {
         case e => e.getMessage must startWith(ErrorVerification.format(c.provider.id, ""))
@@ -126,7 +128,7 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
 
     "return the auth info" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + Mode + "=id_res")
-      c.openIDService.verifiedID(any) returns Future.successful(c.openIDInfo)
+      c.openIDService.verifiedID(any, any) returns Future.successful(c.openIDInfo)
 
       authInfo(c.provider.authenticate()) {
         case authInfo => authInfo must be equalTo c.openIDInfo

@@ -22,6 +22,8 @@ import org.specs2.specification.Scope
 import play.api.libs.oauth.{ OAuth, RequestToken }
 import play.api.libs.ws.WSSignatureCalculator
 import play.api.test.PlaySpecification
+import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Test case for the [[PlayOAuth1Service]] class.

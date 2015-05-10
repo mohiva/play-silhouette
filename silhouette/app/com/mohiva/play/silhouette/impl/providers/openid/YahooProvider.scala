@@ -21,6 +21,7 @@ import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.openid.YahooProvider._
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * A Yahoo OpenID Provider.
@@ -57,7 +58,7 @@ abstract class YahooProvider(httpLayer: HTTPLayer, service: OpenIDService, setti
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OpenIDInfo): Future[Profile] = {
+  protected def buildProfile(authInfo: OpenIDInfo)(implicit ec: ExecutionContext): Future[Profile] = {
     profileParser.parse(authInfo)
   }
 }
@@ -73,7 +74,7 @@ class YahooProfileParser extends SocialProfileParser[OpenIDInfo, CommonSocialPro
    * @param info The auth info received from the provider.
    * @return The social profile from given result.
    */
-  def parse(info: OpenIDInfo) = Future.successful {
+  def parse(info: OpenIDInfo)(implicit ec: ExecutionContext) = Future.successful {
     CommonSocialProfile(
       loginInfo = LoginInfo(ID, info.id),
       fullName = info.attributes.get("fullname"),

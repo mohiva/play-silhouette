@@ -20,12 +20,12 @@
 package com.mohiva.play.silhouette.impl.providers.openid.services
 
 import com.mohiva.play.silhouette.impl.providers.{ OpenIDInfo, OpenIDService, OpenIDSettings }
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.openid.OpenID
 import play.api.mvc.Request
 import play.api.Play.current
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -42,7 +42,7 @@ class PlayOpenIDService(settings: OpenIDSettings) extends OpenIDService {
    * @param resolvedCallbackURL The full callback URL to the application after a successful authentication.
    * @return The redirect URL where the user should be redirected to start the OpenID authentication process.
    */
-  def redirectURL(openID: String, resolvedCallbackURL: String): Future[String] = Try {
+  def redirectURL(openID: String, resolvedCallbackURL: String)(implicit ec: ExecutionContext): Future[String] = Try {
     OpenID.redirectURL(openID, resolvedCallbackURL, settings.axRequired, settings.axOptional, settings.realm)
   } match {
     case Success(f) => f
@@ -56,7 +56,7 @@ class PlayOpenIDService(settings: OpenIDSettings) extends OpenIDService {
    * @tparam B The type of the request body.
    * @return A OpenIDInfo in case of success, Exception otherwise.
    */
-  def verifiedID[B](implicit request: Request[B]) = Try {
+  def verifiedID[B](implicit request: Request[B], ec: ExecutionContext) = Try {
     OpenID.verifiedId.map(info => OpenIDInfo(info.id, info.attributes))
   } match {
     case Success(f) => f

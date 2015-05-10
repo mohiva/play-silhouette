@@ -29,6 +29,7 @@ import play.api.mvc.RequestHeader
 
 import scala.collection.mutable
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 import scala.reflect.runtime.universe._
 
 /**
@@ -53,7 +54,7 @@ class FakeIdentityService[I <: Identity](identities: (LoginInfo, I)*)
    * @param loginInfo The login info to retrieve an identity.
    * @return The retrieved identity or None if no identity could be retrieved for the given login info.
    */
-  def retrieve(loginInfo: LoginInfo): Future[Option[I]] = {
+  def retrieve(loginInfo: LoginInfo)(implicit ec: ExecutionContext): Future[Option[I]] = {
     Future.successful(identities.find(_._1 == loginInfo).map(_._2))
   }
 }
@@ -76,7 +77,7 @@ class FakeAuthenticatorDAO[T <: StorableAuthenticator] extends AuthenticatorDAO[
    * @param id The authenticator ID.
    * @return The found authenticator or None if no authenticator could be found for the given ID.
    */
-  def find(id: String): Future[Option[T]] = {
+  def find(id: String)(implicit ec: ExecutionContext): Future[Option[T]] = {
     Future.successful(data.get(id))
   }
 
@@ -86,7 +87,7 @@ class FakeAuthenticatorDAO[T <: StorableAuthenticator] extends AuthenticatorDAO[
    * @param authenticator The authenticator to add.
    * @return The added authenticator.
    */
-  def add(authenticator: T): Future[T] = {
+  def add(authenticator: T)(implicit ec: ExecutionContext): Future[T] = {
     data += (authenticator.id -> authenticator)
     Future.successful(authenticator)
   }
@@ -97,7 +98,7 @@ class FakeAuthenticatorDAO[T <: StorableAuthenticator] extends AuthenticatorDAO[
    * @param authenticator The authenticator to update.
    * @return The updated authenticator.
    */
-  def update(authenticator: T): Future[T] = {
+  def update(authenticator: T)(implicit ec: ExecutionContext): Future[T] = {
     data += (authenticator.id -> authenticator)
     Future.successful(authenticator)
   }
@@ -108,7 +109,7 @@ class FakeAuthenticatorDAO[T <: StorableAuthenticator] extends AuthenticatorDAO[
    * @param id The authenticator ID.
    * @return An empty future.
    */
-  def remove(id: String): Future[Unit] = {
+  def remove(id: String)(implicit ec: ExecutionContext): Future[Unit] = {
     data -= id
     Future.successful(())
   }
@@ -201,7 +202,7 @@ object FakeAuthenticator {
    * @tparam T The type of the authenticator,
    * @return A authenticator instance.
    */
-  def apply[T <: Authenticator](loginInfo: LoginInfo)(implicit env: Environment[_, T], requestHeader: RequestHeader): T = {
+  def apply[T <: Authenticator](loginInfo: LoginInfo)(implicit env: Environment[_, T], requestHeader: RequestHeader, ec: ExecutionContext): T = {
     env.authenticatorService.create(loginInfo)
   }
 }

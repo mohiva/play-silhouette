@@ -31,6 +31,8 @@ import play.api.test.{ FakeRequest, WithApplication }
 import play.mvc.Http.HeaderNames
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Abstract test case for the [[OAuth2Provider]] class.
@@ -63,7 +65,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           implicit val req = FakeRequest(GET, "/")
 
           c.state.serialize returns "session-value"
-          c.stateProvider.build(any) returns Future.successful(c.state)
+          c.stateProvider.build(any, any) returns Future.successful(c.state)
           c.oAuthSettings.authorizationURL returns None
 
           failed[ConfigurationException](c.provider.authenticate()) {
@@ -81,8 +83,8 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           val sessionValue = "session-value"
 
           c.state.serialize returns sessionValue
-          c.stateProvider.build(any) returns Future.successful(c.state)
-          c.stateProvider.publish(any, any)(any) answers { (a, m) =>
+          c.stateProvider.build(any, any) returns Future.successful(c.state)
+          c.stateProvider.publish(any, any)(any, any) answers { (a, m) =>
             val result = a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
             val state = a.asInstanceOf[Array[Any]](1).asInstanceOf[OAuth2State]
 
@@ -134,8 +136,8 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           c.oAuthSettings.redirectURL returns redirectURL
 
           c.state.serialize returns sessionValue
-          c.stateProvider.build(any) returns Future.successful(c.state)
-          c.stateProvider.publish(any, any)(any) answers { (a, m) =>
+          c.stateProvider.build(any, any) returns Future.successful(c.state)
+          c.stateProvider.publish(any, any)(any, any) answers { (a, m) =>
             val result = a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
             val state = a.asInstanceOf[Array[Any]](1).asInstanceOf[OAuth2State]
 
@@ -158,8 +160,8 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           implicit val req = FakeRequest(GET, "/")
 
           c.state.serialize returns ""
-          c.stateProvider.build(any) returns Future.successful(c.state)
-          c.stateProvider.publish(any, any)(any) answers { (a, m) =>
+          c.stateProvider.build(any, any) returns Future.successful(c.state)
+          c.stateProvider.publish(any, any)(any, any) answers { (a, m) =>
             a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
           }
 
@@ -181,7 +183,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
 
       requestHolder.withHeaders(any) returns requestHolder
-      c.stateProvider.validate(any) returns Future.successful(c.state)
+      c.stateProvider.validate(any, any) returns Future.successful(c.state)
 
       // We must use this neat trick here because it isn't possible to check the post call with a verification,
       // because of the implicit params needed for the post call. On the other hand we can test it in the abstract

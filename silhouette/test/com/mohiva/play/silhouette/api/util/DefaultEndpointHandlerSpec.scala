@@ -7,6 +7,7 @@ import play.api.mvc._
 import play.api.test._
 
 import scala.concurrent._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.api.util.DefaultEndpointHandler]] class.
@@ -21,7 +22,7 @@ class DefaultEndpointHandlerSpec extends PlaySpecification {
         expectedContentType = HTML,
         expectedResponseFragment = "<html>",
         expectedMessage = "silhouette.not.authenticated",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthenticated(r, messages) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthenticated(r, messages, implicitly[ExecutionContext]) })
     }
 
     "return a JSON response for a JSON request" in new WithApplication with Context {
@@ -31,7 +32,7 @@ class DefaultEndpointHandlerSpec extends PlaySpecification {
         expectedContentType = JSON,
         expectedResponseFragment = "\"success\":false",
         expectedMessage = "silhouette.not.authenticated",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthenticated(r, messages) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthenticated(r, messages, implicitly[ExecutionContext]) })
     }
 
     "return a XML response for a XML request" in new WithApplication with Context {
@@ -41,7 +42,7 @@ class DefaultEndpointHandlerSpec extends PlaySpecification {
         expectedContentType = XML,
         expectedResponseFragment = "<success>false</success>",
         expectedMessage = "silhouette.not.authenticated",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthenticated(r, messages) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthenticated(r, messages, implicitly[ExecutionContext]) })
     }
 
     "return a plain text response for a plain text request" in new WithApplication with Context {
@@ -51,7 +52,7 @@ class DefaultEndpointHandlerSpec extends PlaySpecification {
         expectedContentType = TEXT,
         expectedResponseFragment = Messages("silhouette.not.authenticated"),
         expectedMessage = "silhouette.not.authenticated",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthenticated(r, messages) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthenticated(r, messages, implicitly[ExecutionContext]) })
     }
 
     "return a plain text response for other requests" in new WithApplication with Context {
@@ -61,7 +62,7 @@ class DefaultEndpointHandlerSpec extends PlaySpecification {
         expectedContentType = TEXT,
         expectedResponseFragment = Messages("silhouette.not.authenticated"),
         expectedMessage = "silhouette.not.authenticated",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthenticated(r, messages) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthenticated(r, messages, implicitly[ExecutionContext]) })
     }
 
     "return an HTML response for a request without an Accept header" in new WithApplication with Context {
@@ -71,7 +72,7 @@ class DefaultEndpointHandlerSpec extends PlaySpecification {
         expectedContentType = HTML,
         expectedResponseFragment = Messages("silhouette.not.authenticated"),
         expectedMessage = "silhouette.not.authenticated",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthenticated(r, messages) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthenticated(r, messages, implicitly[ExecutionContext]) })
     }
   }
 
@@ -83,7 +84,7 @@ class DefaultEndpointHandlerSpec extends PlaySpecification {
         expectedContentType = HTML,
         expectedResponseFragment = "<html>",
         expectedMessage = "silhouette.not.authorized",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthorized(r, messages) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthorized(r, messages, implicitly[ExecutionContext]) })
     }
 
     "return a JSON response for a JSON request" in new WithApplication with Context {
@@ -93,7 +94,7 @@ class DefaultEndpointHandlerSpec extends PlaySpecification {
         expectedContentType = JSON,
         expectedResponseFragment = "\"success\":false",
         expectedMessage = "silhouette.not.authorized",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthorized(r, messages) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthorized(r, messages, implicitly[ExecutionContext]) })
     }
 
     "return a XML response for a XML request" in new WithApplication with Context {
@@ -103,7 +104,7 @@ class DefaultEndpointHandlerSpec extends PlaySpecification {
         expectedContentType = XML,
         expectedResponseFragment = "<success>false</success>",
         expectedMessage = "silhouette.not.authorized",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthorized(r, messages) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthorized(r, messages, implicitly[ExecutionContext]) })
     }
 
     "return a plain text response for a plain text request" in new WithApplication with Context {
@@ -113,7 +114,7 @@ class DefaultEndpointHandlerSpec extends PlaySpecification {
         expectedContentType = TEXT,
         expectedResponseFragment = Messages("silhouette.not.authorized"),
         expectedMessage = "silhouette.not.authorized",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthorized(r, messages) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthorized(r, messages, implicitly[ExecutionContext]) })
     }
 
     "return a plain text response for other requests" in new WithApplication with Context {
@@ -123,7 +124,7 @@ class DefaultEndpointHandlerSpec extends PlaySpecification {
         expectedContentType = TEXT,
         expectedResponseFragment = Messages("silhouette.not.authorized"),
         expectedMessage = "silhouette.not.authorized",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthorized(r, messages) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthorized(r, messages, implicitly[ExecutionContext]) })
     }
 
     "return an HTML response for a request without an Accept header" in new WithApplication with Context {
@@ -133,7 +134,7 @@ class DefaultEndpointHandlerSpec extends PlaySpecification {
         expectedContentType = HTML,
         expectedResponseFragment = Messages("silhouette.not.authorized"),
         expectedMessage = "silhouette.not.authorized",
-        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthorized(r, messages) })
+        f = { r: RequestHeader => DefaultEndpointHandler.handleNotAuthorized(r, messages, implicitly[ExecutionContext]) })
     }
   }
 

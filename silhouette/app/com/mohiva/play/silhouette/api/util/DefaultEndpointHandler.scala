@@ -21,7 +21,7 @@ object DefaultEndpointHandler extends Controller {
    * @param messages The messages for the current language.
    * @return A response indicating that user authentication is required.
    */
-  def handleNotAuthenticated(implicit request: RequestHeader, messages: Messages): Future[Result] = {
+  def handleNotAuthenticated(implicit request: RequestHeader, messages: Messages, ec: ExecutionContext): Future[Result] = {
     produceResponse(Unauthorized, Messages("silhouette.not.authenticated"))
   }
 
@@ -35,7 +35,7 @@ object DefaultEndpointHandler extends Controller {
    * @param messages The messages for the current language.
    * @return A response indicating that access is forbidden.
    */
-  def handleNotAuthorized(implicit request: RequestHeader, messages: Messages): Future[Result] = {
+  def handleNotAuthorized(implicit request: RequestHeader, messages: Messages, ec: ExecutionContext): Future[Result] = {
     produceResponse(Forbidden, Messages("silhouette.not.authorized"))
   }
 
@@ -47,7 +47,7 @@ object DefaultEndpointHandler extends Controller {
    * @param msg The user-friendly message.
    * @param request The request header.
    */
-  private def produceResponse[S <: Status](status: S, msg: String)(implicit request: RequestHeader): Future[Result] = {
+  private def produceResponse[S <: Status](status: S, msg: String)(implicit request: RequestHeader, ec: ExecutionContext): Future[Result] = {
     Future.successful(render {
       case Accepts.Html() => status(toHtmlError(msg)).as(HTML)
       // This will also be the default content type if the client doesn't request a specific media type.

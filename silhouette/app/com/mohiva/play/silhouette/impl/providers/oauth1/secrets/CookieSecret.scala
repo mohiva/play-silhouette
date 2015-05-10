@@ -27,6 +27,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{ Cookie, Result }
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -111,7 +112,7 @@ class CookieSecretProvider(
    * @tparam B The type of the request body.
    * @return The build secret.
    */
-  def build[B](info: OAuth1Info)(implicit request: ExtractableRequest[B]): Future[CookieSecret] = {
+  def build[B](info: OAuth1Info)(implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[CookieSecret] = {
     Future.successful(CookieSecret(info.secret, clock.now.plusSeconds(settings.expirationTime)))
   }
 
@@ -122,7 +123,7 @@ class CookieSecretProvider(
    * @tparam B The type of the request body.
    * @return A secret on success, otherwise an failure.
    */
-  def retrieve[B](implicit request: ExtractableRequest[B]): Future[Secret] = {
+  def retrieve[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Secret] = {
     request.cookies.get(settings.cookieName) match {
       case Some(cookie) => CookieSecret.unserialize(cookie.value) match {
         case Success(secret) if secret.isExpired => Future.failed(new OAuth1TokenSecretException(SecretIsExpired))
@@ -142,7 +143,7 @@ class CookieSecretProvider(
    * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
-  def publish[B](result: Result, secret: CookieSecret)(implicit request: ExtractableRequest[B]) = {
+  def publish[B](result: Result, secret: CookieSecret)(implicit request: ExtractableRequest[B], ec: ExecutionContext) = {
     result.withCookies(Cookie(name = settings.cookieName,
       value = secret.serialize,
       maxAge = Some(settings.expirationTime),
