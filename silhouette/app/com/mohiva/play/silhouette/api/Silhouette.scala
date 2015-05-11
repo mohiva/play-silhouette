@@ -361,17 +361,17 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @return A handler result.
      */
     protected def invokeBlock[B, T](block: SecuredRequest[B] => Future[HandlerResult[T]])(implicit request: Request[B]): Future[HandlerResult[T]] = {
-      handleAuthentication.flatMap {
+      withAuthorization(handleAuthentication).flatMap {
         // A user is both authenticated and authorized. The request will be granted
-        case (Some(authenticator), Some(identity)) if authorize.isEmpty || authorize.get.isAuthorized(identity) =>
+        case (Some(authenticator), Some(identity), Some(authorized)) if authorized =>
           env.eventBus.publish(AuthenticatedEvent(identity, request, request2Messages))
           handleBlock(authenticator, a => block(SecuredRequest(identity, a, request)))
         // A user is authenticated but not authorized. The request will be forbidden
-        case (Some(authenticator), Some(identity)) =>
+        case (Some(authenticator), Some(identity), _) =>
           env.eventBus.publish(NotAuthorizedEvent(identity, request, request2Messages))
           handleBlock(authenticator, _ => handleNotAuthorized(request).map(r => HandlerResult(r)))
         // An authenticator but no user was found. The request will ask for authentication and the authenticator will be discarded
-        case (Some(authenticator), None) =>
+        case (Some(authenticator), None, _) =>
           env.eventBus.publish(NotAuthenticatedEvent(request, request2Messages))
           for {
             result <- handleNotAuthenticated(request)
@@ -381,6 +381,22 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
         case _ =>
           env.eventBus.publish(NotAuthenticatedEvent(request, request2Messages))
           handleNotAuthenticated(request).map(r => HandlerResult(r))
+      }
+    }
+
+    /**
+     * Adds the authorization status to the authentication result.
+     *
+     * @param result The authentication result.
+     * @param request The current request header.
+     * @return The authentication result with the additional authorization status.
+     */
+    private def withAuthorization(result: Future[(Option[Either[A, A]], Option[I])])(implicit request: RequestHeader) = {
+      result.flatMap {
+        case (a, Some(i)) =>
+          authorize.map(_.isAuthorized(i)).getOrElse(Future.successful(true)).map(b => (a, Some(i), Some(b)))
+        case (a, i) =>
+          Future.successful((a, i, None))
       }
     }
   }
