@@ -83,16 +83,6 @@ object AuthenticatorResult {
 trait AuthenticatorService[T <: Authenticator] {
 
   /**
-   * Used to add additional headers to the existing headers.
-   *
-   * @param existing The existing headers.
-   * @param additional The additional headers to add.
-   */
-  case class AdditionalHeaders(existing: Headers, additional: Seq[(String, Seq[String])]) extends Headers {
-    override protected val data: Seq[(String, Seq[String])] = (existing.toMap ++ additional).toSeq
-  }
-
-  /**
    * Creates a new authenticator for the specified login info.
    *
    * @param loginInfo The login info for which the authenticator should be created.

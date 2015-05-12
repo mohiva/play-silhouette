@@ -22,7 +22,7 @@ import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.FoursquareProvider._
 import play.api.libs.json.Json
-import play.api.libs.ws.{ WSRequestHolder, WSResponse }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.{ FakeRequest, WithApplication }
 import test.Helper
 
@@ -35,14 +35,14 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
 
   "The `authenticate` method" should {
     "fail with UnexpectedResponseException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
       response.json returns Json.obj()
       requestHolder.withHeaders(any) returns requestHolder
-      requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
+      requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      stateProvider.validate(any)(any) returns Future.successful(state)
+      stateProvider.validate(any) returns Future.successful(state)
 
       failed[UnexpectedResponseException](provider.authenticate()) {
         case e => e.getMessage must startWith(InvalidInfoFormat.format(provider.id, ""))
@@ -50,14 +50,14 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
     }
 
     "return the auth info" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
       response.json returns oAuthInfo
       requestHolder.withHeaders(any) returns requestHolder
-      requestHolder.post[Map[String, Seq[String]]](any)(any, any) returns Future.successful(response)
+      requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      stateProvider.validate(any)(any) returns Future.successful(state)
+      stateProvider.validate(any) returns Future.successful(state)
 
       authInfo(provider.authenticate()) {
         case authInfo => authInfo must be equalTo oAuthInfo.as[OAuth2Info]
@@ -67,7 +67,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
 
   "The `retrieveProfile` method" should {
     "fail with ProfileRetrievalException if API returns error" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       response.json returns Helper.loadJson("providers/oauth2/foursquare.error.json")
       requestHolder.get() returns Future.successful(response)
@@ -83,7 +83,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
     }
 
     "fail with ProfileRetrievalException if an unexpected error occurred" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       response.json throws new RuntimeException("")
       requestHolder.get() returns Future.successful(response)
@@ -95,7 +95,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
     }
 
     "return the social profile" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       response.json returns Helper.loadJson("providers/oauth2/foursquare.success.json")
       requestHolder.get() returns Future.successful(response)
@@ -114,7 +114,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
     }
 
     "return the social profile if API is deprecated" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       response.json returns Helper.loadJson("providers/oauth2/foursquare.deprecated.json")
       requestHolder.get() returns Future.successful(response)
@@ -134,7 +134,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
 
     "handle the custom API version property" in new WithApplication with Context {
       val customProperties = Map(APIVersion -> "20120101")
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       override lazy val provider = FoursquareProvider(
         httpLayer,
@@ -160,7 +160,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
 
     "handle the custom avatar resolution property" in new WithApplication with Context {
       val customProperties = Map(AvatarResolution -> "150x150")
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       override lazy val provider = FoursquareProvider(
         httpLayer,

@@ -25,7 +25,7 @@ import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.libs.json.{ JsValue, Json }
-import play.api.libs.ws.WSRequestHolder
+import play.api.libs.ws.WSRequest
 import play.api.mvc.Result
 import play.api.test.{ FakeRequest, WithApplication }
 import play.mvc.Http.HeaderNames
@@ -171,7 +171,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
     }
 
     "submit the proper params to the access token post request" in new WithApplication {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val params = Map(
         ClientID -> Seq(c.oAuthSettings.clientID),
         ClientSecret -> Seq(c.oAuthSettings.clientSecret),
@@ -181,15 +181,15 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
 
       requestHolder.withHeaders(any) returns requestHolder
-      c.stateProvider.validate(any)(any) returns Future.successful(c.state)
+      c.stateProvider.validate(any) returns Future.successful(c.state)
 
       // We must use this neat trick here because it isn't possible to check the post call with a verification,
       // because of the implicit params needed for the post call. On the other hand we can test it in the abstract
       // spec, because we throw an exception in both cases which stops the test once the post method was called.
       // This protects as for an NPE because of the not mocked dependencies. The other solution would be to execute
       // this test in every provider with the full mocked dependencies.
-      requestHolder.post[Map[String, Seq[String]]](any)(any, any) answers {
-        _.equals(params) match {
+      requestHolder.post[Map[String, Seq[String]]](any)(any) answers { (a, m) =>
+        a.asInstanceOf[Array[Any]](0).asInstanceOf[Map[String, Seq[String]]].equals(params) match {
           case true => throw new RuntimeException("success")
           case false => throw new RuntimeException("failure")
         }

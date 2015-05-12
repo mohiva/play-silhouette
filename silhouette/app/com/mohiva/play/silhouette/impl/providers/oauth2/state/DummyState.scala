@@ -52,12 +52,11 @@ class DummyStateProvider extends OAuth2StateProvider {
   /**
    * Returns always a valid state avoid authentication errors.
    *
-   * @param id The provider ID.
    * @param request The request.
    * @tparam B The type of the request body.
    * @return Always a valid state avoid authentication errors.
    */
-  def validate[B](id: String)(implicit request: ExtractableRequest[B]) = Future.successful(DummyState())
+  def validate[B](implicit request: ExtractableRequest[B]) = Future.successful(DummyState())
 
   /**
    * Returns the original result.

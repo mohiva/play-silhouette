@@ -165,7 +165,7 @@ class CookieAuthenticatorService(
    * @return The serialized authenticator value.
    */
   def init(authenticator: CookieAuthenticator)(implicit request: RequestHeader) = {
-    dao.save(authenticator).map { a =>
+    dao.add(authenticator).map { a =>
       Cookie(
         name = settings.cookieName,
         value = a.id,
@@ -201,8 +201,8 @@ class CookieAuthenticatorService(
    */
   def embed(cookie: Cookie, request: RequestHeader) = {
     val cookies = Cookies.merge(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(cookie))
-    val additional = Seq(HeaderNames.COOKIE -> Seq(cookies))
-    request.copy(headers = AdditionalHeaders(request.headers, additional))
+    val additional = Seq(HeaderNames.COOKIE -> cookies)
+    request.copy(headers = request.headers.replace(additional: _*))
   }
 
   /**
@@ -231,7 +231,7 @@ class CookieAuthenticatorService(
    * @return The original or a manipulated result.
    */
   def update(authenticator: CookieAuthenticator, result: Result)(implicit request: RequestHeader) = {
-    dao.save(authenticator).map { a =>
+    dao.update(authenticator).map { a =>
       AuthenticatorResult(result)
     }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)

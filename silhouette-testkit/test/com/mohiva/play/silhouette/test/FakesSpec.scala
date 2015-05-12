@@ -15,7 +15,9 @@
  */
 package com.mohiva.play.silhouette.test
 
-import com.mohiva.play.silhouette.api.{ Silhouette, Environment, LoginInfo }
+import javax.inject.Inject
+
+import com.mohiva.play.silhouette.api.{ Environment, LoginInfo, Silhouette }
 import com.mohiva.play.silhouette.impl.authenticators._
 import org.specs2.matcher.JsonMatchers
 import play.api.libs.json.Json
@@ -43,23 +45,13 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     }
   }
 
-  "The `save` method of the `FakeAuthenticatorDAO`" should {
-    "save an authenticator" in {
-      val loginInfo = LoginInfo("test", "test")
-      val authenticator = new FakeAuthenticator(loginInfo)
-      val dao = new FakeAuthenticatorDAO[FakeAuthenticator]()
-
-      await(dao.save(authenticator)) must be equalTo authenticator
-    }
-  }
-
   "The `find` method of the `FakeAuthenticatorDAO`" should {
     "return an authenticator for the given ID" in {
       val loginInfo = LoginInfo("test", "test")
       val authenticator = new FakeAuthenticator(loginInfo, "test")
       val dao = new FakeAuthenticatorDAO[FakeAuthenticator]()
 
-      await(dao.save(authenticator))
+      await(dao.add(authenticator))
 
       await(dao.find("test")) must beSome(authenticator)
     }
@@ -71,13 +63,33 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     }
   }
 
+  "The `add` method of the `FakeAuthenticatorDAO`" should {
+    "add an authenticator" in {
+      val loginInfo = LoginInfo("test", "test")
+      val authenticator = new FakeAuthenticator(loginInfo)
+      val dao = new FakeAuthenticatorDAO[FakeAuthenticator]()
+
+      await(dao.add(authenticator)) must be equalTo authenticator
+    }
+  }
+
+  "The `update` method of the `FakeAuthenticatorDAO`" should {
+    "update an authenticator" in {
+      val loginInfo = LoginInfo("test", "test")
+      val authenticator = new FakeAuthenticator(loginInfo)
+      val dao = new FakeAuthenticatorDAO[FakeAuthenticator]()
+
+      await(dao.update(authenticator)) must be equalTo authenticator
+    }
+  }
+
   "The `remove` method of the `FakeAuthenticatorDAO`" should {
     "remove an authenticator" in {
       val loginInfo = LoginInfo("test", "test")
       val authenticator = new FakeAuthenticator(loginInfo, "test")
       val dao = new FakeAuthenticatorDAO[FakeAuthenticator]()
 
-      await(dao.save(authenticator))
+      await(dao.add(authenticator))
       await(dao.find("test")) must beSome(authenticator)
       await(dao.remove("test"))
       await(dao.find("test")) must beNone
@@ -107,7 +119,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
   }
 
   "The `FakeAuthenticator` factory" should {
-    "return a `SessionAuthenticator`" in {
+    "return a `SessionAuthenticator`" in new WithApplication {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
       implicit val env = FakeEnvironment[FakeIdentity, SessionAuthenticator](Seq(loginInfo -> identity))
@@ -125,7 +137,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
       FakeAuthenticator[CookieAuthenticator](loginInfo) must beAnInstanceOf[CookieAuthenticator]
     }
 
-    "return a `BearerTokenAuthenticator`" in {
+    "return a `BearerTokenAuthenticator`" in new WithApplication {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
       implicit val env = FakeEnvironment[FakeIdentity, BearerTokenAuthenticator](Seq(loginInfo -> identity))
@@ -134,7 +146,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
       FakeAuthenticator[BearerTokenAuthenticator](loginInfo) must beAnInstanceOf[BearerTokenAuthenticator]
     }
 
-    "return a `JWTAuthenticator`" in {
+    "return a `JWTAuthenticator`" in new WithApplication {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
       implicit val env = FakeEnvironment[FakeIdentity, JWTAuthenticator](Seq(loginInfo -> identity))
@@ -143,7 +155,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
       FakeAuthenticator[JWTAuthenticator](loginInfo) must beAnInstanceOf[JWTAuthenticator]
     }
 
-    "return a `DummyAuthenticator`" in {
+    "return a `DummyAuthenticator`" in new WithApplication {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
       implicit val env = FakeEnvironment[FakeIdentity, DummyAuthenticator](Seq(loginInfo -> identity))
@@ -220,6 +232,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     "return a 200 status code if authenticator and identity was found" in new WithApplication {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
+
       implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
       val request = FakeRequest().withAuthenticator(loginInfo)
 
@@ -236,7 +249,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
    *
    * @param env The Silhouette environment.
    */
-  class SecuredController(
+  class SecuredController @Inject() (
     val env: Environment[FakeIdentity, CookieAuthenticator])
     extends Silhouette[FakeIdentity, CookieAuthenticator] {
 

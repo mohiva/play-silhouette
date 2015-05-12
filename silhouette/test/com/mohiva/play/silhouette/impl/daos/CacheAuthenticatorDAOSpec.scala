@@ -19,34 +19,25 @@ import com.mohiva.play.silhouette.api.StorableAuthenticator
 import com.mohiva.play.silhouette.api.util.CacheLayer
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.test.{ PlaySpecification, WithApplication }
+import play.api.test.PlaySpecification
 
 import scala.concurrent.Future
+import scala.concurrent.duration.Duration
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.daos.CacheAuthenticatorDAO]] class.
  */
 class CacheAuthenticatorDAOSpec extends PlaySpecification with Mockito {
 
-  "The `save` method" should {
-    "save value in cache" in new WithApplication with Context {
-      authenticator.id returns "test-id"
-      cacheLayer.save("test-id", authenticator, 0) returns Future.successful(authenticator)
-
-      await(dao.save(authenticator)) must be equalTo authenticator
-      there was one(cacheLayer).save("test-id", authenticator, 0)
-    }
-  }
-
   "The `find` method" should {
-    "return value from cache" in new WithApplication with Context {
+    "return value from cache" in new Context {
       cacheLayer.find[StorableAuthenticator]("test-id") returns Future.successful(Some(authenticator))
 
       await(dao.find("test-id")) must beSome(authenticator)
       there was one(cacheLayer).find[StorableAuthenticator]("test-id")
     }
 
-    "return None if value couldn't be found in cache" in new WithApplication with Context {
+    "return None if value couldn't be found in cache" in new Context {
       cacheLayer.find[StorableAuthenticator]("test-id") returns Future.successful(None)
 
       await(dao.find("test-id")) must beNone
@@ -54,8 +45,28 @@ class CacheAuthenticatorDAOSpec extends PlaySpecification with Mockito {
     }
   }
 
+  "The `add` method" should {
+    "add value in cache" in new Context {
+      authenticator.id returns "test-id"
+      cacheLayer.save("test-id", authenticator, Duration.Inf) returns Future.successful(authenticator)
+
+      await(dao.add(authenticator)) must be equalTo authenticator
+      there was one(cacheLayer).save("test-id", authenticator, Duration.Inf)
+    }
+  }
+
+  "The `update` method" should {
+    "update value in cache" in new Context {
+      authenticator.id returns "test-id"
+      cacheLayer.save("test-id", authenticator, Duration.Inf) returns Future.successful(authenticator)
+
+      await(dao.update(authenticator)) must be equalTo authenticator
+      there was one(cacheLayer).save("test-id", authenticator, Duration.Inf)
+    }
+  }
+
   "The `remove` method" should {
-    "removes value from cache" in new WithApplication with Context {
+    "remove value from cache" in new Context {
       cacheLayer.remove("test-id") returns Future.successful(())
 
       await(dao.remove("test-id")) must be equalTo (())

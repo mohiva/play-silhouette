@@ -16,7 +16,7 @@
 package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.exceptions.ConfigurationException
-import com.mohiva.play.silhouette.api.services.AuthInfoService
+import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.api.{ LoginInfo, RequestProvider }
 import com.mohiva.play.silhouette.impl.exceptions.{ IdentityNotFoundException, InvalidPasswordException }
@@ -36,12 +36,12 @@ import scala.concurrent.Future
  * the application has changed the hashing algorithm, the provider hashes the entered password again with the new
  * algorithm and stores the auth info in the backing store.
  *
- * @param authInfoService The auth info service.
+ * @param authInfoRepository The auth info repository.
  * @param passwordHasher The default password hasher used by the application.
  * @param passwordHasherList List of password hasher supported by the application.
  */
 class BasicAuthProvider(
-  authInfoService: AuthInfoService,
+  authInfoRepository: AuthInfoRepository,
   passwordHasher: PasswordHasher,
   passwordHasherList: Seq[PasswordHasher]) extends RequestProvider {
 
@@ -63,11 +63,11 @@ class BasicAuthProvider(
     getCredentials(request) match {
       case Some(credentials) =>
         val loginInfo = LoginInfo(id, credentials.identifier)
-        authInfoService.retrieve[PasswordInfo](loginInfo).map {
+        authInfoRepository.find[PasswordInfo](loginInfo).map {
           case Some(authInfo) => passwordHasherList.find(_.id == authInfo.hasher) match {
             case Some(hasher) if hasher.matches(authInfo, credentials.password) =>
               if (hasher != passwordHasher) {
-                authInfoService.save(loginInfo, passwordHasher.hash(credentials.password))
+                authInfoRepository.update(loginInfo, passwordHasher.hash(credentials.password))
               }
               Some(loginInfo)
             case Some(hasher) => throw new InvalidPasswordException(InvalidPassword.format(id))
@@ -89,11 +89,12 @@ class BasicAuthProvider(
    */
   def getCredentials(request: RequestHeader): Option[Credentials] = {
     request.headers.get(HeaderNames.AUTHORIZATION) match {
-      case Some(header) => Base64.decode(header.replace("Basic ", "")).split(":") match {
-        case credentials if credentials.length == 2 => Some(Credentials(credentials(0), credentials(1)))
-        case _ => None
-      }
-      case None => None
+      case Some(header) if header.startsWith("Basic ") =>
+        Base64.decode(header.replace("Basic ", "")).split(":") match {
+          case credentials if credentials.length == 2 => Some(Credentials(credentials(0), credentials(1)))
+          case _ => None
+        }
+      case _ => None
     }
   }
 }

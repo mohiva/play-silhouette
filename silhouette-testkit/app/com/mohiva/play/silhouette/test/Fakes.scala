@@ -23,6 +23,8 @@ import com.mohiva.play.silhouette.api.util.Clock
 import com.mohiva.play.silhouette.impl.authenticators._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import com.mohiva.play.silhouette.impl.util.{ DefaultFingerprintGenerator, SecureRandomIDGenerator }
+import play.api.Application
+import play.api.i18n.MessagesApi
 import play.api.mvc.RequestHeader
 
 import scala.collection.mutable
@@ -69,17 +71,6 @@ class FakeAuthenticatorDAO[T <: StorableAuthenticator] extends AuthenticatorDAO[
   var data: mutable.HashMap[String, T] = mutable.HashMap()
 
   /**
-   * Saves the authenticator.
-   *
-   * @param authenticator The authenticator to save.
-   * @return The saved auth authenticator.
-   */
-  def save(authenticator: T): Future[T] = {
-    data += (authenticator.id -> authenticator)
-    Future.successful(authenticator)
-  }
-
-  /**
    * Finds the authenticator for the given ID.
    *
    * @param id The authenticator ID.
@@ -87,6 +78,28 @@ class FakeAuthenticatorDAO[T <: StorableAuthenticator] extends AuthenticatorDAO[
    */
   def find(id: String): Future[Option[T]] = {
     Future.successful(data.get(id))
+  }
+
+  /**
+   * Adds a new authenticator.
+   *
+   * @param authenticator The authenticator to add.
+   * @return The added authenticator.
+   */
+  def add(authenticator: T): Future[T] = {
+    data += (authenticator.id -> authenticator)
+    Future.successful(authenticator)
+  }
+
+  /**
+   * Updates an already existing authenticator.
+   *
+   * @param authenticator The authenticator to update.
+   * @return The updated authenticator.
+   */
+  def update(authenticator: T): Future[T] = {
+    data += (authenticator.id -> authenticator)
+    Future.successful(authenticator)
   }
 
   /**
@@ -199,26 +212,29 @@ object FakeAuthenticator {
  * @param identities A list of (login info -> identity) pairs to return inside a Silhouette action.
  * @param requestProviders The list of request providers.
  * @param eventBus The event bus implementation.
+ * @param app The implicit Play application.
  * @tparam I The type of the identity.
  * @tparam T The type of the authenticator.
  */
 case class FakeEnvironment[I <: Identity, T <: Authenticator: TypeTag](
   identities: Seq[(LoginInfo, I)],
   requestProviders: Seq[RequestProvider] = Seq(),
-  eventBus: EventBus = EventBus())
+  eventBus: EventBus = EventBus())(
+    implicit val app: Application)
   extends Environment[I, T] {
 
   /**
-   * Gets the identity service implementation.
-   *
-   * @return The identity service implementation.
+   * The identity service implementation.
    */
   val identityService: IdentityService[I] = new FakeIdentityService[I](identities: _*)
 
   /**
-   * Gets the authenticator service implementation.
-   *
-   * @return The authenticator service implementation.
+   *  The authenticator service implementation.
    */
   val authenticatorService: AuthenticatorService[T] = FakeAuthenticatorService[T]()
+
+  /**
+   * The Play messages API.
+   */
+  val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
 }

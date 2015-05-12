@@ -18,6 +18,7 @@ package com.mohiva.play.silhouette.impl.providers.oauth1.secrets
 import com.mohiva.play.silhouette.api.util.Clock
 import com.mohiva.play.silhouette.impl.exceptions.OAuth1TokenSecretException
 import com.mohiva.play.silhouette.impl.providers.OAuth1Info
+import com.mohiva.play.silhouette.impl.providers.oauth1.secrets.CookieSecret._
 import com.mohiva.play.silhouette.impl.providers.oauth1.secrets.CookieSecretProvider._
 import org.joda.time.DateTime
 import org.specs2.matcher.JsonMatchers
@@ -49,7 +50,7 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
       val dateTime = new DateTime(2014, 8, 8, 0, 0, 0)
       val decoded = Crypto.decryptAES(secret.copy(expirationDate = dateTime).serialize)
 
-      decoded must /("expirationDate" -> dateTime.getMillis)
+      decoded must /("expirationDate" -> dateTime.getMillis.toDouble)
       decoded must /("value" -> "value")
     }
   }
@@ -72,8 +73,8 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
     "throw an TokenSecretException if client secret doesn't exists" in new Context {
       implicit val req = FakeRequest()
 
-      await(provider.retrieve("test")) must throwA[OAuth1TokenSecretException].like {
-        case e => e.getMessage must startWith(ClientSecretDoesNotExists.format("test", ""))
+      await(provider.retrieve) must throwA[OAuth1TokenSecretException].like {
+        case e => e.getMessage must startWith(ClientSecretDoesNotExists.format(""))
       }
     }
 
@@ -82,8 +83,8 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
 
       implicit val req = FakeRequest().withCookies(Cookie(settings.cookieName, invalidSecret))
 
-      await(provider.retrieve("test")) must throwA[OAuth1TokenSecretException].like {
-        case e => e.getMessage must startWith(InvalidSecretFormat.format("test", ""))
+      await(provider.retrieve) must throwA[OAuth1TokenSecretException].like {
+        case e => e.getMessage must startWith(InvalidSecretFormat.format(""))
       }
     }
 
@@ -92,8 +93,8 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
 
       implicit val req = FakeRequest().withCookies(Cookie(settings.cookieName, invalidSecret))
 
-      await(provider.retrieve("test")) must throwA[OAuth1TokenSecretException].like {
-        case e => e.getMessage must startWith(InvalidSecretFormat.format("test", ""))
+      await(provider.retrieve) must throwA[OAuth1TokenSecretException].like {
+        case e => e.getMessage must startWith(InvalidSecretFormat.format(""))
       }
     }
 
@@ -102,15 +103,15 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
 
       implicit val req = FakeRequest().withCookies(Cookie(settings.cookieName, expiredSecret.serialize))
 
-      await(provider.retrieve("test")) must throwA[OAuth1TokenSecretException].like {
-        case e => e.getMessage must startWith(SecretIsExpired.format("test"))
+      await(provider.retrieve) must throwA[OAuth1TokenSecretException].like {
+        case e => e.getMessage must startWith(SecretIsExpired.format())
       }
     }
 
     "return the secret if it's valid" in new WithApplication with Context {
       implicit val req = FakeRequest().withCookies(Cookie(settings.cookieName, secret.serialize))
 
-      await(provider.retrieve("test")) must be equalTo secret
+      await(provider.retrieve) must be equalTo secret
     }
   }
 
@@ -121,7 +122,7 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
 
       cookies(result).get(settings.cookieName) should beSome[Cookie].which { c =>
         c.name must be equalTo settings.cookieName
-        c.value must be equalTo secret.serialize
+        unserialize(c.value).get must be equalTo secret
         c.maxAge must beSome(settings.expirationTime)
         c.path must be equalTo settings.cookiePath
         c.domain must be equalTo settings.cookieDomain

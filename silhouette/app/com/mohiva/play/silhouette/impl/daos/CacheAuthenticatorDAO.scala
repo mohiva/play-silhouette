@@ -19,6 +19,7 @@ import com.mohiva.play.silhouette.api.StorableAuthenticator
 import com.mohiva.play.silhouette.api.util.CacheLayer
 
 import scala.concurrent.Future
+import scala.concurrent.duration.Duration
 import scala.reflect.ClassTag
 
 /**
@@ -30,20 +31,28 @@ import scala.reflect.ClassTag
 class CacheAuthenticatorDAO[T <: StorableAuthenticator: ClassTag](cacheLayer: CacheLayer) extends AuthenticatorDAO[T] {
 
   /**
-   * Saves the authenticator.
-   *
-   * @param authenticator The authenticator to save.
-   * @return The saved auth info.
-   */
-  def save(authenticator: T): Future[T] = cacheLayer.save[T](authenticator.id, authenticator)
-
-  /**
    * Finds the authenticator for the given ID.
    *
    * @param id The authenticator ID.
    * @return The found authenticator or None if no authenticator could be found for the given ID.
    */
   def find(id: String): Future[Option[T]] = cacheLayer.find[T](id)
+
+  /**
+   * Adds a new authenticator.
+   *
+   * @param authenticator The authenticator to add.
+   * @return The added authenticator.
+   */
+  def add(authenticator: T): Future[T] = cacheLayer.save[T](authenticator.id, authenticator, Duration.Inf)
+
+  /**
+   * Updates an already existing authenticator.
+   *
+   * @param authenticator The authenticator to update.
+   * @return The updated authenticator.
+   */
+  def update(authenticator: T): Future[T] = cacheLayer.save[T](authenticator.id, authenticator, Duration.Inf)
 
   /**
    * Removes the authenticator for the given ID.

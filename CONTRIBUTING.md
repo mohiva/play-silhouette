@@ -17,7 +17,7 @@ Development workflow
 
 Development is coordinated via [GitHub](https://github.com/mohiva/play-silhouette). Ideas for improvements are discussed using [issues](https://github.com/mohiva/play-silhouette/issues).
 
-For a more streamlined experience for all people involved, we encourage contributors to follow the practices described at [GitHub workflow for submitting pull requests](https://www.openshift.com/wiki/github-workflow-for-submitting-pull-requests).
+For a more streamlined experience for all people involved, we encourage contributors to follow the practices described at [GitHub workflow for submitting pull requests](http://docs.openshift.org/origin-m4/oo_contributors_guide.html#submitting-code).
 
 Scala source code should follow the conventions documented in the [Scala Style Guide](http://docs.scala-lang.org/style/). Additionally, acronyms should be capitalized. To have your code automatically reformatted, run this command before committing your changes:
 

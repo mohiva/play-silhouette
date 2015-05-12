@@ -23,7 +23,7 @@ import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.GlobalSettings
-import play.api.i18n.{ Lang, Messages }
+import play.api.i18n.{ MessagesApi, Lang, Messages }
 import play.api.libs.concurrent.Akka
 import play.api.libs.json.Json
 import play.api.mvc.Results._
@@ -32,6 +32,7 @@ import play.api.test.{ FakeApplication, FakeRequest, PlaySpecification, WithAppl
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.reflect.ClassTag
 
 /**
@@ -49,7 +50,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
 
         status(result) must equalTo(UNAUTHORIZED)
         contentAsString(result) must contain(Messages("silhouette.not.authenticated"))
-        theProbe.expectMsg(500 millis, NotAuthenticatedEvent(request, lang))
+        theProbe.expectMsg(500 millis, NotAuthenticatedEvent(request, messages))
       }
     }
 
@@ -66,7 +67,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         status(result) must equalTo(UNAUTHORIZED)
         contentAsString(result) must contain(Messages("silhouette.not.authenticated"))
         there was one(env.authenticatorService).discard(any, any)(any)
-        theProbe.expectMsg(500 millis, NotAuthenticatedEvent(request, lang))
+        theProbe.expectMsg(500 millis, NotAuthenticatedEvent(request, messages))
       }
     }
 
@@ -84,7 +85,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         status(result) must equalTo(UNAUTHORIZED)
         contentAsString(result) must contain(Messages("silhouette.not.authenticated"))
         there was one(env.authenticatorService).discard(any, any)(any)
-        theProbe.expectMsg(500 millis, NotAuthenticatedEvent(request, lang))
+        theProbe.expectMsg(500 millis, NotAuthenticatedEvent(request, messages))
       }
     }
 
@@ -150,7 +151,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         status(result) must equalTo(FORBIDDEN)
         contentAsString(result) must contain(Messages("silhouette.not.authorized"))
         there was one(env.authenticatorService).update(any, any)(any)
-        theProbe.expectMsg(500 millis, NotAuthorizedEvent(identity, request, lang))
+        theProbe.expectMsg(500 millis, NotAuthorizedEvent(identity, request, messages))
       }
     }
 
@@ -258,7 +259,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         contentAsString(result) must contain("full.access")
         there was one(env.authenticatorService).touch(any)
         there was one(env.authenticatorService).update(any, any)(any)
-        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, lang))
+        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, messages))
       }
     }
 
@@ -278,7 +279,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         contentAsString(result) must contain("full.access")
         there was one(env.authenticatorService).touch(any)
         there was one(env.authenticatorService).update(any, any)(any)
-        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, lang))
+        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, messages))
       }
     }
 
@@ -301,7 +302,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         contentAsString(result) must contain("full.access")
         there was one(env.authenticatorService).create(any)(any)
         there was one(env.authenticatorService).init(any)(any)
-        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, lang))
+        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, messages))
       }
     }
 
@@ -321,7 +322,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         contentAsString(result) must contain("full.access")
         there was one(env.authenticatorService).touch(any)
         there was one(env.authenticatorService).update(any, any)(any)
-        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, lang))
+        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, messages))
       }
     }
 
@@ -338,7 +339,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         contentAsString(result) must contain("full.access")
         there was one(env.authenticatorService).touch(any)
         there was no(env.authenticatorService).update(any, any)(any)
-        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, lang))
+        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, messages))
       }
     }
 
@@ -360,7 +361,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         contentAsString(result) must contain("full.access")
         there was one(env.authenticatorService).create(any)(any)
         there was one(env.authenticatorService).init(any)(any)
-        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, lang))
+        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, messages))
       }
     }
 
@@ -381,7 +382,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         there was one(env.authenticatorService).touch(any)
         there was one(env.authenticatorService).renew(any, any)(any)
         there was no(env.authenticatorService).update(any, any)(any)
-        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, lang))
+        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, messages))
       }
     }
 
@@ -402,7 +403,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         contentAsString(result) must contain("renewed")
         there was one(env.authenticatorService).create(any)(any)
         there was one(env.authenticatorService).renew(any, any)(any)
-        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, lang))
+        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, messages))
       }
     }
 
@@ -423,7 +424,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         there was one(env.authenticatorService).touch(any)
         there was one(env.authenticatorService).discard(any, any)(any)
         there was no(env.authenticatorService).update(any, any)(any)
-        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, lang))
+        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, messages))
       }
     }
 
@@ -443,7 +444,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         status(result) must equalTo(OK)
         there was one(env.authenticatorService).create(any)(any)
         there was one(env.authenticatorService).discard(any, any)(any)
-        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, lang))
+        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, request, messages))
       }
     }
 
@@ -466,7 +467,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         contentAsString(result) must /("result" -> "full.access")
         there was one(env.authenticatorService).touch(any)
         there was one(env.authenticatorService).update(any, any)(any)
-        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, req, lang))
+        theProbe.expectMsg(500 millis, AuthenticatedEvent(identity, req, messages))
       }
     }
   }
@@ -781,16 +782,6 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     self: WithApplication =>
 
     /**
-     * The Silhouette environment.
-     */
-    lazy val env = Environment[FakeIdentity, FakeAuthenticator](
-      mock[IdentityService[FakeIdentity]],
-      mock[AuthenticatorService[FakeAuthenticator]],
-      Seq(),
-      new EventBus
-    )
-
-    /**
      * An identity.
      */
     lazy val identity = new FakeIdentity(LoginInfo("test", "1"))
@@ -806,9 +797,14 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     lazy implicit val request = FakeRequest()
 
     /**
-     * A language.
+     * The messages API.
      */
-    lazy val lang = Lang.defaultLang
+    lazy implicit val messagesApi = app.injector.instanceOf[MessagesApi]
+
+    /**
+     * The messages for the current language.
+     */
+    lazy implicit val messages = Messages(Lang.defaultLang, messagesApi)
 
     /**
      * The Play actor system.
@@ -819,6 +815,17 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      * The test probe.
      */
     lazy val theProbe = TestProbe()
+
+    /**
+     * The Silhouette environment.
+     */
+    lazy val env = Environment[FakeIdentity, FakeAuthenticator](
+      mock[IdentityService[FakeIdentity]],
+      mock[AuthenticatorService[FakeAuthenticator]],
+      Seq(),
+      new EventBus,
+      messagesApi
+    )
 
     /**
      * Executes a block after event bus initialization, so that the event can be handled inside the given block.
@@ -874,7 +881,8 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         basicAuthRequestProvider,
         nonRequestProvider
       ),
-      new EventBus
+      new EventBus,
+      messagesApi
     )
   }
 
@@ -887,10 +895,10 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      * Called when a user isn't authenticated.
      *
      * @param request The request header.
-     * @param lang The current selected lang.
+     * @param messages The messages for the current language.
      * @return The result to send to the client.
      */
-    override def onNotAuthenticated(request: RequestHeader, lang: Lang) = {
+    override def onNotAuthenticated(request: RequestHeader, messages: Messages) = {
       Some(Future.successful(Unauthorized("global.not.authenticated")))
     }
 
@@ -898,10 +906,10 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      * Called when a user isn't authorized.
      *
      * @param request The request header.
-     * @param lang The current selected lang.
+     * @param messages The messages for the current language.
      * @return The result to send to the client.
      */
-    override def onNotAuthorized(request: RequestHeader, lang: Lang) = {
+    override def onNotAuthorized(request: RequestHeader, messages: Messages) = {
       Some(Future.successful(Forbidden("global.not.authorized")))
     }
 
@@ -1049,9 +1057,11 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      *
      * @param identity The identity to check for.
      * @param request The current request header.
-     * @param lang The current lang.
+     * @param messages The messages for the current language.
      * @return True if the user is authorized, false otherwise.
      */
-    def isAuthorized(identity: FakeIdentity)(implicit request: RequestHeader, lang: Lang): Boolean = isAuthorized
+    def isAuthorized(identity: FakeIdentity)(implicit request: RequestHeader, messages: Messages): Future[Boolean] = {
+      Future.successful(isAuthorized)
+    }
   }
 }

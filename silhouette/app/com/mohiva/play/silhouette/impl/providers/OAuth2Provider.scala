@@ -23,7 +23,6 @@ import java.net.URLEncoder._
 
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.services.AuthInfo
 import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
@@ -111,7 +110,7 @@ abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
       case Some(throwable) => Future.failed(throwable)
       case None => request.extractString(Code) match {
         // We're being redirected back from the authorization server with the access code
-        case Some(code) => stateProvider.validate(id).flatMap { state =>
+        case Some(code) => stateProvider.validate.flatMap { state =>
           getAccessToken(code).map(oauth2Info => Right(oauth2Info))
         }
         // There's no code in the request, this is the first step in the OAuth flow
@@ -249,12 +248,11 @@ trait OAuth2StateProvider {
   /**
    * Validates the provider and the client state.
    *
-   * @param id The provider ID.
    * @param request The current request.
    * @tparam B The type of the request body.
    * @return The state on success, otherwise an failure.
    */
-  def validate[B](id: String)(implicit request: ExtractableRequest[B]): Future[State]
+  def validate[B](implicit request: ExtractableRequest[B]): Future[State]
 
   /**
    * Publishes the state to the client.

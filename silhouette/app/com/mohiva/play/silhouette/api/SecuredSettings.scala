@@ -16,7 +16,7 @@
 package com.mohiva.play.silhouette.api
 
 import play.api.GlobalSettings
-import play.api.i18n.Lang
+import play.api.i18n.Messages
 import play.api.mvc.{ RequestHeader, Result }
 
 import scala.concurrent.Future
@@ -34,10 +34,10 @@ trait SecuredSettings {
    * As defined by RFC 2616, the status code of the response should be 401 Unauthorized.
    *
    * @param request The request header.
-   * @param lang The currently selected language.
+   * @param messages The messages for the current language.
    * @return The result to send to the client.
    */
-  def onNotAuthenticated(request: RequestHeader, lang: Lang): Option[Future[Result]] = None
+  def onNotAuthenticated(request: RequestHeader, messages: Messages): Option[Future[Result]] = None
 
   /**
    * Called when a user is authenticated but not authorized.
@@ -45,8 +45,8 @@ trait SecuredSettings {
    * As defined by RFC 2616, the status code of the response should be 403 Forbidden.
    *
    * @param request The request header.
-   * @param lang The currently selected language.
+   * @param messages The messages for the current language.
    * @return The result to send to the client.
    */
-  def onNotAuthorized(request: RequestHeader, lang: Lang): Option[Future[Result]] = None
+  def onNotAuthorized(request: RequestHeader, messages: Messages): Option[Future[Result]] = None
 }

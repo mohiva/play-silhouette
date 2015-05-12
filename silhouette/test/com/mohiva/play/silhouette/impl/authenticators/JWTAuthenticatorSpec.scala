@@ -21,6 +21,7 @@ import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.util.{ Base64, Clock, IDGenerator }
+import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator._
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import org.joda.time.DateTime
@@ -30,7 +31,7 @@ import org.specs2.specification.Scope
 import play.api.libs.Crypto
 import play.api.libs.json.{ JsNull, Json }
 import play.api.mvc.Results
-import play.api.test.{ WithApplication, FakeRequest, PlaySpecification }
+import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
 import scala.concurrent.Future
 
@@ -58,44 +59,45 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
     }
   }
 
-  "The `serialize` method of the service" should {
+  "The `serialize` method of the authenticator" should {
     "return a JWT with an expiration time" in new WithApplication with Context {
-      val jwt = service(None).serialize(authenticator)
+      val jwt = serialize(authenticator)(settings)
       val json = Base64.decode(jwt.split('.').apply(1))
 
-      json must /("exp" -> authenticator.expirationDate.getMillis / 1000)
+      json must /("exp" -> (authenticator.expirationDate.getMillis / 1000).toInt)
     }
 
     "return a JWT with an encrypted subject" in new WithApplication with Context {
       settings.encryptSubject returns true
 
-      val jwt = service(None).serialize(authenticator)
-      val json = Base64.decode(jwt.split('.').apply(1))
+      val jwt = serialize(authenticator)(settings)
+      val json = Json.parse(Base64.decode(jwt.split('.').apply(1)))
+      val sub = Json.parse(Crypto.decryptAES((json \ "sub").as[String])).as[LoginInfo]
 
-      json must /("sub" -> Crypto.encryptAES(Json.toJson(authenticator.loginInfo).toString()))
+      sub must be equalTo authenticator.loginInfo
     }
 
     "return a JWT with an unencrypted subject" in new WithApplication with Context {
       settings.encryptSubject returns false
 
-      val jwt = service(None).serialize(authenticator)
+      val jwt = serialize(authenticator)(settings)
       val json = Base64.decode(jwt.split('.').apply(1))
 
       json must /("sub" -> Base64.encode(Json.toJson(authenticator.loginInfo)))
     }
 
     "return a JWT with an issuer" in new WithApplication with Context {
-      val jwt = service(None).serialize(authenticator)
+      val jwt = serialize(authenticator)(settings)
       val json = Base64.decode(jwt.split('.').apply(1))
 
       json must /("iss" -> settings.issuerClaim)
     }
 
     "return a JWT with an issued-at time" in new WithApplication with Context {
-      val jwt = service(None).serialize(authenticator)
+      val jwt = serialize(authenticator)(settings)
       val json = Base64.decode(jwt.split('.').apply(1))
 
-      json must /("iat" -> authenticator.lastUsedDate.getMillis / 1000)
+      json must /("iat" -> (authenticator.lastUsedDate.getMillis / 1000).toInt)
     }
 
     "throw an AuthenticatorException if a reserved claim will be overriden" in new WithApplication with Context {
@@ -103,7 +105,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
         "jti" -> "reserved"
       )
 
-      service(None).serialize(authenticator.copy(customClaims = Some(claims))) must throwA[AuthenticatorException].like {
+      serialize(authenticator.copy(customClaims = Some(claims)))(settings) must throwA[AuthenticatorException].like {
         case e => e.getMessage must startWith(OverrideReservedClaim.format(ID, "jti", ""))
       }
     }
@@ -113,13 +115,13 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
         "null" -> JsNull
       )
 
-      service(None).serialize(authenticator.copy(customClaims = Some(claims))) must throwA[AuthenticatorException].like {
+      serialize(authenticator.copy(customClaims = Some(claims)))(settings) must throwA[AuthenticatorException].like {
         case e => e.getMessage must startWith(UnexpectedJsonValue.format(ID, ""))
       }
     }
 
     "return a JWT with arbitrary claims" in new WithApplication with Context {
-      val jwt = service(None).serialize(authenticator.copy(customClaims = Some(customClaims)))
+      val jwt = serialize(authenticator.copy(customClaims = Some(customClaims)))(settings)
       val json = Base64.decode(jwt.split('.').apply(1))
 
       json must /("boolean" -> true)
@@ -135,38 +137,38 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
     }
   }
 
-  "The `unserialize` method of the service" should {
+  "The `unserialize` method of the authenticator" should {
     "throw an AuthenticatorException if the given token can't be parsed" in new WithApplication with Context {
       val jwt = "invalid"
       val msg = Pattern.quote(InvalidJWTToken.format(ID, jwt))
 
-      service(None).unserialize(jwt) must beFailedTry.withThrowable[AuthenticatorException](msg)
+      unserialize(jwt)(settings) must beFailedTry.withThrowable[AuthenticatorException](msg)
     }
 
     "throw an AuthenticatorException if the given token couldn't be verified" in new WithApplication with Context {
-      val jwt = service(None).serialize(authenticator) + "-wrong-sig"
+      val jwt = serialize(authenticator)(settings) + "-wrong-sig"
       val msg = Pattern.quote(InvalidJWTToken.format(ID, jwt))
 
-      service(None).unserialize(jwt) must beFailedTry.withThrowable[AuthenticatorException](msg)
+      unserialize(jwt)(settings) must beFailedTry.withThrowable[AuthenticatorException](msg)
     }
 
     "throw an AuthenticatorException if encrypted token gets serialized unencrypted" in new WithApplication with Context {
       settings.encryptSubject returns true
 
-      val jwt = service(None).serialize(authenticator)
+      val jwt = serialize(authenticator)(settings)
       val msg = Pattern.quote(InvalidJWTToken.format(ID, jwt))
 
       settings.encryptSubject returns false
 
-      service(None).unserialize(jwt) must beFailedTry.withThrowable[AuthenticatorException](msg)
+      unserialize(jwt)(settings) must beFailedTry.withThrowable[AuthenticatorException](msg)
     }
 
     "unserialize a JWT with an encrypted subject" in new WithApplication with Context {
       settings.encryptSubject returns true
 
-      val jwt = service(None).serialize(authenticator)
+      val jwt = serialize(authenticator)(settings)
 
-      service(None).unserialize(jwt) must beSuccessfulTry.withValue(authenticator.copy(
+      unserialize(jwt)(settings) must beSuccessfulTry.withValue(authenticator.copy(
         expirationDate = authenticator.expirationDate.withMillisOfSecond(0),
         lastUsedDate = authenticator.lastUsedDate.withMillisOfSecond(0)
       ))
@@ -175,9 +177,9 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
     "unserialize a JWT with an encrypted subject" in new WithApplication with Context {
       settings.encryptSubject returns false
 
-      val jwt = service(None).serialize(authenticator)
+      val jwt = serialize(authenticator)(settings)
 
-      service(None).unserialize(jwt) must beSuccessfulTry.withValue(authenticator.copy(
+      unserialize(jwt)(settings) must beSuccessfulTry.withValue(authenticator.copy(
         expirationDate = authenticator.expirationDate.withMillisOfSecond(0),
         lastUsedDate = authenticator.lastUsedDate.withMillisOfSecond(0)
       ))
@@ -186,9 +188,9 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
     "unserialize a JWT with arbitrary claims" in new WithApplication with Context {
       settings.encryptSubject returns false
 
-      val jwt = service(None).serialize(authenticator.copy(customClaims = Some(customClaims)))
+      val jwt = serialize(authenticator.copy(customClaims = Some(customClaims)))(settings)
 
-      service(None).unserialize(jwt) must beSuccessfulTry.like {
+      unserialize(jwt)(settings) must beSuccessfulTry.like {
         case a =>
           a.customClaims must beSome(customClaims)
       }
@@ -266,7 +268,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
     }
 
     "return authenticator if DAO is enabled and an authenticator is stored for the header" in new WithApplication with Context {
-      implicit val request = FakeRequest().withHeaders(settings.headerName -> service(None).serialize(authenticator))
+      implicit val request = FakeRequest().withHeaders(settings.headerName -> serialize(authenticator)(settings))
 
       dao.find(authenticator.id) returns Future.successful(Some(authenticator.copy(
         expirationDate = authenticator.expirationDate.withMillisOfSecond(0),
@@ -280,7 +282,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
     }
 
     "return authenticator if DAO is disabled and authenticator was found in the header" in new WithApplication with Context {
-      implicit val request = FakeRequest().withHeaders(settings.headerName -> service(None).serialize(authenticator))
+      implicit val request = FakeRequest().withHeaders(settings.headerName -> serialize(authenticator)(settings))
 
       await(service(None).retrieve) must beSome(authenticator.copy(
         expirationDate = authenticator.expirationDate.withMillisOfSecond(0),
@@ -290,7 +292,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
     }
 
     "throws an AuthenticatorRetrievalException exception if an error occurred during retrieval" in new WithApplication with Context {
-      implicit val request = FakeRequest().withHeaders(settings.headerName -> service(None).serialize(authenticator))
+      implicit val request = FakeRequest().withHeaders(settings.headerName -> serialize(authenticator)(settings))
 
       dao.find(authenticator.id) returns Future.failed(new RuntimeException("Cannot find authenticator"))
 
@@ -303,13 +305,13 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
 
   "The `init` method of the service" should {
     "return the token if DAO is enabled and authenticator could be saved in backing store" in new WithApplication with Context {
-      dao.save(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
+      dao.add(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
       implicit val request = FakeRequest()
 
       val token = await(service(Some(dao)).init(authenticator))
 
-      token must be equalTo service(None).serialize(authenticator)
-      there was one(dao).save(any)
+      unserialize(token)(settings).get must be equalTo authenticator
+      there was one(dao).add(any)
     }
 
     "return the token if DAO is disabled" in new WithApplication with Context {
@@ -317,12 +319,12 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
 
       val token = await(service(None).init(authenticator))
 
-      token must be equalTo service(None).serialize(authenticator)
-      there was no(dao).save(any)
+      unserialize(token)(settings).get must be equalTo authenticator
+      there was no(dao).add(any)
     }
 
     "throws an AuthenticatorInitializationException exception if an error occurred during initialization" in new Context {
-      dao.save(any) returns Future.failed(new Exception("Cannot store authenticator"))
+      dao.add(any) returns Future.failed(new Exception("Cannot store authenticator"))
 
       implicit val request = FakeRequest()
       val okResult = Future.successful(Results.Ok)
@@ -336,9 +338,8 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
 
   "The result `embed` method of the service" should {
     "return the response with a header" in new WithApplication with Context {
-      dao.save(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
       implicit val request = FakeRequest()
-      val token = service(None).serialize(authenticator)
+      val token = serialize(authenticator)(settings)
 
       val result = service(Some(dao)).embed(token, Results.Ok)
 
@@ -348,30 +349,24 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
 
   "The request `embed` method of the service" should {
     "return the request with a header " in new WithApplication with Context {
-      dao.save(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
-
-      val token = service(None).serialize(authenticator)
+      val token = serialize(authenticator)(settings)
       val request = service(Some(dao)).embed(token, FakeRequest())
 
-      request.headers.get(settings.headerName) should beSome(service(None).serialize(authenticator))
+      unserialize(request.headers.get(settings.headerName).get)(settings).get must be equalTo authenticator
     }
 
     "override an existing token" in new WithApplication with Context {
-      dao.save(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
-
-      val token = service(None).serialize(authenticator)
+      val token = serialize(authenticator)(settings)
       val request = service(Some(dao)).embed(token, FakeRequest().withHeaders(settings.headerName -> "test"))
 
-      request.headers.get(settings.headerName) should beSome(service(None).serialize(authenticator))
+      unserialize(request.headers.get(settings.headerName).get)(settings).get must be equalTo authenticator
     }
 
     "keep non authenticator related headers" in new WithApplication with Context {
-      dao.save(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
-
-      val token = service(None).serialize(authenticator)
+      val token = serialize(authenticator)(settings)
       val request = service(Some(dao)).embed(token, FakeRequest().withHeaders("test" -> "test"))
 
-      request.headers.get(settings.headerName) should beSome(service(None).serialize(authenticator))
+      unserialize(request.headers.get(settings.headerName).get)(settings).get must be equalTo authenticator
       request.headers.get("test") should beSome("test")
     }
   }
@@ -400,39 +395,39 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
 
   "The `update` method of the service" should {
     "update the authenticator in backing store" in new WithApplication with Context {
-      dao.save(any) returns Future.successful(authenticator)
+      dao.update(any) returns Future.successful(authenticator)
 
       implicit val request = FakeRequest()
 
       await(service(Some(dao)).update(authenticator, Results.Ok))
 
-      there was one(dao).save(authenticator)
+      there was one(dao).update(authenticator)
     }
 
     "return the result if the authenticator could be stored in backing store" in new WithApplication with Context {
-      dao.save(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
+      dao.update(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
 
       implicit val request = FakeRequest()
       val result = service(Some(dao)).update(authenticator, Results.Ok)
 
       status(result) must be equalTo OK
-      header(settings.headerName, result) should beSome(service(None).serialize(authenticator))
-      there was one(dao).save(authenticator)
+      unserialize(header(settings.headerName, result).get)(settings).get must be equalTo authenticator
+      there was one(dao).update(authenticator)
     }
 
     "return the result if backing store is disabled" in new WithApplication with Context {
-      dao.save(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
+      dao.update(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
 
       implicit val request = FakeRequest()
       val result = service(None).update(authenticator, Results.Ok)
 
       status(result) must be equalTo OK
-      header(settings.headerName, result) should beSome(service(None).serialize(authenticator))
-      there was no(dao).save(any)
+      unserialize(header(settings.headerName, result).get)(settings).get must be equalTo authenticator
+      there was no(dao).update(any)
     }
 
     "throws an AuthenticatorUpdateException exception if an error occurred during update" in new WithApplication with Context {
-      dao.save(any) returns Future.failed(new Exception("Cannot store authenticator"))
+      dao.update(any) returns Future.failed(new Exception("Cannot store authenticator"))
 
       implicit val request = FakeRequest()
 
@@ -446,27 +441,29 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
   "The `renew` method of the service" should {
     "renew the authenticator and return the response with a new JWT if DAO is enabled" in new WithApplication with Context {
       implicit val request = FakeRequest()
-      val now = new DateTime
+      val now = new DateTime(2015, 2, 25, 19, 0, 0, 0)
       val id = "new-test-id"
 
       dao.remove(any) returns Future.successful(())
-      dao.save(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
+      dao.add(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
       val result = service(Some(dao)).renew(authenticator, Results.Ok)
 
-      header(settings.headerName, result) should beSome(service(None).serialize(authenticator.copy(
+      unserialize(header(settings.headerName, result).get)(settings).get must be equalTo authenticator.copy(
         id = id,
         expirationDate = clock.now.plusSeconds(settings.authenticatorExpiry),
         lastUsedDate = clock.now
-      )))
+      )
+
+      there was one(dao).add(any)
       there was one(dao).remove(authenticator.id)
     }
 
     "renew the authenticator and return the response with a new JWT if DAO is disabled" in new WithApplication with Context {
       implicit val request = FakeRequest()
-      val now = new DateTime
+      val now = new DateTime(2015, 2, 25, 19, 0, 0, 0)
       val id = "new-test-id"
 
       idGenerator.generate returns Future.successful(id)
@@ -474,13 +471,13 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
 
       val result = service(None).renew(authenticator, Results.Ok)
 
-      header(settings.headerName, result) should beSome(service(None).serialize(authenticator.copy(
+      unserialize(header(settings.headerName, result).get)(settings).get must be equalTo authenticator.copy(
         id = id,
         expirationDate = clock.now.plusSeconds(settings.authenticatorExpiry),
         lastUsedDate = clock.now
-      )))
+      )
       there was no(dao).remove(any)
-      there was no(dao).save(any)
+      there was no(dao).add(any)
     }
 
     "throws an AuthenticatorRenewalException exception if an error occurred during renewal" in new Context {
@@ -489,7 +486,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       val id = "new-test-id"
 
       dao.remove(any) returns Future.successful(())
-      dao.save(any) returns Future.failed(new Exception("Cannot store authenticator"))
+      dao.add(any) returns Future.failed(new Exception("Cannot store authenticator"))
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
@@ -581,8 +578,8 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
     lazy val authenticator = new JWTAuthenticator(
       id = "test-id",
       loginInfo = LoginInfo("test", "1"),
-      lastUsedDate = DateTime.now,
-      expirationDate = DateTime.now.plusMinutes(12 * 60),
+      lastUsedDate = new DateTime(2015, 2, 25, 19, 0, 0, 0),
+      expirationDate = new DateTime(2015, 2, 25, 19, 0, 0, 0).plusMinutes(12 * 60),
       idleTimeout = settings.authenticatorIdleTimeout
     )
 

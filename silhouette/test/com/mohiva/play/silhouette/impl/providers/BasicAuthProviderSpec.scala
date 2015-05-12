@@ -17,7 +17,7 @@ package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.services.AuthInfoService
+import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.{ Base64, Credentials, PasswordHasher, PasswordInfo }
 import com.mohiva.play.silhouette.impl.exceptions.{ InvalidPasswordException, IdentityNotFoundException }
 import com.mohiva.play.silhouette.impl.providers.BasicAuthProvider._
@@ -37,7 +37,7 @@ class BasicAuthProviderSpec extends PlaySpecification with Mockito {
       val loginInfo = new LoginInfo(provider.id, credentials.identifier)
       val request = FakeRequest().withHeaders(AUTHORIZATION -> encodeCredentials(credentials))
 
-      authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(None)
+      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(None)
 
       await(provider.authenticate(request)) must throwA[IdentityNotFoundException].like {
         case e => e.getMessage must beEqualTo(UnknownCredentials.format(provider.id))
@@ -50,7 +50,7 @@ class BasicAuthProviderSpec extends PlaySpecification with Mockito {
       val request = FakeRequest().withHeaders(AUTHORIZATION -> encodeCredentials(credentials))
 
       fooHasher.matches(passwordInfo, credentials.password) returns false
-      authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
+      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
       await(provider.authenticate(request)) must throwA[InvalidPasswordException].like {
         case e => e.getMessage must beEqualTo(InvalidPassword.format(provider.id))
@@ -62,7 +62,7 @@ class BasicAuthProviderSpec extends PlaySpecification with Mockito {
       val loginInfo = LoginInfo(provider.id, credentials.identifier)
       val request = FakeRequest().withHeaders(AUTHORIZATION -> encodeCredentials(credentials))
 
-      authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
+      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
       await(provider.authenticate(request)) must throwA[ConfigurationException].like {
         case e => e.getMessage must beEqualTo(UnsupportedHasher.format(provider.id, "unknown", "foo, bar"))
@@ -85,7 +85,7 @@ class BasicAuthProviderSpec extends PlaySpecification with Mockito {
       val request = FakeRequest().withHeaders(AUTHORIZATION -> encodeCredentials(credentials))
 
       fooHasher.matches(passwordInfo, credentials.password) returns true
-      authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
+      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
       await(provider.authenticate(request)) must beSome(loginInfo)
     }
@@ -97,10 +97,16 @@ class BasicAuthProviderSpec extends PlaySpecification with Mockito {
 
       fooHasher.hash(credentials.password) returns passwordInfo
       barHasher.matches(passwordInfo, credentials.password) returns true
-      authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
+      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
       await(provider.authenticate(request)) must beSome(loginInfo)
-      there was one(authInfoService).save(loginInfo, passwordInfo)
+      there was one(authInfoRepository).update(loginInfo, passwordInfo)
+    }
+
+    "return None if Authorization method is not Basic and Base64 decoded header has ':'" in new WithApplication with Context {
+      val request = FakeRequest().withHeaders(AUTHORIZATION -> Base64.encode("NotBasic foo:bar"))
+
+      await(provider.authenticate(request)) must beNone
     }
   }
 
@@ -133,14 +139,14 @@ class BasicAuthProviderSpec extends PlaySpecification with Mockito {
     }
 
     /**
-     * The auth info service mock.
+     * The auth info repository mock.
      */
-    lazy val authInfoService = mock[AuthInfoService]
+    lazy val authInfoRepository = mock[AuthInfoRepository]
 
     /**
      * The provider to test.
      */
-    lazy val provider = new BasicAuthProvider(authInfoService, fooHasher, List(fooHasher, barHasher))
+    lazy val provider = new BasicAuthProvider(authInfoRepository, fooHasher, List(fooHasher, barHasher))
 
     /**
      * Creates the credentials to send within the header.
