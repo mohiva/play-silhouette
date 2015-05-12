@@ -43,7 +43,6 @@ abstract class  WeiboProvider (httpLayer: HTTPLayer, stateProvider: OAuth2StateP
   protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
     httpLayer.url(urls("api").format(authInfo.params.get.get("uid").get.stripPrefix("\"").stripSuffix("\""), authInfo.accessToken)).get().flatMap { response =>
     val json = response.json
-      logger.debug("yuzhou " + json.toString())
       (json \ "error").asOpt[JsObject] match {
         case Some(errorMsg) =>
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, errorMsg))
@@ -64,7 +63,7 @@ abstract class  WeiboProvider (httpLayer: HTTPLayer, stateProvider: OAuth2StateP
     response.json.validate[OAuth2Info].asEither.fold(
       error => Failure(new UnexpectedResponseException(InvalidInfoFormat.format(id, error))),
       info => {
-        val params = Some(Map[String, String]("uid" -> response.json.\("uid").toString().toString))
+        val params = Some(Map[String, String]("uid" -> response.json.\("uid").toString))
         Success(info.copy(params = params))
       }
     )
