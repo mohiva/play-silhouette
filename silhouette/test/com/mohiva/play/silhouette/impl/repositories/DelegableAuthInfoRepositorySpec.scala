@@ -26,6 +26,7 @@ import net.codingwell.scalaguice.ScalaModule
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.test.PlaySpecification
+import play.api.libs.concurrent.Execution.Implicits._
 
 import scala.collection.mutable
 import scala.concurrent.Future
@@ -131,6 +132,37 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
 
       await(service.update(loginInfo, new UnsupportedInfo)) must throwA[Exception].like {
         case e => e.getMessage must startWith(UpdateError.format(""))
+      }
+    }
+  }
+
+  "The `save` method" should {
+    "delegate the PasswordInfo to the correct DAO" in new Context {
+      val loginInfo = LoginInfo("credentials", "1")
+
+      await(service.save(loginInfo, passwordInfo)) must be equalTo passwordInfo
+      there was one(passwordInfoDAO).save(loginInfo, passwordInfo)
+    }
+
+    "delegate the OAuth1Info to the correct DAO" in new Context {
+      val loginInfo = LoginInfo("credentials", "1")
+
+      await(service.save(loginInfo, oauth1Info)) must be equalTo oauth1Info
+      there was one(oauth1InfoDAO).save(loginInfo, oauth1Info)
+    }
+
+    "delegate the OAuth2Info to the correct DAO" in new Context {
+      val loginInfo = LoginInfo("credentials", "1")
+
+      await(service.save(loginInfo, oauth2Info)) must be equalTo oauth2Info
+      there was one(oauth2InfoDAO).save(loginInfo, oauth2Info)
+    }
+
+    "throw an Exception if an unsupported type was given" in new Context {
+      val loginInfo = LoginInfo("credentials", "1")
+
+      await(service.save(loginInfo, new UnsupportedInfo)) must throwA[Exception].like {
+        case e => e.getMessage must startWith(SaveError.format(""))
       }
     }
   }
@@ -274,7 +306,7 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
        * @return The retrieved OAuth1 info or None if no OAuth1 info could be retrieved for the given login info.
        */
       def find(loginInfo: LoginInfo): Future[Option[T]] = {
-        Future.successful(Option(data.apply(loginInfo)))
+        Future.successful(data.get(loginInfo))
       }
 
       /**
@@ -299,6 +331,23 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
       def update(loginInfo: LoginInfo, authInfo: T): Future[T] = {
         data += (loginInfo -> authInfo)
         Future.successful(authInfo)
+      }
+
+      /**
+       * Saves the auth info for the given login info.
+       *
+       * This method either adds the auth info if it doesn't exists or it updates the auth info
+       * if it already exists.
+       *
+       * @param loginInfo The login info for which the auth info should be saved.
+       * @param authInfo The auth info to save.
+       * @return The saved auth info.
+       */
+      def save(loginInfo: LoginInfo, authInfo: T): Future[T] = {
+        find(loginInfo).flatMap {
+          case Some(_) => update(loginInfo, authInfo)
+          case None => add(loginInfo, authInfo)
+        }
       }
 
       /**

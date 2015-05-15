@@ -84,6 +84,23 @@ class DelegableAuthInfoRepository(daos: DelegableAuthInfoDAO[_]*) extends AuthIn
   }
 
   /**
+   * Updates the auth info for the given login info.
+   *
+   * This method either adds the auth info if it doesn't exists or it updates the auth info if it already exists.
+   *
+   * @param loginInfo The login info for which the auth info should be saved.
+   * @param authInfo The auth info to save.
+   * @tparam T The type of the auth info to handle.
+   * @return The updated auth info.
+   */
+  def save[T <: AuthInfo](loginInfo: LoginInfo, authInfo: T): Future[T] = {
+    daos.find(_.classTag.runtimeClass == authInfo.getClass) match {
+      case Some(dao) => dao.asInstanceOf[AuthInfoDAO[T]].save(loginInfo, authInfo)
+      case _ => throw new Exception(SaveError.format(authInfo.getClass))
+    }
+  }
+
+  /**
    * Removes the auth info for the given login info.
    *
    * @param loginInfo The login info for which the auth info should be removed.
@@ -110,5 +127,6 @@ object DelegableAuthInfoRepository {
   val AddError = "Cannot add auth info of type: %s"
   val FindError = "Cannot find auth info of type: %s"
   val UpdateError = "Cannot update auth info of type: %s"
+  val SaveError = "Cannot save auth info of type: %s"
   val RemoveError = "Cannot remove auth info of type: %s"
 }

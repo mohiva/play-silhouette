@@ -60,6 +60,19 @@ trait AuthInfoRepository {
   def update[T <: AuthInfo](loginInfo: LoginInfo, authInfo: T): Future[T]
 
   /**
+   * Saves the auth info for the given login info.
+   *
+   * This method either adds the auth info if it doesn't exists or it updates the auth info
+   * if it already exists.
+   *
+   * @param loginInfo The login info for which the auth info should be saved.
+   * @param authInfo The auth info to save.
+   * @tparam T The type of the auth info to handle.
+   * @return The updated auth info.
+   */
+  def save[T <: AuthInfo](loginInfo: LoginInfo, authInfo: T): Future[T]
+
+  /**
    * Removes the auth info for the given login info.
    *
    * @param loginInfo The login info for which the auth info should be removed.
