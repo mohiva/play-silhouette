@@ -53,6 +53,18 @@ trait AuthInfoDAO[T <: AuthInfo] {
   def update(loginInfo: LoginInfo, authInfo: T): Future[T]
 
   /**
+   * Saves the auth info for the given login info.
+   *
+   * This method either adds the auth info if it doesn't exists or it updates the auth info
+   * if it already exists.
+   *
+   * @param loginInfo The login info for which the auth info should be saved.
+   * @param authInfo The auth info to save.
+   * @return The saved auth info.
+   */
+  def save(loginInfo: LoginInfo, authInfo: T): Future[T]
+
+  /**
    * Removes the auth info for the given login info.
    *
    * @param loginInfo The login info for which the auth info should be removed.
