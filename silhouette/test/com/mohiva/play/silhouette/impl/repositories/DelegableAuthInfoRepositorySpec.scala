@@ -295,15 +295,15 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
     abstract class InMemoryAuthInfoDAO[T <: AuthInfo: ClassTag] extends DelegableAuthInfoDAO[T] {
 
       /**
-       * The data store for the OAuth1 info.
+       * The data store for the auth info.
        */
       var data: mutable.HashMap[LoginInfo, T] = mutable.HashMap()
 
       /**
-       * Finds the OAuth1 info which is linked with the specified login info.
+       * Finds the auth info which is linked with the specified login info.
        *
        * @param loginInfo The linked login info.
-       * @return The retrieved OAuth1 info or None if no OAuth1 info could be retrieved for the given login info.
+       * @return The retrieved auth info or None if no auth info could be retrieved for the given login info.
        */
       def find(loginInfo: LoginInfo): Future[Option[T]] = {
         Future.successful(data.get(loginInfo))
