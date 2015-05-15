@@ -19,6 +19,7 @@ import org.specs2.specification.Scope
 import play.api.GlobalSettings
 import play.api.i18n.{ Lang, Messages, MessagesApi }
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.api.SecuredSettings]] trait.

@@ -25,12 +25,12 @@ import com.mohiva.play.silhouette.impl.exceptions.{ UnexpectedResponseException,
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.VKProvider._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.ws.WSResponse
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 import scala.util.{ Success, Failure, Try }
 
 /**
@@ -68,7 +68,7 @@ abstract class VKProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvid
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+  protected def buildProfile(authInfo: OAuth2Info)(implicit ec: ExecutionContext): Future[Profile] = {
     httpLayer.url(urls("api").format(authInfo.accessToken)).get().flatMap { response =>
       val json = response.json
       (json \ "error").asOpt[JsObject] match {
@@ -109,7 +109,7 @@ class VKProfileParser extends SocialProfileParser[(JsValue, OAuth2Info), CommonS
    * @param data The data returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(data: (JsValue, OAuth2Info)) = Future.successful {
+  def parse(data: (JsValue, OAuth2Info))(implicit ec: ExecutionContext) = Future.successful {
     val json = data._1
     val response = (json \ "response").apply(0)
     val userId = (response \ "uid").as[Long]

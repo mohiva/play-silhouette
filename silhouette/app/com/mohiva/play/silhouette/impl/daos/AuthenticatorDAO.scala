@@ -18,6 +18,7 @@ package com.mohiva.play.silhouette.impl.daos
 import com.mohiva.play.silhouette.api.StorableAuthenticator
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * The DAO to persist the authenticator.
@@ -32,7 +33,7 @@ trait AuthenticatorDAO[T <: StorableAuthenticator] {
    * @param id The authenticator ID.
    * @return The found authenticator or None if no authenticator could be found for the given ID.
    */
-  def find(id: String): Future[Option[T]]
+  def find(id: String)(implicit ec: ExecutionContext): Future[Option[T]]
 
   /**
    * Adds a new authenticator.
@@ -40,7 +41,7 @@ trait AuthenticatorDAO[T <: StorableAuthenticator] {
    * @param authenticator The authenticator to add.
    * @return The added authenticator.
    */
-  def add(authenticator: T): Future[T]
+  def add(authenticator: T)(implicit ec: ExecutionContext): Future[T]
 
   /**
    * Updates an already existing authenticator.
@@ -48,7 +49,7 @@ trait AuthenticatorDAO[T <: StorableAuthenticator] {
    * @param authenticator The authenticator to update.
    * @return The updated authenticator.
    */
-  def update(authenticator: T): Future[T]
+  def update(authenticator: T)(implicit ec: ExecutionContext): Future[T]
 
   /**
    * Removes the authenticator for the given ID.
@@ -56,5 +57,5 @@ trait AuthenticatorDAO[T <: StorableAuthenticator] {
    * @param id The authenticator ID.
    * @return An empty future.
    */
-  def remove(id: String): Future[Unit]
+  def remove(id: String)(implicit ec: ExecutionContext): Future[Unit]
 }

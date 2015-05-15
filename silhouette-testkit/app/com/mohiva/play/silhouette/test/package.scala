@@ -16,10 +16,10 @@
 package com.mohiva.play.silhouette
 
 import com.mohiva.play.silhouette.api._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.test.{ FakeHeaders, FakeRequest }
 
 import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext
 import scala.concurrent.{ Await, Future }
 import scala.language.{ implicitConversions, postfixOps }
 
@@ -53,8 +53,8 @@ package object test {
      * @tparam T The type of the authenticator,
      * @return A fake request.
      */
-    def withAuthenticator[T <: Authenticator](authenticator: T)(implicit env: Environment[_, T]): FakeRequest[A] = {
-      val rh = env.authenticatorService.init(authenticator)(f).map(v => env.authenticatorService.embed(v, f))
+    def withAuthenticator[T <: Authenticator](authenticator: T)(implicit env: Environment[_, T], ec: ExecutionContext): FakeRequest[A] = {
+      val rh = env.authenticatorService.init(authenticator)(f, ec).map(v => env.authenticatorService.embed(v, f))
       new FakeRequest(
         id = rh.id,
         tags = rh.tags,
@@ -76,8 +76,8 @@ package object test {
      * @tparam T The type of the authenticator,
      * @return A fake request.
      */
-    def withAuthenticator[T <: Authenticator](loginInfo: LoginInfo)(implicit env: Environment[_, T]): FakeRequest[A] = {
-      withAuthenticator(FakeAuthenticator[T](loginInfo)(env, f))
+    def withAuthenticator[T <: Authenticator](loginInfo: LoginInfo)(implicit env: Environment[_, T], ec: ExecutionContext): FakeRequest[A] = {
+      withAuthenticator(FakeAuthenticator[T](loginInfo)(env, f, ec))
     }
   }
 }

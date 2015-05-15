@@ -25,10 +25,10 @@ import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.GitHubProvider._
 import play.api.http.HeaderNames
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.JsValue
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * A GitHub OAuth2 Provider.
@@ -73,7 +73,7 @@ abstract class GitHubProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+  protected def buildProfile(authInfo: OAuth2Info)(implicit ec: ExecutionContext): Future[Profile] = {
     httpLayer.url(urls("api").format(authInfo.accessToken)).get().flatMap { response =>
       val json = response.json
       (json \ "message").asOpt[String] match {
@@ -98,7 +98,7 @@ class GitHubProfileParser extends SocialProfileParser[JsValue, CommonSocialProfi
    * @param json The content returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(json: JsValue) = Future.successful {
+  def parse(json: JsValue)(implicit ec: ExecutionContext) = Future.successful {
     val userID = (json \ "id").as[Long]
     val fullName = (json \ "name").asOpt[String]
     val avatarUrl = (json \ "avatar_url").asOpt[String]

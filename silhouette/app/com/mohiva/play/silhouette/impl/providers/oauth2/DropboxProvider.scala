@@ -21,10 +21,10 @@ import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.DropboxProvider._
 import play.api.http.HeaderNames._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.JsValue
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * A Dropbox OAuth2 Provider.
@@ -60,7 +60,7 @@ abstract class DropboxProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateP
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+  protected def buildProfile(authInfo: OAuth2Info)(implicit ec: ExecutionContext): Future[Profile] = {
     httpLayer.url(urls("api")).withHeaders(AUTHORIZATION -> s"Bearer ${authInfo.accessToken}").get().flatMap { response =>
       val json = response.json
       response.status match {
@@ -84,7 +84,7 @@ class DropboxProfileParser extends SocialProfileParser[JsValue, CommonSocialProf
    * @param json The content returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(json: JsValue) = Future.successful {
+  def parse(json: JsValue)(implicit ec: ExecutionContext) = Future.successful {
     val userID = (json \ "uid").as[Long]
     val firstName = (json \ "name_details" \ "given_name").asOpt[String]
     val lastName = (json \ "name_details" \ "surname").asOpt[String]

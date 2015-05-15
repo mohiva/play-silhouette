@@ -30,6 +30,8 @@ import play.api.test.PlaySpecification
 import scala.collection.mutable
 import scala.concurrent.Future
 import scala.reflect.ClassTag
+import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Test case for the [[DelegableAuthInfoRepository]] trait.
@@ -43,7 +45,7 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
       await(passwordInfoDAO.add(loginInfo, passwordInfo))
 
       await(service.find[PasswordInfo](loginInfo)) must beSome(passwordInfo)
-      there was one(passwordInfoDAO).find(loginInfo)
+      there was one(passwordInfoDAO).find(===(loginInfo))(any)
     }
 
     "delegate the OAuth1Info to the correct DAO" in new Context {
@@ -52,7 +54,7 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
       await(oauth1InfoDAO.add(loginInfo, oauth1Info))
 
       await(service.find[OAuth1Info](loginInfo)) must beSome(oauth1Info)
-      there was one(oauth1InfoDAO).find(loginInfo)
+      there was one(oauth1InfoDAO).find(===(loginInfo))(any)
     }
 
     "delegate the OAuth2Info to the correct DAO" in new Context {
@@ -61,7 +63,7 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
       await(oauth2InfoDAO.add(loginInfo, oauth2Info))
 
       await(service.find[OAuth2Info](loginInfo)) must beSome(oauth2Info)
-      there was one(oauth2InfoDAO).find(loginInfo)
+      there was one(oauth2InfoDAO).find(===(loginInfo))(any)
     }
 
     "throw an Exception if an unsupported type was given" in new Context {
@@ -78,21 +80,21 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
       val loginInfo = LoginInfo("credentials", "1")
 
       await(service.add(loginInfo, passwordInfo)) must be equalTo passwordInfo
-      there was one(passwordInfoDAO).add(loginInfo, passwordInfo)
+      there was one(passwordInfoDAO).add(===(loginInfo), ===(passwordInfo))(any)
     }
 
     "delegate the OAuth1Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
       await(service.add(loginInfo, oauth1Info)) must be equalTo oauth1Info
-      there was one(oauth1InfoDAO).add(loginInfo, oauth1Info)
+      there was one(oauth1InfoDAO).add(===(loginInfo), ===(oauth1Info))(any)
     }
 
     "delegate the OAuth2Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
       await(service.add(loginInfo, oauth2Info)) must be equalTo oauth2Info
-      there was one(oauth2InfoDAO).add(loginInfo, oauth2Info)
+      there was one(oauth2InfoDAO).add(===(loginInfo), ===(oauth2Info))(any)
     }
 
     "throw an Exception if an unsupported type was given" in new Context {
@@ -109,21 +111,21 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
       val loginInfo = LoginInfo("credentials", "1")
 
       await(service.update(loginInfo, passwordInfo)) must be equalTo passwordInfo
-      there was one(passwordInfoDAO).update(loginInfo, passwordInfo)
+      there was one(passwordInfoDAO).update(===(loginInfo), ===(passwordInfo))(any)
     }
 
     "delegate the OAuth1Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
       await(service.update(loginInfo, oauth1Info)) must be equalTo oauth1Info
-      there was one(oauth1InfoDAO).update(loginInfo, oauth1Info)
+      there was one(oauth1InfoDAO).update(===(loginInfo), ===(oauth1Info))(any)
     }
 
     "delegate the OAuth2Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
       await(service.update(loginInfo, oauth2Info)) must be equalTo oauth2Info
-      there was one(oauth2InfoDAO).update(loginInfo, oauth2Info)
+      there was one(oauth2InfoDAO).update(===(loginInfo), ===(oauth2Info))(any)
     }
 
     "throw an Exception if an unsupported type was given" in new Context {
@@ -142,7 +144,7 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
       await(passwordInfoDAO.add(loginInfo, passwordInfo))
 
       await(service.remove[PasswordInfo](loginInfo)) must be equalTo (())
-      there was one(passwordInfoDAO).remove(loginInfo)
+      there was one(passwordInfoDAO).remove(===(loginInfo))(any)
     }
 
     "delegate the OAuth1Info to the correct DAO" in new Context {
@@ -151,7 +153,7 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
       await(oauth1InfoDAO.add(loginInfo, oauth1Info))
 
       await(service.remove[OAuth1Info](loginInfo)) must be equalTo (())
-      there was one(oauth1InfoDAO).remove(loginInfo)
+      there was one(oauth1InfoDAO).remove(===(loginInfo))(any)
     }
 
     "delegate the OAuth2Info to the correct DAO" in new Context {
@@ -160,7 +162,7 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
       await(oauth2InfoDAO.add(loginInfo, oauth2Info))
 
       await(service.remove[OAuth2Info](loginInfo)) must be equalTo (())
-      there was one(oauth2InfoDAO).remove(loginInfo)
+      there was one(oauth2InfoDAO).remove(===(loginInfo))(any)
     }
 
     "throw an Exception if an unsupported type was given" in new Context {
@@ -273,7 +275,7 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
        * @param loginInfo The linked login info.
        * @return The retrieved OAuth1 info or None if no OAuth1 info could be retrieved for the given login info.
        */
-      def find(loginInfo: LoginInfo): Future[Option[T]] = {
+      def find(loginInfo: LoginInfo)(implicit ec: ExecutionContext): Future[Option[T]] = {
         Future.successful(Option(data.apply(loginInfo)))
       }
 
@@ -284,7 +286,7 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
        * @param authInfo The auth info to add.
        * @return The added auth info.
        */
-      def add(loginInfo: LoginInfo, authInfo: T): Future[T] = {
+      def add(loginInfo: LoginInfo, authInfo: T)(implicit ec: ExecutionContext): Future[T] = {
         data += (loginInfo -> authInfo)
         Future.successful(authInfo)
       }
@@ -296,7 +298,7 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
        * @param authInfo The auth info to update.
        * @return The updated auth info.
        */
-      def update(loginInfo: LoginInfo, authInfo: T): Future[T] = {
+      def update(loginInfo: LoginInfo, authInfo: T)(implicit ec: ExecutionContext): Future[T] = {
         data += (loginInfo -> authInfo)
         Future.successful(authInfo)
       }
@@ -307,7 +309,7 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
        * @param loginInfo The login info for which the auth info should be removed.
        * @return A future to wait for the process to be completed.
        */
-      def remove(loginInfo: LoginInfo): Future[Unit] = {
+      def remove(loginInfo: LoginInfo)(implicit ec: ExecutionContext): Future[Unit] = {
         data -= loginInfo
         Future.successful(())
       }

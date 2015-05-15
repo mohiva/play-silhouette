@@ -20,6 +20,7 @@
 package com.mohiva.play.silhouette.api.util
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * A generator which creates an ID.
@@ -34,5 +35,5 @@ trait IDGenerator {
    *
    * @return The generated ID.
    */
-  def generate: Future[String]
+  def generate(implicit ec: ExecutionContext): Future[String]
 }

@@ -22,6 +22,7 @@ import com.mohiva.play.silhouette.impl.authenticators._
 import org.specs2.matcher.JsonMatchers
 import play.api.libs.json.Json
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.test]] helpers.

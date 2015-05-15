@@ -25,9 +25,9 @@ import com.mohiva.play.silhouette.api.Logger
 import com.mohiva.play.silhouette.api.services.AvatarService
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.services.GravatarService._
-import play.api.libs.concurrent.Execution.Implicits._
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * Retrieves avatar URLs from the Gravatar service.
@@ -42,7 +42,7 @@ class GravatarService(httpLayer: HTTPLayer) extends AvatarService with Logger {
    * @param email The email address for the avatar.
    * @return Maybe an avatar URL or None if no avatar could be found for the given email address.
    */
-  def retrieveURL(email: String): Future[Option[String]] = {
+  def retrieveURL(email: String)(implicit ec: ExecutionContext): Future[Option[String]] = {
     hash(email) match {
       case Some(hash) =>
         val url = URL.format(hash)

@@ -18,6 +18,7 @@ package com.mohiva.play.silhouette.impl.daos
 import com.mohiva.play.silhouette.api.{ AuthInfo, LoginInfo }
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * The DAO to persist the auth info.
@@ -32,7 +33,7 @@ trait AuthInfoDAO[T <: AuthInfo] {
    * @param loginInfo The linked login info.
    * @return The found auth info or None if no auth info could be found for the given login info.
    */
-  def find(loginInfo: LoginInfo): Future[Option[T]]
+  def find(loginInfo: LoginInfo)(implicit ec: ExecutionContext): Future[Option[T]]
 
   /**
    * Adds new auth info for the given login info.
@@ -41,7 +42,7 @@ trait AuthInfoDAO[T <: AuthInfo] {
    * @param authInfo The auth info to add.
    * @return The added auth info.
    */
-  def add(loginInfo: LoginInfo, authInfo: T): Future[T]
+  def add(loginInfo: LoginInfo, authInfo: T)(implicit ec: ExecutionContext): Future[T]
 
   /**
    * Updates the auth info for the given login info.
@@ -50,7 +51,7 @@ trait AuthInfoDAO[T <: AuthInfo] {
    * @param authInfo The auth info to update.
    * @return The updated auth info.
    */
-  def update(loginInfo: LoginInfo, authInfo: T): Future[T]
+  def update(loginInfo: LoginInfo, authInfo: T)(implicit ec: ExecutionContext): Future[T]
 
   /**
    * Removes the auth info for the given login info.
@@ -58,5 +59,5 @@ trait AuthInfoDAO[T <: AuthInfo] {
    * @param loginInfo The login info for which the auth info should be removed.
    * @return A future to wait for the process to be completed.
    */
-  def remove(loginInfo: LoginInfo): Future[Unit]
+  def remove(loginInfo: LoginInfo)(implicit ec: ExecutionContext): Future[Unit]
 }

@@ -23,6 +23,7 @@ import play.api.test.PlaySpecification
 
 import scala.concurrent.Future
 import scala.concurrent.duration.Duration
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.daos.CacheAuthenticatorDAO]] class.

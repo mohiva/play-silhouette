@@ -22,6 +22,8 @@ import play.api.cache.CacheApi
 import play.api.test.PlaySpecification
 
 import scala.concurrent.duration.Duration
+import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.util.PlayCacheLayer]] class.

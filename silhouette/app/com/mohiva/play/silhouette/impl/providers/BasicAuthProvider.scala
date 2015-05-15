@@ -22,10 +22,10 @@ import com.mohiva.play.silhouette.api.{ LoginInfo, RequestProvider }
 import com.mohiva.play.silhouette.impl.exceptions.{ IdentityNotFoundException, InvalidPasswordException }
 import com.mohiva.play.silhouette.impl.providers.BasicAuthProvider._
 import play.api.http.HeaderNames
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ Request, RequestHeader }
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * A request provider implementation which supports HTTP basic authentication.
@@ -59,7 +59,7 @@ class BasicAuthProvider(
    * @tparam B The type of the body.
    * @return Some login info on successful authentication or None if the authentication was unsuccessful.
    */
-  def authenticate[B](request: Request[B]): Future[Option[LoginInfo]] = {
+  def authenticate[B](request: Request[B])(implicit ec: ExecutionContext): Future[Option[LoginInfo]] = {
     getCredentials(request) match {
       case Some(credentials) =>
         val loginInfo = LoginInfo(id, credentials.identifier)

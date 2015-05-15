@@ -20,6 +20,7 @@ import play.api.i18n.Messages
 import play.api.mvc.{ RequestHeader, Result }
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * Can be mixed into the GlobalSettings object to define a global behaviour
@@ -37,7 +38,7 @@ trait SecuredSettings {
    * @param messages The messages for the current language.
    * @return The result to send to the client.
    */
-  def onNotAuthenticated(request: RequestHeader, messages: Messages): Option[Future[Result]] = None
+  def onNotAuthenticated(request: RequestHeader, messages: Messages)(implicit ec: ExecutionContext): Option[Future[Result]] = None
 
   /**
    * Called when a user is authenticated but not authorized.
@@ -48,5 +49,5 @@ trait SecuredSettings {
    * @param messages The messages for the current language.
    * @return The result to send to the client.
    */
-  def onNotAuthorized(request: RequestHeader, messages: Messages): Option[Future[Result]] = None
+  def onNotAuthorized(request: RequestHeader, messages: Messages)(implicit ec: ExecutionContext): Option[Future[Result]] = None
 }

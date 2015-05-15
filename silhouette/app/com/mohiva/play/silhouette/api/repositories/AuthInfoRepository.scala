@@ -18,6 +18,7 @@ package com.mohiva.play.silhouette.api.repositories
 import com.mohiva.play.silhouette.api.{ AuthInfo, LoginInfo }
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 import scala.reflect.ClassTag
 
 /**
@@ -37,7 +38,7 @@ trait AuthInfoRepository {
    * @tparam T The type of the auth info to handle.
    * @return The found auth info or None if no auth info could be found for the given login info.
    */
-  def find[T <: AuthInfo](loginInfo: LoginInfo)(implicit tag: ClassTag[T]): Future[Option[T]]
+  def find[T <: AuthInfo](loginInfo: LoginInfo)(implicit tag: ClassTag[T], ec: ExecutionContext): Future[Option[T]]
 
   /**
    * Adds new auth info for the given login info.
@@ -47,7 +48,7 @@ trait AuthInfoRepository {
    * @tparam T The type of the auth info to handle.
    * @return The saved auth info.
    */
-  def add[T <: AuthInfo](loginInfo: LoginInfo, authInfo: T): Future[T]
+  def add[T <: AuthInfo](loginInfo: LoginInfo, authInfo: T)(implicit ec: ExecutionContext): Future[T]
 
   /**
    * Updates the auth info for the given login info.
@@ -57,7 +58,7 @@ trait AuthInfoRepository {
    * @tparam T The type of the auth info to handle.
    * @return The updated auth info.
    */
-  def update[T <: AuthInfo](loginInfo: LoginInfo, authInfo: T): Future[T]
+  def update[T <: AuthInfo](loginInfo: LoginInfo, authInfo: T)(implicit ec: ExecutionContext): Future[T]
 
   /**
    * Removes the auth info for the given login info.
@@ -67,5 +68,5 @@ trait AuthInfoRepository {
    * @tparam T The type of the auth info to handle.
    * @return A future to wait for the process to be completed.
    */
-  def remove[T <: AuthInfo](loginInfo: LoginInfo)(implicit tag: ClassTag[T]): Future[Unit]
+  def remove[T <: AuthInfo](loginInfo: LoginInfo)(implicit tag: ClassTag[T], ec: ExecutionContext): Future[Unit]
 }

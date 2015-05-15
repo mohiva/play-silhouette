@@ -18,6 +18,8 @@ package com.mohiva.play.silhouette.impl.providers.openid
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.impl.providers._
 import play.api.test.WithApplication
+import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Test case for the [[YahooProvider]] class.

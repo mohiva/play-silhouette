@@ -23,6 +23,8 @@ import play.api.test.PlaySpecification
 
 import scala.concurrent.Future
 import scala.reflect.ClassTag
+import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Abstract test case for the social providers.

@@ -31,10 +31,10 @@ import org.joda.time.DateTime
 import play.api.Play
 import play.api.Play.current
 import play.api.http.HeaderNames
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc._
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 import scala.util.Try
 
 /**
@@ -115,7 +115,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return An authenticator.
    */
-  def create(loginInfo: LoginInfo)(implicit request: RequestHeader) = {
+  def create(loginInfo: LoginInfo)(implicit request: RequestHeader, ec: ExecutionContext) = {
     idGenerator.generate.map { id =>
       val now = clock.now
       CookieAuthenticator(
@@ -137,7 +137,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return Some authenticator or None if no authenticator could be found in request.
    */
-  def retrieve(implicit request: RequestHeader) = {
+  def retrieve(implicit request: RequestHeader, ec: ExecutionContext) = {
     Future.from(Try {
       if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
     }).flatMap { fingerprint =>
@@ -164,7 +164,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The serialized authenticator value.
    */
-  def init(authenticator: CookieAuthenticator)(implicit request: RequestHeader) = {
+  def init(authenticator: CookieAuthenticator)(implicit request: RequestHeader, ec: ExecutionContext) = {
     dao.add(authenticator).map { a =>
       Cookie(
         name = settings.cookieName,
@@ -188,7 +188,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  def embed(cookie: Cookie, result: Result)(implicit request: RequestHeader) = {
+  def embed(cookie: Cookie, result: Result)(implicit request: RequestHeader, ec: ExecutionContext) = {
     Future.successful(AuthenticatorResult(result.withCookies(cookie)))
   }
 
@@ -230,7 +230,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def update(authenticator: CookieAuthenticator, result: Result)(implicit request: RequestHeader) = {
+  def update(authenticator: CookieAuthenticator, result: Result)(implicit request: RequestHeader, ec: ExecutionContext) = {
     dao.update(authenticator).map { a =>
       AuthenticatorResult(result)
     }.recover {
@@ -249,7 +249,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The serialized expression of the authenticator.
    */
-  def renew(authenticator: CookieAuthenticator)(implicit request: RequestHeader) = {
+  def renew(authenticator: CookieAuthenticator)(implicit request: RequestHeader, ec: ExecutionContext) = {
     dao.remove(authenticator.id).flatMap { _ =>
       create(authenticator.loginInfo).flatMap(init)
     }.recover {
@@ -268,7 +268,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def renew(authenticator: CookieAuthenticator, result: Result)(implicit request: RequestHeader) = {
+  def renew(authenticator: CookieAuthenticator, result: Result)(implicit request: RequestHeader, ec: ExecutionContext) = {
     renew(authenticator).flatMap(v => embed(v, result)).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
     }
@@ -281,7 +281,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  def discard(authenticator: CookieAuthenticator, result: Result)(implicit request: RequestHeader) = {
+  def discard(authenticator: CookieAuthenticator, result: Result)(implicit request: RequestHeader, ec: ExecutionContext) = {
     dao.remove(authenticator.id).map { _ =>
       AuthenticatorResult(result.discardingCookies(DiscardingCookie(
         name = settings.cookieName,

@@ -25,12 +25,12 @@ import com.mohiva.play.silhouette.impl.exceptions.{ UnexpectedResponseException,
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.FacebookProvider._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.{ JsObject, JsValue }
 import play.api.libs.ws.WSResponse
 
 import scala.concurrent.Future
 import scala.util.{ Failure, Success, Try }
+import scala.concurrent.ExecutionContext
 
 /**
  * A Facebook OAuth2 Provider.
@@ -67,7 +67,7 @@ abstract class FacebookProvider(httpLayer: HTTPLayer, stateProvider: OAuth2State
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+  protected def buildProfile(authInfo: OAuth2Info)(implicit ec: ExecutionContext): Future[Profile] = {
     httpLayer.url(urls("api").format(authInfo.accessToken)).get().flatMap { response =>
       val json = response.json
       (json \ "error").asOpt[JsObject] match {
@@ -110,7 +110,7 @@ class FacebookProfileParser extends SocialProfileParser[JsValue, CommonSocialPro
    * @param json The content returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(json: JsValue) = Future.successful {
+  def parse(json: JsValue)(implicit ec: ExecutionContext) = Future.successful {
     val userID = (json \ "id").as[String]
     val firstName = (json \ "first_name").asOpt[String]
     val lastName = (json \ "last_name").asOpt[String]

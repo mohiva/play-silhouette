@@ -24,6 +24,7 @@ import play.api.libs.iteratee.Enumerator
 import play.api.mvc._
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * A marker result which indicates that an operation on an authenticator was processed and
@@ -89,7 +90,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return An authenticator.
    */
-  def create(loginInfo: LoginInfo)(implicit request: RequestHeader): Future[T]
+  def create(loginInfo: LoginInfo)(implicit request: RequestHeader, ec: ExecutionContext): Future[T]
 
   /**
    * Retrieves the authenticator from request.
@@ -97,7 +98,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return Some authenticator or None if no authenticator could be found in request.
    */
-  def retrieve(implicit request: RequestHeader): Future[Option[T]]
+  def retrieve(implicit request: RequestHeader, ec: ExecutionContext): Future[Option[T]]
 
   /**
    * Initializes an authenticator and instead of embedding into the the request or result, it returns
@@ -107,7 +108,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return The serialized authenticator value.
    */
-  def init(authenticator: T)(implicit request: RequestHeader): Future[T#Value]
+  def init(authenticator: T)(implicit request: RequestHeader, ec: ExecutionContext): Future[T#Value]
 
   /**
    * Embeds authenticator specific artifacts into the response.
@@ -117,7 +118,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return The manipulated result.
    */
-  def embed(value: T#Value, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult]
+  def embed(value: T#Value, result: Result)(implicit request: RequestHeader, ec: ExecutionContext): Future[AuthenticatorResult]
 
   /**
    * Embeds authenticator specific artifacts into the request.
@@ -162,7 +163,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def update(authenticator: T, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult]
+  def update(authenticator: T, result: Result)(implicit request: RequestHeader, ec: ExecutionContext): Future[AuthenticatorResult]
 
   /**
    * Renews the expiration of an authenticator.
@@ -176,7 +177,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def renew(authenticator: T, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult]
+  def renew(authenticator: T, result: Result)(implicit request: RequestHeader, ec: ExecutionContext): Future[AuthenticatorResult]
 
   /**
    * Renews the expiration of an authenticator without embedding it into the result.
@@ -188,7 +189,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return The serialized expression of the authenticator.
    */
-  def renew(authenticator: T)(implicit request: RequestHeader): Future[T#Value]
+  def renew(authenticator: T)(implicit request: RequestHeader, ec: ExecutionContext): Future[T#Value]
 
   /**
    * Manipulates the response and removes authenticator specific artifacts before sending it to the client.
@@ -198,7 +199,7 @@ trait AuthenticatorService[T <: Authenticator] {
    * @param request The request header.
    * @return The manipulated result.
    */
-  def discard(authenticator: T, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult]
+  def discard(authenticator: T, result: Result)(implicit request: RequestHeader, ec: ExecutionContext): Future[AuthenticatorResult]
 }
 
 /**

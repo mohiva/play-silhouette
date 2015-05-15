@@ -24,10 +24,10 @@ import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.FoursquareProvider._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.JsValue
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * A Foursquare OAuth2 provider.
@@ -64,7 +64,7 @@ abstract class FoursquareProvider(httpLayer: HTTPLayer, stateProvider: OAuth2Sta
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+  protected def buildProfile(authInfo: OAuth2Info)(implicit ec: ExecutionContext): Future[Profile] = {
     val version = settings.customProperties.getOrElse(APIVersion, DefaultAPIVersion)
     httpLayer.url(urls("api").format(authInfo.accessToken, version)).get().flatMap { response =>
       val json = response.json
@@ -100,7 +100,7 @@ class FoursquareProfileParser(settings: OAuth2Settings) extends SocialProfilePar
    * @param json The content returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(json: JsValue) = Future.successful {
+  def parse(json: JsValue)(implicit ec: ExecutionContext) = Future.successful {
     val user = json \ "response" \ "user"
     val userID = (user \ "id").as[String]
     val lastName = (user \ "lastName").asOpt[String]

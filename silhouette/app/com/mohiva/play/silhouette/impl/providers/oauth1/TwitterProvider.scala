@@ -24,10 +24,10 @@ import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.JsValue
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * A Twitter OAuth1 Provider.
@@ -68,7 +68,7 @@ abstract class TwitterProvider(
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth1Info): Future[Profile] = {
+  protected def buildProfile(authInfo: OAuth1Info)(implicit ec: ExecutionContext): Future[Profile] = {
     httpLayer.url(urls("api")).sign(service.sign(authInfo)).get().flatMap { response =>
       val json = response.json
       (json \ "errors" \\ "code").headOption.map(_.as[Int]) match {
@@ -93,7 +93,7 @@ class TwitterProfileParser extends SocialProfileParser[JsValue, CommonSocialProf
    * @param json The content returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(json: JsValue) = Future.successful {
+  def parse(json: JsValue)(implicit ec: ExecutionContext) = Future.successful {
     val userID = (json \ "id").as[Long]
     val fullName = (json \ "name").asOpt[String]
     val avatarURL = (json \ "profile_image_url_https").asOpt[String]

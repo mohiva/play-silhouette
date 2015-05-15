@@ -25,9 +25,9 @@ import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.{ Credentials, PasswordHasher, PasswordInfo }
 import com.mohiva.play.silhouette.impl.exceptions.{ IdentityNotFoundException, InvalidPasswordException }
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider._
-import play.api.libs.concurrent.Execution.Implicits._
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * A provider for authenticating with credentials.
@@ -60,7 +60,7 @@ class CredentialsProvider(
    * @param credentials The credentials to authenticate with.
    * @return The login info if the authentication was successful, otherwise a failure.
    */
-  def authenticate(credentials: Credentials): Future[LoginInfo] = {
+  def authenticate(credentials: Credentials)(implicit ec: ExecutionContext): Future[LoginInfo] = {
     val loginInfo = LoginInfo(id, credentials.identifier)
     authInfoRepository.find[PasswordInfo](loginInfo).map {
       case Some(authInfo) => passwordHasherList.find(_.id == authInfo.hasher) match {

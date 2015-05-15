@@ -26,6 +26,8 @@ import play.api.test.{ FakeRequest, WithApplication }
 import test.Helper
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Test case for the [[FacebookProvider]] class.
@@ -41,7 +43,7 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      stateProvider.validate(any) returns Future.successful(state)
+      stateProvider.validate(any, any) returns Future.successful(state)
 
       failed[UnexpectedResponseException](provider.authenticate()) {
         case e => e.getMessage must equalTo(InvalidInfoFormat.format(provider.id, ""))
@@ -56,7 +58,7 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      stateProvider.validate(any) returns Future.successful(state)
+      stateProvider.validate(any, any) returns Future.successful(state)
 
       authInfo(provider.authenticate()) {
         case authInfo => authInfo must be equalTo OAuth2Info(
@@ -75,7 +77,7 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      stateProvider.validate(any) returns Future.successful(state)
+      stateProvider.validate(any, any) returns Future.successful(state)
 
       authInfo(provider.authenticate()) {
         case authInfo => authInfo must be equalTo OAuth2Info(

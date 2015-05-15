@@ -24,10 +24,10 @@ import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth1.LinkedInProvider._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.JsValue
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 /**
  * A LinkedIn OAuth1 Provider.
@@ -69,7 +69,7 @@ abstract class LinkedInProvider(
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth1Info): Future[Profile] = {
+  protected def buildProfile(authInfo: OAuth1Info)(implicit ec: ExecutionContext): Future[Profile] = {
     httpLayer.url(urls("api")).sign(service.sign(authInfo)).get().flatMap { response =>
       val json = response.json
       (json \ "errorCode").asOpt[Int] match {
@@ -97,7 +97,7 @@ class LinkedInProfileParser extends SocialProfileParser[JsValue, CommonSocialPro
    * @param json The content returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(json: JsValue) = Future.successful {
+  def parse(json: JsValue)(implicit ec: ExecutionContext) = Future.successful {
     val userID = (json \ "id").as[String]
     val firstName = (json \ "firstName").asOpt[String]
     val lastName = (json \ "lastName").asOpt[String]

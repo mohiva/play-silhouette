@@ -26,6 +26,8 @@ import play.api.test.{ FakeRequest, WithApplication }
 import play.mvc.Http.HeaderNames
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Abstract test case for the [[OAuth1Provider]] class.
@@ -68,8 +70,8 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
 
       c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.successful(c.oAuthInfo)
       c.oAuthService.redirectUrl(any) returns c.oAuthSettings.authorizationURL
-      c.oAuthTokenSecretProvider.build(any)(any) returns Future.successful(c.oAuthTokenSecret)
-      c.oAuthTokenSecretProvider.publish(any, any)(any) answers { (a, m) =>
+      c.oAuthTokenSecretProvider.build(any)(any, any) returns Future.successful(c.oAuthTokenSecret)
+      c.oAuthTokenSecretProvider.publish(any, any)(any, any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
       }
 
@@ -97,10 +99,10 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
       req.secure returns secure
       c.oAuthSettings.callbackURL returns callbackURL
 
-      c.oAuthService.retrieveRequestToken(any) returns Future.successful(c.oAuthInfo)
+      c.oAuthService.retrieveRequestToken(any)(any) returns Future.successful(c.oAuthInfo)
       c.oAuthService.redirectUrl(c.oAuthInfo.token) returns c.oAuthSettings.authorizationURL
-      c.oAuthTokenSecretProvider.build(any)(any) returns Future.successful(c.oAuthTokenSecret)
-      c.oAuthTokenSecretProvider.publish(any, any)(any) returns Results.Redirect(c.oAuthSettings.authorizationURL)
+      c.oAuthTokenSecretProvider.build(any)(any, any) returns Future.successful(c.oAuthTokenSecret)
+      c.oAuthTokenSecretProvider.publish(any, any)(any, any) returns Results.Redirect(c.oAuthSettings.authorizationURL)
 
       await(c.provider.authenticate())
       there was one(c.oAuthService).retrieveRequestToken(resolvedCallbackURL)
@@ -111,7 +113,7 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier&" + OAuthToken + "=my.token")
 
       c.oAuthTokenSecret.value returns tokenSecret
-      c.oAuthTokenSecretProvider.retrieve(any) returns Future.successful(c.oAuthTokenSecret)
+      c.oAuthTokenSecretProvider.retrieve(any, any) returns Future.successful(c.oAuthTokenSecret)
       c.oAuthService.retrieveAccessToken(c.oAuthInfo.copy(secret = tokenSecret), "my.verifier") returns Future.failed(new Exception(""))
 
       failed[UnexpectedResponseException](c.provider.authenticate()) {
@@ -124,7 +126,7 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier&" + OAuthToken + "=my.token")
 
       c.oAuthTokenSecret.value returns tokenSecret
-      c.oAuthTokenSecretProvider.retrieve(any) returns Future.successful(c.oAuthTokenSecret)
+      c.oAuthTokenSecretProvider.retrieve(any, any) returns Future.successful(c.oAuthTokenSecret)
       c.oAuthService.retrieveAccessToken(c.oAuthInfo.copy(secret = tokenSecret), "my.verifier") returns Future.successful(c.oAuthInfo)
 
       authInfo(c.provider.authenticate()) {
