@@ -431,6 +431,25 @@ object.
       <p class="shortcomment cmt">Removes the auth info for the given login info.</p><div class="fullcomment"><div class="comment cmt"><p>Removes the auth info for the given login info.
 </p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the auth info to handle.</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be removed.</p></dd><dt class="param">tag</dt><dd class="cmt"><p>The class tag of the auth info.</p></dd><dt>returns</dt><dd class="cmt"><p>A future to wait for the process to be completed.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository">DelegableAuthInfoRepository</a> → <a href="../../api/repositories/AuthInfoRepository.html" class="extype" name="com.mohiva.play.silhouette.api.repositories.AuthInfoRepository">AuthInfoRepository</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository#save" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="save[T&lt;:com.mohiva.play.silhouette.api.AuthInfo](loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]"></a>
+      <a id="save[T&lt;:AuthInfo](LoginInfo,T):Future[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">save</span><span class="tparams">[<span name="T">T &lt;: <a href="../../api/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.AuthInfo">AuthInfo</a></span>]</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository.save.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository.save.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository@save[T&lt;:com.mohiva.play.silhouette.api.AuthInfo](loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Updates the auth info for the given login info.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the auth info for the given login info.</p><p>This method either adds the auth info if it doesn't exists or it updates the auth info if it already exists.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the auth info to handle.</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be saved.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info to save.</p></dd><dt>returns</dt><dd class="cmt"><p>The updated auth info.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository">DelegableAuthInfoRepository</a> → <a href="../../api/repositories/AuthInfoRepository.html" class="extype" name="com.mohiva.play.silhouette.api.repositories.AuthInfoRepository">AuthInfoRepository</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

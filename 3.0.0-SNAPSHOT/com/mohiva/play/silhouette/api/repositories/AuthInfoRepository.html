@@ -156,6 +156,26 @@ every linked login info gets stored separately.
       <p class="shortcomment cmt">Removes the auth info for the given login info.</p><div class="fullcomment"><div class="comment cmt"><p>Removes the auth info for the given login info.
 </p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the auth info to handle.</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be removed.</p></dd><dt class="param">tag</dt><dd class="cmt"><p>The class tag of the auth info.</p></dd><dt>returns</dt><dd class="cmt"><p>A future to wait for the process to be completed.
 </p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.repositories.AuthInfoRepository#save" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="save[T&lt;:com.mohiva.play.silhouette.api.AuthInfo](loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]"></a>
+      <a id="save[T&lt;:AuthInfo](LoginInfo,T):Future[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">save</span><span class="tparams">[<span name="T">T &lt;: <a href="../AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.AuthInfo">AuthInfo</a></span>]</span><span class="params">(<span name="loginInfo">loginInfo: <a href="../LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.api.repositories.AuthInfoRepository.save.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.api.repositories.AuthInfoRepository.save.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.repositories.AuthInfoRepository@save[T&lt;:com.mohiva.play.silhouette.api.AuthInfo](loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Saves the auth info for the given login info.</p><div class="fullcomment"><div class="comment cmt"><p>Saves the auth info for the given login info.</p><p>This method either adds the auth info if it doesn't exists or it updates the auth info
+if it already exists.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the auth info to handle.</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The login info for which the auth info should be saved.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info to save.</p></dd><dt>returns</dt><dd class="cmt"><p>The updated auth info.
+</p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.repositories.AuthInfoRepository#update" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="update[T&lt;:com.mohiva.play.silhouette.api.AuthInfo](loginInfo:com.mohiva.play.silhouette.api.LoginInfo,authInfo:T):scala.concurrent.Future[T]"></a>
       <a id="update[T&lt;:AuthInfo](LoginInfo,T):Future[T]"></a>
