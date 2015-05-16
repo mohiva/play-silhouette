@@ -31,7 +31,7 @@ trait CacheLayer {
    * @tparam T The type of the object to return.
    * @return The found value or None if no value could be found.
    */
-  def find[T: ClassTag](key: String): Future[Option[T]]
+  def find[T: ClassTag: Manifest](key: String): Future[Option[T]]
 
   /**
    * Save a value in cache.

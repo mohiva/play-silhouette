@@ -51,7 +51,7 @@ class PlayCacheLayer @Inject() (cacheApi: CacheApi) extends CacheLayer {
    * @tparam T The type of the object to return.
    * @return The found value or None if no value could be found.
    */
-  def find[T: ClassTag](key: String): Future[Option[T]] = Future.successful(cacheApi.get[T](key))
+  def find[T: ClassTag: Manifest](key: String): Future[Option[T]] = Future.successful(cacheApi.get[T](key))
 
   /**
    * Remove a value from the cache.

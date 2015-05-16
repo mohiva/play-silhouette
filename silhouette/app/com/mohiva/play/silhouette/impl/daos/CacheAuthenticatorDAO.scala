@@ -28,7 +28,7 @@ import scala.reflect.ClassTag
  * @param cacheLayer The cache layer implementation.
  * @tparam T The type of the authenticator to store.
  */
-class CacheAuthenticatorDAO[T <: StorableAuthenticator: ClassTag](cacheLayer: CacheLayer) extends AuthenticatorDAO[T] {
+class CacheAuthenticatorDAO[T <: StorableAuthenticator: ClassTag: Manifest](cacheLayer: CacheLayer) extends AuthenticatorDAO[T] {
 
   /**
    * Finds the authenticator for the given ID.
