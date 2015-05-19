@@ -45,6 +45,14 @@ class SocialProviderRegistrySpec extends PlaySpecification with Mockito {
     }
   }
 
+  "The `getSeq` method" should {
+    "return a list of providers by it's sub type" in new Context {
+      val list = registry.getSeq[OAuth2Provider]
+      list(0).id must be equalTo providers(0).id
+      list(1).id must be equalTo providers(1).id
+    }
+  }
+
   /**
    * The context.
    */

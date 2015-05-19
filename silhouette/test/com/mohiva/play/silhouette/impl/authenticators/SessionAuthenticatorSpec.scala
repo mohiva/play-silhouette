@@ -55,6 +55,16 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
     }
   }
 
+  "The `withSettings` method of the service" should {
+    "create a new instance with customized settings" in new Context {
+      val s = service.withSettings { s =>
+        s.copy("new-session-key")
+      }
+
+      s.settings.sessionKey must be equalTo "new-session-key"
+    }
+  }
+
   "The `create` method of the service" should {
     "return a fingerprinted authenticator" in new Context {
       implicit val request = FakeRequest()

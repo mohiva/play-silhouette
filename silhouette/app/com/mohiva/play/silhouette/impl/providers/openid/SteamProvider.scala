@@ -23,16 +23,11 @@ import com.mohiva.play.silhouette.impl.providers.openid.SteamProvider._
 import scala.concurrent.Future
 
 /**
- * A Steam OpenID Provider.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param service The OpenID service implementation.
- * @param settings The OpenID provider settings.
+ * Base Steam OpenID Provider.
  *
  * @see https://steamcommunity.com/dev
  */
-abstract class SteamProvider(httpLayer: HTTPLayer, service: OpenIDService, settings: OpenIDSettings)
-  extends OpenIDProvider(httpLayer, service, settings) {
+trait BaseSteamProvider extends OpenIDProvider {
 
   /**
    * The content type to parse a profile from.
@@ -79,15 +74,35 @@ class SteamProfileParser extends SocialProfileParser[OpenIDInfo, CommonSocialPro
 }
 
 /**
- * The profile builder for the common social profile.
+ * The Steam OAuth2 Provider.
+ *
+ * @param httpLayer The HTTP layer implementation.
+ * @param service The OpenID service implementation.
+ * @param settings The OpenID provider settings.
  */
-trait SteamProfileBuilder extends CommonSocialProfileBuilder {
-  self: SteamProvider =>
+class SteamProvider(
+  protected val httpLayer: HTTPLayer,
+  protected val service: OpenIDService,
+  val settings: OpenIDSettings)
+  extends BaseSteamProvider with CommonSocialProfileBuilder {
+
+  /**
+   * The type of this class.
+   */
+  type Self = SteamProvider
 
   /**
    * The profile parser implementation.
    */
   val profileParser = new SteamProfileParser
+
+  /**
+   * Gets a provider initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the provider initialized with new settings.
+   */
+  def withSettings(f: (Settings) => Settings) = new SteamProvider(httpLayer, service, f(settings))
 }
 
 /**
@@ -99,16 +114,4 @@ object SteamProvider {
    * The Steam constants.
    */
   val ID = "steam"
-
-  /**
-   * Creates an instance of the provider.
-   *
-   * @param httpLayer The HTTP layer implementation.
-   * @param service The OpenID service implementation.
-   * @param settings The OpenID provider settings.
-   * @return An instance of this provider.
-   */
-  def apply(httpLayer: HTTPLayer, service: OpenIDService, settings: OpenIDSettings) = {
-    new SteamProvider(httpLayer, service, settings) with SteamProfileBuilder
-  }
 }

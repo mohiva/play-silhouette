@@ -34,18 +34,13 @@ import scala.concurrent.Future
 import scala.util.{ Success, Failure, Try }
 
 /**
- * A Vk OAuth 2 provider.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param stateProvider The state provider implementation.
- * @param settings The provider settings.
+ * Base Vk OAuth 2 provider.
  *
  * @see http://vk.com/dev/auth_sites
  * @see http://vk.com/dev/api_requests
  * @see http://vk.com/pages.php?o=-1&p=getProfiles
  */
-abstract class VKProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
-  extends OAuth2Provider(httpLayer, stateProvider, settings) {
+trait BaseVKProvider extends OAuth2Provider {
 
   /**
    * The content type to parse a profile from.
@@ -127,15 +122,35 @@ class VKProfileParser extends SocialProfileParser[(JsValue, OAuth2Info), CommonS
 }
 
 /**
- * The profile builder for the common social profile.
+ * The VK OAuth2 Provider.
+ *
+ * @param httpLayer The HTTP layer implementation.
+ * @param stateProvider The state provider implementation.
+ * @param settings The provider settings.
  */
-trait VKProfileBuilder extends CommonSocialProfileBuilder {
-  self: VKProvider =>
+class VKProvider(
+  protected val httpLayer: HTTPLayer,
+  protected val stateProvider: OAuth2StateProvider,
+  val settings: OAuth2Settings)
+  extends BaseVKProvider with CommonSocialProfileBuilder {
+
+  /**
+   * The type of this class.
+   */
+  type Self = VKProvider
 
   /**
    * The profile parser implementation.
    */
   val profileParser = new VKProfileParser
+
+  /**
+   * Gets a provider initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the provider initialized with new settings.
+   */
+  def withSettings(f: (Settings) => Settings) = new VKProvider(httpLayer, stateProvider, f(settings))
 }
 
 /**
@@ -166,16 +181,4 @@ object VKProvider {
   )((accessToken: String, tokenType: Option[String], expiresIn: Option[Int], refreshToken: Option[String], email: Option[String]) =>
       new OAuth2Info(accessToken, tokenType, expiresIn, refreshToken, email.map(e => Map("email" -> e)))
     )
-
-  /**
-   * Creates an instance of the provider.
-   *
-   * @param httpLayer The HTTP layer implementation.
-   * @param stateProvider The state provider implementation.
-   * @param settings The provider settings.
-   * @return An instance of this provider.
-   */
-  def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new VKProvider(httpLayer, stateProvider, settings) with VKProfileBuilder
-  }
 }

@@ -51,7 +51,8 @@ case class SessionAuthenticator(
   lastUsedDate: DateTime,
   expirationDate: DateTime,
   idleTimeout: Option[Int],
-  fingerprint: Option[String]) extends Authenticator {
+  fingerprint: Option[String])
+  extends Authenticator {
 
   /**
    * The Type of the generated value an authenticator will be serialized to.
@@ -148,11 +149,33 @@ object SessionAuthenticator extends Logger {
  * @param clock The clock implementation.
  */
 class SessionAuthenticatorService(
-  settings: SessionAuthenticatorSettings,
+  val settings: SessionAuthenticatorSettings,
   fingerprintGenerator: FingerprintGenerator,
-  clock: Clock) extends AuthenticatorService[SessionAuthenticator] with Logger {
+  clock: Clock)
+  extends AuthenticatorService[SessionAuthenticator]
+  with Logger {
 
   import SessionAuthenticator._
+
+  /**
+   * The type of this class.
+   */
+  type Self = SessionAuthenticatorService
+
+  /**
+   * The type of the settings.
+   */
+  type Settings = SessionAuthenticatorSettings
+
+  /**
+   * Gets an authenticator service initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the authenticator service initialized with new settings.
+   */
+  def withSettings(f: SessionAuthenticatorSettings => SessionAuthenticatorSettings) = {
+    new SessionAuthenticatorService(f(settings), fingerprintGenerator, clock)
+  }
 
   /**
    * Creates a new authenticator for the specified login info.
@@ -161,7 +184,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return An authenticator.
    */
-  def create(loginInfo: LoginInfo)(implicit request: RequestHeader) = {
+  def create(loginInfo: LoginInfo)(implicit request: RequestHeader): Future[SessionAuthenticator] = {
     Future.from(Try {
       val now = clock.now
       SessionAuthenticator(
@@ -182,7 +205,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return Some authenticator or None if no authenticator could be found in request.
    */
-  def retrieve(implicit request: RequestHeader) = {
+  def retrieve(implicit request: RequestHeader): Future[Option[SessionAuthenticator]] = {
     Future.from(Try {
       if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
     }).map { fingerprint =>
@@ -205,7 +228,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The serialized authenticator value.
    */
-  def init(authenticator: SessionAuthenticator)(implicit request: RequestHeader) = {
+  def init(authenticator: SessionAuthenticator)(implicit request: RequestHeader): Future[Session] = {
     Future.successful(request.session + (settings.sessionKey -> serialize(authenticator)(settings)))
   }
 
@@ -216,7 +239,7 @@ class SessionAuthenticatorService(
    * @param result The result to manipulate.
    * @return The manipulated result.
    */
-  def embed(session: Session, result: Result)(implicit request: RequestHeader) = {
+  def embed(session: Session, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
     Future.successful(AuthenticatorResult(result.addingToSession(session.data.toSeq: _*)))
   }
 
@@ -227,9 +250,9 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The manipulated request header.
    */
-  def embed(session: Session, request: RequestHeader) = {
+  def embed(session: Session, request: RequestHeader): RequestHeader = {
     val sessionCookie = Session.encodeAsCookie(session)
-    val cookies = Cookies.merge(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(sessionCookie))
+    val cookies = Cookies.mergeCookieHeader(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(sessionCookie))
     val additional = Seq(HeaderNames.COOKIE -> cookies)
     request.copy(headers = request.headers.replace(additional: _*))
   }
@@ -259,7 +282,10 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def update(authenticator: SessionAuthenticator, result: Result)(implicit request: RequestHeader) = {
+  def update(
+    authenticator: SessionAuthenticator,
+    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+
     Future.from(Try {
       AuthenticatorResult(result.addingToSession(settings.sessionKey -> serialize(authenticator)(settings)))
     }.recover {
@@ -278,7 +304,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The serialized expression of the authenticator.
    */
-  def renew(authenticator: SessionAuthenticator)(implicit request: RequestHeader) = {
+  def renew(authenticator: SessionAuthenticator)(implicit request: RequestHeader): Future[Session] = {
     create(authenticator.loginInfo).flatMap(init).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
     }
@@ -295,7 +321,10 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def renew(authenticator: SessionAuthenticator, result: Result)(implicit request: RequestHeader) = {
+  def renew(
+    authenticator: SessionAuthenticator,
+    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+
     renew(authenticator).flatMap(v => embed(v, result)).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
     }
@@ -308,7 +337,10 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  def discard(authenticator: SessionAuthenticator, result: Result)(implicit request: RequestHeader) = {
+  def discard(
+    authenticator: SessionAuthenticator,
+    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+
     Future.from(Try {
       AuthenticatorResult(result.removingFromSession(settings.sessionKey))
     }.recover {

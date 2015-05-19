@@ -83,6 +83,31 @@ object AuthenticatorResult {
 trait AuthenticatorService[T <: Authenticator] {
 
   /**
+   * The type of the concrete implementation of this abstract type.
+   */
+  type Self <: AuthenticatorService[T]
+
+  /**
+   * The type of the settings.
+   */
+  type Settings
+
+  /**
+   * Gets the authenticator settings.
+   *
+   * @return The authenticator settings.
+   */
+  def settings: Settings
+
+  /**
+   * Gets an authenticator service initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the authenticator service initialized with new settings.
+   */
+  def withSettings(f: Settings => Settings): Self
+
+  /**
    * Creates a new authenticator for the specified login info.
    *
    * @param loginInfo The login info for which the authenticator should be created.
@@ -165,6 +190,18 @@ trait AuthenticatorService[T <: Authenticator] {
   def update(authenticator: T, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult]
 
   /**
+   * Renews the expiration of an authenticator without embedding it into the result.
+   *
+   * Based on the implementation, the renew method should revoke the given authenticator first, before
+   * creating a new one. If the authenticator was updated, then the updated artifacts should be returned.
+   *
+   * @param authenticator The authenticator to renew.
+   * @param request The request header.
+   * @return The serialized expression of the authenticator.
+   */
+  def renew(authenticator: T)(implicit request: RequestHeader): Future[T#Value]
+
+  /**
    * Renews the expiration of an authenticator.
    *
    * Based on the implementation, the renew method should revoke the given authenticator first, before
@@ -177,18 +214,6 @@ trait AuthenticatorService[T <: Authenticator] {
    * @return The original or a manipulated result.
    */
   def renew(authenticator: T, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult]
-
-  /**
-   * Renews the expiration of an authenticator without embedding it into the result.
-   *
-   * Based on the implementation, the renew method should revoke the given authenticator first, before
-   * creating a new one. If the authenticator was updated, then the updated artifacts should be returned.
-   *
-   * @param authenticator The authenticator to renew.
-   * @param request The request header.
-   * @return The serialized expression of the authenticator.
-   */
-  def renew(authenticator: T)(implicit request: RequestHeader): Future[T#Value]
 
   /**
    * Manipulates the response and removes authenticator specific artifacts before sending it to the client.

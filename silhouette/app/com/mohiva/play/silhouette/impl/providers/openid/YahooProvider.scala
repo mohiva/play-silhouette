@@ -23,16 +23,11 @@ import com.mohiva.play.silhouette.impl.providers.openid.YahooProvider._
 import scala.concurrent.Future
 
 /**
- * A Yahoo OpenID Provider.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param service The OpenID service implementation.
- * @param settings The OpenID provider settings.
+ * Base Yahoo OpenID Provider.
  *
  * @see https://developer.yahoo.com/openid/index.html
  */
-abstract class YahooProvider(httpLayer: HTTPLayer, service: OpenIDService, settings: OpenIDSettings)
-  extends OpenIDProvider(httpLayer, service, settings) {
+trait BaseYahooProvider extends OpenIDProvider {
 
   /**
    * The content type to parse a profile from.
@@ -84,15 +79,35 @@ class YahooProfileParser extends SocialProfileParser[OpenIDInfo, CommonSocialPro
 }
 
 /**
- * The profile builder for the common social profile.
+ * The Yahoo OAuth2 Provider.
+ *
+ * @param httpLayer The HTTP layer implementation.
+ * @param service The OpenID service implementation.
+ * @param settings The OpenID provider settings.
  */
-trait YahooProfileBuilder extends CommonSocialProfileBuilder {
-  self: YahooProvider =>
+class YahooProvider(
+  protected val httpLayer: HTTPLayer,
+  protected val service: OpenIDService,
+  val settings: OpenIDSettings)
+  extends BaseYahooProvider with CommonSocialProfileBuilder {
+
+  /**
+   * The type of this class.
+   */
+  type Self = YahooProvider
 
   /**
    * The profile parser implementation.
    */
   val profileParser = new YahooProfileParser
+
+  /**
+   * Gets a provider initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the provider initialized with new settings.
+   */
+  def withSettings(f: (Settings) => Settings) = new YahooProvider(httpLayer, service, f(settings))
 }
 
 /**
@@ -104,16 +119,4 @@ object YahooProvider {
    * The Yahoo constants.
    */
   val ID = "yahoo"
-
-  /**
-   * Creates an instance of the provider.
-   *
-   * @param httpLayer The HTTP layer implementation.
-   * @param service The OpenID service implementation.
-   * @param settings The OpenID provider settings.
-   * @return An instance of this provider.
-   */
-  def apply(httpLayer: HTTPLayer, service: OpenIDService, settings: OpenIDSettings) = {
-    new YahooProvider(httpLayer, service, settings) with YahooProfileBuilder
-  }
 }

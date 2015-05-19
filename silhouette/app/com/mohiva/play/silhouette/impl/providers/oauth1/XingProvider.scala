@@ -30,22 +30,12 @@ import play.api.libs.json.{ JsObject, JsValue }
 import scala.concurrent.Future
 
 /**
- * A Xing OAuth1 Provider.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param service The OAuth1 service implementation.
- * @param tokenSecretProvider The OAuth1 token secret provider implementation.
- * @param settings The OAuth1 provider settings.
+ * Base Xing OAuth1 Provider.
  *
  * @see https://dev.xing.com/docs/get/users/me
  * @see https://dev.xing.com/docs/error_responses
  */
-abstract class XingProvider(
-  httpLayer: HTTPLayer,
-  service: OAuth1Service,
-  tokenSecretProvider: OAuth1TokenSecretProvider,
-  settings: OAuth1Settings)
-  extends OAuth1Provider(httpLayer, service, tokenSecretProvider, settings) {
+trait BaseXingProvider extends OAuth1Provider {
 
   /**
    * The content type to parse a profile from.
@@ -113,15 +103,39 @@ class XingProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile
 }
 
 /**
- * The profile builder for the common social profile.
+ * The Xing OAuth1 Provider.
+ *
+ * @param httpLayer The HTTP layer implementation.
+ * @param service The OAuth1 service implementation.
+ * @param tokenSecretProvider The OAuth1 token secret provider implementation.
+ * @param settings The OAuth1 provider settings.
  */
-trait XingProfileBuilder extends CommonSocialProfileBuilder {
-  self: XingProvider =>
+class XingProvider(
+  protected val httpLayer: HTTPLayer,
+  protected val service: OAuth1Service,
+  protected val tokenSecretProvider: OAuth1TokenSecretProvider,
+  val settings: OAuth1Settings)
+  extends BaseXingProvider with CommonSocialProfileBuilder {
+
+  /**
+   * The type of this class.
+   */
+  type Self = XingProvider
 
   /**
    * The profile parser implementation.
    */
   val profileParser = new XingProfileParser
+
+  /**
+   * Gets a provider initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the provider initialized with new settings.
+   */
+  def withSettings(f: (Settings) => Settings) = {
+    new XingProvider(httpLayer, service, tokenSecretProvider, f(settings))
+  }
 }
 
 /**
@@ -135,21 +149,8 @@ object XingProvider {
   val SpecifiedProfileError = "[Silhouette][%s] error retrieving profile information. Error name: %s, message: %s"
 
   /**
-   * The LinkedIn constants.
+   * The Xing constants.
    */
   val ID = "xing"
   val API = "https://api.xing.com/v1/users/me?fields=id,first_name,last_name,display_name,photo_urls.large,active_email"
-
-  /**
-   * Creates an instance of the provider.
-   *
-   * @param httpLayer The HTTP layer implementation.
-   * @param service The OAuth1 service implementation.
-   * @param tokenSecretProvider The OAuth1 token secret provider implementation.
-   * @param settings The OAuth1 provider settings.
-   * @return An instance of this provider.
-   */
-  def apply(httpLayer: HTTPLayer, service: OAuth1Service, tokenSecretProvider: OAuth1TokenSecretProvider, settings: OAuth1Settings) = {
-    new XingProvider(httpLayer, service, tokenSecretProvider, settings) with XingProfileBuilder
-  }
 }

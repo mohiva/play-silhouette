@@ -53,6 +53,16 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
     }
   }
 
+  "The `withSettings` method of the service" should {
+    "create a new instance with customized settings" in new Context {
+      val s = service.withSettings { s =>
+        s.copy("new-header-name")
+      }
+
+      s.settings.headerName must be equalTo "new-header-name"
+    }
+  }
+
   "The `create` method of the service" should {
     "return an authenticator with the generated ID" in new Context {
       implicit val request = FakeRequest()

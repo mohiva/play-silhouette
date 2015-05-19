@@ -30,19 +30,14 @@ import play.api.libs.json.{ JsObject, JsValue }
 import scala.concurrent.Future
 
 /**
- * A Google OAuth2 Provider.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param stateProvider The state provider implementation.
- * @param settings The provider settings.
+ * Base Google OAuth2 Provider.
  *
  * @see https://developers.google.com/+/api/auth-migration#timetable
  * @see https://developers.google.com/+/api/auth-migration#oauth2login
  * @see https://developers.google.com/accounts/docs/OAuth2Login
  * @see https://developers.google.com/+/api/latest/people
  */
-abstract class GoogleProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
-  extends OAuth2Provider(httpLayer, stateProvider, settings) {
+trait BaseGoogleProvider extends OAuth2Provider {
 
   /**
    * The content type to parse a profile from.
@@ -117,15 +112,35 @@ class GoogleProfileParser extends SocialProfileParser[JsValue, CommonSocialProfi
 }
 
 /**
- * The profile builder for the common social profile.
+ * The Google OAuth2 Provider.
+ *
+ * @param httpLayer The HTTP layer implementation.
+ * @param stateProvider The state provider implementation.
+ * @param settings The provider settings.
  */
-trait GoogleProfileBuilder extends CommonSocialProfileBuilder {
-  self: GoogleProvider =>
+class GoogleProvider(
+  protected val httpLayer: HTTPLayer,
+  protected val stateProvider: OAuth2StateProvider,
+  val settings: OAuth2Settings)
+  extends BaseGoogleProvider with CommonSocialProfileBuilder {
+
+  /**
+   * The type of this class.
+   */
+  type Self = GoogleProvider
 
   /**
    * The profile parser implementation.
    */
   val profileParser = new GoogleProfileParser
+
+  /**
+   * Gets a provider initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the provider initialized with new settings.
+   */
+  def withSettings(f: (Settings) => Settings) = new GoogleProvider(httpLayer, stateProvider, f(settings))
 }
 
 /**
@@ -143,16 +158,4 @@ object GoogleProvider {
    */
   val ID = "google"
   val API = "https://www.googleapis.com/plus/v1/people/me?access_token=%s"
-
-  /**
-   * Creates an instance of the provider.
-   *
-   * @param httpLayer The HTTP layer implementation.
-   * @param stateProvider The state provider implementation.
-   * @param settings The provider settings.
-   * @return An instance of this provider.
-   */
-  def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new GoogleProvider(httpLayer, stateProvider, settings) with GoogleProfileBuilder
-  }
 }

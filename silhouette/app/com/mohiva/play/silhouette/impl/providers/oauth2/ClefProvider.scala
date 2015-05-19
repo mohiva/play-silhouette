@@ -26,16 +26,11 @@ import play.api.libs.json.JsValue
 import scala.concurrent.Future
 
 /**
- * A Clef OAuth2 Provider.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param stateProvider The state provider implementation.
- * @param settings The provider settings.
+ * Base Clef OAuth2 Provider.
  *
  * @see http://docs.getclef.com/v1.0/docs
  */
-abstract class ClefProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
-  extends OAuth2Provider(httpLayer, stateProvider, settings) {
+trait BaseClefProvider extends OAuth2Provider {
 
   /**
    * The content type to parse a profile from.
@@ -96,15 +91,35 @@ class ClefProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile
 }
 
 /**
- * The profile builder for the common social profile.
+ * The Clef OAuth2 Provider.
+ *
+ * @param httpLayer The HTTP layer implementation.
+ * @param stateProvider The state provider implementation.
+ * @param settings The provider settings.
  */
-trait ClefProfileBuilder extends CommonSocialProfileBuilder {
-  self: ClefProvider =>
+class ClefProvider(
+  protected val httpLayer: HTTPLayer,
+  protected val stateProvider: OAuth2StateProvider,
+  val settings: OAuth2Settings)
+  extends BaseClefProvider with CommonSocialProfileBuilder {
+
+  /**
+   * The type of this class.
+   */
+  type Self = ClefProvider
 
   /**
    * The profile parser implementation.
    */
   val profileParser = new ClefProfileParser
+
+  /**
+   * Gets a provider initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the provider initialized with new settings.
+   */
+  def withSettings(f: (Settings) => Settings) = new ClefProvider(httpLayer, stateProvider, f(settings))
 }
 
 /**
@@ -122,16 +137,4 @@ object ClefProvider {
    */
   val ID = "clef"
   val API = "https://clef.io/api/v1/info?access_token=%s"
-
-  /**
-   * Creates an instance of the provider.
-   *
-   * @param httpLayer The HTTP layer implementation.
-   * @param stateProvider The state provider implementation.
-   * @param settings The provider settings.
-   * @return An instance of this provider.
-   */
-  def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new ClefProvider(httpLayer, stateProvider, settings) with ClefProfileBuilder
-  }
 }

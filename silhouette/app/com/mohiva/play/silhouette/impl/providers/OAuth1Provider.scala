@@ -30,19 +30,9 @@ import play.api.mvc._
 import scala.concurrent.Future
 
 /**
- * Base class for all OAuth1 providers.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param service The OAuth1 service implementation.
- * @param tokenSecretProvider The OAuth1 token secret provider implementation.
- * @param settings The OAuth1 provider settings.
+ * Base implementation for all OAuth1 providers.
  */
-abstract class OAuth1Provider(
-  httpLayer: HTTPLayer,
-  service: OAuth1Service,
-  tokenSecretProvider: OAuth1TokenSecretProvider,
-  val settings: OAuth1Settings)
-  extends SocialProvider with Logger {
+trait OAuth1Provider extends SocialProvider with Logger {
 
   /**
    * Check if services uses 1.0a specification because it address the session fixation attack identified
@@ -68,6 +58,21 @@ abstract class OAuth1Provider(
    * The settings type.
    */
   type Settings = OAuth1Settings
+
+  /**
+   * The HTTP layer implementation.
+   */
+  protected val httpLayer: HTTPLayer
+
+  /**
+   * The OAuth1 service implementation.
+   */
+  protected val service: OAuth1Service
+
+  /**
+   * The OAuth1 token secret provider implementation.
+   */
+  protected val tokenSecretProvider: OAuth1TokenSecretProvider
 
   /**
    * Starts the authentication process.

@@ -162,7 +162,8 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
       cookies(result).get(settings.cookieName) should beSome[Cookie].which { c =>
         c.name must be equalTo settings.cookieName
         c.value must be equalTo state.serialize
-        c.maxAge must beSome(settings.expirationTime)
+        // https://github.com/mohiva/play-silhouette/issues/273
+        c.maxAge must beSome[Int].which(_ <= settings.expirationTime)
         c.path must be equalTo settings.cookiePath
         c.domain must be equalTo settings.cookieDomain
         c.secure must be equalTo settings.secureCookie

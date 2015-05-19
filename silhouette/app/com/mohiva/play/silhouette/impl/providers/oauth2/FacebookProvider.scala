@@ -33,18 +33,13 @@ import scala.concurrent.Future
 import scala.util.{ Failure, Success, Try }
 
 /**
- * A Facebook OAuth2 Provider.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param stateProvider The state provider implementation.
- * @param settings The provider settings.
+ * Base Facebook OAuth2 Provider.
  *
  * @see https://developers.facebook.com/tools/explorer
  * @see https://developers.facebook.com/docs/graph-api/reference/user
  * @see https://developers.facebook.com/docs/facebook-login/access-tokens
  */
-abstract class FacebookProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
-  extends OAuth2Provider(httpLayer, stateProvider, settings) {
+trait BaseFacebookProvider extends OAuth2Provider {
 
   /**
    * The content type to parse a profile from.
@@ -129,15 +124,35 @@ class FacebookProfileParser extends SocialProfileParser[JsValue, CommonSocialPro
 }
 
 /**
- * The profile builder for the common social profile.
+ * The Facebook OAuth2 Provider.
+ *
+ * @param httpLayer The HTTP layer implementation.
+ * @param stateProvider The state provider implementation.
+ * @param settings The provider settings.
  */
-trait FacebookProfileBuilder extends CommonSocialProfileBuilder {
-  self: FacebookProvider =>
+class FacebookProvider(
+  protected val httpLayer: HTTPLayer,
+  protected val stateProvider: OAuth2StateProvider,
+  val settings: OAuth2Settings)
+  extends BaseFacebookProvider with CommonSocialProfileBuilder {
+
+  /**
+   * The type of this class.
+   */
+  type Self = FacebookProvider
 
   /**
    * The profile parser implementation.
    */
   val profileParser = new FacebookProfileParser
+
+  /**
+   * Gets a provider initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the provider initialized with new settings.
+   */
+  def withSettings(f: (Settings) => Settings) = new FacebookProvider(httpLayer, stateProvider, f(settings))
 }
 
 /**
@@ -155,16 +170,4 @@ object FacebookProvider {
    */
   val ID = "facebook"
   val API = "https://graph.facebook.com/me?fields=name,first_name,last_name,picture,email&return_ssl_resources=1&access_token=%s"
-
-  /**
-   * Creates an instance of the provider.
-   *
-   * @param httpLayer The HTTP layer implementation.
-   * @param stateProvider The state provider implementation.
-   * @param settings The provider settings.
-   * @return An instance of this provider.
-   */
-  def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new FacebookProvider(httpLayer, stateProvider, settings) with FacebookProfileBuilder
-  }
 }

@@ -30,23 +30,13 @@ import play.api.libs.json.JsValue
 import scala.concurrent.Future
 
 /**
- * A LinkedIn OAuth1 Provider.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param service The OAuth1 service implementation.
- * @param tokenSecretProvider The OAuth1 token secret provider implementation.
- * @param settings The OAuth1 provider settings.
+ * Base LinkedIn OAuth1 Provider.
  *
  * @see https://developer.linkedin.com/documents/oauth-10a
  * @see https://developer.linkedin.com/documents/authentication
  * @see https://developer.linkedin.com/documents/inapiprofile
  */
-abstract class LinkedInProvider(
-  httpLayer: HTTPLayer,
-  service: OAuth1Service,
-  tokenSecretProvider: OAuth1TokenSecretProvider,
-  settings: OAuth1Settings)
-  extends OAuth1Provider(httpLayer, service, tokenSecretProvider, settings) {
+trait BaseLinkedInProvider extends OAuth1Provider {
 
   /**
    * The content type to parse a profile from.
@@ -116,15 +106,39 @@ class LinkedInProfileParser extends SocialProfileParser[JsValue, CommonSocialPro
 }
 
 /**
- * The profile builder for the common social profile.
+ * The LinkedIn OAuth1 Provider.
+ *
+ * @param httpLayer The HTTP layer implementation.
+ * @param service The OAuth1 service implementation.
+ * @param tokenSecretProvider The OAuth1 token secret provider implementation.
+ * @param settings The OAuth1 provider settings.
  */
-trait LinkedInProfileBuilder extends CommonSocialProfileBuilder {
-  self: LinkedInProvider =>
+class LinkedInProvider(
+  protected val httpLayer: HTTPLayer,
+  protected val service: OAuth1Service,
+  protected val tokenSecretProvider: OAuth1TokenSecretProvider,
+  val settings: OAuth1Settings)
+  extends BaseLinkedInProvider with CommonSocialProfileBuilder {
+
+  /**
+   * The type of this class.
+   */
+  type Self = LinkedInProvider
 
   /**
    * The profile parser implementation.
    */
   val profileParser = new LinkedInProfileParser
+
+  /**
+   * Gets a provider initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the provider initialized with new settings.
+   */
+  def withSettings(f: (Settings) => Settings) = {
+    new LinkedInProvider(httpLayer, service, tokenSecretProvider, f(settings))
+  }
 }
 
 /**
@@ -142,17 +156,4 @@ object LinkedInProvider {
    */
   val ID = "linkedin"
   val API = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,formatted-name,picture-url,email-address)?format=json"
-
-  /**
-   * Creates an instance of the provider.
-   *
-   * @param httpLayer The HTTP layer implementation.
-   * @param service The OAuth1 service implementation.
-   * @param tokenSecretProvider The OAuth1 token secret provider implementation.
-   * @param settings The OAuth1 provider settings.
-   * @return An instance of this provider.
-   */
-  def apply(httpLayer: HTTPLayer, service: OAuth1Service, tokenSecretProvider: OAuth1TokenSecretProvider, settings: OAuth1Settings) = {
-    new LinkedInProvider(httpLayer, service, tokenSecretProvider, settings) with LinkedInProfileBuilder
-  }
 }

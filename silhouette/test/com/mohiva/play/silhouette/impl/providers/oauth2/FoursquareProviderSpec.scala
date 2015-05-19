@@ -33,6 +33,16 @@ import scala.concurrent.Future
  */
 class FoursquareProviderSpec extends OAuth2ProviderSpec {
 
+  "The `withSettings` method" should {
+    "create a new instance with customized settings" in new WithApplication with Context {
+      val s = provider.withSettings { s =>
+        s.copy(accessTokenURL = "new-access-token-url")
+      }
+
+      s.settings.accessTokenURL must be equalTo "new-access-token-url"
+    }
+  }
+
   "The `authenticate` method" should {
     "fail with UnexpectedResponseException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
       val requestHolder = mock[WSRequest]
@@ -136,17 +146,13 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       val customProperties = Map(APIVersion -> "20120101")
       val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
-      override lazy val provider = FoursquareProvider(
-        httpLayer,
-        stateProvider,
-        oAuthSettings.copy(customProperties = customProperties)
-      )
 
       response.json returns Helper.loadJson("providers/oauth2/foursquare.success.json")
       requestHolder.get() returns Future.successful(response)
       httpLayer.url(API.format("my.access.token", "20120101")) returns requestHolder
 
-      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
+      profile(provider.withSettings(_.copy(customProperties = customProperties))
+        .retrieveProfile(oAuthInfo.as[OAuth2Info])) {
         case p =>
           p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "13221052"),
@@ -162,17 +168,13 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       val customProperties = Map(AvatarResolution -> "150x150")
       val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
-      override lazy val provider = FoursquareProvider(
-        httpLayer,
-        stateProvider,
-        oAuthSettings.copy(customProperties = customProperties)
-      )
 
       response.json returns Helper.loadJson("providers/oauth2/foursquare.success.json")
       requestHolder.get() returns Future.successful(response)
       httpLayer.url(API.format("my.access.token", DefaultAPIVersion)) returns requestHolder
 
-      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
+      profile(provider.withSettings(_.copy(customProperties = customProperties))
+        .retrieveProfile(oAuthInfo.as[OAuth2Info])) {
         case p =>
           p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "13221052"),
@@ -217,6 +219,6 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = FoursquareProvider(httpLayer, stateProvider, oAuthSettings)
+    lazy val provider = new FoursquareProvider(httpLayer, stateProvider, oAuthSettings)
   }
 }

@@ -16,12 +16,13 @@
 package com.mohiva.play.silhouette.impl.providers.custom
 
 import com.mohiva.play.silhouette.api.LoginInfo
+import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.{ ProfileRetrievalException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.FacebookProvider._
-import com.mohiva.play.silhouette.impl.providers.oauth2.{ FacebookProfileParser, FacebookProvider }
+import com.mohiva.play.silhouette.impl.providers.oauth2.{ BaseFacebookProvider, FacebookProfileParser, FacebookProvider }
 import play.api.libs.json.JsValue
 import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.{ FakeRequest, WithApplication }
@@ -34,6 +35,16 @@ import scala.concurrent.ExecutionContext.Implicits.global
  * Test case for the [[FacebookProvider]] class which uses a custom social profile.
  */
 class FacebookProviderSpec extends OAuth2ProviderSpec {
+
+  "The `withSettings` method" should {
+    "create a new instance with customized settings" in new WithApplication with Context {
+      val s = provider.withSettings { s =>
+        s.copy(accessTokenURL = "new-access-token-url")
+      }
+
+      s.settings.accessTokenURL must be equalTo "new-access-token-url"
+    }
+  }
 
   "The `authenticate` method" should {
     "fail with UnexpectedResponseException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
@@ -169,7 +180,7 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new FacebookProvider(httpLayer, stateProvider, oAuthSettings) with CustomFacebookProfileBuilder
+    lazy val provider = new CustomFacebookProvider(httpLayer, stateProvider, oAuthSettings)
   }
 
   /**
@@ -214,10 +225,22 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
   }
 
   /**
-   * A custom Facebook profile builder for testing purpose.
+   * The custom Facebook OAuth2 Provider.
+   *
+   * @param httpLayer The HTTP layer implementation.
+   * @param stateProvider The state provider implementation.
+   * @param settings The provider settings.
    */
-  trait CustomFacebookProfileBuilder {
-    self: FacebookProvider =>
+  class CustomFacebookProvider(
+    protected val httpLayer: HTTPLayer,
+    protected val stateProvider: OAuth2StateProvider,
+    val settings: OAuth2Settings)
+    extends BaseFacebookProvider {
+
+    /**
+     * The type of this class.
+     */
+    type Self = CustomFacebookProvider
 
     /**
      * The type of the profile a profile builder is responsible for.
@@ -228,5 +251,15 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
      * The profile parser.
      */
     val profileParser = new CustomFacebookProfileParser
+
+    /**
+     * Gets a provider initialized with a new settings object.
+     *
+     * @param f A function which gets the settings passed and returns different settings.
+     * @return An instance of the provider initialized with new settings.
+     */
+    def withSettings(f: (Settings) => Settings) = {
+      new CustomFacebookProvider(httpLayer, stateProvider, f(settings))
+    }
   }
 }
