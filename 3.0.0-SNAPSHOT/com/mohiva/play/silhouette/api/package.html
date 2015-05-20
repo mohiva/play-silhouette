@@ -417,7 +417,9 @@ for unauthorized and forbidden endpoints.</p>
     </span>
       <p class="shortcomment cmt">Provides the mechanisms that can be used to protect endpoints and retrieve the current user
 if available.</p><div class="fullcomment"><div class="comment cmt"><p>Provides the mechanisms that can be used to protect endpoints and retrieve the current user
-if available.</p><pre><span class="kw">class</span> MyController(env: Environment[User, CookieAuthenticator])
+if available.</p><pre><span class="kw">class</span> MyController(
+  <span class="kw">val</span> messagesApi: MessagesApi,
+  <span class="kw">val</span> env: Environment[User, CookieAuthenticator])
   <span class="kw">extends</span> Silhouette[User, CookieAuthenticator] {
 
   <span class="kw">def</span> protectedAction = SecuredAction { <span class="kw">implicit</span> request <span class="kw">=&gt;</span>
