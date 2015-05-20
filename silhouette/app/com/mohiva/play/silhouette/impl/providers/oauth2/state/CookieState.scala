@@ -83,14 +83,14 @@ case class CookieState(expirationDate: DateTime, value: String) extends OAuth2St
    *
    * @return True if the state is expired, false otherwise.
    */
-  def isExpired = expirationDate.isBeforeNow
+  override def isExpired = expirationDate.isBeforeNow
 
   /**
    * Returns a serialized value of the state.
    *
    * @return A serialized value of the state.
    */
-  def serialize = CookieState.serialize(this)
+  override def serialize = CookieState.serialize(this)
 }
 
 /**
@@ -108,7 +108,7 @@ class CookieStateProvider(
   /**
    * The type of the state implementation.
    */
-  type State = CookieState
+  override type State = CookieState
 
   /**
    * Builds the state.
@@ -117,7 +117,7 @@ class CookieStateProvider(
    * @tparam B The type of the request body.
    * @return The build state.
    */
-  def build[B](implicit request: ExtractableRequest[B]): Future[CookieState] = idGenerator.generate.map { id =>
+  override def build[B](implicit request: ExtractableRequest[B]): Future[CookieState] = idGenerator.generate.map { id =>
     CookieState(clock.now.plusSeconds(settings.expirationTime), id)
   }
 
@@ -128,7 +128,7 @@ class CookieStateProvider(
    * @tparam B The type of the request body.
    * @return The state on success, otherwise an failure.
    */
-  def validate[B](implicit request: ExtractableRequest[B]) = {
+  override def validate[B](implicit request: ExtractableRequest[B]) = {
     Future.from(clientState.flatMap(clientState => providerState.flatMap(providerState =>
       if (clientState != providerState) Failure(new OAuth2StateException(StateIsNotEqual))
       else if (clientState.isExpired) Failure(new OAuth2StateException(StateIsExpired))
@@ -145,7 +145,7 @@ class CookieStateProvider(
    * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
-  def publish[B](result: Result, state: State)(implicit request: ExtractableRequest[B]) = {
+  override def publish[B](result: Result, state: State)(implicit request: ExtractableRequest[B]) = {
     result.withCookies(Cookie(name = settings.cookieName,
       value = state.serialize,
       maxAge = Some(settings.expirationTime),

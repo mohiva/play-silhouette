@@ -41,17 +41,17 @@ trait BaseFoursquareProvider extends OAuth2Provider {
   /**
    * The content type to parse a profile from.
    */
-  type Content = JsValue
+  override type Content = JsValue
 
   /**
    * The provider ID.
    */
-  val id = ID
+  override val id = ID
 
   /**
    * Defines the URLs that are needed to retrieve the profile data.
    */
-  protected val urls = Map("api" -> API)
+  override protected val urls = Map("api" -> API)
 
   /**
    * Builds the social profile.
@@ -59,7 +59,7 @@ trait BaseFoursquareProvider extends OAuth2Provider {
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+  override protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
     val version = settings.customProperties.getOrElse(APIVersion, DefaultAPIVersion)
     httpLayer.url(urls("api").format(authInfo.accessToken, version)).get().flatMap { response =>
       val json = response.json
@@ -95,7 +95,7 @@ class FoursquareProfileParser(settings: OAuth2Settings) extends SocialProfilePar
    * @param json The content returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue) = Future.successful {
     val user = json \ "response" \ "user"
     val userID = (user \ "id").as[String]
     val lastName = (user \ "lastName").asOpt[String]
@@ -130,12 +130,12 @@ class FoursquareProvider(
   /**
    * The type of this class.
    */
-  type Self = FoursquareProvider
+  override type Self = FoursquareProvider
 
   /**
    * The profile parser implementation.
    */
-  val profileParser = new FoursquareProfileParser(settings)
+  override val profileParser = new FoursquareProfileParser(settings)
 
   /**
    * Gets a provider initialized with a new settings object.
@@ -143,7 +143,7 @@ class FoursquareProvider(
    * @param f A function which gets the settings passed and returns different settings.
    * @return An instance of the provider initialized with new settings.
    */
-  def withSettings(f: (Settings) => Settings) = new FoursquareProvider(httpLayer, stateProvider, f(settings))
+  override def withSettings(f: (Settings) => Settings) = new FoursquareProvider(httpLayer, stateProvider, f(settings))
 }
 
 /**

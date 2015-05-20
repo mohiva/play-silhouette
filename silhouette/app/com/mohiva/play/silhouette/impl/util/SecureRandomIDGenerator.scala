@@ -39,7 +39,7 @@ class SecureRandomIDGenerator(idSizeInBytes: Int = 128) extends IDGenerator {
    *
    * @return The generated ID.
    */
-  def generate: Future[String] = {
+  override def generate: Future[String] = {
     val randomValue = new Array[Byte](idSizeInBytes)
     Future(SecureRandomIDGenerator.random.nextBytes(randomValue)).map { _ =>
       Codecs.toHexString(randomValue)

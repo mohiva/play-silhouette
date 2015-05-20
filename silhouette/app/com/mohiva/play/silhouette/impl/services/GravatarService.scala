@@ -42,7 +42,7 @@ class GravatarService(httpLayer: HTTPLayer) extends AvatarService with Logger {
    * @param email The email address for the avatar.
    * @return Maybe an avatar URL or None if no avatar could be found for the given email address.
    */
-  def retrieveURL(email: String): Future[Option[String]] = {
+  override def retrieveURL(email: String): Future[Option[String]] = {
     hash(email) match {
       case Some(hash) =>
         val url = URL.format(hash)

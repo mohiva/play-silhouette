@@ -36,7 +36,7 @@ class BCryptPasswordHasher(logRounds: Int = 10) extends PasswordHasher {
    *
    * @return The ID of the hasher.
    */
-  def id = ID
+  override def id = ID
 
   /**
    * Hashes a password.
@@ -47,7 +47,7 @@ class BCryptPasswordHasher(logRounds: Int = 10) extends PasswordHasher {
    * @param plainPassword The password to hash.
    * @return A PasswordInfo containing the hashed password.
    */
-  def hash(plainPassword: String) = PasswordInfo(id, BCrypt.hashpw(plainPassword, BCrypt.gensalt(logRounds)))
+  override def hash(plainPassword: String) = PasswordInfo(id, BCrypt.hashpw(plainPassword, BCrypt.gensalt(logRounds)))
 
   /**
    * Checks if a password matches the hashed version.
@@ -56,7 +56,7 @@ class BCryptPasswordHasher(logRounds: Int = 10) extends PasswordHasher {
    * @param suppliedPassword The password supplied by the user trying to log in.
    * @return True if the password matches, false otherwise.
    */
-  def matches(passwordInfo: PasswordInfo, suppliedPassword: String) = {
+  override def matches(passwordInfo: PasswordInfo, suppliedPassword: String) = {
     BCrypt.checkpw(suppliedPassword, passwordInfo.password)
   }
 }

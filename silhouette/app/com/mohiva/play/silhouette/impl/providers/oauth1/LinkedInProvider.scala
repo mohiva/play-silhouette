@@ -41,17 +41,17 @@ trait BaseLinkedInProvider extends OAuth1Provider {
   /**
    * The content type to parse a profile from.
    */
-  type Content = JsValue
+  override type Content = JsValue
 
   /**
    * The provider ID.
    */
-  val id = ID
+  override val id = ID
 
   /**
    * Defines the URLs that are needed to retrieve the profile data.
    */
-  protected val urls = Map("api" -> API)
+  override protected val urls = Map("api" -> API)
 
   /**
    * Builds the social profile.
@@ -59,7 +59,7 @@ trait BaseLinkedInProvider extends OAuth1Provider {
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth1Info): Future[Profile] = {
+  override protected def buildProfile(authInfo: OAuth1Info): Future[Profile] = {
     httpLayer.url(urls("api")).sign(service.sign(authInfo)).get().flatMap { response =>
       val json = response.json
       (json \ "errorCode").asOpt[Int] match {
@@ -87,7 +87,7 @@ class LinkedInProfileParser extends SocialProfileParser[JsValue, CommonSocialPro
    * @param json The content returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue) = Future.successful {
     val userID = (json \ "id").as[String]
     val firstName = (json \ "firstName").asOpt[String]
     val lastName = (json \ "lastName").asOpt[String]
@@ -123,12 +123,12 @@ class LinkedInProvider(
   /**
    * The type of this class.
    */
-  type Self = LinkedInProvider
+  override type Self = LinkedInProvider
 
   /**
    * The profile parser implementation.
    */
-  val profileParser = new LinkedInProfileParser
+  override val profileParser = new LinkedInProfileParser
 
   /**
    * Gets a provider initialized with a new settings object.
@@ -136,7 +136,7 @@ class LinkedInProvider(
    * @param f A function which gets the settings passed and returns different settings.
    * @return An instance of the provider initialized with new settings.
    */
-  def withSettings(f: (Settings) => Settings) = {
+  override def withSettings(f: (Settings) => Settings) = {
     new LinkedInProvider(httpLayer, service, tokenSecretProvider, f(settings))
   }
 }

@@ -45,17 +45,17 @@ trait BaseVKProvider extends OAuth2Provider {
   /**
    * The content type to parse a profile from.
    */
-  type Content = (JsValue, OAuth2Info)
+  override type Content = (JsValue, OAuth2Info)
 
   /**
    * The provider ID.
    */
-  val id = ID
+  override val id = ID
 
   /**
    * Defines the URLs that are needed to retrieve the profile data.
    */
-  protected val urls = Map("api" -> API)
+  override protected val urls = Map("api" -> API)
 
   /**
    * Builds the social profile.
@@ -63,7 +63,7 @@ trait BaseVKProvider extends OAuth2Provider {
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+  override protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
     httpLayer.url(urls("api").format(authInfo.accessToken)).get().flatMap { response =>
       val json = response.json
       (json \ "error").asOpt[JsObject] match {
@@ -104,7 +104,7 @@ class VKProfileParser extends SocialProfileParser[(JsValue, OAuth2Info), CommonS
    * @param data The data returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(data: (JsValue, OAuth2Info)) = Future.successful {
+  override def parse(data: (JsValue, OAuth2Info)) = Future.successful {
     val json = data._1
     val response = (json \ "response").apply(0)
     val userId = (response \ "uid").as[Long]
@@ -137,12 +137,12 @@ class VKProvider(
   /**
    * The type of this class.
    */
-  type Self = VKProvider
+  override type Self = VKProvider
 
   /**
    * The profile parser implementation.
    */
-  val profileParser = new VKProfileParser
+  override val profileParser = new VKProfileParser
 
   /**
    * Gets a provider initialized with a new settings object.
@@ -150,7 +150,7 @@ class VKProvider(
    * @param f A function which gets the settings passed and returns different settings.
    * @return An instance of the provider initialized with new settings.
    */
-  def withSettings(f: (Settings) => Settings) = new VKProvider(httpLayer, stateProvider, f(settings))
+  override def withSettings(f: (Settings) => Settings) = new VKProvider(httpLayer, stateProvider, f(settings))
 }
 
 /**

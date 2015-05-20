@@ -58,14 +58,14 @@ case class BearerTokenAuthenticator(
   /**
    * The Type of the generated value an authenticator will be serialized to.
    */
-  type Value = String
+  override type Value = String
 
   /**
    * Checks if the authenticator isn't expired and isn't timed out.
    *
    * @return True if the authenticator isn't expired and isn't timed out.
    */
-  def isValid = !isExpired && !isTimedOut
+  override def isValid = !isExpired && !isTimedOut
 
   /**
    * Checks if the authenticator is expired. This is an absolute timeout since the creation of
@@ -103,12 +103,12 @@ class BearerTokenAuthenticatorService(
   /**
    * The type of this class.
    */
-  type Self = BearerTokenAuthenticatorService
+  override type Self = BearerTokenAuthenticatorService
 
   /**
    * The type of the settings.
    */
-  type Settings = BearerTokenAuthenticatorSettings
+  override type Settings = BearerTokenAuthenticatorSettings
 
   /**
    * Gets an authenticator service initialized with a new settings object.
@@ -116,7 +116,7 @@ class BearerTokenAuthenticatorService(
    * @param f A function which gets the settings passed and returns different settings.
    * @return An instance of the authenticator service initialized with new settings.
    */
-  def withSettings(f: BearerTokenAuthenticatorSettings => BearerTokenAuthenticatorSettings) = {
+  override def withSettings(f: BearerTokenAuthenticatorSettings => BearerTokenAuthenticatorSettings) = {
     new BearerTokenAuthenticatorService(f(settings), dao, idGenerator, clock)
   }
 
@@ -127,7 +127,7 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return An authenticator.
    */
-  def create(loginInfo: LoginInfo)(implicit request: RequestHeader): Future[BearerTokenAuthenticator] = {
+  override def create(loginInfo: LoginInfo)(implicit request: RequestHeader): Future[BearerTokenAuthenticator] = {
     idGenerator.generate.map { id =>
       val now = clock.now
       BearerTokenAuthenticator(
@@ -147,7 +147,7 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return Some authenticator or None if no authenticator could be found in request.
    */
-  def retrieve(implicit request: RequestHeader): Future[Option[BearerTokenAuthenticator]] = {
+  override def retrieve(implicit request: RequestHeader): Future[Option[BearerTokenAuthenticator]] = {
     Future.from(Try(request.headers.get(settings.headerName))).flatMap {
       case Some(token) => dao.find(token)
       case None => Future.successful(None)
@@ -164,7 +164,7 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The serialized authenticator value.
    */
-  def init(authenticator: BearerTokenAuthenticator)(implicit request: RequestHeader): Future[String] = {
+  override def init(authenticator: BearerTokenAuthenticator)(implicit request: RequestHeader): Future[String] = {
     dao.add(authenticator).map { a =>
       a.id
     }.recover {
@@ -180,7 +180,7 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  def embed(token: String, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def embed(token: String, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
     Future.successful(AuthenticatorResult(result.withHeaders(settings.headerName -> token)))
   }
 
@@ -191,7 +191,7 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The manipulated request header.
    */
-  def embed(token: String, request: RequestHeader): RequestHeader = {
+  override def embed(token: String, request: RequestHeader): RequestHeader = {
     val additional = Seq(settings.headerName -> token)
     request.copy(headers = request.headers.replace(additional: _*))
   }
@@ -202,7 +202,7 @@ class BearerTokenAuthenticatorService(
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  def touch(authenticator: BearerTokenAuthenticator): Either[BearerTokenAuthenticator, BearerTokenAuthenticator] = {
+  override def touch(authenticator: BearerTokenAuthenticator): Either[BearerTokenAuthenticator, BearerTokenAuthenticator] = {
     if (authenticator.idleTimeout.isDefined) {
       Left(authenticator.copy(lastUsedDate = clock.now))
     } else {
@@ -221,7 +221,7 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def update(
+  override def update(
     authenticator: BearerTokenAuthenticator,
     result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
@@ -243,7 +243,7 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The serialized expression of the authenticator.
    */
-  def renew(authenticator: BearerTokenAuthenticator)(implicit request: RequestHeader): Future[String] = {
+  override def renew(authenticator: BearerTokenAuthenticator)(implicit request: RequestHeader): Future[String] = {
     dao.remove(authenticator.id).flatMap { _ =>
       create(authenticator.loginInfo).flatMap(init)
     }.recover {
@@ -262,7 +262,7 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def renew(
+  override def renew(
     authenticator: BearerTokenAuthenticator,
     result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
@@ -278,7 +278,7 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  def discard(
+  override def discard(
     authenticator: BearerTokenAuthenticator,
     result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
 

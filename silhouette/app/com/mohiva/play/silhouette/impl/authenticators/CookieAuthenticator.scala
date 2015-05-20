@@ -67,14 +67,14 @@ case class CookieAuthenticator(
   /**
    * The Type of the generated value an authenticator will be serialized to.
    */
-  type Value = Cookie
+  override type Value = Cookie
 
   /**
    * Checks if the authenticator isn't expired and isn't timed out.
    *
    * @return True if the authenticator isn't expired and isn't timed out.
    */
-  def isValid = !isExpired && !isTimedOut
+  override def isValid = !isExpired && !isTimedOut
 
   /**
    * Checks if the authenticator is expired. This is an absolute timeout since the creation of
@@ -114,12 +114,12 @@ class CookieAuthenticatorService(
   /**
    * The type of this class.
    */
-  type Self = CookieAuthenticatorService
+  override type Self = CookieAuthenticatorService
 
   /**
    * The type of the settings.
    */
-  type Settings = CookieAuthenticatorSettings
+  override type Settings = CookieAuthenticatorSettings
 
   /**
    * Gets an authenticator service initialized with a new settings object.
@@ -127,7 +127,7 @@ class CookieAuthenticatorService(
    * @param f A function which gets the settings passed and returns different settings.
    * @return An instance of the authenticator service initialized with new settings.
    */
-  def withSettings(f: CookieAuthenticatorSettings => CookieAuthenticatorSettings) = {
+  override def withSettings(f: CookieAuthenticatorSettings => CookieAuthenticatorSettings) = {
     new CookieAuthenticatorService(f(settings), dao, fingerprintGenerator, idGenerator, clock)
   }
 
@@ -138,7 +138,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return An authenticator.
    */
-  def create(loginInfo: LoginInfo)(implicit request: RequestHeader): Future[CookieAuthenticator] = {
+  override def create(loginInfo: LoginInfo)(implicit request: RequestHeader): Future[CookieAuthenticator] = {
     idGenerator.generate.map { id =>
       val now = clock.now
       CookieAuthenticator(
@@ -160,7 +160,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return Some authenticator or None if no authenticator could be found in request.
    */
-  def retrieve(implicit request: RequestHeader): Future[Option[CookieAuthenticator]] = {
+  override def retrieve(implicit request: RequestHeader): Future[Option[CookieAuthenticator]] = {
     Future.from(Try {
       if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
     }).flatMap { fingerprint =>
@@ -187,7 +187,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The serialized authenticator value.
    */
-  def init(authenticator: CookieAuthenticator)(implicit request: RequestHeader): Future[Cookie] = {
+  override def init(authenticator: CookieAuthenticator)(implicit request: RequestHeader): Future[Cookie] = {
     dao.add(authenticator).map { a =>
       Cookie(
         name = settings.cookieName,
@@ -211,7 +211,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  def embed(cookie: Cookie, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def embed(cookie: Cookie, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
     Future.successful(AuthenticatorResult(result.withCookies(cookie)))
   }
 
@@ -222,7 +222,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The manipulated request header.
    */
-  def embed(cookie: Cookie, request: RequestHeader): RequestHeader = {
+  override def embed(cookie: Cookie, request: RequestHeader): RequestHeader = {
     val cookies = Cookies.mergeCookieHeader(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(cookie))
     val additional = Seq(HeaderNames.COOKIE -> cookies)
     request.copy(headers = request.headers.replace(additional: _*))
@@ -234,7 +234,7 @@ class CookieAuthenticatorService(
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  def touch(authenticator: CookieAuthenticator): Either[CookieAuthenticator, CookieAuthenticator] = {
+  override def touch(authenticator: CookieAuthenticator): Either[CookieAuthenticator, CookieAuthenticator] = {
     if (authenticator.idleTimeout.isDefined) {
       Left(authenticator.copy(lastUsedDate = clock.now))
     } else {
@@ -253,7 +253,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def update(
+  override def update(
     authenticator: CookieAuthenticator,
     result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
@@ -275,7 +275,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The serialized expression of the authenticator.
    */
-  def renew(authenticator: CookieAuthenticator)(implicit request: RequestHeader): Future[Cookie] = {
+  override def renew(authenticator: CookieAuthenticator)(implicit request: RequestHeader): Future[Cookie] = {
     dao.remove(authenticator.id).flatMap { _ =>
       create(authenticator.loginInfo).flatMap(init)
     }.recover {
@@ -294,7 +294,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def renew(
+  override def renew(
     authenticator: CookieAuthenticator,
     result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
@@ -310,7 +310,7 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  def discard(
+  override def discard(
     authenticator: CookieAuthenticator,
     result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
 

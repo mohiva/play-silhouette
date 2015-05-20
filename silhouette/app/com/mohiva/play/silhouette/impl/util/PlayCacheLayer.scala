@@ -39,7 +39,7 @@ class PlayCacheLayer @Inject() (cacheApi: CacheApi) extends CacheLayer {
    * @param expiration Expiration time in seconds (0 second means eternity).
    * @return The value saved in cache.
    */
-  def save[T](key: String, value: T, expiration: Duration = Duration.Inf): Future[T] = Future.successful {
+  override def save[T](key: String, value: T, expiration: Duration = Duration.Inf): Future[T] = Future.successful {
     cacheApi.set(key, value, expiration)
     value
   }
@@ -51,7 +51,7 @@ class PlayCacheLayer @Inject() (cacheApi: CacheApi) extends CacheLayer {
    * @tparam T The type of the object to return.
    * @return The found value or None if no value could be found.
    */
-  def find[T: ClassTag](key: String): Future[Option[T]] = Future.successful(cacheApi.get[T](key))
+  override def find[T: ClassTag](key: String): Future[Option[T]] = Future.successful(cacheApi.get[T](key))
 
   /**
    * Remove a value from the cache.
@@ -59,5 +59,5 @@ class PlayCacheLayer @Inject() (cacheApi: CacheApi) extends CacheLayer {
    * @param key Item key.
    * @return An empty future to wait for removal.
    */
-  def remove(key: String) = Future.successful(cacheApi.remove(key))
+  override def remove(key: String) = Future.successful(cacheApi.remove(key))
 }

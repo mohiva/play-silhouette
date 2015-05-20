@@ -40,17 +40,17 @@ trait BaseXingProvider extends OAuth1Provider {
   /**
    * The content type to parse a profile from.
    */
-  type Content = JsValue
+  override type Content = JsValue
 
   /**
    * The provider ID.
    */
-  val id = ID
+  override val id = ID
 
   /**
    * Defines the URLs that are needed to retrieve the profile data.
    */
-  protected val urls = Map("api" -> API)
+  override protected val urls = Map("api" -> API)
 
   /**
    * Builds the social profile.
@@ -58,7 +58,7 @@ trait BaseXingProvider extends OAuth1Provider {
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth1Info): Future[Profile] = {
+  override protected def buildProfile(authInfo: OAuth1Info): Future[Profile] = {
     httpLayer.url(urls("api")).sign(service.sign(authInfo)).get().flatMap { response =>
       val json = response.json
       (json \ "error_name").asOpt[String] match {
@@ -83,7 +83,7 @@ class XingProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile
    * @param json The content returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue) = Future.successful {
     val users = (json \ "users").as[Seq[JsObject]].head
     val userID = (users \ "id").as[String]
     val firstName = (users \ "first_name").asOpt[String]
@@ -120,12 +120,12 @@ class XingProvider(
   /**
    * The type of this class.
    */
-  type Self = XingProvider
+  override type Self = XingProvider
 
   /**
    * The profile parser implementation.
    */
-  val profileParser = new XingProfileParser
+  override val profileParser = new XingProfileParser
 
   /**
    * Gets a provider initialized with a new settings object.
@@ -133,7 +133,7 @@ class XingProvider(
    * @param f A function which gets the settings passed and returns different settings.
    * @return An instance of the provider initialized with new settings.
    */
-  def withSettings(f: (Settings) => Settings) = {
+  override def withSettings(f: (Settings) => Settings) = {
     new XingProvider(httpLayer, service, tokenSecretProvider, f(settings))
   }
 }

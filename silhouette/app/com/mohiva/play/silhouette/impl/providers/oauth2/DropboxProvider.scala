@@ -37,17 +37,17 @@ trait BaseDropboxProvider extends OAuth2Provider {
   /**
    * The content type to parse a profile from.
    */
-  type Content = JsValue
+  override type Content = JsValue
 
   /**
    * The provider ID.
    */
-  val id = ID
+  override val id = ID
 
   /**
    * Defines the URLs that are needed to retrieve the profile data.
    */
-  protected val urls = Map("api" -> API)
+  override protected val urls = Map("api" -> API)
 
   /**
    * Builds the social profile.
@@ -55,7 +55,7 @@ trait BaseDropboxProvider extends OAuth2Provider {
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+  override protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
     httpLayer.url(urls("api")).withHeaders(AUTHORIZATION -> s"Bearer ${authInfo.accessToken}").get().flatMap { response =>
       val json = response.json
       response.status match {
@@ -79,7 +79,7 @@ class DropboxProfileParser extends SocialProfileParser[JsValue, CommonSocialProf
    * @param json The content returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue) = Future.successful {
     val userID = (json \ "uid").as[Long]
     val firstName = (json \ "name_details" \ "given_name").asOpt[String]
     val lastName = (json \ "name_details" \ "surname").asOpt[String]
@@ -109,12 +109,12 @@ class DropboxProvider(
   /**
    * The type of this class.
    */
-  type Self = DropboxProvider
+  override type Self = DropboxProvider
 
   /**
    * The profile parser implementation.
    */
-  val profileParser = new DropboxProfileParser
+  override val profileParser = new DropboxProfileParser
 
   /**
    * Gets a provider initialized with a new settings object.
@@ -122,7 +122,7 @@ class DropboxProvider(
    * @param f A function which gets the settings passed and returns different settings.
    * @return An instance of the provider initialized with new settings.
    */
-  def withSettings(f: (Settings) => Settings) = new DropboxProvider(httpLayer, stateProvider, f(settings))
+  override def withSettings(f: (Settings) => Settings) = new DropboxProvider(httpLayer, stateProvider, f(settings))
 }
 
 /**
