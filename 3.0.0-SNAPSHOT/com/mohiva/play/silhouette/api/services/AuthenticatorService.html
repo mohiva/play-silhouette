@@ -96,7 +96,44 @@
         <div id="allMembers">
         
 
-        
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService.Self" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Self&lt;:com.mohiva.play.silhouette.api.services.AuthenticatorService[T]"></a>
+      <a id="Self:Self"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Self</span><span class="result"> &lt;: <a href="" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a>[<span class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@Self&lt;:com.mohiva.play.silhouette.api.services.AuthenticatorService[T]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The type of the concrete implementation of this abstract type.</p>
+    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService.Settings" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Settings"></a>
+      <a id="Settings:Settings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Settings</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@Settings" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The type of the settings.</p>
+    </li></ol>
+            </div>
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
@@ -201,26 +238,6 @@ the serialized value.
 </p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator instance.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The serialized authenticator value.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#renew" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="renew(authenticator:T)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[T#Value]"></a>
-      <a id="renew(T)(RequestHeader):Future[T.Value]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">renew</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService.T">T</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authenticator.Value">T.Value</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@renew(authenticator:T)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[T#Value]" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Renews the expiration of an authenticator without embedding it into the result.</p><div class="fullcomment"><div class="comment cmt"><p>Renews the expiration of an authenticator without embedding it into the result.</p><p>Based on the implementation, the renew method should revoke the given authenticator first, before
-creating a new one. If the authenticator was updated, then the updated artifacts should be returned.
-</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to renew.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The serialized expression of the authenticator.
-</p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#renew" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="renew(authenticator:T,result:play.api.mvc.Result)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[com.mohiva.play.silhouette.api.services.AuthenticatorResult]"></a>
       <a id="renew(T,Result)(RequestHeader):Future[AuthenticatorResult]"></a>
       <h4 class="signature">
@@ -241,6 +258,26 @@ creating a new one. If the authenticator was updated, then the updated artifacts
 into the response.
 </p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to renew.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The original or a manipulated result.
 </p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#renew" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="renew(authenticator:T)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[T#Value]"></a>
+      <a id="renew(T)(RequestHeader):Future[T.Value]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">renew</span><span class="params">(<span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService.T">T</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authenticator.Value">T.Value</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@renew(authenticator:T)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[T#Value]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Renews the expiration of an authenticator without embedding it into the result.</p><div class="fullcomment"><div class="comment cmt"><p>Renews the expiration of an authenticator without embedding it into the result.</p><p>Based on the implementation, the renew method should revoke the given authenticator first, before
+creating a new one. If the authenticator was updated, then the updated artifacts should be returned.
+</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to renew.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The serialized expression of the authenticator.
+</p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#retrieve" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="retrieve(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[Option[T]]"></a>
       <a id="retrieve(RequestHeader):Future[Option[T]]"></a>
@@ -259,6 +296,25 @@ into the response.
     </span>
       <p class="shortcomment cmt">Retrieves the authenticator from request.</p><div class="fullcomment"><div class="comment cmt"><p>Retrieves the authenticator from request.
 </p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>Some authenticator or None if no authenticator could be found in request.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#settings" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="settings:AuthenticatorService.this.Settings"></a>
+      <a id="settings:Settings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">settings</span><span class="result">: <a href="#Settings" class="extmbr" name="com.mohiva.play.silhouette.api.services.AuthenticatorService.Settings">Settings</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@settings:AuthenticatorService.this.Settings" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Gets the authenticator settings.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the authenticator settings.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The authenticator settings.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#touch" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="touch(authenticator:T):Either[T,T]"></a>
@@ -304,6 +360,25 @@ be updated later by the <a href="#update(authenticator:T,result:play.api.mvc.Res
 This method gets called on every subsequent request if an identity accesses a Silhouette action,
 expect the authenticator was not touched.
 </p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to update.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The original or a manipulated result.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#withSettings" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="withSettings(f:AuthenticatorService.this.Settings=&gt;AuthenticatorService.this.Settings):AuthenticatorService.this.Self"></a>
+      <a id="withSettings((Settings)⇒Settings):Self"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withSettings</span><span class="params">(<span name="f">f: (<a href="#Settings" class="extmbr" name="com.mohiva.play.silhouette.api.services.AuthenticatorService.Settings">Settings</a>) ⇒ <a href="#Settings" class="extmbr" name="com.mohiva.play.silhouette.api.services.AuthenticatorService.Settings">Settings</a></span>)</span><span class="result">: <a href="#Self&lt;:com.mohiva.play.silhouette.api.services.AuthenticatorService[T]" class="extmbr" name="com.mohiva.play.silhouette.api.services.AuthenticatorService.Self">Self</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@withSettings(f:AuthenticatorService.this.Settings=&gt;AuthenticatorService.this.Settings):AuthenticatorService.this.Self" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Gets an authenticator service initialized with a new settings object.</p><div class="fullcomment"><div class="comment cmt"><p>Gets an authenticator service initialized with a new settings object.
+</p></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>A function which gets the settings passed and returns different settings.</p></dd><dt>returns</dt><dd class="cmt"><p>An instance of the authenticator service initialized with new settings.
 </p></dd></dl></div>
     </li></ol>
             </div>

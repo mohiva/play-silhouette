@@ -116,7 +116,46 @@
     </li></ol>
             </div>
 
-        
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService.Self" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Self=com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService"></a>
+      <a id="Self:Self"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Self</span><span class="result"> = <a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService">SessionAuthenticatorService</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService@Self=com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The type of this class.</p><div class="fullcomment"><div class="comment cmt"><p>The type of this class.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService">SessionAuthenticatorService</a> → <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService.Settings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Settings=com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorSettings"></a>
+      <a id="Settings:Settings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Settings</span><span class="result"> = <a href="SessionAuthenticatorSettings.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorSettings">SessionAuthenticatorSettings</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService@Settings=com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorSettings" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The type of the settings.</p><div class="fullcomment"><div class="comment cmt"><p>The type of the settings.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService">SessionAuthenticatorService</a> → <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
+    </li></ol>
+            </div>
 
         
 
@@ -545,6 +584,23 @@ into the result. This must be done manually if needed or use the other renew met
       <p class="shortcomment cmt">Retrieves the authenticator from request.</p><div class="fullcomment"><div class="comment cmt"><p>Retrieves the authenticator from request.
 </p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>Some authenticator or None if no authenticator could be found in request.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService">SessionAuthenticatorService</a> → <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService#settings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="settings:com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorSettings"></a>
+      <a id="settings:SessionAuthenticatorSettings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">settings</span><span class="result">: <a href="SessionAuthenticatorSettings.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorSettings">SessionAuthenticatorSettings</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService@settings:com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorSettings" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The authenticator settings.</p><div class="fullcomment"><div class="comment cmt"><p>The authenticator settings.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService">SessionAuthenticatorService</a> → <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -691,6 +747,25 @@ the authenticator in the session on every subsequent request to keep the last us
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService#withSettings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withSettings(f:com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorSettings=&gt;com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorSettings):com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService"></a>
+      <a id="withSettings((SessionAuthenticatorSettings)⇒SessionAuthenticatorSettings):SessionAuthenticatorService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withSettings</span><span class="params">(<span name="f">f: (<a href="SessionAuthenticatorSettings.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorSettings">SessionAuthenticatorSettings</a>) ⇒ <a href="SessionAuthenticatorSettings.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorSettings">SessionAuthenticatorSettings</a></span>)</span><span class="result">: <a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService">SessionAuthenticatorService</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService@withSettings(f:com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorSettings=&gt;com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorSettings):com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Gets an authenticator service initialized with a new settings object.</p><div class="fullcomment"><div class="comment cmt"><p>Gets an authenticator service initialized with a new settings object.
+</p></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>A function which gets the settings passed and returns different settings.</p></dd><dt>returns</dt><dd class="cmt"><p>An instance of the authenticator service initialized with new settings.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService">SessionAuthenticatorService</a> → <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li></ol>
             </div>
 

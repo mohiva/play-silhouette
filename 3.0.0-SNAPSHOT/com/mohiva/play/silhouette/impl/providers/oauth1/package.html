@@ -66,23 +66,63 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.impl.providers.oauth1.LinkedInProfileBuilder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="LinkedInProfileBuilderextendsCommonSocialProfileBuilder"></a>
-      <a id="LinkedInProfileBuilder:LinkedInProfileBuilder"></a>
+              <ol><li name="com.mohiva.play.silhouette.impl.providers.oauth1.BaseLinkedInProvider" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="BaseLinkedInProviderextendsOAuth1Provider"></a>
+      <a id="BaseLinkedInProvider:BaseLinkedInProvider"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="LinkedInProfileBuilder.html"><span class="name">LinkedInProfileBuilder</span></a><span class="result"> extends <a href="../CommonSocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder">CommonSocialProfileBuilder</a></span>
+        <a href="BaseLinkedInProvider.html"><span class="name">BaseLinkedInProvider</span></a><span class="result"> extends <a href="../OAuth1Provider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth1Provider">OAuth1Provider</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.package@LinkedInProfileBuilderextendsCommonSocialProfileBuilder" title="Permalink" target="_top">
+      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.package@BaseLinkedInProviderextendsOAuth1Provider" title="Permalink" target="_top">
         <img src="../../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The profile builder for the common social profile.</p>
+      <p class="shortcomment cmt">Base LinkedIn OAuth1 Provider.</p><div class="fullcomment"><div class="comment cmt"><p>Base LinkedIn OAuth1 Provider.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>https://developer.linkedin.com/documents/inapiprofile
+</p></span><span class="cmt"><p>https://developer.linkedin.com/documents/authentication</p></span><span class="cmt"><p>https://developer.linkedin.com/documents/oauth-10a</p></span></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.oauth1.BaseTwitterProvider" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="BaseTwitterProviderextendsOAuth1Provider"></a>
+      <a id="BaseTwitterProvider:BaseTwitterProvider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="BaseTwitterProvider.html"><span class="name">BaseTwitterProvider</span></a><span class="result"> extends <a href="../OAuth1Provider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth1Provider">OAuth1Provider</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.package@BaseTwitterProviderextendsOAuth1Provider" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Base Twitter OAuth1 Provider.</p><div class="fullcomment"><div class="comment cmt"><p>Base Twitter OAuth1 Provider.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>https://dev.twitter.com/docs/entities#users
+</p></span><span class="cmt"><p>https://dev.twitter.com/docs/user-profile-images-and-banners</p></span></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.oauth1.BaseXingProvider" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="BaseXingProviderextendsOAuth1Provider"></a>
+      <a id="BaseXingProvider:BaseXingProvider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="BaseXingProvider.html"><span class="name">BaseXingProvider</span></a><span class="result"> extends <a href="../OAuth1Provider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth1Provider">OAuth1Provider</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.package@BaseXingProviderextendsOAuth1Provider" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Base Xing OAuth1 Provider.</p><div class="fullcomment"><div class="comment cmt"><p>Base Xing OAuth1 Provider.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>https://dev.xing.com/docs/error_responses
+</p></span><span class="cmt"><p>https://dev.xing.com/docs/get/users/me</p></span></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.oauth1.LinkedInProfileParser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LinkedInProfileParserextendsSocialProfileParser[play.api.libs.json.JsValue,com.mohiva.play.silhouette.impl.providers.CommonSocialProfile]"></a>
       <a id="LinkedInProfileParser:LinkedInProfileParser"></a>
@@ -100,42 +140,23 @@
       </a>
     </span>
       <p class="shortcomment cmt">The profile parser for the common social profile.</p>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.oauth1.LinkedInProvider" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="LinkedInProviderextendsOAuth1Provider"></a>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.oauth1.LinkedInProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LinkedInProviderextendsBaseLinkedInProviderwithCommonSocialProfileBuilder"></a>
       <a id="LinkedInProvider:LinkedInProvider"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
+        <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="LinkedInProvider.html"><span class="name">LinkedInProvider</span></a><span class="result"> extends <a href="../OAuth1Provider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth1Provider">OAuth1Provider</a></span>
+        <a href="LinkedInProvider.html"><span class="name">LinkedInProvider</span></a><span class="result"> extends <a href="BaseLinkedInProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth1.BaseLinkedInProvider">BaseLinkedInProvider</a> with <a href="../CommonSocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder">CommonSocialProfileBuilder</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.package@LinkedInProviderextendsOAuth1Provider" title="Permalink" target="_top">
+      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.package@LinkedInProviderextendsBaseLinkedInProviderwithCommonSocialProfileBuilder" title="Permalink" target="_top">
         <img src="../../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">A LinkedIn OAuth1 Provider.</p><div class="fullcomment"><div class="comment cmt"><p>A LinkedIn OAuth1 Provider.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>https://developer.linkedin.com/documents/inapiprofile
-</p></span><span class="cmt"><p>https://developer.linkedin.com/documents/authentication</p></span><span class="cmt"><p>https://developer.linkedin.com/documents/oauth-10a</p></span></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProfileBuilder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="TwitterProfileBuilderextendsCommonSocialProfileBuilder"></a>
-      <a id="TwitterProfileBuilder:TwitterProfileBuilder"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="TwitterProfileBuilder.html"><span class="name">TwitterProfileBuilder</span></a><span class="result"> extends <a href="../CommonSocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder">CommonSocialProfileBuilder</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.package@TwitterProfileBuilderextendsCommonSocialProfileBuilder" title="Permalink" target="_top">
-        <img src="../../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">The profile builder for the common social profile.</p>
+      <p class="shortcomment cmt">The LinkedIn OAuth1 Provider.</p>
     </li><li name="com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProfileParser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="TwitterProfileParserextendsSocialProfileParser[play.api.libs.json.JsValue,com.mohiva.play.silhouette.impl.providers.CommonSocialProfile]"></a>
       <a id="TwitterProfileParser:TwitterProfileParser"></a>
@@ -153,42 +174,23 @@
       </a>
     </span>
       <p class="shortcomment cmt">The profile parser for the common social profile.</p>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="TwitterProviderextendsOAuth1Provider"></a>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TwitterProviderextendsBaseTwitterProviderwithCommonSocialProfileBuilder"></a>
       <a id="TwitterProvider:TwitterProvider"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
+        <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="TwitterProvider.html"><span class="name">TwitterProvider</span></a><span class="result"> extends <a href="../OAuth1Provider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth1Provider">OAuth1Provider</a></span>
+        <a href="TwitterProvider.html"><span class="name">TwitterProvider</span></a><span class="result"> extends <a href="BaseTwitterProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth1.BaseTwitterProvider">BaseTwitterProvider</a> with <a href="../CommonSocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder">CommonSocialProfileBuilder</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.package@TwitterProviderextendsOAuth1Provider" title="Permalink" target="_top">
+      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.package@TwitterProviderextendsBaseTwitterProviderwithCommonSocialProfileBuilder" title="Permalink" target="_top">
         <img src="../../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">A Twitter OAuth1 Provider.</p><div class="fullcomment"><div class="comment cmt"><p>A Twitter OAuth1 Provider.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>https://dev.twitter.com/docs/entities#users
-</p></span><span class="cmt"><p>https://dev.twitter.com/docs/user-profile-images-and-banners</p></span></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.oauth1.XingProfileBuilder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="XingProfileBuilderextendsCommonSocialProfileBuilder"></a>
-      <a id="XingProfileBuilder:XingProfileBuilder"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="XingProfileBuilder.html"><span class="name">XingProfileBuilder</span></a><span class="result"> extends <a href="../CommonSocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder">CommonSocialProfileBuilder</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.package@XingProfileBuilderextendsCommonSocialProfileBuilder" title="Permalink" target="_top">
-        <img src="../../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">The profile builder for the common social profile.</p>
+      <p class="shortcomment cmt">The Twitter OAuth1 Provider.</p>
     </li><li name="com.mohiva.play.silhouette.impl.providers.oauth1.XingProfileParser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="XingProfileParserextendsSocialProfileParser[play.api.libs.json.JsValue,com.mohiva.play.silhouette.impl.providers.CommonSocialProfile]"></a>
       <a id="XingProfileParser:XingProfileParser"></a>
@@ -206,25 +208,23 @@
       </a>
     </span>
       <p class="shortcomment cmt">The profile parser for the common social profile.</p>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.oauth1.XingProvider" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="XingProviderextendsOAuth1Provider"></a>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.oauth1.XingProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="XingProviderextendsBaseXingProviderwithCommonSocialProfileBuilder"></a>
       <a id="XingProvider:XingProvider"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
+        <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="XingProvider.html"><span class="name">XingProvider</span></a><span class="result"> extends <a href="../OAuth1Provider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth1Provider">OAuth1Provider</a></span>
+        <a href="XingProvider.html"><span class="name">XingProvider</span></a><span class="result"> extends <a href="BaseXingProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth1.BaseXingProvider">BaseXingProvider</a> with <a href="../CommonSocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder">CommonSocialProfileBuilder</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.package@XingProviderextendsOAuth1Provider" title="Permalink" target="_top">
+      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth1.package@XingProviderextendsBaseXingProviderwithCommonSocialProfileBuilder" title="Permalink" target="_top">
         <img src="../../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">A Xing OAuth1 Provider.</p><div class="fullcomment"><div class="comment cmt"><p>A Xing OAuth1 Provider.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>https://dev.xing.com/docs/error_responses
-</p></span><span class="cmt"><p>https://dev.xing.com/docs/get/users/me</p></span></dd></dl></div>
+      <p class="shortcomment cmt">The Xing OAuth1 Provider.</p>
     </li></ol>
             </div>
 

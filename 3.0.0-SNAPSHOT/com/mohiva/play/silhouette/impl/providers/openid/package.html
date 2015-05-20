@@ -66,23 +66,44 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.impl.providers.openid.SteamProfileBuilder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="SteamProfileBuilderextendsCommonSocialProfileBuilder"></a>
-      <a id="SteamProfileBuilder:SteamProfileBuilder"></a>
+              <ol><li name="com.mohiva.play.silhouette.impl.providers.openid.BaseSteamProvider" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="BaseSteamProviderextendsOpenIDProvider"></a>
+      <a id="BaseSteamProvider:BaseSteamProvider"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="SteamProfileBuilder.html"><span class="name">SteamProfileBuilder</span></a><span class="result"> extends <a href="../CommonSocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder">CommonSocialProfileBuilder</a></span>
+        <a href="BaseSteamProvider.html"><span class="name">BaseSteamProvider</span></a><span class="result"> extends <a href="../OpenIDProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OpenIDProvider">OpenIDProvider</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.openid.package@SteamProfileBuilderextendsCommonSocialProfileBuilder" title="Permalink" target="_top">
+      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.openid.package@BaseSteamProviderextendsOpenIDProvider" title="Permalink" target="_top">
         <img src="../../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The profile builder for the common social profile.</p>
+      <p class="shortcomment cmt">Base Steam OpenID Provider.</p><div class="fullcomment"><div class="comment cmt"><p>Base Steam OpenID Provider.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>https://steamcommunity.com/dev
+</p></span></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.openid.BaseYahooProvider" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="BaseYahooProviderextendsOpenIDProvider"></a>
+      <a id="BaseYahooProvider:BaseYahooProvider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="BaseYahooProvider.html"><span class="name">BaseYahooProvider</span></a><span class="result"> extends <a href="../OpenIDProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OpenIDProvider">OpenIDProvider</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.openid.package@BaseYahooProviderextendsOpenIDProvider" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Base Yahoo OpenID Provider.</p><div class="fullcomment"><div class="comment cmt"><p>Base Yahoo OpenID Provider.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>https://developer.yahoo.com/openid/index.html
+</p></span></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.openid.SteamProfileParser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="SteamProfileParserextendsSocialProfileParser[com.mohiva.play.silhouette.impl.providers.OpenIDInfo,com.mohiva.play.silhouette.impl.providers.CommonSocialProfile]"></a>
       <a id="SteamProfileParser:SteamProfileParser"></a>
@@ -100,42 +121,23 @@
       </a>
     </span>
       <p class="shortcomment cmt">The profile parser for the common social profile.</p>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.openid.SteamProvider" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="SteamProviderextendsOpenIDProvider"></a>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.openid.SteamProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SteamProviderextendsBaseSteamProviderwithCommonSocialProfileBuilder"></a>
       <a id="SteamProvider:SteamProvider"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
+        <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="SteamProvider.html"><span class="name">SteamProvider</span></a><span class="result"> extends <a href="../OpenIDProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OpenIDProvider">OpenIDProvider</a></span>
+        <a href="SteamProvider.html"><span class="name">SteamProvider</span></a><span class="result"> extends <a href="BaseSteamProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.openid.BaseSteamProvider">BaseSteamProvider</a> with <a href="../CommonSocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder">CommonSocialProfileBuilder</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.openid.package@SteamProviderextendsOpenIDProvider" title="Permalink" target="_top">
+      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.openid.package@SteamProviderextendsBaseSteamProviderwithCommonSocialProfileBuilder" title="Permalink" target="_top">
         <img src="../../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">A Steam OpenID Provider.</p><div class="fullcomment"><div class="comment cmt"><p>A Steam OpenID Provider.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>https://steamcommunity.com/dev
-</p></span></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.openid.YahooProfileBuilder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="YahooProfileBuilderextendsCommonSocialProfileBuilder"></a>
-      <a id="YahooProfileBuilder:YahooProfileBuilder"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="YahooProfileBuilder.html"><span class="name">YahooProfileBuilder</span></a><span class="result"> extends <a href="../CommonSocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder">CommonSocialProfileBuilder</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.openid.package@YahooProfileBuilderextendsCommonSocialProfileBuilder" title="Permalink" target="_top">
-        <img src="../../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">The profile builder for the common social profile.</p>
+      <p class="shortcomment cmt">The Steam OAuth2 Provider.</p>
     </li><li name="com.mohiva.play.silhouette.impl.providers.openid.YahooProfileParser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="YahooProfileParserextendsSocialProfileParser[com.mohiva.play.silhouette.impl.providers.OpenIDInfo,com.mohiva.play.silhouette.impl.providers.CommonSocialProfile]"></a>
       <a id="YahooProfileParser:YahooProfileParser"></a>
@@ -153,25 +155,23 @@
       </a>
     </span>
       <p class="shortcomment cmt">The profile parser for the common social profile.</p>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.openid.YahooProvider" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="YahooProviderextendsOpenIDProvider"></a>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.openid.YahooProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="YahooProviderextendsBaseYahooProviderwithCommonSocialProfileBuilder"></a>
       <a id="YahooProvider:YahooProvider"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
+        <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="YahooProvider.html"><span class="name">YahooProvider</span></a><span class="result"> extends <a href="../OpenIDProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OpenIDProvider">OpenIDProvider</a></span>
+        <a href="YahooProvider.html"><span class="name">YahooProvider</span></a><span class="result"> extends <a href="BaseYahooProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.openid.BaseYahooProvider">BaseYahooProvider</a> with <a href="../CommonSocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder">CommonSocialProfileBuilder</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.openid.package@YahooProviderextendsOpenIDProvider" title="Permalink" target="_top">
+      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.openid.package@YahooProviderextendsBaseYahooProviderwithCommonSocialProfileBuilder" title="Permalink" target="_top">
         <img src="../../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">A Yahoo OpenID Provider.</p><div class="fullcomment"><div class="comment cmt"><p>A Yahoo OpenID Provider.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>https://developer.yahoo.com/openid/index.html
-</p></span></dd></dl></div>
+      <p class="shortcomment cmt">The Yahoo OAuth2 Provider.</p>
     </li></ol>
             </div>
 

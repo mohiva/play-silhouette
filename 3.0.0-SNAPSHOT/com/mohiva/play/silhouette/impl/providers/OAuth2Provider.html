@@ -28,7 +28,7 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="OAuth2Provider$.html" title="See companion object"><img src="../../../../../../lib/class_to_object_big.png" /></a>
+        <a href="OAuth2Provider$.html" title="See companion object"><img src="../../../../../../lib/trait_to_object_big.png" /></a>
         <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.impl">impl</a>.<a href="package.html" class="extype" name="com.mohiva.play.silhouette.impl.providers">providers</a></p>
         <h1><a href="OAuth2Provider$.html" title="See companion object">OAuth2Provider</a></h1><h3><span class="morelinks"><div>
             Related Docs:
@@ -43,21 +43,21 @@
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">class</span>
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
         <span class="name">OAuth2Provider</span><span class="result"> extends <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a> with <a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Base class for all OAuth2 providers.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Base implementation for all OAuth2 providers.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a>, <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a>, <a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a>, <a href="../../api/Provider.html" class="extype" name="com.mohiva.play.silhouette.api.Provider">Provider</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="oauth2/ClefProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.ClefProvider">ClefProvider</a>, <a href="oauth2/DropboxProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.DropboxProvider">DropboxProvider</a>, <a href="oauth2/FacebookProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.FacebookProvider">FacebookProvider</a>, <a href="oauth2/FoursquareProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.FoursquareProvider">FoursquareProvider</a>, <a href="oauth2/GitHubProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.GitHubProvider">GitHubProvider</a>, <a href="oauth2/GoogleProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.GoogleProvider">GoogleProvider</a>, <a href="oauth2/InstagramProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.InstagramProvider">InstagramProvider</a>, <a href="oauth2/LinkedInProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.LinkedInProvider">LinkedInProvider</a>, <a href="oauth2/VKProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.VKProvider">VKProvider</a></div>
+            <div class="subClasses hiddenContent"><a href="oauth2/BaseClefProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.BaseClefProvider">BaseClefProvider</a>, <a href="oauth2/BaseDropboxProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.BaseDropboxProvider">BaseDropboxProvider</a>, <a href="oauth2/BaseFacebookProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.BaseFacebookProvider">BaseFacebookProvider</a>, <a href="oauth2/BaseFoursquareProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.BaseFoursquareProvider">BaseFoursquareProvider</a>, <a href="oauth2/BaseGitHubProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.BaseGitHubProvider">BaseGitHubProvider</a>, <a href="oauth2/BaseGoogleProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.BaseGoogleProvider">BaseGoogleProvider</a>, <a href="oauth2/BaseInstagramProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.BaseInstagramProvider">BaseInstagramProvider</a>, <a href="oauth2/BaseLinkedInProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.BaseLinkedInProvider">BaseLinkedInProvider</a>, <a href="oauth2/BaseVKProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.BaseVKProvider">BaseVKProvider</a>, <a href="oauth2/ClefProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.ClefProvider">ClefProvider</a>, <a href="oauth2/DropboxProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.DropboxProvider">DropboxProvider</a>, <a href="oauth2/FacebookProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.FacebookProvider">FacebookProvider</a>, <a href="oauth2/FoursquareProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.FoursquareProvider">FoursquareProvider</a>, <a href="oauth2/GitHubProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.GitHubProvider">GitHubProvider</a>, <a href="oauth2/GoogleProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.GoogleProvider">GoogleProvider</a>, <a href="oauth2/InstagramProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.InstagramProvider">InstagramProvider</a>, <a href="oauth2/LinkedInProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.LinkedInProvider">LinkedInProvider</a>, <a href="oauth2/VKProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.VKProvider">VKProvider</a></div>
           </div></div>
         
 
@@ -93,28 +93,7 @@
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(httpLayer:com.mohiva.play.silhouette.api.util.HTTPLayer,stateProvider:com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider,settings:com.mohiva.play.silhouette.impl.providers.OAuth2Settings):com.mohiva.play.silhouette.impl.providers.OAuth2Provider"></a>
-      <a id="&lt;init&gt;:OAuth2Provider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">OAuth2Provider</span><span class="params">(<span name="httpLayer">httpLayer: <a href="../../api/util/HTTPLayer.html" class="extype" name="com.mohiva.play.silhouette.api.util.HTTPLayer">HTTPLayer</a></span>, <span name="stateProvider">stateProvider: <a href="OAuth2StateProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider">OAuth2StateProvider</a></span>, <span name="settings">settings: <a href="OAuth2Settings.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Settings">OAuth2Settings</a></span>)</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2Provider@&lt;init&gt;(httpLayer:com.mohiva.play.silhouette.api.util.HTTPLayer,stateProvider:com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider,settings:com.mohiva.play.silhouette.impl.providers.OAuth2Settings):com.mohiva.play.silhouette.impl.providers.OAuth2Provider" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">httpLayer</dt><dd class="cmt"><p>The HTTP layer implementation.</p></dd><dt class="param">stateProvider</dt><dd class="cmt"><p>The state provider implementation.</p></dd><dt class="param">settings</dt><dd class="cmt"><p>The provider settings.
-</p></dd></dl></div>
-    </li></ol>
-            </div>
+        
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
@@ -172,6 +151,24 @@
     </span>
       <p class="shortcomment cmt">The type of the profile a profile builder is responsible for.</p><div class="fullcomment"><div class="comment cmt"><p>The type of the profile a profile builder is responsible for.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProvider.Self" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Self&lt;:com.mohiva.play.silhouette.impl.providers.SocialProvider"></a>
+      <a id="Self:Self"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Self</span><span class="result"> &lt;: <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2Provider@Self&lt;:com.mohiva.play.silhouette.impl.providers.SocialProvider" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The type of the concrete implementation of this abstract type.</p><div class="fullcomment"><div class="comment cmt"><p>The type of the concrete implementation of this abstract type.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider.Settings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Settings=com.mohiva.play.silhouette.impl.providers.OAuth2Settings"></a>
       <a id="Settings:Settings"></a>
@@ -214,6 +211,24 @@
       <p class="shortcomment cmt">Subclasses need to implement this method to populate the profile information from the service provider.</p><div class="fullcomment"><div class="comment cmt"><p>Subclasses need to implement this method to populate the profile information from the service provider.
 </p></div><dl class="paramcmts block"><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info received from the provider.</p></dd><dt>returns</dt><dd class="cmt"><p>On success the build social profile, otherwise a failure.
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider#httpLayer" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="httpLayer:com.mohiva.play.silhouette.api.util.HTTPLayer"></a>
+      <a id="httpLayer:HTTPLayer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">httpLayer</span><span class="result">: <a href="../../api/util/HTTPLayer.html" class="extype" name="com.mohiva.play.silhouette.api.util.HTTPLayer">HTTPLayer</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2Provider@httpLayer:com.mohiva.play.silhouette.api.util.HTTPLayer" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The HTTP layer implementation.</p><div class="fullcomment"><div class="comment cmt"><p>The HTTP layer implementation.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.Provider#id" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="id:String"></a>
       <a id="id:String"></a>
@@ -252,6 +267,43 @@
       <p class="shortcomment cmt">Returns the profile parser implementation.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the profile parser implementation.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The profile parser implementation.
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProvider#settings" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="settings:SocialProvider.this.Settings"></a>
+      <a id="settings:Settings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">settings</span><span class="result">: <a href="#Settings=com.mohiva.play.silhouette.impl.providers.OAuth2Settings" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider.Settings">Settings</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2Provider@settings:SocialProvider.this.Settings" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Gets the provider settings.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the provider settings.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The provider settings.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider#stateProvider" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="stateProvider:com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider"></a>
+      <a id="stateProvider:OAuth2StateProvider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">stateProvider</span><span class="result">: <a href="OAuth2StateProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider">OAuth2StateProvider</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2Provider@stateProvider:com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The state provider implementation.</p><div class="fullcomment"><div class="comment cmt"><p>The state provider implementation.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder#urls" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="urls:Map[String,String]"></a>
       <a id="urls:Map[String,String]"></a>
@@ -272,6 +324,25 @@
 So we use a Map here to allow defining multiple URLs.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The URLs that are needed to retrieve the profile data.
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProvider#withSettings" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="withSettings(f:SocialProvider.this.Settings=&gt;SocialProvider.this.Settings):SocialProvider.this.Self"></a>
+      <a id="withSettings((Settings)⇒Settings):Self"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withSettings</span><span class="params">(<span name="f">f: (<a href="#Settings=com.mohiva.play.silhouette.impl.providers.OAuth2Settings" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider.Settings">Settings</a>) ⇒ <a href="#Settings=com.mohiva.play.silhouette.impl.providers.OAuth2Settings" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider.Settings">Settings</a></span>)</span><span class="result">: <a href="#Self&lt;:com.mohiva.play.silhouette.impl.providers.SocialProvider" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider.Self">Self</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2Provider@withSettings(f:SocialProvider.this.Settings=&gt;SocialProvider.this.Settings):SocialProvider.this.Self" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Gets a provider initialized with a new settings object.</p><div class="fullcomment"><div class="comment cmt"><p>Gets a provider initialized with a new settings object.
+</p></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>A function which gets the settings passed and returns different settings.</p></dd><dt>returns</dt><dd class="cmt"><p>An instance of the provider initialized with new settings.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -659,24 +730,6 @@ So we use a Map here to allow defining multiple URLs.
 identity.
 </p></div><dl class="paramcmts block"><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info for which the profile information should be retrieved.</p></dd><dt>returns</dt><dd class="cmt"><p>The profile information for the given auth info.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider#settings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="settings:com.mohiva.play.silhouette.impl.providers.OAuth2Settings"></a>
-      <a id="settings:OAuth2Settings"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">settings</span><span class="result">: <a href="OAuth2Settings.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Settings">OAuth2Settings</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OAuth2Provider@settings:com.mohiva.play.silhouette.impl.providers.OAuth2Settings" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">The provider settings.</p><div class="fullcomment"><div class="comment cmt"><p>The provider settings.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider">OAuth2Provider</a> → <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
