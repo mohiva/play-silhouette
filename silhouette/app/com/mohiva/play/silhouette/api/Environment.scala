@@ -16,7 +16,6 @@
 package com.mohiva.play.silhouette.api
 
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorService, IdentityService }
-import play.api.i18n.MessagesApi
 
 /**
  * The environment needed to instantiate a Silhouette controller.
@@ -50,13 +49,6 @@ trait Environment[I <: Identity, T <: Authenticator] {
    * @return The event bus implementation.
    */
   def eventBus: EventBus
-
-  /**
-   * The Play messages API.
-   *
-   * @return The Play messages API.
-   */
-  def messagesApi: MessagesApi
 }
 
 /**
@@ -67,12 +59,10 @@ object Environment {
     identityServiceImpl: IdentityService[I],
     authenticatorServiceImpl: AuthenticatorService[T],
     requestProvidersImpl: Seq[RequestProvider],
-    eventBusImpl: EventBus,
-    messagesApiImpl: MessagesApi) = new Environment[I, T] {
+    eventBusImpl: EventBus) = new Environment[I, T] {
     val identityService = identityServiceImpl
     val authenticatorService = authenticatorServiceImpl
     val requestProviders = requestProvidersImpl
     val eventBus = eventBusImpl
-    val messagesApi = messagesApiImpl
   }
 }

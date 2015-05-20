@@ -23,7 +23,7 @@ import com.mohiva.play.silhouette.api.exceptions.{ NotAuthenticatedException, No
 import com.mohiva.play.silhouette.api.services.AuthenticatorResult
 import com.mohiva.play.silhouette.api.util.DefaultEndpointHandler
 import play.api.Play
-import play.api.i18n.{ MessagesApi, I18nSupport }
+import play.api.i18n.I18nSupport
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc._
 
@@ -48,11 +48,6 @@ import scala.language.higherKinds
  * @tparam A The type of the authenticator.
  */
 trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logger with I18nSupport {
-
-  /**
-   * Defines the messages API.
-   */
-  val messagesApi: MessagesApi = env.messagesApi
 
   /**
    * Provides an `extract` method on an `Either` which contains the same types.

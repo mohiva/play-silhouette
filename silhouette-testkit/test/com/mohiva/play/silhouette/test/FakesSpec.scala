@@ -20,6 +20,7 @@ import javax.inject.Inject
 import com.mohiva.play.silhouette.api.{ Environment, LoginInfo, Silhouette }
 import com.mohiva.play.silhouette.impl.authenticators._
 import org.specs2.matcher.JsonMatchers
+import play.api.i18n.MessagesApi
 import play.api.libs.json.Json
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
@@ -172,7 +173,8 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
       val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
       val request = FakeRequest()
 
-      val controller = new SecuredController(env)
+      val messagesApi = app.injector.instanceOf[MessagesApi]
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.securedAction(request)
 
       status(result) must equalTo(UNAUTHORIZED)
@@ -184,7 +186,8 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
       implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
       val request = FakeRequest().withAuthenticator[CookieAuthenticator](LoginInfo("invalid", "invalid"))
 
-      val controller = new SecuredController(env)
+      val messagesApi = app.injector.instanceOf[MessagesApi]
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.securedAction(request)
 
       status(result) must equalTo(UNAUTHORIZED)
@@ -196,7 +199,8 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
       implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
       val request = FakeRequest().withAuthenticator[CookieAuthenticator](loginInfo)
 
-      val controller = new SecuredController(env)
+      val messagesApi = app.injector.instanceOf[MessagesApi]
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.securedAction(request)
 
       status(result) must equalTo(OK)
@@ -211,7 +215,8 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
       val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
       val request = FakeRequest()
 
-      val controller = new SecuredController(env)
+      val messagesApi = app.injector.instanceOf[MessagesApi]
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.userAwareAction(request)
 
       status(result) must equalTo(UNAUTHORIZED)
@@ -223,7 +228,8 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
       implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
       val request = FakeRequest().withAuthenticator[CookieAuthenticator](LoginInfo("invalid", "invalid"))
 
-      val controller = new SecuredController(env)
+      val messagesApi = app.injector.instanceOf[MessagesApi]
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.userAwareAction(request)
 
       status(result) must equalTo(UNAUTHORIZED)
@@ -236,7 +242,8 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
       implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
       val request = FakeRequest().withAuthenticator(loginInfo)
 
-      val controller = new SecuredController(env)
+      val messagesApi = app.injector.instanceOf[MessagesApi]
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.userAwareAction(request)
 
       status(result) must equalTo(OK)
@@ -250,6 +257,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
    * @param env The Silhouette environment.
    */
   class SecuredController @Inject() (
+    val messagesApi: MessagesApi,
     val env: Environment[FakeIdentity, CookieAuthenticator])
     extends Silhouette[FakeIdentity, CookieAuthenticator] {
 
