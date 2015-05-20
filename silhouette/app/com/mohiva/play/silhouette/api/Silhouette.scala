@@ -35,7 +35,9 @@ import scala.language.higherKinds
  * if available.
  *
  * {{{
- * class MyController(env: Environment[User, CookieAuthenticator])
+ * class MyController(
+ *   val messagesApi: MessagesApi,
+ *   val env: Environment[User, CookieAuthenticator])
  *   extends Silhouette[User, CookieAuthenticator] {
  *
  *   def protectedAction = SecuredAction { implicit request =>
