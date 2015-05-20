@@ -33,6 +33,16 @@ import scala.concurrent.Future
  */
 class ClefProviderSpec extends OAuth2ProviderSpec {
 
+  "The `withSettings` method" should {
+    "create a new instance with customized settings" in new WithApplication with Context {
+      val s = provider.withSettings { s =>
+        s.copy(accessTokenURL = "new-access-token-url")
+      }
+
+      s.settings.accessTokenURL must be equalTo "new-access-token-url"
+    }
+  }
+
   "The `authenticate` method" should {
     "fail with UnexpectedResponseException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
       val requestHolder = mock[WSRequest]
@@ -139,6 +149,6 @@ class ClefProviderSpec extends OAuth2ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = ClefProvider(httpLayer, stateProvider, oAuthSettings)
+    lazy val provider = new ClefProvider(httpLayer, stateProvider, oAuthSettings)
   }
 }

@@ -22,8 +22,6 @@ import org.specs2.specification.Scope
 import play.api.mvc.Results
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
-import scala.concurrent.Future
-
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator]].
  */
@@ -32,6 +30,12 @@ class DummyAuthenticatorSpec extends PlaySpecification with Mockito {
   "The `isValid` method of the authenticator" should {
     "return true" in new Context {
       authenticator.isValid must beTrue
+    }
+  }
+
+  "The `withSettings` method of the service" should {
+    "create a new instance with customized settings" in new Context {
+      service.withSettings(identity) must beAnInstanceOf[DummyAuthenticatorService]
     }
   }
 

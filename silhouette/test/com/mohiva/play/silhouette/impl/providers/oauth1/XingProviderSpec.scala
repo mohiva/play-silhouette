@@ -31,6 +31,16 @@ import scala.concurrent.Future
  */
 class XingProviderSpec extends OAuth1ProviderSpec {
 
+  "The `withSettings` method" should {
+    "create a new instance with customized settings" in new WithApplication with Context {
+      val s = provider.withSettings { s =>
+        s.copy("new-request-token-url")
+      }
+
+      s.settings.requestTokenURL must be equalTo "new-request-token-url"
+    }
+  }
+
   "The `retrieveProfile` method" should {
     "fail with ProfileRetrievalException if API returns error" in new WithApplication with Context {
       val requestHolder = mock[WSRequest]
@@ -109,6 +119,6 @@ class XingProviderSpec extends OAuth1ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = XingProvider(httpLayer, oAuthService, oAuthTokenSecretProvider, oAuthSettings)
+    lazy val provider = new XingProvider(httpLayer, oAuthService, oAuthTokenSecretProvider, oAuthSettings)
   }
 }

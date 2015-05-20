@@ -27,14 +27,9 @@ import play.api.mvc._
 import scala.concurrent.Future
 
 /**
- * Base class for all OpenID providers.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param service The OpenID service implementation.
- * @param settings The OpenID provider settings.
+ * Base implementation for all OpenID providers.
  */
-abstract class OpenIDProvider(httpLayer: HTTPLayer, service: OpenIDService, val settings: OpenIDSettings)
-  extends SocialProvider with Logger {
+trait OpenIDProvider extends SocialProvider with Logger {
 
   /**
    * The type of the auth info.
@@ -45,6 +40,16 @@ abstract class OpenIDProvider(httpLayer: HTTPLayer, service: OpenIDService, val 
    * The settings type.
    */
   type Settings = OpenIDSettings
+
+  /**
+   * The HTTP layer implementation.
+   */
+  protected val httpLayer: HTTPLayer
+
+  /**
+   * The OpenID service implementation.
+   */
+  protected val service: OpenIDService
 
   /**
    * Starts the authentication process.

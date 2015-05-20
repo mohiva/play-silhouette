@@ -66,7 +66,8 @@ case class JWTAuthenticator(
   lastUsedDate: DateTime,
   expirationDate: DateTime,
   idleTimeout: Option[Int],
-  customClaims: Option[JsObject] = None) extends StorableAuthenticator {
+  customClaims: Option[JsObject] = None)
+  extends StorableAuthenticator {
 
   /**
    * The Type of the generated value an authenticator will be serialized to.
@@ -240,10 +241,32 @@ object JWTAuthenticator {
  * @param clock The clock implementation.
  */
 class JWTAuthenticatorService(
-  settings: JWTAuthenticatorSettings,
+  val settings: JWTAuthenticatorSettings,
   dao: Option[AuthenticatorDAO[JWTAuthenticator]],
   idGenerator: IDGenerator,
-  clock: Clock) extends AuthenticatorService[JWTAuthenticator] with Logger {
+  clock: Clock)
+  extends AuthenticatorService[JWTAuthenticator]
+  with Logger {
+
+  /**
+   * The type of this class.
+   */
+  type Self = JWTAuthenticatorService
+
+  /**
+   * The type of the settings.
+   */
+  type Settings = JWTAuthenticatorSettings
+
+  /**
+   * Gets an authenticator service initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the authenticator service initialized with new settings.
+   */
+  def withSettings(f: JWTAuthenticatorSettings => JWTAuthenticatorSettings) = {
+    new JWTAuthenticatorService(f(settings), dao, idGenerator, clock)
+  }
 
   /**
    * Creates a new authenticator for the specified login info.
@@ -252,7 +275,7 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return An authenticator.
    */
-  def create(loginInfo: LoginInfo)(implicit request: RequestHeader) = {
+  def create(loginInfo: LoginInfo)(implicit request: RequestHeader): Future[JWTAuthenticator] = {
     idGenerator.generate.map { id =>
       val now = clock.now
       JWTAuthenticator(
@@ -275,7 +298,7 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return Some authenticator or None if no authenticator could be found in request.
    */
-  def retrieve(implicit request: RequestHeader) = {
+  def retrieve(implicit request: RequestHeader): Future[Option[JWTAuthenticator]] = {
     Future.from(Try(request.headers.get(settings.headerName))).flatMap {
       case Some(token) => unserialize(token)(settings) match {
         case Success(authenticator) => dao.fold(Future.successful(Option(authenticator)))(_.find(authenticator.id))
@@ -297,7 +320,7 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The serialized authenticator value.
    */
-  def init(authenticator: JWTAuthenticator)(implicit request: RequestHeader) = {
+  def init(authenticator: JWTAuthenticator)(implicit request: RequestHeader): Future[String] = {
     dao.fold(Future.successful(authenticator))(_.add(authenticator)).map { a =>
       serialize(a)(settings)
     }.recover {
@@ -312,7 +335,7 @@ class JWTAuthenticatorService(
    * @param result The result to manipulate.
    * @return The manipulated result.
    */
-  def embed(token: String, result: Result)(implicit request: RequestHeader) = {
+  def embed(token: String, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
     Future.successful(AuthenticatorResult(result.withHeaders(settings.headerName -> token)))
   }
 
@@ -323,7 +346,7 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The manipulated request header.
    */
-  def embed(token: String, request: RequestHeader) = {
+  def embed(token: String, request: RequestHeader): RequestHeader = {
     val additional = Seq(settings.headerName -> token)
     request.copy(headers = request.headers.replace(additional: _*))
   }
@@ -353,7 +376,10 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def update(authenticator: JWTAuthenticator, result: Result)(implicit request: RequestHeader) = {
+  def update(
+    authenticator: JWTAuthenticator,
+    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+
     dao.fold(Future.successful(authenticator))(_.update(authenticator)).map { a =>
       AuthenticatorResult(result.withHeaders(settings.headerName -> serialize(a)(settings)))
     }.recover {
@@ -372,7 +398,7 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The serialized expression of the authenticator.
    */
-  def renew(authenticator: JWTAuthenticator)(implicit request: RequestHeader) = {
+  def renew(authenticator: JWTAuthenticator)(implicit request: RequestHeader): Future[String] = {
     dao.fold(Future.successful(()))(_.remove(authenticator.id)).flatMap { _ =>
       create(authenticator.loginInfo).flatMap(init)
     }.recover {
@@ -391,7 +417,10 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def renew(authenticator: JWTAuthenticator, result: Result)(implicit request: RequestHeader) = {
+  def renew(
+    authenticator: JWTAuthenticator,
+    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+
     renew(authenticator).flatMap(v => embed(v, result)).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
     }
@@ -404,7 +433,10 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  def discard(authenticator: JWTAuthenticator, result: Result)(implicit request: RequestHeader) = {
+  def discard(
+    authenticator: JWTAuthenticator,
+    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+
     dao.fold(Future.successful(()))(_.remove(authenticator.id)).map { _ =>
       AuthenticatorResult(result)
     }.recover {

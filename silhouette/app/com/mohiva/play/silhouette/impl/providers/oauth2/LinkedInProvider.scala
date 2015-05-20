@@ -30,18 +30,13 @@ import play.api.libs.json.JsValue
 import scala.concurrent.Future
 
 /**
- * A LinkedIn OAuth2 Provider.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param stateProvider The state provider implementation.
- * @param settings The provider settings.
+ * Base LinkedIn OAuth2 Provider.
  *
  * @see https://developer.linkedin.com/documents/oauth-10a
  * @see https://developer.linkedin.com/documents/authentication
  * @see https://developer.linkedin.com/documents/inapiprofile
  */
-abstract class LinkedInProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
-  extends OAuth2Provider(httpLayer, stateProvider, settings) {
+trait BaseLinkedInProvider extends OAuth2Provider {
 
   /**
    * The content type to parse a profile from.
@@ -111,15 +106,35 @@ class LinkedInProfileParser extends SocialProfileParser[JsValue, CommonSocialPro
 }
 
 /**
- * The profile builder for the common social profile.
+ * The LinkedIn OAuth2 Provider.
+ *
+ * @param httpLayer The HTTP layer implementation.
+ * @param stateProvider The state provider implementation.
+ * @param settings The provider settings.
  */
-trait LinkedInProfileBuilder extends CommonSocialProfileBuilder {
-  self: LinkedInProvider =>
+class LinkedInProvider(
+  protected val httpLayer: HTTPLayer,
+  protected val stateProvider: OAuth2StateProvider,
+  val settings: OAuth2Settings)
+  extends BaseLinkedInProvider with CommonSocialProfileBuilder {
+
+  /**
+   * The type of this class.
+   */
+  type Self = LinkedInProvider
 
   /**
    * The profile parser implementation.
    */
   val profileParser = new LinkedInProfileParser
+
+  /**
+   * Gets a provider initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the provider initialized with new settings.
+   */
+  def withSettings(f: (Settings) => Settings) = new LinkedInProvider(httpLayer, stateProvider, f(settings))
 }
 
 /**
@@ -137,16 +152,4 @@ object LinkedInProvider {
    */
   val ID = "linkedin"
   val API = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,formatted-name,picture-url,email-address)?format=json&oauth2_access_token=%s"
-
-  /**
-   * Creates an instance of the provider.
-   *
-   * @param httpLayer The HTTP layer implementation.
-   * @param stateProvider The state provider implementation.
-   * @param settings The provider settings.
-   * @return An instance of this provider.
-   */
-  def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new LinkedInProvider(httpLayer, stateProvider, settings) with LinkedInProfileBuilder
-  }
 }

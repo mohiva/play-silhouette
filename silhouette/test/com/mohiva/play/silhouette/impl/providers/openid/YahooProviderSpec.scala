@@ -24,6 +24,16 @@ import play.api.test.WithApplication
  */
 class YahooProviderSpec extends OpenIDProviderSpec {
 
+  "The `withSettings` method" should {
+    "create a new instance with customized settings" in new WithApplication with Context {
+      val s = provider.withSettings { s =>
+        s.copy("new-provider-url")
+      }
+
+      s.settings.providerURL must be equalTo "new-provider-url"
+    }
+  }
+
   "The `retrieveProfile` method" should {
     "return the social profile" in new WithApplication with Context {
       profile(provider.retrieveProfile(openIDInfo)) {
@@ -76,6 +86,6 @@ class YahooProviderSpec extends OpenIDProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = YahooProvider(httpLayer, openIDService, openIDSettings)
+    lazy val provider = new YahooProvider(httpLayer, openIDService, openIDSettings)
   }
 }

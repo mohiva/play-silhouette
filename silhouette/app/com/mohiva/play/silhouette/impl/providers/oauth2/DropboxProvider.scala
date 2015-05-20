@@ -27,17 +27,12 @@ import play.api.libs.json.JsValue
 import scala.concurrent.Future
 
 /**
- * A Dropbox OAuth2 Provider.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param stateProvider The state provider implementation.
- * @param settings The provider settings.
+ * Base Dropbox OAuth2 Provider.
  *
  * @see https://www.dropbox.com/developers/blog/45/using-oauth-20-with-the-core-api
  * @see https://www.dropbox.com/developers/core/docs#oauth2-methods
  */
-abstract class DropboxProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
-  extends OAuth2Provider(httpLayer, stateProvider, settings) {
+trait BaseDropboxProvider extends OAuth2Provider {
 
   /**
    * The content type to parse a profile from.
@@ -99,15 +94,35 @@ class DropboxProfileParser extends SocialProfileParser[JsValue, CommonSocialProf
 }
 
 /**
- * The profile builder for the common social profile.
+ * The Dropbox OAuth2 Provider.
+ *
+ * @param httpLayer The HTTP layer implementation.
+ * @param stateProvider The state provider implementation.
+ * @param settings The provider settings.
  */
-trait DropboxProfileBuilder extends CommonSocialProfileBuilder {
-  self: DropboxProvider =>
+class DropboxProvider(
+  protected val httpLayer: HTTPLayer,
+  protected val stateProvider: OAuth2StateProvider,
+  val settings: OAuth2Settings)
+  extends BaseDropboxProvider with CommonSocialProfileBuilder {
+
+  /**
+   * The type of this class.
+   */
+  type Self = DropboxProvider
 
   /**
    * The profile parser implementation.
    */
   val profileParser = new DropboxProfileParser
+
+  /**
+   * Gets a provider initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the provider initialized with new settings.
+   */
+  def withSettings(f: (Settings) => Settings) = new DropboxProvider(httpLayer, stateProvider, f(settings))
 }
 
 /**
@@ -125,16 +140,4 @@ object DropboxProvider {
    */
   val ID = "dropbox"
   val API = "https://api.dropbox.com/1/account/info"
-
-  /**
-   * Creates an instance of the provider.
-   *
-   * @param httpLayer The HTTP layer implementation.
-   * @param stateProvider The state provider implementation.
-   * @param settings The provider settings.
-   * @return An instance of this provider.
-   */
-  def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new DropboxProvider(httpLayer, stateProvider, settings) with DropboxProfileBuilder
-  }
 }
