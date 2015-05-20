@@ -78,14 +78,14 @@ case class CookieSecret(value: String, expirationDate: DateTime) extends OAuth1T
    *
    * @return True if the secret is expired, false otherwise.
    */
-  def isExpired = expirationDate.isBeforeNow
+  override def isExpired = expirationDate.isBeforeNow
 
   /**
    * Returns a serialized value of the secret.
    *
    * @return A serialized value of the secret.
    */
-  def serialize = CookieSecret.serialize(this)
+  override def serialize = CookieSecret.serialize(this)
 }
 
 /**
@@ -101,7 +101,7 @@ class CookieSecretProvider(
   /**
    * The type of the secret implementation.
    */
-  type Secret = CookieSecret
+  override type Secret = CookieSecret
 
   /**
    * Builds the secret from OAuth info.
@@ -111,7 +111,7 @@ class CookieSecretProvider(
    * @tparam B The type of the request body.
    * @return The build secret.
    */
-  def build[B](info: OAuth1Info)(implicit request: ExtractableRequest[B]): Future[CookieSecret] = {
+  override def build[B](info: OAuth1Info)(implicit request: ExtractableRequest[B]): Future[CookieSecret] = {
     Future.successful(CookieSecret(info.secret, clock.now.plusSeconds(settings.expirationTime)))
   }
 
@@ -122,7 +122,7 @@ class CookieSecretProvider(
    * @tparam B The type of the request body.
    * @return A secret on success, otherwise an failure.
    */
-  def retrieve[B](implicit request: ExtractableRequest[B]): Future[Secret] = {
+  override def retrieve[B](implicit request: ExtractableRequest[B]): Future[Secret] = {
     request.cookies.get(settings.cookieName) match {
       case Some(cookie) => CookieSecret.unserialize(cookie.value) match {
         case Success(secret) if secret.isExpired => Future.failed(new OAuth1TokenSecretException(SecretIsExpired))
@@ -142,7 +142,7 @@ class CookieSecretProvider(
    * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
-  def publish[B](result: Result, secret: CookieSecret)(implicit request: ExtractableRequest[B]) = {
+  override def publish[B](result: Result, secret: CookieSecret)(implicit request: ExtractableRequest[B]) = {
     result.withCookies(Cookie(name = settings.cookieName,
       value = secret.serialize,
       maxAge = Some(settings.expirationTime),

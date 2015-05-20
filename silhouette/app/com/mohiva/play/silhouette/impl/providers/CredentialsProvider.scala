@@ -52,7 +52,7 @@ class CredentialsProvider(
    *
    * @return The provider ID.
    */
-  def id = ID
+  override def id = ID
 
   /**
    * Authenticates a user with its credentials.

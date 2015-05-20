@@ -26,8 +26,8 @@ import scala.concurrent.Future
  * should be validated on client side.
  */
 case class DummyState() extends OAuth2State {
-  def isExpired = false
-  def serialize = ""
+  override def isExpired = false
+  override def serialize = ""
 }
 
 /**
@@ -38,7 +38,7 @@ class DummyStateProvider extends OAuth2StateProvider {
   /**
    * The type of the state implementation.
    */
-  type State = DummyState
+  override type State = DummyState
 
   /**
    * Builds the state.
@@ -47,7 +47,7 @@ class DummyStateProvider extends OAuth2StateProvider {
    * @tparam B The type of the request body.
    * @return The build state.
    */
-  def build[B](implicit request: ExtractableRequest[B]): Future[DummyState] = Future.successful(DummyState())
+  override def build[B](implicit request: ExtractableRequest[B]): Future[DummyState] = Future.successful(DummyState())
 
   /**
    * Returns always a valid state avoid authentication errors.
@@ -56,7 +56,7 @@ class DummyStateProvider extends OAuth2StateProvider {
    * @tparam B The type of the request body.
    * @return Always a valid state avoid authentication errors.
    */
-  def validate[B](implicit request: ExtractableRequest[B]) = Future.successful(DummyState())
+  override def validate[B](implicit request: ExtractableRequest[B]) = Future.successful(DummyState())
 
   /**
    * Returns the original result.
@@ -67,5 +67,5 @@ class DummyStateProvider extends OAuth2StateProvider {
    * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
-  def publish[B](result: Result, state: State)(implicit request: ExtractableRequest[B]) = result
+  override def publish[B](result: Result, state: State)(implicit request: ExtractableRequest[B]) = result
 }

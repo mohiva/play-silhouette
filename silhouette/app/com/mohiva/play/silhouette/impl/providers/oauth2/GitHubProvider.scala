@@ -40,17 +40,17 @@ trait BaseGitHubProvider extends OAuth2Provider {
   /**
    * The content type to parse a profile from.
    */
-  type Content = JsValue
+  override type Content = JsValue
 
   /**
    * The provider ID.
    */
-  val id = ID
+  override val id = ID
 
   /**
    * Defines the URLs that are needed to retrieve the profile data.
    */
-  protected val urls = Map("api" -> API)
+  override protected val urls = Map("api" -> API)
 
   /**
    * A list with headers to send to the API.
@@ -68,7 +68,7 @@ trait BaseGitHubProvider extends OAuth2Provider {
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+  override protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
     httpLayer.url(urls("api").format(authInfo.accessToken)).get().flatMap { response =>
       val json = response.json
       (json \ "message").asOpt[String] match {
@@ -93,7 +93,7 @@ class GitHubProfileParser extends SocialProfileParser[JsValue, CommonSocialProfi
    * @param json The content returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue) = Future.successful {
     val userID = (json \ "id").as[Long]
     val fullName = (json \ "name").asOpt[String]
     val avatarUrl = (json \ "avatar_url").asOpt[String]
@@ -123,12 +123,12 @@ class GitHubProvider(
   /**
    * The type of this class.
    */
-  type Self = GitHubProvider
+  override type Self = GitHubProvider
 
   /**
    * The profile parser implementation.
    */
-  val profileParser = new GitHubProfileParser
+  override val profileParser = new GitHubProfileParser
 
   /**
    * Gets a provider initialized with a new settings object.
@@ -136,7 +136,7 @@ class GitHubProvider(
    * @param f A function which gets the settings passed and returns different settings.
    * @return An instance of the provider initialized with new settings.
    */
-  def withSettings(f: (Settings) => Settings) = new GitHubProvider(httpLayer, stateProvider, f(settings))
+  override def withSettings(f: (Settings) => Settings) = new GitHubProvider(httpLayer, stateProvider, f(settings))
 }
 
 /**

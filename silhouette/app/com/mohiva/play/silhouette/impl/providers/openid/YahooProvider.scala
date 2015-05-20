@@ -32,19 +32,19 @@ trait BaseYahooProvider extends OpenIDProvider {
   /**
    * The content type to parse a profile from.
    */
-  type Content = OpenIDInfo
+  override type Content = OpenIDInfo
 
   /**
    * Gets the provider ID.
    *
    * @return The provider ID.
    */
-  val id = ID
+  override val id = ID
 
   /**
    * Defines the URLs that are needed to retrieve the profile data.
    */
-  protected val urls = Map[String, String]()
+  override protected val urls = Map[String, String]()
 
   /**
    * Builds the social profile.
@@ -52,7 +52,7 @@ trait BaseYahooProvider extends OpenIDProvider {
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OpenIDInfo): Future[Profile] = {
+  override protected def buildProfile(authInfo: OpenIDInfo): Future[Profile] = {
     profileParser.parse(authInfo)
   }
 }
@@ -68,7 +68,7 @@ class YahooProfileParser extends SocialProfileParser[OpenIDInfo, CommonSocialPro
    * @param info The auth info received from the provider.
    * @return The social profile from given result.
    */
-  def parse(info: OpenIDInfo) = Future.successful {
+  override def parse(info: OpenIDInfo) = Future.successful {
     CommonSocialProfile(
       loginInfo = LoginInfo(ID, info.id),
       fullName = info.attributes.get("fullname"),
@@ -94,12 +94,12 @@ class YahooProvider(
   /**
    * The type of this class.
    */
-  type Self = YahooProvider
+  override type Self = YahooProvider
 
   /**
    * The profile parser implementation.
    */
-  val profileParser = new YahooProfileParser
+  override val profileParser = new YahooProfileParser
 
   /**
    * Gets a provider initialized with a new settings object.
@@ -107,7 +107,7 @@ class YahooProvider(
    * @param f A function which gets the settings passed and returns different settings.
    * @return An instance of the provider initialized with new settings.
    */
-  def withSettings(f: (Settings) => Settings) = new YahooProvider(httpLayer, service, f(settings))
+  override def withSettings(f: (Settings) => Settings) = new YahooProvider(httpLayer, service, f(settings))
 }
 
 /**

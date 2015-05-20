@@ -72,14 +72,14 @@ case class JWTAuthenticator(
   /**
    * The Type of the generated value an authenticator will be serialized to.
    */
-  type Value = String
+  override type Value = String
 
   /**
    * Checks if the authenticator isn't expired and isn't timed out.
    *
    * @return True if the authenticator isn't expired and isn't timed out.
    */
-  def isValid = !isExpired && !isTimedOut
+  override def isValid = !isExpired && !isTimedOut
 
   /**
    * Checks if the authenticator is expired. This is an absolute timeout since the creation of
@@ -251,12 +251,12 @@ class JWTAuthenticatorService(
   /**
    * The type of this class.
    */
-  type Self = JWTAuthenticatorService
+  override type Self = JWTAuthenticatorService
 
   /**
    * The type of the settings.
    */
-  type Settings = JWTAuthenticatorSettings
+  override type Settings = JWTAuthenticatorSettings
 
   /**
    * Gets an authenticator service initialized with a new settings object.
@@ -264,7 +264,7 @@ class JWTAuthenticatorService(
    * @param f A function which gets the settings passed and returns different settings.
    * @return An instance of the authenticator service initialized with new settings.
    */
-  def withSettings(f: JWTAuthenticatorSettings => JWTAuthenticatorSettings) = {
+  override def withSettings(f: JWTAuthenticatorSettings => JWTAuthenticatorSettings) = {
     new JWTAuthenticatorService(f(settings), dao, idGenerator, clock)
   }
 
@@ -275,7 +275,7 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return An authenticator.
    */
-  def create(loginInfo: LoginInfo)(implicit request: RequestHeader): Future[JWTAuthenticator] = {
+  override def create(loginInfo: LoginInfo)(implicit request: RequestHeader): Future[JWTAuthenticator] = {
     idGenerator.generate.map { id =>
       val now = clock.now
       JWTAuthenticator(
@@ -298,7 +298,7 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return Some authenticator or None if no authenticator could be found in request.
    */
-  def retrieve(implicit request: RequestHeader): Future[Option[JWTAuthenticator]] = {
+  override def retrieve(implicit request: RequestHeader): Future[Option[JWTAuthenticator]] = {
     Future.from(Try(request.headers.get(settings.headerName))).flatMap {
       case Some(token) => unserialize(token)(settings) match {
         case Success(authenticator) => dao.fold(Future.successful(Option(authenticator)))(_.find(authenticator.id))
@@ -320,7 +320,7 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The serialized authenticator value.
    */
-  def init(authenticator: JWTAuthenticator)(implicit request: RequestHeader): Future[String] = {
+  override def init(authenticator: JWTAuthenticator)(implicit request: RequestHeader): Future[String] = {
     dao.fold(Future.successful(authenticator))(_.add(authenticator)).map { a =>
       serialize(a)(settings)
     }.recover {
@@ -335,7 +335,7 @@ class JWTAuthenticatorService(
    * @param result The result to manipulate.
    * @return The manipulated result.
    */
-  def embed(token: String, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def embed(token: String, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
     Future.successful(AuthenticatorResult(result.withHeaders(settings.headerName -> token)))
   }
 
@@ -346,7 +346,7 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The manipulated request header.
    */
-  def embed(token: String, request: RequestHeader): RequestHeader = {
+  override def embed(token: String, request: RequestHeader): RequestHeader = {
     val additional = Seq(settings.headerName -> token)
     request.copy(headers = request.headers.replace(additional: _*))
   }
@@ -357,7 +357,7 @@ class JWTAuthenticatorService(
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  def touch(authenticator: JWTAuthenticator): Either[JWTAuthenticator, JWTAuthenticator] = {
+  override def touch(authenticator: JWTAuthenticator): Either[JWTAuthenticator, JWTAuthenticator] = {
     if (authenticator.idleTimeout.isDefined) {
       Left(authenticator.copy(lastUsedDate = clock.now))
     } else {
@@ -376,7 +376,7 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def update(
+  override def update(
     authenticator: JWTAuthenticator,
     result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
@@ -398,7 +398,7 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The serialized expression of the authenticator.
    */
-  def renew(authenticator: JWTAuthenticator)(implicit request: RequestHeader): Future[String] = {
+  override def renew(authenticator: JWTAuthenticator)(implicit request: RequestHeader): Future[String] = {
     dao.fold(Future.successful(()))(_.remove(authenticator.id)).flatMap { _ =>
       create(authenticator.loginInfo).flatMap(init)
     }.recover {
@@ -417,7 +417,7 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def renew(
+  override def renew(
     authenticator: JWTAuthenticator,
     result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
@@ -433,7 +433,7 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  def discard(
+  override def discard(
     authenticator: JWTAuthenticator,
     result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
 

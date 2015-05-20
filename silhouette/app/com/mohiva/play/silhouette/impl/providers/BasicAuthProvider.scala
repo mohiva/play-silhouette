@@ -50,7 +50,7 @@ class BasicAuthProvider(
    *
    * @return The provider ID.
    */
-  def id = ID
+  override def id = ID
 
   /**
    * Authenticates an identity based on credentials sent in a request.
@@ -59,7 +59,7 @@ class BasicAuthProvider(
    * @tparam B The type of the body.
    * @return Some login info on successful authentication or None if the authentication was unsuccessful.
    */
-  def authenticate[B](request: Request[B]): Future[Option[LoginInfo]] = {
+  override def authenticate[B](request: Request[B]): Future[Option[LoginInfo]] = {
     getCredentials(request) match {
       case Some(credentials) =>
         val loginInfo = LoginInfo(id, credentials.identifier)

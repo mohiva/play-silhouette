@@ -44,7 +44,7 @@ class DefaultFingerprintGenerator(includeRemoteAddress: Boolean = false) extends
    * @param request The request header.
    * @return The generated fingerprint.
    */
-  def generate(implicit request: RequestHeader) = {
+  override def generate(implicit request: RequestHeader) = {
     Crypt.sha1(new StringBuilder()
       .append(request.headers.get(USER_AGENT).getOrElse("")).append(":")
       .append(request.headers.get(ACCEPT_LANGUAGE).getOrElse("")).append(":")

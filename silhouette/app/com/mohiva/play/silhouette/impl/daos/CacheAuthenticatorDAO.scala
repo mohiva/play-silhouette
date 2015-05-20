@@ -36,7 +36,7 @@ class CacheAuthenticatorDAO[T <: StorableAuthenticator: ClassTag](cacheLayer: Ca
    * @param id The authenticator ID.
    * @return The found authenticator or None if no authenticator could be found for the given ID.
    */
-  def find(id: String): Future[Option[T]] = cacheLayer.find[T](id)
+  override def find(id: String): Future[Option[T]] = cacheLayer.find[T](id)
 
   /**
    * Adds a new authenticator.
@@ -44,7 +44,7 @@ class CacheAuthenticatorDAO[T <: StorableAuthenticator: ClassTag](cacheLayer: Ca
    * @param authenticator The authenticator to add.
    * @return The added authenticator.
    */
-  def add(authenticator: T): Future[T] = cacheLayer.save[T](authenticator.id, authenticator, Duration.Inf)
+  override def add(authenticator: T): Future[T] = cacheLayer.save[T](authenticator.id, authenticator, Duration.Inf)
 
   /**
    * Updates an already existing authenticator.
@@ -52,7 +52,7 @@ class CacheAuthenticatorDAO[T <: StorableAuthenticator: ClassTag](cacheLayer: Ca
    * @param authenticator The authenticator to update.
    * @return The updated authenticator.
    */
-  def update(authenticator: T): Future[T] = cacheLayer.save[T](authenticator.id, authenticator, Duration.Inf)
+  override def update(authenticator: T): Future[T] = cacheLayer.save[T](authenticator.id, authenticator, Duration.Inf)
 
   /**
    * Removes the authenticator for the given ID.
@@ -60,5 +60,5 @@ class CacheAuthenticatorDAO[T <: StorableAuthenticator: ClassTag](cacheLayer: Ca
    * @param id The authenticator ID.
    * @return An empty future.
    */
-  def remove(id: String): Future[Unit] = cacheLayer.remove(id)
+  override def remove(id: String): Future[Unit] = cacheLayer.remove(id)
 }

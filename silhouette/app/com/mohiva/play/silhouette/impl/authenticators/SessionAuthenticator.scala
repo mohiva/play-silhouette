@@ -57,14 +57,14 @@ case class SessionAuthenticator(
   /**
    * The Type of the generated value an authenticator will be serialized to.
    */
-  type Value = Session
+  override type Value = Session
 
   /**
    * Checks if the authenticator isn't expired and isn't timed out.
    *
    * @return True if the authenticator isn't expired and isn't timed out.
    */
-  def isValid = !isExpired && !isTimedOut
+  override def isValid = !isExpired && !isTimedOut
 
   /**
    * Checks if the authenticator is expired. This is an absolute timeout since the creation of
@@ -160,12 +160,12 @@ class SessionAuthenticatorService(
   /**
    * The type of this class.
    */
-  type Self = SessionAuthenticatorService
+  override type Self = SessionAuthenticatorService
 
   /**
    * The type of the settings.
    */
-  type Settings = SessionAuthenticatorSettings
+  override type Settings = SessionAuthenticatorSettings
 
   /**
    * Gets an authenticator service initialized with a new settings object.
@@ -173,7 +173,7 @@ class SessionAuthenticatorService(
    * @param f A function which gets the settings passed and returns different settings.
    * @return An instance of the authenticator service initialized with new settings.
    */
-  def withSettings(f: SessionAuthenticatorSettings => SessionAuthenticatorSettings) = {
+  override def withSettings(f: SessionAuthenticatorSettings => SessionAuthenticatorSettings) = {
     new SessionAuthenticatorService(f(settings), fingerprintGenerator, clock)
   }
 
@@ -184,7 +184,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return An authenticator.
    */
-  def create(loginInfo: LoginInfo)(implicit request: RequestHeader): Future[SessionAuthenticator] = {
+  override def create(loginInfo: LoginInfo)(implicit request: RequestHeader): Future[SessionAuthenticator] = {
     Future.from(Try {
       val now = clock.now
       SessionAuthenticator(
@@ -205,7 +205,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return Some authenticator or None if no authenticator could be found in request.
    */
-  def retrieve(implicit request: RequestHeader): Future[Option[SessionAuthenticator]] = {
+  override def retrieve(implicit request: RequestHeader): Future[Option[SessionAuthenticator]] = {
     Future.from(Try {
       if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
     }).map { fingerprint =>
@@ -228,7 +228,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The serialized authenticator value.
    */
-  def init(authenticator: SessionAuthenticator)(implicit request: RequestHeader): Future[Session] = {
+  override def init(authenticator: SessionAuthenticator)(implicit request: RequestHeader): Future[Session] = {
     Future.successful(request.session + (settings.sessionKey -> serialize(authenticator)(settings)))
   }
 
@@ -239,7 +239,7 @@ class SessionAuthenticatorService(
    * @param result The result to manipulate.
    * @return The manipulated result.
    */
-  def embed(session: Session, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def embed(session: Session, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
     Future.successful(AuthenticatorResult(result.addingToSession(session.data.toSeq: _*)))
   }
 
@@ -250,7 +250,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The manipulated request header.
    */
-  def embed(session: Session, request: RequestHeader): RequestHeader = {
+  override def embed(session: Session, request: RequestHeader): RequestHeader = {
     val sessionCookie = Session.encodeAsCookie(session)
     val cookies = Cookies.mergeCookieHeader(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(sessionCookie))
     val additional = Seq(HeaderNames.COOKIE -> cookies)
@@ -263,7 +263,7 @@ class SessionAuthenticatorService(
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  def touch(authenticator: SessionAuthenticator): Either[SessionAuthenticator, SessionAuthenticator] = {
+  override def touch(authenticator: SessionAuthenticator): Either[SessionAuthenticator, SessionAuthenticator] = {
     if (authenticator.idleTimeout.isDefined) {
       Left(authenticator.copy(lastUsedDate = clock.now))
     } else {
@@ -282,7 +282,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def update(
+  override def update(
     authenticator: SessionAuthenticator,
     result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
@@ -304,7 +304,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The serialized expression of the authenticator.
    */
-  def renew(authenticator: SessionAuthenticator)(implicit request: RequestHeader): Future[Session] = {
+  override def renew(authenticator: SessionAuthenticator)(implicit request: RequestHeader): Future[Session] = {
     create(authenticator.loginInfo).flatMap(init).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
     }
@@ -321,7 +321,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  def renew(
+  override def renew(
     authenticator: SessionAuthenticator,
     result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
@@ -337,7 +337,7 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  def discard(
+  override def discard(
     authenticator: SessionAuthenticator,
     result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
