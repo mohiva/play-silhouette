@@ -45,7 +45,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       withEvent[NotAuthenticatedEvent] {
         env.authenticatorService.retrieve(any) returns Future.successful(None)
 
-        val controller = new SecuredController(env)
+        val controller = new SecuredController(messagesApi, env)
         val result = controller.securedAction(request)
 
         status(result) must equalTo(UNAUTHORIZED)
@@ -61,7 +61,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
 
       withEvent[NotAuthenticatedEvent] {
-        val controller = new SecuredController(env)
+        val controller = new SecuredController(messagesApi, env)
         val result = controller.securedAction(request)
 
         status(result) must equalTo(UNAUTHORIZED)
@@ -79,7 +79,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(None)
 
       withEvent[NotAuthenticatedEvent] {
-        val controller = new SecuredController(env)
+        val controller = new SecuredController(messagesApi, env)
         val result = controller.securedAction(request)
 
         status(result) must equalTo(UNAUTHORIZED)
@@ -96,7 +96,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(None)
 
-      val controller = new SecuredController(env) {
+      val controller = new SecuredController(messagesApi, env) {
         override def onNotAuthenticated(request: RequestHeader): Option[Future[Result]] = {
           Some(Future.successful(Unauthorized("local.not.authenticated")))
         }
@@ -115,7 +115,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(None)
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.securedAction(request)
 
       status(result) must equalTo(UNAUTHORIZED)
@@ -129,7 +129,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(None)
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.securedAction(request)
 
       status(result) must equalTo(UNAUTHORIZED)
@@ -145,7 +145,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
       withEvent[NotAuthorizedEvent[FakeIdentity]] {
-        val controller = new SecuredController(env, SimpleAuthorization(isAuthorized = false))
+        val controller = new SecuredController(messagesApi, env, SimpleAuthorization(isAuthorized = false))
         val result = controller.securedActionWithAuthorization(request)
 
         status(result) must equalTo(FORBIDDEN)
@@ -164,7 +164,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
       def isAuthorized(authorization: Authorization[FakeIdentity], isAuth: Boolean) = {
-        val controller = new SecuredController(env, authorization)
+        val controller = new SecuredController(messagesApi, env, authorization)
         val result = controller.securedActionWithAuthorization(request)
         val resultStatus = if (isAuth) OK else FORBIDDEN
         val resultContent = if (isAuth) "full.access" else Messages("silhouette.not.authorized")
@@ -195,7 +195,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(env, SimpleAuthorization(isAuthorized = false)) {
+      val controller = new SecuredController(messagesApi, env, SimpleAuthorization(isAuthorized = false)) {
         override def onNotAuthorized(request: RequestHeader): Option[Future[Result]] = {
           Some(Future.successful(Forbidden("local.not.authorized")))
         }
@@ -217,7 +217,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(env, SimpleAuthorization(isAuthorized = false))
+      val controller = new SecuredController(messagesApi, env, SimpleAuthorization(isAuthorized = false))
       val result = controller.securedActionWithAuthorization(request)
 
       status(result) must equalTo(FORBIDDEN)
@@ -234,7 +234,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(env, SimpleAuthorization(isAuthorized = false))
+      val controller = new SecuredController(messagesApi, env, SimpleAuthorization(isAuthorized = false))
       val result = controller.securedActionWithAuthorization(request)
 
       status(result) must equalTo(FORBIDDEN)
@@ -252,7 +252,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
       withEvent[AuthenticatedEvent[FakeIdentity]] {
-        val controller = new SecuredController(env)
+        val controller = new SecuredController(messagesApi, env)
         val result = controller.securedAction(request)
 
         status(result) must equalTo(OK)
@@ -272,7 +272,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
       withEvent[AuthenticatedEvent[FakeIdentity]] {
-        val controller = new SecuredController(env)
+        val controller = new SecuredController(messagesApi, env)
         val result = controller.securedActionWithAuthorization(request)
 
         status(result) must equalTo(OK)
@@ -295,7 +295,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
       withEvent[AuthenticatedEvent[FakeIdentity]] {
-        val controller = new SecuredController(env)
+        val controller = new SecuredController(messagesApi, env)
         val result = controller.securedActionWithAuthorization(request)
 
         status(result) must equalTo(OK)
@@ -315,7 +315,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
 
       withEvent[AuthenticatedEvent[FakeIdentity]] {
-        val controller = new SecuredController(env)
+        val controller = new SecuredController(messagesApi, env)
         val result = controller.securedActionWithAuthorization(request)
 
         status(result) must equalTo(OK)
@@ -332,7 +332,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
       withEvent[AuthenticatedEvent[FakeIdentity]] {
-        val controller = new SecuredController(env)
+        val controller = new SecuredController(messagesApi, env)
         val result = controller.securedActionWithAuthorization(request)
 
         status(result) must equalTo(OK)
@@ -354,7 +354,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
       withEvent[AuthenticatedEvent[FakeIdentity]] {
-        val controller = new SecuredController(env)
+        val controller = new SecuredController(messagesApi, env)
         val result = controller.securedActionWithAuthorization(request)
 
         status(result) must equalTo(OK)
@@ -374,7 +374,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
       withEvent[AuthenticatedEvent[FakeIdentity]] {
-        val controller = new SecuredController(env)
+        val controller = new SecuredController(messagesApi, env)
         val result = controller.securedRenewAction(request)
 
         status(result) must equalTo(OK)
@@ -396,7 +396,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
       withEvent[AuthenticatedEvent[FakeIdentity]] {
-        val controller = new SecuredController(env)
+        val controller = new SecuredController(messagesApi, env)
         val result = controller.securedRenewAction(request)
 
         status(result) must equalTo(OK)
@@ -416,7 +416,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
       withEvent[AuthenticatedEvent[FakeIdentity]] {
-        val controller = new SecuredController(env)
+        val controller = new SecuredController(messagesApi, env)
         val result = controller.securedDiscardAction(request)
 
         status(result) must equalTo(OK)
@@ -438,7 +438,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
       withEvent[AuthenticatedEvent[FakeIdentity]] {
-        val controller = new SecuredController(env)
+        val controller = new SecuredController(messagesApi, env)
         val result = controller.securedDiscardAction(request)
 
         status(result) must equalTo(OK)
@@ -459,7 +459,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
       withEvent[AuthenticatedEvent[FakeIdentity]] {
-        val controller = new SecuredController(env)
+        val controller = new SecuredController(messagesApi, env)
         val result = controller.securedAction(req)
 
         status(result) must equalTo(OK)
@@ -476,7 +476,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     "return status 401 if authentication was not successful" in new WithDefaultGlobal {
       env.authenticatorService.retrieve(any) returns Future.successful(None)
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.securedRequestHandler(request)
 
       status(result) must equalTo(UNAUTHORIZED)
@@ -492,7 +492,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.securedRequestHandler(request)
 
       status(result) must equalTo(OK)
@@ -506,7 +506,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     "invoke action without identity and authenticator if no authenticator could be found" in new WithDefaultGlobal {
       env.authenticatorService.retrieve(any) returns Future.successful(None)
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.userAwareAction(request)
 
       status(result) must equalTo(OK)
@@ -519,7 +519,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         Future.successful(AuthenticatorResult(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result]))
       }
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.userAwareAction(request)
 
       status(result) must equalTo(OK)
@@ -535,7 +535,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(None)
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.userAwareAction(request)
 
       status(result) must equalTo(OK)
@@ -552,7 +552,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.userAwareAction(request)
 
       status(result) must equalTo(OK)
@@ -572,7 +572,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.userAwareAction(request)
 
       status(result) must equalTo(OK)
@@ -589,7 +589,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         Future.successful(AuthenticatorResult(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result]))
       }
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.userAwareAction(request)
 
       status(result) must equalTo(OK)
@@ -603,7 +603,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       env.authenticatorService.touch(any) returns Right(authenticator)
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.userAwareAction(request)
 
       status(result) must equalTo(OK)
@@ -622,7 +622,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.userAwareAction(request)
 
       status(result) must equalTo(OK)
@@ -639,7 +639,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.userAwareRenewAction(request)
 
       status(result) must equalTo(OK)
@@ -658,7 +658,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.userAwareRenewAction(request)
 
       status(result) must equalTo(OK)
@@ -675,7 +675,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.userAwareDiscardAction(request)
 
       status(result) must equalTo(OK)
@@ -694,7 +694,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.userAwareDiscardAction(request)
 
       status(result) must equalTo(OK)
@@ -707,7 +707,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
     "return status 401 if authentication was not successful" in new WithDefaultGlobal {
       env.authenticatorService.retrieve(any) returns Future.successful(None)
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.userAwareRequestHandler(request)
 
       status(result) must equalTo(UNAUTHORIZED)
@@ -723,7 +723,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val result = controller.userAwareRequestHandler(request)
 
       status(result) must equalTo(OK)
@@ -740,7 +740,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         Future.successful(AuthenticatorResult(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result]))
       }
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val failed = Future.failed(new NotAuthorizedException("Access denied"))
       val result = controller.recover(failed)
 
@@ -753,7 +753,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         Future.successful(AuthenticatorResult(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result]))
       }
 
-      val controller = new SecuredController(env)
+      val controller = new SecuredController(messagesApi, env)
       val failed = Future.failed(new NotAuthenticatedException("Not authenticated"))
       val result = controller.recover(failed)
 
@@ -823,8 +823,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       mock[IdentityService[FakeIdentity]],
       mock[AuthenticatorService[FakeAuthenticator]],
       Seq(),
-      new EventBus,
-      messagesApi
+      new EventBus
     )
 
     /**
@@ -881,8 +880,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
         basicAuthRequestProvider,
         nonRequestProvider
       ),
-      new EventBus,
-      messagesApi
+      new EventBus
     )
   }
 
@@ -923,10 +921,12 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
   /**
    * A secured controller.
    *
+   * @param messagesApi The Play messages API.
    * @param env The silhouette environment.
    * @param authorization An authorization implementation.
    */
   class SecuredController(
+    val messagesApi: MessagesApi,
     val env: Environment[FakeIdentity, FakeAuthenticator],
     val authorization: Authorization[FakeIdentity] = SimpleAuthorization())
     extends Silhouette[FakeIdentity, FakeAuthenticator] {
