@@ -15,9 +15,7 @@
  */
 package com.mohiva.play.silhouette.api.util
 
-import javax.xml.bind.DatatypeConverter
-
-import com.sun.xml.internal.messaging.saaj.util.{ Base64 => Decoder }
+import java.util.{ Base64 => JBase64 }
 import play.api.libs.json.JsValue
 
 /**
@@ -31,7 +29,7 @@ object Base64 {
    * @param str The string to decode.
    * @return The decoded string.
    */
-  def decode(str: String): String = Decoder.base64Decode(str)
+  def decode(str: String): String = new String(JBase64.getDecoder.decode(str), "UTF-8")
 
   /**
    * Encodes a string as Base64.
@@ -39,7 +37,7 @@ object Base64 {
    * @param str The string to encode.
    * @return The encodes string.
    */
-  def encode(str: String): String = DatatypeConverter.printBase64Binary(str.getBytes("UTF-8"))
+  def encode(str: String): String = JBase64.getEncoder.encodeToString(str.getBytes("UTF-8"))
 
   /**
    * Encodes a Json value as Base64.
