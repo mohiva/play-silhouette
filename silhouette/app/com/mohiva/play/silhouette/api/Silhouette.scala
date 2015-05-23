@@ -120,8 +120,8 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
     logger.debug("[Silhouette] Unauthenticated user trying to access '%s'".format(request.uri))
 
     onNotAuthenticated(request).orElse {
-      Play.current.global match {
-        case s: SecuredSettings => s.onNotAuthenticated(request, request2Messages)
+      Play.current.errorHandler match {
+        case s: SecuredErrorHandler => s.onNotAuthenticated(request, request2Messages)
         case _ => None
       }
     }.getOrElse(DefaultEndpointHandler.handleNotAuthenticated)
@@ -144,8 +144,8 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
     logger.debug("[Silhouette] Unauthorized user trying to access '%s'".format(request.uri))
 
     onNotAuthorized(request).orElse {
-      Play.current.global match {
-        case s: SecuredSettings => s.onNotAuthorized(request, request2Messages)
+      Play.current.errorHandler match {
+        case s: SecuredErrorHandler => s.onNotAuthorized(request, request2Messages)
         case _ => None
       }
     }.getOrElse(DefaultEndpointHandler.handleNotAuthorized)
@@ -452,11 +452,11 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
    * the [[com.mohiva.play.silhouette.api.Silhouette.onNotAuthorized]] methods.
    *
    * If these methods are not implemented, then
-   * the [[com.mohiva.play.silhouette.api.SecuredSettings.onNotAuthenticated]] or
-   * the [[com.mohiva.play.silhouette.api.SecuredSettings.onNotAuthorized]] methods
+   * the [[com.mohiva.play.silhouette.api.SecuredErrorHandler.onNotAuthenticated]] or
+   * the [[com.mohiva.play.silhouette.api.SecuredErrorHandler.onNotAuthorized]] methods
    * will be called as fallback.
    *
-   * If the [[com.mohiva.play.silhouette.api.SecuredSettings]] trait isn't implemented,
+   * If the [[com.mohiva.play.silhouette.api.SecuredErrorHandler]] trait isn't implemented,
    * a default message will be displayed.
    */
   object SecuredAction extends SecuredActionBuilder {

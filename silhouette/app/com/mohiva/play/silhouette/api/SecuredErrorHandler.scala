@@ -15,18 +15,18 @@
  */
 package com.mohiva.play.silhouette.api
 
-import play.api.GlobalSettings
+import play.api.http.HttpErrorHandler
 import play.api.i18n.Messages
 import play.api.mvc.{ RequestHeader, Result }
 
 import scala.concurrent.Future
 
 /**
- * Can be mixed into the GlobalSettings object to define a global behaviour
+ * Can be mixed into the `HttpErrorHandler` object to define a global behaviour
  * for unauthorized and forbidden endpoints.
  */
-trait SecuredSettings {
-  this: GlobalSettings =>
+trait SecuredErrorHandler {
+  this: HttpErrorHandler =>
 
   /**
    * Called when a user is not authenticated.

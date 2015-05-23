@@ -15,24 +15,31 @@
  */
 package com.mohiva.play.silhouette.api
 
+import javax.inject.Inject
+
 import akka.actor.{ Actor, Props }
 import akka.testkit.TestProbe
-import com.mohiva.play.silhouette.api.exceptions.{ NotAuthorizedException, NotAuthenticatedException }
+import com.mohiva.play.silhouette.api.SilhouetteSpec._
+import com.mohiva.play.silhouette.api.exceptions.{ NotAuthenticatedException, NotAuthorizedException }
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService, IdentityService }
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.GlobalSettings
-import play.api.i18n.{ MessagesApi, Lang, Messages }
+import play.api.http.{ DefaultHttpErrorHandler, HttpErrorHandler }
+import play.api.i18n.{ Lang, Messages, MessagesApi }
+import play.api.inject.Module
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.concurrent.Akka
 import play.api.libs.json.Json
 import play.api.mvc.Results._
 import play.api.mvc._
+import play.api.routing.Router
 import play.api.test.{ FakeApplication, FakeRequest, PlaySpecification, WithApplication }
+import play.api.{ Configuration, OptionalSourceMapper }
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.reflect.ClassTag
 
 /**
@@ -885,36 +892,16 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
   }
 
   /**
-   * Runs a fake application with a secured global object.
+   * Runs a fake application with a secured error handler.
    */
-  class WithSecuredGlobal extends WithApplication(FakeApplication(withGlobal = Some(new GlobalSettings with SecuredSettings {
-
-    /**
-     * Called when a user isn't authenticated.
-     *
-     * @param request The request header.
-     * @param messages The messages for the current language.
-     * @return The result to send to the client.
-     */
-    override def onNotAuthenticated(request: RequestHeader, messages: Messages) = {
-      Some(Future.successful(Unauthorized("global.not.authenticated")))
-    }
-
-    /**
-     * Called when a user isn't authorized.
-     *
-     * @param request The request header.
-     * @param messages The messages for the current language.
-     * @return The result to send to the client.
-     */
-    override def onNotAuthorized(request: RequestHeader, messages: Messages) = {
-      Some(Future.successful(Forbidden("global.not.authorized")))
-    }
-
-  }))) with Context
+  class WithSecuredGlobal extends WithApplication(new GuiceApplicationBuilder().overrides(new Module {
+    def bindings(env: play.api.Environment, conf: Configuration) = Seq(
+      bind[HttpErrorHandler].to[ErrorHandler]
+    )
+  }).build()) with Context
 
   /**
-   * Runs a fake application with a default global object.
+   * Runs a fake application with a default error handler.
    */
   class WithDefaultGlobal extends WithApplication(FakeApplication()) with Context
 
@@ -1062,6 +1049,46 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
      */
     def isAuthorized(identity: FakeIdentity)(implicit request: RequestHeader, messages: Messages): Future[Boolean] = {
       Future.successful(isAuthorized)
+    }
+  }
+}
+
+/**
+ * The companion object.
+ */
+object SilhouetteSpec {
+
+  /**
+   * A secured error handler.
+   */
+  class ErrorHandler @Inject() (
+    env: play.api.Environment,
+    config: Configuration,
+    sourceMapper: OptionalSourceMapper,
+    router: javax.inject.Provider[Router])
+    extends DefaultHttpErrorHandler(env, config, sourceMapper, router)
+    with SecuredErrorHandler {
+
+    /**
+     * Called when a user isn't authenticated.
+     *
+     * @param request The request header.
+     * @param messages The messages for the current language.
+     * @return The result to send to the client.
+     */
+    override def onNotAuthenticated(request: RequestHeader, messages: Messages) = {
+      Some(Future.successful(Unauthorized("global.not.authenticated")))
+    }
+
+    /**
+     * Called when a user isn't authorized.
+     *
+     * @param request The request header.
+     * @param messages The messages for the current language.
+     * @return The result to send to the client.
+     */
+    override def onNotAuthorized(request: RequestHeader, messages: Messages) = {
+      Some(Future.successful(Forbidden("global.not.authorized")))
     }
   }
 }
