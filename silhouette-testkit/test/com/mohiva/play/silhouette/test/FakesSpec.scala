@@ -21,6 +21,7 @@ import com.mohiva.play.silhouette.api.{ Environment, LoginInfo, Silhouette }
 import com.mohiva.play.silhouette.impl.authenticators._
 import org.specs2.matcher.JsonMatchers
 import play.api.i18n.MessagesApi
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.Json
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 

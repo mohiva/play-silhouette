@@ -23,9 +23,8 @@ import java.security.MessageDigest
 
 import com.mohiva.play.silhouette.api.Logger
 import com.mohiva.play.silhouette.api.services.AvatarService
-import com.mohiva.play.silhouette.api.util.HTTPLayer
+import com.mohiva.play.silhouette.api.util.{ ExecutionContextProvider, HTTPLayer }
 import com.mohiva.play.silhouette.impl.services.GravatarService._
-import play.api.libs.concurrent.Execution.Implicits._
 
 import scala.concurrent.Future
 
@@ -34,7 +33,12 @@ import scala.concurrent.Future
  *
  * @param httpLayer The HTTP layer implementation.
  */
-class GravatarService(httpLayer: HTTPLayer) extends AvatarService with Logger {
+class GravatarService(httpLayer: HTTPLayer) extends AvatarService with Logger with ExecutionContextProvider {
+
+  /**
+   * The execution context to handle the asynchronous operations.
+   */
+  override implicit val executionContext = httpLayer.executionContext
 
   /**
    * Retrieves the URL for the given email address.

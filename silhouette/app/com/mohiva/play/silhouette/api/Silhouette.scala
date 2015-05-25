@@ -21,10 +21,9 @@ package com.mohiva.play.silhouette.api
 
 import com.mohiva.play.silhouette.api.exceptions.{ NotAuthenticatedException, NotAuthorizedException }
 import com.mohiva.play.silhouette.api.services.AuthenticatorResult
-import com.mohiva.play.silhouette.api.util.DefaultEndpointHandler
+import com.mohiva.play.silhouette.api.util.{ ExecutionContextProvider, DefaultEndpointHandler }
 import play.api.Play
 import play.api.i18n.I18nSupport
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc._
 
 import scala.concurrent.Future
@@ -167,7 +166,12 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
   /**
    * A builder for building request handlers.
    */
-  trait RequestHandlerBuilder[+R[_]] {
+  trait RequestHandlerBuilder[+R[_]] extends ExecutionContextProvider {
+
+    /**
+     * The execution context to handle the asynchronous operations.
+     */
+    implicit val executionContext = env.executionContext
 
     /**
      * Constructs a request handler with default content.
@@ -436,6 +440,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @return A handler result.
      */
     def invokeBlock[B](request: Request[B], block: SecuredRequest[B] => Future[Result]) = {
+      implicit val ec = executionContext
       val b = (r: SecuredRequest[B]) => block(r).map(r => HandlerResult(r))
       (authorize match {
         case Some(a) => SecuredRequestHandler(a)(request)(b)
@@ -530,6 +535,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @return The result to send to the client.
      */
     def invokeBlock[B](request: Request[B], block: UserAwareRequest[B] => Future[Result]) = {
+      implicit val ec = executionContext
       UserAwareRequestHandler(request) { r =>
         block(r).map(r => HandlerResult(r))
       }.map(_.result).recoverWith(exceptionHandler(request))

@@ -23,6 +23,7 @@ import com.mohiva.play.silhouette.impl.exceptions.{ IdentityNotFoundException, I
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider._
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.test.{ PlaySpecification, WithApplication }
 
 import scala.concurrent.Future
@@ -83,6 +84,7 @@ class CredentialsProviderSpec extends PlaySpecification with Mockito {
       fooHasher.hash(credentials.password) returns passwordInfo
       barHasher.matches(passwordInfo, credentials.password) returns true
       authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
+      authInfoRepository.update[PasswordInfo](loginInfo, passwordInfo) returns Future.successful(passwordInfo)
 
       await(provider.authenticate(credentials)) must be equalTo loginInfo
       there was one(authInfoRepository).update(loginInfo, passwordInfo)

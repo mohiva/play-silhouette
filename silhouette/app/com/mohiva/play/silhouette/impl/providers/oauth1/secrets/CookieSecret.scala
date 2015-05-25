@@ -26,7 +26,7 @@ import play.api.libs.Crypto
 import play.api.libs.json.Json
 import play.api.mvc.{ Cookie, Result }
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -108,10 +108,13 @@ class CookieSecretProvider(
    *
    * @param info The OAuth info returned from the provider.
    * @param request The current request.
+   * @param ec The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return The build secret.
    */
-  override def build[B](info: OAuth1Info)(implicit request: ExtractableRequest[B]): Future[CookieSecret] = {
+  override def build[B](info: OAuth1Info)(
+    implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[CookieSecret] = {
+
     Future.successful(CookieSecret(info.secret, clock.now.plusSeconds(settings.expirationTime)))
   }
 
@@ -119,10 +122,11 @@ class CookieSecretProvider(
    * Retrieves the token secret.
    *
    * @param request The current request.
+   * @param ec The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return A secret on success, otherwise an failure.
    */
-  override def retrieve[B](implicit request: ExtractableRequest[B]): Future[Secret] = {
+  override def retrieve[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Secret] = {
     request.cookies.get(settings.cookieName) match {
       case Some(cookie) => CookieSecret.unserialize(cookie.value) match {
         case Success(secret) if secret.isExpired => Future.failed(new OAuth1TokenSecretException(SecretIsExpired))

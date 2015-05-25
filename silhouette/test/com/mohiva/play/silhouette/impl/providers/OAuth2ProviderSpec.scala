@@ -19,11 +19,12 @@ import java.net.URLEncoder._
 
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.util.HTTPLayer
-import com.mohiva.play.silhouette.impl.exceptions.{ UnexpectedResponseException, AccessDeniedException }
+import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
+import play.api.libs.concurrent.Execution._
 import play.api.libs.json.{ JsValue, Json }
 import play.api.libs.ws.WSRequest
 import play.api.mvc.Result
@@ -63,7 +64,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           implicit val req = FakeRequest(GET, "/")
 
           c.state.serialize returns "session-value"
-          c.stateProvider.build(any) returns Future.successful(c.state)
+          c.stateProvider.build(any, any) returns Future.successful(c.state)
           c.oAuthSettings.authorizationURL returns None
 
           failed[ConfigurationException](c.provider.authenticate()) {
@@ -81,7 +82,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           val sessionValue = "session-value"
 
           c.state.serialize returns sessionValue
-          c.stateProvider.build(any) returns Future.successful(c.state)
+          c.stateProvider.build(any, any) returns Future.successful(c.state)
           c.stateProvider.publish(any, any)(any) answers { (a, m) =>
             val result = a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
             val state = a.asInstanceOf[Array[Any]](1).asInstanceOf[OAuth2State]
@@ -134,7 +135,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           c.oAuthSettings.redirectURL returns redirectURL
 
           c.state.serialize returns sessionValue
-          c.stateProvider.build(any) returns Future.successful(c.state)
+          c.stateProvider.build(any, any) returns Future.successful(c.state)
           c.stateProvider.publish(any, any)(any) answers { (a, m) =>
             val result = a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
             val state = a.asInstanceOf[Array[Any]](1).asInstanceOf[OAuth2State]
@@ -158,7 +159,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           implicit val req = FakeRequest(GET, "/")
 
           c.state.serialize returns ""
-          c.stateProvider.build(any) returns Future.successful(c.state)
+          c.stateProvider.build(any, any) returns Future.successful(c.state)
           c.stateProvider.publish(any, any)(any) answers { (a, m) =>
             a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
           }
@@ -181,7 +182,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
 
       requestHolder.withHeaders(any) returns requestHolder
-      c.stateProvider.validate(any) returns Future.successful(c.state)
+      c.stateProvider.validate(any, any) returns Future.successful(c.state)
 
       // We must use this neat trick here because it isn't possible to check the post call with a verification,
       // because of the implicit params needed for the post call. On the other hand we can test it in the abstract
@@ -230,7 +231,11 @@ trait OAuth2ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
   /**
    * The HTTP layer mock.
    */
-  lazy val httpLayer: HTTPLayer = mock[HTTPLayer]
+  lazy val httpLayer = {
+    val m = mock[HTTPLayer]
+    m.executionContext returns defaultContext
+    m
+  }
 
   /**
    * A OAuth2 info.

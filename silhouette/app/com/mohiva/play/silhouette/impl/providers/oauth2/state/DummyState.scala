@@ -19,7 +19,7 @@ import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.impl.providers.{ OAuth2State, OAuth2StateProvider }
 import play.api.mvc.Result
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * A dummy state which can be used to avoid state validation. This can be useful if the state
@@ -44,19 +44,23 @@ class DummyStateProvider extends OAuth2StateProvider {
    * Builds the state.
    *
    * @param request The request.
+   * @param ec The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return The build state.
    */
-  override def build[B](implicit request: ExtractableRequest[B]): Future[DummyState] = Future.successful(DummyState())
+  override def build[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[DummyState] =
+    Future.successful(DummyState())
 
   /**
    * Returns always a valid state avoid authentication errors.
    *
    * @param request The request.
+   * @param ec The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return Always a valid state avoid authentication errors.
    */
-  override def validate[B](implicit request: ExtractableRequest[B]) = Future.successful(DummyState())
+  override def validate[B](implicit request: ExtractableRequest[B], ec: ExecutionContext) =
+    Future.successful(DummyState())
 
   /**
    * Returns the original result.

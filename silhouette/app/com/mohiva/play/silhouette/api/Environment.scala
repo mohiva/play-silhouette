@@ -16,11 +16,14 @@
 package com.mohiva.play.silhouette.api
 
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorService, IdentityService }
+import com.mohiva.play.silhouette.api.util.ExecutionContextProvider
+
+import scala.concurrent.ExecutionContext
 
 /**
  * The environment needed to instantiate a Silhouette controller.
  */
-trait Environment[I <: Identity, T <: Authenticator] {
+trait Environment[I <: Identity, T <: Authenticator] extends ExecutionContextProvider {
 
   /**
    * Gets the identity service implementation.
@@ -59,10 +62,11 @@ object Environment {
     identityServiceImpl: IdentityService[I],
     authenticatorServiceImpl: AuthenticatorService[T],
     requestProvidersImpl: Seq[RequestProvider],
-    eventBusImpl: EventBus) = new Environment[I, T] {
+    eventBusImpl: EventBus)(implicit ec: ExecutionContext) = new Environment[I, T] {
     val identityService = identityServiceImpl
     val authenticatorService = authenticatorServiceImpl
     val requestProviders = requestProvidersImpl
     val eventBus = eventBusImpl
+    val executionContext = ec
   }
 }

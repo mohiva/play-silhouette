@@ -20,14 +20,13 @@
 package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
+import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth1Provider._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.ws.WSSignatureCalculator
 import play.api.mvc._
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * Base implementation for all OAuth1 providers.
@@ -58,11 +57,6 @@ trait OAuth1Provider extends SocialProvider with Logger {
    * The settings type.
    */
   type Settings = OAuth1Settings
-
-  /**
-   * The HTTP layer implementation.
-   */
-  protected val httpLayer: HTTPLayer
 
   /**
    * The OAuth1 service implementation.
@@ -151,18 +145,20 @@ trait OAuth1Service {
    * Retrieves the request info and secret.
    *
    * @param callbackURL The URL where the provider should redirect to (usually a URL on the current app).
+   * @param ec The execution context to handle the asynchronous operations.
    * @return A OAuth1Info in case of success, Exception otherwise.
    */
-  def retrieveRequestToken(callbackURL: String): Future[OAuth1Info]
+  def retrieveRequestToken(callbackURL: String)(implicit ec: ExecutionContext): Future[OAuth1Info]
 
   /**
    * Exchange a request info for an access info.
    *
    * @param oAuthInfo The info/secret pair obtained from a previous call.
    * @param verifier A string you got through your user with redirection.
+   * @param ec The execution context to handle the asynchronous operations.
    * @return A OAuth1Info in case of success, Exception otherwise.
    */
-  def retrieveAccessToken(oAuthInfo: OAuth1Info, verifier: String): Future[OAuth1Info]
+  def retrieveAccessToken(oAuthInfo: OAuth1Info, verifier: String)(implicit ec: ExecutionContext): Future[OAuth1Info]
 
   /**
    * The URL to which the user needs to be redirected to grant authorization to your application.
@@ -228,19 +224,21 @@ trait OAuth1TokenSecretProvider {
    *
    * @param info The OAuth info returned from the provider.
    * @param request The current request.
+   * @param ec The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return The build secret.
    */
-  def build[B](info: OAuth1Info)(implicit request: ExtractableRequest[B]): Future[Secret]
+  def build[B](info: OAuth1Info)(implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Secret]
 
   /**
    * Retrieves the token secret.
    *
    * @param request The current request.
+   * @param ec The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return A secret on success, otherwise an failure.
    */
-  def retrieve[B](implicit request: ExtractableRequest[B]): Future[Secret]
+  def retrieve[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Secret]
 
   /**
    * Publishes the secret to the client.

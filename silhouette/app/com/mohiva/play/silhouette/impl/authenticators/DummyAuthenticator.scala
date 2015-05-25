@@ -19,7 +19,7 @@ import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, Authentica
 import com.mohiva.play.silhouette.api.{ Authenticator, LoginInfo }
 import play.api.mvc.{ RequestHeader, Result }
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * An authenticator that can be used if a client doesn't need an authenticator to
@@ -45,8 +45,11 @@ case class DummyAuthenticator(loginInfo: LoginInfo) extends Authenticator {
 
 /**
  * The service that handles the dummy token authenticator.
+ *
+ * @param executionContext The execution context to handle the asynchronous operations.
  */
-class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator] {
+class DummyAuthenticatorService(implicit val executionContext: ExecutionContext)
+  extends AuthenticatorService[DummyAuthenticator] {
 
   /**
    * The type of this class.
@@ -94,7 +97,9 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return Always None because .
    */
-  override def retrieve(implicit request: RequestHeader): Future[Option[DummyAuthenticator]] = Future.successful(None)
+  override def retrieve(implicit request: RequestHeader): Future[Option[DummyAuthenticator]] = {
+    Future.successful(None)
+  }
 
   /**
    * Returns noting because this authenticator doesn't have a serialized representation.
@@ -103,7 +108,9 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The serialized authenticator value.
    */
-  override def init(authenticator: DummyAuthenticator)(implicit request: RequestHeader): Future[Unit] = Future.successful(())
+  override def init(authenticator: DummyAuthenticator)(implicit request: RequestHeader): Future[Unit] = {
+    Future.successful(())
+  }
 
   /**
    * Returns the original result, because we needn't add the authenticator to the result.
@@ -132,7 +139,9 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  override def touch(authenticator: DummyAuthenticator): Either[DummyAuthenticator, DummyAuthenticator] = Right(authenticator)
+  override def touch(authenticator: DummyAuthenticator): Either[DummyAuthenticator, DummyAuthenticator] = {
+    Right(authenticator)
+  }
 
   /**
    * Returns the original request, because we needn't update the authenticator in the result.
@@ -142,9 +151,8 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  override def update(
-    authenticator: DummyAuthenticator,
-    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def update(authenticator: DummyAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
     Future.successful(AuthenticatorResult(result))
   }
@@ -156,7 +164,9 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The serialized expression of the authenticator.
    */
-  override def renew(authenticator: DummyAuthenticator)(implicit request: RequestHeader): Future[Unit] = Future.successful(())
+  override def renew(authenticator: DummyAuthenticator)(implicit request: RequestHeader): Future[Unit] = {
+    Future.successful(())
+  }
 
   /**
    * Returns the original request, because we needn't renew the authenticator in the result.
@@ -166,9 +176,8 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  override def renew(
-    authenticator: DummyAuthenticator,
-    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def renew(authenticator: DummyAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
     Future.successful(AuthenticatorResult(result))
   }
@@ -180,9 +189,8 @@ class DummyAuthenticatorService extends AuthenticatorService[DummyAuthenticator]
    * @param request The request header.
    * @return The manipulated result.
    */
-  override def discard(
-    authenticator: DummyAuthenticator,
-    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def discard(authenticator: DummyAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
     Future.successful(AuthenticatorResult(result))
   }

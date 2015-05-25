@@ -19,6 +19,7 @@
  */
 package com.mohiva.play.silhouette.api.services
 
+import com.mohiva.play.silhouette.api.util.ExecutionContextProvider
 import com.mohiva.play.silhouette.api.{ Authenticator, LoginInfo }
 import play.api.libs.iteratee.Enumerator
 import play.api.mvc._
@@ -80,7 +81,7 @@ object AuthenticatorResult {
  *
  * @tparam T The type of the authenticator this service is responsible for.
  */
-trait AuthenticatorService[T <: Authenticator] {
+trait AuthenticatorService[T <: Authenticator] extends ExecutionContextProvider {
 
   /**
    * The type of the concrete implementation of this abstract type.

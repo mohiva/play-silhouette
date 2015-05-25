@@ -21,8 +21,7 @@ package com.mohiva.play.silhouette.api
 
 import play.api.i18n.Messages
 import play.api.mvc.RequestHeader
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * A trait to define Authorization objects that let you hook
@@ -49,28 +48,30 @@ trait Authorization[I <: Identity] {
 object Authorization {
 
   /**
-   * Defines additional methods on an Authorization instance.
+   * Defines additional methods on an `Authorization` instance.
    *
-   * @param self The authorization.
+   * @param self The `Authorization` instance on which the additional methods should be defined.
+   * @param ec The execution context to handle the asynchronous operations.
    */
-  implicit final class RichAuthorization[I <: Identity](self: Authorization[I]) {
+  implicit final class RichAuthorization[I <: Identity](self: Authorization[I])(implicit ec: ExecutionContext) {
 
     /**
-     * Negation (not) operator.
+     * Performs a logical negation on an `Authorization` result.
      *
-     * @return The authorization.
+     * @return An `Authorization` which performs a logical negation on an `Authorization` result.
      */
     def unary_! : Authorization[I] = new Authorization[I] {
-      def isAuthorized(identity: I)(implicit request: RequestHeader, messages: Messages): Future[Boolean] = {
+      def isAuthorized(identity: I)(
+        implicit request: RequestHeader, messages: Messages): Future[Boolean] = {
         self.isAuthorized(identity).map(x => !x)
       }
     }
 
     /**
-     * Conjunction (and) operator.
+     * Performs a logical AND operation with two `Authorization` instances.
      *
-     * @param authorization The authorization to be conjunction.
-     * @return The authorization.
+     * @param authorization The right hand operand.
+     * @return An authorization which performs a logical AND operation with two `Authorization` instances.
      */
     def &&(authorization: Authorization[I]): Authorization[I] = new Authorization[I] {
       def isAuthorized(identity: I)(implicit request: RequestHeader, messages: Messages): Future[Boolean] = {
@@ -84,10 +85,10 @@ object Authorization {
     }
 
     /**
-     * Disjunction (or) operator.
+     * Performs a logical OR operation with two `Authorization` instances.
      *
-     * @param authorization The authorization to be disjunction.
-     * @return The authorization.
+     * @param authorization The right hand operand.
+     * @return An authorization which performs a logical OR operation with two `Authorization` instances.
      */
     def ||(authorization: Authorization[I]): Authorization[I] = new Authorization[I] {
       def isAuthorized(identity: I)(implicit request: RequestHeader, messages: Messages): Future[Boolean] = {

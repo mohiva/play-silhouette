@@ -18,15 +18,17 @@ package com.mohiva.play.silhouette.api.util
 import play.api.Play.current
 import play.api.libs.ws._
 
+import scala.concurrent.ExecutionContext
+
 /**
  * A trait which provides a mockable implementation for the HTTP layer.
  */
-trait HTTPLayer {
+trait HTTPLayer extends ExecutionContextProvider {
 
   /**
    * Prepare a new request. You can then construct it by chaining calls.
    *
-   * @param url the URL to request
+   * @param url The URL to request.
    */
   def url(url: String): WSRequest
 }
@@ -36,13 +38,15 @@ trait HTTPLayer {
  *
  * It makes no sense to move the HTTPLayer implementation to the contrib package, because the complete
  * Silhouette module is bound to Play's HTTP implementation. So this layer exists only for mocking purpose.
+ *
+ * @param executionContext The execution context to handle the asynchronous operations.
  */
-class PlayHTTPLayer extends HTTPLayer {
+class PlayHTTPLayer(implicit val executionContext: ExecutionContext) extends HTTPLayer {
 
   /**
    * Prepare a new request. You can then construct it by chaining calls.
    *
-   * @param url the URL to request
+   * @param url The URL to request.
    */
   def url(url: String): WSRequest = WS.url(url)
 }

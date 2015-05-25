@@ -31,10 +31,9 @@ import org.joda.time.DateTime
 import play.api.Play
 import play.api.Play.current
 import play.api.http.HeaderNames
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc._
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.Try
 
 /**
@@ -101,13 +100,14 @@ case class CookieAuthenticator(
  * @param fingerprintGenerator The fingerprint generator implementation.
  * @param idGenerator The ID generator used to create the authenticator ID.
  * @param clock The clock implementation.
+ * @param executionContext The execution context to handle the asynchronous operations.
  */
 class CookieAuthenticatorService(
   val settings: CookieAuthenticatorSettings,
   dao: AuthenticatorDAO[CookieAuthenticator],
   fingerprintGenerator: FingerprintGenerator,
   idGenerator: IDGenerator,
-  clock: Clock)
+  clock: Clock)(implicit val executionContext: ExecutionContext)
   extends AuthenticatorService[CookieAuthenticator]
   with Logger {
 
@@ -253,9 +253,8 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  override def update(
-    authenticator: CookieAuthenticator,
-    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def update(authenticator: CookieAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
     dao.update(authenticator).map { a =>
       AuthenticatorResult(result)
@@ -294,9 +293,8 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  override def renew(
-    authenticator: CookieAuthenticator,
-    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def renew(authenticator: CookieAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
     renew(authenticator).flatMap(v => embed(v, result)).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
@@ -310,9 +308,8 @@ class CookieAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  override def discard(
-    authenticator: CookieAuthenticator,
-    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def discard(authenticator: CookieAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
     dao.remove(authenticator.id).map { _ =>
       AuthenticatorResult(result.discardingCookies(DiscardingCookie(

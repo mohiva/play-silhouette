@@ -25,7 +25,6 @@ import com.mohiva.play.silhouette.impl.exceptions.{ UnexpectedResponseException,
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.FacebookProvider._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.{ JsObject, JsValue }
 import play.api.libs.ws.WSResponse
 

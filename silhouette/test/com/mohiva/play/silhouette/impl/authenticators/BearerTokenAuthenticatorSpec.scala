@@ -24,6 +24,7 @@ import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import org.joda.time.DateTime
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.Results
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 

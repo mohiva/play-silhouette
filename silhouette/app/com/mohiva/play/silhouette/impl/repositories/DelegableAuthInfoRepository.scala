@@ -19,9 +19,8 @@ import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.{ AuthInfo, LoginInfo }
 import com.mohiva.play.silhouette.impl.daos.{ AuthInfoDAO, DelegableAuthInfoDAO }
 import com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository._
-import play.api.libs.concurrent.Execution.Implicits._
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.reflect.ClassTag
 
 /**
@@ -35,8 +34,9 @@ import scala.reflect.ClassTag
  * object.
  *
  * @param daos The auth info DAO implementations.
+ * @param ec The execution context to handle the asynchronous operations.
  */
-class DelegableAuthInfoRepository(daos: DelegableAuthInfoDAO[_]*) extends AuthInfoRepository {
+class DelegableAuthInfoRepository(daos: DelegableAuthInfoDAO[_]*)(implicit ec: ExecutionContext) extends AuthInfoRepository {
 
   /**
    * Finds the auth info which is linked with the specified login info.

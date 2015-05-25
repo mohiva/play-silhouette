@@ -53,7 +53,7 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
       requestHolder.withHeaders(HeaderNames.ACCEPT -> "application/json") returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      stateProvider.validate(any) returns Future.successful(state)
+      stateProvider.validate(any, any) returns Future.successful(state)
 
       failed[UnexpectedResponseException](provider.authenticate()) {
         case e => e.getMessage must startWith(InvalidInfoFormat.format(provider.id, ""))
@@ -68,7 +68,7 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
       requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      stateProvider.validate(any) returns Future.successful(state)
+      stateProvider.validate(any, any) returns Future.successful(state)
 
       authInfo(provider.authenticate()) {
         case authInfo => authInfo must be equalTo oAuthInfo.as[OAuth2Info]
