@@ -45,14 +45,14 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">RequestHandlerBuilder</span><span class="tparams">[<span name="R">+R<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">RequestHandlerBuilder</span><span class="tparams">[<span name="R">+R<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A builder for building request handlers.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="Silhouette$SecuredRequestHandler$.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequestHandler">SecuredRequestHandler</a>, <a href="Silhouette$SecuredRequestHandlerBuilder.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.SecuredRequestHandlerBuilder">SecuredRequestHandlerBuilder</a>, <a href="Silhouette$UserAwareRequestHandler$.html" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.UserAwareRequestHandler">UserAwareRequestHandler</a></div>
@@ -73,7 +73,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder"><span>RequestHandlerBuilder</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder"><span>RequestHandlerBuilder</span></li><li class="in" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider"><span>ExecutionContextProvider</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -284,6 +284,24 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder#executionContext" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="executionContext:scala.concurrent.ExecutionContext"></a>
+      <a id="executionContext:ExecutionContext"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">executionContext</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Silhouette$RequestHandlerBuilder@executionContext:scala.concurrent.ExecutionContext" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The execution context to handle the asynchronous operations.</p><div class="fullcomment"><div class="comment cmt"><p>The execution context to handle the asynchronous operations.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.api.Silhouette.RequestHandlerBuilder">RequestHandlerBuilder</a> → <a href="util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -564,7 +582,9 @@ with the result returned from the invoked block.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">
+              <h3>Inherited from <a href="util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>

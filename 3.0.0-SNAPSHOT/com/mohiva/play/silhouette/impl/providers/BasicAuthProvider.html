@@ -97,7 +97,7 @@ algorithm and stores the auth info in the backing store.
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.mohiva.play.silhouette.impl.providers.BasicAuthProvider#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(authInfoRepository:com.mohiva.play.silhouette.api.repositories.AuthInfoRepository,passwordHasher:com.mohiva.play.silhouette.api.util.PasswordHasher,passwordHasherList:Seq[com.mohiva.play.silhouette.api.util.PasswordHasher]):com.mohiva.play.silhouette.impl.providers.BasicAuthProvider"></a>
+      <a id="&lt;init&gt;(authInfoRepository:com.mohiva.play.silhouette.api.repositories.AuthInfoRepository,passwordHasher:com.mohiva.play.silhouette.api.util.PasswordHasher,passwordHasherList:Seq[com.mohiva.play.silhouette.api.util.PasswordHasher])(implicitexecutionContext:scala.concurrent.ExecutionContext):com.mohiva.play.silhouette.impl.providers.BasicAuthProvider"></a>
       <a id="&lt;init&gt;:BasicAuthProvider"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -105,14 +105,14 @@ algorithm and stores the auth info in the backing store.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">BasicAuthProvider</span><span class="params">(<span name="authInfoRepository">authInfoRepository: <a href="../../api/repositories/AuthInfoRepository.html" class="extype" name="com.mohiva.play.silhouette.api.repositories.AuthInfoRepository">AuthInfoRepository</a></span>, <span name="passwordHasher">passwordHasher: <a href="../../api/util/PasswordHasher.html" class="extype" name="com.mohiva.play.silhouette.api.util.PasswordHasher">PasswordHasher</a></span>, <span name="passwordHasherList">passwordHasherList: <span class="extype" name="scala.Seq">Seq</span>[<a href="../../api/util/PasswordHasher.html" class="extype" name="com.mohiva.play.silhouette.api.util.PasswordHasher">PasswordHasher</a>]</span>)</span>
+        <span class="name">BasicAuthProvider</span><span class="params">(<span name="authInfoRepository">authInfoRepository: <a href="../../api/repositories/AuthInfoRepository.html" class="extype" name="com.mohiva.play.silhouette.api.repositories.AuthInfoRepository">AuthInfoRepository</a></span>, <span name="passwordHasher">passwordHasher: <a href="../../api/util/PasswordHasher.html" class="extype" name="com.mohiva.play.silhouette.api.util.PasswordHasher">PasswordHasher</a></span>, <span name="passwordHasherList">passwordHasherList: <span class="extype" name="scala.Seq">Seq</span>[<a href="../../api/util/PasswordHasher.html" class="extype" name="com.mohiva.play.silhouette.api.util.PasswordHasher">PasswordHasher</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="executionContext">executionContext: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@&lt;init&gt;(authInfoRepository:com.mohiva.play.silhouette.api.repositories.AuthInfoRepository,passwordHasher:com.mohiva.play.silhouette.api.util.PasswordHasher,passwordHasherList:Seq[com.mohiva.play.silhouette.api.util.PasswordHasher]):com.mohiva.play.silhouette.impl.providers.BasicAuthProvider" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@&lt;init&gt;(authInfoRepository:com.mohiva.play.silhouette.api.repositories.AuthInfoRepository,passwordHasher:com.mohiva.play.silhouette.api.util.PasswordHasher,passwordHasherList:Seq[com.mohiva.play.silhouette.api.util.PasswordHasher])(implicitexecutionContext:scala.concurrent.ExecutionContext):com.mohiva.play.silhouette.impl.providers.BasicAuthProvider" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">authInfoRepository</dt><dd class="cmt"><p>The auth info repository.</p></dd><dt class="param">passwordHasher</dt><dd class="cmt"><p>The default password hasher used by the application.</p></dd><dt class="param">passwordHasherList</dt><dd class="cmt"><p>List of password hasher supported by the application.
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">authInfoRepository</dt><dd class="cmt"><p>The auth info repository.</p></dd><dt class="param">passwordHasher</dt><dd class="cmt"><p>The default password hasher used by the application.</p></dd><dt class="param">passwordHasherList</dt><dd class="cmt"><p>List of password hasher supported by the application.</p></dd><dt class="param">executionContext</dt><dd class="cmt"><p>The execution context to handle the asynchronous operations.
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -267,6 +267,23 @@ algorithm and stores the auth info in the backing store.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.BasicAuthProvider#executionContext" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="executionContext:scala.concurrent.ExecutionContext"></a>
+      <a id="executionContext:ExecutionContext"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">executionContext</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.BasicAuthProvider@executionContext:scala.concurrent.ExecutionContext" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The execution context to handle the asynchronous operations.</p>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>

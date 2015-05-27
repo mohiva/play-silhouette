@@ -368,23 +368,23 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService#redirectURL" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="redirectURL(openID:String,resolvedCallbackURL:String):scala.concurrent.Future[String]"></a>
-      <a id="redirectURL(String,String):Future[String]"></a>
+      <a id="redirectURL(openID:String,resolvedCallbackURL:String)(implicitec:scala.concurrent.ExecutionContext):scala.concurrent.Future[String]"></a>
+      <a id="redirectURL(String,String)(ExecutionContext):Future[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">redirectURL</span><span class="params">(<span name="openID">openID: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="resolvedCallbackURL">resolvedCallbackURL: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">redirectURL</span><span class="params">(<span name="openID">openID: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="resolvedCallbackURL">resolvedCallbackURL: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService@redirectURL(openID:String,resolvedCallbackURL:String):scala.concurrent.Future[String]" title="Permalink" target="_top">
+      <a href="../../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService@redirectURL(openID:String,resolvedCallbackURL:String)(implicitec:scala.concurrent.ExecutionContext):scala.concurrent.Future[String]" title="Permalink" target="_top">
         <img src="../../../../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Retrieve the URL where the user should be redirected to start the OpenID authentication process.</p><div class="fullcomment"><div class="comment cmt"><p>Retrieve the URL where the user should be redirected to start the OpenID authentication process.
-</p></div><dl class="paramcmts block"><dt class="param">openID</dt><dd class="cmt"><p>The OpenID to use for authentication.</p></dd><dt class="param">resolvedCallbackURL</dt><dd class="cmt"><p>The full callback URL to the application after a successful authentication.</p></dd><dt>returns</dt><dd class="cmt"><p>The redirect URL where the user should be redirected to start the OpenID authentication process.
+</p></div><dl class="paramcmts block"><dt class="param">openID</dt><dd class="cmt"><p>The OpenID to use for authentication.</p></dd><dt class="param">resolvedCallbackURL</dt><dd class="cmt"><p>The full callback URL to the application after a successful authentication.</p></dd><dt class="param">ec</dt><dd class="cmt"><p>The execution context to handle the asynchronous operations.</p></dd><dt>returns</dt><dd class="cmt"><p>The redirect URL where the user should be redirected to start the OpenID authentication process.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService">PlayOpenIDService</a> → <a href="../../OpenIDService.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OpenIDService">OpenIDService</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
@@ -421,23 +421,23 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService#verifiedID" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="verifiedID[B](implicitrequest:play.api.mvc.Request[B]):scala.concurrent.Future[com.mohiva.play.silhouette.impl.providers.OpenIDInfo]"></a>
-      <a id="verifiedID[B](Request[B]):Future[OpenIDInfo]"></a>
+      <a id="verifiedID[B](implicitrequest:play.api.mvc.Request[B],implicitec:scala.concurrent.ExecutionContext):scala.concurrent.Future[com.mohiva.play.silhouette.impl.providers.OpenIDInfo]"></a>
+      <a id="verifiedID[B](Request[B],ExecutionContext):Future[OpenIDInfo]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">verifiedID</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.Request">Request</span>[<span class="extype" name="com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService.verifiedID.B">B</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="../../OpenIDInfo.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OpenIDInfo">OpenIDInfo</a>]</span>
+        <span class="name">verifiedID</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.Request">Request</span>[<span class="extype" name="com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService.verifiedID.B">B</span>]</span>, <span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="../../OpenIDInfo.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OpenIDInfo">OpenIDInfo</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService@verifiedID[B](implicitrequest:play.api.mvc.Request[B]):scala.concurrent.Future[com.mohiva.play.silhouette.impl.providers.OpenIDInfo]" title="Permalink" target="_top">
+      <a href="../../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService@verifiedID[B](implicitrequest:play.api.mvc.Request[B],implicitec:scala.concurrent.ExecutionContext):scala.concurrent.Future[com.mohiva.play.silhouette.impl.providers.OpenIDInfo]" title="Permalink" target="_top">
         <img src="../../../../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">From a request corresponding to the callback from the OpenID server, check the identity of the current user.</p><div class="fullcomment"><div class="comment cmt"><p>From a request corresponding to the callback from the OpenID server, check the identity of the current user.
-</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd><dt>returns</dt><dd class="cmt"><p>A OpenIDInfo in case of success, Exception otherwise.
+</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd><dt class="param">ec</dt><dd class="cmt"><p>The execution context to handle the asynchronous operations.</p></dd><dt>returns</dt><dd class="cmt"><p>A OpenIDInfo in case of success, Exception otherwise.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService">PlayOpenIDService</a> → <a href="../../OpenIDService.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OpenIDService">OpenIDService</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>

@@ -160,6 +160,23 @@
       </a>
     </span>
       <p class="shortcomment cmt">Contains the default request extractors.</p>
+    </li><li name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ExecutionContextProviderextendsAnyRef"></a>
+      <a id="ExecutionContextProvider:ExecutionContextProvider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ExecutionContextProvider.html"><span class="name">ExecutionContextProvider</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.package@ExecutionContextProviderextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A trait that can be mixed in to provide an execution context.</p>
     </li><li name="com.mohiva.play.silhouette.api.util.ExtractableRequest" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ExtractableRequest[B]extendsWrappedRequest[B]"></a>
       <a id="ExtractableRequest[B]:ExtractableRequest[B]"></a>
@@ -197,7 +214,7 @@
     </span>
       <p class="shortcomment cmt">A generator which creates a fingerprint to identify a user.</p>
     </li><li name="com.mohiva.play.silhouette.api.util.HTTPLayer" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="HTTPLayerextendsAnyRef"></a>
+      <a id="HTTPLayerextendsExecutionContextProvider"></a>
       <a id="HTTPLayer:HTTPLayer"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -205,10 +222,10 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="HTTPLayer.html"><span class="name">HTTPLayer</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="HTTPLayer.html"><span class="name">HTTPLayer</span></a><span class="result"> extends <a href="ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.package@HTTPLayerextendsAnyRef" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.package@HTTPLayerextendsExecutionContextProvider" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>

@@ -53,7 +53,7 @@
 Silhouette module is bound to Play's HTTP implementation. So this layer exists only for mocking purpose.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="HTTPLayer.html" class="extype" name="com.mohiva.play.silhouette.api.util.HTTPLayer">HTTPLayer</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="HTTPLayer.html" class="extype" name="com.mohiva.play.silhouette.api.util.HTTPLayer">HTTPLayer</a>, <a href="ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -71,7 +71,7 @@ Silhouette module is bound to Play's HTTP implementation. So this layer exists o
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.api.util.PlayHTTPLayer"><span>PlayHTTPLayer</span></li><li class="in" name="com.mohiva.play.silhouette.api.util.HTTPLayer"><span>HTTPLayer</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.api.util.PlayHTTPLayer"><span>PlayHTTPLayer</span></li><li class="in" name="com.mohiva.play.silhouette.api.util.HTTPLayer"><span>HTTPLayer</span></li><li class="in" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider"><span>ExecutionContextProvider</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -91,8 +91,8 @@ Silhouette module is bound to Play's HTTP implementation. So this layer exists o
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="com.mohiva.play.silhouette.api.util.PlayHTTPLayer#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;():com.mohiva.play.silhouette.api.util.PlayHTTPLayer"></a>
+              <ol><li name="com.mohiva.play.silhouette.api.util.PlayHTTPLayer#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;()(implicitexecutionContext:scala.concurrent.ExecutionContext):com.mohiva.play.silhouette.api.util.PlayHTTPLayer"></a>
       <a id="&lt;init&gt;:PlayHTTPLayer"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -100,14 +100,15 @@ Silhouette module is bound to Play's HTTP implementation. So this layer exists o
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">PlayHTTPLayer</span><span class="params">()</span>
+        <span class="name">PlayHTTPLayer</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="executionContext">executionContext: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.PlayHTTPLayer@&lt;init&gt;():com.mohiva.play.silhouette.api.util.PlayHTTPLayer" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.PlayHTTPLayer@&lt;init&gt;()(implicitexecutionContext:scala.concurrent.ExecutionContext):com.mohiva.play.silhouette.api.util.PlayHTTPLayer" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">executionContext</dt><dd class="cmt"><p>The execution context to handle the asynchronous operations.
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -242,6 +243,24 @@ Silhouette module is bound to Play's HTTP implementation. So this layer exists o
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.util.PlayHTTPLayer#executionContext" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="executionContext:scala.concurrent.ExecutionContext"></a>
+      <a id="executionContext:ExecutionContext"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">executionContext</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.PlayHTTPLayer@executionContext:scala.concurrent.ExecutionContext" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The execution context to handle the asynchronous operations.</p><div class="fullcomment"><div class="comment cmt"><p>The execution context to handle the asynchronous operations.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.api.util.PlayHTTPLayer">PlayHTTPLayer</a> → <a href="ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -418,7 +437,7 @@ Silhouette module is bound to Play's HTTP implementation. So this layer exists o
       </a>
     </span>
       <p class="shortcomment cmt">Prepare a new request.</p><div class="fullcomment"><div class="comment cmt"><p>Prepare a new request. You can then construct it by chaining calls.
-</p></div><dl class="paramcmts block"><dt class="param">url</dt><dd class="cmt"><p>the URL to request
+</p></div><dl class="paramcmts block"><dt class="param">url</dt><dd class="cmt"><p>The URL to request.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.api.util.PlayHTTPLayer">PlayHTTPLayer</a> → <a href="HTTPLayer.html" class="extype" name="com.mohiva.play.silhouette.api.util.HTTPLayer">HTTPLayer</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
@@ -500,6 +519,8 @@ Silhouette module is bound to Play's HTTP implementation. So this layer exists o
         <div id="inheritedMembers">
         <div class="parent" name="com.mohiva.play.silhouette.api.util.HTTPLayer">
               <h3>Inherited from <a href="HTTPLayer.html" class="extype" name="com.mohiva.play.silhouette.api.util.HTTPLayer">HTTPLayer</a></h3>
+            </div><div class="parent" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">
+              <h3>Inherited from <a href="ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

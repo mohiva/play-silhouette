@@ -55,7 +55,7 @@
 that you will loose the possibility to invalidate a JWT.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a>, <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a>[<a href="JWTAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator">JWTAuthenticator</a>], <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a>, <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a>[<a href="JWTAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator">JWTAuthenticator</a>], <a href="../../api/util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="../../test/FakeJWTAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.test.FakeJWTAuthenticatorService">FakeJWTAuthenticatorService</a></div>
@@ -76,7 +76,7 @@ that you will loose the possibility to invalidate a JWT.
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService"><span>JWTAuthenticatorService</span></li><li class="in" name="com.mohiva.play.silhouette.api.Logger"><span>Logger</span></li><li class="in" name="com.mohiva.play.silhouette.api.services.AuthenticatorService"><span>AuthenticatorService</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService"><span>JWTAuthenticatorService</span></li><li class="in" name="com.mohiva.play.silhouette.api.Logger"><span>Logger</span></li><li class="in" name="com.mohiva.play.silhouette.api.services.AuthenticatorService"><span>AuthenticatorService</span></li><li class="in" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider"><span>ExecutionContextProvider</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -97,7 +97,7 @@ that you will loose the possibility to invalidate a JWT.
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(settings:com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorSettings,dao:Option[com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO[com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator]],idGenerator:com.mohiva.play.silhouette.api.util.IDGenerator,clock:com.mohiva.play.silhouette.api.util.Clock):com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService"></a>
+      <a id="&lt;init&gt;(settings:com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorSettings,dao:Option[com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO[com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator]],idGenerator:com.mohiva.play.silhouette.api.util.IDGenerator,clock:com.mohiva.play.silhouette.api.util.Clock)(implicitexecutionContext:scala.concurrent.ExecutionContext):com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService"></a>
       <a id="&lt;init&gt;:JWTAuthenticatorService"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -105,14 +105,14 @@ that you will loose the possibility to invalidate a JWT.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">JWTAuthenticatorService</span><span class="params">(<span name="settings">settings: <a href="JWTAuthenticatorSettings.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorSettings">JWTAuthenticatorSettings</a></span>, <span name="dao">dao: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../daos/AuthenticatorDAO.html" class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO">AuthenticatorDAO</a>[<a href="JWTAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator">JWTAuthenticator</a>]]</span>, <span name="idGenerator">idGenerator: <a href="../../api/util/IDGenerator.html" class="extype" name="com.mohiva.play.silhouette.api.util.IDGenerator">IDGenerator</a></span>, <span name="clock">clock: <a href="../../api/util/Clock.html" class="extype" name="com.mohiva.play.silhouette.api.util.Clock">Clock</a></span>)</span>
+        <span class="name">JWTAuthenticatorService</span><span class="params">(<span name="settings">settings: <a href="JWTAuthenticatorSettings.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorSettings">JWTAuthenticatorSettings</a></span>, <span name="dao">dao: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../daos/AuthenticatorDAO.html" class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO">AuthenticatorDAO</a>[<a href="JWTAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator">JWTAuthenticator</a>]]</span>, <span name="idGenerator">idGenerator: <a href="../../api/util/IDGenerator.html" class="extype" name="com.mohiva.play.silhouette.api.util.IDGenerator">IDGenerator</a></span>, <span name="clock">clock: <a href="../../api/util/Clock.html" class="extype" name="com.mohiva.play.silhouette.api.util.Clock">Clock</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="executionContext">executionContext: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService@&lt;init&gt;(settings:com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorSettings,dao:Option[com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO[com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator]],idGenerator:com.mohiva.play.silhouette.api.util.IDGenerator,clock:com.mohiva.play.silhouette.api.util.Clock):com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService@&lt;init&gt;(settings:com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorSettings,dao:Option[com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO[com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator]],idGenerator:com.mohiva.play.silhouette.api.util.IDGenerator,clock:com.mohiva.play.silhouette.api.util.Clock)(implicitexecutionContext:scala.concurrent.ExecutionContext):com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">settings</dt><dd class="cmt"><p>The authenticator settings.</p></dd><dt class="param">dao</dt><dd class="cmt"><p>The DAO to store the authenticator. Set it to None to use a stateless approach.</p></dd><dt class="param">idGenerator</dt><dd class="cmt"><p>The ID generator used to create the authenticator ID.</p></dd><dt class="param">clock</dt><dd class="cmt"><p>The clock implementation.
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">settings</dt><dd class="cmt"><p>The authenticator settings.</p></dd><dt class="param">dao</dt><dd class="cmt"><p>The DAO to store the authenticator. Set it to None to use a stateless approach.</p></dd><dt class="param">idGenerator</dt><dd class="cmt"><p>The ID generator used to create the authenticator ID.</p></dd><dt class="param">clock</dt><dd class="cmt"><p>The clock implementation.</p></dd><dt class="param">executionContext</dt><dd class="cmt"><p>The execution context to handle the asynchronous operations.
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -363,6 +363,24 @@ that you will loose the possibility to invalidate a JWT.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService#executionContext" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="executionContext:scala.concurrent.ExecutionContext"></a>
+      <a id="executionContext:ExecutionContext"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">executionContext</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService@executionContext:scala.concurrent.ExecutionContext" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The execution context to handle the asynchronous operations.</p><div class="fullcomment"><div class="comment cmt"><p>The execution context to handle the asynchronous operations.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService">JWTAuthenticatorService</a> → <a href="../../api/util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -781,6 +799,8 @@ method will not be executed.
               <h3>Inherited from <a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></h3>
             </div><div class="parent" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">
               <h3>Inherited from <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a>[<a href="JWTAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator">JWTAuthenticator</a>]</h3>
+            </div><div class="parent" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">
+              <h3>Inherited from <a href="../../api/util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

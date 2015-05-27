@@ -47,7 +47,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">AuthenticatorService</span><span class="tparams">[<span name="T">T &lt;: <a href="../Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">AuthenticatorService</span><span class="tparams">[<span name="T">T &lt;: <a href="../Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a></span>]</span><span class="result"> extends <a href="../util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a></span>
       </span>
       </h4>
       
@@ -55,7 +55,7 @@
 </p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the authenticator this service is responsible for.
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="../../impl/authenticators/BearerTokenAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorService">BearerTokenAuthenticatorService</a>, <a href="../../impl/authenticators/CookieAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService">CookieAuthenticatorService</a>, <a href="../../impl/authenticators/DummyAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">DummyAuthenticatorService</a>, <a href="../../test/FakeBearerTokenAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.test.FakeBearerTokenAuthenticatorService">FakeBearerTokenAuthenticatorService</a>, <a href="../../test/FakeCookieAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.test.FakeCookieAuthenticatorService">FakeCookieAuthenticatorService</a>, <a href="../../test/FakeDummyAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.test.FakeDummyAuthenticatorService">FakeDummyAuthenticatorService</a>, <a href="../../test/FakeJWTAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.test.FakeJWTAuthenticatorService">FakeJWTAuthenticatorService</a>, <a href="../../test/FakeSessionAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.test.FakeSessionAuthenticatorService">FakeSessionAuthenticatorService</a>, <a href="../../impl/authenticators/JWTAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService">JWTAuthenticatorService</a>, <a href="../../impl/authenticators/SessionAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService">SessionAuthenticatorService</a></div>
@@ -76,7 +76,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.api.services.AuthenticatorService"><span>AuthenticatorService</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.api.services.AuthenticatorService"><span>AuthenticatorService</span></li><li class="in" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider"><span>ExecutionContextProvider</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -216,6 +216,24 @@ a valid authenticator.</p><p>If an existing authenticator exists, then it will b
       <p class="shortcomment cmt">Embeds authenticator specific artifacts into the response.</p><div class="fullcomment"><div class="comment cmt"><p>Embeds authenticator specific artifacts into the response.
 </p></div><dl class="paramcmts block"><dt class="param">value</dt><dd class="cmt"><p>The authenticator value to embed.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The manipulated result.
 </p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider#executionContext" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="executionContext:scala.concurrent.ExecutionContext"></a>
+      <a id="executionContext:ExecutionContext"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit abstract </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">executionContext</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@executionContext:scala.concurrent.ExecutionContext" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The execution context to handle the asynchronous operations.</p><div class="fullcomment"><div class="comment cmt"><p>The execution context to handle the asynchronous operations.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#init" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="init(authenticator:T)(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[T#Value]"></a>
       <a id="init(T)(RequestHeader):Future[T.Value]"></a>
@@ -747,7 +765,9 @@ expect the authenticator was not touched.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">
+              <h3>Inherited from <a href="../util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>

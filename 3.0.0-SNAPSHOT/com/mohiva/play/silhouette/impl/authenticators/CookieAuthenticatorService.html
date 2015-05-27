@@ -54,7 +54,7 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The service that handles the cookie authenticator.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a>, <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a>[<a href="CookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator">CookieAuthenticator</a>], <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a>, <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a>[<a href="CookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator">CookieAuthenticator</a>], <a href="../../api/util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="../../test/FakeCookieAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.test.FakeCookieAuthenticatorService">FakeCookieAuthenticatorService</a></div>
@@ -75,7 +75,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService"><span>CookieAuthenticatorService</span></li><li class="in" name="com.mohiva.play.silhouette.api.Logger"><span>Logger</span></li><li class="in" name="com.mohiva.play.silhouette.api.services.AuthenticatorService"><span>AuthenticatorService</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService"><span>CookieAuthenticatorService</span></li><li class="in" name="com.mohiva.play.silhouette.api.Logger"><span>Logger</span></li><li class="in" name="com.mohiva.play.silhouette.api.services.AuthenticatorService"><span>AuthenticatorService</span></li><li class="in" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider"><span>ExecutionContextProvider</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -96,7 +96,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(settings:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorSettings,dao:com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO[com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator],fingerprintGenerator:com.mohiva.play.silhouette.api.util.FingerprintGenerator,idGenerator:com.mohiva.play.silhouette.api.util.IDGenerator,clock:com.mohiva.play.silhouette.api.util.Clock):com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService"></a>
+      <a id="&lt;init&gt;(settings:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorSettings,dao:com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO[com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator],fingerprintGenerator:com.mohiva.play.silhouette.api.util.FingerprintGenerator,idGenerator:com.mohiva.play.silhouette.api.util.IDGenerator,clock:com.mohiva.play.silhouette.api.util.Clock)(implicitexecutionContext:scala.concurrent.ExecutionContext):com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService"></a>
       <a id="&lt;init&gt;:CookieAuthenticatorService"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -104,14 +104,14 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">CookieAuthenticatorService</span><span class="params">(<span name="settings">settings: <a href="CookieAuthenticatorSettings.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorSettings">CookieAuthenticatorSettings</a></span>, <span name="dao">dao: <a href="../daos/AuthenticatorDAO.html" class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO">AuthenticatorDAO</a>[<a href="CookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator">CookieAuthenticator</a>]</span>, <span name="fingerprintGenerator">fingerprintGenerator: <a href="../../api/util/FingerprintGenerator.html" class="extype" name="com.mohiva.play.silhouette.api.util.FingerprintGenerator">FingerprintGenerator</a></span>, <span name="idGenerator">idGenerator: <a href="../../api/util/IDGenerator.html" class="extype" name="com.mohiva.play.silhouette.api.util.IDGenerator">IDGenerator</a></span>, <span name="clock">clock: <a href="../../api/util/Clock.html" class="extype" name="com.mohiva.play.silhouette.api.util.Clock">Clock</a></span>)</span>
+        <span class="name">CookieAuthenticatorService</span><span class="params">(<span name="settings">settings: <a href="CookieAuthenticatorSettings.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorSettings">CookieAuthenticatorSettings</a></span>, <span name="dao">dao: <a href="../daos/AuthenticatorDAO.html" class="extype" name="com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO">AuthenticatorDAO</a>[<a href="CookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator">CookieAuthenticator</a>]</span>, <span name="fingerprintGenerator">fingerprintGenerator: <a href="../../api/util/FingerprintGenerator.html" class="extype" name="com.mohiva.play.silhouette.api.util.FingerprintGenerator">FingerprintGenerator</a></span>, <span name="idGenerator">idGenerator: <a href="../../api/util/IDGenerator.html" class="extype" name="com.mohiva.play.silhouette.api.util.IDGenerator">IDGenerator</a></span>, <span name="clock">clock: <a href="../../api/util/Clock.html" class="extype" name="com.mohiva.play.silhouette.api.util.Clock">Clock</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="executionContext">executionContext: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService@&lt;init&gt;(settings:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorSettings,dao:com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO[com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator],fingerprintGenerator:com.mohiva.play.silhouette.api.util.FingerprintGenerator,idGenerator:com.mohiva.play.silhouette.api.util.IDGenerator,clock:com.mohiva.play.silhouette.api.util.Clock):com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService@&lt;init&gt;(settings:com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorSettings,dao:com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO[com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator],fingerprintGenerator:com.mohiva.play.silhouette.api.util.FingerprintGenerator,idGenerator:com.mohiva.play.silhouette.api.util.IDGenerator,clock:com.mohiva.play.silhouette.api.util.Clock)(implicitexecutionContext:scala.concurrent.ExecutionContext):com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">settings</dt><dd class="cmt"><p>The cookie settings.</p></dd><dt class="param">dao</dt><dd class="cmt"><p>The DAO to store the authenticator.</p></dd><dt class="param">fingerprintGenerator</dt><dd class="cmt"><p>The fingerprint generator implementation.</p></dd><dt class="param">idGenerator</dt><dd class="cmt"><p>The ID generator used to create the authenticator ID.</p></dd><dt class="param">clock</dt><dd class="cmt"><p>The clock implementation.
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">settings</dt><dd class="cmt"><p>The cookie settings.</p></dd><dt class="param">dao</dt><dd class="cmt"><p>The DAO to store the authenticator.</p></dd><dt class="param">fingerprintGenerator</dt><dd class="cmt"><p>The fingerprint generator implementation.</p></dd><dt class="param">idGenerator</dt><dd class="cmt"><p>The ID generator used to create the authenticator ID.</p></dd><dt class="param">clock</dt><dd class="cmt"><p>The clock implementation.</p></dd><dt class="param">executionContext</dt><dd class="cmt"><p>The execution context to handle the asynchronous operations.
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -361,6 +361,24 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService#executionContext" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="executionContext:scala.concurrent.ExecutionContext"></a>
+      <a id="executionContext:ExecutionContext"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">executionContext</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService@executionContext:scala.concurrent.ExecutionContext" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The execution context to handle the asynchronous operations.</p><div class="fullcomment"><div class="comment cmt"><p>The execution context to handle the asynchronous operations.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService">CookieAuthenticatorService</a> → <a href="../../api/util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -779,6 +797,8 @@ Only the authenticator in the backing store will be changed.
               <h3>Inherited from <a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></h3>
             </div><div class="parent" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">
               <h3>Inherited from <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a>[<a href="CookieAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator">CookieAuthenticator</a>]</h3>
+            </div><div class="parent" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">
+              <h3>Inherited from <a href="../../api/util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

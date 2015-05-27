@@ -54,7 +54,7 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Base implementation for all OpenID providers.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a>, <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a>, <a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a>, <a href="../../api/Provider.html" class="extype" name="com.mohiva.play.silhouette.api.Provider">Provider</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a>, <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a>, <a href="../../api/util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a>, <a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a>, <a href="../../api/Provider.html" class="extype" name="com.mohiva.play.silhouette.api.Provider">Provider</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="openid/BaseSteamProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.openid.BaseSteamProvider">BaseSteamProvider</a>, <a href="openid/BaseYahooProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.openid.BaseYahooProvider">BaseYahooProvider</a>, <a href="openid/SteamProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.openid.SteamProvider">SteamProvider</a>, <a href="openid/YahooProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.openid.YahooProvider">YahooProvider</a></div>
@@ -75,7 +75,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.impl.providers.OpenIDProvider"><span>OpenIDProvider</span></li><li class="in" name="com.mohiva.play.silhouette.api.Logger"><span>Logger</span></li><li class="in" name="com.mohiva.play.silhouette.impl.providers.SocialProvider"><span>SocialProvider</span></li><li class="in" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder"><span>SocialProfileBuilder</span></li><li class="in" name="com.mohiva.play.silhouette.api.Provider"><span>Provider</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.impl.providers.OpenIDProvider"><span>OpenIDProvider</span></li><li class="in" name="com.mohiva.play.silhouette.api.Logger"><span>Logger</span></li><li class="in" name="com.mohiva.play.silhouette.impl.providers.SocialProvider"><span>SocialProvider</span></li><li class="in" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider"><span>ExecutionContextProvider</span></li><li class="in" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder"><span>SocialProfileBuilder</span></li><li class="in" name="com.mohiva.play.silhouette.api.Provider"><span>Provider</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -211,7 +211,7 @@
       <p class="shortcomment cmt">Subclasses need to implement this method to populate the profile information from the service provider.</p><div class="fullcomment"><div class="comment cmt"><p>Subclasses need to implement this method to populate the profile information from the service provider.
 </p></div><dl class="paramcmts block"><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info received from the provider.</p></dd><dt>returns</dt><dd class="cmt"><p>On success the build social profile, otherwise a failure.
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.OpenIDProvider#httpLayer" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProvider#httpLayer" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="httpLayer:com.mohiva.play.silhouette.api.util.HTTPLayer"></a>
       <a id="httpLayer:HTTPLayer"></a>
       <h4 class="signature">
@@ -228,7 +228,7 @@
       </a>
     </span>
       <p class="shortcomment cmt">The HTTP layer implementation.</p><div class="fullcomment"><div class="comment cmt"><p>The HTTP layer implementation.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.Provider#id" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="id:String"></a>
       <a id="id:String"></a>
@@ -492,6 +492,24 @@ So we use a Map here to allow defining multiple URLs.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProvider#executionContext" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="executionContext:scala.concurrent.ExecutionContext"></a>
+      <a id="executionContext:ExecutionContext"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">executionContext</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.OpenIDProvider@executionContext:scala.concurrent.ExecutionContext" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The execution context to handle the asynchronous operations.</p><div class="fullcomment"><div class="comment cmt"><p>The execution context to handle the asynchronous operations.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a> → <a href="../../api/util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -810,6 +828,8 @@ identity.
               <h3>Inherited from <a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></h3>
             </div><div class="parent" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">
               <h3>Inherited from <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a></h3>
+            </div><div class="parent" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">
+              <h3>Inherited from <a href="../../api/util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a></h3>
             </div><div class="parent" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">
               <h3>Inherited from <a href="SocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder">SocialProfileBuilder</a></h3>
             </div><div class="parent" name="com.mohiva.play.silhouette.api.Provider">

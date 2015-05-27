@@ -54,7 +54,7 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The service that handles the dummy token authenticator.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a>[<a href="DummyAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</a>], <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a>[<a href="DummyAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</a>], <a href="../../api/util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="../../test/FakeDummyAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.test.FakeDummyAuthenticatorService">FakeDummyAuthenticatorService</a></div>
@@ -75,7 +75,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService"><span>DummyAuthenticatorService</span></li><li class="in" name="com.mohiva.play.silhouette.api.services.AuthenticatorService"><span>AuthenticatorService</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService"><span>DummyAuthenticatorService</span></li><li class="in" name="com.mohiva.play.silhouette.api.services.AuthenticatorService"><span>AuthenticatorService</span></li><li class="in" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider"><span>ExecutionContextProvider</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -95,8 +95,8 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;():com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService"></a>
+              <ol><li name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;()(implicitexecutionContext:scala.concurrent.ExecutionContext):com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService"></a>
       <a id="&lt;init&gt;:DummyAuthenticatorService"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -104,14 +104,15 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">DummyAuthenticatorService</span><span class="params">()</span>
+        <span class="name">DummyAuthenticatorService</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="executionContext">executionContext: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService@&lt;init&gt;():com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService@&lt;init&gt;()(implicitexecutionContext:scala.concurrent.ExecutionContext):com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">executionContext</dt><dd class="cmt"><p>The execution context to handle the asynchronous operations.
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -360,6 +361,24 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService#executionContext" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="executionContext:scala.concurrent.ExecutionContext"></a>
+      <a id="executionContext:ExecutionContext"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">executionContext</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService@executionContext:scala.concurrent.ExecutionContext" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The execution context to handle the asynchronous operations.</p><div class="fullcomment"><div class="comment cmt"><p>The execution context to handle the asynchronous operations.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">DummyAuthenticatorService</a> → <a href="../../api/util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -757,6 +776,8 @@ be updated later by the <a href="#update(authenticator:com.mohiva.play.silhouett
         <div id="inheritedMembers">
         <div class="parent" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">
               <h3>Inherited from <a href="../../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a>[<a href="DummyAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator">DummyAuthenticator</a>]</h3>
+            </div><div class="parent" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">
+              <h3>Inherited from <a href="../../api/util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
