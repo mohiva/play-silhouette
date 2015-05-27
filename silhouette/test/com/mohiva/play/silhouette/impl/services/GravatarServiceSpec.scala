@@ -21,6 +21,7 @@ import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.PlaySpecification
+import play.api.libs.concurrent.Execution._
 
 import scala.concurrent.Future
 
@@ -40,6 +41,7 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
 
       response.status returns 404
       requestHolder.get() returns Future.successful(response)
+      httpLayer.executionContext returns defaultContext
       httpLayer.url(any) returns requestHolder
 
       await(service.retrieveURL(email)) should beNone
@@ -98,7 +100,11 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
     /**
      * The HTTP layer implementation.
      */
-    val httpLayer = mock[HTTPLayer]
+    val httpLayer = {
+      val m = mock[HTTPLayer]
+      m.executionContext returns defaultContext
+      m
+    }
 
     /**
      * The gravatar service implementation.

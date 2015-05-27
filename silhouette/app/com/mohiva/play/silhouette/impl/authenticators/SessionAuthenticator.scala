@@ -25,11 +25,10 @@ import com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorServic
 import org.joda.time.DateTime
 import play.api.http.HeaderNames
 import play.api.libs.Crypto
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.Json
 import play.api.mvc.{ Cookies, RequestHeader, Result, Session }
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -147,11 +146,12 @@ object SessionAuthenticator extends Logger {
  * @param settings The authenticator settings.
  * @param fingerprintGenerator The fingerprint generator implementation.
  * @param clock The clock implementation.
+ * @param executionContext The execution context to handle the asynchronous operations.
  */
 class SessionAuthenticatorService(
   val settings: SessionAuthenticatorSettings,
   fingerprintGenerator: FingerprintGenerator,
-  clock: Clock)
+  clock: Clock)(implicit val executionContext: ExecutionContext)
   extends AuthenticatorService[SessionAuthenticator]
   with Logger {
 
@@ -282,9 +282,8 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  override def update(
-    authenticator: SessionAuthenticator,
-    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def update(authenticator: SessionAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
     Future.from(Try {
       AuthenticatorResult(result.addingToSession(settings.sessionKey -> serialize(authenticator)(settings)))
@@ -304,7 +303,9 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The serialized expression of the authenticator.
    */
-  override def renew(authenticator: SessionAuthenticator)(implicit request: RequestHeader): Future[Session] = {
+  override def renew(authenticator: SessionAuthenticator)(
+    implicit request: RequestHeader): Future[Session] = {
+
     create(authenticator.loginInfo).flatMap(init).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
     }
@@ -321,9 +322,8 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  override def renew(
-    authenticator: SessionAuthenticator,
-    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def renew(authenticator: SessionAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
     renew(authenticator).flatMap(v => embed(v, result)).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
@@ -337,9 +337,8 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  override def discard(
-    authenticator: SessionAuthenticator,
-    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def discard(authenticator: SessionAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
     Future.from(Try {
       AuthenticatorResult(result.removingFromSession(settings.sessionKey))

@@ -22,10 +22,9 @@ import com.mohiva.play.silhouette.api.{ LoginInfo, RequestProvider }
 import com.mohiva.play.silhouette.impl.exceptions.{ IdentityNotFoundException, InvalidPasswordException }
 import com.mohiva.play.silhouette.impl.providers.BasicAuthProvider._
 import play.api.http.HeaderNames
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ Request, RequestHeader }
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * A request provider implementation which supports HTTP basic authentication.
@@ -39,11 +38,13 @@ import scala.concurrent.Future
  * @param authInfoRepository The auth info repository.
  * @param passwordHasher The default password hasher used by the application.
  * @param passwordHasherList List of password hasher supported by the application.
+ * @param executionContext The execution context to handle the asynchronous operations.
  */
 class BasicAuthProvider(
   authInfoRepository: AuthInfoRepository,
   passwordHasher: PasswordHasher,
-  passwordHasherList: Seq[PasswordHasher]) extends RequestProvider {
+  passwordHasherList: Seq[PasswordHasher])(implicit val executionContext: ExecutionContext)
+  extends RequestProvider {
 
   /**
    * Gets the provider ID.
@@ -63,13 +64,14 @@ class BasicAuthProvider(
     getCredentials(request) match {
       case Some(credentials) =>
         val loginInfo = LoginInfo(id, credentials.identifier)
-        authInfoRepository.find[PasswordInfo](loginInfo).map {
+        authInfoRepository.find[PasswordInfo](loginInfo).flatMap {
           case Some(authInfo) => passwordHasherList.find(_.id == authInfo.hasher) match {
             case Some(hasher) if hasher.matches(authInfo, credentials.password) =>
               if (hasher != passwordHasher) {
-                authInfoRepository.update(loginInfo, passwordHasher.hash(credentials.password))
+                authInfoRepository.update(loginInfo, passwordHasher.hash(credentials.password)).map(_ => Some(loginInfo))
+              } else {
+                Future.successful(Some(loginInfo))
               }
-              Some(loginInfo)
             case Some(hasher) => throw new InvalidPasswordException(InvalidPassword.format(id))
             case None => throw new ConfigurationException(UnsupportedHasher.format(
               id, authInfo.hasher, passwordHasherList.map(_.id).mkString(", ")

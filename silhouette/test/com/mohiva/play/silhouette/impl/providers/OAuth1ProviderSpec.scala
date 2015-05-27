@@ -21,7 +21,8 @@ import com.mohiva.play.silhouette.impl.providers.OAuth1Provider._
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.mvc.{ Results, Result }
+import play.api.libs.concurrent.Execution.Implicits._
+import play.api.mvc.{ Result, Results }
 import play.api.test.{ FakeRequest, WithApplication }
 import play.mvc.Http.HeaderNames
 
@@ -68,7 +69,7 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
 
       c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.successful(c.oAuthInfo)
       c.oAuthService.redirectUrl(any) returns c.oAuthSettings.authorizationURL
-      c.oAuthTokenSecretProvider.build(any)(any) returns Future.successful(c.oAuthTokenSecret)
+      c.oAuthTokenSecretProvider.build(any)(any, any) returns Future.successful(c.oAuthTokenSecret)
       c.oAuthTokenSecretProvider.publish(any, any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
       }
@@ -97,9 +98,9 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
       req.secure returns secure
       c.oAuthSettings.callbackURL returns callbackURL
 
-      c.oAuthService.retrieveRequestToken(any) returns Future.successful(c.oAuthInfo)
+      c.oAuthService.retrieveRequestToken(any)(any) returns Future.successful(c.oAuthInfo)
       c.oAuthService.redirectUrl(c.oAuthInfo.token) returns c.oAuthSettings.authorizationURL
-      c.oAuthTokenSecretProvider.build(any)(any) returns Future.successful(c.oAuthTokenSecret)
+      c.oAuthTokenSecretProvider.build(any)(any, any) returns Future.successful(c.oAuthTokenSecret)
       c.oAuthTokenSecretProvider.publish(any, any)(any) returns Results.Redirect(c.oAuthSettings.authorizationURL)
 
       await(c.provider.authenticate())
@@ -111,7 +112,7 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier&" + OAuthToken + "=my.token")
 
       c.oAuthTokenSecret.value returns tokenSecret
-      c.oAuthTokenSecretProvider.retrieve(any) returns Future.successful(c.oAuthTokenSecret)
+      c.oAuthTokenSecretProvider.retrieve(any, any) returns Future.successful(c.oAuthTokenSecret)
       c.oAuthService.retrieveAccessToken(c.oAuthInfo.copy(secret = tokenSecret), "my.verifier") returns Future.failed(new Exception(""))
 
       failed[UnexpectedResponseException](c.provider.authenticate()) {
@@ -124,7 +125,7 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
       implicit val req = FakeRequest(GET, "?" + OAuthVerifier + "=my.verifier&" + OAuthToken + "=my.token")
 
       c.oAuthTokenSecret.value returns tokenSecret
-      c.oAuthTokenSecretProvider.retrieve(any) returns Future.successful(c.oAuthTokenSecret)
+      c.oAuthTokenSecretProvider.retrieve(any, any) returns Future.successful(c.oAuthTokenSecret)
       c.oAuthService.retrieveAccessToken(c.oAuthInfo.copy(secret = tokenSecret), "my.verifier") returns Future.successful(c.oAuthInfo)
 
       authInfo(c.provider.authenticate()) {
@@ -161,7 +162,11 @@ trait OAuth1ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
   /**
    * The HTTP layer mock.
    */
-  lazy val httpLayer: HTTPLayer = mock[HTTPLayer]
+  lazy val httpLayer = {
+    val m = mock[HTTPLayer]
+    m.executionContext returns defaultContext
+    m
+  }
 
   /**
    * A OAuth1 info.

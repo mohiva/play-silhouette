@@ -16,7 +16,6 @@
 package com.mohiva.play.silhouette
 
 import com.mohiva.play.silhouette.api._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.test.{ FakeHeaders, FakeRequest }
 
 import scala.concurrent.duration._
@@ -44,17 +43,19 @@ package object test {
    * @tparam A The type of the body.
    */
   implicit class FakeRequestWithAuthenticator[A](f: FakeRequest[A]) {
+    implicit val request = f
 
     /**
      * Creates a fake request with an embedded authenticator.
      *
      * @param authenticator The authenticator to embed into the request.
      * @param env The Silhouette environment.
-     * @tparam T The type of the authenticator,
+     * @tparam T The type of the authenticator.
      * @return A fake request.
      */
     def withAuthenticator[T <: Authenticator](authenticator: T)(implicit env: Environment[_, T]): FakeRequest[A] = {
-      val rh = env.authenticatorService.init(authenticator)(f).map(v => env.authenticatorService.embed(v, f))
+      implicit val ec = env.executionContext
+      val rh = env.authenticatorService.init(authenticator).map(v => env.authenticatorService.embed(v, f))
       new FakeRequest(
         id = rh.id,
         tags = rh.tags,
@@ -73,11 +74,11 @@ package object test {
      *
      * @param loginInfo The login info for which the new authenticator should be created.
      * @param env The Silhouette environment.
-     * @tparam T The type of the authenticator,
+     * @tparam T The type of the authenticator.
      * @return A fake request.
      */
     def withAuthenticator[T <: Authenticator](loginInfo: LoginInfo)(implicit env: Environment[_, T]): FakeRequest[A] = {
-      withAuthenticator(FakeAuthenticator[T](loginInfo)(env, f))
+      withAuthenticator(FakeAuthenticator[T](loginInfo))
     }
   }
 }

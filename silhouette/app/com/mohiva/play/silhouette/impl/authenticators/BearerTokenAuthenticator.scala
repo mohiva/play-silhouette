@@ -24,10 +24,9 @@ import com.mohiva.play.silhouette.api.{ Logger, LoginInfo, StorableAuthenticator
 import com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorService._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import org.joda.time.DateTime
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ RequestHeader, Result }
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.Try
 
 /**
@@ -91,12 +90,13 @@ case class BearerTokenAuthenticator(
  * @param dao The DAO to store the authenticator.
  * @param idGenerator The ID generator used to create the authenticator ID.
  * @param clock The clock implementation.
+ * @param executionContext The execution context to handle the asynchronous operations.
  */
 class BearerTokenAuthenticatorService(
   val settings: BearerTokenAuthenticatorSettings,
   dao: AuthenticatorDAO[BearerTokenAuthenticator],
   idGenerator: IDGenerator,
-  clock: Clock)
+  clock: Clock)(implicit val executionContext: ExecutionContext)
   extends AuthenticatorService[BearerTokenAuthenticator]
   with Logger {
 
@@ -221,9 +221,8 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  override def update(
-    authenticator: BearerTokenAuthenticator,
-    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def update(authenticator: BearerTokenAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
     dao.update(authenticator).map { a =>
       AuthenticatorResult(result)
@@ -243,7 +242,9 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The serialized expression of the authenticator.
    */
-  override def renew(authenticator: BearerTokenAuthenticator)(implicit request: RequestHeader): Future[String] = {
+  override def renew(authenticator: BearerTokenAuthenticator)(
+    implicit request: RequestHeader): Future[String] = {
+
     dao.remove(authenticator.id).flatMap { _ =>
       create(authenticator.loginInfo).flatMap(init)
     }.recover {
@@ -262,9 +263,8 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  override def renew(
-    authenticator: BearerTokenAuthenticator,
-    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def renew(authenticator: BearerTokenAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
     renew(authenticator).flatMap(v => embed(v, result)).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
@@ -278,9 +278,8 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  override def discard(
-    authenticator: BearerTokenAuthenticator,
-    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def discard(authenticator: BearerTokenAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
     dao.remove(authenticator.id).map { _ =>
       AuthenticatorResult(result)

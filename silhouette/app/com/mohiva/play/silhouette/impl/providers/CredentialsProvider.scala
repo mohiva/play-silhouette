@@ -22,12 +22,11 @@ package com.mohiva.play.silhouette.impl.providers
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.exceptions.ConfigurationException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
-import com.mohiva.play.silhouette.api.util.{ Credentials, PasswordHasher, PasswordInfo }
+import com.mohiva.play.silhouette.api.util.{ ExecutionContextProvider, Credentials, PasswordHasher, PasswordInfo }
 import com.mohiva.play.silhouette.impl.exceptions.{ IdentityNotFoundException, InvalidPasswordException }
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider._
-import play.api.libs.concurrent.Execution.Implicits._
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * A provider for authenticating with credentials.
@@ -41,11 +40,13 @@ import scala.concurrent.Future
  * @param authInfoRepository The auth info repository.
  * @param passwordHasher The default password hasher used by the application.
  * @param passwordHasherList List of password hasher supported by the application.
+ * @param executionContext The execution context to handle the asynchronous operations.
  */
 class CredentialsProvider(
   authInfoRepository: AuthInfoRepository,
   passwordHasher: PasswordHasher,
-  passwordHasherList: Seq[PasswordHasher]) extends Provider {
+  passwordHasherList: Seq[PasswordHasher])(implicit val executionContext: ExecutionContext)
+  extends Provider with ExecutionContextProvider {
 
   /**
    * Gets the provider ID.
@@ -62,13 +63,14 @@ class CredentialsProvider(
    */
   def authenticate(credentials: Credentials): Future[LoginInfo] = {
     val loginInfo = LoginInfo(id, credentials.identifier)
-    authInfoRepository.find[PasswordInfo](loginInfo).map {
+    authInfoRepository.find[PasswordInfo](loginInfo).flatMap {
       case Some(authInfo) => passwordHasherList.find(_.id == authInfo.hasher) match {
         case Some(hasher) if hasher.matches(authInfo, credentials.password) =>
           if (hasher != passwordHasher) {
-            authInfoRepository.update(loginInfo, passwordHasher.hash(credentials.password))
+            authInfoRepository.update(loginInfo, passwordHasher.hash(credentials.password)).map(_ => loginInfo)
+          } else {
+            Future.successful(loginInfo)
           }
-          loginInfo
         case Some(hasher) => throw new InvalidPasswordException(InvalidPassword.format(id))
         case None => throw new ConfigurationException(UnsupportedHasher.format(
           id, authInfo.hasher, passwordHasherList.map(_.id).mkString(", ")

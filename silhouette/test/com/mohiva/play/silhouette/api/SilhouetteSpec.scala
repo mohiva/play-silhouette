@@ -30,6 +30,7 @@ import play.api.i18n.{ Lang, Messages, MessagesApi }
 import play.api.inject.Module
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.concurrent.Akka
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.Json
 import play.api.mvc.Results._
 import play.api.mvc._
@@ -37,7 +38,6 @@ import play.api.routing.Router
 import play.api.test.{ FakeApplication, FakeRequest, PlaySpecification, WithApplication }
 import play.api.{ Configuration, OptionalSourceMapper }
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.reflect.ClassTag

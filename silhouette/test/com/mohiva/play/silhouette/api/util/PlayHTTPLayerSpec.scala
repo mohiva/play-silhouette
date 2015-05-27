@@ -1,5 +1,6 @@
 package com.mohiva.play.silhouette.api.util
 
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.ws.WSRequest
 import play.api.test._
 

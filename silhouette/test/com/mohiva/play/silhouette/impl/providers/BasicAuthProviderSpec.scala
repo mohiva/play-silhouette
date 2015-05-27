@@ -19,10 +19,11 @@ import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.{ Base64, Credentials, PasswordHasher, PasswordInfo }
-import com.mohiva.play.silhouette.impl.exceptions.{ InvalidPasswordException, IdentityNotFoundException }
+import com.mohiva.play.silhouette.impl.exceptions.{ IdentityNotFoundException, InvalidPasswordException }
 import com.mohiva.play.silhouette.impl.providers.BasicAuthProvider._
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
 import scala.concurrent.Future
@@ -98,6 +99,7 @@ class BasicAuthProviderSpec extends PlaySpecification with Mockito {
       fooHasher.hash(credentials.password) returns passwordInfo
       barHasher.matches(passwordInfo, credentials.password) returns true
       authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
+      authInfoRepository.update[PasswordInfo](loginInfo, passwordInfo) returns Future.successful(passwordInfo)
 
       await(provider.authenticate(request)) must beSome(loginInfo)
       there was one(authInfoRepository).update(loginInfo, passwordInfo)

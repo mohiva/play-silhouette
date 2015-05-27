@@ -31,13 +31,12 @@ import com.nimbusds.jose.crypto.MACVerifier
 import com.nimbusds.jwt.JWTClaimsSet
 import org.joda.time.DateTime
 import play.api.libs.Crypto
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json._
 import play.api.mvc.{ RequestHeader, Result }
 
 import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -239,12 +238,13 @@ object JWTAuthenticator {
  * @param dao The DAO to store the authenticator. Set it to None to use a stateless approach.
  * @param idGenerator The ID generator used to create the authenticator ID.
  * @param clock The clock implementation.
+ * @param executionContext The execution context to handle the asynchronous operations.
  */
 class JWTAuthenticatorService(
   val settings: JWTAuthenticatorSettings,
   dao: Option[AuthenticatorDAO[JWTAuthenticator]],
   idGenerator: IDGenerator,
-  clock: Clock)
+  clock: Clock)(implicit val executionContext: ExecutionContext)
   extends AuthenticatorService[JWTAuthenticator]
   with Logger {
 
@@ -376,9 +376,8 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  override def update(
-    authenticator: JWTAuthenticator,
-    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def update(authenticator: JWTAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
     dao.fold(Future.successful(authenticator))(_.update(authenticator)).map { a =>
       AuthenticatorResult(result.withHeaders(settings.headerName -> serialize(a)(settings)))
@@ -417,9 +416,8 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  override def renew(
-    authenticator: JWTAuthenticator,
-    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def renew(authenticator: JWTAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
     renew(authenticator).flatMap(v => embed(v, result)).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
@@ -433,9 +431,8 @@ class JWTAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  override def discard(
-    authenticator: JWTAuthenticator,
-    result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+  override def discard(authenticator: JWTAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
     dao.fold(Future.successful(()))(_.remove(authenticator.id)).map { _ =>
       AuthenticatorResult(result)

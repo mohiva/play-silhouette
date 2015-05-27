@@ -18,13 +18,12 @@ package com.mohiva.play.silhouette.impl.providers
 import java.net.URLEncoder
 
 import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
+import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.impl.exceptions.UnexpectedResponseException
 import com.mohiva.play.silhouette.impl.providers.OpenIDProvider._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc._
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * Base implementation for all OpenID providers.
@@ -40,11 +39,6 @@ trait OpenIDProvider extends SocialProvider with Logger {
    * The settings type.
    */
   type Settings = OpenIDSettings
-
-  /**
-   * The HTTP layer implementation.
-   */
-  protected val httpLayer: HTTPLayer
 
   /**
    * The OpenID service implementation.
@@ -131,18 +125,20 @@ trait OpenIDService {
    *
    * @param openID The OpenID to use for authentication.
    * @param resolvedCallbackURL The full callback URL to the application after a successful authentication.
+   * @param ec The execution context to handle the asynchronous operations.
    * @return The redirect URL where the user should be redirected to start the OpenID authentication process.
    */
-  def redirectURL(openID: String, resolvedCallbackURL: String): Future[String]
+  def redirectURL(openID: String, resolvedCallbackURL: String)(implicit ec: ExecutionContext): Future[String]
 
   /**
    * From a request corresponding to the callback from the OpenID server, check the identity of the current user.
    *
    * @param request The current request.
+   * @param ec The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return A OpenIDInfo in case of success, Exception otherwise.
    */
-  def verifiedID[B](implicit request: Request[B]): Future[OpenIDInfo]
+  def verifiedID[B](implicit request: Request[B], ec: ExecutionContext): Future[OpenIDInfo]
 }
 
 /**

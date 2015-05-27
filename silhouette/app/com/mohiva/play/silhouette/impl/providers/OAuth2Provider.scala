@@ -23,17 +23,16 @@ import java.net.URLEncoder._
 
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
+import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.{ impl, _ }
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.ws.WSResponse
 import play.api.mvc._
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -84,11 +83,6 @@ trait OAuth2Provider extends SocialProvider with Logger {
    * The settings type.
    */
   type Settings = OAuth2Settings
-
-  /**
-   * The HTTP layer implementation.
-   */
-  protected val httpLayer: HTTPLayer
 
   /**
    * The state provider implementation.
@@ -245,19 +239,21 @@ trait OAuth2StateProvider {
    * Builds the state.
    *
    * @param request The current request.
+   * @param ec The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return The build state.
    */
-  def build[B](implicit request: ExtractableRequest[B]): Future[State]
+  def build[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[State]
 
   /**
    * Validates the provider and the client state.
    *
    * @param request The current request.
+   * @param ec The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return The state on success, otherwise an failure.
    */
-  def validate[B](implicit request: ExtractableRequest[B]): Future[State]
+  def validate[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[State]
 
   /**
    * Publishes the state to the client.

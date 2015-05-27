@@ -16,12 +16,11 @@
 package com.mohiva.play.silhouette.impl.providers
 
 import java.net.URI
-import com.mohiva.play.silhouette.api.util.ExtractableRequest
+import com.mohiva.play.silhouette.api.util.{ HTTPLayer, ExecutionContextProvider, ExtractableRequest }
 import com.mohiva.play.silhouette.api.{ AuthInfo, LoginInfo, Provider }
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import org.apache.commons.lang3.reflect.TypeUtils
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ RequestHeader, Result }
 
 import scala.concurrent.Future
@@ -30,7 +29,7 @@ import scala.reflect.ClassTag
 /**
  * The base interface for all social providers.
  */
-trait SocialProvider extends Provider with SocialProfileBuilder {
+trait SocialProvider extends Provider with SocialProfileBuilder with ExecutionContextProvider {
 
   /**
    * The type of the concrete implementation of this abstract type.
@@ -46,6 +45,16 @@ trait SocialProvider extends Provider with SocialProfileBuilder {
    * The settings type.
    */
   type Settings
+
+  /**
+   * The HTTP layer implementation.
+   */
+  protected val httpLayer: HTTPLayer
+
+  /**
+   * The execution context to handle the asynchronous operations.
+   */
+  override implicit val executionContext = httpLayer.executionContext
 
   /**
    * Gets the provider settings.

@@ -20,12 +20,11 @@
 package com.mohiva.play.silhouette.impl.providers.openid.services
 
 import com.mohiva.play.silhouette.impl.providers.{ OpenIDInfo, OpenIDService, OpenIDSettings }
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.openid.OpenID
 import play.api.mvc.Request
 import play.api.Play.current
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -40,23 +39,27 @@ class PlayOpenIDService(settings: OpenIDSettings) extends OpenIDService {
    *
    * @param openID The OpenID to use for authentication.
    * @param resolvedCallbackURL The full callback URL to the application after a successful authentication.
+   * @param ec The execution context to handle the asynchronous operations.
    * @return The redirect URL where the user should be redirected to start the OpenID authentication process.
    */
-  override def redirectURL(openID: String, resolvedCallbackURL: String): Future[String] = Try {
-    OpenID.redirectURL(openID, resolvedCallbackURL, settings.axRequired, settings.axOptional, settings.realm)
-  } match {
-    case Success(f) => f
-    case Failure(e) => Future.failed(e)
+  override def redirectURL(openID: String, resolvedCallbackURL: String)(implicit ec: ExecutionContext): Future[String] = {
+    Try {
+      OpenID.redirectURL(openID, resolvedCallbackURL, settings.axRequired, settings.axOptional, settings.realm)
+    } match {
+      case Success(f) => f
+      case Failure(e) => Future.failed(e)
+    }
   }
 
   /**
    * From a request corresponding to the callback from the OpenID server, check the identity of the current user.
    *
    * @param request The current request.
+   * @param ec The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return A OpenIDInfo in case of success, Exception otherwise.
    */
-  override def verifiedID[B](implicit request: Request[B]) = Try {
+  override def verifiedID[B](implicit request: Request[B], ec: ExecutionContext) = Try {
     OpenID.verifiedId.map(info => OpenIDInfo(info.id, info.attributes))
   } match {
     case Success(f) => f
