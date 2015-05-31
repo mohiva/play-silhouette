@@ -47,7 +47,7 @@ object Dependencies {
     val jwtCore = "com.atlassian.jwt" % "jwt-core" % "1.2.4"
     val jwtApi = "com.atlassian.jwt" % "jwt-api" % "1.2.4"
     val mockito = "org.mockito" % "mockito-core" % "1.10.19"
-    val scalaGuice = "net.codingwell" %% "scala-guice" % "4.0.0-beta5"
+    val scalaGuice = "net.codingwell" %% "scala-guice" % "4.0.0"
     val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % "2.3.10"
   }
 }
