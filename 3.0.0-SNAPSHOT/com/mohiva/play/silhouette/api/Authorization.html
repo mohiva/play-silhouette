@@ -99,23 +99,23 @@ an authorization implementation in secured endpoints.
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="com.mohiva.play.silhouette.api.Authorization#isAuthorized" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="isAuthorized(identity:I)(implicitrequest:play.api.mvc.RequestHeader,implicitmessages:play.api.i18n.Messages):scala.concurrent.Future[Boolean]"></a>
-      <a id="isAuthorized(I)(RequestHeader,Messages):Future[Boolean]"></a>
+      <a id="isAuthorized[B](identity:I)(implicitrequest:play.api.mvc.Request[B],implicitmessages:play.api.i18n.Messages):scala.concurrent.Future[Boolean]"></a>
+      <a id="isAuthorized[B](I)(Request[B],Messages):Future[Boolean]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isAuthorized</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.Authorization.I">I</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.RequestHeader">RequestHeader</span></span>, <span name="messages">messages: <span class="extype" name="play.api.i18n.Messages">Messages</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
+        <span class="name">isAuthorized</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.Authorization.I">I</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <span class="extype" name="play.api.mvc.Request">Request</span>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.isAuthorized.B">B</span>]</span>, <span name="messages">messages: <span class="extype" name="play.api.i18n.Messages">Messages</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization@isAuthorized(identity:I)(implicitrequest:play.api.mvc.RequestHeader,implicitmessages:play.api.i18n.Messages):scala.concurrent.Future[Boolean]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization@isAuthorized[B](identity:I)(implicitrequest:play.api.mvc.Request[B],implicitmessages:play.api.i18n.Messages):scala.concurrent.Future[Boolean]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Checks whether the user is authorized to execute an endpoint or not.</p><div class="fullcomment"><div class="comment cmt"><p>Checks whether the user is authorized to execute an endpoint or not.
-</p></div><dl class="paramcmts block"><dt class="param">identity</dt><dd class="cmt"><p>The identity to check for.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request header.</p></dd><dt class="param">messages</dt><dd class="cmt"><p>The messages for the current language.</p></dd><dt>returns</dt><dd class="cmt"><p>True if the user is authorized, false otherwise.
+</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The identity to check for.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd><dt class="param">messages</dt><dd class="cmt"><p>The messages for the current language.</p></dd><dt>returns</dt><dd class="cmt"><p>True if the user is authorized, false otherwise.
 </p></dd></dl></div>
     </li></ol>
             </div>
