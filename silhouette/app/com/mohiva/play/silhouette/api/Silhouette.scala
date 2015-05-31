@@ -390,9 +390,10 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      *
      * @param result The authentication result.
      * @param request The current request header.
+     * @tparam B The type of the request body.
      * @return The authentication result with the additional authorization status.
      */
-    private def withAuthorization(result: Future[(Option[Either[A, A]], Option[I])])(implicit request: RequestHeader) = {
+    private def withAuthorization[B](result: Future[(Option[Either[A, A]], Option[I])])(implicit request: Request[B]) = {
       result.flatMap {
         case (a, Some(i)) =>
           authorize.map(_.isAuthorized(i)).getOrElse(Future.successful(true)).map(b => (a, Some(i), Some(b)))

@@ -20,7 +20,7 @@
 package com.mohiva.play.silhouette.api
 
 import play.api.i18n.Messages
-import play.api.mvc.RequestHeader
+import play.api.mvc.Request
 import scala.concurrent.{ ExecutionContext, Future }
 
 /**
@@ -35,11 +35,12 @@ trait Authorization[I <: Identity] {
    * Checks whether the user is authorized to execute an endpoint or not.
    *
    * @param identity The identity to check for.
-   * @param request The current request header.
+   * @param request The current request.
    * @param messages The messages for the current language.
+   * @tparam B The type of the request body.
    * @return True if the user is authorized, false otherwise.
    */
-  def isAuthorized(identity: I)(implicit request: RequestHeader, messages: Messages): Future[Boolean]
+  def isAuthorized[B](identity: I)(implicit request: Request[B], messages: Messages): Future[Boolean]
 }
 
 /**
@@ -61,8 +62,7 @@ object Authorization {
      * @return An `Authorization` which performs a logical negation on an `Authorization` result.
      */
     def unary_! : Authorization[I] = new Authorization[I] {
-      def isAuthorized(identity: I)(
-        implicit request: RequestHeader, messages: Messages): Future[Boolean] = {
+      def isAuthorized[B](identity: I)(implicit request: Request[B], messages: Messages): Future[Boolean] = {
         self.isAuthorized(identity).map(x => !x)
       }
     }
@@ -74,7 +74,7 @@ object Authorization {
      * @return An authorization which performs a logical AND operation with two `Authorization` instances.
      */
     def &&(authorization: Authorization[I]): Authorization[I] = new Authorization[I] {
-      def isAuthorized(identity: I)(implicit request: RequestHeader, messages: Messages): Future[Boolean] = {
+      def isAuthorized[B](identity: I)(implicit request: Request[B], messages: Messages): Future[Boolean] = {
         val leftF = self.isAuthorized(identity)
         val rightF = authorization.isAuthorized(identity)
         for {
@@ -91,7 +91,7 @@ object Authorization {
      * @return An authorization which performs a logical OR operation with two `Authorization` instances.
      */
     def ||(authorization: Authorization[I]): Authorization[I] = new Authorization[I] {
-      def isAuthorized(identity: I)(implicit request: RequestHeader, messages: Messages): Future[Boolean] = {
+      def isAuthorized[B](identity: I)(implicit request: Request[B], messages: Messages): Future[Boolean] = {
         val leftF = self.isAuthorized(identity)
         val rightF = authorization.isAuthorized(identity)
         for {
