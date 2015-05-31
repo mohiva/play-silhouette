@@ -15,8 +15,6 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
-import java.net.URLEncoder
-
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.UnexpectedResponseException
 import com.mohiva.play.silhouette.impl.providers.OpenIDProvider._
@@ -68,28 +66,6 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
         case result =>
           status(result) must equalTo(SEE_OTHER)
           redirectLocation(result) must beSome.which(_ == c.openIDSettings.providerURL)
-      }
-    }
-
-    "fix bug 3749" in new WithApplication {
-      val e = (v: String) => URLEncoder.encode(v, "UTF-8")
-      implicit val req = FakeRequest()
-      c.openIDService.redirectURL(any, any)(any) returns Future.successful("https://domain.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0"
-        + "&openid.mode=checkid_setup"
-        + "&openid.claimed_id=" + e(c.openIDSettings.providerURL)
-        + "&openid.identity=" + e(c.openIDSettings.providerURL)
-        + "&openid.return_to=http://www.mydomain.com/auth/domain"
-        + "&openid.realm=http://www.mydomain.com")
-
-      result(c.provider.authenticate()) {
-        case result =>
-          status(result) must equalTo(SEE_OTHER)
-          redirectLocation(result) must beSome.which(_ == "https://domain.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0"
-            + "&openid.mode=checkid_setup"
-            + "&openid.claimed_id=" + e("http://specs.openid.net/auth/2.0/identifier_select")
-            + "&openid.identity=" + e("http://specs.openid.net/auth/2.0/identifier_select")
-            + "&openid.return_to=http://www.mydomain.com/auth/domain"
-            + "&openid.realm=http://www.mydomain.com")
       }
     }
 
