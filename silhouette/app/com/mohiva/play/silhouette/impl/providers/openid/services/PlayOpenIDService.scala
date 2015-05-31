@@ -20,9 +20,8 @@
 package com.mohiva.play.silhouette.impl.providers.openid.services
 
 import com.mohiva.play.silhouette.impl.providers.{ OpenIDInfo, OpenIDService, OpenIDSettings }
-import play.api.libs.openid.OpenID
+import play.api.libs.openid.OpenIdClient
 import play.api.mvc.Request
-import play.api.Play.current
 
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
@@ -30,9 +29,10 @@ import scala.util.{ Failure, Success, Try }
 /**
  * The OpenID service implementation which wraps Play Framework's OpenID implementation.
  *
+ * @param client The OpenID client implementation.
  * @param settings The OpenID settings.
  */
-class PlayOpenIDService(settings: OpenIDSettings) extends OpenIDService {
+class PlayOpenIDService(client: OpenIdClient, settings: OpenIDSettings) extends OpenIDService {
 
   /**
    * Retrieve the URL where the user should be redirected to start the OpenID authentication process.
@@ -44,7 +44,7 @@ class PlayOpenIDService(settings: OpenIDSettings) extends OpenIDService {
    */
   override def redirectURL(openID: String, resolvedCallbackURL: String)(implicit ec: ExecutionContext): Future[String] = {
     Try {
-      OpenID.redirectURL(openID, resolvedCallbackURL, settings.axRequired, settings.axOptional, settings.realm)
+      client.redirectURL(openID, resolvedCallbackURL, settings.axRequired, settings.axOptional, settings.realm)
     } match {
       case Success(f) => f
       case Failure(e) => Future.failed(e)
@@ -60,7 +60,7 @@ class PlayOpenIDService(settings: OpenIDSettings) extends OpenIDService {
    * @return A OpenIDInfo in case of success, Exception otherwise.
    */
   override def verifiedID[B](implicit request: Request[B], ec: ExecutionContext) = Try {
-    OpenID.verifiedId.map(info => OpenIDInfo(info.id, info.attributes))
+    client.verifiedId(request).map(info => OpenIDInfo(info.id, info.attributes))
   } match {
     case Success(f) => f
     case Failure(e) => Future.failed(e)

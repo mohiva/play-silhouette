@@ -15,8 +15,6 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
-import java.net.URLEncoder
-
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.impl.exceptions.UnexpectedResponseException
@@ -63,36 +61,12 @@ trait OpenIDProvider extends SocialProvider with Logger {
         // Either we get the openID from request or we use the provider ID to retrieve the redirect URL
         val openID = request.extractString(OpenID).getOrElse(settings.providerURL)
         service.redirectURL(openID, resolveCallbackURL(settings.callbackURL)).map { url =>
-          val redirect = Results.Redirect(fix3749(url))
+          val redirect = Results.Redirect(url)
           logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
           Left(redirect)
         }.recover {
           case e => throw new UnexpectedResponseException(ErrorRedirectURL.format(id, e.getMessage), e)
         }
-    }
-  }
-
-  /**
-   * A temporary fix for: https://github.com/playframework/playframework/pull/3749
-   *
-   * @see https://github.com/playframework/playframework/issues/3740
-   * @see http://stackoverflow.com/questions/22041522/steam-openid-and-play-framework
-   * @param url The URL to fix.
-   * @param request The request.
-   * @tparam B The type of the request body.
-   * @return The fixed URL.
-   */
-  def fix3749[B](url: String)(implicit request: ExtractableRequest[B]) = {
-    if (request.extractString(OpenID).isDefined) {
-      // We've found a non-unique ID so this bug doesn't affect us
-      url
-    } else {
-      // We use "OpenID Provider driven identifier selection", so this bug affects us
-      val search = URLEncoder.encode(settings.providerURL, "UTF-8")
-      val replace = URLEncoder.encode("http://specs.openid.net/auth/2.0/identifier_select", "UTF-8")
-      url
-        .replace("openid.claimed_id=" + search, "openid.claimed_id=" + replace)
-        .replace("openid.identity=" + search, "openid.identity=" + replace)
     }
   }
 }
