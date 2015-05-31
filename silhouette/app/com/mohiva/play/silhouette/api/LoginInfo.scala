@@ -30,7 +30,7 @@ case class LoginInfo(providerID: String, providerKey: String)
 /**
  * The companion object of the login info.
  */
-object LoginInfo {
+object LoginInfo extends ((String, String) => LoginInfo) {
 
   /**
    * Converts the [[com.mohiva.play.silhouette.api.LoginInfo]] to Json and vice versa.
