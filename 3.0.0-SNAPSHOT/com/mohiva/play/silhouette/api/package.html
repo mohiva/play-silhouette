@@ -144,25 +144,25 @@
     </span>
       <p class="shortcomment cmt">An authenticator tracks an authenticated user.</p>
     </li><li name="com.mohiva.play.silhouette.api.Authorization" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Authorization[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsAnyRef"></a>
-      <a id="Authorization[I&lt;:Identity]:Authorization[I]"></a>
+      <a id="Authorization[I&lt;:com.mohiva.play.silhouette.api.Identity,A&lt;:com.mohiva.play.silhouette.api.Authenticator]extendsAnyRef"></a>
+      <a id="Authorization[I&lt;:Identity,A&lt;:Authenticator]:Authorization[I,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Authorization.html"><span class="name">Authorization</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="Authorization.html"><span class="name">Authorization</span></a><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>, <span name="A">A &lt;: <a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@Authorization[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.package@Authorization[I&lt;:com.mohiva.play.silhouette.api.Identity,A&lt;:com.mohiva.play.silhouette.api.Authenticator]extendsAnyRef" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">A trait to define Authorization objects that let you hook
 an authorization implementation in secured endpoints.</p><div class="fullcomment"><div class="comment cmt"><p>A trait to define Authorization objects that let you hook
 an authorization implementation in secured endpoints.
-</p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.
+</p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity.</p></dd><dt class="tparam">A</dt><dd class="cmt"><p>The type of the authenticator.
 </p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.Environment" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Environment[I&lt;:com.mohiva.play.silhouette.api.Identity,T&lt;:com.mohiva.play.silhouette.api.Authenticator]extendsExecutionContextProvider"></a>

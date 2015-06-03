@@ -45,7 +45,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">RichAuthorization</span><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">RichAuthorization</span><span class="tparams">[<span name="I">I &lt;: <a href="Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>, <span name="A">A &lt;: <a href="Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4>
       
@@ -91,18 +91,18 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(self:com.mohiva.play.silhouette.api.Authorization[I])(implicitec:scala.concurrent.ExecutionContext):com.mohiva.play.silhouette.api.Authorization.RichAuthorization[I]"></a>
-      <a id="&lt;init&gt;:RichAuthorization[I]"></a>
+      <a id="&lt;init&gt;(self:com.mohiva.play.silhouette.api.Authorization[I,A])(implicitec:scala.concurrent.ExecutionContext):com.mohiva.play.silhouette.api.Authorization.RichAuthorization[I,A]"></a>
+      <a id="&lt;init&gt;:RichAuthorization[I,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">RichAuthorization</span><span class="params">(<span name="self">self: <a href="Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.I">I</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span>
+        <span class="name">RichAuthorization</span><span class="params">(<span name="self">self: <a href="Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.I">I</span>, <span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@&lt;init&gt;(self:com.mohiva.play.silhouette.api.Authorization[I])(implicitec:scala.concurrent.ExecutionContext):com.mohiva.play.silhouette.api.Authorization.RichAuthorization[I]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@&lt;init&gt;(self:com.mohiva.play.silhouette.api.Authorization[I,A])(implicitec:scala.concurrent.ExecutionContext):com.mohiva.play.silhouette.api.Authorization.RichAuthorization[I,A]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -152,18 +152,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization#&amp;&amp;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&amp;&amp;(authorization:com.mohiva.play.silhouette.api.Authorization[I]):com.mohiva.play.silhouette.api.Authorization[I]"></a>
-      <a id="&amp;&amp;(Authorization[I]):Authorization[I]"></a>
+      <a id="&amp;&amp;(authorization:com.mohiva.play.silhouette.api.Authorization[I,A]):com.mohiva.play.silhouette.api.Authorization[I,A]"></a>
+      <a id="&amp;&amp;(Authorization[I,A]):Authorization[I,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $amp$amp" class="name">&amp;&amp;</span><span class="params">(<span name="authorization">authorization: <a href="Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.I">I</span>]</span>)</span><span class="result">: <a href="Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.I">I</span>]</span>
+        <span title="gt4s: $amp$amp" class="name">&amp;&amp;</span><span class="params">(<span name="authorization">authorization: <a href="Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.I">I</span>, <span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.A">A</span>]</span>)</span><span class="result">: <a href="Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.I">I</span>, <span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@&amp;&amp;(authorization:com.mohiva.play.silhouette.api.Authorization[I]):com.mohiva.play.silhouette.api.Authorization[I]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@&amp;&amp;(authorization:com.mohiva.play.silhouette.api.Authorization[I,A]):com.mohiva.play.silhouette.api.Authorization[I,A]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -421,18 +421,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization#unary_!" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="unary_!:com.mohiva.play.silhouette.api.Authorization[I]"></a>
-      <a id="unary_!:Authorization[I]"></a>
+      <a id="unary_!:com.mohiva.play.silhouette.api.Authorization[I,A]"></a>
+      <a id="unary_!:Authorization[I,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: unary_$bang" class="name">unary_!</span><span class="result">: <a href="Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.I">I</span>]</span>
+        <span title="gt4s: unary_$bang" class="name">unary_!</span><span class="result">: <a href="Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.I">I</span>, <span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@unary_!:com.mohiva.play.silhouette.api.Authorization[I]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@unary_!:com.mohiva.play.silhouette.api.Authorization[I,A]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
@@ -509,18 +509,18 @@
               
         </dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization#||" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="||(authorization:com.mohiva.play.silhouette.api.Authorization[I]):com.mohiva.play.silhouette.api.Authorization[I]"></a>
-      <a id="||(Authorization[I]):Authorization[I]"></a>
+      <a id="||(authorization:com.mohiva.play.silhouette.api.Authorization[I,A]):com.mohiva.play.silhouette.api.Authorization[I,A]"></a>
+      <a id="||(Authorization[I,A]):Authorization[I,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bar$bar" class="name">||</span><span class="params">(<span name="authorization">authorization: <a href="Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.I">I</span>]</span>)</span><span class="result">: <a href="Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.I">I</span>]</span>
+        <span title="gt4s: $bar$bar" class="name">||</span><span class="params">(<span name="authorization">authorization: <a href="Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.I">I</span>, <span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.A">A</span>]</span>)</span><span class="result">: <a href="Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.I">I</span>, <span class="extype" name="com.mohiva.play.silhouette.api.Authorization.RichAuthorization.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@||(authorization:com.mohiva.play.silhouette.api.Authorization[I]):com.mohiva.play.silhouette.api.Authorization[I]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.api.Authorization$$RichAuthorization@||(authorization:com.mohiva.play.silhouette.api.Authorization[I,A]):com.mohiva.play.silhouette.api.Authorization[I,A]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
