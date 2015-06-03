@@ -1,7 +1,7 @@
-## 3.0
+## 3.0 (2015-06-03)
 
 - Update to Play 2.4
-- Fix a lot of inconsistencies in the API
+- A lot of API enhancements
 
 ## 2.0 (2015-03-28)
 
