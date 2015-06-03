@@ -376,7 +376,7 @@
       <p class="shortcomment cmt">Starts the authentication process.</p><div class="fullcomment"><div class="comment cmt"><p>Starts the authentication process.
 </p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd><dt>returns</dt><dd class="cmt"><p>Either a Result or the auth info from the provider.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider">OAuth2Provider</a> → <a href="../SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.oauth2.BaseFacebookProvider#buildInfo" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider#buildInfo" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="buildInfo(response:play.api.libs.ws.WSResponse):scala.util.Try[com.mohiva.play.silhouette.impl.providers.OAuth2Info]"></a>
       <a id="buildInfo(WSResponse):Try[OAuth2Info]"></a>
       <h4 class="signature">
@@ -392,9 +392,9 @@
         <img src="../../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Builds the OAuth2 info.</p><div class="fullcomment"><div class="comment cmt"><p>Builds the OAuth2 info.</p><p>Facebook does not follow the OAuth2 spec :-\
-</p></div><dl class="paramcmts block"><dt class="param">response</dt><dd class="cmt"><p>The response from the provider.</p></dd><dt>returns</dt><dd class="cmt"><p>The OAuth2 info on success, otherwise an failure.
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.BaseFacebookProvider">BaseFacebookProvider</a> → <a href="../OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider">OAuth2Provider</a></dd></dl></div>
+      <p class="shortcomment cmt">Builds the OAuth2 info from response.</p><div class="fullcomment"><div class="comment cmt"><p>Builds the OAuth2 info from response.
+</p></div><dl class="paramcmts block"><dt class="param">response</dt><dd class="cmt"><p>The response from the provider.</p></dd><dt>returns</dt><dd class="cmt"><p>The OAuth2 info on success, otherwise a failure.
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../OAuth2Provider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider">OAuth2Provider</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.oauth2.BaseFacebookProvider#buildProfile" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="buildProfile(authInfo:com.mohiva.play.silhouette.impl.providers.OAuth2Info):scala.concurrent.Future[BaseFacebookProvider.this.Profile]"></a>
       <a id="buildProfile(OAuth2Info):Future[Profile]"></a>
