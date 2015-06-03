@@ -170,7 +170,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
       }
       env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
-      def isAuthorized(authorization: Authorization[FakeIdentity], isAuth: Boolean) = {
+      def isAuthorized(authorization: Authorization[FakeIdentity, FakeAuthenticator], isAuth: Boolean) = {
         val controller = new SecuredController(messagesApi, env, authorization)
         val result = controller.securedActionWithAuthorization(request)
         val resultStatus = if (isAuth) OK else FORBIDDEN
@@ -915,7 +915,7 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
   class SecuredController(
     val messagesApi: MessagesApi,
     val env: Environment[FakeIdentity, FakeAuthenticator],
-    val authorization: Authorization[FakeIdentity] = SimpleAuthorization())
+    val authorization: Authorization[FakeIdentity, FakeAuthenticator] = SimpleAuthorization())
     extends Silhouette[FakeIdentity, FakeAuthenticator] {
 
     /**
@@ -1037,18 +1037,21 @@ class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
    *
    * @param isAuthorized True if the access is authorized, false otherwise.
    */
-  case class SimpleAuthorization(isAuthorized: Boolean = true) extends Authorization[FakeIdentity] {
+  case class SimpleAuthorization(isAuthorized: Boolean = true) extends Authorization[FakeIdentity, FakeAuthenticator] {
 
     /**
      * Checks whether the user is authorized to execute an action or not.
      *
-     * @param identity The identity to check for.
+     * @param identity The current identity instance.
+     * @param authenticator The current authenticator instance.
      * @param request The current request header.
      * @param messages The messages for the current language.
      * @tparam B The type of the request body.
      * @return True if the user is authorized, false otherwise.
      */
-    def isAuthorized[B](identity: FakeIdentity)(implicit request: Request[B], messages: Messages): Future[Boolean] = {
+    def isAuthorized[B](identity: FakeIdentity, authenticator: FakeAuthenticator)(
+      implicit request: Request[B], messages: Messages): Future[Boolean] = {
+
       Future.successful(isAuthorized)
     }
   }

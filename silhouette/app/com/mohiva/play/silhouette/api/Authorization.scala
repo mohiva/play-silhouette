@@ -28,19 +28,21 @@ import scala.concurrent.{ ExecutionContext, Future }
  * an authorization implementation in secured endpoints.
  *
  * @tparam I The type of the identity.
+ * @tparam A The type of the authenticator.
  */
-trait Authorization[I <: Identity] {
+trait Authorization[I <: Identity, A <: Authenticator] {
 
   /**
    * Checks whether the user is authorized to execute an endpoint or not.
    *
-   * @param identity The identity to check for.
+   * @param identity The current identity instance.
+   * @param authenticator The current authenticator instance.
    * @param request The current request.
    * @param messages The messages for the current language.
    * @tparam B The type of the request body.
    * @return True if the user is authorized, false otherwise.
    */
-  def isAuthorized[B](identity: I)(implicit request: Request[B], messages: Messages): Future[Boolean]
+  def isAuthorized[B](identity: I, authenticator: A)(implicit request: Request[B], messages: Messages): Future[Boolean]
 }
 
 /**
@@ -54,16 +56,19 @@ object Authorization {
    * @param self The `Authorization` instance on which the additional methods should be defined.
    * @param ec The execution context to handle the asynchronous operations.
    */
-  implicit final class RichAuthorization[I <: Identity](self: Authorization[I])(implicit ec: ExecutionContext) {
+  implicit final class RichAuthorization[I <: Identity, A <: Authenticator](self: Authorization[I, A])(
+    implicit ec: ExecutionContext) {
 
     /**
      * Performs a logical negation on an `Authorization` result.
      *
      * @return An `Authorization` which performs a logical negation on an `Authorization` result.
      */
-    def unary_! : Authorization[I] = new Authorization[I] {
-      def isAuthorized[B](identity: I)(implicit request: Request[B], messages: Messages): Future[Boolean] = {
-        self.isAuthorized(identity).map(x => !x)
+    def unary_! : Authorization[I, A] = new Authorization[I, A] {
+      def isAuthorized[B](identity: I, authenticator: A)(
+        implicit request: Request[B], messages: Messages): Future[Boolean] = {
+
+        self.isAuthorized(identity, authenticator).map(x => !x)
       }
     }
 
@@ -73,10 +78,12 @@ object Authorization {
      * @param authorization The right hand operand.
      * @return An authorization which performs a logical AND operation with two `Authorization` instances.
      */
-    def &&(authorization: Authorization[I]): Authorization[I] = new Authorization[I] {
-      def isAuthorized[B](identity: I)(implicit request: Request[B], messages: Messages): Future[Boolean] = {
-        val leftF = self.isAuthorized(identity)
-        val rightF = authorization.isAuthorized(identity)
+    def &&(authorization: Authorization[I, A]): Authorization[I, A] = new Authorization[I, A] {
+      def isAuthorized[B](identity: I, authenticator: A)(
+        implicit request: Request[B], messages: Messages): Future[Boolean] = {
+
+        val leftF = self.isAuthorized(identity, authenticator)
+        val rightF = authorization.isAuthorized(identity, authenticator)
         for {
           left <- leftF
           right <- rightF
@@ -90,10 +97,12 @@ object Authorization {
      * @param authorization The right hand operand.
      * @return An authorization which performs a logical OR operation with two `Authorization` instances.
      */
-    def ||(authorization: Authorization[I]): Authorization[I] = new Authorization[I] {
-      def isAuthorized[B](identity: I)(implicit request: Request[B], messages: Messages): Future[Boolean] = {
-        val leftF = self.isAuthorized(identity)
-        val rightF = authorization.isAuthorized(identity)
+    def ||(authorization: Authorization[I, A]): Authorization[I, A] = new Authorization[I, A] {
+      def isAuthorized[B](identity: I, authenticator: A)(
+        implicit request: Request[B], messages: Messages): Future[Boolean] = {
+
+        val leftF = self.isAuthorized(identity, authenticator)
+        val rightF = authorization.isAuthorized(identity, authenticator)
         for {
           left <- leftF
           right <- rightF

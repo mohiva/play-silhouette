@@ -350,7 +350,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
    *
    * @param authorize An Authorize object that checks if the user is authorized to invoke the handler.
    */
-  class SecuredRequestHandlerBuilder(authorize: Option[Authorization[I]] = None) extends RequestHandlerBuilder[SecuredRequest] {
+  class SecuredRequestHandlerBuilder(authorize: Option[Authorization[I, A]] = None) extends RequestHandlerBuilder[SecuredRequest] {
 
     /**
      * Invokes the block.
@@ -395,8 +395,8 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      */
     private def withAuthorization[B](result: Future[(Option[Either[A, A]], Option[I])])(implicit request: Request[B]) = {
       result.flatMap {
-        case (a, Some(i)) =>
-          authorize.map(_.isAuthorized(i)).getOrElse(Future.successful(true)).map(b => (a, Some(i), Some(b)))
+        case (Some(a), Some(i)) =>
+          authorize.map(_.isAuthorized(i, a.extract)).getOrElse(Future.successful(true)).map(b => (Some(a), Some(i), Some(b)))
         case (a, i) =>
           Future.successful((a, i, None))
       }
@@ -414,7 +414,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @param authorize An Authorize object that checks if the user is authorized to invoke the action.
      * @return A secured action handler.
      */
-    def apply(authorize: Authorization[I]) = new SecuredRequestHandlerBuilder(Some(authorize))
+    def apply(authorize: Authorization[I, A]) = new SecuredRequestHandlerBuilder(Some(authorize))
   }
 
   /**
@@ -430,7 +430,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
    *
    * @param authorize An Authorize object that checks if the user is authorized to invoke the action.y
    */
-  class SecuredActionBuilder(authorize: Option[Authorization[I]] = None) extends ActionBuilder[SecuredRequest] {
+  class SecuredActionBuilder(authorize: Option[Authorization[I, A]] = None) extends ActionBuilder[SecuredRequest] {
 
     /**
      * Invokes the block.
@@ -473,7 +473,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
      * @param authorize An Authorize object that checks if the user is authorized to invoke the action.
      * @return A secured action builder.
      */
-    def apply(authorize: Authorization[I]) = new SecuredActionBuilder(Some(authorize))
+    def apply(authorize: Authorization[I, A]) = new SecuredActionBuilder(Some(authorize))
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
