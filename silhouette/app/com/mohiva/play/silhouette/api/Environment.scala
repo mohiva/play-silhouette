@@ -22,8 +22,11 @@ import scala.concurrent.ExecutionContext
 
 /**
  * The environment needed to instantiate a Silhouette controller.
+ *
+ * @tparam I The type of the identity.
+ * @tparam A The type of the authenticator.
  */
-trait Environment[I <: Identity, T <: Authenticator] extends ExecutionContextProvider {
+trait Environment[I <: Identity, A <: Authenticator] extends ExecutionContextProvider {
 
   /**
    * Gets the identity service implementation.
@@ -37,7 +40,7 @@ trait Environment[I <: Identity, T <: Authenticator] extends ExecutionContextPro
    *
    * @return The authenticator service implementation.
    */
-  def authenticatorService: AuthenticatorService[T]
+  def authenticatorService: AuthenticatorService[A]
 
   /**
    * Gets the list of request providers.
@@ -58,11 +61,11 @@ trait Environment[I <: Identity, T <: Authenticator] extends ExecutionContextPro
  * The companion object.
  */
 object Environment {
-  def apply[I <: Identity, T <: Authenticator](
+  def apply[I <: Identity, A <: Authenticator](
     identityServiceImpl: IdentityService[I],
-    authenticatorServiceImpl: AuthenticatorService[T],
+    authenticatorServiceImpl: AuthenticatorService[A],
     requestProvidersImpl: Seq[RequestProvider],
-    eventBusImpl: EventBus)(implicit ec: ExecutionContext) = new Environment[I, T] {
+    eventBusImpl: EventBus)(implicit ec: ExecutionContext) = new Environment[I, A] {
     val identityService = identityServiceImpl
     val authenticatorService = authenticatorServiceImpl
     val requestProviders = requestProvidersImpl
