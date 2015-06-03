@@ -21,15 +21,12 @@ package com.mohiva.play.silhouette.impl.providers.oauth2
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.HTTPLayer
-import com.mohiva.play.silhouette.impl.exceptions.{ UnexpectedResponseException, ProfileRetrievalException }
-import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
+import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.FacebookProvider._
 import play.api.libs.json.{ JsObject, JsValue }
-import play.api.libs.ws.WSResponse
 
 import scala.concurrent.Future
-import scala.util.{ Failure, Success, Try }
 
 /**
  * Base Facebook OAuth2 Provider.
@@ -73,22 +70,6 @@ trait BaseFacebookProvider extends OAuth2Provider {
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, errorMsg, errorType, errorCode))
         case _ => profileParser.parse(json)
       }
-    }
-  }
-
-  /**
-   * Builds the OAuth2 info.
-   *
-   * Facebook does not follow the OAuth2 spec :-\
-   *
-   * @param response The response from the provider.
-   * @return The OAuth2 info on success, otherwise an failure.
-   */
-  override protected def buildInfo(response: WSResponse): Try[OAuth2Info] = {
-    response.body.split("&|=") match {
-      case Array(AccessToken, token, Expires, expiresIn) => Success(OAuth2Info(token, None, Some(expiresIn.toInt)))
-      case Array(AccessToken, token) => Success(OAuth2Info(token))
-      case _ => Failure(new UnexpectedResponseException(InvalidInfoFormat.format(id, response.body)))
     }
   }
 }
@@ -168,5 +149,5 @@ object FacebookProvider {
    * The Facebook constants.
    */
   val ID = "facebook"
-  val API = "https://graph.facebook.com/me?fields=name,first_name,last_name,picture,email&return_ssl_resources=1&access_token=%s"
+  val API = "https://graph.facebook.com/v2.3/me?fields=name,first_name,last_name,picture,email&return_ssl_resources=1&access_token=%s"
 }
