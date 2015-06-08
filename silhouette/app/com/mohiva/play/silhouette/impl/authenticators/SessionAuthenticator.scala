@@ -114,7 +114,7 @@ object SessionAuthenticator extends Logger {
    * @param settings The authenticator settings.
    * @return Some authenticator on success, otherwise None.
    */
-  def unserialize(str: String)(settings: SessionAuthenticatorSettings): Option[SessionAuthenticator] = {
+  def unserialize(str: String)(settings: SessionAuthenticatorSettings): Try[SessionAuthenticator] = {
     if (settings.encryptAuthenticator) buildAuthenticator(Crypto.decryptAES(str))
     else buildAuthenticator(Base64.decode(str))
   }
@@ -125,17 +125,13 @@ object SessionAuthenticator extends Logger {
    * @param str The string representation of the authenticator.
    * @return Some authenticator on success, otherwise None.
    */
-  private def buildAuthenticator(str: String): Option[SessionAuthenticator] = {
+  private def buildAuthenticator(str: String): Try[SessionAuthenticator] = {
     Try(Json.parse(str)) match {
       case Success(json) => json.validate[SessionAuthenticator].asEither match {
-        case Left(error) =>
-          logger.info(InvalidJsonFormat.format(ID, error))
-          None
-        case Right(authenticator) => Some(authenticator)
+        case Left(error) => Failure(new AuthenticatorException(InvalidJsonFormat.format(ID, error)))
+        case Right(authenticator) => Success(authenticator)
       }
-      case Failure(error) =>
-        logger.info(JsonParseError.format(ID, str), error)
-        None
+      case Failure(error) => Failure(new AuthenticatorException(JsonParseError.format(ID, str), error))
     }
   }
 }
@@ -209,12 +205,16 @@ class SessionAuthenticatorService(
     Future.from(Try {
       if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
     }).map { fingerprint =>
-      request.session.get(settings.sessionKey).flatMap(v => unserialize(v)(settings)) match {
-        case Some(a) if fingerprint.isDefined && a.fingerprint != fingerprint =>
-          logger.info(InvalidFingerprint.format(ID, fingerprint, a))
-          None
-        case Some(a) => Some(a)
-        case None => None
+      request.session.get(settings.sessionKey).flatMap { value =>
+        unserialize(value)(settings) match {
+          case Success(authenticator) if fingerprint.isDefined && authenticator.fingerprint != fingerprint =>
+            logger.info(InvalidFingerprint.format(ID, fingerprint, authenticator))
+            None
+          case Success(authenticator) => Some(authenticator)
+          case Failure(error) =>
+            logger.info(error.getMessage, error)
+            None
+        }
       }
     }.recover {
       case e => throw new AuthenticatorRetrievalException(RetrieveError.format(ID), e)

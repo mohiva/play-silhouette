@@ -15,6 +15,8 @@
  */
 package com.mohiva.play.silhouette.impl.authenticators
 
+import java.util.regex.Pattern
+
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.util.{ Base64, Clock, FingerprintGenerator }
@@ -53,6 +55,40 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
         lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get - 10),
         expirationDate = DateTime.now.plusSeconds(5)
       ).isValid must beTrue
+    }
+  }
+
+  "The `unserialize` method of the authenticator" should {
+    "throw an AuthenticatorException if the given value can't be parsed as Json" in new WithApplication with Context {
+      val value = "invalid"
+      val msg = Pattern.quote(JsonParseError.format(ID, value))
+
+      unserialize(Crypto.encryptAES(value))(settings) must beFailedTry.withThrowable[AuthenticatorException](msg)
+    }
+
+    "throw an AuthenticatorException if the given value is in the wrong Json format" in new WithApplication with Context {
+      val value = "{}"
+      val msg = "^" + Pattern.quote(InvalidJsonFormat.format(ID, "")) + ".*"
+
+      unserialize(Crypto.encryptAES(value))(settings) must beFailedTry.withThrowable[AuthenticatorException](msg)
+    }
+  }
+
+  "The `serialize/unserialize` method of the authenticator" should {
+    "handle an encrypted authenticator" in new WithApplication with Context {
+      settings.encryptAuthenticator returns true
+
+      val value = serialize(authenticator)(settings)
+
+      unserialize(value)(settings) must beSuccessfulTry.withValue(authenticator)
+    }
+
+    "handle an unencrypted authenticator" in new Context {
+      settings.encryptAuthenticator returns false
+
+      val value = serialize(authenticator)(settings)
+
+      unserialize(value)(settings) must beSuccessfulTry.withValue(authenticator)
     }
   }
 
@@ -196,7 +232,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
     "throws an AuthenticatorRetrievalException exception if an error occurred during retrieval" in new WithApplication with Context {
       implicit val request = FakeRequest().withSession(settings.sessionKey -> Base64.encode(Json.toJson(authenticator)))
 
-      fingerprintGenerator.generate throws new RuntimeException("Could not generate ID")
+      fingerprintGenerator.generate throws new RuntimeException("Could not generate fingerprint")
       settings.useFingerprinting returns true
       settings.encryptAuthenticator returns false
 

@@ -457,7 +457,6 @@ object JWTAuthenticatorService {
    */
   val InvalidJWTToken = "[Silhouette][%s] Error on parsing JWT token: %s"
   val JsonParseError = "[Silhouette][%s] Cannot parse Json: %s"
-  val InvalidJsonFormat = "[Silhouette][%s] Invalid Json format: %s"
   val UnexpectedJsonValue = "[Silhouette][%s] Unexpected Json value: %s"
   val OverrideReservedClaim = "[Silhouette][%s] Try to overriding a reserved claim `%s`; list of reserved claims: %s"
 

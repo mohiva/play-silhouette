@@ -23,7 +23,7 @@ import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
-import com.mohiva.play.silhouette.api.util.{ Clock, FingerprintGenerator, IDGenerator }
+import com.mohiva.play.silhouette.api.util.{ Base64, Clock, FingerprintGenerator, IDGenerator }
 import com.mohiva.play.silhouette.api.{ Logger, LoginInfo, StorableAuthenticator }
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
@@ -31,15 +31,19 @@ import org.joda.time.DateTime
 import play.api.Play
 import play.api.Play.current
 import play.api.http.HeaderNames
+import play.api.libs.Crypto
+import play.api.libs.json.Json
 import play.api.mvc._
 
 import scala.concurrent.{ ExecutionContext, Future }
-import scala.util.Try
+import scala.util.{ Failure, Success, Try }
 
 /**
- * An authenticator that uses a cookie based approach. It works by storing an ID in a cookie
- * to track the authenticated user and a server side backing store that maps the ID to an
- * authenticator instance.
+ * An authenticator that uses a cookie based approach.
+ *
+ * It works either by storing an ID in a cookie to track the authenticated user and a server side backing
+ * store that maps the ID to an authenticator instance or by a stateless approach that stores the authenticator
+ * in a serialized form directly into the cookie.
  *
  * The authenticator can use sliding window expiration. This means that the authenticator times
  * out after a certain time if it wasn't used. This can be controlled with the [[idleTimeout]]
@@ -93,10 +97,64 @@ case class CookieAuthenticator(
 }
 
 /**
+ * The companion object of the authenticator.
+ */
+object CookieAuthenticator extends Logger {
+
+  /**
+   * Converts the CookieAuthenticator to Json and vice versa.
+   */
+  implicit val jsonFormat = Json.format[CookieAuthenticator]
+
+  /**
+   * Serializes the authenticator.
+   *
+   * @param authenticator The authenticator to serialize.
+   * @param settings The authenticator settings.
+   * @return The serialized authenticator.
+   */
+  def serialize(authenticator: CookieAuthenticator)(settings: CookieAuthenticatorSettings) = {
+    if (settings.encryptAuthenticator) {
+      Crypto.encryptAES(Json.toJson(authenticator).toString())
+    } else {
+      Base64.encode(Json.toJson(authenticator))
+    }
+  }
+
+  /**
+   * Unserializes the authenticator.
+   *
+   * @param str The string representation of the authenticator.
+   * @param settings The authenticator settings.
+   * @return Some authenticator on success, otherwise None.
+   */
+  def unserialize(str: String)(settings: CookieAuthenticatorSettings): Try[CookieAuthenticator] = {
+    if (settings.encryptAuthenticator) buildAuthenticator(Crypto.decryptAES(str))
+    else buildAuthenticator(Base64.decode(str))
+  }
+
+  /**
+   * Builds the authenticator from Json.
+   *
+   * @param str The string representation of the authenticator.
+   * @return Some authenticator on success, otherwise None.
+   */
+  private def buildAuthenticator(str: String): Try[CookieAuthenticator] = {
+    Try(Json.parse(str)) match {
+      case Success(json) => json.validate[CookieAuthenticator].asEither match {
+        case Left(error) => Failure(new AuthenticatorException(InvalidJsonFormat.format(ID, error)))
+        case Right(authenticator) => Success(authenticator)
+      }
+      case Failure(error) => Failure(new AuthenticatorException(JsonParseError.format(ID, str), error))
+    }
+  }
+}
+
+/**
  * The service that handles the cookie authenticator.
  *
  * @param settings The cookie settings.
- * @param dao The DAO to store the authenticator.
+ * @param dao The DAO to store the authenticator. Set it to None to use a stateless approach.
  * @param fingerprintGenerator The fingerprint generator implementation.
  * @param idGenerator The ID generator used to create the authenticator ID.
  * @param clock The clock implementation.
@@ -104,12 +162,14 @@ case class CookieAuthenticator(
  */
 class CookieAuthenticatorService(
   val settings: CookieAuthenticatorSettings,
-  dao: AuthenticatorDAO[CookieAuthenticator],
+  dao: Option[AuthenticatorDAO[CookieAuthenticator]],
   fingerprintGenerator: FingerprintGenerator,
   idGenerator: IDGenerator,
   clock: Clock)(implicit val executionContext: ExecutionContext)
   extends AuthenticatorService[CookieAuthenticator]
   with Logger {
+
+  import CookieAuthenticator._
 
   /**
    * The type of this class.
@@ -165,13 +225,21 @@ class CookieAuthenticatorService(
       if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
     }).flatMap { fingerprint =>
       request.cookies.get(settings.cookieName) match {
-        case Some(cookie) => dao.find(cookie.value).map {
-          case Some(a) if fingerprint.isDefined && a.fingerprint != fingerprint =>
-            logger.info(InvalidFingerprint.format(ID, fingerprint, a))
-            None
-          case Some(a) => Some(a)
-          case None => None
-        }
+        case Some(cookie) =>
+          (dao match {
+            case Some(d) => d.find(cookie.value)
+            case None => unserialize(cookie.value)(settings) match {
+              case Success(authenticator) => Future.successful(Some(authenticator))
+              case Failure(error) =>
+                logger.info(error.getMessage, error)
+                Future.successful(None)
+            }
+          }).map {
+            case Some(a) if fingerprint.isDefined && a.fingerprint != fingerprint =>
+              logger.info(InvalidFingerprint.format(ID, fingerprint, a))
+              None
+            case v => v
+          }
         case None => Future.successful(None)
       }
     }.recover {
@@ -180,7 +248,9 @@ class CookieAuthenticatorService(
   }
 
   /**
-   * Creates a new cookie for the given authenticator and return it. The authenticator will also be
+   * Creates a new cookie for the given authenticator and return it.
+   *
+   * If the non-stateless approach will be used the the authenticator will also be
    * stored in the backing store.
    *
    * @param authenticator The authenticator instance.
@@ -188,10 +258,13 @@ class CookieAuthenticatorService(
    * @return The serialized authenticator value.
    */
   override def init(authenticator: CookieAuthenticator)(implicit request: RequestHeader): Future[Cookie] = {
-    dao.add(authenticator).map { a =>
+    (dao match {
+      case Some(d) => d.add(authenticator).map(_.id)
+      case None => Future.successful(serialize(authenticator)(settings))
+    }).map { value =>
       Cookie(
         name = settings.cookieName,
-        value = a.id,
+        value = value,
         maxAge = settings.cookieMaxAge,
         path = settings.cookiePath,
         domain = settings.cookieDomain,
@@ -243,9 +316,10 @@ class CookieAuthenticatorService(
   }
 
   /**
-   * Updates the authenticator with the new last used date in the backing store.
+   * Updates the authenticator with the new last used date.
    *
-   * We needn't embed the cookie in the response here because the cookie itself will not be changed.
+   * If the stateless approach will be used then we update the cookie on the client. With the non-stateless
+   * approach we needn't embed the cookie in the response here because the cookie itself will not be changed.
    * Only the authenticator in the backing store will be changed.
    *
    * @param authenticator The authenticator to update.
@@ -256,9 +330,18 @@ class CookieAuthenticatorService(
   override def update(authenticator: CookieAuthenticator, result: Result)(
     implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
-    dao.update(authenticator).map { a =>
-      AuthenticatorResult(result)
-    }.recover {
+    (dao match {
+      case Some(d) => d.update(authenticator).map(_ => AuthenticatorResult(result))
+      case None => Future.successful(AuthenticatorResult(result.withCookies(Cookie(
+        name = settings.cookieName,
+        value = serialize(authenticator)(settings),
+        maxAge = settings.cookieMaxAge,
+        path = settings.cookiePath,
+        domain = settings.cookieDomain,
+        secure = settings.secureCookie,
+        httpOnly = settings.httpOnlyCookie
+      ))))
+    }).recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
     }
   }
@@ -275,7 +358,10 @@ class CookieAuthenticatorService(
    * @return The serialized expression of the authenticator.
    */
   override def renew(authenticator: CookieAuthenticator)(implicit request: RequestHeader): Future[Cookie] = {
-    dao.remove(authenticator.id).flatMap { _ =>
+    (dao match {
+      case Some(d) => d.remove(authenticator.id)
+      case None => Future.successful(())
+    }).flatMap { _ =>
       create(authenticator.loginInfo).flatMap(init)
     }.recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
@@ -285,8 +371,8 @@ class CookieAuthenticatorService(
   /**
    * Renews an authenticator and replaces the authenticator cookie with a new one.
    *
-   * The old authenticator will be revoked in the backing store. After that it isn't possible to use
-   * a cookie which was bound to this authenticator.
+   * If the non-stateless approach will be used then the old authenticator will be revoked in the backing
+   * store. After that it isn't possible to use a cookie which was bound to this authenticator.
    *
    * @param authenticator The authenticator to update.
    * @param result The result to manipulate.
@@ -302,7 +388,9 @@ class CookieAuthenticatorService(
   }
 
   /**
-   * Discards the cookie and remove the authenticator from backing store.
+   * Discards the cookie.
+   *
+   * If the non-stateless approach will be used then the authenticator will also be removed from backing store.
    *
    * @param result The result to manipulate.
    * @param request The request header.
@@ -311,7 +399,10 @@ class CookieAuthenticatorService(
   override def discard(authenticator: CookieAuthenticator, result: Result)(
     implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
-    dao.remove(authenticator.id).map { _ =>
+    (dao match {
+      case Some(d) => d.remove(authenticator.id)
+      case None => Future.successful(())
+    }).map { _ =>
       AuthenticatorResult(result.discardingCookies(DiscardingCookie(
         name = settings.cookieName,
         path = settings.cookiePath,
@@ -336,6 +427,8 @@ object CookieAuthenticatorService {
   /**
    * The error messages.
    */
+  val JsonParseError = "[Silhouette][%s] Cannot parse Json: %s"
+  val InvalidJsonFormat = "[Silhouette][%s] Invalid Json format: %s"
   val InvalidFingerprint = "[Silhouette][%s] Fingerprint %s doesn't match authenticator: %s"
 }
 
@@ -358,6 +451,7 @@ case class CookieAuthenticatorSettings(
   cookieDomain: Option[String] = None,
   secureCookie: Boolean = Play.isProd, // Default to sending only for HTTPS in production, but not for development and test.
   httpOnlyCookie: Boolean = true,
+  encryptAuthenticator: Boolean = true,
   useFingerprinting: Boolean = true,
   cookieMaxAge: Option[Int] = Some(12 * 60 * 60),
   authenticatorIdleTimeout: Option[Int] = Some(30 * 60),

@@ -101,7 +101,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       json must /("iat" -> (authenticator.lastUsedDate.getMillis / 1000).toInt)
     }
 
-    "throw an AuthenticatorException if a reserved claim will be overriden" in new WithApplication with Context {
+    "throw an AuthenticatorException if a reserved claim will be overridden" in new WithApplication with Context {
       val claims = Json.obj(
         "jti" -> "reserved"
       )

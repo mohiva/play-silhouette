@@ -125,7 +125,7 @@ case class FakeSessionAuthenticatorService() extends SessionAuthenticatorService
  */
 case class FakeCookieAuthenticatorService() extends CookieAuthenticatorService(
   new CookieAuthenticatorSettings(),
-  new FakeAuthenticatorDAO[CookieAuthenticator],
+  None,
   new DefaultFingerprintGenerator(),
   new SecureRandomIDGenerator(),
   Clock())
