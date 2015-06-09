@@ -1,0 +1,246 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>services - com.mohiva.play.silhouette.api.services</title>
+          <meta name="description" content="services - com.mohiva.play.silhouette.api.services" />
+          <meta name="keywords" content="services com.mohiva.play.silhouette.api.services" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'com.mohiva.play.silhouette.api.services.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette.api">api</a></p>
+        <h1>services</h1><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.package" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">services</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Provides services used by the API to call external or internal services.
+</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="com.mohiva.play.silhouette.api.services"><span>services</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.api.services.AuthenticatorResult" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="AuthenticatorResultextendsResult"></a>
+      <a id="AuthenticatorResult:AuthenticatorResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AuthenticatorResult.html"><span class="name">AuthenticatorResult</span></a><span class="result"> extends <span class="extype" name="play.api.mvc.Result">Result</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.package@AuthenticatorResultextendsResult" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A marker result which indicates that an operation on an authenticator was processed and
+therefore it shouldn't updated automatically.</p><div class="fullcomment"><div class="comment cmt"><p>A marker result which indicates that an operation on an authenticator was processed and
+therefore it shouldn't updated automatically.</p><p>Due the fact that the update method gets called on every subsequent request to update the
+authenticator related data in the backing store and in the result, it isn't possible to
+discard or renew the authenticator simultaneously. This is because the &quot;update&quot; method would
+override the result created by the &quot;renew&quot; or &quot;discard&quot; method, because it will be executed
+as last in the chain.</p><p>As example:
+If we discard the session in a Silhouette action then it will be removed from session. But
+at the end the update method will embed the session again, because it gets called with the
+result of the action.
+</p></div></div>
+    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="AuthenticatorService[T&lt;:com.mohiva.play.silhouette.api.Authenticator]extendsExecutionContextProvider"></a>
+      <a id="AuthenticatorService[T&lt;:Authenticator]:AuthenticatorService[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="AuthenticatorService.html"><span class="name">AuthenticatorService</span></a><span class="tparams">[<span name="T">T &lt;: <a href="../Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a></span>]</span><span class="result"> extends <a href="../util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.package@AuthenticatorService[T&lt;:com.mohiva.play.silhouette.api.Authenticator]extendsExecutionContextProvider" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Handles authenticators for the Silhouette module.</p><div class="fullcomment"><div class="comment cmt"><p>Handles authenticators for the Silhouette module.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the authenticator this service is responsible for.
+</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.services.AvatarService" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AvatarServiceextendsAnyRef"></a>
+      <a id="AvatarService:AvatarService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="AvatarService.html"><span class="name">AvatarService</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.package@AvatarServiceextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Service to retrieve avatar URLs from an avatar service such as Gravatar.</p>
+    </li><li name="com.mohiva.play.silhouette.api.services.IdentityService" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="IdentityService[T&lt;:com.mohiva.play.silhouette.api.Identity]extendsAnyRef"></a>
+      <a id="IdentityService[T&lt;:Identity]:IdentityService[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="IdentityService.html"><span class="name">IdentityService</span></a><span class="tparams">[<span name="T">T &lt;: <a href="../Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.package@IdentityService[T&lt;:com.mohiva.play.silhouette.api.Identity]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A trait that provides the means to retrieve identities for the Silhouette module.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.api.services.AuthenticatorResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AuthenticatorResult"></a>
+      <a id="AuthenticatorResult:AuthenticatorResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AuthenticatorResult$.html"><span class="name">AuthenticatorResult</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.package@AuthenticatorResult" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AuthenticatorService"></a>
+      <a id="AuthenticatorService:AuthenticatorService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AuthenticatorService$.html"><span class="name">AuthenticatorService</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.package@AuthenticatorService" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object.</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
