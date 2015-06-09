@@ -30,6 +30,11 @@ trait Authenticator {
   type Value
 
   /**
+   * The type of the settings an authenticator can handle.
+   */
+  type Settings
+
+  /**
    * Gets the linked login info for an identity.
    *
    * @return The linked login info for an identity.

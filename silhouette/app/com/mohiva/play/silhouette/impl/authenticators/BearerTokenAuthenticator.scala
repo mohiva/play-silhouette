@@ -60,6 +60,11 @@ case class BearerTokenAuthenticator(
   override type Value = String
 
   /**
+   * The type of the settings an authenticator can handle.
+   */
+  override type Settings = BearerTokenAuthenticatorSettings
+
+  /**
    * Checks if the authenticator isn't expired and isn't timed out.
    *
    * @return True if the authenticator isn't expired and isn't timed out.
@@ -104,11 +109,6 @@ class BearerTokenAuthenticatorService(
    * The type of this class.
    */
   override type Self = BearerTokenAuthenticatorService
-
-  /**
-   * The type of the settings.
-   */
-  override type Settings = BearerTokenAuthenticatorSettings
 
   /**
    * Gets an authenticator service initialized with a new settings object.

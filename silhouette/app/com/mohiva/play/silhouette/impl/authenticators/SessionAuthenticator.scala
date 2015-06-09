@@ -59,6 +59,11 @@ case class SessionAuthenticator(
   override type Value = Session
 
   /**
+   * The type of the settings an authenticator can handle.
+   */
+  override type Settings = SessionAuthenticatorSettings
+
+  /**
    * Checks if the authenticator isn't expired and isn't timed out.
    *
    * @return True if the authenticator isn't expired and isn't timed out.
@@ -157,11 +162,6 @@ class SessionAuthenticatorService(
    * The type of this class.
    */
   override type Self = SessionAuthenticatorService
-
-  /**
-   * The type of the settings.
-   */
-  override type Settings = SessionAuthenticatorSettings
 
   /**
    * Gets an authenticator service initialized with a new settings object.
