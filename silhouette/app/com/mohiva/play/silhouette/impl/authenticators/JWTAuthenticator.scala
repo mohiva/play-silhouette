@@ -74,6 +74,11 @@ case class JWTAuthenticator(
   override type Value = String
 
   /**
+   * The type of the settings an authenticator can handle.
+   */
+  override type Settings = JWTAuthenticatorSettings
+
+  /**
    * Checks if the authenticator isn't expired and isn't timed out.
    *
    * @return True if the authenticator isn't expired and isn't timed out.
@@ -252,11 +257,6 @@ class JWTAuthenticatorService(
    * The type of this class.
    */
   override type Self = JWTAuthenticatorService
-
-  /**
-   * The type of the settings.
-   */
-  override type Settings = JWTAuthenticatorSettings
 
   /**
    * Gets an authenticator service initialized with a new settings object.

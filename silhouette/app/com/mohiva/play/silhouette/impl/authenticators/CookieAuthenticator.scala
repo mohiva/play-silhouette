@@ -73,6 +73,11 @@ case class CookieAuthenticator(
   override type Value = Cookie
 
   /**
+   * The type of the settings an authenticator can handle.
+   */
+  override type Settings = CookieAuthenticatorSettings
+
+  /**
    * Checks if the authenticator isn't expired and isn't timed out.
    *
    * @return True if the authenticator isn't expired and isn't timed out.
@@ -175,11 +180,6 @@ class CookieAuthenticatorService(
    * The type of this class.
    */
   override type Self = CookieAuthenticatorService
-
-  /**
-   * The type of the settings.
-   */
-  override type Settings = CookieAuthenticatorSettings
 
   /**
    * Gets an authenticator service initialized with a new settings object.
