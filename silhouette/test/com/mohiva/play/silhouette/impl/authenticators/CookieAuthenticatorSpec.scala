@@ -25,6 +25,7 @@ import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator._
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import org.joda.time.DateTime
+import org.specs2.control.NoLanguageFeatures
 import org.specs2.matcher.MatchResult
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
@@ -33,12 +34,14 @@ import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ Cookie, Results }
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
+import scala.concurrent.duration._
 import scala.concurrent.Future
+import scala.language.postfixOps
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator]].
  */
-class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
+class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLanguageFeatures {
 
   "The `isValid` method of the authenticator" should {
     "return false if the authenticator is expired" in new Context {
@@ -47,13 +50,13 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
 
     "return false if the authenticator is timed out" in new Context {
       authenticator.copy(
-        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get + 1)
+        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get.toSeconds.toInt + 1)
       ).isValid must beFalse
     }
 
     "return true if the authenticator is valid" in new Context {
       authenticator.copy(
-        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get - 10),
+        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get.toSeconds.toInt - 10),
         expirationDate = DateTime.now.plusSeconds(5)
       ).isValid must beTrue
     }
@@ -157,14 +160,14 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
 
     "return an authenticator which expires in 6 hours" in new Context {
       implicit val request = FakeRequest()
-      val sixHours = 6 * 60 * 60
+      val sixHours = 6 hours
       val now = new DateTime
 
       settings.authenticatorExpiry returns sixHours
       idGenerator.generate returns Future.successful("test-id")
       clock.now returns now
 
-      await(service(Some(dao)).create(loginInfo)).expirationDate must be equalTo now.plusSeconds(sixHours)
+      await(service(Some(dao)).create(loginInfo)).expirationDate must be equalTo now.plusSeconds(sixHours.toSeconds.toInt)
     }
 
     "throws an AuthenticatorCreationException exception if an error occurred during creation" in new Context {
@@ -346,7 +349,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
 
   "The `touch` method of the service" should {
     "update the last used date if idle timeout is defined" in new WithApplication with Context {
-      settings.authenticatorIdleTimeout returns Some(1)
+      settings.authenticatorIdleTimeout returns Some(1 second)
       clock.now returns DateTime.now
 
       service(Some(dao)).touch(authenticator) must beLeft[CookieAuthenticator].like {
@@ -450,7 +453,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       val result = service(None).renew(authenticator, Results.Ok)
 
       cookies(result).get(settings.cookieName) should beSome[Cookie].which(statelessResponseCookieMatcher(
-        authenticator.copy(id = id, lastUsedDate = now, expirationDate = now.plusSeconds(settings.authenticatorExpiry))
+        authenticator.copy(id = id, lastUsedDate = now, expirationDate = now.plusSeconds(settings.authenticatorExpiry.toSeconds.toInt))
       ))
       there was no(dao).add(any)
     }
@@ -554,9 +557,9 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       secureCookie = true,
       httpOnlyCookie = true,
       useFingerprinting = true,
-      cookieMaxAge = Some(12 * 60 * 60),
-      authenticatorIdleTimeout = Some(30 * 60),
-      authenticatorExpiry = 12 * 60 * 60
+      cookieMaxAge = Some(12 hours),
+      authenticatorIdleTimeout = Some(30 minutes),
+      authenticatorExpiry = 12 hours
     ))
 
     /**
@@ -577,7 +580,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       id = "test-id",
       loginInfo = LoginInfo("test", "1"),
       lastUsedDate = DateTime.now,
-      expirationDate = DateTime.now.plusSeconds(settings.authenticatorExpiry),
+      expirationDate = DateTime.now.plusSeconds(settings.authenticatorExpiry.toSeconds.toInt),
       idleTimeout = settings.authenticatorIdleTimeout,
       fingerprint = None
     ))
@@ -588,7 +591,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
     lazy val nonStatelessCookie = Cookie(
       name = settings.cookieName,
       value = authenticator.id,
-      maxAge = settings.cookieMaxAge,
+      maxAge = settings.cookieMaxAge.map(_.toSeconds.toInt),
       path = settings.cookiePath,
       domain = settings.cookieDomain,
       secure = settings.secureCookie,
@@ -601,7 +604,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
     lazy val statelessCookie = Cookie(
       name = settings.cookieName,
       value = serialize(authenticator)(settings),
-      maxAge = settings.cookieMaxAge,
+      maxAge = settings.cookieMaxAge.map(_.toSeconds.toInt),
       path = settings.cookiePath,
       domain = settings.cookieDomain,
       secure = settings.secureCookie,
@@ -615,7 +618,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       c.name must be equalTo settings.cookieName
       c.value must be equalTo value
       // https://github.com/mohiva/play-silhouette/issues/273
-      c.maxAge must beSome[Int].which(_ <= settings.cookieMaxAge.get)
+      c.maxAge must beSome[Int].which(_ <= settings.cookieMaxAge.get.toSeconds.toInt)
       c.path must be equalTo settings.cookiePath
       c.domain must be equalTo settings.cookieDomain
       c.secure must be equalTo settings.secureCookie
@@ -629,7 +632,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito {
       c.name must be equalTo settings.cookieName
       unserialize(c.value)(settings).get must be equalTo a
       // https://github.com/mohiva/play-silhouette/issues/273
-      c.maxAge must beSome[Int].which(_ <= settings.cookieMaxAge.get)
+      c.maxAge must beSome[Int].which(_ <= settings.cookieMaxAge.get.toSeconds.toInt)
       c.path must be equalTo settings.cookiePath
       c.domain must be equalTo settings.cookieDomain
       c.secure must be equalTo settings.secureCookie

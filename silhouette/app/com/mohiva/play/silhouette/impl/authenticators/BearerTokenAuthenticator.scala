@@ -26,7 +26,9 @@ import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import org.joda.time.DateTime
 import play.api.mvc.{ RequestHeader, Result }
 
+import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.language.postfixOps
 import scala.util.Try
 
 /**
@@ -44,14 +46,14 @@ import scala.util.Try
  * @param loginInfo The linked login info for an identity.
  * @param lastUsedDate The last used timestamp.
  * @param expirationDate The expiration time.
- * @param idleTimeout The time in seconds an authenticator can be idle before it timed out.
+ * @param idleTimeout The duration an authenticator can be idle before it timed out.
  */
 case class BearerTokenAuthenticator(
   id: String,
   loginInfo: LoginInfo,
   lastUsedDate: DateTime,
   expirationDate: DateTime,
-  idleTimeout: Option[Int])
+  idleTimeout: Option[Duration])
   extends StorableAuthenticator {
 
   /**
@@ -85,7 +87,7 @@ case class BearerTokenAuthenticator(
    *
    * @return True if sliding window expiration is activated and the authenticator is timed out, false otherwise.
    */
-  private def isTimedOut = idleTimeout.isDefined && lastUsedDate.plusSeconds(idleTimeout.get).isBeforeNow
+  private def isTimedOut = idleTimeout.isDefined && lastUsedDate.plusSeconds(idleTimeout.get.toSeconds.toInt).isBeforeNow
 }
 
 /**
@@ -134,7 +136,7 @@ class BearerTokenAuthenticatorService(
         id = id,
         loginInfo = loginInfo,
         lastUsedDate = now,
-        expirationDate = now.plusSeconds(settings.authenticatorExpiry),
+        expirationDate = now.plusSeconds(settings.authenticatorExpiry.toSeconds.toInt),
         idleTimeout = settings.authenticatorIdleTimeout)
     }.recover {
       case e => throw new AuthenticatorCreationException(CreateError.format(ID, loginInfo), e)
@@ -303,11 +305,11 @@ object BearerTokenAuthenticatorService {
 /**
  * The settings for the bearer token authenticator.
  *
- * @param headerName The name of the header in which the token will be transfered.
- * @param authenticatorIdleTimeout The time in seconds an authenticator can be idle before it timed out. Defaults to 30 minutes.
- * @param authenticatorExpiry The expiry of the authenticator in seconds. Defaults to 12 hours.
+ * @param headerName The name of the header in which the token will be transferred.
+ * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out. Defaults to 30 minutes.
+ * @param authenticatorExpiry The duration an authenticator expires. Defaults to 12 hours.
  */
 case class BearerTokenAuthenticatorSettings(
   headerName: String = "X-Auth-Token",
-  authenticatorIdleTimeout: Option[Int] = Some(30 * 60),
-  authenticatorExpiry: Int = 12 * 60 * 60)
+  authenticatorIdleTimeout: Option[Duration] = Some(30 minutes),
+  authenticatorExpiry: Duration = 12 hours)

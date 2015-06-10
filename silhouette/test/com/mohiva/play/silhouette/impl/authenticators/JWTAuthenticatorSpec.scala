@@ -25,6 +25,7 @@ import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator._
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import org.joda.time.DateTime
+import org.specs2.control.NoLanguageFeatures
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
@@ -34,12 +35,14 @@ import play.api.libs.json.{ JsNull, Json }
 import play.api.mvc.Results
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
+import scala.concurrent.duration._
 import scala.concurrent.Future
+import scala.language.postfixOps
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator]].
  */
-class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatchers {
+class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatchers with NoLanguageFeatures {
 
   "The `isValid` method of the authenticator" should {
     "return false if the authenticator is expired" in new Context {
@@ -48,13 +51,13 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
 
     "return false if the authenticator is timed out" in new Context {
       authenticator.copy(
-        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get + 1)
+        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get.toSeconds.toInt + 1)
       ).isValid must beFalse
     }
 
     "return true if the authenticator is valid" in new Context {
       authenticator.copy(
-        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get - 10),
+        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get.toSeconds.toInt - 10),
         expirationDate = DateTime.now.plusSeconds(5)
       ).isValid must beTrue
     }
@@ -241,14 +244,14 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
 
     "return an authenticator which expires in 6 hours" in new Context {
       implicit val request = FakeRequest()
-      val sixHours = 6 * 60 * 60
+      val sixHours = 6 hours
       val now = new DateTime
 
       settings.authenticatorExpiry returns sixHours
       idGenerator.generate returns Future.successful("test-id")
       clock.now returns now
 
-      await(service(None).create(loginInfo)).expirationDate must be equalTo now.plusSeconds(sixHours)
+      await(service(None).create(loginInfo)).expirationDate must be equalTo now.plusSeconds(sixHours.toSeconds.toInt)
     }
 
     "throws an AuthenticatorCreationException exception if an error occurred during creation" in new Context {
@@ -384,7 +387,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
 
   "The `touch` method of the service" should {
     "update the last used date if idle timeout is defined" in new WithApplication with Context {
-      settings.authenticatorIdleTimeout returns Some(1)
+      settings.authenticatorIdleTimeout returns Some(1 second)
       clock.now returns DateTime.now
 
       service(None).touch(authenticator) must beLeft[JWTAuthenticator].like {
@@ -464,7 +467,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
 
       unserialize(header(settings.headerName, result).get)(settings).get must be equalTo authenticator.copy(
         id = id,
-        expirationDate = clock.now.plusSeconds(settings.authenticatorExpiry),
+        expirationDate = clock.now.plusSeconds(settings.authenticatorExpiry.toSeconds.toInt),
         lastUsedDate = clock.now
       )
 
@@ -484,7 +487,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
 
       unserialize(header(settings.headerName, result).get)(settings).get must be equalTo authenticator.copy(
         id = id,
-        expirationDate = clock.now.plusSeconds(settings.authenticatorExpiry),
+        expirationDate = clock.now.plusSeconds(settings.authenticatorExpiry.toSeconds.toInt),
         lastUsedDate = clock.now
       )
       there was no(dao).remove(any)
@@ -567,8 +570,8 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       headerName = "X-Auth-Token",
       issuerClaim = "play-silhouette",
       encryptSubject = true,
-      authenticatorIdleTimeout = Some(30 * 60),
-      authenticatorExpiry = 12 * 60 * 60,
+      authenticatorIdleTimeout = Some(30 minutes),
+      authenticatorExpiry = 12 hours,
       sharedSecret = "fGhre3$56%43erfkl8)/§$dsdf345gsdfvsdf23kl"
     ))
 
@@ -590,7 +593,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       id = "test-id",
       loginInfo = LoginInfo("test", "1"),
       lastUsedDate = new DateTime(2015, 2, 25, 19, 0, 0, 0),
-      expirationDate = new DateTime(2015, 2, 25, 19, 0, 0, 0).plusMinutes(12 * 60),
+      expirationDate = new DateTime(2015, 2, 25, 19, 0, 0, 0).plusMinutes(settings.authenticatorExpiry.toSeconds.toInt),
       idleTimeout = settings.authenticatorIdleTimeout
     )
 

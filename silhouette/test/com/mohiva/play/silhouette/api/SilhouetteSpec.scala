@@ -22,6 +22,7 @@ import akka.testkit.TestProbe
 import com.mohiva.play.silhouette.api.SilhouetteSpec._
 import com.mohiva.play.silhouette.api.exceptions.{ NotAuthenticatedException, NotAuthorizedException }
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService, IdentityService }
+import org.specs2.control.NoLanguageFeatures
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
@@ -40,12 +41,13 @@ import play.api.{ Configuration, OptionalSourceMapper }
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
+import scala.language.postfixOps
 import scala.reflect.ClassTag
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.api.Silhouette]] base controller.
  */
-class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers {
+class SilhouetteSpec extends PlaySpecification with Mockito with JsonMatchers with NoLanguageFeatures {
 
   "The `SecuredAction` action" should {
     "restrict access if no valid authenticator can be retrieved" in new WithDefaultGlobal {

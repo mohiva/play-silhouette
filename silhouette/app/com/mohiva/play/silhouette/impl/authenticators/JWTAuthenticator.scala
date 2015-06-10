@@ -36,7 +36,9 @@ import play.api.mvc.{ RequestHeader, Result }
 
 import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
+import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.language.postfixOps
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -56,7 +58,7 @@ import scala.util.{ Failure, Success, Try }
  * @param loginInfo The linked login info for an identity.
  * @param lastUsedDate The last used timestamp.
  * @param expirationDate The expiration time.
- * @param idleTimeout The time in seconds an authenticator can be idle before it timed out.
+ * @param idleTimeout The duration an authenticator can be idle before it timed out.
  * @param customClaims Custom claims to embed into the token.
  */
 case class JWTAuthenticator(
@@ -64,7 +66,7 @@ case class JWTAuthenticator(
   loginInfo: LoginInfo,
   lastUsedDate: DateTime,
   expirationDate: DateTime,
-  idleTimeout: Option[Int],
+  idleTimeout: Option[Duration],
   customClaims: Option[JsObject] = None)
   extends StorableAuthenticator {
 
@@ -99,7 +101,7 @@ case class JWTAuthenticator(
    *
    * @return True if sliding window expiration is activated and the authenticator is timed out, false otherwise.
    */
-  private def isTimedOut = idleTimeout.isDefined && lastUsedDate.plusSeconds(idleTimeout.get).isBeforeNow
+  private def isTimedOut = idleTimeout.isDefined && lastUsedDate.plusSeconds(idleTimeout.get.toSeconds.toInt).isBeforeNow
 }
 
 /**
@@ -282,7 +284,7 @@ class JWTAuthenticatorService(
         id = id,
         loginInfo = loginInfo,
         lastUsedDate = now,
-        expirationDate = now.plusSeconds(settings.authenticatorExpiry),
+        expirationDate = now.plusSeconds(settings.authenticatorExpiry.toSeconds.toInt),
         idleTimeout = settings.authenticatorIdleTimeout
       )
     }.recover {
@@ -472,14 +474,14 @@ object JWTAuthenticatorService {
  * @param headerName The name of the header in which the token will be transferred.
  * @param issuerClaim The issuer claim identifies the principal that issued the JWT.
  * @param encryptSubject Indicates if the subject should be encrypted in JWT.
- * @param authenticatorIdleTimeout The time in seconds an authenticator can be idle before it timed out.
- * @param authenticatorExpiry The expiry of the authenticator in seconds.
+ * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out.
+ * @param authenticatorExpiry The duration an authenticator expires.
  * @param sharedSecret The shared secret to sign the JWT.
  */
 case class JWTAuthenticatorSettings(
   headerName: String = "X-Auth-Token",
   issuerClaim: String = "play-silhouette",
   encryptSubject: Boolean = true,
-  authenticatorIdleTimeout: Option[Int] = None, // This feature is disabled by default to prevent the generation of a new JWT on every request
-  authenticatorExpiry: Int = 12 * 60 * 60,
+  authenticatorIdleTimeout: Option[Duration] = None, // This feature is disabled by default to prevent the generation of a new JWT on every request
+  authenticatorExpiry: Duration = 12 hours,
   sharedSecret: String)
