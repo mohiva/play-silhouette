@@ -24,6 +24,7 @@ import com.mohiva.play.silhouette.api.{ Authenticator, LoginInfo }
 import com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticator._
 import com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService._
 import org.joda.time.DateTime
+import org.specs2.control.NoLanguageFeatures
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.libs.Crypto
@@ -32,12 +33,14 @@ import play.api.libs.json.Json
 import play.api.mvc.{ Result, Results, Session }
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
+import scala.concurrent.duration._
 import scala.concurrent.Future
+import scala.language.postfixOps
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticator]].
  */
-class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
+class SessionAuthenticatorSpec extends PlaySpecification with Mockito with NoLanguageFeatures {
 
   "The `isValid` method of the authenticator" should {
     "return false if the authenticator is expired" in new Context {
@@ -46,13 +49,13 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
     "return false if the authenticator is timed out" in new Context {
       authenticator.copy(
-        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get + 1)
+        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get.toSeconds.toInt + 1)
       ).isValid must beFalse
     }
 
     "return true if the authenticator is valid" in new Context {
       authenticator.copy(
-        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get - 10),
+        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get.toSeconds.toInt - 10),
         expirationDate = DateTime.now.plusSeconds(5)
       ).isValid must beTrue
     }
@@ -142,13 +145,13 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
     "return an authenticator which expires in 6 hours" in new Context {
       implicit val request = FakeRequest()
-      val sixHours = 6 * 60 * 60
+      val sixHours = 6 hours
       val now = new DateTime
 
       clock.now returns now
       settings.authenticatorExpiry returns sixHours
 
-      await(service.create(loginInfo)).expirationDate must be equalTo now.plusSeconds(sixHours)
+      await(service.create(loginInfo)).expirationDate must be equalTo now.plusSeconds(sixHours.toSeconds.toInt)
     }
 
     "throws an AuthenticatorCreationException exception if an error occurred during creation" in new Context {
@@ -344,7 +347,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
   "The `touch` method of the service" should {
     "update the last used date if idle timeout is defined" in new WithApplication with Context {
-      settings.authenticatorIdleTimeout returns Some(1)
+      settings.authenticatorIdleTimeout returns Some(1 second)
       clock.now returns DateTime.now
 
       service.touch(authenticator) must beLeft[SessionAuthenticator].like {
@@ -427,7 +430,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       val now = DateTime.now
       val data = Base64.encode(Json.toJson(authenticator.copy(
         lastUsedDate = now,
-        expirationDate = now.plusSeconds(settings.authenticatorExpiry)
+        expirationDate = now.plusSeconds(settings.authenticatorExpiry.toSeconds.toInt)
       )))
 
       settings.encryptAuthenticator returns false
@@ -451,7 +454,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       unserialize(session(result).get(settings.sessionKey).get)(settings).get must be equalTo authenticator.copy(
         lastUsedDate = now,
-        expirationDate = now.plusSeconds(settings.authenticatorExpiry)
+        expirationDate = now.plusSeconds(settings.authenticatorExpiry.toSeconds.toInt)
       )
     }
 
@@ -467,7 +470,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       unserialize(session(result).get(settings.sessionKey).get)(settings).get must be equalTo authenticator.copy(
         lastUsedDate = now,
-        expirationDate = now.plusSeconds(settings.authenticatorExpiry)
+        expirationDate = now.plusSeconds(settings.authenticatorExpiry.toSeconds.toInt)
       )
     }
 
@@ -485,7 +488,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       unserialize(session(result).get(settings.sessionKey).get)(settings).get must be equalTo authenticator.copy(
         lastUsedDate = now,
-        expirationDate = now.plusSeconds(settings.authenticatorExpiry)
+        expirationDate = now.plusSeconds(settings.authenticatorExpiry.toSeconds.toInt)
       )
       session(result).get("request-other") should beSome("keep")
       session(result).get("result-other") should beSome("keep")
@@ -563,8 +566,8 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       sessionKey = "authenticator",
       encryptAuthenticator = true,
       useFingerprinting = true,
-      authenticatorIdleTimeout = Some(30 * 60),
-      authenticatorExpiry = 12 * 60 * 60
+      authenticatorIdleTimeout = Some(30 minutes),
+      authenticatorExpiry = 12 hours
     ))
 
     /**
@@ -583,7 +586,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
     lazy val authenticator = spy(new SessionAuthenticator(
       loginInfo = LoginInfo("test", "1"),
       lastUsedDate = DateTime.now,
-      expirationDate = DateTime.now.plusMinutes(12 * 60),
+      expirationDate = DateTime.now.plusSeconds(settings.authenticatorExpiry.toSeconds.toInt),
       idleTimeout = settings.authenticatorIdleTimeout,
       fingerprint = None
     ))

@@ -26,7 +26,9 @@ import play.api.libs.Crypto
 import play.api.libs.json.Json
 import play.api.mvc.{ Cookie, Result }
 
+import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.language.postfixOps
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -115,7 +117,7 @@ class CookieSecretProvider(
   override def build[B](info: OAuth1Info)(
     implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[CookieSecret] = {
 
-    Future.successful(CookieSecret(info.secret, clock.now.plusSeconds(settings.expirationTime)))
+    Future.successful(CookieSecret(info.secret, clock.now.plusSeconds(settings.expirationTime.toSeconds.toInt)))
   }
 
   /**
@@ -149,7 +151,7 @@ class CookieSecretProvider(
   override def publish[B](result: Result, secret: CookieSecret)(implicit request: ExtractableRequest[B]) = {
     result.withCookies(Cookie(name = settings.cookieName,
       value = secret.serialize,
-      maxAge = Some(settings.expirationTime),
+      maxAge = Some(settings.expirationTime.toSeconds.toInt),
       path = settings.cookiePath,
       domain = settings.cookieDomain,
       secure = settings.secureCookie,
@@ -187,4 +189,4 @@ case class CookieSecretSettings(
   cookieDomain: Option[String] = None,
   secureCookie: Boolean = Play.isProd, // Default to sending only for HTTPS in production, but not for development and test.
   httpOnlyCookie: Boolean = true,
-  expirationTime: Int = 5 * 60)
+  expirationTime: Duration = 5 minutes)

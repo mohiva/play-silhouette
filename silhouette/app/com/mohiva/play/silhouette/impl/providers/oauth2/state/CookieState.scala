@@ -27,7 +27,9 @@ import play.api.Play.current
 import play.api.libs.json.Json
 import play.api.mvc.{ Cookie, RequestHeader, Result }
 
+import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.language.postfixOps
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -119,7 +121,7 @@ class CookieStateProvider(
    */
   override def build[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[CookieState] = {
     idGenerator.generate.map { id =>
-      CookieState(clock.now.plusSeconds(settings.expirationTime), id)
+      CookieState(clock.now.plusSeconds(settings.expirationTime.toSeconds.toInt), id)
     }
   }
 
@@ -151,7 +153,7 @@ class CookieStateProvider(
   override def publish[B](result: Result, state: State)(implicit request: ExtractableRequest[B]): Result = {
     result.withCookies(Cookie(name = settings.cookieName,
       value = state.serialize,
-      maxAge = Some(settings.expirationTime),
+      maxAge = Some(settings.expirationTime.toSeconds.toInt),
       path = settings.cookiePath,
       domain = settings.cookieDomain,
       secure = settings.secureCookie,
@@ -219,4 +221,4 @@ case class CookieStateSettings(
   cookieDomain: Option[String] = None,
   secureCookie: Boolean = Play.isProd, // Default to sending only for HTTPS in production, but not for development and test.
   httpOnlyCookie: Boolean = true,
-  expirationTime: Int = 5 * 60)
+  expirationTime: Duration = 5 minutes)

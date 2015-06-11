@@ -23,7 +23,8 @@ import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
-import com.mohiva.play.silhouette.api.util.{ Base64, Clock, FingerprintGenerator, IDGenerator }
+import com.mohiva.play.silhouette.api.util._
+import com.mohiva.play.silhouette.api.util.JsonFormats._
 import com.mohiva.play.silhouette.api.{ Logger, LoginInfo, StorableAuthenticator }
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
@@ -35,7 +36,9 @@ import play.api.libs.Crypto
 import play.api.libs.json.Json
 import play.api.mvc._
 
+import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.language.postfixOps
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -55,7 +58,7 @@ import scala.util.{ Failure, Success, Try }
  * @param loginInfo The linked login info for an identity.
  * @param lastUsedDate The last used timestamp.
  * @param expirationDate The expiration time.
- * @param idleTimeout The time in seconds an authenticator can be idle before it timed out.
+ * @param idleTimeout The duration an authenticator can be idle before it timed out.
  * @param fingerprint Maybe a fingerprint of the user.
  */
 case class CookieAuthenticator(
@@ -63,7 +66,7 @@ case class CookieAuthenticator(
   loginInfo: LoginInfo,
   lastUsedDate: DateTime,
   expirationDate: DateTime,
-  idleTimeout: Option[Int],
+  idleTimeout: Option[Duration],
   fingerprint: Option[String])
   extends StorableAuthenticator {
 
@@ -98,7 +101,7 @@ case class CookieAuthenticator(
    *
    * @return True if sliding window expiration is activated and the authenticator is timed out, false otherwise.
    */
-  private def isTimedOut = idleTimeout.isDefined && lastUsedDate.plusSeconds(idleTimeout.get).isBeforeNow
+  private def isTimedOut = idleTimeout.isDefined && lastUsedDate.plusSeconds(idleTimeout.get.toSeconds.toInt).isBeforeNow
 }
 
 /**
@@ -205,7 +208,7 @@ class CookieAuthenticatorService(
         id = id,
         loginInfo = loginInfo,
         lastUsedDate = now,
-        expirationDate = now.plusSeconds(settings.authenticatorExpiry),
+        expirationDate = now.plusSeconds(settings.authenticatorExpiry.toSeconds.toInt),
         idleTimeout = settings.authenticatorIdleTimeout,
         fingerprint = if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
       )
@@ -265,7 +268,7 @@ class CookieAuthenticatorService(
       Cookie(
         name = settings.cookieName,
         value = value,
-        maxAge = settings.cookieMaxAge,
+        maxAge = settings.cookieMaxAge.map(_.toSeconds.toInt),
         path = settings.cookiePath,
         domain = settings.cookieDomain,
         secure = settings.secureCookie,
@@ -335,7 +338,7 @@ class CookieAuthenticatorService(
       case None => Future.successful(AuthenticatorResult(result.withCookies(Cookie(
         name = settings.cookieName,
         value = serialize(authenticator)(settings),
-        maxAge = settings.cookieMaxAge,
+        maxAge = settings.cookieMaxAge.map(_.toSeconds.toInt),
         path = settings.cookiePath,
         domain = settings.cookieDomain,
         secure = settings.secureCookie,
@@ -441,9 +444,9 @@ object CookieAuthenticatorService {
  * @param secureCookie Whether this cookie is secured, sent only for HTTPS requests.
  * @param httpOnlyCookie Whether this cookie is HTTP only, i.e. not accessible from client-side JavaScript code.
  * @param useFingerprinting Indicates if a fingerprint of the user should be stored in the authenticator.
- * @param cookieMaxAge The cookie expiration date in seconds, `None` for a transient cookie. Defaults to 12 hours.
- * @param authenticatorIdleTimeout The time in seconds an authenticator can be idle before it timed out. Defaults to 30 minutes.
- * @param authenticatorExpiry The expiry of the authenticator in minutes. Defaults to 12 hours.
+ * @param cookieMaxAge The duration a cookie expires. `None` for a transient cookie. Defaults to 12 hours.
+ * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out. Defaults to 30 minutes.
+ * @param authenticatorExpiry The duration an authenticator expires. Defaults to 12 hours.
  */
 case class CookieAuthenticatorSettings(
   cookieName: String = "id",
@@ -453,6 +456,6 @@ case class CookieAuthenticatorSettings(
   httpOnlyCookie: Boolean = true,
   encryptAuthenticator: Boolean = true,
   useFingerprinting: Boolean = true,
-  cookieMaxAge: Option[Int] = Some(12 * 60 * 60),
-  authenticatorIdleTimeout: Option[Int] = Some(30 * 60),
-  authenticatorExpiry: Int = 12 * 60 * 60)
+  cookieMaxAge: Option[Duration] = Some(12 hours),
+  authenticatorIdleTimeout: Option[Duration] = Some(30 minutes),
+  authenticatorExpiry: Duration = 12 hours)
