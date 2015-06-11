@@ -20,6 +20,7 @@
 package com.mohiva.play.silhouette.impl.services
 
 import java.security.MessageDigest
+import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api.Logger
 import com.mohiva.play.silhouette.api.services.AvatarService
@@ -33,7 +34,8 @@ import scala.concurrent.Future
  *
  * @param httpLayer The HTTP layer implementation.
  */
-class GravatarService(httpLayer: HTTPLayer) extends AvatarService with Logger with ExecutionContextProvider {
+class GravatarService @Inject() (httpLayer: HTTPLayer) extends AvatarService
+  with Logger with ExecutionContextProvider {
 
   /**
    * The execution context to handle the asynchronous operations.
