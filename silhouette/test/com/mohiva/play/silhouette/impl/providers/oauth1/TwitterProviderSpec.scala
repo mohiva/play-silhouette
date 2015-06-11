@@ -88,6 +88,25 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
           )
       }
     }
+
+    "return the social profile with email" in new WithApplication with Context {
+      val requestHolder = mock[WSRequest]
+      val response = mock[WSResponse]
+      requestHolder.sign(any) returns requestHolder
+      requestHolder.get() returns Future.successful(response)
+      response.json returns Helper.loadJson("providers/oauth1/twitter.with.email.json")
+      httpLayer.url(API) returns requestHolder
+
+      profile(provider.retrieveProfile(oAuthInfo)) {
+        case p =>
+          p must be equalTo new CommonSocialProfile(
+            loginInfo = LoginInfo(provider.id, "6253282"),
+            fullName = Some("Apollonia Vanova"),
+            email = Some("apollonia.vanova@watchmen.com"),
+            avatarURL = Some("https://pbs.twimg.com/profile_images/1209905677/appolonia_.jpg")
+          )
+      }
+    }
   }
 
   /**

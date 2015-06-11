@@ -85,11 +85,13 @@ class TwitterProfileParser extends SocialProfileParser[JsValue, CommonSocialProf
   override def parse(json: JsValue) = Future.successful {
     val userID = (json \ "id").as[Long]
     val fullName = (json \ "name").asOpt[String]
+    val email = (json \ "email").asOpt[String]
     val avatarURL = (json \ "profile_image_url_https").asOpt[String]
 
     CommonSocialProfile(
       loginInfo = LoginInfo(ID, userID.toString),
       fullName = fullName,
+      email = email,
       avatarURL = avatarURL)
   }
 }
@@ -144,5 +146,5 @@ object TwitterProvider {
    * The Twitter constants.
    */
   val ID = "twitter"
-  val API = "https://api.twitter.com/1.1/account/verify_credentials.json"
+  val API = "https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true&skip_status=true"
 }
