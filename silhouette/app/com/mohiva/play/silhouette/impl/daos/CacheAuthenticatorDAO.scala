@@ -15,6 +15,8 @@
  */
 package com.mohiva.play.silhouette.impl.daos
 
+import javax.inject.Inject
+
 import com.mohiva.play.silhouette.api.StorableAuthenticator
 import com.mohiva.play.silhouette.api.util.CacheLayer
 
@@ -28,7 +30,8 @@ import scala.reflect.ClassTag
  * @param cacheLayer The cache layer implementation.
  * @tparam T The type of the authenticator to store.
  */
-class CacheAuthenticatorDAO[T <: StorableAuthenticator: ClassTag](cacheLayer: CacheLayer) extends AuthenticatorDAO[T] {
+class CacheAuthenticatorDAO[T <: StorableAuthenticator: ClassTag] @Inject() (cacheLayer: CacheLayer)
+  extends AuthenticatorDAO[T] {
 
   /**
    * Finds the authenticator for the given ID.

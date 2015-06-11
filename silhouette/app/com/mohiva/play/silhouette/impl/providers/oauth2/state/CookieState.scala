@@ -15,6 +15,8 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth2.state
 
+import javax.inject.Inject
+
 import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, Base64, Clock, IDGenerator }
 import com.mohiva.play.silhouette.impl.exceptions.OAuth2StateException
@@ -101,7 +103,7 @@ case class CookieState(expirationDate: DateTime, value: String) extends OAuth2St
  * @param idGenerator The ID generator used to create the state value.
  * @param clock The clock implementation.
  */
-class CookieStateProvider(
+class CookieStateProvider @Inject() (
   settings: CookieStateSettings,
   idGenerator: IDGenerator,
   clock: Clock) extends OAuth2StateProvider {

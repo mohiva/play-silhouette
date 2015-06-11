@@ -15,6 +15,8 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
+import javax.inject.Inject
+
 import com.mohiva.play.silhouette.api.exceptions.ConfigurationException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util._
@@ -40,7 +42,7 @@ import scala.concurrent.{ ExecutionContext, Future }
  * @param passwordHasherList List of password hasher supported by the application.
  * @param executionContext The execution context to handle the asynchronous operations.
  */
-class BasicAuthProvider(
+class BasicAuthProvider @Inject() (
   authInfoRepository: AuthInfoRepository,
   passwordHasher: PasswordHasher,
   passwordHasherList: Seq[PasswordHasher])(implicit val executionContext: ExecutionContext)

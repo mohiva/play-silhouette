@@ -15,6 +15,8 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth1.secrets
 
+import javax.inject.Inject
+
 import com.mohiva.play.silhouette.api.util.{ Clock, ExtractableRequest }
 import com.mohiva.play.silhouette.impl.exceptions.OAuth1TokenSecretException
 import com.mohiva.play.silhouette.impl.providers.oauth1.secrets.CookieSecretProvider._
@@ -96,7 +98,7 @@ case class CookieSecret(value: String, expirationDate: DateTime) extends OAuth1T
  * @param settings The secret settings.
  * @param clock The clock implementation.
  */
-class CookieSecretProvider(
+class CookieSecretProvider @Inject() (
   settings: CookieSecretSettings,
   clock: Clock) extends OAuth1TokenSecretProvider {
 
