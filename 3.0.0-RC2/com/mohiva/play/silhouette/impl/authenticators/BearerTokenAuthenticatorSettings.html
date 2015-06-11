@@ -45,12 +45,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">BearerTokenAuthenticatorSettings</span><span class="params">(<span name="headerName">headerName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;X-Auth-Token&quot;</span></span>, <span name="authenticatorIdleTimeout">authenticatorIdleTimeout: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="symbol">Some(30 * 60)</span></span>, <span name="authenticatorExpiry">authenticatorExpiry: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">12 * 60 * 60</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">BearerTokenAuthenticatorSettings</span><span class="params">(<span name="headerName">headerName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;X-Auth-Token&quot;</span></span>, <span name="authenticatorIdleTimeout">authenticatorIdleTimeout: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a>] = <span class="symbol">Some(30 minutes)</span></span>, <span name="authenticatorExpiry">authenticatorExpiry: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a> = <span class="symbol">12 hours</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The settings for the bearer token authenticator.
-</p></div><dl class="paramcmts block"><dt class="param">headerName</dt><dd class="cmt"><p>The name of the header in which the token will be transfered.</p></dd><dt class="param">authenticatorIdleTimeout</dt><dd class="cmt"><p>The time in seconds an authenticator can be idle before it timed out. Defaults to 30 minutes.</p></dd><dt class="param">authenticatorExpiry</dt><dd class="cmt"><p>The expiry of the authenticator in seconds. Defaults to 12 hours.
+</p></div><dl class="paramcmts block"><dt class="param">headerName</dt><dd class="cmt"><p>The name of the header in which the token will be transferred.</p></dd><dt class="param">authenticatorIdleTimeout</dt><dd class="cmt"><p>The duration an authenticator can be idle before it timed out. Defaults to 30 minutes.</p></dd><dt class="param">authenticatorExpiry</dt><dd class="cmt"><p>The duration an authenticator expires. Defaults to 12 hours.
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
@@ -92,7 +92,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorSettings#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(headerName:String,authenticatorIdleTimeout:Option[Int],authenticatorExpiry:Int):com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorSettings"></a>
+      <a id="&lt;init&gt;(headerName:String,authenticatorIdleTimeout:Option[scala.concurrent.duration.Duration],authenticatorExpiry:scala.concurrent.duration.Duration):com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorSettings"></a>
       <a id="&lt;init&gt;:BearerTokenAuthenticatorSettings"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -100,14 +100,14 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">BearerTokenAuthenticatorSettings</span><span class="params">(<span name="headerName">headerName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;X-Auth-Token&quot;</span></span>, <span name="authenticatorIdleTimeout">authenticatorIdleTimeout: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="symbol">Some(30 * 60)</span></span>, <span name="authenticatorExpiry">authenticatorExpiry: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">12 * 60 * 60</span></span>)</span>
+        <span class="name">BearerTokenAuthenticatorSettings</span><span class="params">(<span name="headerName">headerName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;X-Auth-Token&quot;</span></span>, <span name="authenticatorIdleTimeout">authenticatorIdleTimeout: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a>] = <span class="symbol">Some(30 minutes)</span></span>, <span name="authenticatorExpiry">authenticatorExpiry: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a> = <span class="symbol">12 hours</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorSettings@&lt;init&gt;(headerName:String,authenticatorIdleTimeout:Option[Int],authenticatorExpiry:Int):com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorSettings" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorSettings@&lt;init&gt;(headerName:String,authenticatorIdleTimeout:Option[scala.concurrent.duration.Duration],authenticatorExpiry:scala.concurrent.duration.Duration):com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorSettings" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">headerName</dt><dd class="cmt"><p>The name of the header in which the token will be transfered.</p></dd><dt class="param">authenticatorIdleTimeout</dt><dd class="cmt"><p>The time in seconds an authenticator can be idle before it timed out. Defaults to 30 minutes.</p></dd><dt class="param">authenticatorExpiry</dt><dd class="cmt"><p>The expiry of the authenticator in seconds. Defaults to 12 hours.
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">headerName</dt><dd class="cmt"><p>The name of the header in which the token will be transferred.</p></dd><dt class="param">authenticatorIdleTimeout</dt><dd class="cmt"><p>The duration an authenticator can be idle before it timed out. Defaults to 30 minutes.</p></dd><dt class="param">authenticatorExpiry</dt><dd class="cmt"><p>The duration an authenticator expires. Defaults to 12 hours.
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -187,40 +187,40 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorSettings#authenticatorExpiry" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="authenticatorExpiry:Int"></a>
-      <a id="authenticatorExpiry:Int"></a>
+      <a id="authenticatorExpiry:scala.concurrent.duration.Duration"></a>
+      <a id="authenticatorExpiry:Duration"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">authenticatorExpiry</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">authenticatorExpiry</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorSettings@authenticatorExpiry:Int" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorSettings@authenticatorExpiry:scala.concurrent.duration.Duration" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The expiry of the authenticator in seconds.</p><div class="fullcomment"><div class="comment cmt"><p>The expiry of the authenticator in seconds. Defaults to 12 hours.
+      <p class="shortcomment cmt">The duration an authenticator expires.</p><div class="fullcomment"><div class="comment cmt"><p>The duration an authenticator expires. Defaults to 12 hours.
 </p></div></div>
     </li><li name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorSettings#authenticatorIdleTimeout" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="authenticatorIdleTimeout:Option[Int]"></a>
-      <a id="authenticatorIdleTimeout:Option[Int]"></a>
+      <a id="authenticatorIdleTimeout:Option[scala.concurrent.duration.Duration]"></a>
+      <a id="authenticatorIdleTimeout:Option[Duration]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">authenticatorIdleTimeout</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
+        <span class="name">authenticatorIdleTimeout</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorSettings@authenticatorIdleTimeout:Option[Int]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorSettings@authenticatorIdleTimeout:Option[scala.concurrent.duration.Duration]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The time in seconds an authenticator can be idle before it timed out.</p><div class="fullcomment"><div class="comment cmt"><p>The time in seconds an authenticator can be idle before it timed out. Defaults to 30 minutes.</p></div></div>
+      <p class="shortcomment cmt">The duration an authenticator can be idle before it timed out.</p><div class="fullcomment"><div class="comment cmt"><p>The duration an authenticator can be idle before it timed out. Defaults to 30 minutes.</p></div></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -317,7 +317,7 @@
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The name of the header in which the token will be transfered.</p>
+      <p class="shortcomment cmt">The name of the header in which the token will be transferred.</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
