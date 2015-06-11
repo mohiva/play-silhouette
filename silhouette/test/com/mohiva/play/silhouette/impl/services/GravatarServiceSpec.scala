@@ -69,7 +69,7 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
       await(service.retrieveURL(email)) should beNone
     }
 
-    "return Avatar url" in new Context {
+    "return secure Avatar url" in new Context {
       val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
 
@@ -77,7 +77,33 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
       requestHolder.get() returns Future.successful(response)
       httpLayer.url(any) returns requestHolder
 
-      await(service.retrieveURL(email)) should beSome(URL.format(hash))
+      await(service.retrieveURL(email)) should beSome(SecureURL.format(hash, "?d=404"))
+    }
+
+    "return insecure Avatar url" in new Context {
+      val requestHolder = mock[WSRequest]
+      val response = mock[WSResponse]
+
+      settings.secure returns false
+      response.status returns 200
+      requestHolder.get() returns Future.successful(response)
+      httpLayer.url(any) returns requestHolder
+
+      await(service.retrieveURL(email)) should beSome(InsecureURL.format(hash, "?d=404"))
+    }
+
+    "return an url with additional parameters" in new Context {
+      val requestHolder = mock[WSRequest]
+      val response = mock[WSResponse]
+
+      settings.params returns Map("d" -> "http://example.com/images/avatar.jpg", "s" -> "400")
+      response.status returns 200
+      requestHolder.get() returns Future.successful(response)
+      httpLayer.url(any) returns requestHolder
+
+      await(service.retrieveURL(email)) should beSome(
+        SecureURL.format(hash, "?d=http%3A%2F%2Fexample.com%2Fimages%2Favatar.jpg&s=400")
+      )
     }
 
     "not trim leading zeros" in new Context {
@@ -88,7 +114,9 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
       requestHolder.get() returns Future.successful(response)
       httpLayer.url(any) returns requestHolder
 
-      await(service.retrieveURL("123test@test.com")) should beSome(URL.format("0d77aed6b4c5857473c9a04c2017f8b8"))
+      await(service.retrieveURL("123test@test.com")) should beSome(
+        SecureURL.format("0d77aed6b4c5857473c9a04c2017f8b8", "?d=404")
+      )
     }
   }
 
@@ -107,9 +135,14 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
     }
 
     /**
-     * The gravatar service implementation.
+     * The Gravatar service settings.
      */
-    val service = new GravatarService(httpLayer)
+    val settings = spy(GravatarServiceSettings())
+
+    /**
+     * The Gravatar service implementation.
+     */
+    val service = new GravatarService(httpLayer, settings)
 
     /**
      * The email for which the Avatar should be retrieved.
