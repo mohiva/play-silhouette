@@ -375,12 +375,12 @@ object SessionAuthenticatorService {
  * @param sessionKey The key of the authenticator in the session.
  * @param encryptAuthenticator Indicates if the authenticator should be encrypted in session.
  * @param useFingerprinting Indicates if a fingerprint of the user should be stored in the authenticator.
- * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out. Defaults to 30 minutes.
- * @param authenticatorExpiry The duration an authenticator expires. Defaults to 12 hours.
+ * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out.
+ * @param authenticatorExpiry The duration an authenticator expires after it was created.
  */
 case class SessionAuthenticatorSettings(
   sessionKey: String = "authenticator",
   encryptAuthenticator: Boolean = true,
   useFingerprinting: Boolean = true,
-  authenticatorIdleTimeout: Option[FiniteDuration] = Some(30 minutes),
+  authenticatorIdleTimeout: Option[FiniteDuration] = None,
   authenticatorExpiry: FiniteDuration = 12 hours)

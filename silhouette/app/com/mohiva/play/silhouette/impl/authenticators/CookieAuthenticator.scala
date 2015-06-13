@@ -444,9 +444,9 @@ object CookieAuthenticatorService {
  * @param secureCookie Whether this cookie is secured, sent only for HTTPS requests.
  * @param httpOnlyCookie Whether this cookie is HTTP only, i.e. not accessible from client-side JavaScript code.
  * @param useFingerprinting Indicates if a fingerprint of the user should be stored in the authenticator.
- * @param cookieMaxAge The duration a cookie expires. `None` for a transient cookie. Defaults to 12 hours.
- * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out. Defaults to 30 minutes.
- * @param authenticatorExpiry The duration an authenticator expires. Defaults to 12 hours.
+ * @param cookieMaxAge The duration a cookie expires. `None` for a transient cookie..
+ * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out.
+ * @param authenticatorExpiry The duration an authenticator expires after it was created.
  */
 case class CookieAuthenticatorSettings(
   cookieName: String = "id",
@@ -456,6 +456,6 @@ case class CookieAuthenticatorSettings(
   httpOnlyCookie: Boolean = true,
   encryptAuthenticator: Boolean = true,
   useFingerprinting: Boolean = true,
-  cookieMaxAge: Option[FiniteDuration] = Some(12 hours),
-  authenticatorIdleTimeout: Option[FiniteDuration] = Some(30 minutes),
+  cookieMaxAge: Option[FiniteDuration] = None,
+  authenticatorIdleTimeout: Option[FiniteDuration] = None,
   authenticatorExpiry: FiniteDuration = 12 hours)
