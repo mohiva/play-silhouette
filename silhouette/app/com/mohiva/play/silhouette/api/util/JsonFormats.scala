@@ -27,12 +27,12 @@ import scala.concurrent.duration._
 object JsonFormats {
 
   /**
-   * Converts [[scala.concurrent.duration.Duration]] object to JSON and vice versa.
+   * Converts [[scala.concurrent.duration.FiniteDuration]] object to JSON and vice versa.
    *
    * We use seconds here because it the smallest unit used by Silhouette.
    */
-  implicit object DurationFormat extends Format[Duration] {
-    def reads(json: JsValue): JsResult[Duration] = LongReads.reads(json).map(_.seconds)
-    def writes(o: Duration): JsValue = LongWrites.writes(o.toSeconds)
+  implicit object FiniteDurationFormat extends Format[FiniteDuration] {
+    def reads(json: JsValue): JsResult[FiniteDuration] = LongReads.reads(json).map(_.seconds)
+    def writes(o: FiniteDuration): JsValue = LongWrites.writes(o.toSeconds)
   }
 }

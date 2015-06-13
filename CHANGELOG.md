@@ -3,7 +3,7 @@
 - Update to Play 2.4
 - Stateless and non-stateless CookieAuthenticator
 - Allow to customize the Gravatar service
-- Use scala.concurrent.duration.Duration instead of Int for duration based values
+- Use scala.concurrent.duration.FiniteDuration instead of Int for duration based values
 - A lot of API enhancements
 
 ## 2.0 (2015-03-28)

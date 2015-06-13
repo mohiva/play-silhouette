@@ -66,7 +66,7 @@ case class CookieAuthenticator(
   loginInfo: LoginInfo,
   lastUsedDate: DateTime,
   expirationDate: DateTime,
-  idleTimeout: Option[Duration],
+  idleTimeout: Option[FiniteDuration],
   fingerprint: Option[String])
   extends StorableAuthenticator {
 
@@ -456,6 +456,6 @@ case class CookieAuthenticatorSettings(
   httpOnlyCookie: Boolean = true,
   encryptAuthenticator: Boolean = true,
   useFingerprinting: Boolean = true,
-  cookieMaxAge: Option[Duration] = Some(12 hours),
-  authenticatorIdleTimeout: Option[Duration] = Some(30 minutes),
-  authenticatorExpiry: Duration = 12 hours)
+  cookieMaxAge: Option[FiniteDuration] = Some(12 hours),
+  authenticatorIdleTimeout: Option[FiniteDuration] = Some(30 minutes),
+  authenticatorExpiry: FiniteDuration = 12 hours)

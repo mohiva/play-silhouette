@@ -53,7 +53,7 @@ case class BearerTokenAuthenticator(
   loginInfo: LoginInfo,
   lastUsedDate: DateTime,
   expirationDate: DateTime,
-  idleTimeout: Option[Duration])
+  idleTimeout: Option[FiniteDuration])
   extends StorableAuthenticator {
 
   /**
@@ -311,5 +311,5 @@ object BearerTokenAuthenticatorService {
  */
 case class BearerTokenAuthenticatorSettings(
   headerName: String = "X-Auth-Token",
-  authenticatorIdleTimeout: Option[Duration] = Some(30 minutes),
-  authenticatorExpiry: Duration = 12 hours)
+  authenticatorIdleTimeout: Option[FiniteDuration] = Some(30 minutes),
+  authenticatorExpiry: FiniteDuration = 12 hours)

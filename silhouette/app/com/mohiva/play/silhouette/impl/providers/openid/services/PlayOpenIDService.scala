@@ -44,7 +44,7 @@ class PlayOpenIDService(client: OpenIdClient, settings: OpenIDSettings) extends 
    */
   override def redirectURL(openID: String, resolvedCallbackURL: String)(implicit ec: ExecutionContext): Future[String] = {
     Try {
-      client.redirectURL(openID, resolvedCallbackURL, settings.axRequired, settings.axOptional, settings.realm)
+      client.redirectURL(openID, resolvedCallbackURL, settings.axRequired.toSeq, settings.axOptional.toSeq, settings.realm)
     } match {
       case Success(f) => f
       case Failure(e) => Future.failed(e)
