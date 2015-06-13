@@ -288,6 +288,6 @@ case class OAuth2Settings(
   clientID: String,
   clientSecret: String,
   scope: Option[String] = None,
-  authorizationParams: Map[String, String] = Map(),
-  accessTokenParams: Map[String, String] = Map(),
-  customProperties: Map[String, String] = Map())
+  authorizationParams: Map[String, String] = Map.empty,
+  accessTokenParams: Map[String, String] = Map.empty,
+  customProperties: Map[String, String] = Map.empty)
