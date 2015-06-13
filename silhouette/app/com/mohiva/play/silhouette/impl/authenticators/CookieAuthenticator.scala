@@ -42,11 +42,11 @@ import scala.language.postfixOps
 import scala.util.{ Failure, Success, Try }
 
 /**
- * An authenticator that uses a cookie based approach.
+ * An authenticator that uses a stateful as well as stateless, cookie based approach.
  *
  * It works either by storing an ID in a cookie to track the authenticated user and a server side backing
  * store that maps the ID to an authenticator instance or by a stateless approach that stores the authenticator
- * in a serialized form directly into the cookie.
+ * in a serialized form directly into the cookie. The stateless approach could also be named “server side session”.
  *
  * The authenticator can use sliding window expiration. This means that the authenticator times
  * out after a certain time if it wasn't used. This can be controlled with the [[idleTimeout]]
@@ -253,7 +253,7 @@ class CookieAuthenticatorService(
   /**
    * Creates a new cookie for the given authenticator and return it.
    *
-   * If the non-stateless approach will be used the the authenticator will also be
+   * If the stateful approach will be used the the authenticator will also be
    * stored in the backing store.
    *
    * @param authenticator The authenticator instance.
@@ -321,9 +321,9 @@ class CookieAuthenticatorService(
   /**
    * Updates the authenticator with the new last used date.
    *
-   * If the stateless approach will be used then we update the cookie on the client. With the non-stateless
-   * approach we needn't embed the cookie in the response here because the cookie itself will not be changed.
-   * Only the authenticator in the backing store will be changed.
+   * If the stateless approach will be used then we update the cookie on the client. With the stateful approach
+   * we needn't embed the cookie in the response here because the cookie itself will not be changed. Only the
+   * authenticator in the backing store will be changed.
    *
    * @param authenticator The authenticator to update.
    * @param result The result to manipulate.
@@ -374,7 +374,7 @@ class CookieAuthenticatorService(
   /**
    * Renews an authenticator and replaces the authenticator cookie with a new one.
    *
-   * If the non-stateless approach will be used then the old authenticator will be revoked in the backing
+   * If the stateful approach will be used then the old authenticator will be revoked in the backing
    * store. After that it isn't possible to use a cookie which was bound to this authenticator.
    *
    * @param authenticator The authenticator to update.
@@ -393,7 +393,7 @@ class CookieAuthenticatorService(
   /**
    * Discards the cookie.
    *
-   * If the non-stateless approach will be used then the authenticator will also be removed from backing store.
+   * If the stateful approach will be used then the authenticator will also be removed from backing store.
    *
    * @param result The result to manipulate.
    * @param request The request header.
