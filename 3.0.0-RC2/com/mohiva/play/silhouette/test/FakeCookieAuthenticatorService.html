@@ -263,7 +263,7 @@
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Discards the cookie.</p><div class="fullcomment"><div class="comment cmt"><p>Discards the cookie.</p><p>If the non-stateless approach will be used then the authenticator will also be removed from backing store.</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator instance.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The manipulated result.
+      <p class="shortcomment cmt">Discards the cookie.</p><div class="fullcomment"><div class="comment cmt"><p>Discards the cookie.</p><p>If the stateful approach will be used then the authenticator will also be removed from backing store.</p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator instance.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The manipulated result.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../impl/authenticators/CookieAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService">CookieAuthenticatorService</a> → <a href="../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService#embed" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="embed(cookie:play.api.mvc.Cookie,request:play.api.mvc.RequestHeader):play.api.mvc.RequestHeader"></a>
@@ -394,7 +394,7 @@
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Creates a new cookie for the given authenticator and return it.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a new cookie for the given authenticator and return it.</p><p>If the non-stateless approach will be used the the authenticator will also be
+      <p class="shortcomment cmt">Creates a new cookie for the given authenticator and return it.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a new cookie for the given authenticator and return it.</p><p>If the stateful approach will be used the the authenticator will also be
 stored in the backing store.
 </p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator instance.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The serialized authenticator value.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../impl/authenticators/CookieAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService">CookieAuthenticatorService</a> → <a href="../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
@@ -500,7 +500,7 @@ stored in the backing store.
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Renews an authenticator and replaces the authenticator cookie with a new one.</p><div class="fullcomment"><div class="comment cmt"><p>Renews an authenticator and replaces the authenticator cookie with a new one.</p><p>If the non-stateless approach will be used then the old authenticator will be revoked in the backing
+      <p class="shortcomment cmt">Renews an authenticator and replaces the authenticator cookie with a new one.</p><div class="fullcomment"><div class="comment cmt"><p>Renews an authenticator and replaces the authenticator cookie with a new one.</p><p>If the stateful approach will be used then the old authenticator will be revoked in the backing
 store. After that it isn't possible to use a cookie which was bound to this authenticator.
 </p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to update.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The original or a manipulated result.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../impl/authenticators/CookieAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService">CookieAuthenticatorService</a> → <a href="../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
@@ -617,9 +617,9 @@ be updated later by the <a href="../impl/authenticators/CookieAuthenticatorServi
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Updates the authenticator with the new last used date.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the authenticator with the new last used date.</p><p>If the stateless approach will be used then we update the cookie on the client. With the non-stateless
-approach we needn't embed the cookie in the response here because the cookie itself will not be changed.
-Only the authenticator in the backing store will be changed.
+      <p class="shortcomment cmt">Updates the authenticator with the new last used date.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the authenticator with the new last used date.</p><p>If the stateless approach will be used then we update the cookie on the client. With the stateful approach
+we needn't embed the cookie in the response here because the cookie itself will not be changed. Only the
+authenticator in the backing store will be changed.
 </p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to update.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The original or a manipulated result.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../impl/authenticators/CookieAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService">CookieAuthenticatorService</a> → <a href="../api/services/AuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">

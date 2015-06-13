@@ -51,9 +51,9 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An authenticator that uses a cookie based approach.</p><p>It works either by storing an ID in a cookie to track the authenticated user and a server side backing
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An authenticator that uses a stateful as well as stateless, cookie based approach.</p><p>It works either by storing an ID in a cookie to track the authenticated user and a server side backing
 store that maps the ID to an authenticator instance or by a stateless approach that stores the authenticator
-in a serialized form directly into the cookie.</p><p>The authenticator can use sliding window expiration. This means that the authenticator times
+in a serialized form directly into the cookie. The stateless approach could also be named “server side session”.</p><p>The authenticator can use sliding window expiration. This means that the authenticator times
 out after a certain time if it wasn't used. This can be controlled with the <a href="#idleTimeout:Option[scala.concurrent.duration.FiniteDuration]" class="extmbr" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator#idleTimeout">idleTimeout</a>
 property.</p><p>Note: If deploying to multiple nodes the backing store will need to synchronize.
 </p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The authenticator ID.</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info for an identity.</p></dd><dt class="param">lastUsedDate</dt><dd class="cmt"><p>The last used timestamp.</p></dd><dt class="param">expirationDate</dt><dd class="cmt"><p>The expiration time.</p></dd><dt class="param">idleTimeout</dt><dd class="cmt"><p>The duration an authenticator can be idle before it timed out.</p></dd><dt class="param">fingerprint</dt><dd class="cmt"><p>Maybe a fingerprint of the user.
