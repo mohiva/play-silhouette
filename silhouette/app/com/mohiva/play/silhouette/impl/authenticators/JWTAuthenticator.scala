@@ -66,7 +66,7 @@ case class JWTAuthenticator(
   loginInfo: LoginInfo,
   lastUsedDate: DateTime,
   expirationDate: DateTime,
-  idleTimeout: Option[Duration],
+  idleTimeout: Option[FiniteDuration],
   customClaims: Option[JsObject] = None)
   extends StorableAuthenticator {
 
@@ -482,6 +482,6 @@ case class JWTAuthenticatorSettings(
   headerName: String = "X-Auth-Token",
   issuerClaim: String = "play-silhouette",
   encryptSubject: Boolean = true,
-  authenticatorIdleTimeout: Option[Duration] = None, // This feature is disabled by default to prevent the generation of a new JWT on every request
-  authenticatorExpiry: Duration = 12 hours,
+  authenticatorIdleTimeout: Option[FiniteDuration] = None, // This feature is disabled by default to prevent the generation of a new JWT on every request
+  authenticatorExpiry: FiniteDuration = 12 hours,
   sharedSecret: String)

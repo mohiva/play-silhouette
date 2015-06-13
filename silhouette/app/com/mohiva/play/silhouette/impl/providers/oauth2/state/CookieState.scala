@@ -223,4 +223,4 @@ case class CookieStateSettings(
   cookieDomain: Option[String] = None,
   secureCookie: Boolean = Play.isProd, // Default to sending only for HTTPS in production, but not for development and test.
   httpOnlyCookie: Boolean = true,
-  expirationTime: Duration = 5 minutes)
+  expirationTime: FiniteDuration = 5 minutes)

@@ -27,29 +27,29 @@ import scala.concurrent.duration._
  */
 class JsonFormatsSpec extends PlaySpecification with JsonMatchers {
 
-  "A implicit `DurationFormat` object" should {
-    "convert a Duration in seconds to Json" in {
+  "A implicit `FiniteDurationFormat` object" should {
+    "convert a FiniteDuration in seconds to Json" in {
       val json = Json.obj("value" -> 10.seconds)
 
       json.toString() must /("value" -> 10)
     }
 
-    "convert a Duration in minutes to Json" in {
+    "convert a FiniteDuration in minutes to Json" in {
       val json = Json.obj("value" -> 10.minutes)
 
       json.toString() must /("value" -> (10 * 60))
     }
 
-    "convert Json into a Duration in seconds" in {
+    "convert Json into a FiniteDuration in seconds" in {
       val json = Json.obj("value" -> 10.seconds)
 
-      (json \ "value").as[Duration] must be equalTo 10.seconds
+      (json \ "value").as[FiniteDuration] must be equalTo 10.seconds
     }
 
-    "convert Json into a Duration in minutes" in {
+    "convert Json into a FiniteDuration in minutes" in {
       val json = Json.obj("value" -> 10.minutes)
 
-      (json \ "value").as[Duration] must be equalTo 10.minutes
+      (json \ "value").as[FiniteDuration] must be equalTo 10.minutes
     }
   }
 }

@@ -128,8 +128,8 @@ trait OpenIDService {
 case class OpenIDSettings(
   providerURL: String,
   callbackURL: String,
-  axRequired: Seq[(String, String)] = Seq.empty,
-  axOptional: Seq[(String, String)] = Seq.empty,
+  axRequired: Map[String, String] = Map.empty,
+  axOptional: Map[String, String] = Map.empty,
   realm: Option[String] = None)
 
 /**

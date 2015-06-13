@@ -52,7 +52,7 @@ case class SessionAuthenticator(
   loginInfo: LoginInfo,
   lastUsedDate: DateTime,
   expirationDate: DateTime,
-  idleTimeout: Option[Duration],
+  idleTimeout: Option[FiniteDuration],
   fingerprint: Option[String])
   extends Authenticator {
 
@@ -382,5 +382,5 @@ case class SessionAuthenticatorSettings(
   sessionKey: String = "authenticator",
   encryptAuthenticator: Boolean = true,
   useFingerprinting: Boolean = true,
-  authenticatorIdleTimeout: Option[Duration] = Some(30 minutes),
-  authenticatorExpiry: Duration = 12 hours)
+  authenticatorIdleTimeout: Option[FiniteDuration] = Some(30 minutes),
+  authenticatorExpiry: FiniteDuration = 12 hours)
