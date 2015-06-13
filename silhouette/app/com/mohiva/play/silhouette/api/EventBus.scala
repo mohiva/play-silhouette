@@ -110,7 +110,7 @@ class EventBus extends ActorEventBus with SubchannelClassification {
    * Returns the Classifier associated with the given Event.
    *
    * @param event The event for which the Classifier should be returned.
-   * @return The Classifier for the given Event..
+   * @return The Classifier for the given Event.
    */
   override protected def classify(event: Event): Classifier = event.getClass
 }
