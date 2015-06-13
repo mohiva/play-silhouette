@@ -475,13 +475,13 @@ object JWTAuthenticatorService {
  * @param issuerClaim The issuer claim identifies the principal that issued the JWT.
  * @param encryptSubject Indicates if the subject should be encrypted in JWT.
  * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out.
- * @param authenticatorExpiry The duration an authenticator expires.
+ * @param authenticatorExpiry The duration an authenticator expires after it was created.
  * @param sharedSecret The shared secret to sign the JWT.
  */
 case class JWTAuthenticatorSettings(
   headerName: String = "X-Auth-Token",
   issuerClaim: String = "play-silhouette",
   encryptSubject: Boolean = true,
-  authenticatorIdleTimeout: Option[FiniteDuration] = None, // This feature is disabled by default to prevent the generation of a new JWT on every request
+  authenticatorIdleTimeout: Option[FiniteDuration] = None,
   authenticatorExpiry: FiniteDuration = 12 hours,
   sharedSecret: String)

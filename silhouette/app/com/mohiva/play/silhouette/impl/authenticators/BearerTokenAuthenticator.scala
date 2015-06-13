@@ -306,10 +306,10 @@ object BearerTokenAuthenticatorService {
  * The settings for the bearer token authenticator.
  *
  * @param headerName The name of the header in which the token will be transferred.
- * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out. Defaults to 30 minutes.
- * @param authenticatorExpiry The duration an authenticator expires. Defaults to 12 hours.
+ * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out.
+ * @param authenticatorExpiry The duration an authenticator expires after it was created.
  */
 case class BearerTokenAuthenticatorSettings(
   headerName: String = "X-Auth-Token",
-  authenticatorIdleTimeout: Option[FiniteDuration] = Some(30 minutes),
+  authenticatorIdleTimeout: Option[FiniteDuration] = None,
   authenticatorExpiry: FiniteDuration = 12 hours)
