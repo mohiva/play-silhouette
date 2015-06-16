@@ -513,6 +513,15 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
     }
   }
 
+
+  "Creating CookieAuthenticatorSettings" should {
+    "not require a started application to create a default instance" in {
+      val cas = CookieAuthenticatorSettings()
+      cas.secureCookie must be equalTo false
+    }
+  }
+  
+
   /**
    * The context.
    */

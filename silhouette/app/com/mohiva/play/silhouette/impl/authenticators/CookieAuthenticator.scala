@@ -421,7 +421,8 @@ case class CookieAuthenticatorSettings(
   cookieName: String = "id",
   cookiePath: String = "/",
   cookieDomain: Option[String] = None,
-  secureCookie: Boolean = Play.isProd, // Default to sending only for HTTPS in production, but not for development and test.
+  // Default to sending only for HTTPS in production, but not for development, test, or no application at all.
+  secureCookie: Boolean = Play.maybeApplication.map(app => Play.isProd(app)).getOrElse(false), 
   httpOnlyCookie: Boolean = true,
   encryptAuthenticator: Boolean = true,
   useFingerprinting: Boolean = true,
