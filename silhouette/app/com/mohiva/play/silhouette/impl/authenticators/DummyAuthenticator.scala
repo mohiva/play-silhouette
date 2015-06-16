@@ -36,11 +36,6 @@ case class DummyAuthenticator(loginInfo: LoginInfo) extends Authenticator {
   override type Value = Unit
 
   /**
-   * The type of the settings an authenticator can handle.
-   */
-  override type Settings = Unit
-
-  /**
    * Authenticator is always valid.
    *
    * @return True because it's always valid.
@@ -55,26 +50,6 @@ case class DummyAuthenticator(loginInfo: LoginInfo) extends Authenticator {
  */
 class DummyAuthenticatorService(implicit val executionContext: ExecutionContext)
   extends AuthenticatorService[DummyAuthenticator] {
-
-  /**
-   * The type of this class.
-   */
-  override type Self = DummyAuthenticatorService
-
-  /**
-   * Gets the authenticator settings.
-   *
-   * @return The authenticator settings.
-   */
-  override def settings = ()
-
-  /**
-   * Gets an authenticator service initialized with a new settings object.
-   *
-   * @param f A function which gets the settings passed and returns different settings.
-   * @return An instance of the authenticator service initialized with new settings.
-   */
-  override def withSettings(f: Unit => Unit) = new DummyAuthenticatorService()
 
   /**
    * Creates a new authenticator for the specified login info.

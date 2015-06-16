@@ -19,6 +19,11 @@
  */
 package com.mohiva.play.silhouette.api
 
+import com.mohiva.play.silhouette.api.Authenticator.Implicits._
+import org.joda.time.DateTime
+
+import scala.concurrent.duration.FiniteDuration
+
 /**
  * An authenticator tracks an authenticated user.
  */
@@ -42,11 +47,51 @@ trait Authenticator {
   def loginInfo: LoginInfo
 
   /**
-   * Checks if the authenticator isn't expired and isn't timed out.
+   * Checks if the authenticator valid.
    *
-   * @return True if the authenticator isn't expired and isn't timed out.
+   * @return True if the authenticator valid, false otherwise.
    */
   def isValid: Boolean
+}
+
+/**
+ * The `Authenticator` companion object.
+ */
+object Authenticator {
+
+  /**
+   * Some implicits.
+   */
+  object Implicits {
+
+    /**
+     * Defines additional methods on an `DateTime` instance.
+     *
+     * @param dateTime The `DateTime` instance on which the additional methods should be defined.
+     */
+    implicit class RichDateTime(dateTime: DateTime) {
+
+      /**
+       * Adds a duration to a date/time.
+       *
+       * @param duration The duration to add.
+       * @return A date/time instance with the added duration.
+       */
+      def +(duration: FiniteDuration) = {
+        dateTime.plusSeconds(duration.toSeconds.toInt)
+      }
+
+      /**
+       * Subtracts a duration from a date/time.
+       *
+       * @param duration The duration to subtract.
+       * @return A date/time instance with the subtracted duration.
+       */
+      def -(duration: FiniteDuration) = {
+        dateTime.minusSeconds(duration.toSeconds.toInt)
+      }
+    }
+  }
 }
 
 /**
@@ -60,4 +105,48 @@ trait StorableAuthenticator extends Authenticator {
    * @return The ID to reference the authenticator in the backing store.
    */
   def id: String
+}
+
+/**
+ * An authenticator that may expire.
+ */
+trait ExpirableAuthenticator extends Authenticator {
+
+  /**
+   * The last used date/time.
+   */
+  val lastUsedDateTime: DateTime
+
+  /**
+   * The expiration date/time.
+   */
+  val expirationDateTime: DateTime
+
+  /**
+   * The duration an authenticator can be idle before it timed out.
+   */
+  val idleTimeout: Option[FiniteDuration]
+
+  /**
+   * Checks if the authenticator isn't expired and isn't timed out.
+   *
+   * @return True if the authenticator isn't expired and isn't timed out.
+   */
+  override def isValid = !isExpired && !isTimedOut
+
+  /**
+   * Checks if the authenticator is expired. This is an absolute timeout since the creation of
+   * the authenticator.
+   *
+   * @return True if the authenticator is expired, false otherwise.
+   */
+  def isExpired = expirationDateTime.isBeforeNow
+
+  /**
+   * Checks if the time elapsed since the last time the authenticator was used, is longer than
+   * the maximum idle timeout specified in the properties.
+   *
+   * @return True if sliding window expiration is activated and the authenticator is timed out, false otherwise.
+   */
+  def isTimedOut = idleTimeout.isDefined && (lastUsedDateTime + idleTimeout.get).isBeforeNow
 }

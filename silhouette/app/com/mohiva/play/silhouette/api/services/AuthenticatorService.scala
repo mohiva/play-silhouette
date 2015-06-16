@@ -84,26 +84,6 @@ object AuthenticatorResult {
 trait AuthenticatorService[T <: Authenticator] extends ExecutionContextProvider {
 
   /**
-   * The type of the concrete implementation of this abstract type.
-   */
-  type Self <: AuthenticatorService[T]
-
-  /**
-   * Gets the authenticator settings.
-   *
-   * @return The authenticator settings.
-   */
-  def settings: T#Settings
-
-  /**
-   * Gets an authenticator service initialized with a new settings object.
-   *
-   * @param f A function which gets the settings passed and returns different settings.
-   * @return An instance of the authenticator service initialized with new settings.
-   */
-  def withSettings(f: T#Settings => T#Settings): Self
-
-  /**
    * Creates a new authenticator for the specified login info.
    *
    * @param loginInfo The login info for which the authenticator should be created.
