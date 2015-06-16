@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">BearerTokenAuthenticator</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loginInfo">loginInfo: <a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>, <span name="lastUsedDate">lastUsedDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="expirationDate">expirationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="idleTimeout">idleTimeout: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a>]</span>)</span><span class="result"> extends <a href="../../api/StorableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.api.StorableAuthenticator">StorableAuthenticator</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">BearerTokenAuthenticator</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loginInfo">loginInfo: <a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>, <span name="lastUsedDateTime">lastUsedDateTime: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="expirationDateTime">expirationDateTime: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="idleTimeout">idleTimeout: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a>]</span>)</span><span class="result"> extends <a href="../../api/StorableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.api.StorableAuthenticator">StorableAuthenticator</a> with <a href="../../api/ExpirableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.api.ExpirableAuthenticator">ExpirableAuthenticator</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -54,10 +54,10 @@ works by transporting a token in a user defined header to track the authenticate
 and a server side backing store that maps the token to an authenticator instance.</p><p>The authenticator can use sliding window expiration. This means that the authenticator times
 out after a certain time if it wasn't used. This can be controlled with the <a href="#idleTimeout:Option[scala.concurrent.duration.FiniteDuration]" class="extmbr" name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator#idleTimeout">idleTimeout</a>
 property.</p><p>Note: If deploying to multiple nodes the backing store will need to synchronize.
-</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The authenticator ID.</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info for an identity.</p></dd><dt class="param">lastUsedDate</dt><dd class="cmt"><p>The last used timestamp.</p></dd><dt class="param">expirationDate</dt><dd class="cmt"><p>The expiration time.</p></dd><dt class="param">idleTimeout</dt><dd class="cmt"><p>The duration an authenticator can be idle before it timed out.
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The authenticator ID.</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info for an identity.</p></dd><dt class="param">lastUsedDateTime</dt><dd class="cmt"><p>The last used date/time.</p></dd><dt class="param">expirationDateTime</dt><dd class="cmt"><p>The expiration date/time.</p></dd><dt class="param">idleTimeout</dt><dd class="cmt"><p>The duration an authenticator can be idle before it timed out.
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="../../api/StorableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.api.StorableAuthenticator">StorableAuthenticator</a>, <a href="../../api/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="../../api/ExpirableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.api.ExpirableAuthenticator">ExpirableAuthenticator</a>, <a href="../../api/StorableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.api.StorableAuthenticator">StorableAuthenticator</a>, <a href="../../api/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -75,7 +75,7 @@ property.</p><p>Note: If deploying to multiple nodes the backing store will need
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator"><span>BearerTokenAuthenticator</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="com.mohiva.play.silhouette.api.StorableAuthenticator"><span>StorableAuthenticator</span></li><li class="in" name="com.mohiva.play.silhouette.api.Authenticator"><span>Authenticator</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator"><span>BearerTokenAuthenticator</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="com.mohiva.play.silhouette.api.ExpirableAuthenticator"><span>ExpirableAuthenticator</span></li><li class="in" name="com.mohiva.play.silhouette.api.StorableAuthenticator"><span>StorableAuthenticator</span></li><li class="in" name="com.mohiva.play.silhouette.api.Authenticator"><span>Authenticator</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -96,7 +96,7 @@ property.</p><p>Note: If deploying to multiple nodes the backing store will need
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(id:String,loginInfo:com.mohiva.play.silhouette.api.LoginInfo,lastUsedDate:org.joda.time.DateTime,expirationDate:org.joda.time.DateTime,idleTimeout:Option[scala.concurrent.duration.FiniteDuration]):com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator"></a>
+      <a id="&lt;init&gt;(id:String,loginInfo:com.mohiva.play.silhouette.api.LoginInfo,lastUsedDateTime:org.joda.time.DateTime,expirationDateTime:org.joda.time.DateTime,idleTimeout:Option[scala.concurrent.duration.FiniteDuration]):com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator"></a>
       <a id="&lt;init&gt;:BearerTokenAuthenticator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -104,38 +104,38 @@ property.</p><p>Note: If deploying to multiple nodes the backing store will need
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">BearerTokenAuthenticator</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loginInfo">loginInfo: <a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>, <span name="lastUsedDate">lastUsedDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="expirationDate">expirationDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="idleTimeout">idleTimeout: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a>]</span>)</span>
+        <span class="name">BearerTokenAuthenticator</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loginInfo">loginInfo: <a href="../../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>, <span name="lastUsedDateTime">lastUsedDateTime: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="expirationDateTime">expirationDateTime: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="idleTimeout">idleTimeout: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator@&lt;init&gt;(id:String,loginInfo:com.mohiva.play.silhouette.api.LoginInfo,lastUsedDate:org.joda.time.DateTime,expirationDate:org.joda.time.DateTime,idleTimeout:Option[scala.concurrent.duration.FiniteDuration]):com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator@&lt;init&gt;(id:String,loginInfo:com.mohiva.play.silhouette.api.LoginInfo,lastUsedDateTime:org.joda.time.DateTime,expirationDateTime:org.joda.time.DateTime,idleTimeout:Option[scala.concurrent.duration.FiniteDuration]):com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The authenticator ID.</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info for an identity.</p></dd><dt class="param">lastUsedDate</dt><dd class="cmt"><p>The last used timestamp.</p></dd><dt class="param">expirationDate</dt><dd class="cmt"><p>The expiration time.</p></dd><dt class="param">idleTimeout</dt><dd class="cmt"><p>The duration an authenticator can be idle before it timed out.
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>The authenticator ID.</p></dd><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info for an identity.</p></dd><dt class="param">lastUsedDateTime</dt><dd class="cmt"><p>The last used date/time.</p></dd><dt class="param">expirationDateTime</dt><dd class="cmt"><p>The expiration date/time.</p></dd><dt class="param">idleTimeout</dt><dd class="cmt"><p>The duration an authenticator can be idle before it timed out.
 </p></dd></dl></div>
     </li></ol>
             </div>
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator.Settings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Settings=com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorSettings"></a>
+              <ol><li name="com.mohiva.play.silhouette.api.Authenticator.Settings" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Settings"></a>
       <a id="Settings:Settings"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">abstract </span>
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Settings</span><span class="result"> = <a href="BearerTokenAuthenticatorSettings.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorSettings">BearerTokenAuthenticatorSettings</a></span>
+        <span class="name">Settings</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator@Settings=com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorSettings" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator@Settings" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">The type of the settings an authenticator can handle.</p><div class="fullcomment"><div class="comment cmt"><p>The type of the settings an authenticator can handle.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator">BearerTokenAuthenticator</a> → <a href="../../api/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../api/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator.Value" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Value=String"></a>
       <a id="Value:Value"></a>
@@ -269,23 +269,23 @@ property.</p><p>Note: If deploying to multiple nodes the backing store will need
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator#expirationDate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="expirationDate:org.joda.time.DateTime"></a>
-      <a id="expirationDate:DateTime"></a>
+    </li><li name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator#expirationDateTime" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="expirationDateTime:org.joda.time.DateTime"></a>
+      <a id="expirationDateTime:DateTime"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">expirationDate</span><span class="result">: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>
+        <span class="name">expirationDateTime</span><span class="result">: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator@expirationDate:org.joda.time.DateTime" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator@expirationDateTime:org.joda.time.DateTime" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The expiration time.</p>
+      <p class="shortcomment cmt">The expiration date/time.</p><div class="fullcomment"><div class="comment cmt"><p>The expiration date/time.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator">BearerTokenAuthenticator</a> → <a href="../../api/ExpirableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.api.ExpirableAuthenticator">ExpirableAuthenticator</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -343,7 +343,7 @@ property.</p><p>Note: If deploying to multiple nodes the backing store will need
       </a>
     </span>
       <p class="shortcomment cmt">The authenticator ID.</p><div class="fullcomment"><div class="comment cmt"><p>The authenticator ID.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator">BearerTokenAuthenticator</a> → <a href="../../api/StorableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.api.StorableAuthenticator">StorableAuthenticator</a></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator#idleTimeout" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator#idleTimeout" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="idleTimeout:Option[scala.concurrent.duration.FiniteDuration]"></a>
       <a id="idleTimeout:Option[FiniteDuration]"></a>
       <h4 class="signature">
@@ -359,7 +359,28 @@ property.</p><p>Note: If deploying to multiple nodes the backing store will need
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The duration an authenticator can be idle before it timed out.</p>
+      <p class="shortcomment cmt">The duration an authenticator can be idle before it timed out.</p><div class="fullcomment"><div class="comment cmt"><p>The duration an authenticator can be idle before it timed out.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator">BearerTokenAuthenticator</a> → <a href="../../api/ExpirableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.api.ExpirableAuthenticator">ExpirableAuthenticator</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.ExpirableAuthenticator#isExpired" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isExpired:Boolean"></a>
+      <a id="isExpired:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isExpired</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator@isExpired:Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Checks if the authenticator is expired.</p><div class="fullcomment"><div class="comment cmt"><p>Checks if the authenticator is expired. This is an absolute timeout since the creation of
+the authenticator.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>True if the authenticator is expired, false otherwise.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../api/ExpirableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.api.ExpirableAuthenticator">ExpirableAuthenticator</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -377,7 +398,28 @@ property.</p><p>Note: If deploying to multiple nodes the backing store will need
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator#isValid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.mohiva.play.silhouette.api.ExpirableAuthenticator#isTimedOut" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isTimedOut:Boolean"></a>
+      <a id="isTimedOut:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isTimedOut</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator@isTimedOut:Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Checks if the time elapsed since the last time the authenticator was used, is longer than
+the maximum idle timeout specified in the properties.</p><div class="fullcomment"><div class="comment cmt"><p>Checks if the time elapsed since the last time the authenticator was used, is longer than
+the maximum idle timeout specified in the properties.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>True if sliding window expiration is activated and the authenticator is timed out, false otherwise.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../api/ExpirableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.api.ExpirableAuthenticator">ExpirableAuthenticator</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.ExpirableAuthenticator#isValid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isValid:Boolean"></a>
       <a id="isValid:Boolean"></a>
       <h4 class="signature">
@@ -395,24 +437,24 @@ property.</p><p>Note: If deploying to multiple nodes the backing store will need
     </span>
       <p class="shortcomment cmt">Checks if the authenticator isn't expired and isn't timed out.</p><div class="fullcomment"><div class="comment cmt"><p>Checks if the authenticator isn't expired and isn't timed out.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>True if the authenticator isn't expired and isn't timed out.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator">BearerTokenAuthenticator</a> → <a href="../../api/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator#lastUsedDate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="lastUsedDate:org.joda.time.DateTime"></a>
-      <a id="lastUsedDate:DateTime"></a>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../api/ExpirableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.api.ExpirableAuthenticator">ExpirableAuthenticator</a> → <a href="../../api/Authenticator.html" class="extype" name="com.mohiva.play.silhouette.api.Authenticator">Authenticator</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator#lastUsedDateTime" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="lastUsedDateTime:org.joda.time.DateTime"></a>
+      <a id="lastUsedDateTime:DateTime"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">lastUsedDate</span><span class="result">: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>
+        <span class="name">lastUsedDateTime</span><span class="result">: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator@lastUsedDate:org.joda.time.DateTime" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator@lastUsedDateTime:org.joda.time.DateTime" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The last used timestamp.</p>
+      <p class="shortcomment cmt">The last used date/time.</p><div class="fullcomment"><div class="comment cmt"><p>The last used date/time.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator">BearerTokenAuthenticator</a> → <a href="../../api/ExpirableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.api.ExpirableAuthenticator">ExpirableAuthenticator</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator#loginInfo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loginInfo:com.mohiva.play.silhouette.api.LoginInfo"></a>
       <a id="loginInfo:LoginInfo"></a>
@@ -584,6 +626,8 @@ property.</p><p>Note: If deploying to multiple nodes the backing store will need
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
             </div><div class="parent" name="scala.Equals">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
+            </div><div class="parent" name="com.mohiva.play.silhouette.api.ExpirableAuthenticator">
+              <h3>Inherited from <a href="../../api/ExpirableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.api.ExpirableAuthenticator">ExpirableAuthenticator</a></h3>
             </div><div class="parent" name="com.mohiva.play.silhouette.api.StorableAuthenticator">
               <h3>Inherited from <a href="../../api/StorableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.api.StorableAuthenticator">StorableAuthenticator</a></h3>
             </div><div class="parent" name="com.mohiva.play.silhouette.api.Authenticator">

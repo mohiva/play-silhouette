@@ -96,27 +96,7 @@
         <div id="allMembers">
         
 
-        <div id="types" class="types members">
-              <h3>Type Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService.Self" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Self&lt;:com.mohiva.play.silhouette.api.services.AuthenticatorService[T]"></a>
-      <a id="Self:Self"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name">Self</span><span class="result"> &lt;: <a href="" class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService">AuthenticatorService</a>[<span class="extype" name="com.mohiva.play.silhouette.api.services.AuthenticatorService.T">T</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@Self&lt;:com.mohiva.play.silhouette.api.services.AuthenticatorService[T]" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">The type of the concrete implementation of this abstract type.</p>
-    </li></ol>
-            </div>
+        
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
@@ -298,25 +278,6 @@ creating a new one. If the authenticator was updated, then the updated artifacts
       <p class="shortcomment cmt">Retrieves the authenticator from request.</p><div class="fullcomment"><div class="comment cmt"><p>Retrieves the authenticator from request.
 </p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>Some authenticator or None if no authenticator could be found in request.
 </p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#settings" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="settings:T#Settings"></a>
-      <a id="settings:T.Settings"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">settings</span><span class="result">: <span class="extype" name="com.mohiva.play.silhouette.api.Authenticator.Settings">T.Settings</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@settings:T#Settings" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Gets the authenticator settings.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the authenticator settings.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The authenticator settings.
-</p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#touch" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="touch(authenticator:T):Either[T,T]"></a>
       <a id="touch(T):Either[T,T]"></a>
@@ -361,25 +322,6 @@ be updated later by the <a href="#update(authenticator:T,result:play.api.mvc.Res
 This method gets called on every subsequent request if an identity accesses a Silhouette action,
 expect the authenticator was not touched.
 </p></div><dl class="paramcmts block"><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator to update.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to manipulate.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The original or a manipulated result.
-</p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.api.services.AuthenticatorService#withSettings" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="withSettings(f:T#Settings=&gt;T#Settings):AuthenticatorService.this.Self"></a>
-      <a id="withSettings((T.Settings)⇒T.Settings):Self"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">withSettings</span><span class="params">(<span name="f">f: (<span class="extype" name="com.mohiva.play.silhouette.api.Authenticator.Settings">T.Settings</span>) ⇒ <span class="extype" name="com.mohiva.play.silhouette.api.Authenticator.Settings">T.Settings</span></span>)</span><span class="result">: <a href="#Self&lt;:com.mohiva.play.silhouette.api.services.AuthenticatorService[T]" class="extmbr" name="com.mohiva.play.silhouette.api.services.AuthenticatorService.Self">Self</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.services.AuthenticatorService@withSettings(f:T#Settings=&gt;T#Settings):AuthenticatorService.this.Self" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Gets an authenticator service initialized with a new settings object.</p><div class="fullcomment"><div class="comment cmt"><p>Gets an authenticator service initialized with a new settings object.
-</p></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>A function which gets the settings passed and returns different settings.</p></dd><dt>returns</dt><dd class="cmt"><p>An instance of the authenticator service initialized with new settings.
 </p></dd></dl></div>
     </li></ol>
             </div>
