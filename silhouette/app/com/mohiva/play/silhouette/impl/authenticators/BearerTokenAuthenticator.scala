@@ -16,11 +16,12 @@
 package com.mohiva.play.silhouette.impl.authenticators
 
 import com.mohiva.play.silhouette._
+import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
+import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
 import com.mohiva.play.silhouette.api.util.{ Clock, IDGenerator }
-import com.mohiva.play.silhouette.api.{ Logger, LoginInfo, StorableAuthenticator }
+import com.mohiva.play.silhouette.api.{ ExpirableAuthenticator, Logger, LoginInfo, StorableAuthenticator }
 import com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorService._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import org.joda.time.DateTime
@@ -44,50 +45,22 @@ import scala.util.Try
  *
  * @param id The authenticator ID.
  * @param loginInfo The linked login info for an identity.
- * @param lastUsedDate The last used timestamp.
- * @param expirationDate The expiration time.
+ * @param lastUsedDateTime The last used date/time.
+ * @param expirationDateTime The expiration date/time.
  * @param idleTimeout The duration an authenticator can be idle before it timed out.
  */
 case class BearerTokenAuthenticator(
   id: String,
   loginInfo: LoginInfo,
-  lastUsedDate: DateTime,
-  expirationDate: DateTime,
+  lastUsedDateTime: DateTime,
+  expirationDateTime: DateTime,
   idleTimeout: Option[FiniteDuration])
-  extends StorableAuthenticator {
+  extends StorableAuthenticator with ExpirableAuthenticator {
 
   /**
    * The Type of the generated value an authenticator will be serialized to.
    */
   override type Value = String
-
-  /**
-   * The type of the settings an authenticator can handle.
-   */
-  override type Settings = BearerTokenAuthenticatorSettings
-
-  /**
-   * Checks if the authenticator isn't expired and isn't timed out.
-   *
-   * @return True if the authenticator isn't expired and isn't timed out.
-   */
-  override def isValid = !isExpired && !isTimedOut
-
-  /**
-   * Checks if the authenticator is expired. This is an absolute timeout since the creation of
-   * the authenticator.
-   *
-   * @return True if the authenticator is expired, false otherwise.
-   */
-  private def isExpired = expirationDate.isBeforeNow
-
-  /**
-   * Checks if the time elapsed since the last time the authenticator was used is longer than
-   * the maximum idle timeout specified in the properties.
-   *
-   * @return True if sliding window expiration is activated and the authenticator is timed out, false otherwise.
-   */
-  private def isTimedOut = idleTimeout.isDefined && lastUsedDate.plusSeconds(idleTimeout.get.toSeconds.toInt).isBeforeNow
 }
 
 /**
@@ -100,27 +73,12 @@ case class BearerTokenAuthenticator(
  * @param executionContext The execution context to handle the asynchronous operations.
  */
 class BearerTokenAuthenticatorService(
-  val settings: BearerTokenAuthenticatorSettings,
+  settings: BearerTokenAuthenticatorSettings,
   dao: AuthenticatorDAO[BearerTokenAuthenticator],
   idGenerator: IDGenerator,
   clock: Clock)(implicit val executionContext: ExecutionContext)
   extends AuthenticatorService[BearerTokenAuthenticator]
   with Logger {
-
-  /**
-   * The type of this class.
-   */
-  override type Self = BearerTokenAuthenticatorService
-
-  /**
-   * Gets an authenticator service initialized with a new settings object.
-   *
-   * @param f A function which gets the settings passed and returns different settings.
-   * @return An instance of the authenticator service initialized with new settings.
-   */
-  override def withSettings(f: BearerTokenAuthenticatorSettings => BearerTokenAuthenticatorSettings) = {
-    new BearerTokenAuthenticatorService(f(settings), dao, idGenerator, clock)
-  }
 
   /**
    * Creates a new authenticator for the specified login info.
@@ -135,8 +93,8 @@ class BearerTokenAuthenticatorService(
       BearerTokenAuthenticator(
         id = id,
         loginInfo = loginInfo,
-        lastUsedDate = now,
-        expirationDate = now.plusSeconds(settings.authenticatorExpiry.toSeconds.toInt),
+        lastUsedDateTime = now,
+        expirationDateTime = now + settings.authenticatorExpiry,
         idleTimeout = settings.authenticatorIdleTimeout)
     }.recover {
       case e => throw new AuthenticatorCreationException(CreateError.format(ID, loginInfo), e)
@@ -206,7 +164,7 @@ class BearerTokenAuthenticatorService(
    */
   override def touch(authenticator: BearerTokenAuthenticator): Either[BearerTokenAuthenticator, BearerTokenAuthenticator] = {
     if (authenticator.idleTimeout.isDefined) {
-      Left(authenticator.copy(lastUsedDate = clock.now))
+      Left(authenticator.copy(lastUsedDateTime = clock.now))
     } else {
       Right(authenticator)
     }

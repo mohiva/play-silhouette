@@ -34,12 +34,6 @@ class DummyAuthenticatorSpec extends PlaySpecification with Mockito {
     }
   }
 
-  "The `withSettings` method of the service" should {
-    "create a new instance with customized settings" in new Context {
-      service.withSettings(identity) must beAnInstanceOf[DummyAuthenticatorService]
-    }
-  }
-
   "The `create` method of the service" should {
     "return an authenticator containing the given login info" in new Context {
       implicit val request = FakeRequest()

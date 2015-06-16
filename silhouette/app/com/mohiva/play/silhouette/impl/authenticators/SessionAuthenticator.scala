@@ -16,12 +16,13 @@
 package com.mohiva.play.silhouette.impl.authenticators
 
 import com.mohiva.play.silhouette._
+import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
 import com.mohiva.play.silhouette.api.util.{ Base64, Clock, FingerprintGenerator }
 import com.mohiva.play.silhouette.api.util.JsonFormats._
-import com.mohiva.play.silhouette.api.{ Authenticator, Logger, LoginInfo }
+import com.mohiva.play.silhouette.api.{ Authenticator, ExpirableAuthenticator, Logger, LoginInfo }
 import com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService._
 import org.joda.time.DateTime
 import play.api.http.HeaderNames
@@ -43,51 +44,23 @@ import scala.util.{ Failure, Success, Try }
  * property.
  *
  * @param loginInfo The linked login info for an identity.
- * @param lastUsedDate The last used timestamp.
- * @param expirationDate The expiration time.
+ * @param lastUsedDateTime The last used date/time.
+ * @param expirationDateTime The expiration date/time.
  * @param idleTimeout The duration an authenticator can be idle before it timed out.
  * @param fingerprint Maybe a fingerprint of the user.
  */
 case class SessionAuthenticator(
   loginInfo: LoginInfo,
-  lastUsedDate: DateTime,
-  expirationDate: DateTime,
+  lastUsedDateTime: DateTime,
+  expirationDateTime: DateTime,
   idleTimeout: Option[FiniteDuration],
   fingerprint: Option[String])
-  extends Authenticator {
+  extends Authenticator with ExpirableAuthenticator {
 
   /**
    * The Type of the generated value an authenticator will be serialized to.
    */
   override type Value = Session
-
-  /**
-   * The type of the settings an authenticator can handle.
-   */
-  override type Settings = SessionAuthenticatorSettings
-
-  /**
-   * Checks if the authenticator isn't expired and isn't timed out.
-   *
-   * @return True if the authenticator isn't expired and isn't timed out.
-   */
-  override def isValid = !isExpired && !isTimedOut
-
-  /**
-   * Checks if the authenticator is expired. This is an absolute timeout since the creation of
-   * the authenticator.
-   *
-   * @return True if the authenticator is expired, false otherwise.
-   */
-  private def isExpired = expirationDate.isBeforeNow
-
-  /**
-   * Checks if the time elapsed since the last time the authenticator was used is longer than
-   * the maximum idle timeout specified in the properties.
-   *
-   * @return True if sliding window expiration is activated and the authenticator is timed out, false otherwise.
-   */
-  private def isTimedOut = idleTimeout.isDefined && lastUsedDate.plusSeconds(idleTimeout.get.toSeconds.toInt).isBeforeNow
 }
 
 /**
@@ -153,28 +126,13 @@ object SessionAuthenticator extends Logger {
  * @param executionContext The execution context to handle the asynchronous operations.
  */
 class SessionAuthenticatorService(
-  val settings: SessionAuthenticatorSettings,
+  settings: SessionAuthenticatorSettings,
   fingerprintGenerator: FingerprintGenerator,
   clock: Clock)(implicit val executionContext: ExecutionContext)
   extends AuthenticatorService[SessionAuthenticator]
   with Logger {
 
   import SessionAuthenticator._
-
-  /**
-   * The type of this class.
-   */
-  override type Self = SessionAuthenticatorService
-
-  /**
-   * Gets an authenticator service initialized with a new settings object.
-   *
-   * @param f A function which gets the settings passed and returns different settings.
-   * @return An instance of the authenticator service initialized with new settings.
-   */
-  override def withSettings(f: SessionAuthenticatorSettings => SessionAuthenticatorSettings) = {
-    new SessionAuthenticatorService(f(settings), fingerprintGenerator, clock)
-  }
 
   /**
    * Creates a new authenticator for the specified login info.
@@ -188,8 +146,8 @@ class SessionAuthenticatorService(
       val now = clock.now
       SessionAuthenticator(
         loginInfo = loginInfo,
-        lastUsedDate = now,
-        expirationDate = now.plusSeconds(settings.authenticatorExpiry.toSeconds.toInt),
+        lastUsedDateTime = now,
+        expirationDateTime = now + settings.authenticatorExpiry,
         idleTimeout = settings.authenticatorIdleTimeout,
         fingerprint = if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
       )
@@ -268,7 +226,7 @@ class SessionAuthenticatorService(
    */
   override def touch(authenticator: SessionAuthenticator): Either[SessionAuthenticator, SessionAuthenticator] = {
     if (authenticator.idleTimeout.isDefined) {
-      Left(authenticator.copy(lastUsedDate = clock.now))
+      Left(authenticator.copy(lastUsedDateTime = clock.now))
     } else {
       Right(authenticator)
     }

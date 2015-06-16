@@ -17,6 +17,7 @@ package com.mohiva.play.silhouette.impl.authenticators
 
 import java.util.regex.Pattern
 
+import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
@@ -34,8 +35,8 @@ import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ Cookie, Results }
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
-import scala.concurrent.duration._
 import scala.concurrent.Future
+import scala.concurrent.duration._
 import scala.language.postfixOps
 
 /**
@@ -45,19 +46,19 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
 
   "The `isValid` method of the authenticator" should {
     "return false if the authenticator is expired" in new Context {
-      authenticator.copy(expirationDate = DateTime.now.minusHours(1)).isValid must beFalse
+      authenticator.copy(expirationDateTime = DateTime.now - 1.hour).isValid must beFalse
     }
 
     "return false if the authenticator is timed out" in new Context {
       authenticator.copy(
-        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get.toSeconds.toInt + 1)
+        lastUsedDateTime = DateTime.now - (settings.authenticatorIdleTimeout.get + 1.second)
       ).isValid must beFalse
     }
 
     "return true if the authenticator is valid" in new Context {
       authenticator.copy(
-        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get.toSeconds.toInt - 10),
-        expirationDate = DateTime.now.plusSeconds(5)
+        lastUsedDateTime = DateTime.now - (settings.authenticatorIdleTimeout.get - 10.seconds),
+        expirationDateTime = DateTime.now + 5.seconds
       ).isValid must beTrue
     }
   }
@@ -96,16 +97,6 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
     }
   }
 
-  "The `withSettings` method of the service" should {
-    "create a new instance with customized settings" in new Context {
-      val s = service(Some(dao)).withSettings { s =>
-        s.copy("new-cookie-name")
-      }
-
-      s.settings.cookieName must be equalTo "new-cookie-name"
-    }
-  }
-
   "The `create` method of the service" should {
     "return a fingerprinted authenticator" in new Context {
       implicit val request = FakeRequest()
@@ -138,14 +129,14 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
       await(service(Some(dao)).create(loginInfo)).id must be equalTo id
     }
 
-    "return an authenticator with the current date as lastUsedDate" in new Context {
+    "return an authenticator with the current date as lastUsedDateTime" in new Context {
       implicit val request = FakeRequest()
       val now = new DateTime
 
       idGenerator.generate returns Future.successful("test-id")
       clock.now returns now
 
-      await(service(Some(dao)).create(loginInfo)).lastUsedDate must be equalTo now
+      await(service(Some(dao)).create(loginInfo)).lastUsedDateTime must be equalTo now
     }
 
     "return an authenticator which expires in 12 hours(default value)" in new Context {
@@ -155,7 +146,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
       idGenerator.generate returns Future.successful("test-id")
       clock.now returns now
 
-      await(service(Some(dao)).create(loginInfo)).expirationDate must be equalTo now.plusMinutes(12 * 60)
+      await(service(Some(dao)).create(loginInfo)).expirationDateTime must be equalTo now + 12.hours
     }
 
     "return an authenticator which expires in 6 hours" in new Context {
@@ -167,7 +158,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
       idGenerator.generate returns Future.successful("test-id")
       clock.now returns now
 
-      await(service(Some(dao)).create(loginInfo)).expirationDate must be equalTo now.plusSeconds(sixHours.toSeconds.toInt)
+      await(service(Some(dao)).create(loginInfo)).expirationDateTime must be equalTo now + sixHours
     }
 
     "throws an AuthenticatorCreationException exception if an error occurred during creation" in new Context {
@@ -354,7 +345,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
 
       service(Some(dao)).touch(authenticator) must beLeft[CookieAuthenticator].like {
         case a =>
-          a.lastUsedDate must be equalTo clock.now
+          a.lastUsedDateTime must be equalTo clock.now
       }
     }
 
@@ -364,7 +355,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
 
       service(Some(dao)).touch(authenticator) must beRight[CookieAuthenticator].like {
         case a =>
-          a.lastUsedDate must be equalTo authenticator.lastUsedDate
+          a.lastUsedDateTime must be equalTo authenticator.lastUsedDateTime
       }
     }
   }
@@ -453,7 +444,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
       val result = service(None).renew(authenticator, Results.Ok)
 
       cookies(result).get(settings.cookieName) should beSome[Cookie].which(statelessResponseCookieMatcher(
-        authenticator.copy(id = id, lastUsedDate = now, expirationDate = now.plusSeconds(settings.authenticatorExpiry.toSeconds.toInt))
+        authenticator.copy(id = id, lastUsedDateTime = now, expirationDateTime = now + settings.authenticatorExpiry)
       ))
       there was no(dao).add(any)
     }
@@ -579,9 +570,10 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
     lazy val authenticator = spy(new CookieAuthenticator(
       id = "test-id",
       loginInfo = LoginInfo("test", "1"),
-      lastUsedDate = DateTime.now,
-      expirationDate = DateTime.now.plusSeconds(settings.authenticatorExpiry.toSeconds.toInt),
+      lastUsedDateTime = DateTime.now,
+      expirationDateTime = DateTime.now + settings.authenticatorExpiry,
       idleTimeout = settings.authenticatorIdleTimeout,
+      cookieMaxAge = settings.cookieMaxAge,
       fingerprint = None
     ))
 

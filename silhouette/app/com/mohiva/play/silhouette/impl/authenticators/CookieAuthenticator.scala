@@ -20,12 +20,13 @@
 package com.mohiva.play.silhouette.impl.authenticators
 
 import com.mohiva.play.silhouette._
+import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
+import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
 import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.api.util.JsonFormats._
-import com.mohiva.play.silhouette.api.{ Logger, LoginInfo, StorableAuthenticator }
+import com.mohiva.play.silhouette.api.{ ExpirableAuthenticator, Logger, LoginInfo, StorableAuthenticator }
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import org.joda.time.DateTime
@@ -52,56 +53,34 @@ import scala.util.{ Failure, Success, Try }
  * out after a certain time if it wasn't used. This can be controlled with the [[idleTimeout]]
  * property.
  *
+ * With this authenticator it's possible to implement "Remember Me" functionality. This can be
+ * achieved by updating the `expirationDateTime`, `idleTimeout` or `cookieMaxAge` properties of
+ * this authenticator after it was created and before it gets initialized.
+ *
  * Note: If deploying to multiple nodes the backing store will need to synchronize.
  *
  * @param id The authenticator ID.
  * @param loginInfo The linked login info for an identity.
- * @param lastUsedDate The last used timestamp.
- * @param expirationDate The expiration time.
+ * @param lastUsedDateTime The last used date/time.
+ * @param expirationDateTime The expiration date/time.
  * @param idleTimeout The duration an authenticator can be idle before it timed out.
+ * @param cookieMaxAge The duration a cookie expires. `None` for a transient cookie.
  * @param fingerprint Maybe a fingerprint of the user.
  */
 case class CookieAuthenticator(
   id: String,
   loginInfo: LoginInfo,
-  lastUsedDate: DateTime,
-  expirationDate: DateTime,
+  lastUsedDateTime: DateTime,
+  expirationDateTime: DateTime,
   idleTimeout: Option[FiniteDuration],
+  cookieMaxAge: Option[FiniteDuration],
   fingerprint: Option[String])
-  extends StorableAuthenticator {
+  extends StorableAuthenticator with ExpirableAuthenticator {
 
   /**
    * The Type of the generated value an authenticator will be serialized to.
    */
   override type Value = Cookie
-
-  /**
-   * The type of the settings an authenticator can handle.
-   */
-  override type Settings = CookieAuthenticatorSettings
-
-  /**
-   * Checks if the authenticator isn't expired and isn't timed out.
-   *
-   * @return True if the authenticator isn't expired and isn't timed out.
-   */
-  override def isValid = !isExpired && !isTimedOut
-
-  /**
-   * Checks if the authenticator is expired. This is an absolute timeout since the creation of
-   * the authenticator.
-   *
-   * @return True if the authenticator is expired, false otherwise.
-   */
-  private def isExpired = expirationDate.isBeforeNow
-
-  /**
-   * Checks if the time elapsed since the last time the authenticator was used is longer than
-   * the maximum idle timeout specified in the properties.
-   *
-   * @return True if sliding window expiration is activated and the authenticator is timed out, false otherwise.
-   */
-  private def isTimedOut = idleTimeout.isDefined && lastUsedDate.plusSeconds(idleTimeout.get.toSeconds.toInt).isBeforeNow
 }
 
 /**
@@ -169,7 +148,7 @@ object CookieAuthenticator extends Logger {
  * @param executionContext The execution context to handle the asynchronous operations.
  */
 class CookieAuthenticatorService(
-  val settings: CookieAuthenticatorSettings,
+  settings: CookieAuthenticatorSettings,
   dao: Option[AuthenticatorDAO[CookieAuthenticator]],
   fingerprintGenerator: FingerprintGenerator,
   idGenerator: IDGenerator,
@@ -178,21 +157,6 @@ class CookieAuthenticatorService(
   with Logger {
 
   import CookieAuthenticator._
-
-  /**
-   * The type of this class.
-   */
-  override type Self = CookieAuthenticatorService
-
-  /**
-   * Gets an authenticator service initialized with a new settings object.
-   *
-   * @param f A function which gets the settings passed and returns different settings.
-   * @return An instance of the authenticator service initialized with new settings.
-   */
-  override def withSettings(f: CookieAuthenticatorSettings => CookieAuthenticatorSettings) = {
-    new CookieAuthenticatorService(f(settings), dao, fingerprintGenerator, idGenerator, clock)
-  }
 
   /**
    * Creates a new authenticator for the specified login info.
@@ -207,9 +171,10 @@ class CookieAuthenticatorService(
       CookieAuthenticator(
         id = id,
         loginInfo = loginInfo,
-        lastUsedDate = now,
-        expirationDate = now.plusSeconds(settings.authenticatorExpiry.toSeconds.toInt),
+        lastUsedDateTime = now,
+        expirationDateTime = now + settings.authenticatorExpiry,
         idleTimeout = settings.authenticatorIdleTimeout,
+        cookieMaxAge = settings.cookieMaxAge,
         fingerprint = if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
       )
     }.recover {
@@ -268,7 +233,9 @@ class CookieAuthenticatorService(
       Cookie(
         name = settings.cookieName,
         value = value,
-        maxAge = settings.cookieMaxAge.map(_.toSeconds.toInt),
+        // The maxAge` must be used from the authenticator, because it might be changed by the user
+        // to implement "Remember Me" functionality
+        maxAge = authenticator.cookieMaxAge.map(_.toSeconds.toInt),
         path = settings.cookiePath,
         domain = settings.cookieDomain,
         secure = settings.secureCookie,
@@ -312,7 +279,7 @@ class CookieAuthenticatorService(
    */
   override def touch(authenticator: CookieAuthenticator): Either[CookieAuthenticator, CookieAuthenticator] = {
     if (authenticator.idleTimeout.isDefined) {
-      Left(authenticator.copy(lastUsedDate = clock.now))
+      Left(authenticator.copy(lastUsedDateTime = clock.now))
     } else {
       Right(authenticator)
     }
@@ -338,7 +305,9 @@ class CookieAuthenticatorService(
       case None => Future.successful(AuthenticatorResult(result.withCookies(Cookie(
         name = settings.cookieName,
         value = serialize(authenticator)(settings),
-        maxAge = settings.cookieMaxAge.map(_.toSeconds.toInt),
+        // The maxAge` must be used from the authenticator, because it might be changed by the user
+        // to implement "Remember Me" functionality
+        maxAge = authenticator.cookieMaxAge.map(_.toSeconds.toInt),
         path = settings.cookiePath,
         domain = settings.cookieDomain,
         secure = settings.secureCookie,

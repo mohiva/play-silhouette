@@ -15,6 +15,7 @@
  */
 package com.mohiva.play.silhouette.impl.authenticators
 
+import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
@@ -29,8 +30,8 @@ import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.Results
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
-import scala.concurrent.duration._
 import scala.concurrent.Future
+import scala.concurrent.duration._
 import scala.language.postfixOps
 
 /**
@@ -40,30 +41,20 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
 
   "The `isValid` method of the authenticator" should {
     "return false if the authenticator is expired" in new Context {
-      authenticator.copy(expirationDate = DateTime.now.minusHours(1)).isValid must beFalse
+      authenticator.copy(expirationDateTime = DateTime.now - 1.hour).isValid must beFalse
     }
 
     "return false if the authenticator is timed out" in new Context {
       authenticator.copy(
-        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get.toSeconds.toInt + 1)
+        lastUsedDateTime = DateTime.now - (settings.authenticatorIdleTimeout.get + 1.second)
       ).isValid must beFalse
     }
 
     "return true if the authenticator is valid" in new Context {
       authenticator.copy(
-        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get.toSeconds.toInt - 10),
-        expirationDate = DateTime.now.plusSeconds(5)
+        lastUsedDateTime = DateTime.now - (settings.authenticatorIdleTimeout.get - 10.seconds),
+        expirationDateTime = DateTime.now + 5.seconds
       ).isValid must beTrue
-    }
-  }
-
-  "The `withSettings` method of the service" should {
-    "create a new instance with customized settings" in new Context {
-      val s = service.withSettings { s =>
-        s.copy("new-header-name")
-      }
-
-      s.settings.headerName must be equalTo "new-header-name"
     }
   }
 
@@ -78,14 +69,14 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
       await(service.create(loginInfo)).id must be equalTo id
     }
 
-    "return an authenticator with the current date as lastUsedDate" in new Context {
+    "return an authenticator with the current date as lastUsedDateTime" in new Context {
       implicit val request = FakeRequest()
       val now = new DateTime
 
       idGenerator.generate returns Future.successful("test-id")
       clock.now returns now
 
-      await(service.create(loginInfo)).lastUsedDate must be equalTo now
+      await(service.create(loginInfo)).lastUsedDateTime must be equalTo now
     }
 
     "return an authenticator which expires in 12 hours(default value)" in new Context {
@@ -95,7 +86,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
       idGenerator.generate returns Future.successful("test-id")
       clock.now returns now
 
-      await(service.create(loginInfo)).expirationDate must be equalTo now.plusMinutes(12 * 60)
+      await(service.create(loginInfo)).expirationDateTime must be equalTo now + 12.hours
     }
 
     "return an authenticator which expires in 6 hours" in new Context {
@@ -107,7 +98,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
       idGenerator.generate returns Future.successful("test-id")
       clock.now returns now
 
-      await(service.create(loginInfo)).expirationDate must be equalTo now.plusSeconds(sixHours.toSeconds.toInt)
+      await(service.create(loginInfo)).expirationDateTime must be equalTo now + sixHours
     }
 
     "throws an AuthenticatorCreationException exception if an error occurred during creation" in new Context {
@@ -221,7 +212,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
 
       service.touch(authenticator) must beLeft[BearerTokenAuthenticator].like {
         case a =>
-          a.lastUsedDate must be equalTo clock.now
+          a.lastUsedDateTime must be equalTo clock.now
       }
     }
 
@@ -231,7 +222,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
 
       service.touch(authenticator) must beRight[BearerTokenAuthenticator].like {
         case a =>
-          a.lastUsedDate must be equalTo authenticator.lastUsedDate
+          a.lastUsedDateTime must be equalTo authenticator.lastUsedDateTime
       }
     }
   }
@@ -385,8 +376,8 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
     lazy val authenticator = new BearerTokenAuthenticator(
       id = "test-id",
       loginInfo = LoginInfo("test", "1"),
-      lastUsedDate = DateTime.now,
-      expirationDate = DateTime.now.plusSeconds(settings.authenticatorExpiry.toSeconds.toInt),
+      lastUsedDateTime = DateTime.now,
+      expirationDateTime = DateTime.now + settings.authenticatorExpiry,
       idleTimeout = settings.authenticatorIdleTimeout
     )
   }
