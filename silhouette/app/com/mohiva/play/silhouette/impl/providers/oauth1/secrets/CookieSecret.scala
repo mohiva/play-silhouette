@@ -22,8 +22,6 @@ import com.mohiva.play.silhouette.impl.exceptions.OAuth1TokenSecretException
 import com.mohiva.play.silhouette.impl.providers.oauth1.secrets.CookieSecretProvider._
 import com.mohiva.play.silhouette.impl.providers.{ OAuth1Info, OAuth1TokenSecret, OAuth1TokenSecretProvider }
 import org.joda.time.DateTime
-import play.api.Play
-import play.api.Play.current
 import play.api.libs.Crypto
 import play.api.libs.json.Json
 import play.api.mvc.{ Cookie, Result }
@@ -189,6 +187,6 @@ case class CookieSecretSettings(
   cookieName: String = "OAuth1TokenSecret",
   cookiePath: String = "/",
   cookieDomain: Option[String] = None,
-  secureCookie: Boolean = Play.isProd, // Default to sending only for HTTPS in production, but not for development and test.
+  secureCookie: Boolean = true,
   httpOnlyCookie: Boolean = true,
   expirationTime: FiniteDuration = 5 minutes)

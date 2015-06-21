@@ -24,8 +24,6 @@ import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.oauth2.state.CookieStateProvider._
 import com.mohiva.play.silhouette.impl.providers.{ OAuth2State, OAuth2StateProvider }
 import org.joda.time.DateTime
-import play.api.Play
-import play.api.Play.current
 import play.api.libs.json.Json
 import play.api.mvc.{ Cookie, RequestHeader, Result }
 
@@ -221,6 +219,6 @@ case class CookieStateSettings(
   cookieName: String = "OAuth2State",
   cookiePath: String = "/",
   cookieDomain: Option[String] = None,
-  secureCookie: Boolean = Play.isProd, // Default to sending only for HTTPS in production, but not for development and test.
+  secureCookie: Boolean = true,
   httpOnlyCookie: Boolean = true,
   expirationTime: FiniteDuration = 5 minutes)

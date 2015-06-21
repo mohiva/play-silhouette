@@ -30,8 +30,6 @@ import com.mohiva.play.silhouette.api.{ ExpirableAuthenticator, Logger, LoginInf
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import org.joda.time.DateTime
-import play.api.Play
-import play.api.Play.current
 import play.api.http.HeaderNames
 import play.api.libs.Crypto
 import play.api.libs.json.Json
@@ -421,7 +419,7 @@ case class CookieAuthenticatorSettings(
   cookieName: String = "id",
   cookiePath: String = "/",
   cookieDomain: Option[String] = None,
-  secureCookie: Boolean = Play.isProd, // Default to sending only for HTTPS in production, but not for development and test.
+  secureCookie: Boolean = true,
   httpOnlyCookie: Boolean = true,
   encryptAuthenticator: Boolean = true,
   useFingerprinting: Boolean = true,
