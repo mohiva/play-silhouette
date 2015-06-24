@@ -53,6 +53,15 @@ class SocialProviderRegistrySpec extends PlaySpecification with Mockito {
     }
   }
 
+  "The `getWithType` method" should {
+    "return None if asking Twitter.ID with OAuth2Provider type" in new Context {
+      registry.getWithType[OAuth2Provider](TwitterProvider.ID) must beNone
+    }
+    "return a provider by its ID and Type" in new Context {
+      registry.getWithType[OAuth2Provider](FacebookProvider.ID)must beSome(providers(0))
+    }
+  }
+
   /**
    * The context.
    */
