@@ -92,7 +92,7 @@ Silhouette module is bound to Play's HTTP implementation. So this layer exists o
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.mohiva.play.silhouette.api.util.PlayHTTPLayer#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;()(implicitexecutionContext:scala.concurrent.ExecutionContext):com.mohiva.play.silhouette.api.util.PlayHTTPLayer"></a>
+      <a id="&lt;init&gt;(client:play.api.libs.ws.WSClient)(implicitexecutionContext:scala.concurrent.ExecutionContext):com.mohiva.play.silhouette.api.util.PlayHTTPLayer"></a>
       <a id="&lt;init&gt;:PlayHTTPLayer"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -100,14 +100,14 @@ Silhouette module is bound to Play's HTTP implementation. So this layer exists o
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">PlayHTTPLayer</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="executionContext">executionContext: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span>
+        <span class="name">PlayHTTPLayer</span><span class="params">(<span name="client">client: <span class="extype" name="play.api.libs.ws.WSClient">WSClient</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="executionContext">executionContext: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.PlayHTTPLayer@&lt;init&gt;()(implicitexecutionContext:scala.concurrent.ExecutionContext):com.mohiva.play.silhouette.api.util.PlayHTTPLayer" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.util.PlayHTTPLayer@&lt;init&gt;(client:play.api.libs.ws.WSClient)(implicitexecutionContext:scala.concurrent.ExecutionContext):com.mohiva.play.silhouette.api.util.PlayHTTPLayer" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">executionContext</dt><dd class="cmt"><p>The execution context to handle the asynchronous operations.
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">client</dt><dd class="cmt"><p>Play's WS client implementation.</p></dd><dt class="param">executionContext</dt><dd class="cmt"><p>The execution context to handle the asynchronous operations.
 </p></dd></dl></div>
     </li></ol>
             </div>
