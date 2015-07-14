@@ -1,4 +1,4 @@
-## 3.0 (2015-06-11)
+## 3.0 (2015-07-14)
 
 - Update to Play 2.4
 - Stateless and non-stateless CookieAuthenticator

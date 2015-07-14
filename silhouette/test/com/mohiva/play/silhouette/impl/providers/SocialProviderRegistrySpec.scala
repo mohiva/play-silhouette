@@ -36,12 +36,28 @@ class SocialProviderRegistrySpec extends PlaySpecification with Mockito {
       registry.get[YahooProvider] must beNone
     }
 
-    "return a provider by its ID" in new Context {
-      registry.get(GoogleProvider.ID) must beSome(providers(1))
+    "return a provider by its ID as SocialProvider" in new Context {
+      val provider = registry.get[SocialProvider](GoogleProvider.ID)
+
+      provider must beSome.like {
+        case value =>
+          value.id must be equalTo providers(1).id
+          value must beAnInstanceOf[SocialProvider]
+      }
+    }
+
+    "return a provider by its ID as OAuth2Provider" in new Context {
+      val provider = registry.get[OAuth2Provider](GoogleProvider.ID)
+
+      provider must beSome.like {
+        case value =>
+          value.id must be equalTo providers(1).id
+          value must beAnInstanceOf[OAuth2Provider]
+      }
     }
 
     "return None if no provider for the given ID exists" in new Context {
-      registry.get(YahooProvider.ID) must beNone
+      registry.get[SocialProvider](YahooProvider.ID) must beNone
     }
   }
 
