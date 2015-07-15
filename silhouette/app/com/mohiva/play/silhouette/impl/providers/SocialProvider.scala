@@ -129,7 +129,7 @@ case class SocialProviderRegistry(providers: Seq[SocialProvider]) {
    * @tparam T The type of the provider.
    * @return Some specific provider type or None if no provider for the given type could be found.
    */
-  def get[T: ClassTag]: Option[T] = {
+  def get[T <: SocialProvider: ClassTag]: Option[T] = {
     providers.find(p => TypeUtils.isInstance(p, implicitly[ClassTag[T]].runtimeClass)).map(_.asInstanceOf[T])
   }
 
@@ -139,7 +139,7 @@ case class SocialProviderRegistry(providers: Seq[SocialProvider]) {
    * @param id The ID of the provider to return.
    * @return Some social provider or None if no provider for the given ID could be found.
    */
-  def get(id: String): Option[SocialProvider] = providers.find(_.id == id)
+  def get[T <: SocialProvider: ClassTag](id: String): Option[T] = getSeq[T].find(_.id == id)
 
   /**
    * Gets a list of providers that match a certain type.
@@ -147,7 +147,7 @@ case class SocialProviderRegistry(providers: Seq[SocialProvider]) {
    * @tparam T The type of the provider.
    * @return A list of providers that match a certain type.
    */
-  def getSeq[T: ClassTag]: Seq[T] = {
+  def getSeq[T <: SocialProvider: ClassTag]: Seq[T] = {
     providers.filter(p => TypeUtils.isInstance(p, implicitly[ClassTag[T]].runtimeClass)).map(_.asInstanceOf[T])
   }
 }
