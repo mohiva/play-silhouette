@@ -428,7 +428,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
    * [[http://danielirvine.com/blog/2011/07/18/understanding-403-forbidden/ Understanding 403 Forbidden]],
    * [[http://stackoverflow.com/questions/3297048/403-forbidden-vs-401-unauthorized-http-responses/6937030#6937030 403 Forbidden vs 401 Unauthorized HTTP responses]].
    *
-   * @param authorize An Authorize object that checks if the user is authorized to invoke the action.y
+   * @param authorize An Authorize object that checks if the user is authorized to invoke the action.
    */
   class SecuredActionBuilder(authorize: Option[Authorization[I, A]] = None) extends ActionBuilder[SecuredRequest] {
 
