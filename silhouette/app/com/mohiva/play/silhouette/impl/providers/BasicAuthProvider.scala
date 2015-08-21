@@ -20,8 +20,7 @@ import javax.inject.Inject
 import com.mohiva.play.silhouette.api.exceptions.ConfigurationException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util._
-import com.mohiva.play.silhouette.api.{ LoginInfo, RequestProvider }
-import com.mohiva.play.silhouette.impl.exceptions.{ IdentityNotFoundException, InvalidPasswordException }
+import com.mohiva.play.silhouette.api.{ Logger, LoginInfo, RequestProvider }
 import com.mohiva.play.silhouette.impl.providers.BasicAuthProvider._
 import play.api.http.HeaderNames
 import play.api.mvc.{ Request, RequestHeader }
@@ -46,7 +45,7 @@ class BasicAuthProvider @Inject() (
   authInfoRepository: AuthInfoRepository,
   passwordHasher: PasswordHasher,
   passwordHasherList: Seq[PasswordHasher])(implicit val executionContext: ExecutionContext)
-  extends RequestProvider {
+  extends RequestProvider with Logger {
 
   /**
    * Gets the provider ID.
@@ -74,12 +73,16 @@ class BasicAuthProvider @Inject() (
               } else {
                 Future.successful(Some(loginInfo))
               }
-            case Some(hasher) => throw new InvalidPasswordException(InvalidPassword.format(id))
+            case Some(hasher) =>
+              logger.debug(InvalidPassword.format(id))
+              Future.successful(None)
             case None => throw new ConfigurationException(UnsupportedHasher.format(
               id, authInfo.hasher, passwordHasherList.map(_.id).mkString(", ")
             ))
           }
-          case None => throw new IdentityNotFoundException(UnknownCredentials.format(id))
+          case None =>
+            logger.debug(UnknownCredentials.format(id))
+            Future.successful(None)
         }
       case None => Future.successful(None)
     }
@@ -109,7 +112,7 @@ class BasicAuthProvider @Inject() (
 object BasicAuthProvider {
 
   /**
-   * The error messages.
+   * The error and log messages.
    */
   val UnknownCredentials = "[Silhouette][%s] Could not find auth info for given credentials"
   val InvalidPassword = "[Silhouette][%s] Passwords does not match"
