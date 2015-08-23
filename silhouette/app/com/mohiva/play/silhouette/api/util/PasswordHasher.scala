@@ -28,7 +28,11 @@ import com.mohiva.play.silhouette.api.AuthInfo
  * @param password The hashed password.
  * @param salt The optional salt used when hashing.
  */
-case class PasswordInfo(hasher: String, password: String, salt: Option[String] = None) extends AuthInfo
+case class PasswordInfo(hasher: String,
+                        password: String,
+                        salt: Option[String] = None,
+                        iterations : Option[Int] = 0,
+                        lengthInByte: Option[Int] = 0) extends AuthInfo
 
 /**
  * A trait that defines the password hasher interface.
