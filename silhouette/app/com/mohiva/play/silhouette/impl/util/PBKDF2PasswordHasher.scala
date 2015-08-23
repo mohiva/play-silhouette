@@ -25,7 +25,7 @@ class PBKDF2PasswordHasher(logRounds: Int = 10, iterations: Int = 100000, lenthI
     import org.mindrot.jbcrypt.BCrypt
     val salt = BCrypt.gensalt(10);
     val hash = getHash(plainPassword, salt, iterations, lenthInBytes);
-    return PasswordInfo(id, hash, Some(salt), Some(iterations), Some(lenthInBytes))
+    return PasswordInfo(id, hash, Some(salt), iterations, lenthInBytes)
   }
 
   private def getHash(plainPassword: String, salt: String, iterations: Int, lenthInBytes: Int): String = {
@@ -63,7 +63,7 @@ class PBKDF2PasswordHasher(logRounds: Int = 10, iterations: Int = 100000, lenthI
    */
   override def matches(passwordInfo: PasswordInfo, suppliedPassword: String): Boolean = {
     try {
-      val hash = getHash(suppliedPassword, passwordInfo.salt.get, passwordInfo.iterations.get, passwordInfo.lengthInByte.get)
+      val hash = getHash(suppliedPassword, passwordInfo.salt.get, passwordInfo.iterations, passwordInfo.lengthInByte)
       return hash == passwordInfo.password
     } catch {
       case e: Throwable => {
