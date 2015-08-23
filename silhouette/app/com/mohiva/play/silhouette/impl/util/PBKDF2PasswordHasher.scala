@@ -39,8 +39,7 @@ class PBKDF2PasswordHasher(logRounds: Int = 10, iterations: Int = 100000, lenthI
       bytes = keyFactory.generateSecret(spec).getEncoded
       val hash = Base64.encodeBase64String(bytes)
       return hash
-    }
-    catch {
+    } catch {
       case e: InvalidKeySpecException => {
         throw new RuntimeException(e)
       }
@@ -65,8 +64,7 @@ class PBKDF2PasswordHasher(logRounds: Int = 10, iterations: Int = 100000, lenthI
     try {
       val hash = getHash(suppliedPassword, passwordInfo.salt.get, passwordInfo.iterations, passwordInfo.lengthInByte)
       return hash == passwordInfo.password
-    }
-    catch {
+    } catch {
       case e: Throwable => {
         import play.Logger
         Logger.error("Password did not match.", e)
