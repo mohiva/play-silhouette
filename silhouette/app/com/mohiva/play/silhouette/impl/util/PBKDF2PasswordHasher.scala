@@ -6,7 +6,7 @@ import com.mohiva.play.silhouette.api.util.PasswordHasher
  * Created by rpatel on 8/22/15.
  */
 class PBKDF2PasswordHasher(logRounds: Int = 10, iterations: Int = 100000, lenthInBytes: Int = 512)
-  extends PasswordHasher{
+  extends PasswordHasher {
 
   import javax.crypto.SecretKeyFactory
 
@@ -21,14 +21,14 @@ class PBKDF2PasswordHasher(logRounds: Int = 10, iterations: Int = 100000, lenthI
    * @param plainPassword The password to hash.
    * @return A PasswordInfo containing the hashed password.
    */
-  override def hash(plainPassword: String) : PasswordInfo = {
+  override def hash(plainPassword: String): PasswordInfo = {
     import org.mindrot.jbcrypt.BCrypt
-    val salt =  BCrypt.gensalt(10);
+    val salt = BCrypt.gensalt(10);
     val hash = getHash(plainPassword, salt, iterations, lenthInBytes);
-    return PasswordInfo(id, hash, Some(salt), Some(iterations), Some(lenthInBytes) )
+    return PasswordInfo(id, hash, Some(salt), Some(iterations), Some(lenthInBytes))
   }
 
-  private def getHash(plainPassword: String, salt: String, iterations: Int, lenthInBytes : Int): String = {
+  private def getHash(plainPassword: String, salt: String, iterations: Int, lenthInBytes: Int): String = {
     import javax.crypto.spec.PBEKeySpec
     import org.apache.commons.codec.binary.Base64
     import java.security.spec.InvalidKeySpecException
@@ -47,13 +47,13 @@ class PBKDF2PasswordHasher(logRounds: Int = 10, iterations: Int = 100000, lenthI
     }
 
   }
+  def keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
   /**
    * Gets the ID of the hasher.
    *
    * @return The ID of the hasher.
    */
   override def id = PBKDF2PasswordHasher.ID
-  def keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
   /**
    * Checks if a password matches the hashed version.
    *
@@ -61,12 +61,12 @@ class PBKDF2PasswordHasher(logRounds: Int = 10, iterations: Int = 100000, lenthI
    * @param suppliedPassword The password supplied by the user trying to log in.
    * @return True if the password matches, false otherwise.
    */
-  override def matches(passwordInfo: PasswordInfo, suppliedPassword: String) : Boolean = {
+  override def matches(passwordInfo: PasswordInfo, suppliedPassword: String): Boolean = {
     try {
       val hash = getHash(suppliedPassword, passwordInfo.salt.get, passwordInfo.iterations.get, passwordInfo.lengthInByte.get)
       return hash == passwordInfo.password
     } catch {
-      case e => {
+      case e: Throwable => {
         import play.Logger
         Logger.error("Password did not match.", e)
         return false;

@@ -31,8 +31,8 @@ import com.mohiva.play.silhouette.api.AuthInfo
 case class PasswordInfo(hasher: String,
                         password: String,
                         salt: Option[String] = None,
-                        iterations : Option[Int] = 0,
-                        lengthInByte: Option[Int] = 0) extends AuthInfo
+                        iterations : Option[Int] ,
+                        lengthInByte: Option[Int]) extends AuthInfo
 
 /**
  * A trait that defines the password hasher interface.
