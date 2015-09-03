@@ -86,6 +86,18 @@ class BasicAuthProviderSpec extends PlaySpecification with Mockito {
       await(provider.authenticate(request)) must beSome(loginInfo)
     }
 
+    "handle a colon in a password" in new WithApplication with Context {
+      val credentialsWithColon = Credentials("apollonia.vanova@watchmen.com", "s3c:r3t")
+      val passwordInfo = PasswordInfo("foo", "hashed(s3c:r3t)")
+      val loginInfo = LoginInfo(provider.id, credentialsWithColon.identifier)
+      val request = FakeRequest().withHeaders(AUTHORIZATION -> encodeCredentials(credentialsWithColon))
+
+      fooHasher.matches(passwordInfo, credentialsWithColon.password) returns true
+      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
+
+      await(provider.authenticate(request)) must beSome(loginInfo)
+    }
+
     "re-hash password with new hasher" in new WithApplication with Context {
       val passwordInfo = PasswordInfo("bar", "hashed(s3cr3t)")
       val loginInfo = LoginInfo(provider.id, credentials.identifier)
