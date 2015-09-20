@@ -513,7 +513,7 @@ trait Silhouette[I <: Identity, A <: Authenticator] extends Controller with Logg
         case (Some(authenticator), identity) if !authenticator.extract.isValid =>
           block(UserAwareRequest(None, None, request)).flatMap {
             case hr @ HandlerResult(pr, d) =>
-              env.authenticatorService.discard(authenticator.extract, pr).map(r => hr.copy(pr))
+              env.authenticatorService.discard(authenticator.extract, pr).map(r => hr.copy(r))
           }
         // No authenticator and no user was found
         case _ =>
