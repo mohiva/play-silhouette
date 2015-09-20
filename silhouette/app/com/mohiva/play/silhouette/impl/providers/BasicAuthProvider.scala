@@ -18,8 +18,7 @@ package com.mohiva.play.silhouette.impl.providers
 import com.mohiva.play.silhouette.api.exceptions.ConfigurationException
 import com.mohiva.play.silhouette.api.services.AuthInfoService
 import com.mohiva.play.silhouette.api.util._
-import com.mohiva.play.silhouette.api.{ LoginInfo, RequestProvider }
-import com.mohiva.play.silhouette.impl.exceptions.{ IdentityNotFoundException, InvalidPasswordException }
+import com.mohiva.play.silhouette.api.{ Logger, LoginInfo, RequestProvider }
 import com.mohiva.play.silhouette.impl.providers.BasicAuthProvider._
 import play.api.http.HeaderNames
 import play.api.libs.concurrent.Execution.Implicits._
@@ -43,7 +42,8 @@ import scala.concurrent.Future
 class BasicAuthProvider(
   authInfoService: AuthInfoService,
   passwordHasher: PasswordHasher,
-  passwordHasherList: Seq[PasswordHasher]) extends RequestProvider {
+  passwordHasherList: Seq[PasswordHasher])
+  extends RequestProvider with Logger {
 
   /**
    * Gets the provider ID.
@@ -59,23 +59,28 @@ class BasicAuthProvider(
    * @tparam B The type of the body.
    * @return Some login info on successful authentication or None if the authentication was unsuccessful.
    */
-  def authenticate[B](request: Request[B]): Future[Option[LoginInfo]] = {
+  override def authenticate[B](request: Request[B]): Future[Option[LoginInfo]] = {
     getCredentials(request) match {
       case Some(credentials) =>
         val loginInfo = LoginInfo(id, credentials.identifier)
-        authInfoService.retrieve[PasswordInfo](loginInfo).map {
+        authInfoService.retrieve[PasswordInfo](loginInfo).flatMap {
           case Some(authInfo) => passwordHasherList.find(_.id == authInfo.hasher) match {
             case Some(hasher) if hasher.matches(authInfo, credentials.password) =>
               if (hasher != passwordHasher) {
-                authInfoService.save(loginInfo, passwordHasher.hash(credentials.password))
+                authInfoService.save(loginInfo, passwordHasher.hash(credentials.password)).map(_ => Some(loginInfo))
+              } else {
+                Future.successful(Some(loginInfo))
               }
-              Some(loginInfo)
-            case Some(hasher) => throw new InvalidPasswordException(InvalidPassword.format(id))
+            case Some(hasher) =>
+              logger.debug(InvalidPassword.format(id))
+              Future.successful(None)
             case None => throw new ConfigurationException(UnsupportedHasher.format(
               id, authInfo.hasher, passwordHasherList.map(_.id).mkString(", ")
             ))
           }
-          case None => throw new IdentityNotFoundException(UnknownCredentials.format(id))
+          case None =>
+            logger.debug(UnknownCredentials.format(id))
+            Future.successful(None)
         }
       case None => Future.successful(None)
     }
@@ -89,11 +94,12 @@ class BasicAuthProvider(
    */
   def getCredentials(request: RequestHeader): Option[Credentials] = {
     request.headers.get(HeaderNames.AUTHORIZATION) match {
-      case Some(header) => Base64.decode(header.replace("Basic ", "")).split(":") match {
-        case credentials if credentials.length == 2 => Some(Credentials(credentials(0), credentials(1)))
-        case _ => None
-      }
-      case None => None
+      case Some(header) if header.startsWith("Basic ") =>
+        Base64.decode(header.replace("Basic ", "")).split(":", 2) match {
+          case credentials if credentials.length == 2 => Some(Credentials(credentials(0), credentials(1)))
+          case _ => None
+        }
+      case _ => None
     }
   }
 }
