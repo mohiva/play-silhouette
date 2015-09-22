@@ -64,23 +64,40 @@ class CredentialsProvider @Inject() (
    * @return The login info if the authentication was successful, otherwise a failure.
    */
   def authenticate(credentials: Credentials): Future[LoginInfo] = {
-    val loginInfo = LoginInfo(id, credentials.identifier)
-    authInfoRepository.find[PasswordInfo](loginInfo).flatMap {
-      case Some(authInfo) => passwordHasherList.find(_.id == authInfo.hasher) match {
-        case Some(hasher) if hasher.matches(authInfo, credentials.password) =>
-          if (hasher != passwordHasher) {
-            authInfoRepository.update(loginInfo, passwordHasher.hash(credentials.password)).map(_ => loginInfo)
-          } else {
-            Future.successful(loginInfo)
-          }
-        case Some(hasher) => throw new InvalidPasswordException(InvalidPassword.format(id))
-        case None => throw new ConfigurationException(UnsupportedHasher.format(
-          id, authInfo.hasher, passwordHasherList.map(_.id).mkString(", ")
-        ))
+    loginInfo(credentials).flatMap { loginInfo =>
+      authInfoRepository.find[PasswordInfo](loginInfo).flatMap {
+        case Some(authInfo) => passwordHasherList.find(_.id == authInfo.hasher) match {
+          case Some(hasher) if hasher.matches(authInfo, credentials.password) =>
+            if (hasher != passwordHasher) {
+              authInfoRepository.update(loginInfo, passwordHasher.hash(credentials.password)).map(_ => loginInfo)
+            } else {
+              Future.successful(loginInfo)
+            }
+          case Some(hasher) => throw new InvalidPasswordException(InvalidPassword.format(id))
+          case None => throw new ConfigurationException(UnsupportedHasher.format(
+            id, authInfo.hasher, passwordHasherList.map(_.id).mkString(", ")
+          ))
+        }
+        case None => throw new IdentityNotFoundException(UnknownCredentials.format(id))
       }
-      case None => throw new IdentityNotFoundException(UnknownCredentials.format(id))
     }
   }
+
+  /**
+   * Gets the login info for the given credentials.
+   *
+   * Override this method to manipulate the creation of the login info from the credentials.
+   *
+   * By default the credentials provider creates the login info with the identifier entered
+   * in the form. For some cases this may not be enough. It could also be possible that a login
+   * form allows a user to log in with either a username or an email address. In this case
+   * this method should be overridden to provide a unique binding, like the user ID, for the
+   * entered form values.
+   *
+   * @param credentials The credentials to authenticate with.
+   * @return The login info created from the credentials.
+   */
+  def loginInfo(credentials: Credentials): Future[LoginInfo] = Future.successful(LoginInfo(id, credentials.identifier))
 }
 
 /**
