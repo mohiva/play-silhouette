@@ -1,3 +1,11 @@
+## 4.0
+
+- Removed Play Messages instance from Event, Authorization and ErrorHandler types. The I18nSupport trait should be used instead, to get the Messages instance for the current request
+- Rewrite Silhouette trait to provide injectable actions (this is now the default method from Play 2.5 on)
+  - Every SecuredAction can now override the global(default injected) error handler if needed
+  - A controller is not bound to a single Authenticator anymore
+- Remove SecuredErrorHandler in favour of injectable error handler
+
 ## 3.0 (2015-07-14)
 
 - Update to Play 2.4

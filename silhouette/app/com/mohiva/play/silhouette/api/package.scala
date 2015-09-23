@@ -17,7 +17,5 @@ package com.mohiva.play.silhouette
 
 /**
  * The collection of traits and utility classes that form the stable API of Silhouette.
- *
- * The main API is exposed as controller actions by the [[com.mohiva.play.silhouette.api.Silhouette]] trait.
  */
 package object api

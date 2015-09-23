@@ -18,7 +18,6 @@ package com.mohiva.play.silhouette.api
 import akka.actor.{ Actor, Props }
 import akka.testkit.TestProbe
 import org.specs2.specification.Scope
-import play.api.i18n._
 import play.api.libs.concurrent.Akka
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
@@ -51,7 +50,7 @@ class EventBusSpec extends PlaySpecification {
       val eventBus = new EventBus
       val listener = system.actorOf(Props(new Actor {
         def receive = {
-          case e @ LoginEvent(_, _, _) => theProbe.ref ! e
+          case e @ LoginEvent(_, _) => theProbe.ref ! e
         }
       }))
 
@@ -65,8 +64,8 @@ class EventBusSpec extends PlaySpecification {
       val eventBus = new EventBus
       val listener = system.actorOf(Props(new Actor {
         def receive = {
-          case e @ LoginEvent(_, _, _) => theProbe.ref ! e
-          case e @ LogoutEvent(_, _, _) => theProbe.ref ! e
+          case e @ LoginEvent(_, _) => theProbe.ref ! e
+          case e @ LogoutEvent(_, _) => theProbe.ref ! e
         }
       }))
 
@@ -83,7 +82,7 @@ class EventBusSpec extends PlaySpecification {
       val eventBus = new EventBus
       val listener = system.actorOf(Props(new Actor {
         def receive = {
-          case e @ LoginEvent(_, _, _) => theProbe.ref ! e
+          case e @ LoginEvent(_, _) => theProbe.ref ! e
         }
       }))
 
@@ -97,7 +96,7 @@ class EventBusSpec extends PlaySpecification {
       val eventBus = new EventBus
       val listener = system.actorOf(Props(new Actor {
         def receive = {
-          case e @ LoginEvent(_, _, _) => theProbe.ref ! e
+          case e @ LoginEvent(_, _) => theProbe.ref ! e
         }
       }))
 
@@ -112,7 +111,7 @@ class EventBusSpec extends PlaySpecification {
 
       val listener = system.actorOf(Props(new Actor {
         def receive = {
-          case e @ LoginEvent(_, _, _) => theProbe.ref ! e
+          case e @ LoginEvent(_, _) => theProbe.ref ! e
         }
       }))
 
@@ -154,16 +153,6 @@ class EventBusSpec extends PlaySpecification {
     lazy val request = FakeRequest()
 
     /**
-     * The messages API.
-     */
-    val messagesAPI = app.injector.instanceOf[MessagesApi]
-
-    /**
-     * The messages for the current language.
-     */
-    val messages = Messages(Lang("en-US"), messagesAPI)
-
-    /**
      * The Play actor system.
      */
     lazy implicit val system = Akka.system
@@ -176,7 +165,7 @@ class EventBusSpec extends PlaySpecification {
     /**
      * Some events.
      */
-    lazy val loginEvent = new LoginEvent[TestIdentity](identity, request, messages)
-    lazy val logoutEvent = new LogoutEvent[TestIdentity](identity, request, messages)
+    lazy val loginEvent = new LoginEvent[TestIdentity](identity, request)
+    lazy val logoutEvent = new LogoutEvent[TestIdentity](identity, request)
   }
 }

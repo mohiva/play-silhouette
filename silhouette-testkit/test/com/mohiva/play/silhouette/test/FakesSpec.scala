@@ -17,12 +17,17 @@ package com.mohiva.play.silhouette.test
 
 import javax.inject.Inject
 
-import com.mohiva.play.silhouette.api.{ Environment, LoginInfo, Silhouette }
+import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.impl.authenticators._
+import com.mohiva.play.silhouette.test.FakesSpec._
+import net.codingwell.scalaguice.ScalaModule
 import org.specs2.matcher.JsonMatchers
+import org.specs2.specification.Scope
 import play.api.i18n.MessagesApi
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.Json
+import play.api.mvc.Controller
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
 /**
@@ -124,150 +129,242 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     "return a `SessionAuthenticator`" in new WithApplication {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
-      implicit val env = FakeEnvironment[FakeIdentity, SessionAuthenticator](Seq(loginInfo -> identity))
+      implicit val env = FakeEnvironment[SessionEnv](Seq(loginInfo -> identity))
       implicit val request = FakeRequest()
 
-      FakeAuthenticator[SessionAuthenticator](loginInfo) must beAnInstanceOf[SessionAuthenticator]
+      FakeAuthenticator(loginInfo) must beAnInstanceOf[SessionAuthenticator]
     }
 
     "return a `CookieAuthenticator`" in new WithApplication {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
-      implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
+      implicit val env = FakeEnvironment[CookieEnv](Seq(loginInfo -> identity))
       implicit val request = FakeRequest()
 
-      FakeAuthenticator[CookieAuthenticator](loginInfo) must beAnInstanceOf[CookieAuthenticator]
+      FakeAuthenticator(loginInfo) must beAnInstanceOf[CookieAuthenticator]
     }
 
     "return a `BearerTokenAuthenticator`" in new WithApplication {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
-      implicit val env = FakeEnvironment[FakeIdentity, BearerTokenAuthenticator](Seq(loginInfo -> identity))
+      implicit val env = FakeEnvironment[BearerTokenEnv](Seq(loginInfo -> identity))
       implicit val request = FakeRequest()
 
-      FakeAuthenticator[BearerTokenAuthenticator](loginInfo) must beAnInstanceOf[BearerTokenAuthenticator]
+      FakeAuthenticator(loginInfo) must beAnInstanceOf[BearerTokenAuthenticator]
     }
 
     "return a `JWTAuthenticator`" in new WithApplication {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
-      implicit val env = FakeEnvironment[FakeIdentity, JWTAuthenticator](Seq(loginInfo -> identity))
+      implicit val env = FakeEnvironment[JWTEnv](Seq(loginInfo -> identity))
       implicit val request = FakeRequest()
 
-      FakeAuthenticator[JWTAuthenticator](loginInfo) must beAnInstanceOf[JWTAuthenticator]
+      FakeAuthenticator(loginInfo) must beAnInstanceOf[JWTAuthenticator]
     }
 
     "return a `DummyAuthenticator`" in new WithApplication {
       val loginInfo = LoginInfo("test", "test")
       val identity = FakeIdentity(loginInfo)
-      implicit val env = FakeEnvironment[FakeIdentity, DummyAuthenticator](Seq(loginInfo -> identity))
+      implicit val env = FakeEnvironment[DummyEnv](Seq(loginInfo -> identity))
       implicit val request = FakeRequest()
 
-      FakeAuthenticator[DummyAuthenticator](loginInfo) must beAnInstanceOf[DummyAuthenticator]
+      FakeAuthenticator(loginInfo) must beAnInstanceOf[DummyAuthenticator]
     }
   }
 
   "The `securedAction` method of the `SecuredController`" should {
-    "return a 401 status code if no authenticator was found" in new WithApplication {
-      val loginInfo = LoginInfo("test", "test")
-      val identity = FakeIdentity(loginInfo)
-      val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
-      val request = FakeRequest()
+    "return a 401 status code if no authenticator was found" in new InjectorContext {
+      new WithApplication(app) {
+        val loginInfo = LoginInfo("test", "test")
+        val identity = FakeIdentity(loginInfo)
+        val env = FakeEnvironment[CookieEnv](Seq(loginInfo -> identity))
+        val request = FakeRequest()
 
-      val messagesApi = app.injector.instanceOf[MessagesApi]
-      val controller = new SecuredController(messagesApi, env)
-      val result = controller.securedAction(request)
+        val controller = app.injector.instanceOf[SecuredController]
+        val result = controller.defaultSecuredAction(request)
 
-      status(result) must equalTo(UNAUTHORIZED)
+        status(result) must equalTo(UNAUTHORIZED)
+      }
     }
 
-    "return a 401 status code if authenticator but no identity was found" in new WithApplication {
-      val loginInfo = LoginInfo("test", "test")
-      val identity = FakeIdentity(loginInfo)
-      implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
-      val request = FakeRequest().withAuthenticator[CookieAuthenticator](LoginInfo("invalid", "invalid"))
+    "return a 401 status code if authenticator but no identity was found" in new InjectorContext {
+      new WithApplication(app) {
+        val loginInfo = LoginInfo("test", "test")
+        val identity = FakeIdentity(loginInfo)
+        implicit val env = FakeEnvironment[CookieEnv](Seq(loginInfo -> identity))
+        val request = FakeRequest().withAuthenticator(LoginInfo("invalid", "invalid"))
 
-      val messagesApi = app.injector.instanceOf[MessagesApi]
-      val controller = new SecuredController(messagesApi, env)
-      val result = controller.securedAction(request)
+        val controller = app.injector.instanceOf[SecuredController]
+        val result = controller.defaultSecuredAction(request)
 
-      status(result) must equalTo(UNAUTHORIZED)
+        status(result) must equalTo(UNAUTHORIZED)
+      }
     }
 
-    "return a 200 status code if authenticator and identity was found" in new WithApplication {
-      val loginInfo = LoginInfo("test", "test")
-      val identity = FakeIdentity(loginInfo)
-      implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
-      val request = FakeRequest().withAuthenticator[CookieAuthenticator](loginInfo)
+    "return a 200 status code if authenticator and identity was found" in new InjectorContext {
+      new WithApplication(app) {
+        val loginInfo = LoginInfo("test", "test")
+        val identity = FakeIdentity(loginInfo)
+        implicit val env = FakeEnvironment[CookieEnv](Seq(loginInfo -> identity))
+        val request = FakeRequest().withAuthenticator(loginInfo)
 
-      val messagesApi = app.injector.instanceOf[MessagesApi]
-      val controller = new SecuredController(messagesApi, env)
-      val result = controller.securedAction(request)
+        val controller = app.injector.instanceOf[SecuredController]
+        val result = controller.defaultSecuredAction(request)
 
-      status(result) must equalTo(OK)
-      contentAsString(result) must */("providerID" -> "test") and */("providerKey" -> "test")
+        status(result) must equalTo(OK)
+        contentAsString(result) must */("providerID" -> "test") and */("providerKey" -> "test")
+      }
     }
   }
 
   "The `userAwareAction` method of the `SecuredController`" should {
-    "return a 401 status code if no authenticator was found" in new WithApplication {
-      val loginInfo = LoginInfo("test", "test")
-      val identity = FakeIdentity(loginInfo)
-      val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
-      val request = FakeRequest()
+    "return a 401 status code if no authenticator was found" in new InjectorContext {
+      new WithApplication(app) {
+        val loginInfo = LoginInfo("test", "test")
+        val identity = FakeIdentity(loginInfo)
+        val env = FakeEnvironment[CookieEnv](Seq(loginInfo -> identity))
+        val request = FakeRequest()
 
-      val messagesApi = app.injector.instanceOf[MessagesApi]
-      val controller = new SecuredController(messagesApi, env)
-      val result = controller.userAwareAction(request)
+        val controller = app.injector.instanceOf[SecuredController]
+        val result = controller.defaultUserAwareAction(request)
 
-      status(result) must equalTo(UNAUTHORIZED)
+        status(result) must equalTo(UNAUTHORIZED)
+      }
     }
 
-    "return a 401 status code if authenticator but no identity was found" in new WithApplication {
-      val loginInfo = LoginInfo("test", "test")
-      val identity = FakeIdentity(loginInfo)
-      implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
-      val request = FakeRequest().withAuthenticator[CookieAuthenticator](LoginInfo("invalid", "invalid"))
+    "return a 401 status code if authenticator but no identity was found" in new InjectorContext {
+      new WithApplication(app) {
+        val loginInfo = LoginInfo("test", "test")
+        val identity = FakeIdentity(loginInfo)
+        implicit val env = FakeEnvironment[CookieEnv](Seq(loginInfo -> identity))
+        val request = FakeRequest().withAuthenticator(LoginInfo("invalid", "invalid"))
 
-      val messagesApi = app.injector.instanceOf[MessagesApi]
-      val controller = new SecuredController(messagesApi, env)
-      val result = controller.userAwareAction(request)
+        val controller = app.injector.instanceOf[SecuredController]
+        val result = controller.defaultUserAwareAction(request)
 
-      status(result) must equalTo(UNAUTHORIZED)
+        status(result) must equalTo(UNAUTHORIZED)
+      }
     }
 
-    "return a 200 status code if authenticator and identity was found" in new WithApplication {
-      val loginInfo = LoginInfo("test", "test")
-      val identity = FakeIdentity(loginInfo)
+    "return a 200 status code if authenticator and identity was found" in new InjectorContext {
+      new WithApplication(app) {
+        val loginInfo = LoginInfo("test", "test")
+        val identity = FakeIdentity(loginInfo)
 
-      implicit val env = FakeEnvironment[FakeIdentity, CookieAuthenticator](Seq(loginInfo -> identity))
-      val request = FakeRequest().withAuthenticator(loginInfo)
+        implicit val env = FakeEnvironment[CookieEnv](Seq(loginInfo -> identity))
+        val request = FakeRequest().withAuthenticator(loginInfo)
 
-      val messagesApi = app.injector.instanceOf[MessagesApi]
-      val controller = new SecuredController(messagesApi, env)
-      val result = controller.userAwareAction(request)
+        val controller = app.injector.instanceOf[SecuredController]
+        val result = controller.defaultUserAwareAction(request)
 
-      status(result) must equalTo(OK)
-      contentAsString(result) must */("providerID" -> "test") and */("providerKey" -> "test")
+        status(result) must equalTo(OK)
+        contentAsString(result) must */("providerID" -> "test") and */("providerKey" -> "test")
+      }
     }
+  }
+
+  /**
+   * The injector context.
+   */
+  trait InjectorContext extends Scope {
+
+    /**
+     * A login info.
+     */
+    val loginInfo = LoginInfo("test", "test")
+
+    /**
+     * An identity.
+     */
+    val identity = FakeIdentity(loginInfo)
+
+    /**
+     * The Silhouette environment.
+     */
+    implicit val env = FakeEnvironment[CookieEnv](Seq(loginInfo -> identity))
+
+    /**
+     * The guice application builder.
+     */
+    lazy val app = new GuiceApplicationBuilder()
+      .bindings(new GuiceModule)
+      .build()
+
+    /**
+     * The guice module.
+     */
+    class GuiceModule extends ScalaModule {
+      def configure(): Unit = {
+        bind[Silhouette[CookieEnv]].to[SilhouetteProvider[CookieEnv]]
+        bind[Environment[CookieEnv]].toInstance(env)
+        bind[SecuredController]
+      }
+    }
+  }
+}
+
+/**
+ * The companion object.
+ */
+object FakesSpec {
+
+  /**
+   * The cookie environment.
+   */
+  trait CookieEnv extends Env {
+    type I = FakeIdentity
+    type A = CookieAuthenticator
+  }
+
+  /**
+   * The session environment.
+   */
+  trait SessionEnv extends Env {
+    type I = FakeIdentity
+    type A = SessionAuthenticator
+  }
+
+  /**
+   * The JWT environment.
+   */
+  trait JWTEnv extends Env {
+    type I = FakeIdentity
+    type A = JWTAuthenticator
+  }
+
+  /**
+   * The bearer token environment.
+   */
+  trait BearerTokenEnv extends Env {
+    type I = FakeIdentity
+    type A = BearerTokenAuthenticator
+  }
+
+  /**
+   * The dummy environment.
+   */
+  trait DummyEnv extends Env {
+    type I = FakeIdentity
+    type A = DummyAuthenticator
   }
 
   /**
    * A secured controller implementation.
    *
-   * @param env The Silhouette environment.
+   * @param messagesApi The Play messages API.
+   * @param silhouette The Silhouette stack.
    */
   class SecuredController @Inject() (
     val messagesApi: MessagesApi,
-    val env: Environment[FakeIdentity, CookieAuthenticator])
-    extends Silhouette[FakeIdentity, CookieAuthenticator] {
+    val silhouette: Silhouette[CookieEnv])
+    extends Controller {
 
     /**
      * A secured action.
      *
      * @return The result to send to the client.
      */
-    def securedAction = SecuredAction { implicit request =>
+    def defaultSecuredAction = silhouette.SecuredAction { implicit request =>
       Ok(Json.toJson(request.identity.loginInfo))
     }
 
@@ -276,7 +373,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
      *
      * @return The result to send to the client.
      */
-    def userAwareAction = UserAwareAction { implicit request =>
+    def defaultUserAwareAction = silhouette.UserAwareAction { implicit request =>
       request.identity match {
         case Some(identity) => Ok(Json.toJson(identity.loginInfo))
         case None => Unauthorized

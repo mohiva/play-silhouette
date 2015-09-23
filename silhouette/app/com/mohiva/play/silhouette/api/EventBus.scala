@@ -15,9 +15,8 @@
  */
 package com.mohiva.play.silhouette.api
 
-import akka.event.{ SubchannelClassification, ActorEventBus, LookupClassification }
+import akka.event.{ ActorEventBus, SubchannelClassification }
 import akka.util.Subclassification
-import play.api.i18n.Messages
 import play.api.mvc.RequestHeader
 
 /**
@@ -30,58 +29,52 @@ trait SilhouetteEvent
  *
  * @param identity The newly created identity.
  * @param request The request header for the associated request.
- * @param messages The messages for the current language.
  * @tparam I The type of the identity.
  */
-case class SignUpEvent[I <: Identity](identity: I, request: RequestHeader, messages: Messages) extends SilhouetteEvent
+case class SignUpEvent[I <: Identity](identity: I, request: RequestHeader) extends SilhouetteEvent
 
 /**
  * An event which will be published after an identity logged in.
  *
  * @param identity The logged in identity.
  * @param request The request header for the associated request.
- * @param messages The messages for the current language.
  * @tparam I The type of the identity.
  */
-case class LoginEvent[I <: Identity](identity: I, request: RequestHeader, messages: Messages) extends SilhouetteEvent
+case class LoginEvent[I <: Identity](identity: I, request: RequestHeader) extends SilhouetteEvent
 
 /**
  * An event which will be published after an identity logged out.
  *
  * @param identity The logged out identity.
  * @param request The request header for the associated request.
- * @param messages The messages for the current language.
  * @tparam I The type of the identity.
  */
-case class LogoutEvent[I <: Identity](identity: I, request: RequestHeader, messages: Messages) extends SilhouetteEvent
+case class LogoutEvent[I <: Identity](identity: I, request: RequestHeader) extends SilhouetteEvent
 
 /**
  * An event which will be published if a request passes authentication.
  *
  * @param identity The logged in identity.
  * @param request The request header for the associated request.
- * @param messages The messages for the current language.
  * @tparam I The type of the identity.
  */
-case class AuthenticatedEvent[I <: Identity](identity: I, request: RequestHeader, messages: Messages) extends SilhouetteEvent
+case class AuthenticatedEvent[I <: Identity](identity: I, request: RequestHeader) extends SilhouetteEvent
 
 /**
  * An event which will be published if a request did not pass authentication.
  *
  * @param request The request header for the associated request.
- * @param messages The messages for the current language.
  */
-case class NotAuthenticatedEvent(request: RequestHeader, messages: Messages) extends SilhouetteEvent
+case class NotAuthenticatedEvent(request: RequestHeader) extends SilhouetteEvent
 
 /**
  * An event which will be published if a request did not pass authorization.
  *
  * @param identity The logged in identity.
  * @param request The request header for the associated request.
- * @param messages The messages for the current language.
  * @tparam I The type of the identity.
  */
-case class NotAuthorizedEvent[I <: Identity](identity: I, request: RequestHeader, messages: Messages) extends SilhouetteEvent
+case class NotAuthorizedEvent[I <: Identity](identity: I, request: RequestHeader) extends SilhouetteEvent
 
 /**
  * An event bus implementation which uses a class based lookup classification.
