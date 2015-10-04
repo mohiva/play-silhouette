@@ -21,26 +21,55 @@ import com.mohiva.play.silhouette.api.util.ExecutionContextProvider
 import scala.concurrent.ExecutionContext
 
 /**
- * The environment needed to instantiate a Silhouette controller.
+ * The environment type.
  *
- * @tparam I The type of the identity.
- * @tparam A The type of the authenticator.
+ * Defines the [[Identity]] and [[Authenticator]] types for an environment. It is possible
+ * to implement as many types as needed. This has the advantage that an application isn't
+ * bound only to a single `Identity` -> `Authenticator` combination.
+ *
+ * To define a new environment type create a new trait with the appropriate [[Identity]] and
+ * [[Authenticator]] types:
+ *
+ * {{{
+ *   trait SessionEnv {
+ *     type I = User
+ *     type A = SessionAuthenticator
+ *   }
+ *   trait JWTEnv {
+ *     type I = User
+ *     type A = JWTAuthenticator
+ *   }
+ * }}}
  */
-trait Environment[I <: Identity, A <: Authenticator] extends ExecutionContextProvider {
+trait Env {
+  type I <: Identity
+  type A <: Authenticator
+}
+
+/**
+ * Provides the components needed to handle a secured request.
+ *
+ * It's possible to declare different environments for different environment types. The
+ * [[com.mohiva.play.silhouette.api.services.IdentityService]] and the
+ * [[com.mohiva.play.silhouette.api.services.AuthenticatorService]] are bound to the appropriate types
+ * defined in the environment type. But the [[EventBus]] and the list of [[RequestProvider]]
+ * instances can be defined as needed for every environment type.
+ */
+trait Environment[E <: Env] extends ExecutionContextProvider {
 
   /**
    * Gets the identity service implementation.
    *
    * @return The identity service implementation.
    */
-  def identityService: IdentityService[I]
+  def identityService: IdentityService[E#I]
 
   /**
    * Gets the authenticator service implementation.
    *
    * @return The authenticator service implementation.
    */
-  def authenticatorService: AuthenticatorService[A]
+  def authenticatorService: AuthenticatorService[E#A]
 
   /**
    * Gets the list of request providers.
@@ -58,14 +87,19 @@ trait Environment[I <: Identity, A <: Authenticator] extends ExecutionContextPro
 }
 
 /**
- * The companion object.
+ * Companion object to easily create environment instances.
+ *
+ * {{{
+ *   Environment[SessionEnv](...)
+ *   Environment[JWTEnv](...)
+ * }}}
  */
 object Environment {
-  def apply[I <: Identity, A <: Authenticator](
-    identityServiceImpl: IdentityService[I],
-    authenticatorServiceImpl: AuthenticatorService[A],
+  def apply[E <: Env](
+    identityServiceImpl: IdentityService[E#I],
+    authenticatorServiceImpl: AuthenticatorService[E#A],
     requestProvidersImpl: Seq[RequestProvider],
-    eventBusImpl: EventBus)(implicit ec: ExecutionContext) = new Environment[I, A] {
+    eventBusImpl: EventBus)(implicit ec: ExecutionContext) = new Environment[E] {
     val identityService = identityServiceImpl
     val authenticatorService = authenticatorServiceImpl
     val requestProviders = requestProvidersImpl

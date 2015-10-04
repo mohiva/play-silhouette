@@ -50,10 +50,10 @@ package object test {
      *
      * @param authenticator The authenticator to embed into the request.
      * @param env The Silhouette environment.
-     * @tparam T The type of the authenticator.
+     * @tparam E The type of the environment.
      * @return A fake request.
      */
-    def withAuthenticator[T <: Authenticator](authenticator: T)(implicit env: Environment[_, T]): FakeRequest[A] = {
+    def withAuthenticator[E <: Env](authenticator: E#A)(implicit env: Environment[E]): FakeRequest[A] = {
       implicit val ec = env.executionContext
       val rh = env.authenticatorService.init(authenticator).map(v => env.authenticatorService.embed(v, f))
       new FakeRequest(
@@ -74,11 +74,11 @@ package object test {
      *
      * @param loginInfo The login info for which the new authenticator should be created.
      * @param env The Silhouette environment.
-     * @tparam T The type of the authenticator.
+     * @tparam E The type of the environment.
      * @return A fake request.
      */
-    def withAuthenticator[T <: Authenticator](loginInfo: LoginInfo)(implicit env: Environment[_, T]): FakeRequest[A] = {
-      withAuthenticator(FakeAuthenticator[T](loginInfo))
+    def withAuthenticator[E <: Env](loginInfo: LoginInfo)(implicit env: Environment[E]): FakeRequest[A] = {
+      withAuthenticator(FakeAuthenticator[E](loginInfo))
     }
   }
 }

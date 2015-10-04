@@ -19,7 +19,6 @@
  */
 package com.mohiva.play.silhouette.api
 
-import play.api.i18n.Messages
 import play.api.mvc.Request
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -38,11 +37,10 @@ trait Authorization[I <: Identity, A <: Authenticator] {
    * @param identity The current identity instance.
    * @param authenticator The current authenticator instance.
    * @param request The current request.
-   * @param messages The messages for the current language.
    * @tparam B The type of the request body.
    * @return True if the user is authorized, false otherwise.
    */
-  def isAuthorized[B](identity: I, authenticator: A)(implicit request: Request[B], messages: Messages): Future[Boolean]
+  def isAuthorized[B](identity: I, authenticator: A)(implicit request: Request[B]): Future[Boolean]
 }
 
 /**
@@ -66,7 +64,7 @@ object Authorization {
      */
     def unary_! : Authorization[I, A] = new Authorization[I, A] {
       def isAuthorized[B](identity: I, authenticator: A)(
-        implicit request: Request[B], messages: Messages): Future[Boolean] = {
+        implicit request: Request[B]): Future[Boolean] = {
 
         self.isAuthorized(identity, authenticator).map(x => !x)
       }
@@ -80,7 +78,7 @@ object Authorization {
      */
     def &&(authorization: Authorization[I, A]): Authorization[I, A] = new Authorization[I, A] {
       def isAuthorized[B](identity: I, authenticator: A)(
-        implicit request: Request[B], messages: Messages): Future[Boolean] = {
+        implicit request: Request[B]): Future[Boolean] = {
 
         val leftF = self.isAuthorized(identity, authenticator)
         val rightF = authorization.isAuthorized(identity, authenticator)
@@ -99,7 +97,7 @@ object Authorization {
      */
     def ||(authorization: Authorization[I, A]): Authorization[I, A] = new Authorization[I, A] {
       def isAuthorized[B](identity: I, authenticator: A)(
-        implicit request: Request[B], messages: Messages): Future[Boolean] = {
+        implicit request: Request[B]): Future[Boolean] = {
 
         val leftF = self.isAuthorized(identity, authenticator)
         val rightF = authorization.isAuthorized(identity, authenticator)

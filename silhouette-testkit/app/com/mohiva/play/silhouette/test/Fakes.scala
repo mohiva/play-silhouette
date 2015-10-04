@@ -196,10 +196,10 @@ object FakeAuthenticator {
    * @param loginInfo The login info for which the authenticator should be created.
    * @param env The Silhouette environment.
    * @param requestHeader The request header.
-   * @tparam T The type of the authenticator,
+   * @tparam E The type of the environment,
    * @return A authenticator instance.
    */
-  def apply[T <: Authenticator](loginInfo: LoginInfo)(implicit env: Environment[_, T], requestHeader: RequestHeader): T = {
+  def apply[E <: Env](loginInfo: LoginInfo)(implicit env: Environment[E], requestHeader: RequestHeader): E#A = {
     env.authenticatorService.create(loginInfo)
   }
 }
@@ -211,22 +211,22 @@ object FakeAuthenticator {
  * @param requestProviders The list of request providers.
  * @param eventBus The event bus implementation.
  * @param executionContext The execution context to handle the asynchronous operations.
- * @tparam I The type of the identity.
- * @tparam T The type of the authenticator.
+ * @param tt The type tag of the authenticator type.
+ * @tparam E The type of the environment.
  */
-case class FakeEnvironment[I <: Identity, T <: Authenticator: TypeTag](
-  identities: Seq[(LoginInfo, I)],
+case class FakeEnvironment[E <: Env](
+  identities: Seq[(LoginInfo, E#I)],
   requestProviders: Seq[RequestProvider] = Seq(),
-  eventBus: EventBus = EventBus())(implicit val executionContext: ExecutionContext)
-  extends Environment[I, T] {
+  eventBus: EventBus = EventBus())(implicit val executionContext: ExecutionContext, tt: TypeTag[E#A])
+  extends Environment[E] {
 
   /**
    * The identity service implementation.
    */
-  val identityService: IdentityService[I] = new FakeIdentityService[I](identities: _*)
+  val identityService: IdentityService[E#I] = new FakeIdentityService[E#I](identities: _*)
 
   /**
    * The authenticator service implementation.
    */
-  val authenticatorService: AuthenticatorService[T] = FakeAuthenticatorService[T]()
+  val authenticatorService: AuthenticatorService[E#A] = FakeAuthenticatorService[E#A]()
 }
