@@ -19,6 +19,7 @@
  */
 package com.mohiva.play.silhouette.api
 
+import com.mohiva.play.silhouette.api.exceptions.{ NotAuthorizedException, NotAuthenticatedException }
 import play.api.http.{ ContentTypes, Status }
 import play.api.i18n.{ I18nSupport, Messages }
 import play.api.libs.json.Json
@@ -29,12 +30,32 @@ import scala.concurrent._
 /**
  * Silhouette error handler.
  */
-sealed trait ErrorHandler
+sealed trait ErrorHandler {
+
+  /**
+   * Calls the error handler methods based on a caught exception.
+   *
+   * @param request The request header.
+   * @return A partial function which maps an exception to a Play result.
+   */
+  def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[Result]]
+}
 
 /**
  * Handles errors when a user is not authenticated.
  */
 trait NotAuthenticatedErrorHandler extends ErrorHandler {
+
+  /**
+   * Exception handler which translates an [com.mohiva.play.silhouette.api.exceptions.NotAuthenticatedException]]
+   * into a 401 Unauthorized result.
+   *
+   * @param request The request header.
+   * @return A partial function which maps an exception to a Play result.
+   */
+  def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[Result]] = {
+    case e: NotAuthenticatedException => onNotAuthenticated
+  }
 
   /**
    * Called when a user is not authenticated.
@@ -51,6 +72,17 @@ trait NotAuthenticatedErrorHandler extends ErrorHandler {
  * Handles errors when a user is authenticated but not authorized.
  */
 trait NotAuthorizedErrorHandler extends ErrorHandler {
+
+  /**
+   * Exception handler which translates an [[com.mohiva.play.silhouette.api.exceptions.NotAuthorizedException]]
+   * into a 403 Forbidden result.
+   *
+   * @param request The request header.
+   * @return A partial function which maps an exception to a Play result.
+   */
+  def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[Result]] = {
+    case e: NotAuthorizedException => onNotAuthorized
+  }
 
   /**
    * Called when a user is authenticated but not authorized.
@@ -76,6 +108,18 @@ trait DefaultNotAuthenticatedErrorHandler
    * @inheritdoc
    *
    * @param request The request header.
+   * @return A partial function which maps an exception to a Play result.
+   */
+  override def exceptionHandler(implicit request: RequestHeader) = {
+    case e: NotAuthenticatedException =>
+      logger.info(e.getMessage, e)
+      super.exceptionHandler(request)(e)
+  }
+
+  /**
+   * @inheritdoc
+   *
+   * @param request The request header.
    * @return The result to send to the client.
    */
   override def onNotAuthenticated(implicit request: RequestHeader) = {
@@ -92,6 +136,18 @@ trait DefaultNotAuthorizedErrorHandler
   with DefaultErrorHandler
   with I18nSupport
   with Logger {
+
+  /**
+   * @inheritdoc
+   *
+   * @param request The request header.
+   * @return A partial function which maps an exception to a Play result.
+   */
+  override def exceptionHandler(implicit request: RequestHeader) = {
+    case e: NotAuthorizedException =>
+      logger.info(e.getMessage, e)
+      super.exceptionHandler(request)(e)
+  }
 
   /**
    * @inheritdoc
