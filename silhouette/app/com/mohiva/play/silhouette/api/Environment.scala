@@ -31,11 +31,11 @@ import scala.concurrent.ExecutionContext
  * [[Authenticator]] types:
  *
  * {{{
- *   trait SessionEnv {
+ *   trait SessionEnv extends Env {
  *     type I = User
  *     type A = SessionAuthenticator
  *   }
- *   trait JWTEnv {
+ *   trait JWTEnv extends Env {
  *     type I = User
  *     type A = JWTAuthenticator
  *   }
