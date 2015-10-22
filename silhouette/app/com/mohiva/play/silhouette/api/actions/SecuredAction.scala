@@ -22,7 +22,6 @@ package com.mohiva.play.silhouette.api.actions
 import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.exceptions.{ NotAuthenticatedException, NotAuthorizedException }
 import play.api.i18n.MessagesApi
 import play.api.inject.Module
 import play.api.mvc._
@@ -262,33 +261,17 @@ class DefaultSecuredAction @Inject() (val requestHandler: SecuredRequestHandler)
 /**
  * Error handler for secured actions.
  */
-trait SecuredErrorHandler
-  extends NotAuthenticatedErrorHandler
-  with NotAuthorizedErrorHandler
-  with Logger {
+trait SecuredErrorHandler extends NotAuthenticatedErrorHandler with NotAuthorizedErrorHandler {
 
   /**
-   * Default exception handler for silhouette exceptions which translates an exception into
-   * the appropriate result.
-   *
-   * Translates an [[com.mohiva.play.silhouette.api.exceptions.NotAuthenticatedException]] into a
-   * 401 Unauthorized result and an [[com.mohiva.play.silhouette.api.exceptions.NotAuthorizedException]]
-   * into a 403 Forbidden result.
-   *
-   * For reference see:
-   * [[http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html RFC 2616]],
-   * [[http://stackoverflow.com/questions/3297048/403-forbidden-vs-401-unauthorized-http-responses/6937030#6937030 403 Forbidden vs 401 Unauthorized HTTP responses]].
+   * Exception handler which chains the exceptions handlers from the sub types.
    *
    * @param request The request header.
-   * @return The result to send to the client based on the exception.
+   * @return A partial function which maps an exception to a Play result.
    */
-  def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[Result]] = {
-    case e: NotAuthenticatedException =>
-      logger.info(e.getMessage, e)
-      onNotAuthenticated
-    case e: NotAuthorizedException =>
-      logger.info(e.getMessage, e)
-      onNotAuthorized
+  override def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[Result]] = {
+    super[NotAuthenticatedErrorHandler].exceptionHandler orElse
+      super[NotAuthorizedErrorHandler].exceptionHandler
   }
 }
 
@@ -300,7 +283,19 @@ trait SecuredErrorHandler
 class DefaultSecuredErrorHandler @Inject() (val messagesApi: MessagesApi)
   extends SecuredErrorHandler
   with DefaultNotAuthenticatedErrorHandler
-  with DefaultNotAuthorizedErrorHandler
+  with DefaultNotAuthorizedErrorHandler {
+
+  /**
+   * Exception handler which chains the exceptions handlers from the sub types.
+   *
+   * @param request The request header.
+   * @return A partial function which maps an exception to a Play result.
+   */
+  override def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[Result]] = {
+    super[DefaultNotAuthenticatedErrorHandler].exceptionHandler orElse
+      super[DefaultNotAuthorizedErrorHandler].exceptionHandler
+  }
+}
 
 /**
  * Play module for providing the secured action components.
