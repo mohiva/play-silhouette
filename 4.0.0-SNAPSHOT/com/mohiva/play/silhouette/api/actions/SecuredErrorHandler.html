@@ -45,14 +45,14 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">SecuredErrorHandler</span><span class="result"> extends <a href="../NotAuthenticatedErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.NotAuthenticatedErrorHandler">NotAuthenticatedErrorHandler</a> with <a href="../NotAuthorizedErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.NotAuthorizedErrorHandler">NotAuthorizedErrorHandler</a> with <a href="../Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
+        <span class="name">SecuredErrorHandler</span><span class="result"> extends <a href="../NotAuthenticatedErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.NotAuthenticatedErrorHandler">NotAuthenticatedErrorHandler</a> with <a href="../NotAuthorizedErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.NotAuthorizedErrorHandler">NotAuthorizedErrorHandler</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Error handler for secured actions.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a>, <a href="../NotAuthorizedErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.NotAuthorizedErrorHandler">NotAuthorizedErrorHandler</a>, <a href="../NotAuthenticatedErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.NotAuthenticatedErrorHandler">NotAuthenticatedErrorHandler</a>, <a href="../ErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.ErrorHandler">ErrorHandler</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../NotAuthorizedErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.NotAuthorizedErrorHandler">NotAuthorizedErrorHandler</a>, <a href="../NotAuthenticatedErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.NotAuthenticatedErrorHandler">NotAuthenticatedErrorHandler</a>, <a href="../ErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.ErrorHandler">ErrorHandler</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="DefaultSecuredErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.actions.DefaultSecuredErrorHandler">DefaultSecuredErrorHandler</a></div>
@@ -73,7 +73,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler"><span>SecuredErrorHandler</span></li><li class="in" name="com.mohiva.play.silhouette.api.Logger"><span>Logger</span></li><li class="in" name="com.mohiva.play.silhouette.api.NotAuthorizedErrorHandler"><span>NotAuthorizedErrorHandler</span></li><li class="in" name="com.mohiva.play.silhouette.api.NotAuthenticatedErrorHandler"><span>NotAuthenticatedErrorHandler</span></li><li class="in" name="com.mohiva.play.silhouette.api.ErrorHandler"><span>ErrorHandler</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler"><span>SecuredErrorHandler</span></li><li class="in" name="com.mohiva.play.silhouette.api.NotAuthorizedErrorHandler"><span>NotAuthorizedErrorHandler</span></li><li class="in" name="com.mohiva.play.silhouette.api.NotAuthenticatedErrorHandler"><span>NotAuthenticatedErrorHandler</span></li><li class="in" name="com.mohiva.play.silhouette.api.ErrorHandler"><span>ErrorHandler</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -278,14 +278,8 @@
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Default exception handler for silhouette exceptions which translates an exception into
-the appropriate result.</p><div class="fullcomment"><div class="comment cmt"><p>Default exception handler for silhouette exceptions which translates an exception into
-the appropriate result.</p><p>Translates an <a href="../exceptions/NotAuthenticatedException.html" class="extype" name="com.mohiva.play.silhouette.api.exceptions.NotAuthenticatedException">com.mohiva.play.silhouette.api.exceptions.NotAuthenticatedException</a> into a
-401 Unauthorized result and an <a href="../exceptions/NotAuthorizedException.html" class="extype" name="com.mohiva.play.silhouette.api.exceptions.NotAuthorizedException">com.mohiva.play.silhouette.api.exceptions.NotAuthorizedException</a>
-into a 403 Forbidden result.</p><p>For reference see:
-<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">RFC 2616</a>,
-<a href="http://stackoverflow.com/questions/3297048/403-forbidden-vs-401-unauthorized-http-responses/6937030#6937030" target="_blank">403 Forbidden vs 401 Unauthorized HTTP responses</a>.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client based on the exception.</p></dd></dl></div>
+      <p class="shortcomment cmt">Exception handler which chains the exceptions handlers from the sub types.</p><div class="fullcomment"><div class="comment cmt"><p>Exception handler which chains the exceptions handlers from the sub types.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>The request header.</p></dd><dt>returns</dt><dd class="cmt"><p>A partial function which maps an exception to a Play result.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler">SecuredErrorHandler</a> → <a href="../NotAuthorizedErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.NotAuthorizedErrorHandler">NotAuthorizedErrorHandler</a> → <a href="../NotAuthenticatedErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.NotAuthenticatedErrorHandler">NotAuthenticatedErrorHandler</a> → <a href="../ErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.ErrorHandler">ErrorHandler</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -360,24 +354,6 @@ into a 403 Forbidden result.</p><p>For reference see:
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.api.Logger#logger" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="logger:play.api.Logger"></a>
-      <a id="logger:play.api.Logger"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">logger</span><span class="result">: <span class="extype" name="play.api.Logger">play.api.Logger</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.api.actions.SecuredErrorHandler@logger:play.api.Logger" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">A named logger instance.</p><div class="fullcomment"><div class="comment cmt"><p>A named logger instance.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -541,9 +517,7 @@ into a 403 Forbidden result.</p><p>For reference see:
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.mohiva.play.silhouette.api.Logger">
-              <h3>Inherited from <a href="../Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></h3>
-            </div><div class="parent" name="com.mohiva.play.silhouette.api.NotAuthorizedErrorHandler">
+        <div class="parent" name="com.mohiva.play.silhouette.api.NotAuthorizedErrorHandler">
               <h3>Inherited from <a href="../NotAuthorizedErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.NotAuthorizedErrorHandler">NotAuthorizedErrorHandler</a></h3>
             </div><div class="parent" name="com.mohiva.play.silhouette.api.NotAuthenticatedErrorHandler">
               <h3>Inherited from <a href="../NotAuthenticatedErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.NotAuthenticatedErrorHandler">NotAuthenticatedErrorHandler</a></h3>
