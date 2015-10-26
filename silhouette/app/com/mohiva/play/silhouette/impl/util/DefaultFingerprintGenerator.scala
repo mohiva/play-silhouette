@@ -19,8 +19,7 @@
  */
 package com.mohiva.play.silhouette.impl.util
 
-import akka.util.Crypt
-import com.mohiva.play.silhouette.api.util.FingerprintGenerator
+import com.mohiva.play.silhouette.api.util.{ Crypt, FingerprintGenerator }
 import play.api.http.HeaderNames._
 import play.api.mvc.RequestHeader
 
