@@ -410,6 +410,7 @@ object CookieAuthenticatorService {
  * @param cookieDomain The cookie domain.
  * @param secureCookie Whether this cookie is secured, sent only for HTTPS requests.
  * @param httpOnlyCookie Whether this cookie is HTTP only, i.e. not accessible from client-side JavaScript code.
+ * @param encryptAuthenticator Indicates if the authenticator should be encrypted in the cookie.
  * @param useFingerprinting Indicates if a fingerprint of the user should be stored in the authenticator.
  * @param cookieMaxAge The duration a cookie expires. `None` for a transient cookie.
  * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out.
