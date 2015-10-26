@@ -474,24 +474,24 @@ this implementation provides an abstract way to store the secret in different lo
     </span>
       <p class="shortcomment cmt">Builds the social profile.</p>
     </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProfileParser" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="SocialProfileParser[C,P&lt;:com.mohiva.play.silhouette.impl.providers.SocialProfile]extendsAnyRef"></a>
-      <a id="SocialProfileParser[C,P&lt;:SocialProfile]:SocialProfileParser[C,P]"></a>
+      <a id="SocialProfileParser[C,P&lt;:com.mohiva.play.silhouette.impl.providers.SocialProfile,A&lt;:com.mohiva.play.silhouette.api.AuthInfo]extendsAnyRef"></a>
+      <a id="SocialProfileParser[C,P&lt;:SocialProfile,A&lt;:AuthInfo]:SocialProfileParser[C,P,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="SocialProfileParser.html"><span class="name">SocialProfileParser</span></a><span class="tparams">[<span name="C">C</span>, <span name="P">P &lt;: <a href="SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfile">SocialProfile</a></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="SocialProfileParser.html"><span class="name">SocialProfileParser</span></a><span class="tparams">[<span name="C">C</span>, <span name="P">P &lt;: <a href="SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfile">SocialProfile</a></span>, <span name="A">A &lt;: <a href="../../api/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@SocialProfileParser[C,P&lt;:com.mohiva.play.silhouette.impl.providers.SocialProfile]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@SocialProfileParser[C,P&lt;:com.mohiva.play.silhouette.impl.providers.SocialProfile,A&lt;:com.mohiva.play.silhouette.api.AuthInfo]extendsAnyRef" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Parses a social profile.</p><div class="fullcomment"><div class="comment cmt"><p>Parses a social profile.</p><p>A parser transforms the content returned from the provider into a social profile instance. Parsers can
 be reused by other parsers to avoid duplicating code.
-</p></div><dl class="paramcmts block"><dt class="tparam">C</dt><dd class="cmt"><p>The content type to parse a profile from.</p></dd><dt class="tparam">P</dt><dd class="cmt"><p>The type of the profile to parse to.</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="tparam">C</dt><dd class="cmt"><p>The content type to parse a profile from.</p></dd><dt class="tparam">P</dt><dd class="cmt"><p>The type of the profile to parse to.</p></dd><dt class="tparam">A</dt><dd class="cmt"><p>The type of the auth info.</p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProvider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="SocialProviderextendsProviderwithSocialProfileBuilderwithExecutionContextProvider"></a>
       <a id="SocialProvider:SocialProvider"></a>

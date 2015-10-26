@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">SocialProfileParser</span><span class="tparams">[<span name="C">C</span>, <span name="P">P &lt;: <a href="SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfile">SocialProfile</a></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">SocialProfileParser</span><span class="tparams">[<span name="C">C</span>, <span name="P">P &lt;: <a href="SocialProfile.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfile">SocialProfile</a></span>, <span name="A">A &lt;: <a href="../../api/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Parses a social profile.</p><p>A parser transforms the content returned from the provider into a social profile instance. Parsers can
 be reused by other parsers to avoid duplicating code.
-</p></div><dl class="paramcmts block"><dt class="tparam">C</dt><dd class="cmt"><p>The content type to parse a profile from.</p></dd><dt class="tparam">P</dt><dd class="cmt"><p>The type of the profile to parse to.</p></dd></dl><div class="toggleContainer block">
+</p></div><dl class="paramcmts block"><dt class="tparam">C</dt><dd class="cmt"><p>The content type to parse a profile from.</p></dd><dt class="tparam">P</dt><dd class="cmt"><p>The type of the profile to parse to.</p></dd><dt class="tparam">A</dt><dd class="cmt"><p>The type of the auth info.</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
@@ -98,23 +98,23 @@ be reused by other parsers to avoid duplicating code.
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="com.mohiva.play.silhouette.impl.providers.SocialProfileParser#parse" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="parse(content:C):scala.concurrent.Future[P]"></a>
-      <a id="parse(C):Future[P]"></a>
+      <a id="parse(content:C,authInfo:A):scala.concurrent.Future[P]"></a>
+      <a id="parse(C,A):Future[P]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parse</span><span class="params">(<span name="content">content: <span class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileParser.C">C</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileParser.P">P</span>]</span>
+        <span class="name">parse</span><span class="params">(<span name="content">content: <span class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileParser.C">C</span></span>, <span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileParser.A">A</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileParser.P">P</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.SocialProfileParser@parse(content:C):scala.concurrent.Future[P]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.SocialProfileParser@parse(content:C,authInfo:A):scala.concurrent.Future[P]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Parses the social profile.</p><div class="fullcomment"><div class="comment cmt"><p>Parses the social profile.
-</p></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>The content returned from the provider.</p></dd><dt>returns</dt><dd class="cmt"><p>The social profile from given result.</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>The content returned from the provider.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info to query the provider again for additional data.</p></dd><dt>returns</dt><dd class="cmt"><p>The social profile from given result.</p></dd></dl></div>
     </li></ol>
             </div>
 

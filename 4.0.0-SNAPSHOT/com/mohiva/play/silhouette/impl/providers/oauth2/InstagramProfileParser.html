@@ -45,14 +45,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">InstagramProfileParser</span><span class="result"> extends <a href="../SocialProfileParser.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileParser">SocialProfileParser</a>[<span class="extype" name="play.api.libs.json.JsValue">JsValue</span>, <a href="../CommonSocialProfile.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfile">CommonSocialProfile</a>]</span>
+        <span class="name">InstagramProfileParser</span><span class="result"> extends <a href="../SocialProfileParser.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileParser">SocialProfileParser</a>[<span class="extype" name="play.api.libs.json.JsValue">JsValue</span>, <a href="../CommonSocialProfile.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfile">CommonSocialProfile</a>, <a href="../OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Info">OAuth2Info</a>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The profile parser for the common social profile.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../SocialProfileParser.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileParser">SocialProfileParser</a>[<span class="extype" name="play.api.libs.json.JsValue">JsValue</span>, <a href="../CommonSocialProfile.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfile">CommonSocialProfile</a>], <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../SocialProfileParser.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileParser">SocialProfileParser</a>[<span class="extype" name="play.api.libs.json.JsValue">JsValue</span>, <a href="../CommonSocialProfile.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfile">CommonSocialProfile</a>, <a href="../OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Info">OAuth2Info</a>], <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -366,23 +366,23 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.oauth2.InstagramProfileParser#parse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="parse(json:play.api.libs.json.JsValue):scala.concurrent.Future[com.mohiva.play.silhouette.impl.providers.CommonSocialProfile]"></a>
-      <a id="parse(JsValue):Future[CommonSocialProfile]"></a>
+      <a id="parse(json:play.api.libs.json.JsValue,authInfo:com.mohiva.play.silhouette.impl.providers.OAuth2Info):scala.concurrent.Future[com.mohiva.play.silhouette.impl.providers.CommonSocialProfile]"></a>
+      <a id="parse(JsValue,OAuth2Info):Future[CommonSocialProfile]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parse</span><span class="params">(<span name="json">json: <span class="extype" name="play.api.libs.json.JsValue">JsValue</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="../CommonSocialProfile.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfile">CommonSocialProfile</a>]</span>
+        <span class="name">parse</span><span class="params">(<span name="json">json: <span class="extype" name="play.api.libs.json.JsValue">JsValue</span></span>, <span name="authInfo">authInfo: <a href="../OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Info">OAuth2Info</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="../CommonSocialProfile.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfile">CommonSocialProfile</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth2.InstagramProfileParser@parse(json:play.api.libs.json.JsValue):scala.concurrent.Future[com.mohiva.play.silhouette.impl.providers.CommonSocialProfile]" title="Permalink" target="_top">
+      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.oauth2.InstagramProfileParser@parse(json:play.api.libs.json.JsValue,authInfo:com.mohiva.play.silhouette.impl.providers.OAuth2Info):scala.concurrent.Future[com.mohiva.play.silhouette.impl.providers.CommonSocialProfile]" title="Permalink" target="_top">
         <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Parses the social profile.</p><div class="fullcomment"><div class="comment cmt"><p>Parses the social profile.
-</p></div><dl class="paramcmts block"><dt class="param">json</dt><dd class="cmt"><p>The content returned from the provider.</p></dd><dt>returns</dt><dd class="cmt"><p>The social profile from given result.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.InstagramProfileParser">InstagramProfileParser</a> → <a href="../SocialProfileParser.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileParser">SocialProfileParser</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">json</dt><dd class="cmt"><p>The content returned from the provider.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info to query the provider again for additional data.</p></dd><dt>returns</dt><dd class="cmt"><p>The social profile from given result.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.oauth2.InstagramProfileParser">InstagramProfileParser</a> → <a href="../SocialProfileParser.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileParser">SocialProfileParser</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -496,7 +496,7 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="com.mohiva.play.silhouette.impl.providers.SocialProfileParser">
-              <h3>Inherited from <a href="../SocialProfileParser.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileParser">SocialProfileParser</a>[<span class="extype" name="play.api.libs.json.JsValue">JsValue</span>, <a href="../CommonSocialProfile.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfile">CommonSocialProfile</a>]</h3>
+              <h3>Inherited from <a href="../SocialProfileParser.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileParser">SocialProfileParser</a>[<span class="extype" name="play.api.libs.json.JsValue">JsValue</span>, <a href="../CommonSocialProfile.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfile">CommonSocialProfile</a>, <a href="../OAuth2Info.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Info">OAuth2Info</a>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
