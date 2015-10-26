@@ -5,6 +5,7 @@
   - Every SecuredAction can now override the global(default injected) error handler if needed
   - A controller is not bound to a single Authenticator anymore
 - Remove SecuredErrorHandler in favour of injectable error handler
+- Pass the auth info to the profile parsers to easier query additional data from the provider API
 
 ## 3.0 (2015-07-14)
 

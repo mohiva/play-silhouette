@@ -32,7 +32,7 @@ trait BaseYahooProvider extends OpenIDProvider {
   /**
    * The content type to parse a profile from.
    */
-  override type Content = OpenIDInfo
+  override type Content = Unit
 
   /**
    * Gets the provider ID.
@@ -53,27 +53,27 @@ trait BaseYahooProvider extends OpenIDProvider {
    * @return On success the build social profile, otherwise a failure.
    */
   override protected def buildProfile(authInfo: OpenIDInfo): Future[Profile] = {
-    profileParser.parse(authInfo)
+    profileParser.parse((), authInfo)
   }
 }
 
 /**
  * The profile parser for the common social profile.
  */
-class YahooProfileParser extends SocialProfileParser[OpenIDInfo, CommonSocialProfile] {
+class YahooProfileParser extends SocialProfileParser[Unit, CommonSocialProfile, OpenIDInfo] {
 
   /**
    * Parses the social profile.
    *
-   * @param info The auth info received from the provider.
+   * @param authInfo The auth info received from the provider.
    * @return The social profile from given result.
    */
-  override def parse(info: OpenIDInfo) = Future.successful {
+  override def parse(data: Unit, authInfo: OpenIDInfo) = Future.successful {
     CommonSocialProfile(
-      loginInfo = LoginInfo(ID, info.id),
-      fullName = info.attributes.get("fullname"),
-      email = info.attributes.get("email"),
-      avatarURL = info.attributes.get("image")
+      loginInfo = LoginInfo(ID, authInfo.id),
+      fullName = authInfo.attributes.get("fullname"),
+      email = authInfo.attributes.get("email"),
+      avatarURL = authInfo.attributes.get("image")
     )
   }
 }

@@ -69,7 +69,7 @@ trait BaseLinkedInProvider extends OAuth2Provider {
           val timestamp = (json \ "timestamp").asOpt[Long]
 
           Future.failed(new ProfileRetrievalException(SpecifiedProfileError.format(id, error, message, requestId, status, timestamp)))
-        case _ => profileParser.parse(json)
+        case _ => profileParser.parse(json, authInfo)
       }
     }
   }
@@ -78,15 +78,16 @@ trait BaseLinkedInProvider extends OAuth2Provider {
 /**
  * The profile parser for the common social profile.
  */
-class LinkedInProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile] {
+class LinkedInProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile, OAuth2Info] {
 
   /**
    * Parses the social profile.
    *
    * @param json The content returned from the provider.
+   * @param authInfo The auth info to query the provider again for additional data.
    * @return The social profile from given result.
    */
-  override def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue, authInfo: OAuth2Info) = Future.successful {
     val userID = (json \ "id").as[String]
     val firstName = (json \ "firstName").asOpt[String]
     val lastName = (json \ "lastName").asOpt[String]

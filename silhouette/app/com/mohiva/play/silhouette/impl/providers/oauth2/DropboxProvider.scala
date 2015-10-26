@@ -58,7 +58,7 @@ trait BaseDropboxProvider extends OAuth2Provider {
     httpLayer.url(urls("api")).withHeaders(AUTHORIZATION -> s"Bearer ${authInfo.accessToken}").get().flatMap { response =>
       val json = response.json
       response.status match {
-        case 200 => profileParser.parse(json)
+        case 200 => profileParser.parse(json, authInfo)
         case status =>
           val error = (json \ "error").as[String]
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, error, status))
@@ -70,15 +70,16 @@ trait BaseDropboxProvider extends OAuth2Provider {
 /**
  * The profile parser for the common social profile.
  */
-class DropboxProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile] {
+class DropboxProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile, OAuth2Info] {
 
   /**
    * Parses the social profile.
    *
    * @param json The content returned from the provider.
+   * @param authInfo The auth info to query the provider again for additional data.
    * @return The social profile from given result.
    */
-  override def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue, authInfo: OAuth2Info) = Future.successful {
     val userID = (json \ "uid").as[Long]
     val firstName = (json \ "name_details" \ "given_name").asOpt[String]
     val lastName = (json \ "name_details" \ "surname").asOpt[String]

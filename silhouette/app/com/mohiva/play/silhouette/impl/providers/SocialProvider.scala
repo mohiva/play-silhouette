@@ -173,16 +173,18 @@ trait SocialProfile {
  *
  * @tparam C The content type to parse a profile from.
  * @tparam P The type of the profile to parse to.
+ * @tparam A The type of the auth info.
  */
-trait SocialProfileParser[C, P <: SocialProfile] {
+trait SocialProfileParser[C, P <: SocialProfile, A <: AuthInfo] {
 
   /**
    * Parses the social profile.
    *
    * @param content The content returned from the provider.
+   * @param authInfo The auth info to query the provider again for additional data.
    * @return The social profile from given result.
    */
-  def parse(content: C): Future[P]
+  def parse(content: C, authInfo: A): Future[P]
 }
 
 /**
@@ -224,7 +226,7 @@ trait SocialProfileBuilder {
    *
    * @return The profile parser implementation.
    */
-  protected def profileParser: SocialProfileParser[Content, Profile]
+  protected def profileParser: SocialProfileParser[Content, Profile, A]
 }
 
 /**

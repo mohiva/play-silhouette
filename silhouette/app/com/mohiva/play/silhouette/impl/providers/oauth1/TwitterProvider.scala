@@ -65,7 +65,7 @@ trait BaseTwitterProvider extends OAuth1Provider {
           val message = (json \ "errors" \\ "message").headOption.map(_.as[String])
 
           Future.failed(new ProfileRetrievalException(SpecifiedProfileError.format(id, code, message)))
-        case _ => profileParser.parse(json)
+        case _ => profileParser.parse(json, authInfo)
       }
     }
   }
@@ -74,15 +74,16 @@ trait BaseTwitterProvider extends OAuth1Provider {
 /**
  * The profile parser for the common social profile.
  */
-class TwitterProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile] {
+class TwitterProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile, OAuth1Info] {
 
   /**
    * Parses the social profile.
    *
    * @param json The content returned from the provider.
+   * @param authInfo The auth info to query the provider again for additional data.
    * @return The social profile from given result.
    */
-  override def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue, authInfo: OAuth1Info) = Future.successful {
     val userID = (json \ "id").as[Long]
     val fullName = (json \ "name").asOpt[String]
     val email = (json \ "email").asOpt[String]
