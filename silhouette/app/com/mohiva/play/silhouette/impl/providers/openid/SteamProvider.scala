@@ -32,7 +32,7 @@ trait BaseSteamProvider extends OpenIDProvider {
   /**
    * The content type to parse a profile from.
    */
-  override type Content = OpenIDInfo
+  override type Content = Unit
 
   /**
    * Gets the provider ID.
@@ -53,23 +53,23 @@ trait BaseSteamProvider extends OpenIDProvider {
    * @return On success the build social profile, otherwise a failure.
    */
   override protected def buildProfile(authInfo: OpenIDInfo): Future[Profile] = {
-    profileParser.parse(authInfo)
+    profileParser.parse((), authInfo)
   }
 }
 
 /**
  * The profile parser for the common social profile.
  */
-class SteamProfileParser extends SocialProfileParser[OpenIDInfo, CommonSocialProfile] {
+class SteamProfileParser extends SocialProfileParser[Unit, CommonSocialProfile, OpenIDInfo] {
 
   /**
    * Parses the social profile.
    *
-   * @param info The auth info received from the provider.
+   * @param authInfo The auth info received from the provider.
    * @return The social profile from given result.
    */
-  override def parse(info: OpenIDInfo) = Future.successful {
-    CommonSocialProfile(loginInfo = LoginInfo(ID, info.id))
+  override def parse(data: Unit, authInfo: OpenIDInfo) = Future.successful {
+    CommonSocialProfile(loginInfo = LoginInfo(ID, authInfo.id))
   }
 }
 

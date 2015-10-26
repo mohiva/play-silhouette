@@ -44,7 +44,7 @@ trait BaseVKProvider extends OAuth2Provider {
   /**
    * The content type to parse a profile from.
    */
-  override type Content = (JsValue, OAuth2Info)
+  override type Content = JsValue
 
   /**
    * The provider ID.
@@ -71,7 +71,7 @@ trait BaseVKProvider extends OAuth2Provider {
           val errorMsg = (error \ "error_msg").as[String]
 
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, errorCode, errorMsg))
-        case _ => profileParser.parse(json -> authInfo)
+        case _ => profileParser.parse(json, authInfo)
       }
     }
   }
@@ -95,16 +95,16 @@ trait BaseVKProvider extends OAuth2Provider {
 /**
  * The profile parser for the common social profile.
  */
-class VKProfileParser extends SocialProfileParser[(JsValue, OAuth2Info), CommonSocialProfile] {
+class VKProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile, OAuth2Info] {
 
   /**
    * Parses the social profile.
    *
-   * @param data The data returned from the provider.
+   * @param json The data returned from the provider.
+   * @param authInfo The auth info to query the provider again for additional data.
    * @return The social profile from given result.
    */
-  override def parse(data: (JsValue, OAuth2Info)) = Future.successful {
-    val json = data._1
+  override def parse(json: JsValue, authInfo: OAuth2Info) = Future.successful {
     val response = (json \ "response").apply(0)
     val userId = (response \ "uid").as[Long]
     val firstName = (response \ "first_name").asOpt[String]
@@ -115,7 +115,7 @@ class VKProfileParser extends SocialProfileParser[(JsValue, OAuth2Info), CommonS
       loginInfo = LoginInfo(ID, userId.toString),
       firstName = firstName,
       lastName = lastName,
-      email = data._2.params.flatMap(_.get("email")),
+      email = authInfo.params.flatMap(_.get("email")),
       avatarURL = avatarURL)
   }
 }

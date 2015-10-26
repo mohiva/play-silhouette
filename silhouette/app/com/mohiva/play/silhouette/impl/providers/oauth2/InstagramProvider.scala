@@ -66,7 +66,7 @@ trait BaseInstagramProvider extends OAuth2Provider {
           val errorMsg = (json \ "meta" \ "error_message").asOpt[String]
 
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, code, errorType, errorMsg))
-        case _ => profileParser.parse(json)
+        case _ => profileParser.parse(json, authInfo)
       }
     }
   }
@@ -75,15 +75,16 @@ trait BaseInstagramProvider extends OAuth2Provider {
 /**
  * The profile parser for the common social profile.
  */
-class InstagramProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile] {
+class InstagramProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile, OAuth2Info] {
 
   /**
    * Parses the social profile.
    *
    * @param json The content returned from the provider.
+   * @param authInfo The auth info to query the provider again for additional data.
    * @return The social profile from given result.
    */
-  override def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue, authInfo: OAuth2Info) = Future.successful {
     val data = json \ "data"
     val userID = (data \ "id").as[String]
     val fullName = (data \ "full_name").asOpt[String]

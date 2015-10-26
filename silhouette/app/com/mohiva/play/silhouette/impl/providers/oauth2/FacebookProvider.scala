@@ -68,7 +68,7 @@ trait BaseFacebookProvider extends OAuth2Provider {
           val errorCode = (error \ "code").as[Int]
 
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, errorMsg, errorType, errorCode))
-        case _ => profileParser.parse(json)
+        case _ => profileParser.parse(json, authInfo)
       }
     }
   }
@@ -77,15 +77,16 @@ trait BaseFacebookProvider extends OAuth2Provider {
 /**
  * The profile parser for the common social profile.
  */
-class FacebookProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile] {
+class FacebookProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile, OAuth2Info] {
 
   /**
    * Parses the social profile.
    *
    * @param json The content returned from the provider.
+   * @param authInfo The auth info to query the provider again for additional data.
    * @return The social profile from given result.
    */
-  override def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue, authInfo: OAuth2Info) = Future.successful {
     val userID = (json \ "id").as[String]
     val firstName = (json \ "first_name").asOpt[String]
     val lastName = (json \ "last_name").asOpt[String]

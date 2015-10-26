@@ -65,7 +65,7 @@ trait BaseXingProvider extends OAuth1Provider {
           val message = (json \ "message").asOpt[String]
 
           Future.failed(new ProfileRetrievalException(SpecifiedProfileError.format(id, error, message.getOrElse(""))))
-        case _ => profileParser.parse(json)
+        case _ => profileParser.parse(json, authInfo)
       }
     }
   }
@@ -74,15 +74,16 @@ trait BaseXingProvider extends OAuth1Provider {
 /**
  * The profile parser for the common social profile.
  */
-class XingProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile] {
+class XingProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile, OAuth1Info] {
 
   /**
    * Parses the social profile.
    *
    * @param json The content returned from the provider.
+   * @param authInfo The auth info to query the provider again for additional data.
    * @return The social profile from given result.
    */
-  override def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue, authInfo: OAuth1Info) = Future.successful {
     val users = (json \ "users").as[Seq[JsObject]].head
     val userID = (users \ "id").as[String]
     val firstName = (users \ "first_name").asOpt[String]

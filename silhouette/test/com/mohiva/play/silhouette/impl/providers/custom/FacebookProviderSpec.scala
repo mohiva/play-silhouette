@@ -180,7 +180,7 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
   /**
    * A custom Facebook profile parser for testing purpose.
    */
-  class CustomFacebookProfileParser extends SocialProfileParser[JsValue, CustomSocialProfile] {
+  class CustomFacebookProfileParser extends SocialProfileParser[JsValue, CustomSocialProfile, OAuth2Info] {
 
     /**
      * The common social profile parser.
@@ -191,9 +191,10 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
      * Parses the social profile.
      *
      * @param json The content returned from the provider.
+     * @param authInfo The auth info to query the provider again for additional data.
      * @return The social profile from given result.
      */
-    def parse(json: JsValue) = commonParser.parse(json).map { commonProfile =>
+    def parse(json: JsValue, authInfo: OAuth2Info) = commonParser.parse(json, authInfo).map { commonProfile =>
       val gender = (json \ "gender").as[String]
       CustomSocialProfile(
         loginInfo = commonProfile.loginInfo,

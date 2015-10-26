@@ -75,7 +75,7 @@ trait BaseGitHubProvider extends OAuth2Provider {
           val docURL = (json \ "documentation_url").asOpt[String]
 
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, msg, docURL))
-        case _ => profileParser.parse(json)
+        case _ => profileParser.parse(json, authInfo)
       }
     }
   }
@@ -84,15 +84,16 @@ trait BaseGitHubProvider extends OAuth2Provider {
 /**
  * The profile parser for the common social profile.
  */
-class GitHubProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile] {
+class GitHubProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile, OAuth2Info] {
 
   /**
    * Parses the social profile.
    *
    * @param json The content returned from the provider.
+   * @param authInfo The auth info to query the provider again for additional data.
    * @return The social profile from given result.
    */
-  override def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue, authInfo: OAuth2Info) = Future.successful {
     val userID = (json \ "id").as[Long]
     val fullName = (json \ "name").asOpt[String]
     val avatarUrl = (json \ "avatar_url").asOpt[String]

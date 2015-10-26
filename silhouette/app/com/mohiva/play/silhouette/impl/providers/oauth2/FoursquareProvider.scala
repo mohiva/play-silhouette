@@ -75,7 +75,7 @@ trait BaseFoursquareProvider extends OAuth2Provider {
             logger.info("This implementation may be deprecated! Please contact the Silhouette team for a fix!")
           }
 
-          profileParser.parse(json)
+          profileParser.parse(json, authInfo)
       }
     }
   }
@@ -86,15 +86,16 @@ trait BaseFoursquareProvider extends OAuth2Provider {
  *
  * @param settings The provider settings.
  */
-class FoursquareProfileParser(settings: OAuth2Settings) extends SocialProfileParser[JsValue, CommonSocialProfile] {
+class FoursquareProfileParser(settings: OAuth2Settings) extends SocialProfileParser[JsValue, CommonSocialProfile, OAuth2Info] {
 
   /**
    * Parses the social profile.
    *
    * @param json The content returned from the provider.
+   * @param authInfo The auth info to query the provider again for additional data.
    * @return The social profile from given result.
    */
-  override def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue, authInfo: OAuth2Info) = Future.successful {
     val user = json \ "response" \ "user"
     val userID = (user \ "id").as[String]
     val lastName = (user \ "lastName").asOpt[String]
