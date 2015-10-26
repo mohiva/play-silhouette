@@ -15,7 +15,7 @@
  */
 package com.mohiva.play.silhouette.impl.util
 
-import akka.util.Crypt
+import com.mohiva.play.silhouette.api.util.Crypt
 import play.api.test.{ FakeRequest, PlaySpecification }
 
 /**
