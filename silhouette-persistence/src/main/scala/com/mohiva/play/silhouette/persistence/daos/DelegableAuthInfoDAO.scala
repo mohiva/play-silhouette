@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.daos
+package com.mohiva.play.silhouette.persistence.daos
 
 import com.mohiva.play.silhouette.api.AuthInfo
 
@@ -22,10 +22,10 @@ import scala.reflect.ClassTag
 /**
  * An implementation of the auth info DAO.
  *
- * This abstract implementation of the [[com.mohiva.play.silhouette.impl.daos.AuthInfoDAO]] trait
+ * This abstract implementation of the [[com.mohiva.play.silhouette.persistence.daos.AuthInfoDAO]] trait
  * allows us to get the class tag of the auth info it is responsible for. Based on the class tag
- * the [[com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository]] class can
- * delegate operations to the DAO which is responsible for the currently handled auth info.
+ * the [[com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository]] class
+ * can delegate operations to the DAO which is responsible for the currently handled auth info.
  *
  * @param classTag The class tag for the type parameter.
  * @tparam T The type of the auth info to store.

@@ -13,34 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.daos
+package com.mohiva.play.silhouette.persistence.repositories
 
 import com.mohiva.play.silhouette.api.StorableAuthenticator
 import com.mohiva.play.silhouette.api.util.CacheLayer
+import org.specs2.concurrent.ExecutionEnv
 import org.specs2.mock.Mockito
+import org.specs2.mutable.Specification
 import org.specs2.specification.Scope
-import play.api.test.PlaySpecification
 
 import scala.concurrent.Future
 import scala.concurrent.duration.Duration
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.impl.daos.CacheAuthenticatorDAO]] class.
+ * Test case for the [[CacheAuthenticatorRepository]] class.
  */
-class CacheAuthenticatorDAOSpec extends PlaySpecification with Mockito {
+class CacheAuthenticatorRepositorySpec(implicit ev: ExecutionEnv) extends Specification with Mockito {
 
   "The `find` method" should {
     "return value from cache" in new Context {
       cacheLayer.find[StorableAuthenticator]("test-id") returns Future.successful(Some(authenticator))
 
-      await(dao.find("test-id")) must beSome(authenticator)
+      repository.find("test-id") must beSome(authenticator).await
       there was one(cacheLayer).find[StorableAuthenticator]("test-id")
     }
 
     "return None if value couldn't be found in cache" in new Context {
       cacheLayer.find[StorableAuthenticator]("test-id") returns Future.successful(None)
 
-      await(dao.find("test-id")) must beNone
+      repository.find("test-id") must beNone.await
       there was one(cacheLayer).find[StorableAuthenticator]("test-id")
     }
   }
@@ -50,7 +51,7 @@ class CacheAuthenticatorDAOSpec extends PlaySpecification with Mockito {
       authenticator.id returns "test-id"
       cacheLayer.save("test-id", authenticator, Duration.Inf) returns Future.successful(authenticator)
 
-      await(dao.add(authenticator)) must be equalTo authenticator
+      repository.add(authenticator) must beEqualTo(authenticator).await
       there was one(cacheLayer).save("test-id", authenticator, Duration.Inf)
     }
   }
@@ -60,7 +61,7 @@ class CacheAuthenticatorDAOSpec extends PlaySpecification with Mockito {
       authenticator.id returns "test-id"
       cacheLayer.save("test-id", authenticator, Duration.Inf) returns Future.successful(authenticator)
 
-      await(dao.update(authenticator)) must be equalTo authenticator
+      repository.update(authenticator) must beEqualTo(authenticator).await
       there was one(cacheLayer).save("test-id", authenticator, Duration.Inf)
     }
   }
@@ -69,7 +70,7 @@ class CacheAuthenticatorDAOSpec extends PlaySpecification with Mockito {
     "remove value from cache" in new Context {
       cacheLayer.remove("test-id") returns Future.successful(())
 
-      await(dao.remove("test-id")) must be equalTo (())
+      repository.remove("test-id") must beEqualTo(()).await
       there was one(cacheLayer).remove("test-id")
     }
   }
@@ -90,8 +91,8 @@ class CacheAuthenticatorDAOSpec extends PlaySpecification with Mockito {
     lazy val cacheLayer = mock[CacheLayer]
 
     /**
-     * The dAO to test.
+     * The repository to test.
      */
-    lazy val dao = new CacheAuthenticatorDAO[StorableAuthenticator](cacheLayer)
+    lazy val repository = new CacheAuthenticatorRepository[StorableAuthenticator](cacheLayer)
   }
 }

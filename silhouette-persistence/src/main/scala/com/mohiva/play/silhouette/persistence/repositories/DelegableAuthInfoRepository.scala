@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.repositories
+package com.mohiva.play.silhouette.persistence.repositories
 
+import com.mohiva.play.silhouette.api.exceptions.ConfigurationException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.{ AuthInfo, LoginInfo }
-import com.mohiva.play.silhouette.impl.daos.{ AuthInfoDAO, DelegableAuthInfoDAO }
-import com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository._
+import com.mohiva.play.silhouette.persistence.daos.{ AuthInfoDAO, DelegableAuthInfoDAO }
+import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository._
 
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.reflect.ClassTag
@@ -49,7 +50,7 @@ class DelegableAuthInfoRepository(daos: DelegableAuthInfoDAO[_]*)(implicit ec: E
   override def find[T <: AuthInfo](loginInfo: LoginInfo)(implicit tag: ClassTag[T]): Future[Option[T]] = {
     daos.find(_.classTag == tag) match {
       case Some(dao) => dao.find(loginInfo).map(_.map(_.asInstanceOf[T]))
-      case _ => throw new Exception(FindError.format(tag.runtimeClass))
+      case _ => throw new ConfigurationException(FindError.format(tag.runtimeClass))
     }
   }
 
@@ -64,7 +65,7 @@ class DelegableAuthInfoRepository(daos: DelegableAuthInfoDAO[_]*)(implicit ec: E
   override def add[T <: AuthInfo](loginInfo: LoginInfo, authInfo: T): Future[T] = {
     daos.find(_.classTag.runtimeClass == authInfo.getClass) match {
       case Some(dao) => dao.asInstanceOf[AuthInfoDAO[T]].add(loginInfo, authInfo)
-      case _ => throw new Exception(AddError.format(authInfo.getClass))
+      case _ => throw new ConfigurationException(AddError.format(authInfo.getClass))
     }
   }
 
@@ -79,7 +80,7 @@ class DelegableAuthInfoRepository(daos: DelegableAuthInfoDAO[_]*)(implicit ec: E
   override def update[T <: AuthInfo](loginInfo: LoginInfo, authInfo: T): Future[T] = {
     daos.find(_.classTag.runtimeClass == authInfo.getClass) match {
       case Some(dao) => dao.asInstanceOf[AuthInfoDAO[T]].update(loginInfo, authInfo)
-      case _ => throw new Exception(UpdateError.format(authInfo.getClass))
+      case _ => throw new ConfigurationException(UpdateError.format(authInfo.getClass))
     }
   }
 
@@ -96,7 +97,7 @@ class DelegableAuthInfoRepository(daos: DelegableAuthInfoDAO[_]*)(implicit ec: E
   override def save[T <: AuthInfo](loginInfo: LoginInfo, authInfo: T): Future[T] = {
     daos.find(_.classTag.runtimeClass == authInfo.getClass) match {
       case Some(dao) => dao.asInstanceOf[AuthInfoDAO[T]].save(loginInfo, authInfo)
-      case _ => throw new Exception(SaveError.format(authInfo.getClass))
+      case _ => throw new ConfigurationException(SaveError.format(authInfo.getClass))
     }
   }
 
@@ -111,7 +112,7 @@ class DelegableAuthInfoRepository(daos: DelegableAuthInfoDAO[_]*)(implicit ec: E
   override def remove[T <: AuthInfo](loginInfo: LoginInfo)(implicit tag: ClassTag[T]): Future[Unit] = {
     daos.find(_.classTag == tag) match {
       case Some(dao) => dao.remove(loginInfo)
-      case _ => throw new Exception(RemoveError.format(tag.runtimeClass))
+      case _ => throw new ConfigurationException(RemoveError.format(tag.runtimeClass))
     }
   }
 }
@@ -124,9 +125,9 @@ object DelegableAuthInfoRepository {
   /**
    * The error messages.
    */
-  val AddError = "Cannot add auth info of type: %s"
-  val FindError = "Cannot find auth info of type: %s"
-  val UpdateError = "Cannot update auth info of type: %s"
-  val SaveError = "Cannot save auth info of type: %s"
-  val RemoveError = "Cannot remove auth info of type: %s"
+  val AddError = "Cannot add auth info of type: %s; Please configure the DAO for this type"
+  val FindError = "Cannot find auth info of type: %s; Please configure the DAO for this type"
+  val UpdateError = "Cannot update auth info of type: %s; Please configure the DAO for this type"
+  val SaveError = "Cannot save auth info of type: %s; Please configure the DAO for this type"
+  val RemoveError = "Cannot remove auth info of type: %s; Please configure the DAO for this type"
 }

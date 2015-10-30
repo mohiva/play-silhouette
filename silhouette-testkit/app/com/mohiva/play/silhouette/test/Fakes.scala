@@ -18,10 +18,10 @@ package com.mohiva.play.silhouette.test
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api._
+import com.mohiva.play.silhouette.api.repositories.AuthenticatorRepository
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorService, IdentityService }
 import com.mohiva.play.silhouette.api.util.Clock
 import com.mohiva.play.silhouette.impl.authenticators._
-import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import com.mohiva.play.silhouette.impl.util.{ DefaultFingerprintGenerator, SecureRandomIDGenerator }
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.RequestHeader
@@ -57,11 +57,11 @@ class FakeIdentityService[I <: Identity](identities: (LoginInfo, I)*) extends Id
 }
 
 /**
- * A fake authenticator DAO which stores authenticators in memory.
+ * A fake authenticator repository which persists authenticators in memory.
  *
  * @tparam T The type of the authenticator to handle.
  */
-class FakeAuthenticatorDAO[T <: StorableAuthenticator] extends AuthenticatorDAO[T] {
+class FakeAuthenticatorRepository[T <: StorableAuthenticator] extends AuthenticatorRepository[T] {
 
   /**
    * The data store for the OAuth1 info.
@@ -135,7 +135,7 @@ case class FakeCookieAuthenticatorService() extends CookieAuthenticatorService(
  */
 case class FakeBearerTokenAuthenticatorService() extends BearerTokenAuthenticatorService(
   new BearerTokenAuthenticatorSettings(),
-  new FakeAuthenticatorDAO[BearerTokenAuthenticator],
+  new FakeAuthenticatorRepository[BearerTokenAuthenticator],
   new SecureRandomIDGenerator(),
   Clock())
 

@@ -22,13 +22,13 @@ package com.mohiva.play.silhouette.impl.authenticators
 import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api.exceptions._
+import com.mohiva.play.silhouette.api.repositories.AuthenticatorRepository
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
 import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.api.util.JsonFormats._
 import com.mohiva.play.silhouette.api.{ ExpirableAuthenticator, Logger, LoginInfo, StorableAuthenticator }
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService._
-import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import org.joda.time.DateTime
 import play.api.http.HeaderNames
 import play.api.libs.Crypto
@@ -139,7 +139,7 @@ object CookieAuthenticator extends Logger {
  * The service that handles the cookie authenticator.
  *
  * @param settings The cookie settings.
- * @param dao The DAO to store the authenticator. Set it to None to use a stateless approach.
+ * @param repository The repository to persist the authenticator. Set it to None to use a stateless approach.
  * @param fingerprintGenerator The fingerprint generator implementation.
  * @param idGenerator The ID generator used to create the authenticator ID.
  * @param clock The clock implementation.
@@ -147,7 +147,7 @@ object CookieAuthenticator extends Logger {
  */
 class CookieAuthenticatorService(
   settings: CookieAuthenticatorSettings,
-  dao: Option[AuthenticatorDAO[CookieAuthenticator]],
+  repository: Option[AuthenticatorRepository[CookieAuthenticator]],
   fingerprintGenerator: FingerprintGenerator,
   idGenerator: IDGenerator,
   clock: Clock)(implicit val executionContext: ExecutionContext)
@@ -192,7 +192,7 @@ class CookieAuthenticatorService(
     }).flatMap { fingerprint =>
       request.cookies.get(settings.cookieName) match {
         case Some(cookie) =>
-          (dao match {
+          (repository match {
             case Some(d) => d.find(cookie.value)
             case None => unserialize(cookie.value)(settings) match {
               case Success(authenticator) => Future.successful(Some(authenticator))
@@ -224,7 +224,7 @@ class CookieAuthenticatorService(
    * @return The serialized authenticator value.
    */
   override def init(authenticator: CookieAuthenticator)(implicit request: RequestHeader): Future[Cookie] = {
-    (dao match {
+    (repository match {
       case Some(d) => d.add(authenticator).map(_.id)
       case None => Future.successful(serialize(authenticator)(settings))
     }).map { value =>
@@ -298,7 +298,7 @@ class CookieAuthenticatorService(
   override def update(authenticator: CookieAuthenticator, result: Result)(
     implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
-    (dao match {
+    (repository match {
       case Some(d) => d.update(authenticator).map(_ => AuthenticatorResult(result))
       case None => Future.successful(AuthenticatorResult(result.withCookies(Cookie(
         name = settings.cookieName,
@@ -328,7 +328,7 @@ class CookieAuthenticatorService(
    * @return The serialized expression of the authenticator.
    */
   override def renew(authenticator: CookieAuthenticator)(implicit request: RequestHeader): Future[Cookie] = {
-    (dao match {
+    (repository match {
       case Some(d) => d.remove(authenticator.id)
       case None => Future.successful(())
     }).flatMap { _ =>
@@ -369,7 +369,7 @@ class CookieAuthenticatorService(
   override def discard(authenticator: CookieAuthenticator, result: Result)(
     implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
-    (dao match {
+    (repository match {
       case Some(d) => d.remove(authenticator.id)
       case None => Future.successful(())
     }).map { _ =>

@@ -13,64 +13,67 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.repositories
+package com.mohiva.play.silhouette.persistence.repositories
 
 import com.google.inject.{ AbstractModule, Guice, Provides }
+import com.mohiva.play.silhouette.api.exceptions.ConfigurationException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.PasswordInfo
 import com.mohiva.play.silhouette.api.{ AuthInfo, LoginInfo }
-import com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO
 import com.mohiva.play.silhouette.impl.providers.{ OAuth1Info, OAuth2Info }
-import com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository._
+import com.mohiva.play.silhouette.persistence.daos.{ DelegableAuthInfoDAO, InMemoryAuthInfoDAO }
+import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository._
 import net.codingwell.scalaguice.ScalaModule
+import org.specs2.concurrent.ExecutionEnv
+import org.specs2.control.NoLanguageFeatures
 import org.specs2.mock.Mockito
+import org.specs2.mutable.Specification
 import org.specs2.specification.Scope
-import play.api.test.PlaySpecification
-import play.api.libs.concurrent.Execution.Implicits._
 
-import scala.collection.mutable
-import scala.concurrent.Future
-import scala.reflect.ClassTag
+import scala.concurrent.Await
+import scala.concurrent.duration._
+import scala.language.postfixOps
 
 /**
  * Test case for the [[DelegableAuthInfoRepository]] trait.
  */
-class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
+class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
+  extends Specification with Mockito with NoLanguageFeatures {
 
   "The `find` method" should {
     "delegate the PasswordInfo to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(passwordInfoDAO.add(loginInfo, passwordInfo))
+      Await.result(passwordInfoDAO.add(loginInfo, passwordInfo), 10 seconds)
 
-      await(service.find[PasswordInfo](loginInfo)) must beSome(passwordInfo)
+      service.find[PasswordInfo](loginInfo) must beSome(passwordInfo).await
       there was one(passwordInfoDAO).find(loginInfo)
     }
 
     "delegate the OAuth1Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(oauth1InfoDAO.add(loginInfo, oauth1Info))
+      Await.result(oauth1InfoDAO.add(loginInfo, oauth1Info), 10 seconds)
 
-      await(service.find[OAuth1Info](loginInfo)) must beSome(oauth1Info)
+      service.find[OAuth1Info](loginInfo) must beSome(oauth1Info).await
       there was one(oauth1InfoDAO).find(loginInfo)
     }
 
     "delegate the OAuth2Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(oauth2InfoDAO.add(loginInfo, oauth2Info))
+      Await.result(oauth2InfoDAO.add(loginInfo, oauth2Info), 10 seconds)
 
-      await(service.find[OAuth2Info](loginInfo)) must beSome(oauth2Info)
+      service.find[OAuth2Info](loginInfo) must beSome(oauth2Info).await
       there was one(oauth2InfoDAO).find(loginInfo)
     }
 
-    "throw an Exception if an unsupported type was given" in new Context {
+    "throw a ConfigurationException if an unsupported type was given" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(service.find[UnsupportedInfo](loginInfo)) must throwA[Exception].like {
-        case e => e.getMessage must startWith(FindError.format(""))
-      }
+      service.find[UnsupportedInfo](loginInfo) must throwA[ConfigurationException].like {
+        case e => e.getMessage must startWith(FindError.format(classOf[UnsupportedInfo]))
+      }.await
     }
   }
 
@@ -78,30 +81,30 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
     "delegate the PasswordInfo to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(service.add(loginInfo, passwordInfo)) must be equalTo passwordInfo
+      service.add(loginInfo, passwordInfo) must beEqualTo(passwordInfo).await
       there was one(passwordInfoDAO).add(loginInfo, passwordInfo)
     }
 
     "delegate the OAuth1Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(service.add(loginInfo, oauth1Info)) must be equalTo oauth1Info
+      service.add(loginInfo, oauth1Info) must beEqualTo(oauth1Info).await
       there was one(oauth1InfoDAO).add(loginInfo, oauth1Info)
     }
 
     "delegate the OAuth2Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(service.add(loginInfo, oauth2Info)) must be equalTo oauth2Info
+      service.add(loginInfo, oauth2Info) must beEqualTo(oauth2Info).await
       there was one(oauth2InfoDAO).add(loginInfo, oauth2Info)
     }
 
-    "throw an Exception if an unsupported type was given" in new Context {
+    "throw a ConfigurationException if an unsupported type was given" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(service.add(loginInfo, new UnsupportedInfo)) must throwA[Exception].like {
-        case e => e.getMessage must startWith(AddError.format(""))
-      }
+      service.add(loginInfo, new UnsupportedInfo) must throwA[ConfigurationException].like {
+        case e => e.getMessage must startWith(AddError.format(classOf[UnsupportedInfo]))
+      }.await
     }
   }
 
@@ -109,30 +112,30 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
     "delegate the PasswordInfo to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(service.update(loginInfo, passwordInfo)) must be equalTo passwordInfo
+      service.update(loginInfo, passwordInfo) must beEqualTo(passwordInfo).await
       there was one(passwordInfoDAO).update(loginInfo, passwordInfo)
     }
 
     "delegate the OAuth1Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(service.update(loginInfo, oauth1Info)) must be equalTo oauth1Info
+      service.update(loginInfo, oauth1Info) must beEqualTo(oauth1Info).await
       there was one(oauth1InfoDAO).update(loginInfo, oauth1Info)
     }
 
     "delegate the OAuth2Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(service.update(loginInfo, oauth2Info)) must be equalTo oauth2Info
+      service.update(loginInfo, oauth2Info) must beEqualTo(oauth2Info).await
       there was one(oauth2InfoDAO).update(loginInfo, oauth2Info)
     }
 
-    "throw an Exception if an unsupported type was given" in new Context {
+    "throw a ConfigurationException if an unsupported type was given" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(service.update(loginInfo, new UnsupportedInfo)) must throwA[Exception].like {
-        case e => e.getMessage must startWith(UpdateError.format(""))
-      }
+      service.update(loginInfo, new UnsupportedInfo) must throwA[ConfigurationException].like {
+        case e => e.getMessage must startWith(UpdateError.format(classOf[UnsupportedInfo]))
+      }.await
     }
   }
 
@@ -140,30 +143,30 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
     "delegate the PasswordInfo to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(service.save(loginInfo, passwordInfo)) must be equalTo passwordInfo
+      service.save(loginInfo, passwordInfo) must beEqualTo(passwordInfo).await
       there was one(passwordInfoDAO).save(loginInfo, passwordInfo)
     }
 
     "delegate the OAuth1Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(service.save(loginInfo, oauth1Info)) must be equalTo oauth1Info
+      service.save(loginInfo, oauth1Info) must beEqualTo(oauth1Info).await
       there was one(oauth1InfoDAO).save(loginInfo, oauth1Info)
     }
 
     "delegate the OAuth2Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(service.save(loginInfo, oauth2Info)) must be equalTo oauth2Info
+      service.save(loginInfo, oauth2Info) must beEqualTo(oauth2Info).await
       there was one(oauth2InfoDAO).save(loginInfo, oauth2Info)
     }
 
-    "throw an Exception if an unsupported type was given" in new Context {
+    "throw a ConfigurationException if an unsupported type was given" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(service.save(loginInfo, new UnsupportedInfo)) must throwA[Exception].like {
-        case e => e.getMessage must startWith(SaveError.format(""))
-      }
+      service.save(loginInfo, new UnsupportedInfo) must throwA[ConfigurationException].like {
+        case e => e.getMessage must startWith(SaveError.format(classOf[UnsupportedInfo]))
+      }.await
     }
   }
 
@@ -171,36 +174,36 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
     "delegate the PasswordInfo to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(passwordInfoDAO.add(loginInfo, passwordInfo))
+      Await.result(passwordInfoDAO.add(loginInfo, passwordInfo), 10 seconds)
 
-      await(service.remove[PasswordInfo](loginInfo)) must be equalTo (())
+      service.remove[PasswordInfo](loginInfo) must beEqualTo(()).await
       there was one(passwordInfoDAO).remove(loginInfo)
     }
 
     "delegate the OAuth1Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(oauth1InfoDAO.add(loginInfo, oauth1Info))
+      Await.result(oauth1InfoDAO.add(loginInfo, oauth1Info), 10 seconds)
 
-      await(service.remove[OAuth1Info](loginInfo)) must be equalTo (())
+      service.remove[OAuth1Info](loginInfo) must beEqualTo(()).await
       there was one(oauth1InfoDAO).remove(loginInfo)
     }
 
     "delegate the OAuth2Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(oauth2InfoDAO.add(loginInfo, oauth2Info))
+      Await.result(oauth2InfoDAO.add(loginInfo, oauth2Info), 10 seconds)
 
-      await(service.remove[OAuth2Info](loginInfo)) must be equalTo (())
+      service.remove[OAuth2Info](loginInfo) must beEqualTo(()).await
       there was one(oauth2InfoDAO).remove(loginInfo)
     }
 
-    "throw an Exception if an unsupported type was given" in new Context {
+    "throw a ConfigurationException if an unsupported type was given" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      await(service.remove[UnsupportedInfo](loginInfo)) must throwA[Exception].like {
-        case e => e.getMessage must startWith(RemoveError.format(""))
-      }
+      service.remove[UnsupportedInfo](loginInfo) must throwA[ConfigurationException].like {
+        case e => e.getMessage must startWith(RemoveError.format(classOf[UnsupportedInfo]))
+      }.await
     }
   }
 
@@ -241,7 +244,7 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
     /**
      * The Guice module.
      *
-     * This is to test if the [[com.mohiva.play.silhouette.impl.daos.DelegableAuthInfoDAO]] can be used for
+     * This is to test if the [[com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO]] can be used for
      * dependency injection because it depends on an implicit [[scala.reflect.ClassTag]] parameter which the
      * compiler injects at compile time.
      */
@@ -288,78 +291,5 @@ class DelegableAuthInfoRepositorySpec extends PlaySpecification with Mockito {
      * The DAO to store the OAuth2 information.
      */
     class OAuth2InfoDAO extends InMemoryAuthInfoDAO[OAuth2Info]
-
-    /**
-     * An abstract in-memory test helper.
-     */
-    abstract class InMemoryAuthInfoDAO[T <: AuthInfo: ClassTag] extends DelegableAuthInfoDAO[T] {
-
-      /**
-       * The data store for the auth info.
-       */
-      var data: mutable.HashMap[LoginInfo, T] = mutable.HashMap()
-
-      /**
-       * Finds the auth info which is linked with the specified login info.
-       *
-       * @param loginInfo The linked login info.
-       * @return The retrieved auth info or None if no auth info could be retrieved for the given login info.
-       */
-      def find(loginInfo: LoginInfo): Future[Option[T]] = {
-        Future.successful(data.get(loginInfo))
-      }
-
-      /**
-       * Adds new auth info for the given login info.
-       *
-       * @param loginInfo The login info for which the auth info should be added.
-       * @param authInfo The auth info to add.
-       * @return The added auth info.
-       */
-      def add(loginInfo: LoginInfo, authInfo: T): Future[T] = {
-        data += (loginInfo -> authInfo)
-        Future.successful(authInfo)
-      }
-
-      /**
-       * Updates the auth info for the given login info.
-       *
-       * @param loginInfo The login info for which the auth info should be updated.
-       * @param authInfo The auth info to update.
-       * @return The updated auth info.
-       */
-      def update(loginInfo: LoginInfo, authInfo: T): Future[T] = {
-        data += (loginInfo -> authInfo)
-        Future.successful(authInfo)
-      }
-
-      /**
-       * Saves the auth info for the given login info.
-       *
-       * This method either adds the auth info if it doesn't exists or it updates the auth info
-       * if it already exists.
-       *
-       * @param loginInfo The login info for which the auth info should be saved.
-       * @param authInfo The auth info to save.
-       * @return The saved auth info.
-       */
-      def save(loginInfo: LoginInfo, authInfo: T): Future[T] = {
-        find(loginInfo).flatMap {
-          case Some(_) => update(loginInfo, authInfo)
-          case None => add(loginInfo, authInfo)
-        }
-      }
-
-      /**
-       * Removes the auth info for the given login info.
-       *
-       * @param loginInfo The login info for which the auth info should be removed.
-       * @return A future to wait for the process to be completed.
-       */
-      def remove(loginInfo: LoginInfo): Future[Unit] = {
-        data -= loginInfo
-        Future.successful(())
-      }
-    }
   }
 }

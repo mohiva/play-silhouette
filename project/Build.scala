@@ -24,6 +24,18 @@ object Build extends Build {
     base = file("silhouette")
   )
 
+  val silhouettePersistence = Project(
+    id = "play-silhouette-persistence",
+    base = file("silhouette-persistence"),
+    dependencies = Seq(silhouette)
+  )
+
+  val silhouettePersistenceMemory = Project(
+    id = "play-silhouette-persistence-memory",
+    base = file("silhouette-persistence-memory"),
+    dependencies = Seq(silhouettePersistence)
+  )
+
   val silhouetteTestkit = Project(
     id = "play-silhouette-testkit",
     base = file("silhouette-testkit"),
@@ -33,7 +45,12 @@ object Build extends Build {
   val root = Project(
     id = "root",
     base = file("."),
-    aggregate = Seq(silhouette, silhouetteTestkit),
+    aggregate = Seq(
+      silhouette,
+      silhouettePersistence,
+      silhouettePersistenceMemory,
+      silhouetteTestkit
+    ),
     settings = Defaults.coreDefaultSettings ++
       APIDoc.settings ++
       Seq(
