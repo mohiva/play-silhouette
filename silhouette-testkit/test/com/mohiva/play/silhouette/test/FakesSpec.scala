@@ -52,11 +52,11 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     }
   }
 
-  "The `find` method of the `FakeAuthenticatorDAO`" should {
+  "The `find` method of the `FakeAuthenticatorRepository`" should {
     "return an authenticator for the given ID" in {
       val loginInfo = LoginInfo("test", "test")
       val authenticator = new FakeAuthenticator(loginInfo, "test")
-      val dao = new FakeAuthenticatorDAO[FakeAuthenticator]()
+      val dao = new FakeAuthenticatorRepository[FakeAuthenticator]()
 
       await(dao.add(authenticator))
 
@@ -64,37 +64,37 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
     }
 
     "return None if no authenticator could be found for the given ID" in {
-      val dao = new FakeAuthenticatorDAO[FakeAuthenticator]()
+      val dao = new FakeAuthenticatorRepository[FakeAuthenticator]()
 
       await(dao.find("test")) must beNone
     }
   }
 
-  "The `add` method of the `FakeAuthenticatorDAO`" should {
+  "The `add` method of the `FakeAuthenticatorRepository`" should {
     "add an authenticator" in {
       val loginInfo = LoginInfo("test", "test")
       val authenticator = new FakeAuthenticator(loginInfo)
-      val dao = new FakeAuthenticatorDAO[FakeAuthenticator]()
+      val dao = new FakeAuthenticatorRepository[FakeAuthenticator]()
 
       await(dao.add(authenticator)) must be equalTo authenticator
     }
   }
 
-  "The `update` method of the `FakeAuthenticatorDAO`" should {
+  "The `update` method of the `FakeAuthenticatorRepository`" should {
     "update an authenticator" in {
       val loginInfo = LoginInfo("test", "test")
       val authenticator = new FakeAuthenticator(loginInfo)
-      val dao = new FakeAuthenticatorDAO[FakeAuthenticator]()
+      val dao = new FakeAuthenticatorRepository[FakeAuthenticator]()
 
       await(dao.update(authenticator)) must be equalTo authenticator
     }
   }
 
-  "The `remove` method of the `FakeAuthenticatorDAO`" should {
+  "The `remove` method of the `FakeAuthenticatorRepository`" should {
     "remove an authenticator" in {
       val loginInfo = LoginInfo("test", "test")
       val authenticator = new FakeAuthenticator(loginInfo, "test")
-      val dao = new FakeAuthenticatorDAO[FakeAuthenticator]()
+      val dao = new FakeAuthenticatorRepository[FakeAuthenticator]()
 
       await(dao.add(authenticator))
       await(dao.find("test")) must beSome(authenticator)

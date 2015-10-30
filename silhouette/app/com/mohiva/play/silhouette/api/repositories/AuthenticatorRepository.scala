@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.daos
+package com.mohiva.play.silhouette.api.repositories
 
 import com.mohiva.play.silhouette.api.StorableAuthenticator
 
 import scala.concurrent.Future
 
 /**
- * The DAO to persist the authenticator.
+ * A trait that provides the means to persist authenticator information for the Silhouette module.
  *
  * @tparam T The type of the authenticator to store.
  */
-trait AuthenticatorDAO[T <: StorableAuthenticator] {
+trait AuthenticatorRepository[T <: StorableAuthenticator] {
 
   /**
    * Finds the authenticator for the given ID.

@@ -7,8 +7,8 @@ libraryDependencies ++= Seq(
   Library.jwtCore,
   Library.jwtApi,
   Library.Play.specs2 % Test,
-  Library.Specs2.matcherExtra % Test,
-  Library.mockito % Test,
+  Library.Play.Specs2.matcherExtra % Test,
+  Library.Play.Specs2.mock % Test,
   Library.scalaGuice % Test,
   Library.akkaTestkit % Test
 )

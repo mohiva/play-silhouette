@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.daos
+package com.mohiva.play.silhouette.persistence.repositories
 
 import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api.StorableAuthenticator
+import com.mohiva.play.silhouette.api.repositories.AuthenticatorRepository
 import com.mohiva.play.silhouette.api.util.CacheLayer
 
 import scala.concurrent.Future
@@ -25,13 +26,13 @@ import scala.concurrent.duration.Duration
 import scala.reflect.ClassTag
 
 /**
- * Implementation of the authenticator DAO which uses the cache layer to persist the authenticator.
+ * Implementation of the authenticator repository which uses the cache layer to persist the authenticator.
  *
  * @param cacheLayer The cache layer implementation.
  * @tparam T The type of the authenticator to store.
  */
-class CacheAuthenticatorDAO[T <: StorableAuthenticator: ClassTag] @Inject() (cacheLayer: CacheLayer)
-  extends AuthenticatorDAO[T] {
+class CacheAuthenticatorRepository[T <: StorableAuthenticator: ClassTag] @Inject() (cacheLayer: CacheLayer)
+  extends AuthenticatorRepository[T] {
 
   /**
    * Finds the authenticator for the given ID.

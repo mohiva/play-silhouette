@@ -13,26 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.daos
+package com.mohiva.play.silhouette.persistence.daos
 
 import com.mohiva.play.silhouette.api.{ AuthInfo, LoginInfo }
 
+import scala.collection.mutable
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 /**
- * The DAO to persist the auth info.
+ * An implementation of the auth info DAO which stores the data in memory.
  *
- * @tparam T The type of the auth info to store.
+ * This is not thread-safe implementation which should only be used for testing or development purpose.
  */
-trait AuthInfoDAO[T <: AuthInfo] {
+trait InMemoryAuthInfoDAO[T <: AuthInfo] extends DelegableAuthInfoDAO[T] {
 
   /**
-   * Finds the auth info which is linked to the specified login info.
+   * The data store for the auth info.
+   */
+  var data: mutable.HashMap[LoginInfo, T] = mutable.HashMap()
+
+  /**
+   * Finds the auth info which is linked with the specified login info.
    *
    * @param loginInfo The linked login info.
-   * @return The found auth info or None if no auth info could be found for the given login info.
+   * @return The retrieved auth info or None if no auth info could be retrieved for the given login info.
    */
-  def find(loginInfo: LoginInfo): Future[Option[T]]
+  def find(loginInfo: LoginInfo): Future[Option[T]] = {
+    Future.successful(data.get(loginInfo))
+  }
 
   /**
    * Adds new auth info for the given login info.
@@ -41,7 +50,10 @@ trait AuthInfoDAO[T <: AuthInfo] {
    * @param authInfo The auth info to add.
    * @return The added auth info.
    */
-  def add(loginInfo: LoginInfo, authInfo: T): Future[T]
+  def add(loginInfo: LoginInfo, authInfo: T): Future[T] = {
+    data += (loginInfo -> authInfo)
+    Future.successful(authInfo)
+  }
 
   /**
    * Updates the auth info for the given login info.
@@ -50,7 +62,10 @@ trait AuthInfoDAO[T <: AuthInfo] {
    * @param authInfo The auth info to update.
    * @return The updated auth info.
    */
-  def update(loginInfo: LoginInfo, authInfo: T): Future[T]
+  def update(loginInfo: LoginInfo, authInfo: T): Future[T] = {
+    data += (loginInfo -> authInfo)
+    Future.successful(authInfo)
+  }
 
   /**
    * Saves the auth info for the given login info.
@@ -62,7 +77,12 @@ trait AuthInfoDAO[T <: AuthInfo] {
    * @param authInfo The auth info to save.
    * @return The saved auth info.
    */
-  def save(loginInfo: LoginInfo, authInfo: T): Future[T]
+  def save(loginInfo: LoginInfo, authInfo: T): Future[T] = {
+    find(loginInfo).flatMap {
+      case Some(_) => update(loginInfo, authInfo)
+      case None => add(loginInfo, authInfo)
+    }
+  }
 
   /**
    * Removes the auth info for the given login info.
@@ -70,5 +90,8 @@ trait AuthInfoDAO[T <: AuthInfo] {
    * @param loginInfo The login info for which the auth info should be removed.
    * @return A future to wait for the process to be completed.
    */
-  def remove(loginInfo: LoginInfo): Future[Unit]
+  def remove(loginInfo: LoginInfo): Future[Unit] = {
+    data -= loginInfo
+    Future.successful(())
+  }
 }

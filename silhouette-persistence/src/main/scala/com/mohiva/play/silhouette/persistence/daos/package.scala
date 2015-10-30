@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl
+package com.mohiva.play.silhouette.persistence
 
 /**
  * Provides DAO implementations to persist and retrieve objects.

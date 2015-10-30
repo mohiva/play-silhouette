@@ -20,13 +20,13 @@ import com.atlassian.jwt.core.writer.{ JsonSmartJwtJsonBuilder, NimbusJwtWriterF
 import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api.exceptions._
+import com.mohiva.play.silhouette.api.repositories.AuthenticatorRepository
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
 import com.mohiva.play.silhouette.api.util.{ Base64, Clock, IDGenerator }
 import com.mohiva.play.silhouette.api.{ ExpirableAuthenticator, Logger, LoginInfo, StorableAuthenticator }
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator._
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService._
-import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import com.nimbusds.jose.JWSObject
 import com.nimbusds.jose.crypto.MACVerifier
 import com.nimbusds.jwt.JWTClaimsSet
@@ -215,14 +215,14 @@ object JWTAuthenticator {
  * that you will loose the possibility to invalidate a JWT.
  *
  * @param settings The authenticator settings.
- * @param dao The DAO to store the authenticator. Set it to None to use a stateless approach.
+ * @param repository The repository to persist the authenticator. Set it to None to use a stateless approach.
  * @param idGenerator The ID generator used to create the authenticator ID.
  * @param clock The clock implementation.
  * @param executionContext The execution context to handle the asynchronous operations.
  */
 class JWTAuthenticatorService(
   settings: JWTAuthenticatorSettings,
-  dao: Option[AuthenticatorDAO[JWTAuthenticator]],
+  repository: Option[AuthenticatorRepository[JWTAuthenticator]],
   idGenerator: IDGenerator,
   clock: Clock)(implicit val executionContext: ExecutionContext)
   extends AuthenticatorService[JWTAuthenticator]
@@ -261,7 +261,7 @@ class JWTAuthenticatorService(
   override def retrieve(implicit request: RequestHeader): Future[Option[JWTAuthenticator]] = {
     Future.from(Try(request.headers.get(settings.headerName))).flatMap {
       case Some(token) => unserialize(token)(settings) match {
-        case Success(authenticator) => dao.fold(Future.successful(Option(authenticator)))(_.find(authenticator.id))
+        case Success(authenticator) => repository.fold(Future.successful(Option(authenticator)))(_.find(authenticator.id))
         case Failure(e) =>
           logger.info(e.getMessage, e)
           Future.successful(None)
@@ -281,7 +281,7 @@ class JWTAuthenticatorService(
    * @return The serialized authenticator value.
    */
   override def init(authenticator: JWTAuthenticator)(implicit request: RequestHeader): Future[String] = {
-    dao.fold(Future.successful(authenticator))(_.add(authenticator)).map { a =>
+    repository.fold(Future.successful(authenticator))(_.add(authenticator)).map { a =>
       serialize(a)(settings)
     }.recover {
       case e => throw new AuthenticatorInitializationException(InitError.format(ID, authenticator), e)
@@ -339,7 +339,7 @@ class JWTAuthenticatorService(
   override def update(authenticator: JWTAuthenticator, result: Result)(
     implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
-    dao.fold(Future.successful(authenticator))(_.update(authenticator)).map { a =>
+    repository.fold(Future.successful(authenticator))(_.update(authenticator)).map { a =>
       AuthenticatorResult(result.withHeaders(settings.headerName -> serialize(a)(settings)))
     }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
@@ -358,7 +358,7 @@ class JWTAuthenticatorService(
    * @return The serialized expression of the authenticator.
    */
   override def renew(authenticator: JWTAuthenticator)(implicit request: RequestHeader): Future[String] = {
-    dao.fold(Future.successful(()))(_.remove(authenticator.id)).flatMap { _ =>
+    repository.fold(Future.successful(()))(_.remove(authenticator.id)).flatMap { _ =>
       create(authenticator.loginInfo).flatMap(init)
     }.recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
@@ -394,7 +394,7 @@ class JWTAuthenticatorService(
   override def discard(authenticator: JWTAuthenticator, result: Result)(
     implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
-    dao.fold(Future.successful(()))(_.remove(authenticator.id)).map { _ =>
+    repository.fold(Future.successful(()))(_.remove(authenticator.id)).map { _ =>
       AuthenticatorResult(result)
     }.recover {
       case e => throw new AuthenticatorDiscardingException(DiscardError.format(ID, authenticator), e)
