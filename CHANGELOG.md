@@ -6,6 +6,7 @@
   - A controller is not bound to a single Authenticator anymore
 - Remove SecuredErrorHandler in favour of injectable error handler
 - Pass the auth info to the profile parsers to easier query additional data from the provider API
+- Add UnsecuredRequestHandler and UnsecuredAction
 
 ## 3.0 (2015-07-14)
 

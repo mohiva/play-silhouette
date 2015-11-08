@@ -444,7 +444,7 @@ class SecuredActionSpec extends PlaySpecification with Mockito with JsonMatchers
     }
   }
 
-  "The `SecureRequestHandler`" should {
+  "The `SecuredRequestHandler`" should {
     "return status 401 if authentication was not successful" in new InjectorContext {
       new WithApplication(app) with Context {
         env.authenticatorService.retrieve(any) returns Future.successful(None)

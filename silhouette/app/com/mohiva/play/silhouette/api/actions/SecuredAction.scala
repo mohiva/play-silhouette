@@ -56,13 +56,6 @@ case class SecuredRequestHandlerBuilder[E <: Env](
   extends RequestHandlerBuilder[E, ({ type R[B] = SecuredRequest[E, B] })#R] {
 
   /**
-   * Provides an `extract` method on an `Either` which contains the same types.
-   */
-  private implicit class ExtractEither[T](r: Either[T, T]) {
-    def extract: T = r.fold(identity, identity)
-  }
-
-  /**
    * Creates a secured action handler builder with a new error handler in place.
    *
    * @param errorHandler An error handler instance.

@@ -51,13 +51,6 @@ case class UserAwareRequestHandlerBuilder[E <: Env](environment: Environment[E])
   extends RequestHandlerBuilder[E, ({ type R[B] = UserAwareRequest[E, B] })#R] {
 
   /**
-   * Provides an `extract` method on an `Either` which contains the same types.
-   */
-  private implicit class ExtractEither[T](r: Either[T, T]) {
-    def extract: T = r.fold(identity, identity)
-  }
-
-  /**
    * Invokes the block.
    *
    * @param block The block of code to invoke.

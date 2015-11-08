@@ -48,6 +48,13 @@ case class HandlerResult[+T](result: Result, data: Option[T] = None)
 trait RequestHandlerBuilder[E <: Env, +R[_]] extends ExecutionContextProvider {
 
   /**
+   * Provides an `extract` method on an `Either` which contains the same types.
+   */
+  protected implicit class ExtractEither[T](r: Either[T, T]) {
+    def extract: T = r.fold(identity, identity)
+  }
+
+  /**
    * The execution context to handle the asynchronous operations.
    */
   implicit lazy val executionContext = environment.executionContext
