@@ -15,7 +15,6 @@
  */
 package com.mohiva.play.silhouette.impl.authenticators
 
-import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
@@ -142,7 +141,7 @@ class SessionAuthenticatorService(
    * @return An authenticator.
    */
   override def create(loginInfo: LoginInfo)(implicit request: RequestHeader): Future[SessionAuthenticator] = {
-    Future.from(Try {
+    Future.fromTry(Try {
       val now = clock.now
       SessionAuthenticator(
         loginInfo = loginInfo,
@@ -163,7 +162,7 @@ class SessionAuthenticatorService(
    * @return Some authenticator or None if no authenticator could be found in request.
    */
   override def retrieve(implicit request: RequestHeader): Future[Option[SessionAuthenticator]] = {
-    Future.from(Try {
+    Future.fromTry(Try {
       if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
     }).map { fingerprint =>
       request.session.get(settings.sessionKey).flatMap { value =>
@@ -246,7 +245,7 @@ class SessionAuthenticatorService(
   override def update(authenticator: SessionAuthenticator, result: Result)(
     implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
-    Future.from(Try {
+    Future.fromTry(Try {
       AuthenticatorResult(result.addingToSession(settings.sessionKey -> serialize(authenticator)(settings)))
     }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
@@ -301,7 +300,7 @@ class SessionAuthenticatorService(
   override def discard(authenticator: SessionAuthenticator, result: Result)(
     implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
-    Future.from(Try {
+    Future.fromTry(Try {
       AuthenticatorResult(result.removingFromSession(settings.sessionKey))
     }.recover {
       case e => throw new AuthenticatorDiscardingException(DiscardError.format(ID, authenticator), e)

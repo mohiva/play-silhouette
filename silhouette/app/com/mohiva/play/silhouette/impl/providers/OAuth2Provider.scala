@@ -26,7 +26,6 @@ import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
-import com.mohiva.play.silhouette.{ impl, _ }
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.ws.WSResponse
@@ -57,7 +56,7 @@ case class OAuth2Info(
 object OAuth2Info {
 
   /**
-   * Converts the JSON into a [[impl.providers.OAuth2Info]] object.
+   * Converts the JSON into a [[com.mohiva.play.silhouette.impl.providers.OAuth2Info]] object.
    */
   implicit val infoReads = (
     (__ \ AccessToken).read[String] and
@@ -150,7 +149,7 @@ trait OAuth2Provider extends SocialProvider with Logger {
       Code -> Seq(code),
       RedirectURI -> Seq(resolveCallbackURL(settings.redirectURL))) ++ settings.accessTokenParams.mapValues(Seq(_))).flatMap { response =>
       logger.debug("[Silhouette][%s] Access token response: [%s]".format(id, response.body))
-      Future.from(buildInfo(response))
+      Future.fromTry(buildInfo(response))
     }
   }
 

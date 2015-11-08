@@ -17,16 +17,18 @@ package com.mohiva.play.silhouette.api
 
 import akka.actor.{ Actor, Props }
 import akka.testkit.TestProbe
+import org.specs2.control.NoLanguageFeatures
 import org.specs2.specification.Scope
 import play.api.libs.concurrent.Akka
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
 import scala.concurrent.duration._
+import scala.language.postfixOps
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.api.EventBus]] class.
  */
-class EventBusSpec extends PlaySpecification {
+class EventBusSpec extends PlaySpecification with NoLanguageFeatures {
 
   "The event bus" should {
     "handle an subclass event" in new WithApplication with Context {
