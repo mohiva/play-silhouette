@@ -19,7 +19,6 @@
  */
 package com.mohiva.play.silhouette.impl.authenticators
 
-import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.repositories.AuthenticatorRepository
@@ -187,7 +186,7 @@ class CookieAuthenticatorService(
    * @return Some authenticator or None if no authenticator could be found in request.
    */
   override def retrieve(implicit request: RequestHeader): Future[Option[CookieAuthenticator]] = {
-    Future.from(Try {
+    Future.fromTry(Try {
       if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
     }).flatMap { fingerprint =>
       request.cookies.get(settings.cookieName) match {

@@ -48,7 +48,7 @@ class PlayCacheLayerSpec extends PlaySpecification with Mockito {
 
   "The `remove` method" should {
     "removes value from cache" in new Context {
-      await(layer.remove("id")) must be equalTo (())
+      await(layer.remove("id")) must beEqualTo(())
 
       there was one(cacheAPI).remove("id")
     }

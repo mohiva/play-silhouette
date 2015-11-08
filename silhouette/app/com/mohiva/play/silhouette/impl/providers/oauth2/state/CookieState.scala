@@ -17,7 +17,6 @@ package com.mohiva.play.silhouette.impl.providers.oauth2.state
 
 import javax.inject.Inject
 
-import com.mohiva.play.silhouette._
 import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, Base64, Clock, IDGenerator }
 import com.mohiva.play.silhouette.impl.exceptions.OAuth2StateException
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
@@ -134,7 +133,7 @@ class CookieStateProvider @Inject() (
    * @return The state on success, otherwise an failure.
    */
   override def validate[B](implicit request: ExtractableRequest[B], ec: ExecutionContext) = {
-    Future.from(clientState.flatMap(clientState => providerState.flatMap(providerState =>
+    Future.fromTry(clientState.flatMap(clientState => providerState.flatMap(providerState =>
       if (clientState != providerState) Failure(new OAuth2StateException(StateIsNotEqual))
       else if (clientState.isExpired) Failure(new OAuth2StateException(StateIsExpired))
       else Success(clientState)

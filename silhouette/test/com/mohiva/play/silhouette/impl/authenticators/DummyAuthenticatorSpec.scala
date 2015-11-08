@@ -54,7 +54,7 @@ class DummyAuthenticatorSpec extends PlaySpecification with Mockito {
     "return unit" in new Context {
       implicit val request = FakeRequest()
 
-      await(service.init(authenticator)) must be equalTo (())
+      await(service.init(authenticator)) must beEqualTo(())
     }
   }
 

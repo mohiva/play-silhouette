@@ -7,6 +7,7 @@
 - Remove SecuredErrorHandler in favour of injectable error handler
 - Pass the auth info to the profile parsers to easier query additional data from the provider API
 - Add UnsecuredRequestHandler and UnsecuredAction
+- Dropped Scala 2.10 support
 
 ## 3.0 (2015-07-14)
 
