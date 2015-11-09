@@ -101,7 +101,7 @@ object Doc extends AutoPlugin {
 
   override def projectSettings = Seq(
     autoAPIMappings := true,
-    apiURL := Some(url(s"http://api.silhouette.mohiva.com/$version/")),
+    apiURL := Some(url(s"http://api.silhouette.mohiva.com/${version.value}/")),
     apiMappings ++= {
       implicit val cp = (fullClasspath in Compile).value
       Map(
