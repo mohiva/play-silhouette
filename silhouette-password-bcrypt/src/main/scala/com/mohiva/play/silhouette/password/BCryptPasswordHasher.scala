@@ -17,10 +17,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.util
+package com.mohiva.play.silhouette.password
 
 import com.mohiva.play.silhouette.api.util.{ PasswordHasher, PasswordInfo }
-import com.mohiva.play.silhouette.impl.util.BCryptPasswordHasher._
+import com.mohiva.play.silhouette.password.BCryptPasswordHasher._
 import org.mindrot.jbcrypt.BCrypt
 
 /**
