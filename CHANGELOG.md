@@ -8,6 +8,10 @@
 - Pass the auth info to the profile parsers to easier query additional data from the provider API
 - Add UnsecuredRequestHandler and UnsecuredAction
 - Dropped Scala 2.10 support
+- Projects separated
+  - silhouette-password-bcrypt -> contains BCrypt password hasher
+  - silhouette-persistence -> contains base implementations for the persistence layer
+  - silhouette-persistence-memory -> in-memory implementation of the persistence layer
 
 ## 3.0 (2015-07-14)
 

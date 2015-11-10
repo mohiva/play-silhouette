@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.util
+package com.mohiva.play.silhouette.password
 
 import com.mohiva.play.silhouette.api.util.PasswordInfo
-import play.api.test.PlaySpecification
+import org.specs2.mutable.Specification
 
 /**
  * Test case for the [[BCryptPasswordHasher]] class.
  */
-class BCryptPasswordHasherSpec extends PlaySpecification {
+class BCryptPasswordHasherSpec extends Specification {
 
   "The `hash` method" should {
     "hash a password" in {

@@ -17,7 +17,6 @@ package com.mohiva.play.silhouette.persistence.daos
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordInfo
-import com.mohiva.play.silhouette.impl.util.BCryptPasswordHasher
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.control.NoLanguageFeatures
 import org.specs2.mutable.Specification
@@ -100,7 +99,7 @@ class PasswordInfoDAOSpec(implicit ev: ExecutionEnv) extends Specification with 
      * A password info.
      */
     lazy val authInfo = PasswordInfo(
-      hasher = BCryptPasswordHasher.ID,
+      hasher = "bcrypt",
       password = "$2a$10$bCBXbqjTaEcxXcjwc.kCXe.sI1b8.bTgV25gTD71KM00XdVd5MG6K"
     )
   }

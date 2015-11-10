@@ -3,7 +3,6 @@ import Dependencies._
 libraryDependencies ++= Seq(
   Library.Play.cache,
   Library.Play.ws,
-  Library.jbcrypt,
   Library.jwtCore,
   Library.jwtApi,
   Library.Play.specs2 % Test,

@@ -24,6 +24,12 @@ object Build extends Build {
     base = file("silhouette")
   )
 
+  val silhouettePasswordBcrypt = Project(
+    id = "play-silhouette-password-bcrypt",
+    base = file("silhouette-password-bcrypt"),
+    dependencies = Seq(silhouette)
+  )
+
   val silhouettePersistence = Project(
     id = "play-silhouette-persistence",
     base = file("silhouette-persistence"),
@@ -47,6 +53,7 @@ object Build extends Build {
     base = file("."),
     aggregate = Seq(
       silhouette,
+      silhouettePasswordBcrypt,
       silhouettePersistence,
       silhouettePersistenceMemory,
       silhouetteTestkit
