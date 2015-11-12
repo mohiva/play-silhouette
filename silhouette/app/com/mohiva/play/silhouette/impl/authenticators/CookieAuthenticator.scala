@@ -182,10 +182,11 @@ class CookieAuthenticatorService(
   /**
    * Retrieves the authenticator from request.
    *
-   * @param request The request header.
+   * @param request The request to retrieve the authenticator from.
+   * @tparam B The type of the request body.
    * @return Some authenticator or None if no authenticator could be found in request.
    */
-  override def retrieve(implicit request: RequestHeader): Future[Option[CookieAuthenticator]] = {
+  override def retrieve[B](implicit request: ExtractableRequest[B]): Future[Option[CookieAuthenticator]] = {
     Future.fromTry(Try {
       if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
     }).flatMap { fingerprint =>

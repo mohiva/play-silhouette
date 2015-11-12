@@ -20,7 +20,7 @@ import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.repositories.AuthenticatorRepository
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
-import com.mohiva.play.silhouette.api.util.{ Clock, IDGenerator }
+import com.mohiva.play.silhouette.api.util.{ RequestPart, Clock, IDGenerator }
 import com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorService._
 import org.joda.time.DateTime
 import org.specs2.control.NoLanguageFeatures
@@ -120,24 +120,33 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
       await(service.retrieve) must beNone
     }
 
-    "return None if no authenticator is stored for the header" in new Context {
-      implicit val request = FakeRequest().withHeaders(settings.headerName -> authenticator.id)
+    "return None if no authenticator is stored for the token located in the headers" in new Context {
+      implicit val request = FakeRequest().withHeaders(settings.fieldName -> authenticator.id)
 
       repository.find(authenticator.id) returns Future.successful(None)
 
       await(service.retrieve) must beNone
     }
 
-    "return authenticator if an authenticator is stored for the header" in new Context {
-      implicit val request = FakeRequest().withHeaders(settings.headerName -> authenticator.id)
+    "return authenticator if an authenticator is stored for token located in the header" in new Context {
+      implicit val request = FakeRequest().withHeaders(settings.fieldName -> authenticator.id)
 
       repository.find(authenticator.id) returns Future.successful(Some(authenticator))
 
       await(service.retrieve) must beSome(authenticator)
     }
 
+    "return authenticator if an authenticator is stored for the token located in the query string" in new Context {
+      implicit val request = FakeRequest("GET", s"?${settings.fieldName}=${authenticator.id}")
+
+      settings.requestParts returns Some(Seq(RequestPart.QueryString))
+      repository.find(authenticator.id) returns Future.successful(Some(authenticator))
+
+      await(service.retrieve) must beSome(authenticator)
+    }
+
     "throws an AuthenticatorRetrievalException exception if an error occurred during retrieval" in new Context {
-      implicit val request = FakeRequest().withHeaders(settings.headerName -> authenticator.id)
+      implicit val request = FakeRequest().withHeaders(settings.fieldName -> authenticator.id)
 
       repository.find(authenticator.id) returns Future.failed(new RuntimeException("Cannot find authenticator"))
 
@@ -177,7 +186,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
       val value = authenticator.id
       val result = service.embed(value, Results.Ok)
 
-      header(settings.headerName, result) should beSome(authenticator.id)
+      header(settings.fieldName, result) should beSome(authenticator.id)
     }
   }
 
@@ -186,21 +195,21 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
       val value = authenticator.id
       val request = service.embed(value, FakeRequest())
 
-      request.headers.get(settings.headerName) should beSome(authenticator.id)
+      request.headers.get(settings.fieldName) should beSome(authenticator.id)
     }
 
     "override an existing header" in new Context {
       val value = authenticator.id
-      val request = service.embed(value, FakeRequest().withHeaders(settings.headerName -> "test"))
+      val request = service.embed(value, FakeRequest().withHeaders(settings.fieldName -> "test"))
 
-      request.headers.get(settings.headerName) should beSome(authenticator.id)
+      request.headers.get(settings.fieldName) should beSome(authenticator.id)
     }
 
     "keep non authenticator related headers" in new Context {
       val value = authenticator.id
       val request = service.embed(value, FakeRequest().withHeaders("test" -> "test"))
 
-      request.headers.get(settings.headerName) should beSome(authenticator.id)
+      request.headers.get(settings.fieldName) should beSome(authenticator.id)
       request.headers.get("test") should beSome("test")
     }
   }
@@ -287,7 +296,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
 
       val result = service.renew(authenticator, Results.Ok)
 
-      header(settings.headerName, result) should beSome(id)
+      header(settings.fieldName, result) should beSome(id)
     }
 
     "throws an AuthenticatorRenewalException exception if an error occurred during renewal" in new Context {
@@ -355,7 +364,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
      * The settings.
      */
     lazy val settings = spy(BearerTokenAuthenticatorSettings(
-      headerName = "X-Auth-Token",
+      fieldName = "X-Auth-Token",
       authenticatorIdleTimeout = Some(30 minutes),
       authenticatorExpiry = 12 hours
     ))

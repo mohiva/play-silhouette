@@ -226,7 +226,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito with NoLan
     "throws an AuthenticatorRetrievalException exception if an error occurred during retrieval" in new WithApplication with Context {
       implicit val request = FakeRequest().withSession(settings.sessionKey -> Base64.encode(Json.toJson(authenticator)))
 
-      fingerprintGenerator.generate throws new RuntimeException("Could not generate fingerprint")
+      fingerprintGenerator.generate(any) throws new RuntimeException("Could not generate fingerprint")
       settings.useFingerprinting returns true
       settings.encryptAuthenticator returns false
 

@@ -19,7 +19,7 @@ import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
-import com.mohiva.play.silhouette.api.util.{ Base64, Clock, FingerprintGenerator }
+import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, Base64, Clock, FingerprintGenerator }
 import com.mohiva.play.silhouette.api.util.JsonFormats._
 import com.mohiva.play.silhouette.api.{ Authenticator, ExpirableAuthenticator, Logger, LoginInfo }
 import com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService._
@@ -158,10 +158,11 @@ class SessionAuthenticatorService(
   /**
    * Retrieves the authenticator from request.
    *
-   * @param request The request header.
+   * @param request The request to retrieve the authenticator from.
+   * @tparam B The type of the request body.
    * @return Some authenticator or None if no authenticator could be found in request.
    */
-  override def retrieve(implicit request: RequestHeader): Future[Option[SessionAuthenticator]] = {
+  override def retrieve[B](implicit request: ExtractableRequest[B]): Future[Option[SessionAuthenticator]] = {
     Future.fromTry(Try {
       if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
     }).map { fingerprint =>

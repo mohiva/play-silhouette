@@ -16,6 +16,7 @@
 package com.mohiva.play.silhouette.impl.authenticators
 
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
+import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.api.{ Authenticator, LoginInfo }
 import play.api.mvc.{ RequestHeader, Result }
 
@@ -69,10 +70,11 @@ class DummyAuthenticatorService(implicit val executionContext: ExecutionContext)
    * a request provider grants access. If the authentication with a request provider has failed,
    * then this method must return None to not grant access to the resource.
    *
-   * @param request The request header.
+   * @param request The request to retrieve the authenticator from.
+   * @tparam B The type of the request body.
    * @return Always None because .
    */
-  override def retrieve(implicit request: RequestHeader): Future[Option[DummyAuthenticator]] = {
+  override def retrieve[B](implicit request: ExtractableRequest[B]): Future[Option[DummyAuthenticator]] = {
     Future.successful(None)
   }
 

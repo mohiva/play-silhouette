@@ -19,7 +19,7 @@
  */
 package com.mohiva.play.silhouette.api.services
 
-import com.mohiva.play.silhouette.api.util.ExecutionContextProvider
+import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, ExecutionContextProvider }
 import com.mohiva.play.silhouette.api.{ Authenticator, LoginInfo }
 import play.api.libs.iteratee.Enumerator
 import play.api.mvc._
@@ -95,10 +95,11 @@ trait AuthenticatorService[T <: Authenticator] extends ExecutionContextProvider 
   /**
    * Retrieves the authenticator from request.
    *
-   * @param request The request header.
+   * @param request The request to retrieve the authenticator from.
+   * @tparam B The type of the request body.
    * @return Some authenticator or None if no authenticator could be found in request.
    */
-  def retrieve(implicit request: RequestHeader): Future[Option[T]]
+  def retrieve[B](implicit request: ExtractableRequest[B]): Future[Option[T]]
 
   /**
    * Initializes an authenticator and instead of embedding into the the request or result, it returns
