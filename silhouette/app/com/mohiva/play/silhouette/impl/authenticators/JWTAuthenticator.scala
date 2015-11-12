@@ -22,7 +22,7 @@ import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.repositories.AuthenticatorRepository
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
-import com.mohiva.play.silhouette.api.util.{ Base64, Clock, IDGenerator }
+import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.api.{ ExpirableAuthenticator, Logger, LoginInfo, StorableAuthenticator }
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator._
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService._
@@ -254,11 +254,12 @@ class JWTAuthenticatorService(
    *
    * If a backing store is defined, then the authenticator will be validated against it.
    *
-   * @param request The request header.
+   * @param request The request to retrieve the authenticator from.
+   * @tparam B The type of the request body.
    * @return Some authenticator or None if no authenticator could be found in request.
    */
-  override def retrieve(implicit request: RequestHeader): Future[Option[JWTAuthenticator]] = {
-    Future.fromTry(Try(request.headers.get(settings.headerName))).flatMap {
+  override def retrieve[B](implicit request: ExtractableRequest[B]): Future[Option[JWTAuthenticator]] = {
+    Future.fromTry(Try(request.extractString(settings.fieldName, settings.requestParts))).flatMap {
       case Some(token) => unserialize(token)(settings) match {
         case Success(authenticator) => repository.fold(Future.successful(Option(authenticator)))(_.find(authenticator.id))
         case Failure(e) =>
@@ -295,7 +296,7 @@ class JWTAuthenticatorService(
    * @return The manipulated result.
    */
   override def embed(token: String, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
-    Future.successful(AuthenticatorResult(result.withHeaders(settings.headerName -> token)))
+    Future.successful(AuthenticatorResult(result.withHeaders(settings.fieldName -> token)))
   }
 
   /**
@@ -306,7 +307,7 @@ class JWTAuthenticatorService(
    * @return The manipulated request header.
    */
   override def embed(token: String, request: RequestHeader): RequestHeader = {
-    val additional = Seq(settings.headerName -> token)
+    val additional = Seq(settings.fieldName -> token)
     request.copy(headers = request.headers.replace(additional: _*))
   }
 
@@ -339,7 +340,7 @@ class JWTAuthenticatorService(
     implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
     repository.fold(Future.successful(authenticator))(_.update(authenticator)).map { a =>
-      AuthenticatorResult(result.withHeaders(settings.headerName -> serialize(a)(settings)))
+      AuthenticatorResult(result.withHeaders(settings.fieldName -> serialize(a)(settings)))
     }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
     }
@@ -428,7 +429,8 @@ object JWTAuthenticatorService {
 /**
  * The settings for the JWT authenticator.
  *
- * @param headerName The name of the header in which the token will be transferred.
+ * @param fieldName The name of the field in which the token will be transferred in any part of the request.
+ * @param requestParts Some request parts from which a value can be extracted or None to extract values from any part of the request.
  * @param issuerClaim The issuer claim identifies the principal that issued the JWT.
  * @param encryptSubject Indicates if the subject should be encrypted in JWT.
  * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out.
@@ -436,7 +438,8 @@ object JWTAuthenticatorService {
  * @param sharedSecret The shared secret to sign the JWT.
  */
 case class JWTAuthenticatorSettings(
-  headerName: String = "X-Auth-Token",
+  fieldName: String = "X-Auth-Token",
+  requestParts: Option[Seq[RequestPart.Value]] = Some(Seq(RequestPart.Headers)),
   issuerClaim: String = "play-silhouette",
   encryptSubject: Boolean = true,
   authenticatorIdleTimeout: Option[FiniteDuration] = None,

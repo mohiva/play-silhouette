@@ -20,7 +20,7 @@ import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.repositories.AuthenticatorRepository
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
-import com.mohiva.play.silhouette.api.util.{ Clock, IDGenerator }
+import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.api.{ ExpirableAuthenticator, Logger, LoginInfo, StorableAuthenticator }
 import com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorService._
 import org.joda.time.DateTime
@@ -103,11 +103,12 @@ class BearerTokenAuthenticatorService(
   /**
    * Retrieves the authenticator from request.
    *
-   * @param request The request header.
+   * @param request The request to retrieve the authenticator from.
+   * @tparam B The type of the request body.
    * @return Some authenticator or None if no authenticator could be found in request.
    */
-  override def retrieve(implicit request: RequestHeader): Future[Option[BearerTokenAuthenticator]] = {
-    Future.fromTry(Try(request.headers.get(settings.headerName))).flatMap {
+  override def retrieve[B](implicit request: ExtractableRequest[B]): Future[Option[BearerTokenAuthenticator]] = {
+    Future.fromTry(Try(request.extractString(settings.fieldName, settings.requestParts))).flatMap {
       case Some(token) => repository.find(token)
       case None => Future.successful(None)
     }.recover {
@@ -140,7 +141,7 @@ class BearerTokenAuthenticatorService(
    * @return The manipulated result.
    */
   override def embed(token: String, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
-    Future.successful(AuthenticatorResult(result.withHeaders(settings.headerName -> token)))
+    Future.successful(AuthenticatorResult(result.withHeaders(settings.fieldName -> token)))
   }
 
   /**
@@ -151,7 +152,7 @@ class BearerTokenAuthenticatorService(
    * @return The manipulated request header.
    */
   override def embed(token: String, request: RequestHeader): RequestHeader = {
-    val additional = Seq(settings.headerName -> token)
+    val additional = Seq(settings.fieldName -> token)
     request.copy(headers = request.headers.replace(additional: _*))
   }
 
@@ -262,11 +263,13 @@ object BearerTokenAuthenticatorService {
 /**
  * The settings for the bearer token authenticator.
  *
- * @param headerName The name of the header in which the token will be transferred.
+ * @param fieldName The name of the field in which the token will be transferred in any part of the request.
+ * @param requestParts Some request parts from which a value can be extracted or None to extract values from any part of the request.
  * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out.
  * @param authenticatorExpiry The duration an authenticator expires after it was created.
  */
 case class BearerTokenAuthenticatorSettings(
-  headerName: String = "X-Auth-Token",
+  fieldName: String = "X-Auth-Token",
+  requestParts: Option[Seq[RequestPart.Value]] = Some(Seq(RequestPart.Headers)),
   authenticatorIdleTimeout: Option[FiniteDuration] = None,
   authenticatorExpiry: FiniteDuration = 12 hours)

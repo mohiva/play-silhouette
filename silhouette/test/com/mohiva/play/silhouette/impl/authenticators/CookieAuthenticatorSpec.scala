@@ -261,7 +261,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
     "throws an AuthenticatorRetrievalException exception if an error occurred during retrieval" in new Context {
       implicit val request = FakeRequest().withCookies(Cookie(settings.cookieName, authenticator.id))
 
-      fingerprintGenerator.generate throws new RuntimeException("Could not generate fingerprint")
+      fingerprintGenerator.generate(any) throws new RuntimeException("Could not generate fingerprint")
       settings.useFingerprinting returns true
       repository.find(authenticator.id) returns Future.successful(Some(authenticator))
 
