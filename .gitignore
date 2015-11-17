@@ -15,3 +15,12 @@ dist
 /.settings
 /.target
 /.cache
+
+# Eclipse
+.project
+.metadata
+.classpath
+.cache-main
+.cache-tests
+.settings/
+bin/

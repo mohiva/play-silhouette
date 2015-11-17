@@ -6,6 +6,8 @@ libraryDependencies ++= Seq(
   Library.jbcrypt,
   Library.jwtCore,
   Library.jwtApi,
+  Library.casClient,
+  Library.casClientSupportSAML,
   Library.mockito % Test,
   Library.scalaGuice % Test,
   Library.akkaTestkit % Test

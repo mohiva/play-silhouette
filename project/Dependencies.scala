@@ -23,7 +23,8 @@ object Dependencies {
   }
 
   val resolvers = Seq(
-    "Atlassian Releases" at "https://maven.atlassian.com/public/"
+    "Atlassian Releases" at "https://maven.atlassian.com/public/",
+    "Sonatype snapshots repository" at "https://oss.sonatype.org/content/repositories/snapshots/"
   )
 
   object Library {
@@ -41,5 +42,11 @@ object Dependencies {
     val mockito = "org.mockito" % "mockito-core" % "1.9.5"
     val scalaGuice = "net.codingwell" %% "scala-guice" % "4.0.0-beta5"
     val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % "2.3.3"
+    
+    //val pac4jCAS = "org.pac4j" % "pac4j-cas" % "1.8.0-RC1"
+    //val pac4jPlay = "org.pac4j" % "play-pac4j-java" % "2.0.0-SNAPSHOT"
+    val casClient = "org.jasig.cas.client" % "cas-client-core" % "3.4.1"
+    val casClientSupportSAML = "org.jasig.cas.client" % "cas-client-support-saml" % "3.4.1"
+    val inject = "javax-inject" % "javax-inject"
   }
 }
