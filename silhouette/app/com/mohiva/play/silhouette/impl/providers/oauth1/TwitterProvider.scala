@@ -24,45 +24,32 @@ import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.JsValue
 
 import scala.concurrent.Future
 
 /**
- * A Twitter OAuth1 Provider.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param service The OAuth1 service implementation.
- * @param tokenSecretProvider The OAuth1 token secret provider implementation.
- * @param settings The OAuth1 provider settings.
+ * Base Twitter OAuth1 Provider.
  *
  * @see https://dev.twitter.com/docs/user-profile-images-and-banners
  * @see https://dev.twitter.com/docs/entities#users
  */
-abstract class TwitterProvider(
-  httpLayer: HTTPLayer,
-  service: OAuth1Service,
-  tokenSecretProvider: OAuth1TokenSecretProvider,
-  settings: OAuth1Settings)
-  extends OAuth1Provider(httpLayer, service, tokenSecretProvider, settings) {
+trait BaseTwitterProvider extends OAuth1Provider {
 
   /**
    * The content type to parse a profile from.
    */
-  type Content = JsValue
+  override type Content = JsValue
 
   /**
-   * Gets the provider ID.
-   *
-   * @return The provider ID.
+   * The provider ID.
    */
-  val id = ID
+  override val id = ID
 
   /**
    * Defines the URLs that are needed to retrieve the profile data.
    */
-  protected val urls = Map("api" -> API)
+  override protected val urls = Map("api" -> API)
 
   /**
    * Builds the social profile.
@@ -70,7 +57,7 @@ abstract class TwitterProvider(
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth1Info): Future[Profile] = {
+  override protected def buildProfile(authInfo: OAuth1Info): Future[Profile] = {
     httpLayer.url(urls("api")).sign(service.sign(authInfo)).get().flatMap { response =>
       val json = response.json
       (json \ "errors" \\ "code").headOption.map(_.as[Int]) match {
@@ -95,28 +82,54 @@ class TwitterProfileParser extends SocialProfileParser[JsValue, CommonSocialProf
    * @param json The content returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue) = Future.successful {
     val userID = (json \ "id").as[Long]
     val fullName = (json \ "name").asOpt[String]
+    val email = (json \ "email").asOpt[String]
     val avatarURL = (json \ "profile_image_url_https").asOpt[String]
 
     CommonSocialProfile(
       loginInfo = LoginInfo(ID, userID.toString),
       fullName = fullName,
+      email = email,
       avatarURL = avatarURL)
   }
 }
 
 /**
- * The profile builder for the common social profile.
+ * The Twitter OAuth1 Provider.
+ *
+ * @param httpLayer The HTTP layer implementation.
+ * @param service The OAuth1 service implementation.
+ * @param tokenSecretProvider The OAuth1 token secret provider implementation.
+ * @param settings The OAuth1 provider settings.
  */
-trait TwitterProfileBuilder extends CommonSocialProfileBuilder {
-  self: TwitterProvider =>
+class TwitterProvider(
+  protected val httpLayer: HTTPLayer,
+  protected val service: OAuth1Service,
+  protected val tokenSecretProvider: OAuth1TokenSecretProvider,
+  val settings: OAuth1Settings)
+  extends BaseTwitterProvider with CommonSocialProfileBuilder {
+
+  /**
+   * The type of this class.
+   */
+  override type Self = TwitterProvider
 
   /**
    * The profile parser implementation.
    */
-  val profileParser = new TwitterProfileParser
+  override val profileParser = new TwitterProfileParser
+
+  /**
+   * Gets a provider initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the provider initialized with new settings.
+   */
+  override def withSettings(f: (Settings) => Settings) = {
+    new TwitterProvider(httpLayer, service, tokenSecretProvider, f(settings))
+  }
 }
 
 /**
@@ -130,21 +143,8 @@ object TwitterProvider {
   val SpecifiedProfileError = "[Silhouette][%s] error retrieving profile information. Error code: %s, message: %s"
 
   /**
-   * The LinkedIn constants.
+   * The Twitter constants.
    */
   val ID = "twitter"
-  val API = "https://api.twitter.com/1.1/account/verify_credentials.json"
-
-  /**
-   * Creates an instance of the provider.
-   *
-   * @param httpLayer The HTTP layer implementation.
-   * @param service The OAuth1 service implementation.
-   * @param tokenSecretProvider The OAuth1 token secret provider implementation.
-   * @param settings The OAuth1 provider settings.
-   * @return An instance of this provider.
-   */
-  def apply(httpLayer: HTTPLayer, service: OAuth1Service, tokenSecretProvider: OAuth1TokenSecretProvider, settings: OAuth1Settings) = {
-    new TwitterProvider(httpLayer, service, tokenSecretProvider, settings) with TwitterProfileBuilder
-  }
+  val API = "https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true&skip_status=true"
 }

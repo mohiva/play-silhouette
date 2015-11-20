@@ -24,41 +24,33 @@ import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.FoursquareProvider._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.JsValue
 
 import scala.concurrent.Future
 
 /**
- * A Foursquare OAuth2 provider.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param stateProvider The state provider implementation.
- * @param settings The provider settings.
+ * Base Foursquare OAuth2 provider.
  *
  * @see https://developer.foursquare.com/overview/auth
  * @see https://developer.foursquare.com/overview/responses
  * @see https://developer.foursquare.com/docs/explore
  */
-abstract class FoursquareProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, protected val settings: OAuth2Settings)
-  extends OAuth2Provider(httpLayer, stateProvider, settings) {
+trait BaseFoursquareProvider extends OAuth2Provider {
 
   /**
    * The content type to parse a profile from.
    */
-  type Content = JsValue
+  override type Content = JsValue
 
   /**
-   * Gets the provider ID.
-   *
-   * @return The provider ID.
+   * The provider ID.
    */
-  val id = ID
+  override val id = ID
 
   /**
    * Defines the URLs that are needed to retrieve the profile data.
    */
-  protected val urls = Map("api" -> API)
+  override protected val urls = Map("api" -> API)
 
   /**
    * Builds the social profile.
@@ -66,7 +58,7 @@ abstract class FoursquareProvider(httpLayer: HTTPLayer, stateProvider: OAuth2Sta
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+  override protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
     val version = settings.customProperties.getOrElse(APIVersion, DefaultAPIVersion)
     httpLayer.url(urls("api").format(authInfo.accessToken, version)).get().flatMap { response =>
       val json = response.json
@@ -102,7 +94,7 @@ class FoursquareProfileParser(settings: OAuth2Settings) extends SocialProfilePar
    * @param json The content returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue) = Future.successful {
     val user = json \ "response" \ "user"
     val userID = (user \ "id").as[String]
     val lastName = (user \ "lastName").asOpt[String]
@@ -122,15 +114,35 @@ class FoursquareProfileParser(settings: OAuth2Settings) extends SocialProfilePar
 }
 
 /**
- * The profile builder for the common social profile.
+ * The Foursquare OAuth2 Provider.
+ *
+ * @param httpLayer The HTTP layer implementation.
+ * @param stateProvider The state provider implementation.
+ * @param settings The provider settings.
  */
-trait FoursquareProfileBuilder extends CommonSocialProfileBuilder {
-  self: FoursquareProvider =>
+class FoursquareProvider(
+  protected val httpLayer: HTTPLayer,
+  protected val stateProvider: OAuth2StateProvider,
+  val settings: OAuth2Settings)
+  extends BaseFoursquareProvider with CommonSocialProfileBuilder {
+
+  /**
+   * The type of this class.
+   */
+  override type Self = FoursquareProvider
 
   /**
    * The profile parser implementation.
    */
-  val profileParser = new FoursquareProfileParser(settings)
+  override val profileParser = new FoursquareProfileParser(settings)
+
+  /**
+   * Gets a provider initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the provider initialized with new settings.
+   */
+  override def withSettings(f: (Settings) => Settings) = new FoursquareProvider(httpLayer, stateProvider, f(settings))
 }
 
 /**
@@ -166,16 +178,4 @@ object FoursquareProvider {
    */
   val ID = "foursquare"
   val API = "https://api.foursquare.com/v2/users/self?oauth_token=%s&v=%s"
-
-  /**
-   * Creates an instance of the provider.
-   *
-   * @param httpLayer The HTTP layer implementation.
-   * @param stateProvider The state provider implementation.
-   * @param settings The provider settings.
-   * @return An instance of this provider.
-   */
-  def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new FoursquareProvider(httpLayer, stateProvider, settings) with FoursquareProfileBuilder
-  }
 }

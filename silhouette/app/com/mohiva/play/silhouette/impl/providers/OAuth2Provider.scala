@@ -23,18 +23,16 @@ import java.net.URLEncoder._
 
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.services.AuthInfo
-import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
+import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.{ impl, _ }
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.ws.WSResponse
 import play.api.mvc._
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -72,19 +70,24 @@ object OAuth2Info {
 }
 
 /**
- * Base class for all OAuth2 providers.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param stateProvider The state provider implementation.
- * @param settings The provider settings.
+ * Base implementation for all OAuth2 providers.
  */
-abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
-  extends SocialProvider with Logger {
+trait OAuth2Provider extends SocialProvider with Logger {
 
   /**
    * The type of the auth info.
    */
   type A = OAuth2Info
+
+  /**
+   * The settings type.
+   */
+  type Settings = OAuth2Settings
+
+  /**
+   * The state provider implementation.
+   */
+  protected val stateProvider: OAuth2StateProvider
 
   /**
    * A list with headers to send to the API.
@@ -106,7 +109,7 @@ abstract class OAuth2Provider(httpLayer: HTTPLayer, stateProvider: OAuth2StatePr
       case Some(throwable) => Future.failed(throwable)
       case None => request.extractString(Code) match {
         // We're being redirected back from the authorization server with the access code
-        case Some(code) => stateProvider.validate(id).flatMap { state =>
+        case Some(code) => stateProvider.validate.flatMap { state =>
           getAccessToken(code).map(oauth2Info => Right(oauth2Info))
         }
         // There's no code in the request, this is the first step in the OAuth flow
@@ -236,20 +239,21 @@ trait OAuth2StateProvider {
    * Builds the state.
    *
    * @param request The current request.
+   * @param ec The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return The build state.
    */
-  def build[B](implicit request: ExtractableRequest[B]): Future[State]
+  def build[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[State]
 
   /**
    * Validates the provider and the client state.
    *
-   * @param id The provider ID.
    * @param request The current request.
+   * @param ec The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return The state on success, otherwise an failure.
    */
-  def validate[B](id: String)(implicit request: ExtractableRequest[B]): Future[State]
+  def validate[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[State]
 
   /**
    * Publishes the state to the client.
@@ -284,6 +288,6 @@ case class OAuth2Settings(
   clientID: String,
   clientSecret: String,
   scope: Option[String] = None,
-  authorizationParams: Map[String, String] = Map(),
-  accessTokenParams: Map[String, String] = Map(),
-  customProperties: Map[String, String] = Map())
+  authorizationParams: Map[String, String] = Map.empty,
+  accessTokenParams: Map[String, String] = Map.empty,
+  customProperties: Map[String, String] = Map.empty)

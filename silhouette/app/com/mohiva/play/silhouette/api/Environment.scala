@@ -16,11 +16,17 @@
 package com.mohiva.play.silhouette.api
 
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorService, IdentityService }
+import com.mohiva.play.silhouette.api.util.ExecutionContextProvider
+
+import scala.concurrent.ExecutionContext
 
 /**
  * The environment needed to instantiate a Silhouette controller.
+ *
+ * @tparam I The type of the identity.
+ * @tparam A The type of the authenticator.
  */
-trait Environment[I <: Identity, T <: Authenticator] {
+trait Environment[I <: Identity, A <: Authenticator] extends ExecutionContextProvider {
 
   /**
    * Gets the identity service implementation.
@@ -34,14 +40,14 @@ trait Environment[I <: Identity, T <: Authenticator] {
    *
    * @return The authenticator service implementation.
    */
-  def authenticatorService: AuthenticatorService[T]
+  def authenticatorService: AuthenticatorService[A]
 
   /**
-   * Gets the list of authentication providers.
+   * Gets the list of request providers.
    *
-   * @return The list of authentication providers.
+   * @return The list of request providers.
    */
-  def providers: Map[String, Provider]
+  def requestProviders: Seq[RequestProvider]
 
   /**
    * The event bus implementation.
@@ -55,14 +61,15 @@ trait Environment[I <: Identity, T <: Authenticator] {
  * The companion object.
  */
 object Environment {
-  def apply[I <: Identity, T <: Authenticator](
+  def apply[I <: Identity, A <: Authenticator](
     identityServiceImpl: IdentityService[I],
-    authenticatorServiceImpl: AuthenticatorService[T],
-    providersImpl: Map[String, Provider],
-    eventBusImpl: EventBus) = new Environment[I, T] {
+    authenticatorServiceImpl: AuthenticatorService[A],
+    requestProvidersImpl: Seq[RequestProvider],
+    eventBusImpl: EventBus)(implicit ec: ExecutionContext) = new Environment[I, A] {
     val identityService = identityServiceImpl
     val authenticatorService = authenticatorServiceImpl
-    val providers = providersImpl
+    val requestProviders = requestProvidersImpl
     val eventBus = eventBusImpl
+    val executionContext = ec
   }
 }

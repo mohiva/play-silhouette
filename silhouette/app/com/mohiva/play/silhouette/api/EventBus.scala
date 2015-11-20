@@ -17,7 +17,7 @@ package com.mohiva.play.silhouette.api
 
 import akka.event.{ SubchannelClassification, ActorEventBus, LookupClassification }
 import akka.util.Subclassification
-import play.api.i18n.Lang
+import play.api.i18n.Messages
 import play.api.mvc.RequestHeader
 
 /**
@@ -30,70 +30,70 @@ trait SilhouetteEvent
  *
  * @param identity The newly created identity.
  * @param request The request header for the associated request.
- * @param lang The lang associated for the current request.
+ * @param messages The messages for the current language.
  * @tparam I The type of the identity.
  */
-case class SignUpEvent[I <: Identity](identity: I, request: RequestHeader, lang: Lang) extends SilhouetteEvent
+case class SignUpEvent[I <: Identity](identity: I, request: RequestHeader, messages: Messages) extends SilhouetteEvent
 
 /**
  * An event which will be published after an identity logged in.
  *
  * @param identity The logged in identity.
  * @param request The request header for the associated request.
- * @param lang The lang associated for the current request.
+ * @param messages The messages for the current language.
  * @tparam I The type of the identity.
  */
-case class LoginEvent[I <: Identity](identity: I, request: RequestHeader, lang: Lang) extends SilhouetteEvent
+case class LoginEvent[I <: Identity](identity: I, request: RequestHeader, messages: Messages) extends SilhouetteEvent
 
 /**
  * An event which will be published after an identity logged out.
  *
  * @param identity The logged out identity.
  * @param request The request header for the associated request.
- * @param lang The lang associated for the current request.
+ * @param messages The messages for the current language.
  * @tparam I The type of the identity.
  */
-case class LogoutEvent[I <: Identity](identity: I, request: RequestHeader, lang: Lang) extends SilhouetteEvent
+case class LogoutEvent[I <: Identity](identity: I, request: RequestHeader, messages: Messages) extends SilhouetteEvent
 
 /**
  * An event which will be published if a request passes authentication.
  *
  * @param identity The logged in identity.
  * @param request The request header for the associated request.
- * @param lang The lang associated for the current request.
+ * @param messages The messages for the current language.
  * @tparam I The type of the identity.
  */
-case class AuthenticatedEvent[I <: Identity](identity: I, request: RequestHeader, lang: Lang) extends SilhouetteEvent
+case class AuthenticatedEvent[I <: Identity](identity: I, request: RequestHeader, messages: Messages) extends SilhouetteEvent
 
 /**
  * An event which will be published if a request did not pass authentication.
  *
  * @param request The request header for the associated request.
- * @param lang The lang associated for the current request.
+ * @param messages The messages for the current language.
  */
-case class NotAuthenticatedEvent(request: RequestHeader, lang: Lang) extends SilhouetteEvent
+case class NotAuthenticatedEvent(request: RequestHeader, messages: Messages) extends SilhouetteEvent
 
 /**
  * An event which will be published if a request did not pass authorization.
  *
  * @param identity The logged in identity.
  * @param request The request header for the associated request.
- * @param lang The lang associated for the current request.
+ * @param messages The messages for the current language.
  * @tparam I The type of the identity.
  */
-case class NotAuthorizedEvent[I <: Identity](identity: I, request: RequestHeader, lang: Lang) extends SilhouetteEvent
+case class NotAuthorizedEvent[I <: Identity](identity: I, request: RequestHeader, messages: Messages) extends SilhouetteEvent
 
 /**
  * An event bus implementation which uses a class based lookup classification.
  */
 class EventBus extends ActorEventBus with SubchannelClassification {
-  type Classifier = Class[_ <: SilhouetteEvent]
-  type Event = SilhouetteEvent
+  override type Classifier = Class[_ <: SilhouetteEvent]
+  override type Event = SilhouetteEvent
 
   /**
    * The logic to form sub-class hierarchy
    */
-  protected implicit val subclassification = new Subclassification[Classifier] {
+  override protected implicit val subclassification = new Subclassification[Classifier] {
     def isEqual(x: Classifier, y: Classifier): Boolean = x == y
     def isSubclass(x: Classifier, y: Classifier): Boolean = y.isAssignableFrom(x)
   }
@@ -104,15 +104,15 @@ class EventBus extends ActorEventBus with SubchannelClassification {
    * @param event The Event to publish.
    * @param subscriber The Subscriber to which the Event should be published.
    */
-  protected def publish(event: Event, subscriber: Subscriber): Unit = subscriber ! event
+  override protected def publish(event: Event, subscriber: Subscriber): Unit = subscriber ! event
 
   /**
    * Returns the Classifier associated with the given Event.
    *
    * @param event The event for which the Classifier should be returned.
-   * @return The Classifier for the given Event..
+   * @return The Classifier for the given Event.
    */
-  protected def classify(event: Event): Classifier = event.getClass
+  override protected def classify(event: Event): Classifier = event.getClass
 }
 
 /**

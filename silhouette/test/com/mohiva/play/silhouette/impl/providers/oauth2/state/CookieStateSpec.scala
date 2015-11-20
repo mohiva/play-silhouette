@@ -20,18 +20,22 @@ import com.mohiva.play.silhouette.impl.exceptions.OAuth2StateException
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.oauth2.state.CookieStateProvider._
 import org.joda.time.DateTime
+import org.specs2.control.NoLanguageFeatures
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ Cookie, Results }
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
+import scala.concurrent.duration._
 import scala.concurrent.Future
+import scala.language.postfixOps
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.providers.oauth2.state.CookieState]] class.
  */
-class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
+class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers with NoLanguageFeatures {
 
   "The `isExpired` method of the state" should {
     "return true if the state is expired" in new Context {
@@ -48,7 +52,7 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
       val dateTime = new DateTime(2014, 8, 8, 0, 0, 0)
       val decoded = Base64.decode(state.copy(expirationDate = dateTime).serialize)
 
-      decoded must /("expirationDate" -> dateTime.getMillis)
+      decoded must /("expirationDate" -> dateTime.getMillis.toDouble)
       decoded must /("value" -> "value")
     }
   }
@@ -64,7 +68,7 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
 
       val s = await(provider.build)
 
-      s.expirationDate must be equalTo dateTime.plusSeconds(settings.expirationTime)
+      s.expirationDate must be equalTo dateTime.plusSeconds(settings.expirationTime.toSeconds.toInt)
       s.value must be equalTo value
     }
   }
@@ -73,16 +77,16 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
     "throw an StateException if client state doesn't exists" in new Context {
       implicit val req = FakeRequest(GET, s"?$State=${state.serialize}")
 
-      await(provider.validate("test")) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(ClientStateDoesNotExists.format("test", ""))
+      await(provider.validate) must throwA[OAuth2StateException].like {
+        case e => e.getMessage must startWith(ClientStateDoesNotExists.format(""))
       }
     }
 
     "throw an StateException if provider state doesn't exists" in new WithApplication with Context {
       implicit val req = FakeRequest(GET, "/").withCookies(Cookie(settings.cookieName, state.serialize))
 
-      await(provider.validate("test")) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(ProviderStateDoesNotExists.format("test", ""))
+      await(provider.validate) must throwA[OAuth2StateException].like {
+        case e => e.getMessage must startWith(ProviderStateDoesNotExists.format(""))
       }
     }
 
@@ -91,8 +95,8 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
 
       implicit val req = FakeRequest(GET, s"?$State=${state.serialize}").withCookies(Cookie(settings.cookieName, invalidState))
 
-      await(provider.validate("test")) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(InvalidStateFormat.format("test", ""))
+      await(provider.validate) must throwA[OAuth2StateException].like {
+        case e => e.getMessage must startWith(InvalidStateFormat.format(""))
       }
     }
 
@@ -101,8 +105,8 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
 
       implicit val req = FakeRequest(GET, s"?$State=${state.serialize}").withCookies(Cookie(settings.cookieName, invalidState))
 
-      await(provider.validate("test")) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(InvalidStateFormat.format("test", ""))
+      await(provider.validate) must throwA[OAuth2StateException].like {
+        case e => e.getMessage must startWith(InvalidStateFormat.format(""))
       }
     }
 
@@ -111,8 +115,8 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
 
       implicit val req = FakeRequest(GET, s"?$State=$invalidState").withCookies(Cookie(settings.cookieName, state.serialize))
 
-      await(provider.validate("test")) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(InvalidStateFormat.format("test", ""))
+      await(provider.validate) must throwA[OAuth2StateException].like {
+        case e => e.getMessage must startWith(InvalidStateFormat.format(""))
       }
     }
 
@@ -121,8 +125,8 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
 
       implicit val req = FakeRequest(GET, s"?$State=$invalidState").withCookies(Cookie(settings.cookieName, state.serialize))
 
-      await(provider.validate("test")) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(InvalidStateFormat.format("test", ""))
+      await(provider.validate) must throwA[OAuth2StateException].like {
+        case e => e.getMessage must startWith(InvalidStateFormat.format(""))
       }
     }
 
@@ -132,8 +136,8 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
 
       implicit val req = FakeRequest(GET, s"?$State=${providerState.serialize}").withCookies(Cookie(settings.cookieName, clientState.serialize))
 
-      await(provider.validate("test")) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(StateIsNotEqual.format("test"))
+      await(provider.validate) must throwA[OAuth2StateException].like {
+        case e => e.getMessage must startWith(StateIsNotEqual.format())
       }
     }
 
@@ -142,27 +146,28 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
 
       implicit val req = FakeRequest(GET, s"?$State=${expiredState.serialize}").withCookies(Cookie(settings.cookieName, expiredState.serialize))
 
-      await(provider.validate("test")) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(StateIsExpired.format("test"))
+      await(provider.validate) must throwA[OAuth2StateException].like {
+        case e => e.getMessage must startWith(StateIsExpired.format())
       }
     }
 
     "return the state if it's valid" in new WithApplication with Context {
       implicit val req = FakeRequest(GET, s"?$State=${state.serialize}").withCookies(Cookie(settings.cookieName, state.serialize))
 
-      await(provider.validate("test")) must be equalTo state
+      await(provider.validate) must be equalTo state
     }
   }
 
   "The `publish` method of the provider" should {
     "add the state to the cookie" in new Context {
       implicit val req = FakeRequest(GET, "/")
-      val result = Future.successful(provider.publish(Results.Status(200), state))
+      val result = Future.successful(provider.publish(Results.Ok, state))
 
       cookies(result).get(settings.cookieName) should beSome[Cookie].which { c =>
         c.name must be equalTo settings.cookieName
         c.value must be equalTo state.serialize
-        c.maxAge must beSome(settings.expirationTime)
+        // https://github.com/mohiva/play-silhouette/issues/273
+        c.maxAge must beSome[Int].which(_ <= settings.expirationTime.toSeconds.toInt)
         c.path must be equalTo settings.cookiePath
         c.domain must be equalTo settings.cookieDomain
         c.secure must be equalTo settings.secureCookie
@@ -194,7 +199,7 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
       cookieDomain = None,
       secureCookie = true,
       httpOnlyCookie = true,
-      expirationTime = 5 * 60
+      expirationTime = 5 minutes
     )
 
     /**
@@ -206,7 +211,7 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers {
      * A state to test.
      */
     lazy val state = spy(new CookieState(
-      expirationDate = DateTime.now.plusMinutes(settings.expirationTime),
+      expirationDate = DateTime.now.plusSeconds(settings.expirationTime.toSeconds.toInt),
       value = "value"
     ))
   }

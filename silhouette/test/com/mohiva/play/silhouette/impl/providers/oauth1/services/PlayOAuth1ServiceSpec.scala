@@ -19,6 +19,7 @@ import com.mohiva.play.silhouette.impl.providers.{ OAuth1Info, OAuth1Settings }
 import oauth.signpost.exception.{ OAuthException, OAuthMessageSignerException }
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.oauth.{ OAuth, RequestToken }
 import play.api.libs.ws.WSSignatureCalculator
 import play.api.test.PlaySpecification

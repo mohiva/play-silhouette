@@ -23,23 +23,23 @@ import java.security.SecureRandom
 
 import com.mohiva.play.silhouette.api.util.IDGenerator
 import play.api.libs.Codecs
-import play.api.libs.concurrent.Execution.Implicits._
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * A generator which uses SecureRandom to generate cryptographically strong IDs.
  *
  * @param idSizeInBytes The size of the ID length in bytes.
+ * @param ec The execution context to handle the asynchronous operations.
  */
-class SecureRandomIDGenerator(idSizeInBytes: Int = 128) extends IDGenerator {
+class SecureRandomIDGenerator(idSizeInBytes: Int = 128)(implicit ec: ExecutionContext) extends IDGenerator {
 
   /**
    * Generates a new ID using SecureRandom.
    *
    * @return The generated ID.
    */
-  def generate: Future[String] = {
+  override def generate: Future[String] = {
     val randomValue = new Array[Byte](idSizeInBytes)
     Future(SecureRandomIDGenerator.random.nextBytes(randomValue)).map { _ =>
       Codecs.toHexString(randomValue)

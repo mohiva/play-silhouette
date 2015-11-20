@@ -1,18 +1,18 @@
 package com.mohiva.play.silhouette.impl.providers
 
-import scala.reflect.ClassTag
-import scala.concurrent.Future
+import com.mohiva.play.silhouette.api.AuthInfo
 import org.specs2.matcher.MatchResult
-import play.api.test.PlaySpecification
 import play.api.mvc.Result
-import com.mohiva.play.silhouette.api.services.AuthInfo
-import com.mohiva.play.silhouette.impl.providers.cas.CASAuthInfo
+import play.api.test.PlaySpecification
+
+import scala.concurrent.Future
+import scala.reflect.ClassTag
 
 /**
  * @author nshaw
  */
 trait SharedSpecification[A <: AuthInfo] extends PlaySpecification {
-  
+
   /**
    * Applies a matcher on a simple result.
    *
@@ -25,7 +25,7 @@ trait SharedSpecification[A <: AuthInfo] extends PlaySpecification {
       case result => b(Future.successful(result))
     }
   }
-  
+
   /**
    * Matches a partial function against a failure message.
    *
@@ -46,7 +46,7 @@ trait SharedSpecification[A <: AuthInfo] extends PlaySpecification {
     result must not(throwAn[E])
     result.rethrow must throwAn[E].like(f)
   }
-  
+
   /**
    * Applies a matcher on a auth info.
    *
@@ -59,5 +59,5 @@ trait SharedSpecification[A <: AuthInfo] extends PlaySpecification {
       case authInfo => b(authInfo)
     }
   }
-  
+
 }

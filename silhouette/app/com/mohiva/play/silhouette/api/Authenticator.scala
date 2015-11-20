@@ -19,12 +19,10 @@
  */
 package com.mohiva.play.silhouette.api
 
-import com.mohiva.play.silhouette.api.Authenticator.Discard
-import com.mohiva.play.silhouette.api.Authenticator.Renew
-import play.api.libs.concurrent.Execution.Implicits._
-import play.api.mvc.Result
+import com.mohiva.play.silhouette.api.Authenticator.Implicits._
+import org.joda.time.DateTime
 
-import scala.concurrent.Future
+import scala.concurrent.duration.FiniteDuration
 
 /**
  * An authenticator tracks an authenticated user.
@@ -37,6 +35,11 @@ trait Authenticator {
   type Value
 
   /**
+   * The type of the settings an authenticator can handle.
+   */
+  type Settings
+
+  /**
    * Gets the linked login info for an identity.
    *
    * @return The linked login info for an identity.
@@ -44,63 +47,51 @@ trait Authenticator {
   def loginInfo: LoginInfo
 
   /**
-   * Checks if the authenticator isn't expired and isn't timed out.
+   * Checks if the authenticator valid.
    *
-   * @return True if the authenticator isn't expired and isn't timed out.
+   * @return True if the authenticator valid, false otherwise.
    */
   def isValid: Boolean
-
-  /**
-   * Discards an authenticator.
-   *
-   * @param result The result to wrap into the [[com.mohiva.play.silhouette.api.Authenticator.Discard]] result.
-   * @return A [[com.mohiva.play.silhouette.api.Authenticator.Discard]] result.
-   */
-  def discard(result: Result): Result = new Discard(result)
-
-  /**
-   * Discards an authenticator.
-   *
-   * @param result The result to wrap into the [[com.mohiva.play.silhouette.api.Authenticator.Discard]] result.
-   * @return A [[com.mohiva.play.silhouette.api.Authenticator.Discard]] result.
-   */
-  def discard(result: Future[Result]): Future[Result] = result.map(r => discard(r))
-
-  /**
-   * Renews an authenticator.
-   *
-   * @param result The result to wrap into the [[com.mohiva.play.silhouette.api.Authenticator.Renew]] result.
-   * @return A [[com.mohiva.play.silhouette.api.Authenticator.Renew]] result.
-   */
-  def renew(result: Result): Result = new Renew(result)
-
-  /**
-   * Renews an authenticator.
-   *
-   * @param result The result to wrap into the [[com.mohiva.play.silhouette.api.Authenticator.Renew]] result.
-   * @return A [[com.mohiva.play.silhouette.api.Authenticator.Renew]] result.
-   */
-  def renew(result: Future[Result]): Future[Result] = result.map(r => renew(r))
 }
 
 /**
- * The companion object.
+ * The `Authenticator` companion object.
  */
 object Authenticator {
 
   /**
-   * A marker result which indicates that an authenticator should be discarded.
-   *
-   * @param result The wrapped result.
+   * Some implicits.
    */
-  class Discard(result: Result) extends Result(result.header, result.body, result.connection)
+  object Implicits {
 
-  /**
-   * A marker result which indicates that an authenticator should be renewed.
-   *
-   * @param result The wrapped result.
-   */
-  class Renew(result: Result) extends Result(result.header, result.body, result.connection)
+    /**
+     * Defines additional methods on an `DateTime` instance.
+     *
+     * @param dateTime The `DateTime` instance on which the additional methods should be defined.
+     */
+    implicit class RichDateTime(dateTime: DateTime) {
+
+      /**
+       * Adds a duration to a date/time.
+       *
+       * @param duration The duration to add.
+       * @return A date/time instance with the added duration.
+       */
+      def +(duration: FiniteDuration) = {
+        dateTime.plusSeconds(duration.toSeconds.toInt)
+      }
+
+      /**
+       * Subtracts a duration from a date/time.
+       *
+       * @param duration The duration to subtract.
+       * @return A date/time instance with the subtracted duration.
+       */
+      def -(duration: FiniteDuration) = {
+        dateTime.minusSeconds(duration.toSeconds.toInt)
+      }
+    }
+  }
 }
 
 /**
@@ -114,4 +105,48 @@ trait StorableAuthenticator extends Authenticator {
    * @return The ID to reference the authenticator in the backing store.
    */
   def id: String
+}
+
+/**
+ * An authenticator that may expire.
+ */
+trait ExpirableAuthenticator extends Authenticator {
+
+  /**
+   * The last used date/time.
+   */
+  val lastUsedDateTime: DateTime
+
+  /**
+   * The expiration date/time.
+   */
+  val expirationDateTime: DateTime
+
+  /**
+   * The duration an authenticator can be idle before it timed out.
+   */
+  val idleTimeout: Option[FiniteDuration]
+
+  /**
+   * Checks if the authenticator isn't expired and isn't timed out.
+   *
+   * @return True if the authenticator isn't expired and isn't timed out.
+   */
+  override def isValid = !isExpired && !isTimedOut
+
+  /**
+   * Checks if the authenticator is expired. This is an absolute timeout since the creation of
+   * the authenticator.
+   *
+   * @return True if the authenticator is expired, false otherwise.
+   */
+  def isExpired = expirationDateTime.isBeforeNow
+
+  /**
+   * Checks if the time elapsed since the last time the authenticator was used, is longer than
+   * the maximum idle timeout specified in the properties.
+   *
+   * @return True if sliding window expiration is activated and the authenticator is timed out, false otherwise.
+   */
+  def isTimedOut = idleTimeout.isDefined && (lastUsedDateTime + idleTimeout.get).isBeforeNow
 }

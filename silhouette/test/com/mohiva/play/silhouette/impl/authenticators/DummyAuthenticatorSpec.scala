@@ -16,12 +16,12 @@
 package com.mohiva.play.silhouette.impl.authenticators
 
 import com.mohiva.play.silhouette.api.LoginInfo
+import com.mohiva.play.silhouette.api.services.AuthenticatorResult
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.Results
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
-
-import scala.concurrent.Future
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticator]].
@@ -61,9 +61,9 @@ class DummyAuthenticatorSpec extends PlaySpecification with Mockito {
   "The result `embed` method of the service" should {
     "return the original response" in new Context {
       implicit val request = FakeRequest()
-      val result = Future.successful(Results.Status(200))
+      val result = AuthenticatorResult(Results.Ok)
 
-      service.embed((), result) must be equalTo result
+      await(service.embed((), result)) must be equalTo result
     }
   }
 
@@ -87,27 +87,27 @@ class DummyAuthenticatorSpec extends PlaySpecification with Mockito {
   "The `update` method of the service" should {
     "return the original result" in new Context {
       implicit val request = FakeRequest()
-      val result = Future.successful(Results.Ok)
+      val result = AuthenticatorResult(Results.Ok)
 
-      service.update(authenticator, result) must be equalTo result
+      await(service.update(authenticator, result)) must be equalTo result
     }
   }
 
   "The `renew` method of the service" should {
     "return the original result" in new Context {
       implicit val request = FakeRequest()
-      val result = Future.successful(Results.Ok)
+      val result = AuthenticatorResult(Results.Ok)
 
-      service.renew(authenticator, result) must be equalTo result
+      await(service.renew(authenticator, result)) must be equalTo result
     }
   }
 
   "The `discard` method of the service" should {
     "return the original result" in new Context {
       implicit val request = FakeRequest()
-      val result = Future.successful(Results.Ok)
+      val result = AuthenticatorResult(Results.Ok)
 
-      service.discard(authenticator, result) must be equalTo result
+      await(service.discard(authenticator, result)) must be equalTo result
     }
   }
 

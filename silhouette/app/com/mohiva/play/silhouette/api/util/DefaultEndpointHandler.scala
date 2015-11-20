@@ -18,10 +18,11 @@ object DefaultEndpointHandler extends Controller {
    * [[https://tools.ietf.org/html/rfc2616#section-10.4.2 RFC 2616]].
    *
    * @param request The request header.
+   * @param messages The messages for the current language.
    * @return A response indicating that user authentication is required.
    */
-  def handleNotAuthenticated(implicit request: RequestHeader): Future[Result] = {
-    produceResponse(Unauthorized, "silhouette.not.authenticated")
+  def handleNotAuthenticated(implicit request: RequestHeader, messages: Messages): Future[Result] = {
+    produceResponse(Unauthorized, Messages("silhouette.not.authenticated"))
   }
 
   /**
@@ -31,10 +32,11 @@ object DefaultEndpointHandler extends Controller {
    * [[https://tools.ietf.org/html/rfc2616#section-10.4.4 RFC 2616]].
    *
    * @param request The request header.
+   * @param messages The messages for the current language.
    * @return A response indicating that access is forbidden.
    */
-  def handleNotAuthorized(implicit request: RequestHeader): Future[Result] = {
-    produceResponse(Forbidden, "silhouette.not.authorized")
+  def handleNotAuthorized(implicit request: RequestHeader, messages: Messages): Future[Result] = {
+    produceResponse(Forbidden, Messages("silhouette.not.authorized"))
   }
 
   /**
@@ -46,13 +48,12 @@ object DefaultEndpointHandler extends Controller {
    * @param request The request header.
    */
   private def produceResponse[S <: Status](status: S, msg: String)(implicit request: RequestHeader): Future[Result] = {
-    val localized = Messages(msg)
     Future.successful(render {
-      case Accepts.Html() => status(toHtmlError(localized)).as(HTML)
+      case Accepts.Html() => status(toHtmlError(msg)).as(HTML)
       // This will also be the default content type if the client doesn't request a specific media type.
-      case Accepts.Json() => status(toJsonError(localized))
-      case Accepts.Xml() => status(toXmlError(localized))
-      case _ => status(toPlainTextError(localized))
+      case Accepts.Json() => status(toJsonError(msg))
+      case Accepts.Xml() => status(toXmlError(msg))
+      case _ => status(toPlainTextError(msg))
       // The correct HTTP status code must be returned in any situation.
       // The response format will default to plain text in case the request does not specify one of known
       // media types. The user agent is responsible for inspecting the response headers as specified in

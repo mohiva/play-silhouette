@@ -16,26 +16,60 @@
 package com.mohiva.play.silhouette.impl.providers
 
 import java.net.URI
-
-import com.mohiva.play.silhouette.api.services.AuthInfo
-import com.mohiva.play.silhouette.api.util.ExtractableRequest
-import com.mohiva.play.silhouette.api.{ LoginInfo, Provider }
+import com.mohiva.play.silhouette.api.util.{ HTTPLayer, ExecutionContextProvider, ExtractableRequest }
+import com.mohiva.play.silhouette.api.{ AuthInfo, LoginInfo, Provider }
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
-import play.api.libs.concurrent.Execution.Implicits._
+import org.apache.commons.lang3.reflect.TypeUtils
 import play.api.mvc.{ RequestHeader, Result }
 
 import scala.concurrent.Future
+import scala.reflect.ClassTag
 
 /**
  * The base interface for all social providers.
  */
-trait SocialProvider extends Provider with SocialProfileBuilder {
+trait SocialProvider extends Provider with SocialProfileBuilder with ExecutionContextProvider {
+
+  /**
+   * The type of the concrete implementation of this abstract type.
+   */
+  type Self <: SocialProvider
 
   /**
    * The type of the auth info.
    */
   type A <: AuthInfo
+
+  /**
+   * The settings type.
+   */
+  type Settings
+
+  /**
+   * The HTTP layer implementation.
+   */
+  protected val httpLayer: HTTPLayer
+
+  /**
+   * The execution context to handle the asynchronous operations.
+   */
+  override implicit val executionContext = httpLayer.executionContext
+
+  /**
+   * Gets the provider settings.
+   *
+   * @return The provider settings.
+   */
+  def settings: Settings
+
+  /**
+   * Gets a provider initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the provider initialized with new settings.
+   */
+  def withSettings(f: Settings => Settings): Self
 
   /**
    * Authenticates the user and returns the auth information.
@@ -79,6 +113,42 @@ trait SocialProvider extends Provider with SocialProfileBuilder {
     case uri =>
       val scheme = if (request.secure) "https://" else "http://"
       URI.create(scheme + request.host + request.path).resolve(uri).toString
+  }
+}
+
+/**
+ * A registry that holds and provides access to all social provider implementations.
+ *
+ * @param providers The list of social providers.
+ */
+case class SocialProviderRegistry(providers: Seq[SocialProvider]) {
+
+  /**
+   * Gets a specific provider by its type.
+   *
+   * @tparam T The type of the provider.
+   * @return Some specific provider type or None if no provider for the given type could be found.
+   */
+  def get[T <: SocialProvider: ClassTag]: Option[T] = {
+    providers.find(p => TypeUtils.isInstance(p, implicitly[ClassTag[T]].runtimeClass)).map(_.asInstanceOf[T])
+  }
+
+  /**
+   * Gets a specific provider by its ID.
+   *
+   * @param id The ID of the provider to return.
+   * @return Some social provider or None if no provider for the given ID could be found.
+   */
+  def get[T <: SocialProvider: ClassTag](id: String): Option[T] = getSeq[T].find(_.id == id)
+
+  /**
+   * Gets a list of providers that match a certain type.
+   *
+   * @tparam T The type of the provider.
+   * @return A list of providers that match a certain type.
+   */
+  def getSeq[T <: SocialProvider: ClassTag]: Seq[T] = {
+    providers.filter(p => TypeUtils.isInstance(p, implicitly[ClassTag[T]].runtimeClass)).map(_.asInstanceOf[T])
   }
 }
 

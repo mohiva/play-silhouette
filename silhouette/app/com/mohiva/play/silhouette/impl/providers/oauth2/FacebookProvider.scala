@@ -21,47 +21,36 @@ package com.mohiva.play.silhouette.impl.providers.oauth2
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.HTTPLayer
-import com.mohiva.play.silhouette.impl.exceptions.{ UnexpectedResponseException, ProfileRetrievalException }
-import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
+import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.FacebookProvider._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.{ JsObject, JsValue }
-import play.api.libs.ws.WSResponse
 
 import scala.concurrent.Future
-import scala.util.{ Failure, Success, Try }
 
 /**
- * A Facebook OAuth2 Provider.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param stateProvider The state provider implementation.
- * @param settings The provider settings.
+ * Base Facebook OAuth2 Provider.
  *
  * @see https://developers.facebook.com/tools/explorer
  * @see https://developers.facebook.com/docs/graph-api/reference/user
  * @see https://developers.facebook.com/docs/facebook-login/access-tokens
  */
-abstract class FacebookProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
-  extends OAuth2Provider(httpLayer, stateProvider, settings) {
+trait BaseFacebookProvider extends OAuth2Provider {
 
   /**
    * The content type to parse a profile from.
    */
-  type Content = JsValue
+  override type Content = JsValue
 
   /**
-   * Gets the provider ID.
-   *
-   * @return The provider ID.
+   * The provider ID.
    */
-  val id = ID
+  override val id = ID
 
   /**
    * Defines the URLs that are needed to retrieve the profile data.
    */
-  protected val urls = Map("api" -> API)
+  override protected val urls = Map("api" -> API)
 
   /**
    * Builds the social profile.
@@ -69,7 +58,7 @@ abstract class FacebookProvider(httpLayer: HTTPLayer, stateProvider: OAuth2State
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+  override protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
     httpLayer.url(urls("api").format(authInfo.accessToken)).get().flatMap { response =>
       val json = response.json
       (json \ "error").asOpt[JsObject] match {
@@ -81,22 +70,6 @@ abstract class FacebookProvider(httpLayer: HTTPLayer, stateProvider: OAuth2State
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, errorMsg, errorType, errorCode))
         case _ => profileParser.parse(json)
       }
-    }
-  }
-
-  /**
-   * Builds the OAuth2 info.
-   *
-   * Facebook does not follow the OAuth2 spec :-\
-   *
-   * @param response The response from the provider.
-   * @return The OAuth2 info on success, otherwise an failure.
-   */
-  override protected def buildInfo(response: WSResponse): Try[OAuth2Info] = {
-    response.body.split("&|=") match {
-      case Array(AccessToken, token, Expires, expiresIn) => Success(OAuth2Info(token, None, Some(expiresIn.toInt)))
-      case Array(AccessToken, token) => Success(OAuth2Info(token))
-      case _ => Failure(new UnexpectedResponseException(InvalidInfoFormat.format(id, response.body)))
     }
   }
 }
@@ -112,7 +85,7 @@ class FacebookProfileParser extends SocialProfileParser[JsValue, CommonSocialPro
    * @param json The content returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue) = Future.successful {
     val userID = (json \ "id").as[String]
     val firstName = (json \ "first_name").asOpt[String]
     val lastName = (json \ "last_name").asOpt[String]
@@ -131,15 +104,35 @@ class FacebookProfileParser extends SocialProfileParser[JsValue, CommonSocialPro
 }
 
 /**
- * The profile builder for the common social profile.
+ * The Facebook OAuth2 Provider.
+ *
+ * @param httpLayer The HTTP layer implementation.
+ * @param stateProvider The state provider implementation.
+ * @param settings The provider settings.
  */
-trait FacebookProfileBuilder extends CommonSocialProfileBuilder {
-  self: FacebookProvider =>
+class FacebookProvider(
+  protected val httpLayer: HTTPLayer,
+  protected val stateProvider: OAuth2StateProvider,
+  val settings: OAuth2Settings)
+  extends BaseFacebookProvider with CommonSocialProfileBuilder {
+
+  /**
+   * The type of this class.
+   */
+  override type Self = FacebookProvider
 
   /**
    * The profile parser implementation.
    */
-  val profileParser = new FacebookProfileParser
+  override val profileParser = new FacebookProfileParser
+
+  /**
+   * Gets a provider initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the provider initialized with new settings.
+   */
+  override def withSettings(f: (Settings) => Settings) = new FacebookProvider(httpLayer, stateProvider, f(settings))
 }
 
 /**
@@ -156,17 +149,5 @@ object FacebookProvider {
    * The Facebook constants.
    */
   val ID = "facebook"
-  val API = "https://graph.facebook.com/me?fields=name,first_name,last_name,picture,email&return_ssl_resources=1&access_token=%s"
-
-  /**
-   * Creates an instance of the provider.
-   *
-   * @param httpLayer The HTTP layer implementation.
-   * @param stateProvider The state provider implementation.
-   * @param settings The provider settings.
-   * @return An instance of this provider.
-   */
-  def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new FacebookProvider(httpLayer, stateProvider, settings) with FacebookProfileBuilder
-  }
+  val API = "https://graph.facebook.com/v2.3/me?fields=name,first_name,last_name,picture,email&return_ssl_resources=1&access_token=%s"
 }

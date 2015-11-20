@@ -15,32 +15,33 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
-import java.net.URLEncoder
-
 import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.services.AuthInfo
-import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
+import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.impl.exceptions.UnexpectedResponseException
 import com.mohiva.play.silhouette.impl.providers.OpenIDProvider._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc._
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
- * Base class for all OpenID providers.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param service The OpenID service implementation.
- * @param settings The OpenID provider settings.
+ * Base implementation for all OpenID providers.
  */
-abstract class OpenIDProvider(httpLayer: HTTPLayer, service: OpenIDService, settings: OpenIDSettings)
-  extends SocialProvider with Logger {
+trait OpenIDProvider extends SocialProvider with Logger {
 
   /**
    * The type of the auth info.
    */
   type A = OpenIDInfo
+
+  /**
+   * The settings type.
+   */
+  type Settings = OpenIDSettings
+
+  /**
+   * The OpenID service implementation.
+   */
+  protected val service: OpenIDService
 
   /**
    * Starts the authentication process.
@@ -60,36 +61,12 @@ abstract class OpenIDProvider(httpLayer: HTTPLayer, service: OpenIDService, sett
         // Either we get the openID from request or we use the provider ID to retrieve the redirect URL
         val openID = request.extractString(OpenID).getOrElse(settings.providerURL)
         service.redirectURL(openID, resolveCallbackURL(settings.callbackURL)).map { url =>
-          val redirect = Results.Redirect(fix3749(url))
+          val redirect = Results.Redirect(url)
           logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
           Left(redirect)
         }.recover {
           case e => throw new UnexpectedResponseException(ErrorRedirectURL.format(id, e.getMessage), e)
         }
-    }
-  }
-
-  /**
-   * A temporary fix for: https://github.com/playframework/playframework/pull/3749
-   *
-   * @see https://github.com/playframework/playframework/issues/3740
-   * @see http://stackoverflow.com/questions/22041522/steam-openid-and-play-framework
-   * @param url The URL to fix.
-   * @param request The request.
-   * @tparam B The type of the request body.
-   * @return The fixed URL.
-   */
-  def fix3749[B](url: String)(implicit request: ExtractableRequest[B]) = {
-    if (request.extractString(OpenID).isDefined) {
-      // We've found a non-unique ID so this bug doesn't affect us
-      url
-    } else {
-      // We use "OpenID Provider driven identifier selection", so this bug affects us
-      val search = URLEncoder.encode(settings.providerURL, "UTF-8")
-      val replace = URLEncoder.encode("http://specs.openid.net/auth/2.0/identifier_select", "UTF-8")
-      url
-        .replace("openid.claimed_id=" + search, "openid.claimed_id=" + replace)
-        .replace("openid.identity=" + search, "openid.identity=" + replace)
     }
   }
 }
@@ -122,18 +99,20 @@ trait OpenIDService {
    *
    * @param openID The OpenID to use for authentication.
    * @param resolvedCallbackURL The full callback URL to the application after a successful authentication.
+   * @param ec The execution context to handle the asynchronous operations.
    * @return The redirect URL where the user should be redirected to start the OpenID authentication process.
    */
-  def redirectURL(openID: String, resolvedCallbackURL: String): Future[String]
+  def redirectURL(openID: String, resolvedCallbackURL: String)(implicit ec: ExecutionContext): Future[String]
 
   /**
    * From a request corresponding to the callback from the OpenID server, check the identity of the current user.
    *
    * @param request The current request.
+   * @param ec The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return A OpenIDInfo in case of success, Exception otherwise.
    */
-  def verifiedID[B](implicit request: Request[B]): Future[OpenIDInfo]
+  def verifiedID[B](implicit request: Request[B], ec: ExecutionContext): Future[OpenIDInfo]
 }
 
 /**
@@ -149,8 +128,8 @@ trait OpenIDService {
 case class OpenIDSettings(
   providerURL: String,
   callbackURL: String,
-  axRequired: Seq[(String, String)] = Seq.empty,
-  axOptional: Seq[(String, String)] = Seq.empty,
+  axRequired: Map[String, String] = Map.empty,
+  axOptional: Map[String, String] = Map.empty,
   realm: Option[String] = None)
 
 /**

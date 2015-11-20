@@ -25,7 +25,6 @@ import com.mohiva.play.silhouette.impl.exceptions.{ UnexpectedResponseException,
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.VKProvider._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.ws.WSResponse
@@ -34,35 +33,28 @@ import scala.concurrent.Future
 import scala.util.{ Success, Failure, Try }
 
 /**
- * A Vk OAuth 2 provider.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param stateProvider The state provider implementation.
- * @param settings The provider settings.
+ * Base Vk OAuth 2 provider.
  *
  * @see http://vk.com/dev/auth_sites
  * @see http://vk.com/dev/api_requests
  * @see http://vk.com/pages.php?o=-1&p=getProfiles
  */
-abstract class VKProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
-  extends OAuth2Provider(httpLayer, stateProvider, settings) {
+trait BaseVKProvider extends OAuth2Provider {
 
   /**
    * The content type to parse a profile from.
    */
-  type Content = (JsValue, OAuth2Info)
+  override type Content = (JsValue, OAuth2Info)
 
   /**
-   * Gets the provider ID.
-   *
-   * @return The provider ID.
+   * The provider ID.
    */
-  val id = ID
+  override val id = ID
 
   /**
    * Defines the URLs that are needed to retrieve the profile data.
    */
-  protected val urls = Map("api" -> API)
+  override protected val urls = Map("api" -> API)
 
   /**
    * Builds the social profile.
@@ -70,7 +62,7 @@ abstract class VKProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvid
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+  override protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
     httpLayer.url(urls("api").format(authInfo.accessToken)).get().flatMap { response =>
       val json = response.json
       (json \ "error").asOpt[JsObject] match {
@@ -111,7 +103,7 @@ class VKProfileParser extends SocialProfileParser[(JsValue, OAuth2Info), CommonS
    * @param data The data returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(data: (JsValue, OAuth2Info)) = Future.successful {
+  override def parse(data: (JsValue, OAuth2Info)) = Future.successful {
     val json = data._1
     val response = (json \ "response").apply(0)
     val userId = (response \ "uid").as[Long]
@@ -129,15 +121,35 @@ class VKProfileParser extends SocialProfileParser[(JsValue, OAuth2Info), CommonS
 }
 
 /**
- * The profile builder for the common social profile.
+ * The VK OAuth2 Provider.
+ *
+ * @param httpLayer The HTTP layer implementation.
+ * @param stateProvider The state provider implementation.
+ * @param settings The provider settings.
  */
-trait VKProfileBuilder extends CommonSocialProfileBuilder {
-  self: VKProvider =>
+class VKProvider(
+  protected val httpLayer: HTTPLayer,
+  protected val stateProvider: OAuth2StateProvider,
+  val settings: OAuth2Settings)
+  extends BaseVKProvider with CommonSocialProfileBuilder {
+
+  /**
+   * The type of this class.
+   */
+  override type Self = VKProvider
 
   /**
    * The profile parser implementation.
    */
-  val profileParser = new VKProfileParser
+  override val profileParser = new VKProfileParser
+
+  /**
+   * Gets a provider initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the provider initialized with new settings.
+   */
+  override def withSettings(f: (Settings) => Settings) = new VKProvider(httpLayer, stateProvider, f(settings))
 }
 
 /**
@@ -168,16 +180,4 @@ object VKProvider {
   )((accessToken: String, tokenType: Option[String], expiresIn: Option[Int], refreshToken: Option[String], email: Option[String]) =>
       new OAuth2Info(accessToken, tokenType, expiresIn, refreshToken, email.map(e => Map("email" -> e)))
     )
-
-  /**
-   * Creates an instance of the provider.
-   *
-   * @param httpLayer The HTTP layer implementation.
-   * @param stateProvider The state provider implementation.
-   * @param settings The provider settings.
-   * @return An instance of this provider.
-   */
-  def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new VKProvider(httpLayer, stateProvider, settings) with VKProfileBuilder
-  }
 }

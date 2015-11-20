@@ -21,40 +21,32 @@ import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.DropboxProvider._
 import play.api.http.HeaderNames._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.JsValue
 
 import scala.concurrent.Future
 
 /**
- * A Dropbox OAuth2 Provider.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param stateProvider The state provider implementation.
- * @param settings The provider settings.
+ * Base Dropbox OAuth2 Provider.
  *
  * @see https://www.dropbox.com/developers/blog/45/using-oauth-20-with-the-core-api
  * @see https://www.dropbox.com/developers/core/docs#oauth2-methods
  */
-abstract class DropboxProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
-  extends OAuth2Provider(httpLayer, stateProvider, settings) {
+trait BaseDropboxProvider extends OAuth2Provider {
 
   /**
    * The content type to parse a profile from.
    */
-  type Content = JsValue
+  override type Content = JsValue
 
   /**
-   * Gets the provider ID.
-   *
-   * @return The provider ID.
+   * The provider ID.
    */
-  val id = ID
+  override val id = ID
 
   /**
    * Defines the URLs that are needed to retrieve the profile data.
    */
-  protected val urls = Map("api" -> API)
+  override protected val urls = Map("api" -> API)
 
   /**
    * Builds the social profile.
@@ -62,7 +54,7 @@ abstract class DropboxProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateP
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+  override protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
     httpLayer.url(urls("api")).withHeaders(AUTHORIZATION -> s"Bearer ${authInfo.accessToken}").get().flatMap { response =>
       val json = response.json
       response.status match {
@@ -86,7 +78,7 @@ class DropboxProfileParser extends SocialProfileParser[JsValue, CommonSocialProf
    * @param json The content returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue) = Future.successful {
     val userID = (json \ "uid").as[Long]
     val firstName = (json \ "name_details" \ "given_name").asOpt[String]
     val lastName = (json \ "name_details" \ "surname").asOpt[String]
@@ -101,15 +93,35 @@ class DropboxProfileParser extends SocialProfileParser[JsValue, CommonSocialProf
 }
 
 /**
- * The profile builder for the common social profile.
+ * The Dropbox OAuth2 Provider.
+ *
+ * @param httpLayer The HTTP layer implementation.
+ * @param stateProvider The state provider implementation.
+ * @param settings The provider settings.
  */
-trait DropboxProfileBuilder extends CommonSocialProfileBuilder {
-  self: DropboxProvider =>
+class DropboxProvider(
+  protected val httpLayer: HTTPLayer,
+  protected val stateProvider: OAuth2StateProvider,
+  val settings: OAuth2Settings)
+  extends BaseDropboxProvider with CommonSocialProfileBuilder {
+
+  /**
+   * The type of this class.
+   */
+  override type Self = DropboxProvider
 
   /**
    * The profile parser implementation.
    */
-  val profileParser = new DropboxProfileParser
+  override val profileParser = new DropboxProfileParser
+
+  /**
+   * Gets a provider initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the provider initialized with new settings.
+   */
+  override def withSettings(f: (Settings) => Settings) = new DropboxProvider(httpLayer, stateProvider, f(settings))
 }
 
 /**
@@ -127,16 +139,4 @@ object DropboxProvider {
    */
   val ID = "dropbox"
   val API = "https://api.dropbox.com/1/account/info"
-
-  /**
-   * Creates an instance of the provider.
-   *
-   * @param httpLayer The HTTP layer implementation.
-   * @param stateProvider The state provider implementation.
-   * @param settings The provider settings.
-   * @return An instance of this provider.
-   */
-  def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new DropboxProvider(httpLayer, stateProvider, settings) with DropboxProfileBuilder
-  }
 }

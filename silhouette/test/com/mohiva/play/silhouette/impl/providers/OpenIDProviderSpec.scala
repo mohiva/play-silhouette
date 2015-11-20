@@ -15,14 +15,13 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
-import java.net.URLEncoder
-
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.UnexpectedResponseException
 import com.mohiva.play.silhouette.impl.providers.OpenIDProvider._
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.test.{ FakeRequest, WithApplication }
 import play.mvc.Http.HeaderNames
 
@@ -41,7 +40,7 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
     "fail with an UnexpectedResponseException if redirect URL couldn't be retrieved" in new WithApplication {
       implicit val req = FakeRequest()
 
-      c.openIDService.redirectURL(any, any) returns Future.failed(new Exception(""))
+      c.openIDService.redirectURL(any, any)(any) returns Future.failed(new Exception(""))
 
       failed[UnexpectedResponseException](c.provider.authenticate()) {
         case e => e.getMessage must startWith(ErrorRedirectURL.format(c.provider.id, ""))
@@ -50,7 +49,7 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
 
     "redirect to provider by using the provider URL" in new WithApplication {
       implicit val req = FakeRequest()
-      c.openIDService.redirectURL(any, any) returns Future.successful(c.openIDSettings.providerURL)
+      c.openIDService.redirectURL(any, any)(any) returns Future.successful(c.openIDSettings.providerURL)
 
       result(c.provider.authenticate()) {
         case result =>
@@ -61,7 +60,7 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
 
     "redirect to provider by using a openID" in new WithApplication {
       implicit val req = FakeRequest(GET, "?openID=my.open.id")
-      c.openIDService.redirectURL(any, any) returns Future.successful(c.openIDSettings.providerURL)
+      c.openIDService.redirectURL(any, any)(any) returns Future.successful(c.openIDSettings.providerURL)
 
       result(c.provider.authenticate()) {
         case result =>
@@ -70,38 +69,16 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
       }
     }
 
-    "fix bug 3749" in new WithApplication {
-      val e = (v: String) => URLEncoder.encode(v, "UTF-8")
-      implicit val req = FakeRequest()
-      c.openIDService.redirectURL(any, any) returns Future.successful("https://domain.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0"
-        + "&openid.mode=checkid_setup"
-        + "&openid.claimed_id=" + e(c.openIDSettings.providerURL)
-        + "&openid.identity=" + e(c.openIDSettings.providerURL)
-        + "&openid.return_to=http://www.mydomain.com/auth/domain"
-        + "&openid.realm=http://www.mydomain.com")
-
-      result(c.provider.authenticate()) {
-        case result =>
-          status(result) must equalTo(SEE_OTHER)
-          redirectLocation(result) must beSome.which(_ == "https://domain.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0"
-            + "&openid.mode=checkid_setup"
-            + "&openid.claimed_id=" + e("http://specs.openid.net/auth/2.0/identifier_select")
-            + "&openid.identity=" + e("http://specs.openid.net/auth/2.0/identifier_select")
-            + "&openid.return_to=http://www.mydomain.com/auth/domain"
-            + "&openid.realm=http://www.mydomain.com")
-      }
-    }
-
     "resolves relative callbackURLs before starting the flow" in new WithApplication {
-      verifyRelativeCallbackURLResolution("/callback-url", false, "http://www.example.com/callback-url")
+      verifyRelativeCallbackURLResolution("/callback-url", secure = false, "http://www.example.com/callback-url")
     }
 
     "resolves path relative callbackURLs before starting the flow" in new WithApplication {
-      verifyRelativeCallbackURLResolution("callback-url", false, "http://www.example.com/request-path/callback-url")
+      verifyRelativeCallbackURLResolution("callback-url", secure = false, "http://www.example.com/request-path/callback-url")
     }
 
     "resolves relative callbackURLs before starting the flow over https" in new WithApplication {
-      verifyRelativeCallbackURLResolution("/callback-url", true, "https://www.example.com/callback-url")
+      verifyRelativeCallbackURLResolution("/callback-url", secure = true, "https://www.example.com/callback-url")
     }
 
     def verifyRelativeCallbackURLResolution(callbackURL: String, secure: Boolean, resolvedCallbackURL: String) = {
@@ -109,15 +86,15 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
 
       req.secure returns secure
       c.openIDSettings.callbackURL returns callbackURL
-      c.openIDService.redirectURL(any, any) returns Future.successful(c.openIDSettings.providerURL)
+      c.openIDService.redirectURL(any, any)(any) returns Future.successful(c.openIDSettings.providerURL)
 
       await(c.provider.authenticate())
-      there was one(c.openIDService).redirectURL(any, ===(resolvedCallbackURL))
+      there was one(c.openIDService).redirectURL(any, ===(resolvedCallbackURL))(any)
     }
 
     "fail with an UnexpectedResponseException if auth info cannot be retrieved" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + Mode + "=id_res")
-      c.openIDService.verifiedID(any) returns Future.failed(new Exception(""))
+      c.openIDService.verifiedID(any, any) returns Future.failed(new Exception(""))
 
       failed[UnexpectedResponseException](c.provider.authenticate()) {
         case e => e.getMessage must startWith(ErrorVerification.format(c.provider.id, ""))
@@ -126,11 +103,18 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
 
     "return the auth info" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + Mode + "=id_res")
-      c.openIDService.verifiedID(any) returns Future.successful(c.openIDInfo)
+      c.openIDService.verifiedID(any, any) returns Future.successful(c.openIDInfo)
 
       authInfo(c.provider.authenticate()) {
         case authInfo => authInfo must be equalTo c.openIDInfo
       }
+    }
+  }
+
+  "The `settings` method" should {
+    val c = context
+    "return the settings instance" in {
+      c.provider.settings must be equalTo c.openIDSettings
     }
   }
 
@@ -150,7 +134,11 @@ trait OpenIDProviderSpecContext extends Scope with Mockito with ThrownExpectatio
   /**
    * The HTTP layer mock.
    */
-  lazy val httpLayer: HTTPLayer = mock[HTTPLayer]
+  lazy val httpLayer = {
+    val m = mock[HTTPLayer]
+    m.executionContext returns defaultContext
+    m
+  }
 
   /**
    * A OpenID info.

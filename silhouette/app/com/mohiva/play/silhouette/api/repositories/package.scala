@@ -16,14 +16,6 @@
 package com.mohiva.play.silhouette.api
 
 /**
- * A token used for reset password and sign up operations.
+ * Provides repositories used by the API to persist entities.
  */
-trait Token {
-
-  /**
-   * Gets the token ID.
-   *
-   * @return The token ID.
-   */
-  def id: String
-}
+package object repositories {}

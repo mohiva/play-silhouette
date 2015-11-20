@@ -15,16 +15,18 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
+import javax.inject.Inject
+
 import com.mohiva.play.silhouette.api.exceptions.ConfigurationException
-import com.mohiva.play.silhouette.api.services.AuthInfoService
+import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util._
-import com.mohiva.play.silhouette.api.{ Logger, LoginInfo, RequestProvider }
+import com.mohiva.play.silhouette.api.{ LoginInfo, RequestProvider }
+import com.mohiva.play.silhouette.impl.exceptions.{ IdentityNotFoundException, InvalidPasswordException }
 import com.mohiva.play.silhouette.impl.providers.BasicAuthProvider._
 import play.api.http.HeaderNames
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ Request, RequestHeader }
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * A request provider implementation which supports HTTP basic authentication.
@@ -35,22 +37,23 @@ import scala.concurrent.Future
  * the application has changed the hashing algorithm, the provider hashes the entered password again with the new
  * algorithm and stores the auth info in the backing store.
  *
- * @param authInfoService The auth info service.
+ * @param authInfoRepository The auth info repository.
  * @param passwordHasher The default password hasher used by the application.
  * @param passwordHasherList List of password hasher supported by the application.
+ * @param executionContext The execution context to handle the asynchronous operations.
  */
-class BasicAuthProvider(
-  authInfoService: AuthInfoService,
+class BasicAuthProvider @Inject() (
+  authInfoRepository: AuthInfoRepository,
   passwordHasher: PasswordHasher,
-  passwordHasherList: Seq[PasswordHasher])
-  extends RequestProvider with Logger {
+  passwordHasherList: Seq[PasswordHasher])(implicit val executionContext: ExecutionContext)
+  extends RequestProvider {
 
   /**
    * Gets the provider ID.
    *
    * @return The provider ID.
    */
-  def id = ID
+  override def id = ID
 
   /**
    * Authenticates an identity based on credentials sent in a request.
@@ -63,24 +66,20 @@ class BasicAuthProvider(
     getCredentials(request) match {
       case Some(credentials) =>
         val loginInfo = LoginInfo(id, credentials.identifier)
-        authInfoService.retrieve[PasswordInfo](loginInfo).flatMap {
+        authInfoRepository.find[PasswordInfo](loginInfo).flatMap {
           case Some(authInfo) => passwordHasherList.find(_.id == authInfo.hasher) match {
             case Some(hasher) if hasher.matches(authInfo, credentials.password) =>
               if (hasher != passwordHasher) {
-                authInfoService.save(loginInfo, passwordHasher.hash(credentials.password)).map(_ => Some(loginInfo))
+                authInfoRepository.update(loginInfo, passwordHasher.hash(credentials.password)).map(_ => Some(loginInfo))
               } else {
                 Future.successful(Some(loginInfo))
               }
-            case Some(hasher) =>
-              logger.debug(InvalidPassword.format(id))
-              Future.successful(None)
+            case Some(hasher) => throw new InvalidPasswordException(InvalidPassword.format(id))
             case None => throw new ConfigurationException(UnsupportedHasher.format(
               id, authInfo.hasher, passwordHasherList.map(_.id).mkString(", ")
             ))
           }
-          case None =>
-            logger.debug(UnknownCredentials.format(id))
-            Future.successful(None)
+          case None => throw new IdentityNotFoundException(UnknownCredentials.format(id))
         }
       case None => Future.successful(None)
     }
@@ -95,7 +94,7 @@ class BasicAuthProvider(
   def getCredentials(request: RequestHeader): Option[Credentials] = {
     request.headers.get(HeaderNames.AUTHORIZATION) match {
       case Some(header) if header.startsWith("Basic ") =>
-        Base64.decode(header.replace("Basic ", "")).split(":", 2) match {
+        Base64.decode(header.replace("Basic ", "")).split(":") match {
           case credentials if credentials.length == 2 => Some(Credentials(credentials(0), credentials(1)))
           case _ => None
         }

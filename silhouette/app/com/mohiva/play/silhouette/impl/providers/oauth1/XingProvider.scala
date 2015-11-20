@@ -24,45 +24,32 @@ import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth1.XingProvider._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.{ JsObject, JsValue }
 
 import scala.concurrent.Future
 
 /**
- * A Xing OAuth1 Provider.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param service The OAuth1 service implementation.
- * @param tokenSecretProvider The OAuth1 token secret provider implementation.
- * @param settings The OAuth1 provider settings.
+ * Base Xing OAuth1 Provider.
  *
  * @see https://dev.xing.com/docs/get/users/me
  * @see https://dev.xing.com/docs/error_responses
  */
-abstract class XingProvider(
-  httpLayer: HTTPLayer,
-  service: OAuth1Service,
-  tokenSecretProvider: OAuth1TokenSecretProvider,
-  settings: OAuth1Settings)
-  extends OAuth1Provider(httpLayer, service, tokenSecretProvider, settings) {
+trait BaseXingProvider extends OAuth1Provider {
 
   /**
    * The content type to parse a profile from.
    */
-  type Content = JsValue
+  override type Content = JsValue
 
   /**
-   * Gets the provider ID.
-   *
-   * @return The provider ID.
+   * The provider ID.
    */
-  val id = ID
+  override val id = ID
 
   /**
    * Defines the URLs that are needed to retrieve the profile data.
    */
-  protected val urls = Map("api" -> API)
+  override protected val urls = Map("api" -> API)
 
   /**
    * Builds the social profile.
@@ -70,7 +57,7 @@ abstract class XingProvider(
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth1Info): Future[Profile] = {
+  override protected def buildProfile(authInfo: OAuth1Info): Future[Profile] = {
     httpLayer.url(urls("api")).sign(service.sign(authInfo)).get().flatMap { response =>
       val json = response.json
       (json \ "error_name").asOpt[String] match {
@@ -95,7 +82,7 @@ class XingProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile
    * @param json The content returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue) = Future.successful {
     val users = (json \ "users").as[Seq[JsObject]].head
     val userID = (users \ "id").as[String]
     val firstName = (users \ "first_name").asOpt[String]
@@ -115,15 +102,39 @@ class XingProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile
 }
 
 /**
- * The profile builder for the common social profile.
+ * The Xing OAuth1 Provider.
+ *
+ * @param httpLayer The HTTP layer implementation.
+ * @param service The OAuth1 service implementation.
+ * @param tokenSecretProvider The OAuth1 token secret provider implementation.
+ * @param settings The OAuth1 provider settings.
  */
-trait XingProfileBuilder extends CommonSocialProfileBuilder {
-  self: XingProvider =>
+class XingProvider(
+  protected val httpLayer: HTTPLayer,
+  protected val service: OAuth1Service,
+  protected val tokenSecretProvider: OAuth1TokenSecretProvider,
+  val settings: OAuth1Settings)
+  extends BaseXingProvider with CommonSocialProfileBuilder {
+
+  /**
+   * The type of this class.
+   */
+  override type Self = XingProvider
 
   /**
    * The profile parser implementation.
    */
-  val profileParser = new XingProfileParser
+  override val profileParser = new XingProfileParser
+
+  /**
+   * Gets a provider initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the provider initialized with new settings.
+   */
+  override def withSettings(f: (Settings) => Settings) = {
+    new XingProvider(httpLayer, service, tokenSecretProvider, f(settings))
+  }
 }
 
 /**
@@ -137,21 +148,8 @@ object XingProvider {
   val SpecifiedProfileError = "[Silhouette][%s] error retrieving profile information. Error name: %s, message: %s"
 
   /**
-   * The LinkedIn constants.
+   * The Xing constants.
    */
   val ID = "xing"
   val API = "https://api.xing.com/v1/users/me?fields=id,first_name,last_name,display_name,photo_urls.large,active_email"
-
-  /**
-   * Creates an instance of the provider.
-   *
-   * @param httpLayer The HTTP layer implementation.
-   * @param service The OAuth1 service implementation.
-   * @param tokenSecretProvider The OAuth1 token secret provider implementation.
-   * @param settings The OAuth1 provider settings.
-   * @return An instance of this provider.
-   */
-  def apply(httpLayer: HTTPLayer, service: OAuth1Service, tokenSecretProvider: OAuth1TokenSecretProvider, settings: OAuth1Settings) = {
-    new XingProvider(httpLayer, service, tokenSecretProvider, settings) with XingProfileBuilder
-  }
 }

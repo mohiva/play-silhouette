@@ -15,42 +15,84 @@
  */
 package com.mohiva.play.silhouette.impl.authenticators
 
+import java.util.regex.Pattern
+
+import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.util.{ Base64, Clock, FingerprintGenerator }
 import com.mohiva.play.silhouette.api.{ Authenticator, LoginInfo }
+import com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticator._
 import com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService._
 import org.joda.time.DateTime
+import org.specs2.control.NoLanguageFeatures
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.libs.Crypto
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.Json
-import play.api.mvc.{ Result, Session, Results }
+import play.api.mvc.{ Result, Results, Session }
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
 import scala.concurrent.Future
+import scala.concurrent.duration._
+import scala.language.postfixOps
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticator]].
  */
-class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
+class SessionAuthenticatorSpec extends PlaySpecification with Mockito with NoLanguageFeatures {
 
   "The `isValid` method of the authenticator" should {
     "return false if the authenticator is expired" in new Context {
-      authenticator.copy(expirationDate = DateTime.now.minusHours(1)).isValid must beFalse
+      authenticator.copy(expirationDateTime = DateTime.now - 1.hour).isValid must beFalse
     }
 
     "return false if the authenticator is timed out" in new Context {
       authenticator.copy(
-        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get + 1)
+        lastUsedDateTime = DateTime.now - (settings.authenticatorIdleTimeout.get + 1.second)
       ).isValid must beFalse
     }
 
     "return true if the authenticator is valid" in new Context {
       authenticator.copy(
-        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get - 10),
-        expirationDate = DateTime.now.plusSeconds(5)
+        lastUsedDateTime = DateTime.now - (settings.authenticatorIdleTimeout.get - 10.seconds),
+        expirationDateTime = DateTime.now + 5.seconds
       ).isValid must beTrue
+    }
+  }
+
+  "The `unserialize` method of the authenticator" should {
+    "throw an AuthenticatorException if the given value can't be parsed as Json" in new WithApplication with Context {
+      val value = "invalid"
+      val msg = Pattern.quote(JsonParseError.format(ID, value))
+
+      unserialize(Crypto.encryptAES(value))(settings) must beFailedTry.withThrowable[AuthenticatorException](msg)
+    }
+
+    "throw an AuthenticatorException if the given value is in the wrong Json format" in new WithApplication with Context {
+      val value = "{}"
+      val msg = "^" + Pattern.quote(InvalidJsonFormat.format(ID, "")) + ".*"
+
+      unserialize(Crypto.encryptAES(value))(settings) must beFailedTry.withThrowable[AuthenticatorException](msg)
+    }
+  }
+
+  "The `serialize/unserialize` method of the authenticator" should {
+    "handle an encrypted authenticator" in new WithApplication with Context {
+      settings.encryptAuthenticator returns true
+
+      val value = serialize(authenticator)(settings)
+
+      unserialize(value)(settings) must beSuccessfulTry.withValue(authenticator)
+    }
+
+    "handle an unencrypted authenticator" in new Context {
+      settings.encryptAuthenticator returns false
+
+      val value = serialize(authenticator)(settings)
+
+      unserialize(value)(settings) must beSuccessfulTry.withValue(authenticator)
     }
   }
 
@@ -74,13 +116,13 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       await(service.create(loginInfo)).fingerprint must beNone
     }
 
-    "return an authenticator with the current date as lastUsedDate" in new Context {
+    "return an authenticator with the current date as lastUsedDateTime" in new Context {
       implicit val request = FakeRequest()
       val now = new DateTime
 
       clock.now returns now
 
-      await(service.create(loginInfo)).lastUsedDate must be equalTo now
+      await(service.create(loginInfo)).lastUsedDateTime must be equalTo now
     }
 
     "return an authenticator which expires in 12 hours(default value)" in new Context {
@@ -89,18 +131,18 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       clock.now returns now
 
-      await(service.create(loginInfo)).expirationDate must be equalTo now.plusMinutes(12 * 60)
+      await(service.create(loginInfo)).expirationDateTime must be equalTo now + 12.hours
     }
 
     "return an authenticator which expires in 6 hours" in new Context {
       implicit val request = FakeRequest()
-      val sixHours = 6 * 60 * 60
+      val sixHours = 6 hours
       val now = new DateTime
 
       clock.now returns now
       settings.authenticatorExpiry returns sixHours
 
-      await(service.create(loginInfo)).expirationDate must be equalTo now.plusSeconds(sixHours)
+      await(service.create(loginInfo)).expirationDateTime must be equalTo now + sixHours
     }
 
     "throws an AuthenticatorCreationException exception if an error occurred during creation" in new Context {
@@ -184,7 +226,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
     "throws an AuthenticatorRetrievalException exception if an error occurred during retrieval" in new WithApplication with Context {
       implicit val request = FakeRequest().withSession(settings.sessionKey -> Base64.encode(Json.toJson(authenticator)))
 
-      fingerprintGenerator.generate throws new RuntimeException("Could not generate ID")
+      fingerprintGenerator.generate throws new RuntimeException("Could not generate fingerprint")
       settings.useFingerprinting returns true
       settings.encryptAuthenticator returns false
 
@@ -210,20 +252,18 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       settings.encryptAuthenticator returns true
 
       implicit val request = FakeRequest()
-      val data = Crypto.encryptAES(Json.toJson(authenticator).toString())
       val session = await(service.init(authenticator))
 
-      session must be equalTo Session(Map(settings.sessionKey -> data))
+      unserialize(session.get(settings.sessionKey).get)(settings).get must be equalTo authenticator
     }
 
     "override existing authenticator from request" in new WithApplication with Context {
       settings.encryptAuthenticator returns true
 
       implicit val request = FakeRequest().withSession(settings.sessionKey -> "existing")
-      val data = Crypto.encryptAES(Json.toJson(authenticator).toString())
       val session = await(service.init(authenticator))
 
-      session must be equalTo Session(Map(settings.sessionKey -> data))
+      unserialize(session.get(settings.sessionKey).get)(settings).get must be equalTo authenticator
     }
 
     "keep non authenticator related session data" in new WithApplication with Context {
@@ -244,7 +284,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       implicit val request = FakeRequest()
       val data = Crypto.encryptAES(Json.toJson(authenticator).toString())
-      val result = service.embed(Session(Map(settings.sessionKey -> data)), Future.successful(Results.Ok))
+      val result = service.embed(Session(Map(settings.sessionKey -> data)), Results.Ok)
 
       session(result).get(settings.sessionKey) should beSome(data)
     }
@@ -254,7 +294,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       implicit val request = FakeRequest().withSession(settings.sessionKey -> "existing")
       val data = Crypto.encryptAES(Json.toJson(authenticator).toString())
-      val result = service.embed(Session(Map(settings.sessionKey -> data)), Future.successful(Results.Ok))
+      val result = service.embed(Session(Map(settings.sessionKey -> data)), Results.Ok)
 
       session(result).get(settings.sessionKey) should beSome(data)
     }
@@ -264,9 +304,9 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       implicit val request = FakeRequest().withSession("request-other" -> "keep")
       val data = Crypto.encryptAES(Json.toJson(authenticator).toString())
-      val result = service.embed(Session(Map(settings.sessionKey -> data)), Future.successful(Results.Ok.addingToSession(
+      val result = service.embed(Session(Map(settings.sessionKey -> data)), Results.Ok.addingToSession(
         "result-other" -> "keep"
-      )))
+      ))
 
       session(result).get(settings.sessionKey) should beSome(data)
       session(result).get("request-other") should beSome("keep")
@@ -298,12 +338,12 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
   "The `touch` method of the service" should {
     "update the last used date if idle timeout is defined" in new WithApplication with Context {
-      settings.authenticatorIdleTimeout returns Some(1)
+      settings.authenticatorIdleTimeout returns Some(1 second)
       clock.now returns DateTime.now
 
       service.touch(authenticator) must beLeft[SessionAuthenticator].like {
         case a =>
-          a.lastUsedDate must be equalTo clock.now
+          a.lastUsedDateTime must be equalTo clock.now
       }
     }
 
@@ -313,7 +353,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       service.touch(authenticator) must beRight[SessionAuthenticator].like {
         case a =>
-          a.lastUsedDate must be equalTo authenticator.lastUsedDate
+          a.lastUsedDateTime must be equalTo authenticator.lastUsedDateTime
       }
     }
   }
@@ -324,7 +364,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       implicit val request = FakeRequest()
       val data = Base64.encode(Json.toJson(authenticator))
-      val result = service.update(authenticator, Future.successful(Results.Ok))
+      val result = service.update(authenticator, Results.Ok)
 
       status(result) must be equalTo OK
       session(result).get(settings.sessionKey) should beSome(data)
@@ -334,33 +374,31 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       settings.encryptAuthenticator returns true
 
       implicit val request = FakeRequest()
-      val data = Crypto.encryptAES(Json.toJson(authenticator).toString())
-      val result = service.update(authenticator, Future.successful(Results.Ok))
+      val result = service.update(authenticator, Results.Ok)
 
       status(result) must be equalTo OK
-      session(result).get(settings.sessionKey) should beSome(data)
+
+      unserialize(session(result).get(settings.sessionKey).get)(settings).get must be equalTo authenticator
     }
 
     "override existing authenticator from request" in new WithApplication with Context {
       settings.encryptAuthenticator returns true
 
       implicit val request = FakeRequest().withSession(settings.sessionKey -> "existing")
-      val data = Crypto.encryptAES(Json.toJson(authenticator).toString())
-      val result = service.update(authenticator, Future.successful(Results.Ok))
+      val result = service.update(authenticator, Results.Ok)
 
-      session(result).get(settings.sessionKey) should beSome(data)
+      unserialize(session(result).get(settings.sessionKey).get)(settings).get must be equalTo authenticator
     }
 
     "non authenticator related session data" in new WithApplication with Context {
       settings.encryptAuthenticator returns true
 
       implicit val request = FakeRequest().withSession("request-other" -> "keep")
-      val data = Crypto.encryptAES(Json.toJson(authenticator).toString())
-      val result = service.update(authenticator, Future.successful(Results.Ok.addingToSession(
+      val result = service.update(authenticator, Results.Ok.addingToSession(
         "result-other" -> "keep"
-      )))
+      ))
 
-      session(result).get(settings.sessionKey) should beSome(data)
+      unserialize(session(result).get(settings.sessionKey).get)(settings).get must be equalTo authenticator
       session(result).get("request-other") should beSome("keep")
       session(result).get("result-other") should beSome("keep")
     }
@@ -370,7 +408,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       request.session throws new RuntimeException("Cannot get session")
 
-      await(service.update(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticatorUpdateException].like {
+      await(service.update(authenticator, Results.Ok)) must throwA[AuthenticatorUpdateException].like {
         case e =>
           e.getMessage must startWith(UpdateError.format(ID, ""))
       }
@@ -382,15 +420,15 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       implicit val request = FakeRequest()
       val now = DateTime.now
       val data = Base64.encode(Json.toJson(authenticator.copy(
-        lastUsedDate = now,
-        expirationDate = now.plusSeconds(settings.authenticatorExpiry)
+        lastUsedDateTime = now,
+        expirationDateTime = now + settings.authenticatorExpiry
       )))
 
       settings.encryptAuthenticator returns false
       settings.useFingerprinting returns false
       clock.now returns now
 
-      val result = service.renew(authenticator, Future.successful(Results.Ok))
+      val result = service.renew(authenticator, Results.Ok)
 
       session(result).get(settings.sessionKey) should beSome(data)
     }
@@ -398,54 +436,51 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
     "renew the session with an encrypted authenticator" in new WithApplication with Context {
       implicit val request = FakeRequest()
       val now = DateTime.now
-      val data = Crypto.encryptAES(Json.toJson(authenticator.copy(
-        lastUsedDate = now,
-        expirationDate = now.plusSeconds(settings.authenticatorExpiry)
-      )).toString())
 
       settings.encryptAuthenticator returns true
       settings.useFingerprinting returns false
       clock.now returns now
 
-      val result = service.renew(authenticator, Future.successful(Results.Ok))
+      val result = service.renew(authenticator, Results.Ok)
 
-      session(result).get(settings.sessionKey) should beSome(data)
+      unserialize(session(result).get(settings.sessionKey).get)(settings).get must be equalTo authenticator.copy(
+        lastUsedDateTime = now,
+        expirationDateTime = now + settings.authenticatorExpiry
+      )
     }
 
     "override existing authenticator from request" in new WithApplication with Context {
       implicit val request = FakeRequest().withSession(settings.sessionKey -> "existing")
       val now = DateTime.now
-      val data = Crypto.encryptAES(Json.toJson(authenticator.copy(
-        lastUsedDate = now,
-        expirationDate = now.plusSeconds(settings.authenticatorExpiry)
-      )).toString())
 
       settings.encryptAuthenticator returns true
       settings.useFingerprinting returns false
       clock.now returns now
 
-      val result = service.renew(authenticator, Future.successful(Results.Ok))
+      val result = service.renew(authenticator, Results.Ok)
 
-      session(result).get(settings.sessionKey) should beSome(data)
+      unserialize(session(result).get(settings.sessionKey).get)(settings).get must be equalTo authenticator.copy(
+        lastUsedDateTime = now,
+        expirationDateTime = now + settings.authenticatorExpiry
+      )
     }
 
     "non authenticator related session data" in new WithApplication with Context {
       implicit val request = FakeRequest().withSession("request-other" -> "keep")
       val now = DateTime.now
-      val data = Crypto.encryptAES(Json.toJson(authenticator.copy(
-        lastUsedDate = now,
-        expirationDate = now.plusSeconds(settings.authenticatorExpiry)
-      )).toString())
 
       settings.encryptAuthenticator returns true
       settings.useFingerprinting returns false
       clock.now returns now
 
-      val result = service.renew(authenticator, Future.successful(Results.Ok.addingToSession(
+      val result = service.renew(authenticator, Results.Ok.addingToSession(
         "result-other" -> "keep"
-      )))
+      ))
 
-      session(result).get(settings.sessionKey) should beSome(data)
+      unserialize(session(result).get(settings.sessionKey).get)(settings).get must be equalTo authenticator.copy(
+        lastUsedDateTime = now,
+        expirationDateTime = now + settings.authenticatorExpiry
+      )
       session(result).get("request-other") should beSome("keep")
       session(result).get("result-other") should beSome("keep")
     }
@@ -459,7 +494,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       settings.useFingerprinting returns false
       clock.now returns now
 
-      await(service.renew(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticatorRenewalException].like {
+      await(service.renew(authenticator, Results.Ok)) must throwA[AuthenticatorRenewalException].like {
         case e =>
           e.getMessage must startWith(RenewError.format(ID, ""))
       }
@@ -469,18 +504,18 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
   "The `discard` method of the service" should {
     "discard the authenticator from session" in new WithApplication with Context {
       implicit val request = FakeRequest()
-      val result = service.discard(authenticator, Future.successful(Results.Ok.withSession(
+      val result = service.discard(authenticator, Results.Ok.withSession(
         settings.sessionKey -> "test"
-      )))
+      ))
 
       session(result).get(settings.sessionKey) should beNone
     }
 
     "non authenticator related session data" in new WithApplication with Context {
       implicit val request = FakeRequest().withSession("request-other" -> "keep", settings.sessionKey -> "test")
-      val result = service.discard(authenticator, Future.successful(Results.Ok.addingToSession(
+      val result = service.discard(authenticator, Results.Ok.addingToSession(
         "result-other" -> "keep"
-      )))
+      ))
 
       session(result).get(settings.sessionKey) should beNone
       session(result).get("request-other") should beSome("keep")
@@ -493,7 +528,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
 
       result.removingFromSession(any)(any) throws new RuntimeException("Cannot get session")
 
-      await(service.discard(authenticator, Future.successful(result))) must throwA[AuthenticatorDiscardingException].like {
+      await(service.discard(authenticator, result)) must throwA[AuthenticatorDiscardingException].like {
         case e =>
           e.getMessage must startWith(DiscardError.format(ID, ""))
       }
@@ -522,8 +557,8 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
       sessionKey = "authenticator",
       encryptAuthenticator = true,
       useFingerprinting = true,
-      authenticatorIdleTimeout = Some(30 * 60),
-      authenticatorExpiry = 12 * 60 * 60
+      authenticatorIdleTimeout = Some(30 minutes),
+      authenticatorExpiry = 12 hours
     ))
 
     /**
@@ -541,8 +576,8 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito {
      */
     lazy val authenticator = spy(new SessionAuthenticator(
       loginInfo = LoginInfo("test", "1"),
-      lastUsedDate = DateTime.now,
-      expirationDate = DateTime.now.plusMinutes(12 * 60),
+      lastUsedDateTime = DateTime.now,
+      expirationDateTime = DateTime.now + settings.authenticatorExpiry,
       idleTimeout = settings.authenticatorIdleTimeout,
       fingerprint = None
     ))

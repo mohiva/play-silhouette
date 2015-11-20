@@ -19,26 +19,30 @@
  */
 package com.mohiva.play.silhouette.api
 
-import play.api.i18n.Lang
-import play.api.mvc.RequestHeader
+import play.api.i18n.Messages
+import play.api.mvc.Request
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * A trait to define Authorization objects that let you hook
  * an authorization implementation in secured endpoints.
  *
  * @tparam I The type of the identity.
+ * @tparam A The type of the authenticator.
  */
-trait Authorization[I <: Identity] {
+trait Authorization[I <: Identity, A <: Authenticator] {
 
   /**
    * Checks whether the user is authorized to execute an endpoint or not.
    *
-   * @param identity The identity to check for.
-   * @param request The current request header.
-   * @param lang The current lang.
+   * @param identity The current identity instance.
+   * @param authenticator The current authenticator instance.
+   * @param request The current request.
+   * @param messages The messages for the current language.
+   * @tparam B The type of the request body.
    * @return True if the user is authorized, false otherwise.
    */
-  def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang): Boolean
+  def isAuthorized[B](identity: I, authenticator: A)(implicit request: Request[B], messages: Messages): Future[Boolean]
 }
 
 /**
@@ -47,44 +51,62 @@ trait Authorization[I <: Identity] {
 object Authorization {
 
   /**
-   * Defines additional methods on an Authorization instance.
+   * Defines additional methods on an `Authorization` instance.
    *
-   * @param self The authorization.
+   * @param self The `Authorization` instance on which the additional methods should be defined.
+   * @param ec The execution context to handle the asynchronous operations.
    */
-  implicit final class RichAuthorization[I <: Identity](self: Authorization[I]) {
+  implicit final class RichAuthorization[I <: Identity, A <: Authenticator](self: Authorization[I, A])(
+    implicit ec: ExecutionContext) {
 
     /**
-     * Negation (not) operator.
+     * Performs a logical negation on an `Authorization` result.
      *
-     * @return The authorization.
+     * @return An `Authorization` which performs a logical negation on an `Authorization` result.
      */
-    def unary_! : Authorization[I] = new Authorization[I] {
-      def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang): Boolean = {
-        !self.isAuthorized(identity)
+    def unary_! : Authorization[I, A] = new Authorization[I, A] {
+      def isAuthorized[B](identity: I, authenticator: A)(
+        implicit request: Request[B], messages: Messages): Future[Boolean] = {
+
+        self.isAuthorized(identity, authenticator).map(x => !x)
       }
     }
 
     /**
-     * Conjunction (and) operator.
+     * Performs a logical AND operation with two `Authorization` instances.
      *
-     * @param authorization The authorization to be conjunction.
-     * @return The authorization.
+     * @param authorization The right hand operand.
+     * @return An authorization which performs a logical AND operation with two `Authorization` instances.
      */
-    def &&(authorization: Authorization[I]): Authorization[I] = new Authorization[I] {
-      def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang): Boolean = {
-        self.isAuthorized(identity) && authorization.isAuthorized(identity)
+    def &&(authorization: Authorization[I, A]): Authorization[I, A] = new Authorization[I, A] {
+      def isAuthorized[B](identity: I, authenticator: A)(
+        implicit request: Request[B], messages: Messages): Future[Boolean] = {
+
+        val leftF = self.isAuthorized(identity, authenticator)
+        val rightF = authorization.isAuthorized(identity, authenticator)
+        for {
+          left <- leftF
+          right <- rightF
+        } yield left && right
       }
     }
 
     /**
-     * Disjunction (or) operator.
+     * Performs a logical OR operation with two `Authorization` instances.
      *
-     * @param authorization The authorization to be disjunction.
-     * @return The authorization.
+     * @param authorization The right hand operand.
+     * @return An authorization which performs a logical OR operation with two `Authorization` instances.
      */
-    def ||(authorization: Authorization[I]): Authorization[I] = new Authorization[I] {
-      def isAuthorized(identity: I)(implicit request: RequestHeader, lang: Lang): Boolean = {
-        self.isAuthorized(identity) || authorization.isAuthorized(identity)
+    def ||(authorization: Authorization[I, A]): Authorization[I, A] = new Authorization[I, A] {
+      def isAuthorized[B](identity: I, authenticator: A)(
+        implicit request: Request[B], messages: Messages): Future[Boolean] = {
+
+        val leftF = self.isAuthorized(identity, authenticator)
+        val rightF = authorization.isAuthorized(identity, authenticator)
+        for {
+          left <- leftF
+          right <- rightF
+        } yield left || right
       }
     }
   }

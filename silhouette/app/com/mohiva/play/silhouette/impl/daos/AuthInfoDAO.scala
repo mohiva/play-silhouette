@@ -15,8 +15,7 @@
  */
 package com.mohiva.play.silhouette.impl.daos
 
-import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.api.services.AuthInfo
+import com.mohiva.play.silhouette.api.{ AuthInfo, LoginInfo }
 
 import scala.concurrent.Future
 
@@ -28,7 +27,36 @@ import scala.concurrent.Future
 trait AuthInfoDAO[T <: AuthInfo] {
 
   /**
-   * Saves the auth info.
+   * Finds the auth info which is linked to the specified login info.
+   *
+   * @param loginInfo The linked login info.
+   * @return The found auth info or None if no auth info could be found for the given login info.
+   */
+  def find(loginInfo: LoginInfo): Future[Option[T]]
+
+  /**
+   * Adds new auth info for the given login info.
+   *
+   * @param loginInfo The login info for which the auth info should be added.
+   * @param authInfo The auth info to add.
+   * @return The added auth info.
+   */
+  def add(loginInfo: LoginInfo, authInfo: T): Future[T]
+
+  /**
+   * Updates the auth info for the given login info.
+   *
+   * @param loginInfo The login info for which the auth info should be updated.
+   * @param authInfo The auth info to update.
+   * @return The updated auth info.
+   */
+  def update(loginInfo: LoginInfo, authInfo: T): Future[T]
+
+  /**
+   * Saves the auth info for the given login info.
+   *
+   * This method either adds the auth info if it doesn't exists or it updates the auth info
+   * if it already exists.
    *
    * @param loginInfo The login info for which the auth info should be saved.
    * @param authInfo The auth info to save.
@@ -37,10 +65,10 @@ trait AuthInfoDAO[T <: AuthInfo] {
   def save(loginInfo: LoginInfo, authInfo: T): Future[T]
 
   /**
-   * Finds the auth info which is linked with the specified login info.
+   * Removes the auth info for the given login info.
    *
-   * @param loginInfo The linked login info.
-   * @return The found auth info or None if no auth info could be found for the given login info.
+   * @param loginInfo The login info for which the auth info should be removed.
+   * @return A future to wait for the process to be completed.
    */
-  def find(loginInfo: LoginInfo): Future[Option[T]]
+  def remove(loginInfo: LoginInfo): Future[Unit]
 }

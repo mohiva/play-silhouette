@@ -20,39 +20,31 @@ import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.ClefProvider._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.JsValue
 
 import scala.concurrent.Future
 
 /**
- * A Clef OAuth2 Provider.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param stateProvider The state provider implementation.
- * @param settings The provider settings.
+ * Base Clef OAuth2 Provider.
  *
  * @see http://docs.getclef.com/v1.0/docs
  */
-abstract class ClefProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings)
-  extends OAuth2Provider(httpLayer, stateProvider, settings) {
+trait BaseClefProvider extends OAuth2Provider {
 
   /**
    * The content type to parse a profile from.
    */
-  type Content = JsValue
+  override type Content = JsValue
 
   /**
-   * Gets the provider ID.
-   *
-   * @return The provider ID.
+   * The provider ID.
    */
-  val id = ID
+  override val id = ID
 
   /**
    * Defines the URLs that are needed to retrieve the profile data.
    */
-  protected val urls = Map("api" -> API)
+  override protected val urls = Map("api" -> API)
 
   /**
    * Builds the social profile.
@@ -60,7 +52,7 @@ abstract class ClefProvider(httpLayer: HTTPLayer, stateProvider: OAuth2StateProv
    * @param authInfo The auth info received from the provider.
    * @return On success the build social profile, otherwise a failure.
    */
-  protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+  override protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
     httpLayer.url(urls("api").format(authInfo.accessToken)).get().flatMap { response =>
       val json = response.json
       (json \ "error").asOpt[String] match {
@@ -83,7 +75,7 @@ class ClefProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile
    * @param json The content returned from the provider.
    * @return The social profile from given result.
    */
-  def parse(json: JsValue) = Future.successful {
+  override def parse(json: JsValue) = Future.successful {
     val userID = (json \ "info" \ "id").as[Long].toString
     val firstName = (json \ "info" \ "first_name").asOpt[String]
     val lastName = (json \ "info" \ "last_name").asOpt[String]
@@ -98,15 +90,35 @@ class ClefProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile
 }
 
 /**
- * The profile builder for the common social profile.
+ * The Clef OAuth2 Provider.
+ *
+ * @param httpLayer The HTTP layer implementation.
+ * @param stateProvider The state provider implementation.
+ * @param settings The provider settings.
  */
-trait ClefProfileBuilder extends CommonSocialProfileBuilder {
-  self: ClefProvider =>
+class ClefProvider(
+  protected val httpLayer: HTTPLayer,
+  protected val stateProvider: OAuth2StateProvider,
+  val settings: OAuth2Settings)
+  extends BaseClefProvider with CommonSocialProfileBuilder {
+
+  /**
+   * The type of this class.
+   */
+  override type Self = ClefProvider
 
   /**
    * The profile parser implementation.
    */
-  val profileParser = new ClefProfileParser
+  override val profileParser = new ClefProfileParser
+
+  /**
+   * Gets a provider initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the provider initialized with new settings.
+   */
+  override def withSettings(f: (Settings) => Settings) = new ClefProvider(httpLayer, stateProvider, f(settings))
 }
 
 /**
@@ -124,16 +136,4 @@ object ClefProvider {
    */
   val ID = "clef"
   val API = "https://clef.io/api/v1/info?access_token=%s"
-
-  /**
-   * Creates an instance of the provider.
-   *
-   * @param httpLayer The HTTP layer implementation.
-   * @param stateProvider The state provider implementation.
-   * @param settings The provider settings.
-   * @return An instance of this provider.
-   */
-  def apply(httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, settings: OAuth2Settings) = {
-    new ClefProvider(httpLayer, stateProvider, settings) with ClefProfileBuilder
-  }
 }

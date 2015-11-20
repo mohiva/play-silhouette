@@ -22,11 +22,10 @@ package com.mohiva.play.silhouette.impl.providers.oauth1.services
 import com.mohiva.play.silhouette.api.Logger
 import com.mohiva.play.silhouette.impl.providers.oauth1.services.PlayOAuth1Service._
 import com.mohiva.play.silhouette.impl.providers.{ OAuth1Info, OAuth1Service, OAuth1Settings }
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.oauth.{ ConsumerKey, OAuth, RequestToken, ServiceInfo, _ }
 import play.api.libs.ws.WSSignatureCalculator
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * The OAuth1 service implementation which wraps Play Framework's OAuth implementation.
@@ -53,15 +52,16 @@ class PlayOAuth1Service(service: OAuth, settings: OAuth1Settings) extends OAuth1
    *
    * @return True if the services uses 1.0a specification, false otherwise.
    */
-  def use10a = service.use10a
+  override def use10a = service.use10a
 
   /**
    * Retrieves the request info and secret.
    *
    * @param callbackURL The URL where the provider should redirect to (usually a URL on the current app).
+   * @param ec The execution context to handle the asynchronous operations.
    * @return A OAuth1Info in case of success, Exception otherwise.
    */
-  def retrieveRequestToken(callbackURL: String): Future[OAuth1Info] = {
+  override def retrieveRequestToken(callbackURL: String)(implicit ec: ExecutionContext): Future[OAuth1Info] = {
     Future(service.retrieveRequestToken(settings.callbackURL)).map(_.fold(
       e => throw e,
       t => OAuth1Info(t.token, t.secret)))
@@ -72,9 +72,10 @@ class PlayOAuth1Service(service: OAuth, settings: OAuth1Settings) extends OAuth1
    *
    * @param oAuthInfo The info/secret pair obtained from a previous call.
    * @param verifier A string you got through your user, with redirection.
+   * @param ec The execution context to handle the asynchronous operations.
    * @return A OAuth1Info in case of success, Exception otherwise.
    */
-  def retrieveAccessToken(oAuthInfo: OAuth1Info, verifier: String): Future[OAuth1Info] = {
+  override def retrieveAccessToken(oAuthInfo: OAuth1Info, verifier: String)(implicit ec: ExecutionContext): Future[OAuth1Info] = {
     Future(service.retrieveAccessToken(RequestToken(oAuthInfo.token, oAuthInfo.secret), verifier)).map(_.fold(
       e => throw e,
       t => OAuth1Info(t.token, t.secret)))
@@ -86,7 +87,7 @@ class PlayOAuth1Service(service: OAuth, settings: OAuth1Settings) extends OAuth1
    * @param token The request info.
    * @return The redirect URL.
    */
-  def redirectUrl(token: String): String = service.redirectUrl(token)
+  override def redirectUrl(token: String): String = service.redirectUrl(token)
 
   /**
    * Creates the signature calculator for the OAuth info.
@@ -94,7 +95,7 @@ class PlayOAuth1Service(service: OAuth, settings: OAuth1Settings) extends OAuth1
    * @param oAuthInfo The info/secret pair obtained from a previous call.
    * @return The signature calculator for the OAuth1 request.
    */
-  def sign(oAuthInfo: OAuth1Info): WSSignatureCalculator = {
+  override def sign(oAuthInfo: OAuth1Info): WSSignatureCalculator = {
     OAuthCalculator(service.info.key, RequestToken(oAuthInfo.token, oAuthInfo.secret))
   }
 }

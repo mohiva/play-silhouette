@@ -16,18 +16,20 @@
 package com.mohiva.play.silhouette.impl.authenticators
 
 import com.mohiva.play.silhouette._
+import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.services.AuthenticatorService
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
+import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
 import com.mohiva.play.silhouette.api.util.{ Clock, IDGenerator }
-import com.mohiva.play.silhouette.api.{ Logger, LoginInfo, StorableAuthenticator }
+import com.mohiva.play.silhouette.api.{ ExpirableAuthenticator, Logger, LoginInfo, StorableAuthenticator }
 import com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorService._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import org.joda.time.DateTime
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ RequestHeader, Result }
 
-import scala.concurrent.Future
+import scala.concurrent.duration._
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.language.postfixOps
 import scala.util.Try
 
 /**
@@ -43,44 +45,22 @@ import scala.util.Try
  *
  * @param id The authenticator ID.
  * @param loginInfo The linked login info for an identity.
- * @param lastUsedDate The last used timestamp.
- * @param expirationDate The expiration time.
- * @param idleTimeout The time in seconds an authenticator can be idle before it timed out.
+ * @param lastUsedDateTime The last used date/time.
+ * @param expirationDateTime The expiration date/time.
+ * @param idleTimeout The duration an authenticator can be idle before it timed out.
  */
 case class BearerTokenAuthenticator(
   id: String,
   loginInfo: LoginInfo,
-  lastUsedDate: DateTime,
-  expirationDate: DateTime,
-  idleTimeout: Option[Int]) extends StorableAuthenticator {
+  lastUsedDateTime: DateTime,
+  expirationDateTime: DateTime,
+  idleTimeout: Option[FiniteDuration])
+  extends StorableAuthenticator with ExpirableAuthenticator {
 
   /**
    * The Type of the generated value an authenticator will be serialized to.
    */
-  type Value = String
-
-  /**
-   * Checks if the authenticator isn't expired and isn't timed out.
-   *
-   * @return True if the authenticator isn't expired and isn't timed out.
-   */
-  def isValid = !isExpired && !isTimedOut
-
-  /**
-   * Checks if the authenticator is expired. This is an absolute timeout since the creation of
-   * the authenticator.
-   *
-   * @return True if the authenticator is expired, false otherwise.
-   */
-  private def isExpired = expirationDate.isBeforeNow
-
-  /**
-   * Checks if the time elapsed since the last time the authenticator was used is longer than
-   * the maximum idle timeout specified in the properties.
-   *
-   * @return True if sliding window expiration is activated and the authenticator is timed out, false otherwise.
-   */
-  private def isTimedOut = idleTimeout.isDefined && lastUsedDate.plusSeconds(idleTimeout.get).isBeforeNow
+  override type Value = String
 }
 
 /**
@@ -90,12 +70,15 @@ case class BearerTokenAuthenticator(
  * @param dao The DAO to store the authenticator.
  * @param idGenerator The ID generator used to create the authenticator ID.
  * @param clock The clock implementation.
+ * @param executionContext The execution context to handle the asynchronous operations.
  */
 class BearerTokenAuthenticatorService(
   settings: BearerTokenAuthenticatorSettings,
   dao: AuthenticatorDAO[BearerTokenAuthenticator],
   idGenerator: IDGenerator,
-  clock: Clock) extends AuthenticatorService[BearerTokenAuthenticator] with Logger {
+  clock: Clock)(implicit val executionContext: ExecutionContext)
+  extends AuthenticatorService[BearerTokenAuthenticator]
+  with Logger {
 
   /**
    * Creates a new authenticator for the specified login info.
@@ -104,14 +87,14 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return An authenticator.
    */
-  def create(loginInfo: LoginInfo)(implicit request: RequestHeader) = {
+  override def create(loginInfo: LoginInfo)(implicit request: RequestHeader): Future[BearerTokenAuthenticator] = {
     idGenerator.generate.map { id =>
       val now = clock.now
       BearerTokenAuthenticator(
         id = id,
         loginInfo = loginInfo,
-        lastUsedDate = now,
-        expirationDate = now.plusSeconds(settings.authenticatorExpiry),
+        lastUsedDateTime = now,
+        expirationDateTime = now + settings.authenticatorExpiry,
         idleTimeout = settings.authenticatorIdleTimeout)
     }.recover {
       case e => throw new AuthenticatorCreationException(CreateError.format(ID, loginInfo), e)
@@ -124,7 +107,7 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return Some authenticator or None if no authenticator could be found in request.
    */
-  def retrieve(implicit request: RequestHeader) = {
+  override def retrieve(implicit request: RequestHeader): Future[Option[BearerTokenAuthenticator]] = {
     Future.from(Try(request.headers.get(settings.headerName))).flatMap {
       case Some(token) => dao.find(token)
       case None => Future.successful(None)
@@ -141,8 +124,8 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The serialized authenticator value.
    */
-  def init(authenticator: BearerTokenAuthenticator)(implicit request: RequestHeader) = {
-    dao.save(authenticator).map { a =>
+  override def init(authenticator: BearerTokenAuthenticator)(implicit request: RequestHeader): Future[String] = {
+    dao.add(authenticator).map { a =>
       a.id
     }.recover {
       case e => throw new AuthenticatorInitializationException(InitError.format(ID, authenticator), e)
@@ -157,8 +140,8 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  def embed(token: String, result: Future[Result])(implicit request: RequestHeader) = {
-    result.map(_.withHeaders(settings.headerName -> token))
+  override def embed(token: String, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+    Future.successful(AuthenticatorResult(result.withHeaders(settings.headerName -> token)))
   }
 
   /**
@@ -168,8 +151,9 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The manipulated request header.
    */
-  def embed(token: String, request: RequestHeader) = {
-    request.copy(headers = AdditionalHeaders(request.headers, Seq(settings.headerName -> Seq(token))))
+  override def embed(token: String, request: RequestHeader): RequestHeader = {
+    val additional = Seq(settings.headerName -> token)
+    request.copy(headers = request.headers.replace(additional: _*))
   }
 
   /**
@@ -178,11 +162,9 @@ class BearerTokenAuthenticatorService(
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  protected[silhouette] def touch(
-    authenticator: BearerTokenAuthenticator): Either[BearerTokenAuthenticator, BearerTokenAuthenticator] = {
-
+  override def touch(authenticator: BearerTokenAuthenticator): Either[BearerTokenAuthenticator, BearerTokenAuthenticator] = {
     if (authenticator.idleTimeout.isDefined) {
-      Left(authenticator.copy(lastUsedDate = clock.now))
+      Left(authenticator.copy(lastUsedDateTime = clock.now))
     } else {
       Right(authenticator)
     }
@@ -199,35 +181,52 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def update(
-    authenticator: BearerTokenAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+  override def update(authenticator: BearerTokenAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
-    dao.save(authenticator).flatMap { a =>
-      result
+    dao.update(authenticator).map { a =>
+      AuthenticatorResult(result)
     }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
     }
   }
 
   /**
-   * Replaces the bearer token header with a new one. The old authenticator will be revoked. After
-   * that it isn't possible to use a bearer token which was bound to this authenticator.
+   * Renews an authenticator.
+   *
+   * After that it isn't possible to use a bearer token which was bound to this authenticator. This
+   * method doesn't embed the the authenticator into the result. This must be done manually if needed
+   * or use the other renew method otherwise.
+   *
+   * @param authenticator The authenticator to renew.
+   * @param request The request header.
+   * @return The serialized expression of the authenticator.
+   */
+  override def renew(authenticator: BearerTokenAuthenticator)(
+    implicit request: RequestHeader): Future[String] = {
+
+    dao.remove(authenticator.id).flatMap { _ =>
+      create(authenticator.loginInfo).flatMap(init)
+    }.recover {
+      case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
+    }
+  }
+
+  /**
+   * Renews an authenticator and replaces the bearer token header with a new one.
+   *
+   * The old authenticator will be revoked. After that it isn't possible to use a bearer token which was
+   * bound to this authenticator.
    *
    * @param authenticator The authenticator to update.
    * @param result The result to manipulate.
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def renew(
-    authenticator: BearerTokenAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+  override def renew(authenticator: BearerTokenAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
-    dao.remove(authenticator.id).flatMap { _ =>
-      create(authenticator.loginInfo).flatMap { a =>
-        init(a).flatMap(v => embed(v, result))
-      }
-    }.recover {
+    renew(authenticator).flatMap(v => embed(v, result)).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
     }
   }
@@ -239,12 +238,11 @@ class BearerTokenAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  protected[silhouette] def discard(
-    authenticator: BearerTokenAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+  override def discard(authenticator: BearerTokenAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
-    dao.remove(authenticator.id).flatMap { _ =>
-      result
+    dao.remove(authenticator.id).map { _ =>
+      AuthenticatorResult(result)
     }.recover {
       case e => throw new AuthenticatorDiscardingException(DiscardError.format(ID, authenticator), e)
     }
@@ -265,11 +263,11 @@ object BearerTokenAuthenticatorService {
 /**
  * The settings for the bearer token authenticator.
  *
- * @param headerName The name of the header in which the token will be transfered.
- * @param authenticatorIdleTimeout The time in seconds an authenticator can be idle before it timed out. Defaults to 30 minutes.
- * @param authenticatorExpiry The expiry of the authenticator in seconds. Defaults to 12 hours.
+ * @param headerName The name of the header in which the token will be transferred.
+ * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out.
+ * @param authenticatorExpiry The duration an authenticator expires after it was created.
  */
 case class BearerTokenAuthenticatorSettings(
   headerName: String = "X-Auth-Token",
-  authenticatorIdleTimeout: Option[Int] = Some(30 * 60),
-  authenticatorExpiry: Int = 12 * 60 * 60)
+  authenticatorIdleTimeout: Option[FiniteDuration] = None,
+  authenticatorExpiry: FiniteDuration = 12 hours)

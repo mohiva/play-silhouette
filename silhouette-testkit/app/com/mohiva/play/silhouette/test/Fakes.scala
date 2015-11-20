@@ -23,10 +23,11 @@ import com.mohiva.play.silhouette.api.util.Clock
 import com.mohiva.play.silhouette.impl.authenticators._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import com.mohiva.play.silhouette.impl.util.{ DefaultFingerprintGenerator, SecureRandomIDGenerator }
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.RequestHeader
 
 import scala.collection.mutable
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.reflect.runtime.universe._
 
 /**
@@ -42,8 +43,7 @@ case class FakeIdentity(loginInfo: LoginInfo) extends Identity
  * @param identities A list of (login info -> identity) pairs this service is responsible for.
  * @tparam I The type of the identity to handle.
  */
-class FakeIdentityService[I <: Identity](identities: (LoginInfo, I)*)
-  extends IdentityService[I] {
+class FakeIdentityService[I <: Identity](identities: (LoginInfo, I)*) extends IdentityService[I] {
 
   /**
    * Retrieves an identity that matches the specified login info.
@@ -69,17 +69,6 @@ class FakeAuthenticatorDAO[T <: StorableAuthenticator] extends AuthenticatorDAO[
   var data: mutable.HashMap[String, T] = mutable.HashMap()
 
   /**
-   * Saves the authenticator.
-   *
-   * @param authenticator The authenticator to save.
-   * @return The saved auth authenticator.
-   */
-  def save(authenticator: T): Future[T] = {
-    data += (authenticator.id -> authenticator)
-    Future.successful(authenticator)
-  }
-
-  /**
    * Finds the authenticator for the given ID.
    *
    * @param id The authenticator ID.
@@ -87,6 +76,28 @@ class FakeAuthenticatorDAO[T <: StorableAuthenticator] extends AuthenticatorDAO[
    */
   def find(id: String): Future[Option[T]] = {
     Future.successful(data.get(id))
+  }
+
+  /**
+   * Adds a new authenticator.
+   *
+   * @param authenticator The authenticator to add.
+   * @return The added authenticator.
+   */
+  def add(authenticator: T): Future[T] = {
+    data += (authenticator.id -> authenticator)
+    Future.successful(authenticator)
+  }
+
+  /**
+   * Updates an already existing authenticator.
+   *
+   * @param authenticator The authenticator to update.
+   * @return The updated authenticator.
+   */
+  def update(authenticator: T): Future[T] = {
+    data += (authenticator.id -> authenticator)
+    Future.successful(authenticator)
   }
 
   /**
@@ -114,7 +125,7 @@ case class FakeSessionAuthenticatorService() extends SessionAuthenticatorService
  */
 case class FakeCookieAuthenticatorService() extends CookieAuthenticatorService(
   new CookieAuthenticatorSettings(),
-  new FakeAuthenticatorDAO[CookieAuthenticator],
+  None,
   new DefaultFingerprintGenerator(),
   new SecureRandomIDGenerator(),
   Clock())
@@ -197,28 +208,25 @@ object FakeAuthenticator {
  * A fake environment implementation.
  *
  * @param identities A list of (login info -> identity) pairs to return inside a Silhouette action.
- * @param providers The list of authentication providers.
+ * @param requestProviders The list of request providers.
  * @param eventBus The event bus implementation.
+ * @param executionContext The execution context to handle the asynchronous operations.
  * @tparam I The type of the identity.
  * @tparam T The type of the authenticator.
  */
 case class FakeEnvironment[I <: Identity, T <: Authenticator: TypeTag](
   identities: Seq[(LoginInfo, I)],
-  providers: Map[String, Provider] = Map(),
-  eventBus: EventBus = EventBus())
+  requestProviders: Seq[RequestProvider] = Seq(),
+  eventBus: EventBus = EventBus())(implicit val executionContext: ExecutionContext)
   extends Environment[I, T] {
 
   /**
-   * Gets the identity service implementation.
-   *
-   * @return The identity service implementation.
+   * The identity service implementation.
    */
   val identityService: IdentityService[I] = new FakeIdentityService[I](identities: _*)
 
   /**
-   * Gets the authenticator service implementation.
-   *
-   * @return The authenticator service implementation.
+   * The authenticator service implementation.
    */
   val authenticatorService: AuthenticatorService[T] = FakeAuthenticatorService[T]()
 }

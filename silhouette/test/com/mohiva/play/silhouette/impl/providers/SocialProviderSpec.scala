@@ -15,7 +15,7 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
-import com.mohiva.play.silhouette.api.services.AuthInfo
+import com.mohiva.play.silhouette.api.AuthInfo
 import org.specs2.matcher.{ JsonMatchers, MatchResult }
 import org.specs2.mock.Mockito
 import play.api.mvc.Result

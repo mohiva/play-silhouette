@@ -20,7 +20,7 @@ import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider._
-import play.api.libs.ws.{ WSRequestHolder, WSResponse }
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.WithApplication
 import test.Helper
 
@@ -31,9 +31,19 @@ import scala.concurrent.Future
  */
 class TwitterProviderSpec extends OAuth1ProviderSpec {
 
+  "The `withSettings` method" should {
+    "create a new instance with customized settings" in new WithApplication with Context {
+      val s = provider.withSettings { s =>
+        s.copy("new-request-token-url")
+      }
+
+      s.settings.requestTokenURL must be equalTo "new-request-token-url"
+    }
+  }
+
   "The `retrieveProfile` method" should {
     "fail with ProfileRetrievalException if API returns error" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
@@ -49,7 +59,7 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
     }
 
     "fail with ProfileRetrievalException if an unexpected error occurred" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
@@ -62,7 +72,7 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
     }
 
     "return the social profile" in new WithApplication with Context {
-      val requestHolder = mock[WSRequestHolder]
+      val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       requestHolder.sign(any) returns requestHolder
       requestHolder.get() returns Future.successful(response)
@@ -74,6 +84,25 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
           p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "6253282"),
             fullName = Some("Apollonia Vanova"),
+            avatarURL = Some("https://pbs.twimg.com/profile_images/1209905677/appolonia_.jpg")
+          )
+      }
+    }
+
+    "return the social profile with email" in new WithApplication with Context {
+      val requestHolder = mock[WSRequest]
+      val response = mock[WSResponse]
+      requestHolder.sign(any) returns requestHolder
+      requestHolder.get() returns Future.successful(response)
+      response.json returns Helper.loadJson("providers/oauth1/twitter.with.email.json")
+      httpLayer.url(API) returns requestHolder
+
+      profile(provider.retrieveProfile(oAuthInfo)) {
+        case p =>
+          p must be equalTo new CommonSocialProfile(
+            loginInfo = LoginInfo(provider.id, "6253282"),
+            fullName = Some("Apollonia Vanova"),
+            email = Some("apollonia.vanova@watchmen.com"),
             avatarURL = Some("https://pbs.twimg.com/profile_images/1209905677/appolonia_.jpg")
           )
       }
@@ -106,6 +135,6 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = TwitterProvider(httpLayer, oAuthService, oAuthTokenSecretProvider, oAuthSettings)
+    lazy val provider = new TwitterProvider(httpLayer, oAuthService, oAuthTokenSecretProvider, oAuthSettings)
   }
 }

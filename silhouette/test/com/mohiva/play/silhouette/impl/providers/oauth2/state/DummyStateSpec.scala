@@ -18,6 +18,7 @@ package com.mohiva.play.silhouette.impl.providers.oauth2.state
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.Results
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
@@ -50,14 +51,14 @@ class DummyStateSpec extends PlaySpecification with Mockito with JsonMatchers {
     "return the state if it's valid" in new WithApplication with Context {
       implicit val req = FakeRequest()
 
-      await(provider.validate("test")) must be equalTo state
+      await(provider.validate) must be equalTo state
     }
   }
 
   "The `publish` method of the provider" should {
     "return the original result" in new Context {
       implicit val req = FakeRequest(GET, "/")
-      val result = Results.Status(200)
+      val result = Results.Ok
 
       provider.publish(result, state) must be equalTo result
     }

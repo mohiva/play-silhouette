@@ -17,11 +17,13 @@ package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.services.AuthInfoService
+import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.{ Base64, Credentials, PasswordHasher, PasswordInfo }
+import com.mohiva.play.silhouette.impl.exceptions.{ IdentityNotFoundException, InvalidPasswordException }
 import com.mohiva.play.silhouette.impl.providers.BasicAuthProvider._
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
 import scala.concurrent.Future
@@ -32,36 +34,40 @@ import scala.concurrent.Future
 class BasicAuthProviderSpec extends PlaySpecification with Mockito {
 
   "The `authenticate` method" should {
-    "throw ConfigurationException if unsupported hasher is stored" in new WithApplication with Context {
-      val passwordInfo = PasswordInfo("unknown", "hashed(s3cr3t)")
-      val loginInfo = LoginInfo(provider.id, credentials.identifier)
-      val request = FakeRequest().withHeaders(AUTHORIZATION -> encodeCredentials(credentials))
-
-      authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
-
-      await(provider.authenticate(request)) must throwA[ConfigurationException].like {
-        case e => e.getMessage must beEqualTo(UnsupportedHasher.format(provider.id, "unknown", "foo, bar"))
-      }
-    }
-
-    "return None if no auth info could be found for the given credentials" in new WithApplication with Context {
+    "throw IdentityNotFoundException if no auth info could be found for the given credentials" in new WithApplication with Context {
       val loginInfo = new LoginInfo(provider.id, credentials.identifier)
       val request = FakeRequest().withHeaders(AUTHORIZATION -> encodeCredentials(credentials))
 
-      authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(None)
+      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(None)
 
-      await(provider.authenticate(request)) must beNone
+      await(provider.authenticate(request)) must throwA[IdentityNotFoundException].like {
+        case e => e.getMessage must beEqualTo(UnknownCredentials.format(provider.id))
+      }
     }
 
-    "return None if passwords does not match" in new WithApplication with Context {
+    "throw InvalidPasswordException if passwords does not match" in new WithApplication with Context {
       val passwordInfo = PasswordInfo("foo", "hashed(s3cr3t)")
       val loginInfo = LoginInfo(provider.id, credentials.identifier)
       val request = FakeRequest().withHeaders(AUTHORIZATION -> encodeCredentials(credentials))
 
       fooHasher.matches(passwordInfo, credentials.password) returns false
-      authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
+      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
-      await(provider.authenticate(request)) must beNone
+      await(provider.authenticate(request)) must throwA[InvalidPasswordException].like {
+        case e => e.getMessage must beEqualTo(InvalidPassword.format(provider.id))
+      }
+    }
+
+    "throw ConfigurationException if unsupported hasher is stored" in new WithApplication with Context {
+      val passwordInfo = PasswordInfo("unknown", "hashed(s3cr3t)")
+      val loginInfo = LoginInfo(provider.id, credentials.identifier)
+      val request = FakeRequest().withHeaders(AUTHORIZATION -> encodeCredentials(credentials))
+
+      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
+
+      await(provider.authenticate(request)) must throwA[ConfigurationException].like {
+        case e => e.getMessage must beEqualTo(UnsupportedHasher.format(provider.id, "unknown", "foo, bar"))
+      }
     }
 
     "return None if provider isn't responsible" in new WithApplication with Context {
@@ -80,7 +86,7 @@ class BasicAuthProviderSpec extends PlaySpecification with Mockito {
       val request = FakeRequest().withHeaders(AUTHORIZATION -> encodeCredentials(credentials))
 
       fooHasher.matches(passwordInfo, credentials.password) returns true
-      authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
+      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
       await(provider.authenticate(request)) must beSome(loginInfo)
     }
@@ -92,11 +98,11 @@ class BasicAuthProviderSpec extends PlaySpecification with Mockito {
 
       fooHasher.hash(credentials.password) returns passwordInfo
       barHasher.matches(passwordInfo, credentials.password) returns true
-      authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
-      authInfoService.save[PasswordInfo](loginInfo, passwordInfo) returns Future.successful(passwordInfo)
+      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
+      authInfoRepository.update[PasswordInfo](loginInfo, passwordInfo) returns Future.successful(passwordInfo)
 
       await(provider.authenticate(request)) must beSome(loginInfo)
-      there was one(authInfoService).save(loginInfo, passwordInfo)
+      there was one(authInfoRepository).update(loginInfo, passwordInfo)
     }
 
     "return None if Authorization method is not Basic and Base64 decoded header has ':'" in new WithApplication with Context {
@@ -135,14 +141,14 @@ class BasicAuthProviderSpec extends PlaySpecification with Mockito {
     }
 
     /**
-     * The auth info service mock.
+     * The auth info repository mock.
      */
-    lazy val authInfoService = mock[AuthInfoService]
+    lazy val authInfoRepository = mock[AuthInfoRepository]
 
     /**
      * The provider to test.
      */
-    lazy val provider = new BasicAuthProvider(authInfoService, fooHasher, List(fooHasher, barHasher))
+    lazy val provider = new BasicAuthProvider(authInfoRepository, fooHasher, List(fooHasher, barHasher))
 
     /**
      * Creates the credentials to send within the header.

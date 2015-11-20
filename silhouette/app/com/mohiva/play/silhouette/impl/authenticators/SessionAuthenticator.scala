@@ -16,20 +16,23 @@
 package com.mohiva.play.silhouette.impl.authenticators
 
 import com.mohiva.play.silhouette._
+import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.services.AuthenticatorService
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
+import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
 import com.mohiva.play.silhouette.api.util.{ Base64, Clock, FingerprintGenerator }
-import com.mohiva.play.silhouette.api.{ Authenticator, Logger, LoginInfo }
+import com.mohiva.play.silhouette.api.util.JsonFormats._
+import com.mohiva.play.silhouette.api.{ Authenticator, ExpirableAuthenticator, Logger, LoginInfo }
 import com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService._
 import org.joda.time.DateTime
 import play.api.http.HeaderNames
 import play.api.libs.Crypto
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.Json
 import play.api.mvc.{ Cookies, RequestHeader, Result, Session }
 
-import scala.concurrent.Future
+import scala.concurrent.duration._
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.language.postfixOps
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -41,56 +44,77 @@ import scala.util.{ Failure, Success, Try }
  * property.
  *
  * @param loginInfo The linked login info for an identity.
- * @param lastUsedDate The last used timestamp.
- * @param expirationDate The expiration time.
- * @param idleTimeout The time in seconds an authenticator can be idle before it timed out.
+ * @param lastUsedDateTime The last used date/time.
+ * @param expirationDateTime The expiration date/time.
+ * @param idleTimeout The duration an authenticator can be idle before it timed out.
  * @param fingerprint Maybe a fingerprint of the user.
  */
 case class SessionAuthenticator(
   loginInfo: LoginInfo,
-  lastUsedDate: DateTime,
-  expirationDate: DateTime,
-  idleTimeout: Option[Int],
-  fingerprint: Option[String]) extends Authenticator {
+  lastUsedDateTime: DateTime,
+  expirationDateTime: DateTime,
+  idleTimeout: Option[FiniteDuration],
+  fingerprint: Option[String])
+  extends Authenticator with ExpirableAuthenticator {
 
   /**
    * The Type of the generated value an authenticator will be serialized to.
    */
-  type Value = Session
-
-  /**
-   * Checks if the authenticator isn't expired and isn't timed out.
-   *
-   * @return True if the authenticator isn't expired and isn't timed out.
-   */
-  def isValid = !isExpired && !isTimedOut
-
-  /**
-   * Checks if the authenticator is expired. This is an absolute timeout since the creation of
-   * the authenticator.
-   *
-   * @return True if the authenticator is expired, false otherwise.
-   */
-  private def isExpired = expirationDate.isBeforeNow
-
-  /**
-   * Checks if the time elapsed since the last time the authenticator was used is longer than
-   * the maximum idle timeout specified in the properties.
-   *
-   * @return True if sliding window expiration is activated and the authenticator is timed out, false otherwise.
-   */
-  private def isTimedOut = idleTimeout.isDefined && lastUsedDate.plusSeconds(idleTimeout.get).isBeforeNow
+  override type Value = Session
 }
 
 /**
  * The companion object of the authenticator.
  */
-object SessionAuthenticator {
+object SessionAuthenticator extends Logger {
 
   /**
    * Converts the SessionAuthenticator to Json and vice versa.
    */
   implicit val jsonFormat = Json.format[SessionAuthenticator]
+
+  /**
+   * Serializes the authenticator.
+   *
+   * @param authenticator The authenticator to serialize.
+   * @param settings The authenticator settings.
+   * @return The serialized authenticator.
+   */
+  def serialize(authenticator: SessionAuthenticator)(settings: SessionAuthenticatorSettings) = {
+    if (settings.encryptAuthenticator) {
+      Crypto.encryptAES(Json.toJson(authenticator).toString())
+    } else {
+      Base64.encode(Json.toJson(authenticator))
+    }
+  }
+
+  /**
+   * Unserializes the authenticator.
+   *
+   * @param str The string representation of the authenticator.
+   * @param settings The authenticator settings.
+   * @return Some authenticator on success, otherwise None.
+   */
+  def unserialize(str: String)(settings: SessionAuthenticatorSettings): Try[SessionAuthenticator] = {
+    if (settings.encryptAuthenticator) buildAuthenticator(Crypto.decryptAES(str))
+    else buildAuthenticator(Base64.decode(str))
+  }
+
+  /**
+   * Builds the authenticator from Json.
+   *
+   * @param str The string representation of the authenticator.
+   * @return Some authenticator on success, otherwise None.
+   */
+  private def buildAuthenticator(str: String): Try[SessionAuthenticator] = {
+    Try(Json.parse(str)) match {
+      case Success(json) => json.validate[SessionAuthenticator].asEither match {
+        case Left(error) => Failure(new AuthenticatorException(InvalidJsonFormat.format(ID, error)))
+        case Right(authenticator) => Success(authenticator)
+      }
+      case Failure(error) => Failure(new AuthenticatorException(JsonParseError.format(ID, str), error))
+    }
+  }
 }
 
 /**
@@ -99,11 +123,16 @@ object SessionAuthenticator {
  * @param settings The authenticator settings.
  * @param fingerprintGenerator The fingerprint generator implementation.
  * @param clock The clock implementation.
+ * @param executionContext The execution context to handle the asynchronous operations.
  */
 class SessionAuthenticatorService(
   settings: SessionAuthenticatorSettings,
   fingerprintGenerator: FingerprintGenerator,
-  clock: Clock) extends AuthenticatorService[SessionAuthenticator] with Logger {
+  clock: Clock)(implicit val executionContext: ExecutionContext)
+  extends AuthenticatorService[SessionAuthenticator]
+  with Logger {
+
+  import SessionAuthenticator._
 
   /**
    * Creates a new authenticator for the specified login info.
@@ -112,13 +141,13 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return An authenticator.
    */
-  def create(loginInfo: LoginInfo)(implicit request: RequestHeader) = {
+  override def create(loginInfo: LoginInfo)(implicit request: RequestHeader): Future[SessionAuthenticator] = {
     Future.from(Try {
       val now = clock.now
       SessionAuthenticator(
         loginInfo = loginInfo,
-        lastUsedDate = now,
-        expirationDate = now.plusSeconds(settings.authenticatorExpiry),
+        lastUsedDateTime = now,
+        expirationDateTime = now + settings.authenticatorExpiry,
         idleTimeout = settings.authenticatorIdleTimeout,
         fingerprint = if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
       )
@@ -133,16 +162,20 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return Some authenticator or None if no authenticator could be found in request.
    */
-  def retrieve(implicit request: RequestHeader) = {
+  override def retrieve(implicit request: RequestHeader): Future[Option[SessionAuthenticator]] = {
     Future.from(Try {
       if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
     }).map { fingerprint =>
-      request.session.get(settings.sessionKey).flatMap(unserialize) match {
-        case Some(a) if fingerprint.isDefined && a.fingerprint != fingerprint =>
-          logger.info(InvalidFingerprint.format(ID, fingerprint, a))
-          None
-        case Some(a) => Some(a)
-        case None => None
+      request.session.get(settings.sessionKey).flatMap { value =>
+        unserialize(value)(settings) match {
+          case Success(authenticator) if fingerprint.isDefined && authenticator.fingerprint != fingerprint =>
+            logger.info(InvalidFingerprint.format(ID, fingerprint, authenticator))
+            None
+          case Success(authenticator) => Some(authenticator)
+          case Failure(error) =>
+            logger.info(error.getMessage, error)
+            None
+        }
       }
     }.recover {
       case e => throw new AuthenticatorRetrievalException(RetrieveError.format(ID), e)
@@ -156,8 +189,8 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The serialized authenticator value.
    */
-  def init(authenticator: SessionAuthenticator)(implicit request: RequestHeader) = {
-    Future.successful(request.session + (settings.sessionKey -> serialize(authenticator)))
+  override def init(authenticator: SessionAuthenticator)(implicit request: RequestHeader): Future[Session] = {
+    Future.successful(request.session + (settings.sessionKey -> serialize(authenticator)(settings)))
   }
 
   /**
@@ -167,8 +200,8 @@ class SessionAuthenticatorService(
    * @param result The result to manipulate.
    * @return The manipulated result.
    */
-  def embed(session: Session, result: Future[Result])(implicit request: RequestHeader) = {
-    result.map(_.addingToSession(session.data.toSeq: _*))
+  override def embed(session: Session, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
+    Future.successful(AuthenticatorResult(result.addingToSession(session.data.toSeq: _*)))
   }
 
   /**
@@ -178,11 +211,11 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The manipulated request header.
    */
-  def embed(session: Session, request: RequestHeader) = {
+  override def embed(session: Session, request: RequestHeader): RequestHeader = {
     val sessionCookie = Session.encodeAsCookie(session)
-    val cookies = Cookies.merge(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(sessionCookie))
-    val additional = Seq(HeaderNames.COOKIE -> Seq(cookies))
-    request.copy(headers = AdditionalHeaders(request.headers, additional))
+    val cookies = Cookies.mergeCookieHeader(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(sessionCookie))
+    val additional = Seq(HeaderNames.COOKIE -> cookies)
+    request.copy(headers = request.headers.replace(additional: _*))
   }
 
   /**
@@ -191,11 +224,9 @@ class SessionAuthenticatorService(
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
-  protected[silhouette] def touch(
-    authenticator: SessionAuthenticator): Either[SessionAuthenticator, SessionAuthenticator] = {
-
+  override def touch(authenticator: SessionAuthenticator): Either[SessionAuthenticator, SessionAuthenticator] = {
     if (authenticator.idleTimeout.isDefined) {
-      Left(authenticator.copy(lastUsedDate = clock.now))
+      Left(authenticator.copy(lastUsedDateTime = clock.now))
     } else {
       Right(authenticator)
     }
@@ -212,31 +243,50 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def update(
-    authenticator: SessionAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+  override def update(authenticator: SessionAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
-    result.map(_.addingToSession(settings.sessionKey -> serialize(authenticator))).recover {
+    Future.from(Try {
+      AuthenticatorResult(result.addingToSession(settings.sessionKey -> serialize(authenticator)(settings)))
+    }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
+    })
+  }
+
+  /**
+   * Renews an authenticator.
+   *
+   * The old authenticator needn't be revoked because we use a stateless approach here. So only
+   * one authenticator can be bound to a user session. This method doesn't embed the the authenticator
+   * into the result. This must be done manually if needed or use the other renew method otherwise.
+   *
+   * @param authenticator The authenticator to renew.
+   * @param request The request header.
+   * @return The serialized expression of the authenticator.
+   */
+  override def renew(authenticator: SessionAuthenticator)(
+    implicit request: RequestHeader): Future[Session] = {
+
+    create(authenticator.loginInfo).flatMap(init).recover {
+      case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
     }
   }
 
   /**
-   * Replaces the authenticator in session with a new one. The old authenticator needn't be revoked
-   * because we use a stateless approach here. So only one authenticator can be bound to a user session.
+   * Renews an authenticator and replaces the authenticator in session with a new one.
+   *
+   * The old authenticator needn't be revoked because we use a stateless approach here. So only
+   * one authenticator can be bound to a user session.
    *
    * @param authenticator The authenticator to update.
    * @param result The result to manipulate.
    * @param request The request header.
    * @return The original or a manipulated result.
    */
-  protected[silhouette] def renew(
-    authenticator: SessionAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+  override def renew(authenticator: SessionAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
-    create(authenticator.loginInfo).flatMap { a =>
-      init(a).flatMap(v => embed(v, result))
-    }.recover {
+    renew(authenticator).flatMap(v => embed(v, result)).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
     }
   }
@@ -248,58 +298,14 @@ class SessionAuthenticatorService(
    * @param request The request header.
    * @return The manipulated result.
    */
-  protected[silhouette] def discard(
-    authenticator: SessionAuthenticator,
-    result: Future[Result])(implicit request: RequestHeader) = {
+  override def discard(authenticator: SessionAuthenticator, result: Result)(
+    implicit request: RequestHeader): Future[AuthenticatorResult] = {
 
-    result.map(_.removingFromSession(settings.sessionKey)).recover {
+    Future.from(Try {
+      AuthenticatorResult(result.removingFromSession(settings.sessionKey))
+    }.recover {
       case e => throw new AuthenticatorDiscardingException(DiscardError.format(ID, authenticator), e)
-    }
-  }
-
-  /**
-   * Serializes the authenticator.
-   *
-   * @param authenticator The authenticator to serialize.
-   * @return The serialized authenticator.
-   */
-  private def serialize(authenticator: SessionAuthenticator) = {
-    if (settings.encryptAuthenticator) {
-      Crypto.encryptAES(Json.toJson(authenticator).toString())
-    } else {
-      Base64.encode(Json.toJson(authenticator))
-    }
-  }
-
-  /**
-   * Unserializes the authenticator.
-   *
-   * @param str The string representation of the authenticator.
-   * @return Some authenticator on success, otherwise None.
-   */
-  private def unserialize(str: String): Option[SessionAuthenticator] = {
-    if (settings.encryptAuthenticator) buildAuthenticator(Crypto.decryptAES(str))
-    else buildAuthenticator(Base64.decode(str))
-  }
-
-  /**
-   * Builds the authenticator from Json.
-   *
-   * @param str The string representation of the authenticator.
-   * @return Some authenticator on success, otherwise None.
-   */
-  private def buildAuthenticator(str: String): Option[SessionAuthenticator] = {
-    Try(Json.parse(str)) match {
-      case Success(json) => json.validate[SessionAuthenticator].asEither match {
-        case Left(error) =>
-          logger.info(InvalidJsonFormat.format(ID, error))
-          None
-        case Right(authenticator) => Some(authenticator)
-      }
-      case Failure(error) =>
-        logger.info(JsonParseError.format(ID, str), error)
-        None
-    }
+    })
   }
 }
 
@@ -327,12 +333,12 @@ object SessionAuthenticatorService {
  * @param sessionKey The key of the authenticator in the session.
  * @param encryptAuthenticator Indicates if the authenticator should be encrypted in session.
  * @param useFingerprinting Indicates if a fingerprint of the user should be stored in the authenticator.
- * @param authenticatorIdleTimeout The time in seconds an authenticator can be idle before it timed out. Defaults to 30 minutes.
- * @param authenticatorExpiry The expiry of the authenticator in minutes. Defaults to 12 hours.
+ * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out.
+ * @param authenticatorExpiry The duration an authenticator expires after it was created.
  */
 case class SessionAuthenticatorSettings(
   sessionKey: String = "authenticator",
   encryptAuthenticator: Boolean = true,
   useFingerprinting: Boolean = true,
-  authenticatorIdleTimeout: Option[Int] = Some(30 * 60),
-  authenticatorExpiry: Int = 12 * 60 * 60)
+  authenticatorIdleTimeout: Option[FiniteDuration] = None,
+  authenticatorExpiry: FiniteDuration = 12 hours)

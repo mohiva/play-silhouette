@@ -15,6 +15,7 @@
  */
 package com.mohiva.play.silhouette.impl.authenticators
 
+import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
@@ -22,33 +23,37 @@ import com.mohiva.play.silhouette.api.util.{ Clock, IDGenerator }
 import com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorService._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
 import org.joda.time.DateTime
+import org.specs2.control.NoLanguageFeatures
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.Results
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
 import scala.concurrent.Future
+import scala.concurrent.duration._
+import scala.language.postfixOps
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticator]].
  */
-class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
+class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with NoLanguageFeatures {
 
   "The `isValid` method of the authenticator" should {
     "return false if the authenticator is expired" in new Context {
-      authenticator.copy(expirationDate = DateTime.now.minusHours(1)).isValid must beFalse
+      authenticator.copy(expirationDateTime = DateTime.now - 1.hour).isValid must beFalse
     }
 
     "return false if the authenticator is timed out" in new Context {
       authenticator.copy(
-        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get + 1)
+        lastUsedDateTime = DateTime.now - (settings.authenticatorIdleTimeout.get + 1.second)
       ).isValid must beFalse
     }
 
     "return true if the authenticator is valid" in new Context {
       authenticator.copy(
-        lastUsedDate = DateTime.now.minusSeconds(settings.authenticatorIdleTimeout.get - 10),
-        expirationDate = DateTime.now.plusSeconds(5)
+        lastUsedDateTime = DateTime.now - (settings.authenticatorIdleTimeout.get - 10.seconds),
+        expirationDateTime = DateTime.now + 5.seconds
       ).isValid must beTrue
     }
   }
@@ -64,14 +69,14 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
       await(service.create(loginInfo)).id must be equalTo id
     }
 
-    "return an authenticator with the current date as lastUsedDate" in new Context {
+    "return an authenticator with the current date as lastUsedDateTime" in new Context {
       implicit val request = FakeRequest()
       val now = new DateTime
 
       idGenerator.generate returns Future.successful("test-id")
       clock.now returns now
 
-      await(service.create(loginInfo)).lastUsedDate must be equalTo now
+      await(service.create(loginInfo)).lastUsedDateTime must be equalTo now
     }
 
     "return an authenticator which expires in 12 hours(default value)" in new Context {
@@ -81,19 +86,19 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
       idGenerator.generate returns Future.successful("test-id")
       clock.now returns now
 
-      await(service.create(loginInfo)).expirationDate must be equalTo now.plusMinutes(12 * 60)
+      await(service.create(loginInfo)).expirationDateTime must be equalTo now + 12.hours
     }
 
     "return an authenticator which expires in 6 hours" in new Context {
       implicit val request = FakeRequest()
-      val sixHours = 6 * 60 * 60
+      val sixHours = 6 hours
       val now = new DateTime
 
       settings.authenticatorExpiry returns sixHours
       idGenerator.generate returns Future.successful("test-id")
       clock.now returns now
 
-      await(service.create(loginInfo)).expirationDate must be equalTo now.plusSeconds(sixHours)
+      await(service.create(loginInfo)).expirationDateTime must be equalTo now + sixHours
     }
 
     "throws an AuthenticatorCreationException exception if an error occurred during creation" in new Context {
@@ -145,17 +150,17 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
 
   "The `init` method of the service" should {
     "save the authenticator in backing store" in new Context {
-      dao.save(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
+      dao.add(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
 
       implicit val request = FakeRequest()
       val token = await(service.init(authenticator))
 
       token must be equalTo authenticator.id
-      there was one(dao).save(authenticator)
+      there was one(dao).add(authenticator)
     }
 
     "throws an AuthenticatorInitializationException exception if an error occurred during initialization" in new Context {
-      dao.save(any) returns Future.failed(new Exception("Cannot store authenticator"))
+      dao.add(any) returns Future.failed(new Exception("Cannot store authenticator"))
 
       implicit val request = FakeRequest()
 
@@ -170,7 +175,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
     "return the response with a header" in new Context {
       implicit val request = FakeRequest()
       val value = authenticator.id
-      val result = service.embed(value, Future.successful(Results.Status(200)))
+      val result = service.embed(value, Results.Ok)
 
       header(settings.headerName, result) should beSome(authenticator.id)
     }
@@ -202,12 +207,12 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
 
   "The `touch` method of the service" should {
     "update the last used date if idle timeout is defined" in new WithApplication with Context {
-      settings.authenticatorIdleTimeout returns Some(1)
+      settings.authenticatorIdleTimeout returns Some(1 second)
       clock.now returns DateTime.now
 
       service.touch(authenticator) must beLeft[BearerTokenAuthenticator].like {
         case a =>
-          a.lastUsedDate must be equalTo clock.now
+          a.lastUsedDateTime must be equalTo clock.now
       }
     }
 
@@ -217,37 +222,37 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
 
       service.touch(authenticator) must beRight[BearerTokenAuthenticator].like {
         case a =>
-          a.lastUsedDate must be equalTo authenticator.lastUsedDate
+          a.lastUsedDateTime must be equalTo authenticator.lastUsedDateTime
       }
     }
   }
 
   "The `update` method of the service" should {
     "update the authenticator in backing store" in new Context {
-      dao.save(any) returns Future.successful(authenticator)
+      dao.update(any) returns Future.successful(authenticator)
 
       implicit val request = FakeRequest()
 
-      await(service.update(authenticator, Future.successful(Results.Ok)))
+      await(service.update(authenticator, Results.Ok))
 
-      there was one(dao).save(authenticator)
+      there was one(dao).update(authenticator)
     }
 
     "return the result if the authenticator could be stored in backing store" in new Context {
-      dao.save(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
+      dao.update(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
 
       implicit val request = FakeRequest()
-      val result = service.update(authenticator, Future.successful(Results.Ok))
+      val result = service.update(authenticator, Results.Ok)
 
       status(result) must be equalTo OK
     }
 
     "throws an AuthenticatorUpdateException exception if an error occurred during update" in new Context {
-      dao.save(any) returns Future.failed(new Exception("Cannot store authenticator"))
+      dao.update(any) returns Future.failed(new Exception("Cannot store authenticator"))
 
       implicit val request = FakeRequest()
 
-      await(service.update(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticatorUpdateException].like {
+      await(service.update(authenticator, Results.Ok)) must throwA[AuthenticatorUpdateException].like {
         case e =>
           e.getMessage must startWith(UpdateError.format(ID, ""))
       }
@@ -261,11 +266,11 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
       val id = "new-test-id"
 
       dao.remove(authenticator.id) returns Future.successful(())
-      dao.save(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
+      dao.add(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
-      await(service.renew(authenticator, Future.successful(Results.Ok)))
+      await(service.renew(authenticator, Results.Ok))
 
       there was one(dao).remove(authenticator.id)
     }
@@ -276,11 +281,11 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
       val id = "new-test-id"
 
       dao.remove(any) returns Future.successful(())
-      dao.save(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
+      dao.add(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
-      val result = service.renew(authenticator, Future.successful(Results.Ok))
+      val result = service.renew(authenticator, Results.Ok)
 
       header(settings.headerName, result) should beSome(id)
     }
@@ -291,11 +296,11 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
       val id = "new-test-id"
 
       dao.remove(any) returns Future.successful(())
-      dao.save(any) returns Future.failed(new Exception("Cannot store authenticator"))
+      dao.add(any) returns Future.failed(new Exception("Cannot store authenticator"))
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
-      await(service.renew(authenticator, Future.successful(Results.Ok))) must throwA[AuthenticatorRenewalException].like {
+      await(service.renew(authenticator, Results.Ok)) must throwA[AuthenticatorRenewalException].like {
         case e =>
           e.getMessage must startWith(RenewError.format(ID, ""))
       }
@@ -308,14 +313,14 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
 
       dao.remove(authenticator.id) returns Future.successful(authenticator)
 
-      await(service.discard(authenticator, Future.successful(Results.Status(200))))
+      await(service.discard(authenticator, Results.Ok))
 
       there was one(dao).remove(authenticator.id)
     }
 
     "throws an AuthenticatorDiscardingException exception if an error occurred during discarding" in new Context {
       implicit val request = FakeRequest()
-      val okResult = Future.successful(Results.Status(200))
+      val okResult = Results.Ok
 
       dao.remove(authenticator.id) returns Future.failed(new Exception("Cannot remove authenticator"))
 
@@ -351,8 +356,8 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
      */
     lazy val settings = spy(BearerTokenAuthenticatorSettings(
       headerName = "X-Auth-Token",
-      authenticatorIdleTimeout = Some(30 * 60),
-      authenticatorExpiry = 12 * 60 * 60
+      authenticatorIdleTimeout = Some(30 minutes),
+      authenticatorExpiry = 12 hours
     ))
 
     /**
@@ -371,8 +376,8 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito {
     lazy val authenticator = new BearerTokenAuthenticator(
       id = "test-id",
       loginInfo = LoginInfo("test", "1"),
-      lastUsedDate = DateTime.now,
-      expirationDate = DateTime.now.plusMinutes(12 * 60),
+      lastUsedDateTime = DateTime.now,
+      expirationDateTime = DateTime.now + settings.authenticatorExpiry,
       idleTimeout = settings.authenticatorIdleTimeout
     )
   }

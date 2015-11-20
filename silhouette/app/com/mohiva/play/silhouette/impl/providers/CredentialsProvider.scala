@@ -19,15 +19,16 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
+import javax.inject.Inject
+
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.exceptions.ConfigurationException
-import com.mohiva.play.silhouette.api.services.AuthInfoService
-import com.mohiva.play.silhouette.api.util.{ Credentials, PasswordHasher, PasswordInfo }
+import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
+import com.mohiva.play.silhouette.api.util.{ ExecutionContextProvider, Credentials, PasswordHasher, PasswordInfo }
 import com.mohiva.play.silhouette.impl.exceptions.{ IdentityNotFoundException, InvalidPasswordException }
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider._
-import play.api.libs.concurrent.Execution.Implicits._
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * A provider for authenticating with credentials.
@@ -38,21 +39,23 @@ import scala.concurrent.Future
  * the application has changed the hashing algorithm, the provider hashes the entered password again with the new
  * algorithm and stores the auth info in the backing store.
  *
- * @param authInfoService The auth info service.
+ * @param authInfoRepository The auth info repository.
  * @param passwordHasher The default password hasher used by the application.
  * @param passwordHasherList List of password hasher supported by the application.
+ * @param executionContext The execution context to handle the asynchronous operations.
  */
-class CredentialsProvider(
-  authInfoService: AuthInfoService,
+class CredentialsProvider @Inject() (
+  authInfoRepository: AuthInfoRepository,
   passwordHasher: PasswordHasher,
-  passwordHasherList: Seq[PasswordHasher]) extends Provider {
+  passwordHasherList: Seq[PasswordHasher])(implicit val executionContext: ExecutionContext)
+  extends Provider with ExecutionContextProvider {
 
   /**
    * Gets the provider ID.
    *
    * @return The provider ID.
    */
-  def id = ID
+  override def id = ID
 
   /**
    * Authenticates a user with its credentials.
@@ -62,13 +65,14 @@ class CredentialsProvider(
    */
   def authenticate(credentials: Credentials): Future[LoginInfo] = {
     val loginInfo = LoginInfo(id, credentials.identifier)
-    authInfoService.retrieve[PasswordInfo](loginInfo).map {
+    authInfoRepository.find[PasswordInfo](loginInfo).flatMap {
       case Some(authInfo) => passwordHasherList.find(_.id == authInfo.hasher) match {
         case Some(hasher) if hasher.matches(authInfo, credentials.password) =>
           if (hasher != passwordHasher) {
-            authInfoService.save(loginInfo, passwordHasher.hash(credentials.password))
+            authInfoRepository.update(loginInfo, passwordHasher.hash(credentials.password)).map(_ => loginInfo)
+          } else {
+            Future.successful(loginInfo)
           }
-          loginInfo
         case Some(hasher) => throw new InvalidPasswordException(InvalidPassword.format(id))
         case None => throw new ConfigurationException(UnsupportedHasher.format(
           id, authInfo.hasher, passwordHasherList.map(_.id).mkString(", ")

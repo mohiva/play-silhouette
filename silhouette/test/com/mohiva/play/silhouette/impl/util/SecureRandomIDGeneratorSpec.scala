@@ -15,6 +15,7 @@
  */
 package com.mohiva.play.silhouette.impl.util
 
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.test.PlaySpecification
 
 /**

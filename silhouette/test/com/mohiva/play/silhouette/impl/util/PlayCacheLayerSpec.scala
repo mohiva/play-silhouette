@@ -16,63 +16,62 @@
 package com.mohiva.play.silhouette.impl.util
 
 import org.joda.time.DateTime
+import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.Play.current
-import play.api.cache.Cache
-import play.api.test.{ PlaySpecification, WithApplication }
-import test.AfterWithinAround
+import play.api.cache.CacheApi
+import play.api.test.PlaySpecification
+
+import scala.concurrent.duration.Duration
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.util.PlayCacheLayer]] class.
  */
-class PlayCacheLayerSpec extends PlaySpecification {
+class PlayCacheLayerSpec extends PlaySpecification with Mockito {
 
-  "The `save` method" should {
-    "save value in cache" in new WithApplication with Context {
-      await(layer.save("id", value))
+  "The `find` method" should {
+    "return value from cache" in new Context {
+      cacheAPI.get[DateTime]("id") returns Some(value)
 
-      Cache.getAs[DateTime]("id") should beSome(value)
+      await(layer.find[DateTime]("id")) should beSome(value)
+
+      there was one(cacheAPI).get[DateTime]("id")
     }
   }
 
-  "The `find` method" should {
-    "return value from cache" in new WithApplication with Context {
-      Cache.set("id", value)
+  "The `save` method" should {
+    "save value in cache" in new Context {
+      await(layer.save("id", value))
 
-      await(layer.find[DateTime]("id")) should beSome(value)
+      there was one(cacheAPI).set("id", value, Duration.Inf)
     }
   }
 
   "The `remove` method" should {
-    "removes value from cache" in new WithApplication with Context {
-      Cache.set("id", value)
+    "removes value from cache" in new Context {
+      await(layer.remove("id")) must be equalTo (())
 
-      await(layer.remove("id"))
-
-      Cache.getAs[DateTime]("id") should beNone
+      there was one(cacheAPI).remove("id")
     }
   }
 
   /**
    * The context.
    */
-  trait Context extends Scope with AfterWithinAround {
+  trait Context extends Scope {
+
+    /**
+     * The cache API.
+     */
+    lazy val cacheAPI = mock[CacheApi]
 
     /**
      * The layer to test.
      */
-    lazy val layer = new PlayCacheLayer
+    lazy val layer = new PlayCacheLayer(cacheAPI)
 
     /**
      * The value to cache.
      */
     lazy val value = new DateTime
-
-    /**
-     * Clears the cache after every test
-     */
-    def after {
-      Cache.remove("id")
-    }
   }
 }

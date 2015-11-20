@@ -17,12 +17,13 @@ package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.services.AuthInfoService
+import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.{ Credentials, PasswordHasher, PasswordInfo }
 import com.mohiva.play.silhouette.impl.exceptions.{ IdentityNotFoundException, InvalidPasswordException }
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider._
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.test.{ PlaySpecification, WithApplication }
 
 import scala.concurrent.Future
@@ -36,7 +37,7 @@ class CredentialsProviderSpec extends PlaySpecification with Mockito {
     "throw IdentityNotFoundException if no auth info could be found for the given credentials" in new WithApplication with Context {
       val loginInfo = new LoginInfo(provider.id, credentials.identifier)
 
-      authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(None)
+      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(None)
 
       await(provider.authenticate(credentials)) must throwA[IdentityNotFoundException].like {
         case e => e.getMessage must beEqualTo(UnknownCredentials.format(provider.id))
@@ -48,7 +49,7 @@ class CredentialsProviderSpec extends PlaySpecification with Mockito {
       val loginInfo = LoginInfo(provider.id, credentials.identifier)
 
       fooHasher.matches(passwordInfo, credentials.password) returns false
-      authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
+      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
       await(provider.authenticate(credentials)) must throwA[InvalidPasswordException].like {
         case e => e.getMessage must beEqualTo(InvalidPassword.format(provider.id))
@@ -59,7 +60,7 @@ class CredentialsProviderSpec extends PlaySpecification with Mockito {
       val passwordInfo = PasswordInfo("unknown", "hashed(s3cr3t)")
       val loginInfo = LoginInfo(provider.id, credentials.identifier)
 
-      authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
+      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
       await(provider.authenticate(credentials)) must throwA[ConfigurationException].like {
         case e => e.getMessage must beEqualTo(UnsupportedHasher.format(provider.id, "unknown", "foo, bar"))
@@ -71,7 +72,7 @@ class CredentialsProviderSpec extends PlaySpecification with Mockito {
       val loginInfo = LoginInfo(provider.id, credentials.identifier)
 
       fooHasher.matches(passwordInfo, credentials.password) returns true
-      authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
+      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
       await(provider.authenticate(credentials)) must be equalTo loginInfo
     }
@@ -82,10 +83,11 @@ class CredentialsProviderSpec extends PlaySpecification with Mockito {
 
       fooHasher.hash(credentials.password) returns passwordInfo
       barHasher.matches(passwordInfo, credentials.password) returns true
-      authInfoService.retrieve[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
+      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
+      authInfoRepository.update[PasswordInfo](loginInfo, passwordInfo) returns Future.successful(passwordInfo)
 
       await(provider.authenticate(credentials)) must be equalTo loginInfo
-      there was one(authInfoService).save(loginInfo, passwordInfo)
+      there was one(authInfoRepository).update(loginInfo, passwordInfo)
     }
   }
 
@@ -118,13 +120,13 @@ class CredentialsProviderSpec extends PlaySpecification with Mockito {
     }
 
     /**
-     * The auth info service mock.
+     * The auth info repository mock.
      */
-    lazy val authInfoService = mock[AuthInfoService]
+    lazy val authInfoRepository = mock[AuthInfoRepository]
 
     /**
      * The provider to test.
      */
-    lazy val provider = new CredentialsProvider(authInfoService, fooHasher, List(fooHasher, barHasher))
+    lazy val provider = new CredentialsProvider(authInfoRepository, fooHasher, List(fooHasher, barHasher))
   }
 }

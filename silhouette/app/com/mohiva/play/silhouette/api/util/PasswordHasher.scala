@@ -19,7 +19,7 @@
  */
 package com.mohiva.play.silhouette.api.util
 
-import com.mohiva.play.silhouette.api.services.AuthInfo
+import com.mohiva.play.silhouette.api.AuthInfo
 
 /**
  * The password details.

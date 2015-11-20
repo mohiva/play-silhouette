@@ -20,30 +20,18 @@
 package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.services.AuthInfo
-import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
+import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth1Provider._
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.ws.WSSignatureCalculator
 import play.api.mvc._
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
- * Base class for all OAuth1 providers.
- *
- * @param httpLayer The HTTP layer implementation.
- * @param service The OAuth1 service implementation.
- * @param tokenSecretProvider The OAuth1 token secret provider implementation.
- * @param settings The OAuth1 provider settings.
+ * Base implementation for all OAuth1 providers.
  */
-abstract class OAuth1Provider(
-  httpLayer: HTTPLayer,
-  service: OAuth1Service,
-  tokenSecretProvider: OAuth1TokenSecretProvider,
-  settings: OAuth1Settings)
-  extends SocialProvider with Logger {
+trait OAuth1Provider extends SocialProvider with Logger {
 
   /**
    * Check if services uses 1.0a specification because it address the session fixation attack identified
@@ -66,6 +54,21 @@ abstract class OAuth1Provider(
   type A = OAuth1Info
 
   /**
+   * The settings type.
+   */
+  type Settings = OAuth1Settings
+
+  /**
+   * The OAuth1 service implementation.
+   */
+  protected val service: OAuth1Service
+
+  /**
+   * The OAuth1 token secret provider implementation.
+   */
+  protected val tokenSecretProvider: OAuth1TokenSecretProvider
+
+  /**
    * Starts the authentication process.
    *
    * @param request The current request.
@@ -78,7 +81,7 @@ abstract class OAuth1Provider(
       case None => request.extractString(OAuthVerifier) -> request.extractString(OAuthToken) match {
         // Second step in the OAuth flow.
         // We have received the verifier and the request token, and we need to swap it for the access token.
-        case (Some(verifier), Some(token)) => tokenSecretProvider.retrieve(id).flatMap { tokenSecret =>
+        case (Some(verifier), Some(token)) => tokenSecretProvider.retrieve.flatMap { tokenSecret =>
           service.retrieveAccessToken(OAuth1Info(token, tokenSecret.value), verifier).map { info =>
             Right(info)
           }.recover {
@@ -142,18 +145,20 @@ trait OAuth1Service {
    * Retrieves the request info and secret.
    *
    * @param callbackURL The URL where the provider should redirect to (usually a URL on the current app).
+   * @param ec The execution context to handle the asynchronous operations.
    * @return A OAuth1Info in case of success, Exception otherwise.
    */
-  def retrieveRequestToken(callbackURL: String): Future[OAuth1Info]
+  def retrieveRequestToken(callbackURL: String)(implicit ec: ExecutionContext): Future[OAuth1Info]
 
   /**
    * Exchange a request info for an access info.
    *
    * @param oAuthInfo The info/secret pair obtained from a previous call.
    * @param verifier A string you got through your user with redirection.
+   * @param ec The execution context to handle the asynchronous operations.
    * @return A OAuth1Info in case of success, Exception otherwise.
    */
-  def retrieveAccessToken(oAuthInfo: OAuth1Info, verifier: String): Future[OAuth1Info]
+  def retrieveAccessToken(oAuthInfo: OAuth1Info, verifier: String)(implicit ec: ExecutionContext): Future[OAuth1Info]
 
   /**
    * The URL to which the user needs to be redirected to grant authorization to your application.
@@ -219,20 +224,21 @@ trait OAuth1TokenSecretProvider {
    *
    * @param info The OAuth info returned from the provider.
    * @param request The current request.
+   * @param ec The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return The build secret.
    */
-  def build[B](info: OAuth1Info)(implicit request: ExtractableRequest[B]): Future[Secret]
+  def build[B](info: OAuth1Info)(implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Secret]
 
   /**
    * Retrieves the token secret.
    *
-   * @param id The provider ID.
    * @param request The current request.
+   * @param ec The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return A secret on success, otherwise an failure.
    */
-  def retrieve[B](id: String)(implicit request: ExtractableRequest[B]): Future[Secret]
+  def retrieve[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Secret]
 
   /**
    * Publishes the secret to the client.

@@ -15,18 +15,21 @@
  */
 package com.mohiva.play.silhouette.impl.util
 
+import javax.inject.Inject
+
 import com.mohiva.play.silhouette.api.util.CacheLayer
-import play.api.Play.current
-import play.api.cache.Cache
-import play.api.libs.concurrent.Execution.Implicits._
+import play.api.cache.CacheApi
 
 import scala.concurrent.Future
+import scala.concurrent.duration.Duration
 import scala.reflect.ClassTag
 
 /**
  * Implementation of the cache layer which uses the default Play cache plugin.
+ *
+ * @param cacheApi Plays cache API implementation.
  */
-class PlayCacheLayer extends CacheLayer {
+class PlayCacheLayer @Inject() (cacheApi: CacheApi) extends CacheLayer {
 
   /**
    * Save a value in cache.
@@ -36,9 +39,9 @@ class PlayCacheLayer extends CacheLayer {
    * @param expiration Expiration time in seconds (0 second means eternity).
    * @return The value saved in cache.
    */
-  def save[T](key: String, value: T, expiration: Int = 0): Future[T] = {
-    Cache.set(key, value, expiration)
-    Future.successful(value)
+  override def save[T](key: String, value: T, expiration: Duration = Duration.Inf): Future[T] = Future.successful {
+    cacheApi.set(key, value, expiration)
+    value
   }
 
   /**
@@ -48,7 +51,7 @@ class PlayCacheLayer extends CacheLayer {
    * @tparam T The type of the object to return.
    * @return The found value or None if no value could be found.
    */
-  def find[T: ClassTag](key: String): Future[Option[T]] = Future(Cache.getAs[T](key))
+  override def find[T: ClassTag](key: String): Future[Option[T]] = Future.successful(cacheApi.get[T](key))
 
   /**
    * Remove a value from the cache.
@@ -56,5 +59,5 @@ class PlayCacheLayer extends CacheLayer {
    * @param key Item key.
    * @return An empty future to wait for removal.
    */
-  def remove(key: String) = Future(Cache.remove(key))
+  override def remove(key: String) = Future.successful(cacheApi.remove(key))
 }
