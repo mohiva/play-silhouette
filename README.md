@@ -3,8 +3,23 @@ Silhouette [![Maven Central](https://maven-badges.herokuapp.com/maven-central/co
 
 **Silhouette** is an authentication library for Play Framework applications that supports several authentication methods, including OAuth1, OAuth2, OpenID, Credentials, Basic Authentication, Two Factor Authentication or custom authentication schemes.
 
-See [the project documentation](http://silhouette.mohiva.com/docs) for more information.
+See [the project documentation] for more information.
+
+## Support
+
+If you have question regarding Silhouette please use the [chat] or the [mailing list]. **Please do not use the issue tracker for questions!**
+
+## Contribution
+
+Please read the [contributing guide] before you contribute. It contains very useful tips for a successful contribution.
 
 ## License
 
-The code is licensed under [Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0) and the documentation under [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/).
+The code is licensed under [Apache License v2.0] and the documentation under [CC BY 3.0].
+
+[the project documentation]: http://silhouette.mohiva.com/docs
+[chat]: https://gitter.im/mohiva/play-silhouette
+[mailing list]: https://groups.google.com/forum/#!forum/play-silhouette
+[contributing guide]: CONTRIBUTING.md
+[Apache License v2.0]: http://www.apache.org/licenses/LICENSE-2.0
+[CC BY 3.0]: http://creativecommons.org/licenses/by/3.0/
