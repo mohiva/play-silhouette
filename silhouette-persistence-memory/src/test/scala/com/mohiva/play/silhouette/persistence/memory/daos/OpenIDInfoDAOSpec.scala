@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.persistence.daos
+package com.mohiva.play.silhouette.persistence.memory.daos
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.impl.providers.OAuth1Info
+import com.mohiva.play.silhouette.impl.providers.OpenIDInfo
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.control.NoLanguageFeatures
 import org.specs2.mutable.Specification
@@ -27,9 +27,9 @@ import scala.concurrent.duration._
 import scala.language.postfixOps
 
 /**
- * Test case for the [[OAuth1InfoDAO]] class.
+ * Test case for the [[OpenIDInfoDAO]] class.
  */
-class OAuth1InfoDAOSpec(implicit ev: ExecutionEnv) extends Specification with NoLanguageFeatures {
+class OpenIDInfoDAOSpec(implicit ev: ExecutionEnv) extends Specification with NoLanguageFeatures {
 
   "The `find` method" should {
     "find an OAuth1 info for the given login info" in new Context {
@@ -52,7 +52,7 @@ class OAuth1InfoDAOSpec(implicit ev: ExecutionEnv) extends Specification with No
 
   "The `update` method" should {
     "update an existing OAuth1 info" in new Context {
-      val updatedInfo = authInfo.copy(secret = "updated")
+      val updatedInfo = authInfo.copy(attributes = authInfo.attributes.updated("fullname", "updated"))
 
       dao.update(loginInfo, updatedInfo) must beEqualTo(updatedInfo).await
       dao.find(loginInfo) must beSome(updatedInfo).await
@@ -66,7 +66,7 @@ class OAuth1InfoDAOSpec(implicit ev: ExecutionEnv) extends Specification with No
     }
 
     "update an existing OAuth1 info" in new Context {
-      val updatedInfo = authInfo.copy(secret = "updated")
+      val updatedInfo = authInfo.copy(attributes = authInfo.attributes.updated("fullname", "updated"))
 
       dao.update(loginInfo, updatedInfo) must beEqualTo(updatedInfo).await
       dao.find(loginInfo) must beSome(updatedInfo).await
@@ -88,16 +88,20 @@ class OAuth1InfoDAOSpec(implicit ev: ExecutionEnv) extends Specification with No
     /**
      * The OAuth1 info DAO implementation.
      */
-    lazy val dao = new OAuth1InfoDAO
+    lazy val dao = new OpenIDInfoDAO
 
     /**
      * A login info.
      */
-    lazy val loginInfo = LoginInfo("provider", "6253282")
+    lazy val loginInfo = LoginInfo("provider", "https://me.yahoo.com/a/Xs6hPjazdrMvmbn4jhQjkjkhcasdGdsKajq9we")
 
     /**
      * A OAuth1 info.
      */
-    lazy val authInfo = OAuth1Info("my.token", "my.consumer.secret")
+    lazy val authInfo = OpenIDInfo("https://me.yahoo.com/a/Xs6hPjazdrMvmbn4jhQjkjkhcasdGdsKajq9we", Map(
+      "fullname" -> "Apollonia Vanova",
+      "email" -> "apollonia.vanova@watchmen.com",
+      "image" -> "https://s.yimg.com/dh/ap/social/profile/profile_b48.png"
+    ))
   }
 }

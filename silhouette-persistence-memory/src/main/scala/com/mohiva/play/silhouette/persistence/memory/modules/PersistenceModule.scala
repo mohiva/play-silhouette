@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.persistence.modules
+package com.mohiva.play.silhouette.persistence.memory.modules
 
 import com.google.inject.{ AbstractModule, Provides }
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.PasswordInfo
 import com.mohiva.play.silhouette.impl.providers.{ OAuth1Info, OAuth2Info, OpenIDInfo }
 import com.mohiva.play.silhouette.persistence.daos._
+import com.mohiva.play.silhouette.persistence.memory.daos.{ PasswordInfoDAO, OpenIDInfoDAO, OAuth2InfoDAO, OAuth1InfoDAO }
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
 import net.codingwell.scalaguice.ScalaModule
 
