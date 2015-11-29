@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.persistence.daos
+package com.mohiva.play.silhouette.persistence.memory.daos
 
-import com.mohiva.play.silhouette.impl.providers.OAuth1Info
+import com.mohiva.play.silhouette.api.util.PasswordInfo
+import com.mohiva.play.silhouette.persistence.daos.InMemoryAuthInfoDAO
 
 /**
- * The DAO to persist the OAuth1 information.
+ * The DAO to persist the password information.
  *
  * Note: Not thread safe, demo only.
  */
-class OAuth1InfoDAO extends InMemoryAuthInfoDAO[OAuth1Info]
+class PasswordInfoDAO extends InMemoryAuthInfoDAO[PasswordInfo]

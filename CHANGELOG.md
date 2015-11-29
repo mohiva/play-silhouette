@@ -12,6 +12,7 @@
   - silhouette-password-bcrypt -> contains BCrypt password hasher
   - silhouette-persistence -> contains base implementations for the persistence layer
   - silhouette-persistence-memory -> in-memory implementation of the persistence layer
+- Use request extractors to find authenticator values in other parts of the request
 
 ## 3.0 (2015-07-14)
 
