@@ -33,7 +33,12 @@ import scala.concurrent.{ ExecutionContext, Future }
  * @param service The Play Framework OAuth implementation.
  * @param settings The service settings.
  */
-class PlayOAuth1Service(service: OAuth, settings: OAuth1Settings) extends OAuth1Service with Logger {
+class PlayOAuth1Service(service: OAuth, val settings: OAuth1Settings) extends OAuth1Service with Logger {
+
+  /**
+   * The type of this class.
+   */
+  override type Self = PlayOAuth1Service
 
   /**
    * Constructs the default Play Framework OAuth implementation.
@@ -97,6 +102,16 @@ class PlayOAuth1Service(service: OAuth, settings: OAuth1Settings) extends OAuth1
    */
   override def sign(oAuthInfo: OAuth1Info): WSSignatureCalculator = {
     OAuthCalculator(service.info.key, RequestToken(oAuthInfo.token, oAuthInfo.secret))
+  }
+
+  /**
+   * Gets a service initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the service initialized with new settings.
+   */
+  override def withSettings(f: (OAuth1Settings) => OAuth1Settings) = {
+    new PlayOAuth1Service(f(settings))
   }
 }
 

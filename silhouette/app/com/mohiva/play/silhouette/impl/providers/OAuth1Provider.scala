@@ -131,6 +131,11 @@ object OAuth1Provider {
 trait OAuth1Service {
 
   /**
+   * The type of the concrete implementation of this abstract type.
+   */
+  type Self <: OAuth1Service
+
+  /**
    * Indicates if the service uses the safer 1.0a specification which addresses the session fixation attack
    * identified in the OAuth Core 1.0 specification.
    *
@@ -175,6 +180,14 @@ trait OAuth1Service {
    * @return The signature calculator for the OAuth1 request.
    */
   def sign(oAuthInfo: OAuth1Info): WSSignatureCalculator
+
+  /**
+   * Gets a service initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the service initialized with new settings.
+   */
+  def withSettings(f: OAuth1Settings => OAuth1Settings): Self
 }
 
 /**

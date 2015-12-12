@@ -33,11 +33,13 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
 
   "The `withSettings` method" should {
     "create a new instance with customized settings" in new WithApplication with Context {
-      val s = provider.withSettings { s =>
+      val overrideSettingsFunction: OAuth1Settings => OAuth1Settings = { s =>
         s.copy("new-request-token-url")
       }
+      val s = provider.withSettings(overrideSettingsFunction)
 
       s.settings.requestTokenURL must be equalTo "new-request-token-url"
+      there was one(oAuthService).withSettings(overrideSettingsFunction)
     }
   }
 

@@ -32,7 +32,12 @@ import scala.util.{ Failure, Success, Try }
  * @param client The OpenID client implementation.
  * @param settings The OpenID settings.
  */
-class PlayOpenIDService(client: OpenIdClient, settings: OpenIDSettings) extends OpenIDService {
+class PlayOpenIDService(val client: OpenIdClient, val settings: OpenIDSettings) extends OpenIDService {
+
+  /**
+   * The type of this class.
+   */
+  override type Self = PlayOpenIDService
 
   /**
    * Retrieve the URL where the user should be redirected to start the OpenID authentication process.
@@ -64,5 +69,15 @@ class PlayOpenIDService(client: OpenIdClient, settings: OpenIDSettings) extends 
   } match {
     case Success(f) => f
     case Failure(e) => Future.failed(e)
+  }
+
+  /**
+   * Gets a service initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the service initialized with new settings.
+   */
+  override def withSettings(f: (OpenIDSettings) => OpenIDSettings) = {
+    new PlayOpenIDService(client, f(settings))
   }
 }

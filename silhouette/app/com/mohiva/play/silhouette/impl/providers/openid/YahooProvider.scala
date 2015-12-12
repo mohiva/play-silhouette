@@ -87,7 +87,7 @@ class YahooProfileParser extends SocialProfileParser[Unit, CommonSocialProfile, 
  */
 class YahooProvider(
   protected val httpLayer: HTTPLayer,
-  protected val service: OpenIDService,
+  val service: OpenIDService,
   val settings: OpenIDSettings)
   extends BaseYahooProvider with CommonSocialProfileBuilder {
 
@@ -107,7 +107,9 @@ class YahooProvider(
    * @param f A function which gets the settings passed and returns different settings.
    * @return An instance of the provider initialized with new settings.
    */
-  override def withSettings(f: (Settings) => Settings) = new YahooProvider(httpLayer, service, f(settings))
+  override def withSettings(f: (Settings) => Settings) = {
+    new YahooProvider(httpLayer, service.withSettings(f), f(settings))
+  }
 }
 
 /**

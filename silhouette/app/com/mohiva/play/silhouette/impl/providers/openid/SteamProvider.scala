@@ -82,7 +82,7 @@ class SteamProfileParser extends SocialProfileParser[Unit, CommonSocialProfile, 
  */
 class SteamProvider(
   protected val httpLayer: HTTPLayer,
-  protected val service: OpenIDService,
+  val service: OpenIDService,
   val settings: OpenIDSettings)
   extends BaseSteamProvider with CommonSocialProfileBuilder {
 
@@ -102,7 +102,9 @@ class SteamProvider(
    * @param f A function which gets the settings passed and returns different settings.
    * @return An instance of the provider initialized with new settings.
    */
-  override def withSettings(f: (Settings) => Settings) = new SteamProvider(httpLayer, service, f(settings))
+  override def withSettings(f: (Settings) => Settings) = {
+    new SteamProvider(httpLayer, service.withSettings(f), f(settings))
+  }
 }
 
 /**
