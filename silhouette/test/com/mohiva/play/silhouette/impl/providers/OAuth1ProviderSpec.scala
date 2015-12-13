@@ -18,6 +18,7 @@ package com.mohiva.play.silhouette.impl.providers
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth1Provider._
+import com.mohiva.play.silhouette.impl.providers.oauth1.services.PlayOAuth1Service
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
@@ -177,8 +178,9 @@ trait OAuth1ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
    * The OAuth1 service mock.
    */
   lazy val oAuthService: OAuth1Service = {
-    val s = mock[OAuth1Service]
+    val s = mock[PlayOAuth1Service]
     s.use10a returns true
+    s.withSettings(anyFunction1) returns s
     s
   }
 

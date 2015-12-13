@@ -107,7 +107,7 @@ class TwitterProfileParser extends SocialProfileParser[JsValue, CommonSocialProf
  */
 class TwitterProvider(
   protected val httpLayer: HTTPLayer,
-  protected val service: OAuth1Service,
+  val service: OAuth1Service,
   protected val tokenSecretProvider: OAuth1TokenSecretProvider,
   val settings: OAuth1Settings)
   extends BaseTwitterProvider with CommonSocialProfileBuilder {
@@ -129,7 +129,7 @@ class TwitterProvider(
    * @return An instance of the provider initialized with new settings.
    */
   override def withSettings(f: (Settings) => Settings) = {
-    new TwitterProvider(httpLayer, service, tokenSecretProvider, f(settings))
+    new TwitterProvider(httpLayer, service.withSettings(f), tokenSecretProvider, f(settings))
   }
 }
 

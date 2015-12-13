@@ -22,12 +22,22 @@ import org.specs2.specification.Scope
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.oauth.{ OAuth, RequestToken }
 import play.api.libs.ws.WSSignatureCalculator
-import play.api.test.PlaySpecification
+import play.api.test.{ WithApplication, PlaySpecification }
 
 /**
  * Test case for the [[PlayOAuth1Service]] class.
  */
 class PlayOAuth1ServiceSpec extends PlaySpecification with Mockito {
+
+  "The `withSettings` method" should {
+    "create a new instance with customized settings" in new WithApplication with Context {
+      val s = service.withSettings { s =>
+        s.copy("new-request-token-url")
+      }
+
+      s.settings.requestTokenURL must be equalTo "new-request-token-url"
+    }
+  }
 
   "The alternative constructor" should {
     "construct the service with the default Play Framework OAuth implementation" in new Context {

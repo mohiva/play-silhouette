@@ -112,7 +112,7 @@ class XingProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile
  */
 class XingProvider(
   protected val httpLayer: HTTPLayer,
-  protected val service: OAuth1Service,
+  val service: OAuth1Service,
   protected val tokenSecretProvider: OAuth1TokenSecretProvider,
   val settings: OAuth1Settings)
   extends BaseXingProvider with CommonSocialProfileBuilder {
@@ -134,7 +134,7 @@ class XingProvider(
    * @return An instance of the provider initialized with new settings.
    */
   override def withSettings(f: (Settings) => Settings) = {
-    new XingProvider(httpLayer, service, tokenSecretProvider, f(settings))
+    new XingProvider(httpLayer, service.withSettings(f), tokenSecretProvider, f(settings))
   }
 }
 

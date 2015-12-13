@@ -115,7 +115,7 @@ class LinkedInProfileParser extends SocialProfileParser[JsValue, CommonSocialPro
  */
 class LinkedInProvider(
   protected val httpLayer: HTTPLayer,
-  protected val service: OAuth1Service,
+  val service: OAuth1Service,
   protected val tokenSecretProvider: OAuth1TokenSecretProvider,
   val settings: OAuth1Settings)
   extends BaseLinkedInProvider with CommonSocialProfileBuilder {
@@ -137,7 +137,7 @@ class LinkedInProvider(
    * @return An instance of the provider initialized with new settings.
    */
   override def withSettings(f: (Settings) => Settings) = {
-    new LinkedInProvider(httpLayer, service, tokenSecretProvider, f(settings))
+    new LinkedInProvider(httpLayer, service.withSettings(f), tokenSecretProvider, f(settings))
   }
 }
 

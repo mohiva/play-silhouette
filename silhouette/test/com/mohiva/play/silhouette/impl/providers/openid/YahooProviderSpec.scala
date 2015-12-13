@@ -26,11 +26,13 @@ class YahooProviderSpec extends OpenIDProviderSpec {
 
   "The `withSettings` method" should {
     "create a new instance with customized settings" in new WithApplication with Context {
-      val s = provider.withSettings { s =>
+      val overrideSettingsFunction: OpenIDSettings => OpenIDSettings = { s =>
         s.copy("new-provider-url")
       }
+      val s = provider.withSettings(overrideSettingsFunction)
 
       s.settings.providerURL must be equalTo "new-provider-url"
+      there was one(openIDService).withSettings(overrideSettingsFunction)
     }
   }
 

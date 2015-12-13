@@ -95,6 +95,11 @@ object OpenIDProvider {
 trait OpenIDService {
 
   /**
+   * The type of the concrete implementation of this abstract type.
+   */
+  type Self <: OpenIDService
+
+  /**
    * Retrieve the URL where the user should be redirected to start the OpenID authentication process.
    *
    * @param openID The OpenID to use for authentication.
@@ -113,6 +118,14 @@ trait OpenIDService {
    * @return A OpenIDInfo in case of success, Exception otherwise.
    */
   def verifiedID[B](implicit request: Request[B], ec: ExecutionContext): Future[OpenIDInfo]
+
+  /**
+   * Gets a service initialized with a new settings object.
+   *
+   * @param f A function which gets the settings passed and returns different settings.
+   * @return An instance of the service initialized with new settings.
+   */
+  def withSettings(f: OpenIDSettings => OpenIDSettings): Self
 }
 
 /**
