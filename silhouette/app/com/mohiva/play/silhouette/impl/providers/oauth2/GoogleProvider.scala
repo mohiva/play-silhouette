@@ -51,7 +51,7 @@ trait BaseGoogleProvider extends OAuth2Provider {
   /**
    * Defines the URLs that are needed to retrieve the profile data.
    */
-  override protected val urls = Map("api" -> API)
+  override protected val urls = Map("api" -> settings.apiURL.getOrElse(API))
 
   /**
    * Builds the social profile.
@@ -82,7 +82,7 @@ class GoogleProfileParser extends SocialProfileParser[JsValue, CommonSocialProfi
   /**
    * Parses the social profile.
    *
-   * @param json The content returned from the provider.
+   * @param json     The content returned from the provider.
    * @param authInfo The auth info to query the provider again for additional data.
    * @return The social profile from given result.
    */
@@ -114,9 +114,9 @@ class GoogleProfileParser extends SocialProfileParser[JsValue, CommonSocialProfi
 /**
  * The Google OAuth2 Provider.
  *
- * @param httpLayer The HTTP layer implementation.
+ * @param httpLayer     The HTTP layer implementation.
  * @param stateProvider The state provider implementation.
- * @param settings The provider settings.
+ * @param settings      The provider settings.
  */
 class GoogleProvider(
   protected val httpLayer: HTTPLayer,

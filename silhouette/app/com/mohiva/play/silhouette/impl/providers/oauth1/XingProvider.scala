@@ -49,7 +49,7 @@ trait BaseXingProvider extends OAuth1Provider {
   /**
    * Defines the URLs that are needed to retrieve the profile data.
    */
-  override protected val urls = Map("api" -> API)
+  override protected val urls = Map("api" -> settings.apiURL.getOrElse(API))
 
   /**
    * Builds the social profile.
@@ -79,7 +79,7 @@ class XingProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile
   /**
    * Parses the social profile.
    *
-   * @param json The content returned from the provider.
+   * @param json     The content returned from the provider.
    * @param authInfo The auth info to query the provider again for additional data.
    * @return The social profile from given result.
    */
@@ -105,10 +105,10 @@ class XingProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile
 /**
  * The Xing OAuth1 Provider.
  *
- * @param httpLayer The HTTP layer implementation.
- * @param service The OAuth1 service implementation.
+ * @param httpLayer           The HTTP layer implementation.
+ * @param service             The OAuth1 service implementation.
  * @param tokenSecretProvider The OAuth1 token secret provider implementation.
- * @param settings The OAuth1 provider settings.
+ * @param settings            The OAuth1 provider settings.
  */
 class XingProvider(
   protected val httpLayer: HTTPLayer,

@@ -73,6 +73,21 @@ class XingProviderSpec extends OAuth1ProviderSpec {
       }
     }
 
+    "use the overridden API URL" in new WithApplication with Context {
+      val url = "https://custom.api.url"
+      val requestHolder = mock[WSRequest]
+      val response = mock[WSResponse]
+      oAuthSettings.apiURL returns Some(url)
+      requestHolder.sign(any) returns requestHolder
+      requestHolder.get() returns Future.successful(response)
+      response.json returns Helper.loadJson("providers/oauth1/xing.success.json")
+      httpLayer.url(url) returns requestHolder
+
+      await(provider.retrieveProfile(oAuthInfo))
+
+      there was one(httpLayer.url(url))
+    }
+
     "return the social profile" in new WithApplication with Context {
       val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]

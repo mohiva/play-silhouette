@@ -37,11 +37,11 @@ import scala.util.{ Failure, Success, Try }
 /**
  * The Oauth2 info.
  *
- * @param accessToken The access token.
- * @param tokenType The token type.
- * @param expiresIn The number of seconds before the token expires.
+ * @param accessToken  The access token.
+ * @param tokenType    The token type.
+ * @param expiresIn    The number of seconds before the token expires.
  * @param refreshToken The refresh token.
- * @param params Additional params transported in conjunction with the token.
+ * @param params       Additional params transported in conjunction with the token.
  */
 case class OAuth2Info(
   accessToken: String,
@@ -137,7 +137,7 @@ trait OAuth2Provider extends SocialProvider with Logger {
   /**
    * Gets the access token.
    *
-   * @param code The access code.
+   * @param code    The access code.
    * @param request The current request.
    * @return The info containing the access token.
    */
@@ -238,7 +238,7 @@ trait OAuth2StateProvider {
    * Builds the state.
    *
    * @param request The current request.
-   * @param ec The execution context to handle the asynchronous operations.
+   * @param ec      The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return The build state.
    */
@@ -248,7 +248,7 @@ trait OAuth2StateProvider {
    * Validates the provider and the client state.
    *
    * @param request The current request.
-   * @param ec The execution context to handle the asynchronous operations.
+   * @param ec      The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return The state on success, otherwise an failure.
    */
@@ -257,8 +257,8 @@ trait OAuth2StateProvider {
   /**
    * Publishes the state to the client.
    *
-   * @param result The result to send to the client.
-   * @param state The state to publish.
+   * @param result  The result to send to the client.
+   * @param state   The state to publish.
    * @param request The current request.
    * @tparam B The type of the request body.
    * @return The result to send to the client.
@@ -269,21 +269,25 @@ trait OAuth2StateProvider {
 /**
  * The OAuth2 settings.
  *
- * @param authorizationURL The authorization URL provided by the OAuth provider.
- * @param accessTokenURL The access token URL provided by the OAuth provider.
- * @param redirectURL The redirect URL to the application after a successful authentication on the OAuth provider.
- *                    The URL can be a relative path which will be resolved against the current request's host.
- * @param clientID The client ID provided by the OAuth provider.
- * @param clientSecret The client secret provided by the OAuth provider.
- * @param scope The OAuth2 scope parameter provided by the OAuth provider.
+ * @param authorizationURL    The authorization URL provided by the OAuth provider.
+ * @param accessTokenURL      The access token URL provided by the OAuth provider.
+ * @param redirectURL         The redirect URL to the application after a successful authentication on the OAuth
+ *                            provider. The URL can be a relative path which will be resolved against the current
+ *                            request's host.
+ * @param apiURL              The URL to fetch the profile from the API. Can be used to override the default URL
+ *                            hardcoded in every provider implementation.
+ * @param clientID            The client ID provided by the OAuth provider.
+ * @param clientSecret        The client secret provided by the OAuth provider.
+ * @param scope               The OAuth2 scope parameter provided by the OAuth provider.
  * @param authorizationParams Additional params to add to the authorization request.
- * @param accessTokenParams Additional params to add to the access token request.
- * @param customProperties A map of custom properties for the different providers.
+ * @param accessTokenParams   Additional params to add to the access token request.
+ * @param customProperties    A map of custom properties for the different providers.
  */
 case class OAuth2Settings(
   authorizationURL: Option[String] = None,
   accessTokenURL: String,
   redirectURL: String,
+  apiURL: Option[String] = None,
   clientID: String,
   clientSecret: String,
   scope: Option[String] = None,
