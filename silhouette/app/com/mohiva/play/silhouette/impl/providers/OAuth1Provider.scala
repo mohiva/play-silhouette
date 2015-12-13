@@ -150,7 +150,7 @@ trait OAuth1Service {
    * Retrieves the request info and secret.
    *
    * @param callbackURL The URL where the provider should redirect to (usually a URL on the current app).
-   * @param ec The execution context to handle the asynchronous operations.
+   * @param ec          The execution context to handle the asynchronous operations.
    * @return A OAuth1Info in case of success, Exception otherwise.
    */
   def retrieveRequestToken(callbackURL: String)(implicit ec: ExecutionContext): Future[OAuth1Info]
@@ -159,7 +159,7 @@ trait OAuth1Service {
    * Exchange a request info for an access info.
    *
    * @param oAuthInfo The info/secret pair obtained from a previous call.
-   * @param verifier A string you got through your user with redirection.
+   * @param verifier  A string you got through your user with redirection.
    * @param ec The execution context to handle the asynchronous operations.
    * @return A OAuth1Info in case of success, Exception otherwise.
    */
@@ -235,9 +235,9 @@ trait OAuth1TokenSecretProvider {
   /**
    * Builds the secret from OAuth info.
    *
-   * @param info The OAuth info returned from the provider.
+   * @param info    The OAuth info returned from the provider.
    * @param request The current request.
-   * @param ec The execution context to handle the asynchronous operations.
+   * @param ec      The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return The build secret.
    */
@@ -247,7 +247,7 @@ trait OAuth1TokenSecretProvider {
    * Retrieves the token secret.
    *
    * @param request The current request.
-   * @param ec The execution context to handle the asynchronous operations.
+   * @param ec      The execution context to handle the asynchronous operations.
    * @tparam B The type of the request body.
    * @return A secret on success, otherwise an failure.
    */
@@ -256,8 +256,8 @@ trait OAuth1TokenSecretProvider {
   /**
    * Publishes the secret to the client.
    *
-   * @param result The result to send to the client.
-   * @param secret The secret to publish.
+   * @param result  The result to send to the client.
+   * @param secret  The secret to publish.
    * @param request The current request.
    * @tparam B The type of the request body.
    * @return The result to send to the client.
@@ -268,26 +268,30 @@ trait OAuth1TokenSecretProvider {
 /**
  * The OAuth1 settings.
  *
- * @param requestTokenURL The request token URL provided by the OAuth provider.
- * @param accessTokenURL The access token URL provided by the OAuth provider.
+ * @param requestTokenURL  The request token URL provided by the OAuth provider.
+ * @param accessTokenURL   The access token URL provided by the OAuth provider.
  * @param authorizationURL The authorization URL provided by the OAuth provider.
- * @param callbackURL The callback URL to the application after a successful authentication on the OAuth provider.
- *                    The URL can be a relative path which will be resolved against the current request's host.
- * @param consumerKey The consumer ID provided by the OAuth provider.
- * @param consumerSecret The consumer secret provided by the OAuth provider.
+ * @param callbackURL      The callback URL to the application after a successful authentication on the OAuth
+ *                         provider. The URL can be a relative path which will be resolved against the current
+ *                         request's host.
+ * @param apiURL           The URL to fetch the profile from the API. Can be used to override the default URL
+ *                         hardcoded in every provider implementation.
+ * @param consumerKey      The consumer ID provided by the OAuth provider.
+ * @param consumerSecret   The consumer secret provided by the OAuth provider.
  */
 case class OAuth1Settings(
   requestTokenURL: String,
   accessTokenURL: String,
   authorizationURL: String,
   callbackURL: String,
+  apiURL: Option[String] = None,
   consumerKey: String,
   consumerSecret: String)
 
 /**
  * The OAuth1 details.
  *
- * @param token The consumer token.
+ * @param token  The consumer token.
  * @param secret The consumer secret.
  */
 case class OAuth1Info(token: String, secret: String) extends AuthInfo

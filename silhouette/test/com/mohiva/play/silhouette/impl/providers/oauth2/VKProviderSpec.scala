@@ -103,6 +103,20 @@ class VKProviderSpec extends OAuth2ProviderSpec {
       }
     }
 
+    "use the overridden API URL" in new WithApplication with Context {
+      val url = "https://custom.api.url?access_token=%s"
+      val requestHolder = mock[WSRequest]
+      val response = mock[WSResponse]
+      oAuthSettings.apiURL returns Some(url)
+      response.json returns Helper.loadJson("providers/oauth2/vk.success.json")
+      requestHolder.get() returns Future.successful(response)
+      httpLayer.url(url.format("my.access.token")) returns requestHolder
+
+      await(provider.retrieveProfile(oAuthInfo.as[OAuth2Info]))
+
+      there was one(httpLayer.url(url.format("my.access.token")))
+    }
+
     "return the social profile with email" in new WithApplication with Context {
       val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]

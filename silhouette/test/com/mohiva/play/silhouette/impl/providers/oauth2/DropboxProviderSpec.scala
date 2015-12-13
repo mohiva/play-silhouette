@@ -108,6 +108,23 @@ class DropboxProviderSpec extends OAuth2ProviderSpec {
       }
     }
 
+    "use the overridden API URL" in new WithApplication with Context {
+      val url = "https://custom.api.url"
+      val authInfo = oAuthInfo.as[OAuth2Info]
+      val requestHolder = mock[WSRequest]
+      val response = mock[WSResponse]
+      oAuthSettings.apiURL returns Some(url)
+      response.status returns 200
+      response.json returns Helper.loadJson("providers/oauth2/dropbox.success.json")
+      requestHolder.withHeaders(AUTHORIZATION -> s"Bearer ${authInfo.accessToken}") returns requestHolder
+      requestHolder.get() returns Future.successful(response)
+      httpLayer.url(url) returns requestHolder
+
+      await(provider.retrieveProfile(authInfo))
+
+      there was one(httpLayer.url(url))
+    }
+
     "return the social profile" in new WithApplication with Context {
       val authInfo = oAuthInfo.as[OAuth2Info]
       val requestHolder = mock[WSRequest]

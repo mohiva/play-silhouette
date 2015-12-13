@@ -77,14 +77,13 @@ class ClefProviderSpec extends OAuth2ProviderSpec {
 
   "The `retrieveProfile` method" should {
     "fail with ProfileRetrievalException if API returns error" in new WithApplication with Context {
-      val authInfo = oAuthInfo.as[OAuth2Info]
       val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       response.json returns Helper.loadJson("providers/oauth2/clef.error.json")
       requestHolder.get() returns Future.successful(response)
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      failed[ProfileRetrievalException](provider.retrieveProfile(authInfo)) {
+      failed[ProfileRetrievalException](provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
         case e => e.getMessage must equalTo(SpecifiedProfileError.format(
           provider.id,
           "Invalid token."))
@@ -92,20 +91,32 @@ class ClefProviderSpec extends OAuth2ProviderSpec {
     }
 
     "fail with ProfileRetrievalException if an unexpected error occurred" in new WithApplication with Context {
-      val authInfo = oAuthInfo.as[OAuth2Info]
       val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       response.json throws new RuntimeException("")
       requestHolder.get() returns Future.successful(response)
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      failed[ProfileRetrievalException](provider.retrieveProfile(authInfo)) {
+      failed[ProfileRetrievalException](provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
         case e => e.getMessage must equalTo(UnspecifiedProfileError.format(provider.id))
       }
     }
 
+    "use the overridden API URL" in new WithApplication with Context {
+      val url = "https://custom.api.url?access_token=%s"
+      val requestHolder = mock[WSRequest]
+      val response = mock[WSResponse]
+      oAuthSettings.apiURL returns Some(url)
+      response.json returns Helper.loadJson("providers/oauth2/clef.success.json")
+      requestHolder.get() returns Future.successful(response)
+      httpLayer.url(url.format("my.access.token")) returns requestHolder
+
+      await(provider.retrieveProfile(oAuthInfo.as[OAuth2Info]))
+
+      there was one(httpLayer.url(url.format("my.access.token")))
+    }
+
     "return the social profile" in new WithApplication with Context {
-      val authInfo = oAuthInfo.as[OAuth2Info]
       val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
       response.status returns 200
@@ -113,7 +124,7 @@ class ClefProviderSpec extends OAuth2ProviderSpec {
       requestHolder.get() returns Future.successful(response)
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      profile(provider.retrieveProfile(authInfo)) {
+      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
         case p =>
           p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, "12345"),
@@ -140,11 +151,11 @@ class ClefProviderSpec extends OAuth2ProviderSpec {
     /**
      * The OAuth2 settings.
      */
-    lazy val oAuthSettings = OAuth2Settings(
+    lazy val oAuthSettings = spy(OAuth2Settings(
       accessTokenURL = "https://clef.io/api/v1/authorize",
       redirectURL = "https://www.mohiva.com",
       clientID = "my.client.id",
-      clientSecret = "my.client.secret")
+      clientSecret = "my.client.secret"))
 
     /**
      * The provider to test.
