@@ -492,6 +492,29 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       there was one(repository).remove(authenticator.id)
     }
 
+    "renew an authenticator with custom claims" in new WithApplication with Context {
+      implicit val request = FakeRequest()
+      val now = new DateTime(2015, 2, 25, 19, 0, 0, 0)
+      val id = "new-test-id"
+
+      repository.remove(any) returns Future.successful(())
+      repository.add(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
+      idGenerator.generate returns Future.successful(id)
+      clock.now returns now
+
+      val result = service(Some(repository)).renew(authenticator.copy(customClaims = Some(customClaims)), Results.Ok)
+
+      unserialize(header(settings.fieldName, result).get)(settings).get must be equalTo authenticator.copy(
+        id = id,
+        expirationDateTime = clock.now + settings.authenticatorExpiry,
+        lastUsedDateTime = clock.now,
+        customClaims = Some(customClaims)
+      )
+
+      there was one(repository).add(any)
+      there was one(repository).remove(authenticator.id)
+    }
+
     "renew the authenticator and return the response with a new JWT if DAO is disabled" in new WithApplication with Context {
       implicit val request = FakeRequest()
       val now = new DateTime(2015, 2, 25, 19, 0, 0, 0)

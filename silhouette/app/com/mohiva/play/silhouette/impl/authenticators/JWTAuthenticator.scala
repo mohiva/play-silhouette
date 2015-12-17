@@ -359,7 +359,7 @@ class JWTAuthenticatorService(
    */
   override def renew(authenticator: JWTAuthenticator)(implicit request: RequestHeader): Future[String] = {
     repository.fold(Future.successful(()))(_.remove(authenticator.id)).flatMap { _ =>
-      create(authenticator.loginInfo).flatMap(init)
+      create(authenticator.loginInfo).map(_.copy(customClaims = authenticator.customClaims)).flatMap(init)
     }.recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
     }
