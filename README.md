@@ -5,6 +5,10 @@ Silhouette [![Maven Central](https://maven-badges.herokuapp.com/maven-central/co
 
 See [the project documentation] for more information.
 
+## Donation
+
+If you like the project, please consider to support my "[New MTB for spring]" campaign. This is your change to give something back.
+
 ## Support
 
 If you have question regarding Silhouette please use the [chat] or the [mailing list]. **Please do not use the issue tracker for questions!**
@@ -23,3 +27,4 @@ The code is licensed under [Apache License v2.0] and the documentation under [CC
 [contributing guide]: CONTRIBUTING.md
 [Apache License v2.0]: http://www.apache.org/licenses/LICENSE-2.0
 [CC BY 3.0]: http://creativecommons.org/licenses/by/3.0/
+[New MTB for spring]: http://blog.mohiva.com/2016/01/new-mtb-for-spring-campaign.html
