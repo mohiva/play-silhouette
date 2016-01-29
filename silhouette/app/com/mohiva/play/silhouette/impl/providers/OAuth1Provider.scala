@@ -31,7 +31,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 /**
  * Base implementation for all OAuth1 providers.
  */
-trait OAuth1Provider extends SocialProvider with Logger {
+trait OAuth1Provider extends SocialProvider with OAuth1Constants with Logger {
 
   /**
    * Check if services uses 1.0a specification because it address the session fixation attack identified
@@ -108,7 +108,7 @@ trait OAuth1Provider extends SocialProvider with Logger {
 /**
  * The OAuth1Provider companion object.
  */
-object OAuth1Provider {
+object OAuth1Provider extends OAuth1Constants {
 
   /**
    * The error messages.
@@ -116,10 +116,13 @@ object OAuth1Provider {
   val AuthorizationError = "[Silhouette][%s] Authorization server returned error: %s"
   val ErrorAccessToken = "[Silhouette][%s] Error retrieving access token"
   val ErrorRequestToken = "[Silhouette][%s] Error retrieving request token"
+}
 
-  /**
-   * The OAuth1 constants.
-   */
+/**
+ * The OAuth1 constants.
+ */
+trait OAuth1Constants {
+
   val Denied = "denied"
   val OAuthVerifier = "oauth_verifier"
   val OAuthToken = "oauth_token"
@@ -141,7 +144,6 @@ trait OAuth1Service {
    *
    * @see http://oauth.net/core/1.0a/
    * @see http://oauth.net/advisories/2009-1/
-   *
    * @return True if the services uses 1.0a specification, false otherwise.
    */
   def use10a: Boolean
