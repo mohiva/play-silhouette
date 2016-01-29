@@ -26,8 +26,8 @@ import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
-import play.api.libs.json._
 import play.api.libs.functional.syntax._
+import play.api.libs.json._
 import play.api.libs.ws.WSResponse
 import play.api.mvc._
 
@@ -53,7 +53,7 @@ case class OAuth2Info(
 /**
  * The Oauth2 info companion object.
  */
-object OAuth2Info {
+object OAuth2Info extends OAuth2Constants {
 
   /**
    * Converts the JSON into a [[com.mohiva.play.silhouette.impl.providers.OAuth2Info]] object.
@@ -71,7 +71,7 @@ object OAuth2Info {
 /**
  * Base implementation for all OAuth2 providers.
  */
-trait OAuth2Provider extends SocialProvider with Logger {
+trait OAuth2Provider extends SocialProvider with OAuth2Constants with Logger {
 
   /**
    * The type of the auth info.
@@ -170,7 +170,7 @@ trait OAuth2Provider extends SocialProvider with Logger {
 /**
  * The OAuth2Provider companion object.
  */
-object OAuth2Provider {
+object OAuth2Provider extends OAuth2Constants {
 
   /**
    * The error messages.
@@ -178,10 +178,13 @@ object OAuth2Provider {
   val AuthorizationURLUndefined = "[Silhouette][%s] Authorization URL is undefined"
   val AuthorizationError = "[Silhouette][%s] Authorization server returned error: %s"
   val InvalidInfoFormat = "[Silhouette][%s] Cannot build OAuth2Info because of invalid response format: %s"
+}
 
-  /**
-   * The OAuth2 constants.
-   */
+/**
+ * The OAuth2 constants.
+ */
+trait OAuth2Constants {
+
   val ClientID = "client_id"
   val ClientSecret = "client_secret"
   val RedirectURI = "redirect_uri"
@@ -204,6 +207,7 @@ object OAuth2Provider {
  * The OAuth2 state.
  *
  * This is to prevent the client for CSRF attacks as described in the OAuth2 RFC.
+ *
  * @see https://tools.ietf.org/html/rfc6749#section-10.12
  */
 trait OAuth2State {

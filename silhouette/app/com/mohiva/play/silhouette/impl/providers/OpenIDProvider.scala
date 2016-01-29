@@ -26,7 +26,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 /**
  * Base implementation for all OpenID providers.
  */
-trait OpenIDProvider extends SocialProvider with Logger {
+trait OpenIDProvider extends SocialProvider with OpenIDConstants with Logger {
 
   /**
    * The type of the auth info.
@@ -74,17 +74,20 @@ trait OpenIDProvider extends SocialProvider with Logger {
 /**
  * The OpenIDProvider companion object.
  */
-object OpenIDProvider {
+object OpenIDProvider extends OpenIDConstants {
 
   /**
    * The error messages.
    */
   val ErrorVerification = "[Silhouette][%s] Error verifying the ID: %s"
   val ErrorRedirectURL = "[Silhouette][%s] Error retrieving the redirect URL: %s"
+}
 
-  /**
-   * The OpenID constants.
-   */
+/**
+ * The OpenID constants.
+ */
+trait OpenIDConstants {
+
   val Mode = "openid.mode"
   val OpenID = "openID"
 }
