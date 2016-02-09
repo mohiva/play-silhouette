@@ -28,7 +28,7 @@ scripts/validate-format
 
 echo ""
 echo "Testing and generating documentation"
-scripts/sbt coverage test doc && scripts/sbt coverageAggregate
+scripts/sbt coverage test doc coverageAggregate
 
 echo ""
 echo "Build finished"
