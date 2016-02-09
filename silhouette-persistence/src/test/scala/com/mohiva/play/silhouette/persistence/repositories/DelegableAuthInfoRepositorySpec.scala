@@ -23,6 +23,7 @@ import com.mohiva.play.silhouette.api.{ AuthInfo, LoginInfo }
 import com.mohiva.play.silhouette.impl.providers.{ OAuth1Info, OAuth2Info }
 import com.mohiva.play.silhouette.persistence.daos.{ DelegableAuthInfoDAO, InMemoryAuthInfoDAO }
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository._
+import com.mohiva.play.silhouette.test.WaitPatience
 import net.codingwell.scalaguice.ScalaModule
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.control.NoLanguageFeatures
@@ -38,7 +39,7 @@ import scala.language.postfixOps
  * Test case for the [[DelegableAuthInfoRepository]] trait.
  */
 class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
-  extends Specification with Mockito with NoLanguageFeatures {
+  extends Specification with Mockito with NoLanguageFeatures with WaitPatience {
 
   "The `find` method" should {
     "delegate the PasswordInfo to the correct DAO" in new Context {
@@ -46,7 +47,7 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
 
       Await.result(passwordInfoDAO.add(loginInfo, passwordInfo), 10 seconds)
 
-      service.find[PasswordInfo](loginInfo) must beSome(passwordInfo).await
+      service.find[PasswordInfo](loginInfo) must beSome(passwordInfo).awaitWithPatience
       there was one(passwordInfoDAO).find(loginInfo)
     }
 
@@ -55,7 +56,7 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
 
       Await.result(oauth1InfoDAO.add(loginInfo, oauth1Info), 10 seconds)
 
-      service.find[OAuth1Info](loginInfo) must beSome(oauth1Info).await
+      service.find[OAuth1Info](loginInfo) must beSome(oauth1Info).awaitWithPatience
       there was one(oauth1InfoDAO).find(loginInfo)
     }
 
@@ -64,7 +65,7 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
 
       Await.result(oauth2InfoDAO.add(loginInfo, oauth2Info), 10 seconds)
 
-      service.find[OAuth2Info](loginInfo) must beSome(oauth2Info).await
+      service.find[OAuth2Info](loginInfo) must beSome(oauth2Info).awaitWithPatience
       there was one(oauth2InfoDAO).find(loginInfo)
     }
 
@@ -73,7 +74,7 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
 
       service.find[UnsupportedInfo](loginInfo) must throwA[ConfigurationException].like {
         case e => e.getMessage must startWith(FindError.format(classOf[UnsupportedInfo]))
-      }.await
+      }.awaitWithPatience
     }
   }
 
@@ -81,21 +82,21 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
     "delegate the PasswordInfo to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      service.add(loginInfo, passwordInfo) must beEqualTo(passwordInfo).await
+      service.add(loginInfo, passwordInfo) must beEqualTo(passwordInfo).awaitWithPatience
       there was one(passwordInfoDAO).add(loginInfo, passwordInfo)
     }
 
     "delegate the OAuth1Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      service.add(loginInfo, oauth1Info) must beEqualTo(oauth1Info).await
+      service.add(loginInfo, oauth1Info) must beEqualTo(oauth1Info).awaitWithPatience
       there was one(oauth1InfoDAO).add(loginInfo, oauth1Info)
     }
 
     "delegate the OAuth2Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      service.add(loginInfo, oauth2Info) must beEqualTo(oauth2Info).await
+      service.add(loginInfo, oauth2Info) must beEqualTo(oauth2Info).awaitWithPatience
       there was one(oauth2InfoDAO).add(loginInfo, oauth2Info)
     }
 
@@ -104,7 +105,7 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
 
       service.add(loginInfo, new UnsupportedInfo) must throwA[ConfigurationException].like {
         case e => e.getMessage must startWith(AddError.format(classOf[UnsupportedInfo]))
-      }.await
+      }.awaitWithPatience
     }
   }
 
@@ -112,21 +113,21 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
     "delegate the PasswordInfo to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      service.update(loginInfo, passwordInfo) must beEqualTo(passwordInfo).await
+      service.update(loginInfo, passwordInfo) must beEqualTo(passwordInfo).awaitWithPatience
       there was one(passwordInfoDAO).update(loginInfo, passwordInfo)
     }
 
     "delegate the OAuth1Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      service.update(loginInfo, oauth1Info) must beEqualTo(oauth1Info).await
+      service.update(loginInfo, oauth1Info) must beEqualTo(oauth1Info).awaitWithPatience
       there was one(oauth1InfoDAO).update(loginInfo, oauth1Info)
     }
 
     "delegate the OAuth2Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      service.update(loginInfo, oauth2Info) must beEqualTo(oauth2Info).await
+      service.update(loginInfo, oauth2Info) must beEqualTo(oauth2Info).awaitWithPatience
       there was one(oauth2InfoDAO).update(loginInfo, oauth2Info)
     }
 
@@ -135,7 +136,7 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
 
       service.update(loginInfo, new UnsupportedInfo) must throwA[ConfigurationException].like {
         case e => e.getMessage must startWith(UpdateError.format(classOf[UnsupportedInfo]))
-      }.await
+      }.awaitWithPatience
     }
   }
 
@@ -143,21 +144,21 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
     "delegate the PasswordInfo to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      service.save(loginInfo, passwordInfo) must beEqualTo(passwordInfo).await
+      service.save(loginInfo, passwordInfo) must beEqualTo(passwordInfo).awaitWithPatience
       there was one(passwordInfoDAO).save(loginInfo, passwordInfo)
     }
 
     "delegate the OAuth1Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      service.save(loginInfo, oauth1Info) must beEqualTo(oauth1Info).await
+      service.save(loginInfo, oauth1Info) must beEqualTo(oauth1Info).awaitWithPatience
       there was one(oauth1InfoDAO).save(loginInfo, oauth1Info)
     }
 
     "delegate the OAuth2Info to the correct DAO" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      service.save(loginInfo, oauth2Info) must beEqualTo(oauth2Info).await
+      service.save(loginInfo, oauth2Info) must beEqualTo(oauth2Info).awaitWithPatience
       there was one(oauth2InfoDAO).save(loginInfo, oauth2Info)
     }
 
@@ -166,7 +167,7 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
 
       service.save(loginInfo, new UnsupportedInfo) must throwA[ConfigurationException].like {
         case e => e.getMessage must startWith(SaveError.format(classOf[UnsupportedInfo]))
-      }.await
+      }.awaitWithPatience
     }
   }
 
@@ -176,7 +177,7 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
 
       Await.result(passwordInfoDAO.add(loginInfo, passwordInfo), 10 seconds)
 
-      service.remove[PasswordInfo](loginInfo) must beEqualTo(()).await
+      service.remove[PasswordInfo](loginInfo) must beEqualTo(()).awaitWithPatience
       there was one(passwordInfoDAO).remove(loginInfo)
     }
 
@@ -185,7 +186,7 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
 
       Await.result(oauth1InfoDAO.add(loginInfo, oauth1Info), 10 seconds)
 
-      service.remove[OAuth1Info](loginInfo) must beEqualTo(()).await
+      service.remove[OAuth1Info](loginInfo) must beEqualTo(()).awaitWithPatience
       there was one(oauth1InfoDAO).remove(loginInfo)
     }
 
@@ -194,7 +195,7 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
 
       Await.result(oauth2InfoDAO.add(loginInfo, oauth2Info), 10 seconds)
 
-      service.remove[OAuth2Info](loginInfo) must beEqualTo(()).await
+      service.remove[OAuth2Info](loginInfo) must beEqualTo(()).awaitWithPatience
       there was one(oauth2InfoDAO).remove(loginInfo)
     }
 
@@ -203,7 +204,7 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
 
       service.remove[UnsupportedInfo](loginInfo) must throwA[ConfigurationException].like {
         case e => e.getMessage must startWith(RemoveError.format(classOf[UnsupportedInfo]))
-      }.await
+      }.awaitWithPatience
     }
   }
 

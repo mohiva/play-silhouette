@@ -17,6 +17,7 @@ package com.mohiva.play.silhouette.persistence.repositories
 
 import com.mohiva.play.silhouette.api.StorableAuthenticator
 import com.mohiva.play.silhouette.api.util.CacheLayer
+import com.mohiva.play.silhouette.test.WaitPatience
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.mock.Mockito
 import org.specs2.mutable.Specification
@@ -28,20 +29,20 @@ import scala.concurrent.duration.Duration
 /**
  * Test case for the [[CacheAuthenticatorRepository]] class.
  */
-class CacheAuthenticatorRepositorySpec(implicit ev: ExecutionEnv) extends Specification with Mockito {
+class CacheAuthenticatorRepositorySpec(implicit ev: ExecutionEnv) extends Specification with Mockito with WaitPatience {
 
   "The `find` method" should {
     "return value from cache" in new Context {
       cacheLayer.find[StorableAuthenticator]("test-id") returns Future.successful(Some(authenticator))
 
-      repository.find("test-id") must beSome(authenticator).await
+      repository.find("test-id") must beSome(authenticator).awaitWithPatience
       there was one(cacheLayer).find[StorableAuthenticator]("test-id")
     }
 
     "return None if value couldn't be found in cache" in new Context {
       cacheLayer.find[StorableAuthenticator]("test-id") returns Future.successful(None)
 
-      repository.find("test-id") must beNone.await
+      repository.find("test-id") must beNone.awaitWithPatience
       there was one(cacheLayer).find[StorableAuthenticator]("test-id")
     }
   }
@@ -51,7 +52,7 @@ class CacheAuthenticatorRepositorySpec(implicit ev: ExecutionEnv) extends Specif
       authenticator.id returns "test-id"
       cacheLayer.save("test-id", authenticator, Duration.Inf) returns Future.successful(authenticator)
 
-      repository.add(authenticator) must beEqualTo(authenticator).await
+      repository.add(authenticator) must beEqualTo(authenticator).awaitWithPatience
       there was one(cacheLayer).save("test-id", authenticator, Duration.Inf)
     }
   }
@@ -61,7 +62,7 @@ class CacheAuthenticatorRepositorySpec(implicit ev: ExecutionEnv) extends Specif
       authenticator.id returns "test-id"
       cacheLayer.save("test-id", authenticator, Duration.Inf) returns Future.successful(authenticator)
 
-      repository.update(authenticator) must beEqualTo(authenticator).await
+      repository.update(authenticator) must beEqualTo(authenticator).awaitWithPatience
       there was one(cacheLayer).save("test-id", authenticator, Duration.Inf)
     }
   }
@@ -70,7 +71,7 @@ class CacheAuthenticatorRepositorySpec(implicit ev: ExecutionEnv) extends Specif
     "remove value from cache" in new Context {
       cacheLayer.remove("test-id") returns Future.successful(())
 
-      repository.remove("test-id") must beEqualTo(()).await
+      repository.remove("test-id") must beEqualTo(()).awaitWithPatience
       there was one(cacheLayer).remove("test-id")
     }
   }

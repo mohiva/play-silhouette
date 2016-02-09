@@ -85,7 +85,7 @@ class XingProviderSpec extends OAuth1ProviderSpec {
 
       await(provider.retrieveProfile(oAuthInfo))
 
-      there was one(httpLayer.url(url))
+      there was one(httpLayer).url(url)
     }
 
     "return the social profile" in new WithApplication with Context {

@@ -122,7 +122,7 @@ class DropboxProviderSpec extends OAuth2ProviderSpec {
 
       await(provider.retrieveProfile(authInfo))
 
-      there was one(httpLayer.url(url))
+      there was one(httpLayer).url(url)
     }
 
     "return the social profile" in new WithApplication with Context {
