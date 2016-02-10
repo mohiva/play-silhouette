@@ -113,7 +113,7 @@ class ClefProviderSpec extends OAuth2ProviderSpec {
 
       await(provider.retrieveProfile(oAuthInfo.as[OAuth2Info]))
 
-      there was one(httpLayer.url(url.format("my.access.token")))
+      there was one(httpLayer).url(url.format("my.access.token"))
     }
 
     "return the social profile" in new WithApplication with Context {
