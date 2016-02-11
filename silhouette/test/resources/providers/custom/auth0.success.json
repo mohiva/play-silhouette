@@ -1,0 +1,5 @@
+{
+  "id_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NtLXRlc3QuZXUuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDU2YmIwODVmZGE1OTU4NjQwMjcyZmI5YSIsImF1ZCI6Im15SDM2eDZyMTh0TEhxRGxjR21FbGJTd1paZGdjUXpoIiwiZXhwIjoxNDU1MTMzOTkxLCJpYXQiOjE0NTUwOTc5OTF9.hH5Bim8NpVwnw0hEZ3psoq4pjrwbVBgXXh7udcvL8os",
+  "access_token": "uytvrlJcwrGtvejb",
+  "token_type": "bearer"
+}

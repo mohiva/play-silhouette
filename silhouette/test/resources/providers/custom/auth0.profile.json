@@ -1,0 +1,21 @@
+{
+  "email": "john@company.org",
+  "email_verified": true,
+  "clientID": "tSWS3Y1pFaFbY4v3hPwYa46TepGtg875",
+  "updated_at": "2016-02-10T11:05:23.689Z",
+  "picture": "https://s.gravatar.com/avatar/c1c49231ce863e5f33d7f42cd44632f4?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Flu.png",
+  "user_id": "auth0|56961100fc02d8a0339b1a2a",
+  "name": "john@company.org",
+  "nickname": "john",
+  "identities": [
+    {
+      "user_id": "56961100fc02d8a0339b1a2a",
+      "provider": "auth0",
+      "connection": "Username-Password-Authentication",
+      "isSocial": false
+    }
+  ],
+  "created_at": "2016-01-13T08:55:28.389Z",
+  "last_password_reset": "2016-02-08T11:14:20.663Z",
+  "sub": "auth0|56961100fc02d8a0339b1a2a"
+}
