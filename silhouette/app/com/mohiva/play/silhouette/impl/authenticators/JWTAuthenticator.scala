@@ -366,9 +366,9 @@ class JWTAuthenticatorService(
   }
 
   /**
-   * Renews an authenticator and teplaces the JWT header with a new one.
+   * Renews an authenticator and replaces the JWT header with a new one.
    *
-   * If a backing store is defined, the old authenticator will be revoked. After that it isn't
+   * If a backing store is defined, the old authenticator will be revoked. After that, it isn't
    * possible to use a JWT which was bound to this authenticator.
    *
    * @param authenticator The authenticator to update.
