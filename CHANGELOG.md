@@ -15,6 +15,9 @@
 - Use request extractors to find authenticator values in other parts of the request
 - Fix overriding settings method for Providers (thanks @felipefzdz)
 - Allow to override the API URL in the OAuth1 and OAuth2 providers
+- Allow to override authentication provider constants
+- Support for Auth0 authentication provider (thanks @lucamilanesio)
+- Issue #435: copy customClaims when renewing JWTToken (thanks @mizerlou)
 
 ## 3.0 (2015-07-14)
 
