@@ -5,6 +5,8 @@ libraryDependencies ++= Seq(
   Library.Play.ws,
   Library.jwtCore,
   Library.jwtApi,
+  Library.casClient,
+  Library.casClientSupportSAML,
   Library.Play.specs2 % Test,
   Library.Play.Specs2.matcherExtra % Test,
   Library.Play.Specs2.mock % Test,
