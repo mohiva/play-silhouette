@@ -12,6 +12,7 @@ import com.mohiva.play.silhouette.impl.providers.cas.CASProfileParser._
 import com.mohiva.play.silhouette.impl.providers.cas.CASProvider._
 import org.jasig.cas.client.authentication.AttributePrincipal
 import play.api.mvc.{ Result, Results }
+import scala.collection.JavaConversions._
 
 import scala.concurrent.Future
 import scala.util.Try
@@ -96,9 +97,13 @@ class CASProvider(protected val httpLayer: HTTPLayer, val settings: CASSettings,
 
 case class CASAuthInfo(ticket: String) extends AuthInfo
 
-trait CASProfileParser extends SocialProfileParser[AttributePrincipal, CommonSocialProfile, CASAuthInfo] {
+trait CASProfileParser extends SocialProfileParser[AttributePrincipal, CommonSocialProfile, CASAuthInfo] with Logger {
   def parse(principal: AttributePrincipal, authInfo: CASAuthInfo) = {
-    val attr = principal.getAttributes()
+    
+    val attr = principal.getAttributes
+    
+    logger.info("AttributePrincipal, attributes:")
+    attr.foreach(kv => logger.info("key: [$s], value: [$s]".format(kv._1, kv._2)))
 
     val locale = Option(attr.get(CASProvider.Locale).asInstanceOf[String]).map(new java.util.Locale(_))
     val gender = Option(attr.get(CASProvider.Gender).asInstanceOf[String]).map(Gender.withName)
