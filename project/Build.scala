@@ -23,7 +23,7 @@ object Build extends Build {
     id = "play-silhouette",
     base = file("silhouette")
   )
-
+  
   val silhouettePasswordBcrypt = Project(
     id = "play-silhouette-password-bcrypt",
     base = file("silhouette-password-bcrypt"),
@@ -41,13 +41,19 @@ object Build extends Build {
     base = file("silhouette-persistence-memory"),
     dependencies = Seq(silhouettePersistence)
   )
+  
+  val playSilhouetteCAS = Project(
+    id = "play-silhouette-cas",
+    base = file("silhouette-cas"),
+    dependencies = Seq(silhouette % "compile->compile;test->test")
+  )
 
   val silhouetteTestkit = Project(
     id = "play-silhouette-testkit",
     base = file("silhouette-testkit"),
     dependencies = Seq(silhouette)
   )
-
+  
   val root = Project(
     id = "root",
     base = file("."),
@@ -55,7 +61,8 @@ object Build extends Build {
       silhouette,
       silhouettePasswordBcrypt,
       silhouettePersistence,
-      silhouettePersistenceMemory,
+      silhouettePersistenceMemory,      
+      playSilhouetteCAS,
       silhouetteTestkit
     ),
     settings = Defaults.coreDefaultSettings ++

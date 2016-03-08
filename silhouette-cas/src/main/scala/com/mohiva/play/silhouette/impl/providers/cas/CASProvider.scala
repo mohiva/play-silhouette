@@ -1,3 +1,16 @@
+/**
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.mohiva.play.silhouette.impl.providers.cas
 
 import java.net.URL
@@ -18,13 +31,27 @@ import scala.concurrent.Future
 import scala.util.Try
 
 /**
- * @author nshaw
+ * Central Authentication Service Provider
+ * Enterprise Single Sign-On
+ * 
+ * @see http://jasig.github.io/cas
+ * @see https://github.com/Jasig/cas
  */
 class CASProvider(protected val httpLayer: HTTPLayer, val settings: CASSettings, client: CASClient)
   extends SocialProvider with CASProfileParser with CommonSocialProfileBuilder with Logger {
 
+  /**
+   * The provider ID.
+   */
   def id = ID
 
+  /**
+   * Starts the authentication process.
+   * 
+   * @param request The current request.
+   * @tparam B The type of the request body.
+   * @return Either a Result or the auth info from the provider.
+   */
   def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[Either[Result, CASAuthInfo]] = {
     validateSettings(settings)
 
@@ -95,30 +122,31 @@ class CASProvider(protected val httpLayer: HTTPLayer, val settings: CASSettings,
   override protected def urls: Map[String, String] = Map.empty
 }
 
+/**
+ * The CAS authentication information
+ */
 case class CASAuthInfo(ticket: String) extends AuthInfo
 
+/**
+ * The profile parser for the common 
+ */
 trait CASProfileParser extends SocialProfileParser[AttributePrincipal, CommonSocialProfile, CASAuthInfo] with Logger {
   def parse(principal: AttributePrincipal, authInfo: CASAuthInfo) = {
     
     val attr = principal.getAttributes
     
-    logger.info("AttributePrincipal, attributes:")
-    attr.foreach(kv => logger.info("key: [$s], value: [$s]".format(kv._1, kv._2)))
+    logger.debug("AttributePrincipal, attributes:")
+    attr.foreach(kv => logger.debug("key: [$s], value: [$s]".format(kv._1, kv._2)))
+    
+    val fName = Option(attr.get(CASProvider.FirstName).asInstanceOf[String])
+    val sName = Option(attr.get(CASProvider.LastName).asInstanceOf[String])
 
-    val locale = Option(attr.get(CASProvider.Locale).asInstanceOf[String]).map(new java.util.Locale(_))
-    val gender = Option(attr.get(CASProvider.Gender).asInstanceOf[String]).map(Gender.withName)
-
-    Future.successful(new CASProfile(
+    Future.successful(new CommonSocialProfile(
       LoginInfo(CASProvider.ID, attr.get(CASProvider.UserName).asInstanceOf[String]),
-      Option(attr.get(CASProvider.Email).asInstanceOf[String]),
-      Option(attr.get(CASProvider.FirstName).asInstanceOf[String]),
-      Option(attr.get(CASProvider.LastName).asInstanceOf[String]),
-      Option(attr.get(CASProvider.DisplayName).asInstanceOf[String]),
-      gender,
-      locale,
-      Option(attr.get(CASProvider.PictureURL).asInstanceOf[String]),
-      Option(attr.get(CASProvider.ProfileURL).asInstanceOf[String]),
-      Option(attr.get(CASProvider.Location).asInstanceOf[String])
+      firstName = fName,
+      lastName = sName,
+      email = Option(attr.get(CASProvider.Email).asInstanceOf[String]),
+      avatarURL = Option(attr.get(CASProvider.PictureURL).asInstanceOf[String])      
     ))
   }
 }
@@ -139,6 +167,17 @@ class CASProfile(
   val profileURL: Option[String],
   val location: Option[String]) extends CommonSocialProfile(loginInfo, firstName, lastName, displayName, email, pictureURL)
 
+/**
+ * The CAS settings
+ * 
+ * @param casURL The URL of the CAS server.
+ * @param redirectURL The URL the CAS server will redirect to.
+ * @param encoding Specifies the encoding charset the client should use.
+ * @param acceptAnyProxy Accept any proxy in a chain of proxies.
+ * @param samlTimeTolerance Adjust to accommodate clock drift between client/server, increasing tolerance has security consequences
+ * @param protocol The protocol supported by the CAS server @see CasProtocols
+ * 
+ */
 case class CASSettings(
   casURL: String,
   redirectURL: String,
@@ -155,7 +194,25 @@ object Gender extends Enumeration {
   val UNSPECIFIED = Value("UNSPECIFIED")
 }
 
-object CASProvider {
+/**
+ * The OAuth2Provider companion object.
+ */
+object CASProvider extends CASProviderConstants {
+  
+  /**
+   * The CAS error messages
+   */
+  val RedirectURLInvalid = "[Silhouette][%s] redirectURL setting [%s] is invalid"
+  val CASURLInvalid = "[Silhouette][%s] casUrl setting [%s] is invalid"
+  val TimeToleranceInvalid = "[Silhouette][%s] samlTimeTolerance setting [%s] must be positive"
+  val EncodingInvalid = "[Silhouette][%s] encoding setting [%s] cannot be empty"
+  val ProtocolInvalid = "[Silhouette][%s] protocol setting [%s] is invalid"
+}
+
+/**
+ * The CAS constants
+ */
+trait CASProviderConstants {
   val ID = "cas"
   val Email = "email"
   val FirstName = "first_name"
@@ -167,11 +224,4 @@ object CASProvider {
   val PictureURL = "picture_url"
   val ProfileURL = "profile_url"
   val Location = "location"
-
-  // Exception messages
-  val RedirectURLInvalid = "[Silhouette][%s] redirectURL setting [%s] is invalid"
-  val CASURLInvalid = "[Silhouette][%s] casUrl setting [%s] is invalid"
-  val TimeToleranceInvalid = "[Silhouette][%s] samlTimeTolerance setting [%s] must be positive"
-  val EncodingInvalid = "[Silhouette][%s] encoding setting [%s] cannot be empty"
-  val ProtocolInvalid = "[Silhouette][%s] protocol setting [%s] is invalid"
 }

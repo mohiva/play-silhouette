@@ -104,10 +104,8 @@ class CASProviderSpec extends SocialProviderSpec[CASAuthInfo] with Mockito with 
       } yield p
 
       await(futureProfile) must beLike[CommonSocialProfile] {
-        case profile => profile must be equalTo new CASProfile(new LoginInfo(CASProvider.ID, c.userName), Some(c.email),
-          Some(c.firstName), Some(c.lastName), Some(c.displayName),
-          Some(Gender.MALE), Some(new java.util.Locale(c.locale)),
-          Some(c.pictureURL), Some(c.profileURL), Some(c.location))
+        case profile => profile must be equalTo new CommonSocialProfile(new LoginInfo(CASProvider.ID, c.userName), 
+          Some(c.firstName), Some(c.lastName), None, Some(c.email), Some(c.pictureURL))
       }
     }
 
