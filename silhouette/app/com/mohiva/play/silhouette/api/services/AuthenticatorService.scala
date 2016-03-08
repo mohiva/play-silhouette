@@ -21,7 +21,7 @@ package com.mohiva.play.silhouette.api.services
 
 import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, ExecutionContextProvider }
 import com.mohiva.play.silhouette.api.{ Authenticator, LoginInfo }
-import play.api.libs.iteratee.Enumerator
+import play.api.http.HttpEntity
 import play.api.mvc._
 
 import scala.concurrent.Future
@@ -43,22 +43,17 @@ import scala.concurrent.Future
  *
  * @param result The result to wrap.
  */
-class AuthenticatorResult(result: Result) extends Result(result.header, result.body, result.connection) {
+class AuthenticatorResult(result: Result) extends Result(result.header, result.body) {
 
   /**
    * Creates a new copy of a `AuthenticatorResult`.
    *
    * @param header The response header, which contains status code and HTTP headers.
    * @param body The response body.
-   * @param connection The connection semantics to use.
    * @return A copy of a `AuthenticatorResult`.
    */
-  override def copy(
-    header: ResponseHeader = this.header,
-    body: Enumerator[Array[Byte]] = this.body,
-    connection: HttpConnection.Connection = this.connection) = {
-
-    AuthenticatorResult(super.copy(header, body, connection))
+  override def copy(header: ResponseHeader, body: HttpEntity) = {
+    AuthenticatorResult(super.copy(header, body))
   }
 }
 
