@@ -28,7 +28,7 @@ class AuthenticatorResultSpec extends PlaySpecification {
       val result = Results.Ok
       val authenticatorResult = AuthenticatorResult(result)
 
-      authenticatorResult.copy(result.header, result.body, result.connection) must beAnInstanceOf[AuthenticatorResult]
+      authenticatorResult.copy(result.header, result.body) must beAnInstanceOf[AuthenticatorResult]
     }
   }
 

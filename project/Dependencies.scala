@@ -37,23 +37,23 @@ object Dependencies {
       val test = "com.typesafe.play" %% "play-test" % version
       val specs2 = "com.typesafe.play" %% "play-specs2" % version
       object Specs2 {
-        private val version = "3.4"
+        private val version = "3.6.6"
         val matcherExtra = "org.specs2" %% "specs2-matcher-extra" % version
         val mock = "org.specs2" %% "specs2-mock" % version
       }
     }
 
     object Specs2 {
-      private val version = "3.6.5"
+      private val version = "3.6.6"
       val core = "org.specs2" %% "specs2-core" % version
       val matcherExtra = "org.specs2" %% "specs2-matcher-extra" % version
       val mock = "org.specs2" %% "specs2-mock" % version
     }
 
-    val jbcrypt = "org.mindrot" % "jbcrypt" % "0.3m"
-    val jwtCore = "com.atlassian.jwt" % "jwt-core" % "1.2.4"
-    val jwtApi = "com.atlassian.jwt" % "jwt-api" % "1.2.4"
-    val scalaGuice = "net.codingwell" %% "scala-guice" % "4.0.0"
-    val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % "2.3.10"
+    val jbcrypt = "de.svenkubiak" % "jBCrypt" % "0.4.1"
+    val jwtCore = "com.atlassian.jwt" % "jwt-core" % "1.5.8"
+    val jwtApi = "com.atlassian.jwt" % "jwt-api" % "1.5.8"
+    val scalaGuice = "net.codingwell" %% "scala-guice" % "4.0.1"
+    val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % "2.4.2"
   }
 }
