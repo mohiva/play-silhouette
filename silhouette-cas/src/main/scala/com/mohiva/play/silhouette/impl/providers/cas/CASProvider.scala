@@ -33,7 +33,7 @@ import scala.util.Try
 /**
  * Central Authentication Service Provider
  * Enterprise Single Sign-On
- * 
+ *
  * @see http://jasig.github.io/cas
  * @see https://github.com/Jasig/cas
  */
@@ -47,7 +47,7 @@ class CASProvider(protected val httpLayer: HTTPLayer, val settings: CASSettings,
 
   /**
    * Starts the authentication process.
-   * 
+   *
    * @param request The current request.
    * @tparam B The type of the request body.
    * @return Either a Result or the auth info from the provider.
@@ -128,16 +128,16 @@ class CASProvider(protected val httpLayer: HTTPLayer, val settings: CASSettings,
 case class CASAuthInfo(ticket: String) extends AuthInfo
 
 /**
- * The profile parser for the common 
+ * The profile parser for the common
  */
 trait CASProfileParser extends SocialProfileParser[AttributePrincipal, CommonSocialProfile, CASAuthInfo] with Logger {
   def parse(principal: AttributePrincipal, authInfo: CASAuthInfo) = {
-    
+
     val attr = principal.getAttributes
-    
+
     logger.debug("AttributePrincipal, attributes:")
     attr.foreach(kv => logger.debug("key: [$s], value: [$s]".format(kv._1, kv._2)))
-    
+
     val fName = Option(attr.get(CASProvider.FirstName).asInstanceOf[String])
     val sName = Option(attr.get(CASProvider.LastName).asInstanceOf[String])
 
@@ -146,7 +146,7 @@ trait CASProfileParser extends SocialProfileParser[AttributePrincipal, CommonSoc
       firstName = fName,
       lastName = sName,
       email = Option(attr.get(CASProvider.Email).asInstanceOf[String]),
-      avatarURL = Option(attr.get(CASProvider.PictureURL).asInstanceOf[String])      
+      avatarURL = Option(attr.get(CASProvider.PictureURL).asInstanceOf[String])
     ))
   }
 }
@@ -169,14 +169,14 @@ class CASProfile(
 
 /**
  * The CAS settings
- * 
+ *
  * @param casURL The URL of the CAS server.
  * @param redirectURL The URL the CAS server will redirect to.
  * @param encoding Specifies the encoding charset the client should use.
  * @param acceptAnyProxy Accept any proxy in a chain of proxies.
  * @param samlTimeTolerance Adjust to accommodate clock drift between client/server, increasing tolerance has security consequences
  * @param protocol The protocol supported by the CAS server @see CasProtocols
- * 
+ *
  */
 case class CASSettings(
   casURL: String,
@@ -198,7 +198,7 @@ object Gender extends Enumeration {
  * The OAuth2Provider companion object.
  */
 object CASProvider extends CASProviderConstants {
-  
+
   /**
    * The CAS error messages
    */
