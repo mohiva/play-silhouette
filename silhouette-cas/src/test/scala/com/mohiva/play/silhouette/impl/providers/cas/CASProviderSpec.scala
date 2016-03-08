@@ -109,19 +109,6 @@ class CASProviderSpec extends SocialProviderSpec[CASAuthInfo] with Mockito with 
       }
     }
 
-    //    "fail with a ProfileRetrievalException if service ticket can't be validated" in new WithApplication {
-    //
-    //      await(c.client.validateServiceTicket(c.ticket)) must throwA[TicketValidationException]
-    //
-    //      await(c.provider.retrieveProfile(c.authInfo)) must throwA[ProfileRetrievalException]
-    //    }
-    //
-    //    "fail with an UnknownHostException if the casURL is invalid." in new WithApplication {
-    //
-    //      await(c.realProvider.retrieveProfile(c.authInfo)) must throwA[ProfileRetrievalException]
-    //
-    //    }
-
   }
 
   protected def context: CASProviderSpecContext = new CASProviderSpecContext {}
