@@ -1,4 +1,6 @@
 /**
+ * Copyright 2015 Mohiva Organisation (license at mohiva dot com)
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -40,6 +42,12 @@ import scala.util.Try
 class CASProvider(protected val httpLayer: HTTPLayer, val settings: CASSettings, client: CASClient)
   extends SocialProvider with CASProfileParser with CommonSocialProfileBuilder with Logger {
 
+  type Content = AttributePrincipal
+
+  override type Self = CASProvider
+  override type A = CASAuthInfo
+  override type Settings = CASSettings
+
   /**
    * The provider ID.
    */
@@ -62,25 +70,6 @@ class CASProvider(protected val httpLayer: HTTPLayer, val settings: CASSettings,
     )
   }
 
-  private def validateSettings(settings: CASSettings) = {
-    if (validateURL(settings.redirectURL).isFailure)
-      throw new ConfigurationException(RedirectURLInvalid.format(id, settings.redirectURL))
-
-    if (validateURL(settings.casURL).isFailure)
-      throw new ConfigurationException(CASURLInvalid.format(id, settings.casURL))
-
-    if (!CasProtocols.isValid(settings.protocol))
-      throw new ConfigurationException(ProtocolInvalid.format(id, settings.protocol))
-
-    if (settings.samlTimeTolerance < 1L)
-      throw new ConfigurationException(TimeToleranceInvalid.format(id, settings.samlTimeTolerance))
-
-    if (settings.encoding.isEmpty())
-      throw new ConfigurationException(EncodingInvalid.format(id, settings.encoding))
-  }
-
-  private def validateURL(URL: String): Try[URL] = Try(new URL(URL))
-
   /**
    * Gets a provider initialized with a new settings object.
    *
@@ -91,11 +80,6 @@ class CASProvider(protected val httpLayer: HTTPLayer, val settings: CASSettings,
     val s = f(settings)
     new CASProvider(httpLayer, s, new CASClient(s))
   }
-
-  override type Self = CASProvider
-  override type A = CASAuthInfo
-  override type Settings = CASSettings
-  type Content = AttributePrincipal
 
   /**
    * Returns the profile parser implementation.
@@ -120,6 +104,25 @@ class CASProvider(protected val httpLayer: HTTPLayer, val settings: CASSettings,
    * Since profile retrieval is internal to the jasigcas implementation, we don't need any further URLs ourselves.
    */
   override protected def urls: Map[String, String] = Map.empty
+
+  private def validateSettings(settings: CASSettings) = {
+    if (validateURL(settings.redirectURL).isFailure)
+      throw new ConfigurationException(RedirectURLInvalid.format(id, settings.redirectURL))
+
+    if (validateURL(settings.casURL).isFailure)
+      throw new ConfigurationException(CASURLInvalid.format(id, settings.casURL))
+
+    if (!CasProtocols.isValid(settings.protocol))
+      throw new ConfigurationException(ProtocolInvalid.format(id, settings.protocol))
+
+    if (settings.samlTimeTolerance < 1L)
+      throw new ConfigurationException(TimeToleranceInvalid.format(id, settings.samlTimeTolerance))
+
+    if (settings.encoding.isEmpty())
+      throw new ConfigurationException(EncodingInvalid.format(id, settings.encoding))
+  }
+
+  private def validateURL(URL: String): Try[URL] = Try(new URL(URL))
 }
 
 /**
@@ -151,21 +154,15 @@ trait CASProfileParser extends SocialProfileParser[AttributePrincipal, CommonSoc
   }
 }
 
+/**
+ * The CASProfile parser companion object.
+ */
 object CASProfileParser {
+  /**
+   * Error messages
+   */
   val UnspecifiedProfileError = "[Silhouette][%s] error retrieving profile information: [%s]"
 }
-
-class CASProfile(
-  override val loginInfo: LoginInfo,
-  override val email: Option[String],
-  override val firstName: Option[String],
-  override val lastName: Option[String],
-  val displayName: Option[String],
-  val gender: Option[Gender.Value],
-  val locale: Option[Locale],
-  val pictureURL: Option[String],
-  val profileURL: Option[String],
-  val location: Option[String]) extends CommonSocialProfile(loginInfo, firstName, lastName, displayName, email, pictureURL)
 
 /**
  * The CAS settings
@@ -185,14 +182,6 @@ case class CASSettings(
   acceptAnyProxy: Boolean = false,
   samlTimeTolerance: Long = 1000L,
   protocol: String = CasProtocols.default)
-
-object Gender extends Enumeration {
-  type Gender = Value
-
-  val MALE = Value("MALE")
-  val FEMALE = Value("FEMALE")
-  val UNSPECIFIED = Value("UNSPECIFIED")
-}
 
 /**
  * The OAuth2Provider companion object.
