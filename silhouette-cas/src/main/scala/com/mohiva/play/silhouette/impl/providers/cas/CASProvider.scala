@@ -131,7 +131,7 @@ class CASProvider(protected val httpLayer: HTTPLayer, val settings: CASSettings,
 case class CASAuthInfo(ticket: String) extends AuthInfo
 
 /**
- * The profile parser for the common
+ * The profile parser for the [[CommonSocialProfile]]
  */
 trait CASProfileParser extends SocialProfileParser[AttributePrincipal, CommonSocialProfile, CASAuthInfo] with Logger {
   def parse(principal: AttributePrincipal, authInfo: CASAuthInfo) = {
