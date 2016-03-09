@@ -31,8 +31,8 @@ object BasicSettings extends AutoPlugin {
   override def trigger = allRequirements
 
   override def projectSettings = Seq(
-    organization := "com.mohiva",
-    version := "3.0.6",
+    organization := "com.trifectalabs",
+    version := "3.0.7",
     resolvers ++= Dependencies.resolvers,
     scalaVersion := Dependencies.Versions.scalaVersion,
     crossScalaVersions := Dependencies.Versions.crossScala,

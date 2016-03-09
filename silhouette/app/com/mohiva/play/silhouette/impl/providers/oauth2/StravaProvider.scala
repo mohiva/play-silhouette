@@ -95,7 +95,7 @@ class StravaProfileParser extends SocialProfileParser[JsValue, CommonSocialProfi
     val email = (json \ "email").asOpt[String]
 
     CommonSocialProfile(
-      loginInfo = LoginInfo(ID, userID),
+      loginInfo = LoginInfo(ID, email),
       firstName = firstName,
       lastName = lastName,
       fullName = fullName,
