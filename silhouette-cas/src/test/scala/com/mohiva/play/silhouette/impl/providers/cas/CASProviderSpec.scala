@@ -108,7 +108,6 @@ class CASProviderSpec extends SocialProviderSpec[CASAuthInfo] with Mockito with 
           Some(c.firstName), Some(c.lastName), None, Some(c.email), Some(c.pictureURL))
       }
     }
-
   }
 
   protected def context: CASProviderSpecContext = new CASProviderSpecContext {}
@@ -130,8 +129,6 @@ trait CASProviderSpecContext extends Scope with Mockito with ThrownExpectations 
   lazy val redirectURLWithOrigin: String = "$s/my/original/url".format(settings.redirectURL)
 
   lazy val client: CASClient = mock[CASClient]
-
-  //client expects newInstance(settings)
 
   lazy val realClient: CASClient = new CASClient(settings)
 
