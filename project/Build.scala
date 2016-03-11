@@ -42,6 +42,12 @@ object Build extends Build {
     dependencies = Seq(silhouettePersistence)
   )
 
+  val silhouetteCAS = Project(
+    id = "play-silhouette-cas",
+    base = file("silhouette-cas"),
+    dependencies = Seq(silhouette % "compile->compile;test->test")
+  )
+
   val silhouetteTestkit = Project(
     id = "play-silhouette-testkit",
     base = file("silhouette-testkit"),
@@ -56,6 +62,7 @@ object Build extends Build {
       silhouettePasswordBcrypt,
       silhouettePersistence,
       silhouettePersistenceMemory,
+      silhouetteCAS,
       silhouetteTestkit
     ),
     settings = Defaults.coreDefaultSettings ++
