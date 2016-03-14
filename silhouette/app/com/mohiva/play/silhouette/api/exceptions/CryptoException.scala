@@ -13,18 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.api.util
-
-import play.api.test._
+package com.mohiva.play.silhouette.api.exceptions
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.api.util.Crypt]] object.
+ * Indicates that a crypto operation error occurred.
+ *
+ * @param msg The exception message.
+ * @param cause The exception cause.
  */
-class CryptSpec extends PlaySpecification {
-
-  "The `sha1` method" should {
-    "create a SHA1 hash of a string" in {
-      Crypt.sha1("SÄÜ%&/($§QW@\\'Ä_:;>|§`´*~") must be equalTo "a87babacb5ef14f1f811527c2028706a55c56be5"
-    }
-  }
-}
+class CryptoException(msg: String, cause: Throwable = null)
+  extends SilhouetteException(msg, cause)

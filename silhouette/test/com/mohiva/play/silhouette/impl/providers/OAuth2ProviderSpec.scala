@@ -63,7 +63,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
         case Some(authorizationURL) =>
           implicit val req = FakeRequest(GET, "/")
 
-          c.state.serialize returns "session-value"
+          c.stateProvider.serialize(c.state) returns "session-value"
           c.stateProvider.build(any, any) returns Future.successful(c.state)
           c.oAuthSettings.authorizationURL returns None
 
@@ -81,19 +81,19 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           val sessionKey = "session-key"
           val sessionValue = "session-value"
 
-          c.state.serialize returns sessionValue
+          c.stateProvider.serialize(c.state) returns sessionValue
           c.stateProvider.build(any, any) returns Future.successful(c.state)
           c.stateProvider.publish(any, any)(any) answers { (a, m) =>
             val result = a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
-            val state = a.asInstanceOf[Array[Any]](1).asInstanceOf[OAuth2State]
+            val state = a.asInstanceOf[Array[Any]](1).asInstanceOf[c.TestState]
 
-            result.withSession(sessionKey -> state.serialize)
+            result.withSession(sessionKey -> c.stateProvider.serialize(state))
           }
 
           result(c.provider.authenticate()) {
             case result =>
               status(result) must equalTo(SEE_OTHER)
-              session(result).get(sessionKey) must beSome(c.state.serialize)
+              session(result).get(sessionKey) must beSome(c.stateProvider.serialize(c.state))
               redirectLocation(result) must beSome.which { url =>
                 val urlParams = c.urlParams(url)
                 val params = c.oAuthSettings.scope.foldLeft(List(
@@ -134,13 +134,13 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           req.secure returns secure
           c.oAuthSettings.redirectURL returns redirectURL
 
-          c.state.serialize returns sessionValue
+          c.stateProvider.serialize(c.state) returns sessionValue
           c.stateProvider.build(any, any) returns Future.successful(c.state)
           c.stateProvider.publish(any, any)(any) answers { (a, m) =>
             val result = a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
             val state = a.asInstanceOf[Array[Any]](1).asInstanceOf[OAuth2State]
 
-            result.withSession(sessionKey -> state.serialize)
+            result.withSession(sessionKey -> c.stateProvider.serialize(c.state))
           }
 
           result(c.provider.authenticate()) {
@@ -158,7 +158,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
         case Some(_) =>
           implicit val req = FakeRequest(GET, "/")
 
-          c.state.serialize returns ""
+          c.stateProvider.serialize(c.state) returns ""
           c.stateProvider.build(any, any) returns Future.successful(c.state)
           c.stateProvider.publish(any, any)(any) answers { (a, m) =>
             a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
@@ -232,7 +232,7 @@ trait OAuth2ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
    * The HTTP layer mock.
    */
   lazy val httpLayer = {
-    val m = mock[HTTPLayer]
+    val m = mock[HTTPLayer].smart
     m.executionContext returns defaultContext
     m
   }
@@ -249,12 +249,12 @@ trait OAuth2ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
   /**
    * The OAuth2 state.
    */
-  lazy val state: TestState = mock[TestState]
+  lazy val state = mock[TestState].smart
 
   /**
    * The OAuth2 state provider.
    */
-  lazy val stateProvider: TestStateProvider = mock[TestStateProvider]
+  lazy val stateProvider = mock[TestStateProvider].smart
 
   /**
    * The OAuth2 settings.

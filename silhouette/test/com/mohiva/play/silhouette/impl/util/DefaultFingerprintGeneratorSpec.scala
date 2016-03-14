@@ -15,7 +15,7 @@
  */
 package com.mohiva.play.silhouette.impl.util
 
-import com.mohiva.play.silhouette.api.util.Crypt
+import com.mohiva.play.silhouette.api.crypto.Hash
 import play.api.test.{ FakeRequest, PlaySpecification }
 
 /**
@@ -29,7 +29,7 @@ class DefaultFingerprintGeneratorSpec extends PlaySpecification {
       val generator = new DefaultFingerprintGenerator()
       implicit val request = FakeRequest().withHeaders(USER_AGENT -> userAgent)
 
-      generator.generate must be equalTo Crypt.sha1(userAgent + ":::")
+      generator.generate must be equalTo Hash.sha1(userAgent + ":::")
     }
 
     "return fingerprint including the `Accept-Language` header" in {
@@ -37,7 +37,7 @@ class DefaultFingerprintGeneratorSpec extends PlaySpecification {
       val generator = new DefaultFingerprintGenerator()
       implicit val request = FakeRequest().withHeaders(ACCEPT_LANGUAGE -> acceptLanguage)
 
-      generator.generate must be equalTo Crypt.sha1(":" + acceptLanguage + "::")
+      generator.generate must be equalTo Hash.sha1(":" + acceptLanguage + "::")
     }
 
     "return fingerprint including the `Accept-Charset` header" in {
@@ -45,14 +45,14 @@ class DefaultFingerprintGeneratorSpec extends PlaySpecification {
       val generator = new DefaultFingerprintGenerator()
       implicit val request = FakeRequest().withHeaders(ACCEPT_CHARSET -> acceptCharset)
 
-      generator.generate must be equalTo Crypt.sha1("::" + acceptCharset + ":")
+      generator.generate must be equalTo Hash.sha1("::" + acceptCharset + ":")
     }
 
     "return fingerprint including the remote address" in {
       val generator = new DefaultFingerprintGenerator(true)
       implicit val request = FakeRequest()
 
-      generator.generate must be equalTo Crypt.sha1(":::127.0.0.1")
+      generator.generate must be equalTo Hash.sha1(":::127.0.0.1")
     }
 
     "return fingerprint including all values" in {
@@ -66,7 +66,7 @@ class DefaultFingerprintGeneratorSpec extends PlaySpecification {
         ACCEPT_CHARSET -> acceptCharset
       )
 
-      generator.generate must be equalTo Crypt.sha1(
+      generator.generate must be equalTo Hash.sha1(
         userAgent + ":" + acceptLanguage + ":" + acceptCharset + ":127.0.0.1"
       )
     }

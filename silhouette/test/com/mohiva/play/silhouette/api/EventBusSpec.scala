@@ -15,11 +15,10 @@
  */
 package com.mohiva.play.silhouette.api
 
-import akka.actor.{ Actor, Props }
+import akka.actor.{ Actor, ActorSystem, Props }
 import akka.testkit.TestProbe
 import org.specs2.control.NoLanguageFeatures
 import org.specs2.specification.Scope
-import play.api.libs.concurrent.Akka
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
 import scala.concurrent.duration._
@@ -157,7 +156,7 @@ class EventBusSpec extends PlaySpecification with NoLanguageFeatures {
     /**
      * The Play actor system.
      */
-    lazy implicit val system = Akka.system
+    lazy implicit val system = app.injector.instanceOf[ActorSystem]
 
     /**
      * The test probe.

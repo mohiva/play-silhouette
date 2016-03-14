@@ -15,9 +15,13 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth2.state
 
-import com.mohiva.play.silhouette.api.util.{ Base64, Clock, IDGenerator }
+import java.util.regex.Pattern
+
+import com.mohiva.play.silhouette.api.crypto.{ Base64, CookieSigner }
+import com.mohiva.play.silhouette.api.util.{ Clock, IDGenerator }
 import com.mohiva.play.silhouette.impl.exceptions.OAuth2StateException
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
+import com.mohiva.play.silhouette.impl.providers.oauth2.state.CookieState._
 import com.mohiva.play.silhouette.impl.providers.oauth2.state.CookieStateProvider._
 import org.joda.time.DateTime
 import org.specs2.control.NoLanguageFeatures
@@ -28,9 +32,10 @@ import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ Cookie, Results }
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
-import scala.concurrent.duration._
 import scala.concurrent.Future
+import scala.concurrent.duration._
 import scala.language.postfixOps
+import scala.util.{ Failure, Success }
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.providers.oauth2.state.CookieState]] class.
@@ -48,12 +53,43 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers w
   }
 
   "The `serialize` method of the state" should {
-    "serialize the JSON as base64 encoded string" in new Context {
-      val dateTime = new DateTime(2014, 8, 8, 0, 0, 0)
-      val decoded = Base64.decode(state.copy(expirationDate = dateTime).serialize)
+    "sign the cookie" in new WithApplication with Context {
+      serialize(state, cookieSigner)
 
-      decoded must /("expirationDate" -> dateTime.getMillis.toDouble)
-      decoded must /("value" -> "value")
+      there was one(cookieSigner).sign(any)
+    }
+  }
+
+  "The `unserialize` method of the state" should {
+    "throw a OAuth2StateException if a state contains invalid json" in new WithApplication with Context {
+      val value = "invalid"
+      val msg = Pattern.quote(InvalidJson.format(value))
+
+      unserialize(Base64.encode(value), cookieSigner) must beFailedTry.withThrowable[OAuth2StateException](msg)
+    }
+
+    "throw an OAuth2StateException if a state contains valid json but invalid state" in new WithApplication with Context {
+      val value = "{ \"test\": \"test\" }"
+      val msg = "^" + Pattern.quote(InvalidStateFormat.format("")) + ".*"
+
+      unserialize(Base64.encode(value), cookieSigner) must beFailedTry.withThrowable[OAuth2StateException](msg)
+    }
+
+    "throw an OAuth2StateException if a state is badly signed" in new WithApplication with Context {
+      cookieSigner.extract(any) returns Failure(new Exception("Bad signature"))
+
+      val value = serialize(state, cookieSigner)
+      val msg = Pattern.quote(InvalidCookieSignature)
+
+      unserialize(Base64.encode(value), cookieSigner) must beFailedTry.withThrowable[OAuth2StateException](msg)
+    }
+  }
+
+  "The `serialize/unserialize` method of the state" should {
+    "serialize/unserialize a state" in new WithApplication with Context {
+      val serialized = serialize(state, cookieSigner)
+
+      unserialize(serialized, cookieSigner) must beSuccessfulTry.withValue(state)
     }
   }
 
@@ -74,77 +110,87 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers w
   }
 
   "The `validate` method of the provider" should {
-    "throw an StateException if client state doesn't exists" in new Context {
-      implicit val req = FakeRequest(GET, s"?$State=${state.serialize}")
+    "throw an OAuth2StateException if client state doesn't exists" in new Context {
+      implicit val req = FakeRequest(GET, s"?$State=${provider.serialize(state)}")
 
       await(provider.validate) must throwA[OAuth2StateException].like {
         case e => e.getMessage must startWith(ClientStateDoesNotExists.format(""))
       }
     }
 
-    "throw an StateException if provider state doesn't exists" in new WithApplication with Context {
-      implicit val req = FakeRequest(GET, "/").withCookies(Cookie(settings.cookieName, state.serialize))
+    "throw an OAuth2StateException if provider state doesn't exists" in new WithApplication with Context {
+      implicit val req = FakeRequest(GET, "/").withCookies(Cookie(settings.cookieName, provider.serialize(state)))
 
       await(provider.validate) must throwA[OAuth2StateException].like {
         case e => e.getMessage must startWith(ProviderStateDoesNotExists.format(""))
       }
     }
 
-    "throw an StateException if client state contains invalid json" in new WithApplication with Context {
+    "throw an OAuth2StateException if client state contains invalid json" in new WithApplication with Context {
       val invalidState = Base64.encode("{")
 
-      implicit val req = FakeRequest(GET, s"?$State=${state.serialize}").withCookies(Cookie(settings.cookieName, invalidState))
+      implicit val req = FakeRequest(GET, s"?$State=${provider.serialize(state)}").withCookies(Cookie(settings.cookieName, invalidState))
 
       await(provider.validate) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(InvalidStateFormat.format(""))
+        case e => e.getMessage must startWith(InvalidJson.format(""))
       }
     }
 
-    "throw an StateException if client state contains valid json but invalid state" in new WithApplication with Context {
+    "throw an OAuth2StateException if client state contains valid json but invalid state" in new WithApplication with Context {
       val invalidState = Base64.encode("{ \"test\": \"test\" }")
 
-      implicit val req = FakeRequest(GET, s"?$State=${state.serialize}").withCookies(Cookie(settings.cookieName, invalidState))
+      implicit val req = FakeRequest(GET, s"?$State=${provider.serialize(state)}").withCookies(Cookie(settings.cookieName, invalidState))
 
       await(provider.validate) must throwA[OAuth2StateException].like {
         case e => e.getMessage must startWith(InvalidStateFormat.format(""))
       }
     }
 
-    "throw an StateException if provider state contains invalid json" in new WithApplication with Context {
+    "throw an OAuth2StateException if client state is badly signed" in new WithApplication with Context {
+      cookieSigner.extract(any) returns Failure(new Exception("Bad signature"))
+
+      implicit val req = FakeRequest(GET, s"?$State=${provider.serialize(state)}").withCookies(Cookie(settings.cookieName, provider.serialize(state)))
+
+      await(provider.validate) must throwA[OAuth2StateException].like {
+        case e => e.getMessage must startWith(InvalidCookieSignature)
+      }
+    }
+
+    "throw an OAuth2StateException if provider state contains invalid json" in new WithApplication with Context {
       val invalidState = Base64.encode("{")
 
-      implicit val req = FakeRequest(GET, s"?$State=$invalidState").withCookies(Cookie(settings.cookieName, state.serialize))
+      implicit val req = FakeRequest(GET, s"?$State=$invalidState").withCookies(Cookie(settings.cookieName, provider.serialize(state)))
 
       await(provider.validate) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(InvalidStateFormat.format(""))
+        case e => e.getMessage must startWith(InvalidJson.format(""))
       }
     }
 
-    "throw an StateException if provider state contains valid json but invalid state" in new WithApplication with Context {
+    "throw an OAuth2StateException if provider state contains valid json but invalid state" in new WithApplication with Context {
       val invalidState = Base64.encode("{ \"test\": \"test\" }")
 
-      implicit val req = FakeRequest(GET, s"?$State=$invalidState").withCookies(Cookie(settings.cookieName, state.serialize))
+      implicit val req = FakeRequest(GET, s"?$State=$invalidState").withCookies(Cookie(settings.cookieName, provider.serialize(state)))
 
       await(provider.validate) must throwA[OAuth2StateException].like {
         case e => e.getMessage must startWith(InvalidStateFormat.format(""))
       }
     }
 
-    "throw an StateException if client and provider state are not equal" in new WithApplication with Context {
+    "throw an OAuth2StateException if client and provider state are not equal" in new WithApplication with Context {
       val clientState = state.copy(value = "clientState")
       val providerState = state.copy(value = "providerState")
 
-      implicit val req = FakeRequest(GET, s"?$State=${providerState.serialize}").withCookies(Cookie(settings.cookieName, clientState.serialize))
+      implicit val req = FakeRequest(GET, s"?$State=${provider.serialize(providerState)}").withCookies(Cookie(settings.cookieName, provider.serialize(clientState)))
 
       await(provider.validate) must throwA[OAuth2StateException].like {
         case e => e.getMessage must startWith(StateIsNotEqual.format())
       }
     }
 
-    "throw an StateException if state is expired" in new WithApplication with Context {
+    "throw an OAuth2StateException if state is expired" in new WithApplication with Context {
       val expiredState = state.copy(expirationDate = DateTime.now.minusHours(1))
 
-      implicit val req = FakeRequest(GET, s"?$State=${expiredState.serialize}").withCookies(Cookie(settings.cookieName, expiredState.serialize))
+      implicit val req = FakeRequest(GET, s"?$State=${provider.serialize(expiredState)}").withCookies(Cookie(settings.cookieName, provider.serialize(expiredState)))
 
       await(provider.validate) must throwA[OAuth2StateException].like {
         case e => e.getMessage must startWith(StateIsExpired.format())
@@ -152,7 +198,7 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers w
     }
 
     "return the state if it's valid" in new WithApplication with Context {
-      implicit val req = FakeRequest(GET, s"?$State=${state.serialize}").withCookies(Cookie(settings.cookieName, state.serialize))
+      implicit val req = FakeRequest(GET, s"?$State=${provider.serialize(state)}").withCookies(Cookie(settings.cookieName, provider.serialize(state)))
 
       await(provider.validate) must be equalTo state
     }
@@ -165,7 +211,7 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers w
 
       cookies(result).get(settings.cookieName) should beSome[Cookie].which { c =>
         c.name must be equalTo settings.cookieName
-        c.value must be equalTo state.serialize
+        c.value must be equalTo provider.serialize(state)
         // https://github.com/mohiva/play-silhouette/issues/273
         c.maxAge must beSome[Int].which(_ <= settings.expirationTime.toSeconds.toInt)
         c.path must be equalTo settings.cookiePath
@@ -183,12 +229,12 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers w
     /**
      * The ID generator implementation.
      */
-    lazy val idGenerator: IDGenerator = mock[IDGenerator]
+    lazy val idGenerator = mock[IDGenerator].smart
 
     /**
      * The clock implementation.
      */
-    lazy val clock: Clock = mock[Clock]
+    lazy val clock = mock[Clock].smart
 
     /**
      * The settings.
@@ -203,9 +249,21 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers w
     )
 
     /**
+     * The cookie signer implementation.
+     *
+     * The cookie signer returns the same value as passed to the methods. This is enough for testing.
+     */
+    lazy val cookieSigner = {
+      val c = mock[CookieSigner].smart
+      c.sign(any) answers { p => p.asInstanceOf[String] }
+      c.extract(any) answers { p => Success(p.asInstanceOf[String]) }
+      c
+    }
+
+    /**
      * The provider implementation to test.
      */
-    lazy val provider = new CookieStateProvider(settings, idGenerator, clock)
+    lazy val provider = new CookieStateProvider(settings, idGenerator, cookieSigner, clock)
 
     /**
      * A state to test.

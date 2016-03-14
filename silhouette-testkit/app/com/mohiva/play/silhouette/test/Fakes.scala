@@ -18,6 +18,7 @@ package com.mohiva.play.silhouette.test
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api._
+import com.mohiva.play.silhouette.api.crypto.{ Base64AuthenticatorEncoder, CookieSigner }
 import com.mohiva.play.silhouette.api.repositories.AuthenticatorRepository
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorService, IdentityService }
 import com.mohiva.play.silhouette.api.util.Clock
@@ -29,6 +30,7 @@ import play.api.mvc.RequestHeader
 import scala.collection.mutable
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.reflect.runtime.universe._
+import scala.util.Success
 
 /**
  * A fake identity.
@@ -118,6 +120,7 @@ class FakeAuthenticatorRepository[T <: StorableAuthenticator] extends Authentica
 case class FakeSessionAuthenticatorService() extends SessionAuthenticatorService(
   new SessionAuthenticatorSettings(),
   new DefaultFingerprintGenerator(),
+  new Base64AuthenticatorEncoder,
   Clock())
 
 /**
@@ -127,6 +130,11 @@ case class FakeCookieAuthenticatorService() extends CookieAuthenticatorService(
   new CookieAuthenticatorSettings(),
   None,
   new DefaultFingerprintGenerator(),
+  new CookieSigner {
+    def sign(data: String) = data
+    def extract(message: String) = Success(message)
+  },
+  new Base64AuthenticatorEncoder,
   new SecureRandomIDGenerator(),
   Clock())
 
@@ -143,8 +151,9 @@ case class FakeBearerTokenAuthenticatorService() extends BearerTokenAuthenticato
  * A fake JWT authenticator service.
  */
 case class FakeJWTAuthenticatorService() extends JWTAuthenticatorService(
-  new JWTAuthenticatorSettings(sharedSecret = UUID.randomUUID().toString, encryptSubject = false),
+  new JWTAuthenticatorSettings(sharedSecret = UUID.randomUUID().toString),
   None,
+  new Base64AuthenticatorEncoder,
   new SecureRandomIDGenerator(),
   Clock())
 
@@ -217,7 +226,9 @@ object FakeAuthenticator {
 case class FakeEnvironment[E <: Env](
   identities: Seq[(LoginInfo, E#I)],
   requestProviders: Seq[RequestProvider] = Seq(),
-  eventBus: EventBus = EventBus())(implicit val executionContext: ExecutionContext, tt: TypeTag[E#A])
+  eventBus: EventBus = EventBus())(
+  implicit
+  val executionContext: ExecutionContext, tt: TypeTag[E#A])
   extends Environment[E] {
 
   /**

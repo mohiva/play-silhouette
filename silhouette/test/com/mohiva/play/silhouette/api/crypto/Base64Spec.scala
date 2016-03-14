@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.api.util
+package com.mohiva.play.silhouette.api.crypto
 
 import play.api.libs.json.Json
 import play.api.test._
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.api.util.Base64]] object.
+ * Test case for the [[Base64]] object.
  */
 class Base64Spec extends PlaySpecification {
 

@@ -17,6 +17,7 @@ package com.mohiva.play.silhouette.impl.providers
 
 import javax.inject.Inject
 
+import com.mohiva.play.silhouette.api.crypto.Base64
 import com.mohiva.play.silhouette.api.exceptions.ConfigurationException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util._

@@ -20,17 +20,17 @@
 package com.mohiva.play.silhouette.impl.authenticators
 
 import com.mohiva.play.silhouette.api.Authenticator.Implicits._
+import com.mohiva.play.silhouette.api._
+import com.mohiva.play.silhouette.api.crypto.{ CookieSigner, AuthenticatorEncoder }
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.repositories.AuthenticatorRepository
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
-import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.api.util.JsonFormats._
-import com.mohiva.play.silhouette.api.{ ExpirableAuthenticator, Logger, LoginInfo, StorableAuthenticator }
+import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService._
 import org.joda.time.DateTime
 import play.api.http.HeaderNames
-import play.api.libs.Crypto
 import play.api.libs.json.Json
 import play.api.mvc._
 
@@ -94,34 +94,42 @@ object CookieAuthenticator extends Logger {
    * Serializes the authenticator.
    *
    * @param authenticator The authenticator to serialize.
-   * @param settings The authenticator settings.
+   * @param cookieSigner The cookie signer.
+   * @param authenticatorEncoder The authenticator encoder.
    * @return The serialized authenticator.
    */
-  def serialize(authenticator: CookieAuthenticator)(settings: CookieAuthenticatorSettings) = {
-    if (settings.encryptAuthenticator) {
-      Crypto.encryptAES(Json.toJson(authenticator).toString())
-    } else {
-      Base64.encode(Json.toJson(authenticator))
-    }
+  def serialize(
+    authenticator: CookieAuthenticator,
+    cookieSigner: CookieSigner,
+    authenticatorEncoder: AuthenticatorEncoder) = {
+
+    cookieSigner.sign(authenticatorEncoder.encode(Json.toJson(authenticator).toString()))
   }
 
   /**
    * Unserializes the authenticator.
    *
    * @param str The string representation of the authenticator.
-   * @param settings The authenticator settings.
+   * @param cookieSigner The cookie signer.
+   * @param authenticatorEncoder The authenticator encoder.
    * @return Some authenticator on success, otherwise None.
    */
-  def unserialize(str: String)(settings: CookieAuthenticatorSettings): Try[CookieAuthenticator] = {
-    if (settings.encryptAuthenticator) buildAuthenticator(Crypto.decryptAES(str))
-    else buildAuthenticator(Base64.decode(str))
+  def unserialize(
+    str: String,
+    cookieSigner: CookieSigner,
+    authenticatorEncoder: AuthenticatorEncoder): Try[CookieAuthenticator] = {
+
+    cookieSigner.extract(str) match {
+      case Success(data) => buildAuthenticator(authenticatorEncoder.decode(data))
+      case Failure(e)    => Failure(new AuthenticatorException(InvalidCookieSignature.format(ID), e))
+    }
   }
 
   /**
    * Builds the authenticator from Json.
    *
    * @param str The string representation of the authenticator.
-   * @return Some authenticator on success, otherwise None.
+   * @return An authenticator on success, otherwise a failure.
    */
   private def buildAuthenticator(str: String): Try[CookieAuthenticator] = {
     Try(Json.parse(str)) match {
@@ -129,7 +137,7 @@ object CookieAuthenticator extends Logger {
         case Left(error)          => Failure(new AuthenticatorException(InvalidJsonFormat.format(ID, error)))
         case Right(authenticator) => Success(authenticator)
       }
-      case Failure(error) => Failure(new AuthenticatorException(JsonParseError.format(ID, str), error))
+      case Failure(error) => Failure(new AuthenticatorException(InvalidJson.format(ID, str), error))
     }
   }
 }
@@ -140,6 +148,8 @@ object CookieAuthenticator extends Logger {
  * @param settings The cookie settings.
  * @param repository The repository to persist the authenticator. Set it to None to use a stateless approach.
  * @param fingerprintGenerator The fingerprint generator implementation.
+ * @param cookieSigner The cookie signer.
+ * @param authenticatorEncoder The authenticator encoder.
  * @param idGenerator The ID generator used to create the authenticator ID.
  * @param clock The clock implementation.
  * @param executionContext The execution context to handle the asynchronous operations.
@@ -148,6 +158,8 @@ class CookieAuthenticatorService(
   settings: CookieAuthenticatorSettings,
   repository: Option[AuthenticatorRepository[CookieAuthenticator]],
   fingerprintGenerator: FingerprintGenerator,
+  cookieSigner: CookieSigner,
+  authenticatorEncoder: AuthenticatorEncoder,
   idGenerator: IDGenerator,
   clock: Clock)(implicit val executionContext: ExecutionContext)
   extends AuthenticatorService[CookieAuthenticator]
@@ -194,7 +206,7 @@ class CookieAuthenticatorService(
         case Some(cookie) =>
           (repository match {
             case Some(d) => d.find(cookie.value)
-            case None => unserialize(cookie.value)(settings) match {
+            case None => unserialize(cookie.value, cookieSigner, authenticatorEncoder) match {
               case Success(authenticator) => Future.successful(Some(authenticator))
               case Failure(error) =>
                 logger.info(error.getMessage, error)
@@ -226,7 +238,7 @@ class CookieAuthenticatorService(
   override def init(authenticator: CookieAuthenticator)(implicit request: RequestHeader): Future[Cookie] = {
     (repository match {
       case Some(d) => d.add(authenticator).map(_.id)
-      case None    => Future.successful(serialize(authenticator)(settings))
+      case None    => Future.successful(serialize(authenticator, cookieSigner, authenticatorEncoder))
     }).map { value =>
       Cookie(
         name = settings.cookieName,
@@ -271,7 +283,6 @@ class CookieAuthenticatorService(
 
   /**
    * @inheritdoc
-   *
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
@@ -303,7 +314,7 @@ class CookieAuthenticatorService(
       case Some(d) => d.update(authenticator).map(_ => AuthenticatorResult(result))
       case None => Future.successful(AuthenticatorResult(result.withCookies(Cookie(
         name = settings.cookieName,
-        value = serialize(authenticator)(settings),
+        value = serialize(authenticator, cookieSigner, authenticatorEncoder),
         // The maxAge` must be used from the authenticator, because it might be changed by the user
         // to implement "Remember Me" functionality
         maxAge = authenticator.cookieMaxAge.map(_.toSeconds.toInt),
@@ -400,9 +411,10 @@ object CookieAuthenticatorService {
   /**
    * The error messages.
    */
-  val JsonParseError = "[Silhouette][%s] Cannot parse Json: %s"
+  val InvalidJson = "[Silhouette][%s] Cannot parse invalid Json: %s"
   val InvalidJsonFormat = "[Silhouette][%s] Invalid Json format: %s"
   val InvalidFingerprint = "[Silhouette][%s] Fingerprint %s doesn't match authenticator: %s"
+  val InvalidCookieSignature = "[Silhouette][%s] Invalid cookie signature"
 }
 
 /**
@@ -413,7 +425,6 @@ object CookieAuthenticatorService {
  * @param cookieDomain The cookie domain.
  * @param secureCookie Whether this cookie is secured, sent only for HTTPS requests.
  * @param httpOnlyCookie Whether this cookie is HTTP only, i.e. not accessible from client-side JavaScript code.
- * @param encryptAuthenticator Indicates if the authenticator should be encrypted in the cookie.
  * @param useFingerprinting Indicates if a fingerprint of the user should be stored in the authenticator.
  * @param cookieMaxAge The duration a cookie expires. `None` for a transient cookie.
  * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out.
@@ -425,7 +436,6 @@ case class CookieAuthenticatorSettings(
   cookieDomain: Option[String] = None,
   secureCookie: Boolean = true,
   httpOnlyCookie: Boolean = true,
-  encryptAuthenticator: Boolean = true,
   useFingerprinting: Boolean = true,
   cookieMaxAge: Option[FiniteDuration] = None,
   authenticatorIdleTimeout: Option[FiniteDuration] = None,

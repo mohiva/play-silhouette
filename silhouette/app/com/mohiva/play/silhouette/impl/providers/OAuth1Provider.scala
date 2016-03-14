@@ -215,13 +215,6 @@ trait OAuth1TokenSecret {
    * @return True if the secret is expired, false otherwise.
    */
   def isExpired: Boolean
-
-  /**
-   * Returns a serialized value of the secret.
-   *
-   * @return A serialized value of the secret.
-   */
-  def serialize: String
 }
 
 /**

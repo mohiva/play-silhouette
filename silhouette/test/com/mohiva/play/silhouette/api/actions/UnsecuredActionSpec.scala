@@ -17,7 +17,7 @@ package com.mohiva.play.silhouette.api.actions
 
 import javax.inject.Inject
 
-import akka.actor.{ Actor, Props }
+import akka.actor.{ Actor, ActorSystem, Props }
 import akka.testkit.TestProbe
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.actions.UnsecuredActionSpec._
@@ -31,7 +31,6 @@ import org.specs2.specification.Scope
 import play.api.i18n.{ Lang, Messages, MessagesApi }
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.concurrent.Akka
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.Results._
 import play.api.mvc._
@@ -243,7 +242,7 @@ class UnsecuredActionSpec extends PlaySpecification with Mockito with JsonMatche
       /**
        * The Play actor system.
        */
-      lazy implicit val system = Akka.system
+      lazy implicit val system = app.injector.instanceOf[ActorSystem]
 
       /**
        * The test probe.
