@@ -20,7 +20,7 @@ import com.mohiva.play.silhouette.impl.exceptions.{ ProfileRetrievalException, U
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.Auth0Provider._
-import play.api.libs.json.{ JsArray, JsValue, Json }
+import play.api.libs.json.Json
 import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.{ FakeRequest, WithApplication }
 import play.mvc.Http
@@ -123,13 +123,12 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.apiURL.get) returns requestHolder
 
       profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
-        case p => {
-          val identity = (userProfile \ "identities").as[JsArray].value.head
+        case p =>
           p must be equalTo new CommonSocialProfile(
             loginInfo = LoginInfo(provider.id, (userProfile \ "user_id").as[String]),
             email = (userProfile \ "email").asOpt[String],
-            avatarURL = (userProfile \ "picture").asOpt[String])
-        }
+            avatarURL = (userProfile \ "picture").asOpt[String]
+          )
       }
     }
   }
