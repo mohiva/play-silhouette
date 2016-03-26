@@ -191,7 +191,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
       // this test in every provider with the full mocked dependencies.
       requestHolder.post[Map[String, Seq[String]]](any)(any) answers { (a, m) =>
         a.asInstanceOf[Array[Any]](0).asInstanceOf[Map[String, Seq[String]]].equals(params) match {
-          case true => throw new RuntimeException("success")
+          case true  => throw new RuntimeException("success")
           case false => throw new RuntimeException("failure")
         }
       }

@@ -452,7 +452,7 @@ object UserAwareActionSpec {
     def renewAction = silhouette.UserAwareAction.async { implicit request =>
       request.authenticator match {
         case Some(a) => silhouette.env.authenticatorService.renew(a, Ok("renewed"))
-        case None => Future.successful(Ok("not.renewed"))
+        case None    => Future.successful(Ok("not.renewed"))
       }
     }
 
@@ -464,7 +464,7 @@ object UserAwareActionSpec {
     def discardAction = silhouette.UserAwareAction.async { implicit request =>
       request.authenticator match {
         case Some(a) => silhouette.env.authenticatorService.discard(a, Ok("discarded"))
-        case None => Future.successful(Ok("not.discarded"))
+        case None    => Future.successful(Ok("not.discarded"))
       }
     }
 
@@ -476,7 +476,7 @@ object UserAwareActionSpec {
         Future.successful(HandlerResult(Ok, userAwareRequest.identity))
       }.map {
         case HandlerResult(r, Some(user)) => Ok(Json.toJson(user.loginInfo))
-        case HandlerResult(r, None) => Unauthorized
+        case HandlerResult(r, None)       => Unauthorized
       }
     }
   }

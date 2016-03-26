@@ -103,7 +103,7 @@ trait OAuth2Provider extends SocialProvider with OAuth2Constants with Logger {
   def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[Either[Result, OAuth2Info]] = {
     request.extractString(Error).map {
       case e @ AccessDenied => new AccessDeniedException(AuthorizationError.format(id, e))
-      case e => new UnexpectedResponseException(AuthorizationError.format(id, e))
+      case e                => new UnexpectedResponseException(AuthorizationError.format(id, e))
     } match {
       case Some(throwable) => Future.failed(throwable)
       case None => request.extractString(Code) match {

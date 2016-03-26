@@ -58,7 +58,7 @@ object CookieState {
   def unserialize(str: String): Try[CookieState] = {
     Try(Json.parse(Base64.decode(str))) match {
       case Success(json) => json.validate[CookieState].asEither match {
-        case Left(error) => Failure(new OAuth2StateException(InvalidStateFormat.format(error)))
+        case Left(error)          => Failure(new OAuth2StateException(InvalidStateFormat.format(error)))
         case Right(authenticator) => Success(authenticator)
       }
       case Failure(error) => Failure(new OAuth2StateException(InvalidStateFormat.format(error)))
@@ -150,7 +150,8 @@ class CookieStateProvider @Inject() (
    * @return The result to send to the client.
    */
   override def publish[B](result: Result, state: State)(implicit request: ExtractableRequest[B]): Result = {
-    result.withCookies(Cookie(name = settings.cookieName,
+    result.withCookies(Cookie(
+      name = settings.cookieName,
       value = state.serialize,
       maxAge = Some(settings.expirationTime.toSeconds.toInt),
       path = settings.cookiePath,
@@ -168,7 +169,7 @@ class CookieStateProvider @Inject() (
   private def clientState(implicit request: RequestHeader): Try[CookieState] = {
     request.cookies.get(settings.cookieName) match {
       case Some(cookie) => CookieState.unserialize(cookie.value)
-      case None => Failure(new OAuth2StateException(ClientStateDoesNotExists.format(settings.cookieName)))
+      case None         => Failure(new OAuth2StateException(ClientStateDoesNotExists.format(settings.cookieName)))
     }
   }
 
@@ -183,7 +184,7 @@ class CookieStateProvider @Inject() (
   private def providerState[B](implicit request: ExtractableRequest[B]): Try[CookieState] = {
     request.extractString(State) match {
       case Some(state) => CookieState.unserialize(state)
-      case _ => Failure(new OAuth2StateException(ProviderStateDoesNotExists.format(State)))
+      case _           => Failure(new OAuth2StateException(ProviderStateDoesNotExists.format(State)))
     }
   }
 }

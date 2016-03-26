@@ -116,7 +116,7 @@ trait RequestHandlerBuilder[E <: Env, +R[_]] extends ExecutionContextProvider {
    */
   protected def handleBlock[T](authenticator: Either[E#A, E#A], block: E#A => Future[HandlerResult[T]])(implicit request: RequestHeader) = {
     authenticator match {
-      case Left(a) => handleInitializedAuthenticator(a, block)
+      case Left(a)  => handleInitializedAuthenticator(a, block)
       case Right(a) => handleUninitializedAuthenticator(a, block)
     }
   }
@@ -137,7 +137,7 @@ trait RequestHandlerBuilder[E <: Env, +R[_]] extends ExecutionContextProvider {
   protected def handleAuthentication[B](implicit request: Request[B]): Future[(Option[Either[E#A, E#A]], Option[E#I])] = {
     environment.authenticatorService.retrieve.flatMap {
       // A valid authenticator was found so we retrieve also the identity
-      case Some(a) if a.isValid => environment.identityService.retrieve(a.loginInfo).map(i => Some(Left(a)) -> i)
+      case Some(a) if a.isValid  => environment.identityService.retrieve(a.loginInfo).map(i => Some(Left(a)) -> i)
       // An invalid authenticator was found so we needn't retrieve the identity
       case Some(a) if !a.isValid => Future.successful(Some(Left(a)) -> None)
       // No authenticator was found so we try to authenticate with a request provider
@@ -170,7 +170,7 @@ trait RequestHandlerBuilder[E <: Env, +R[_]] extends ExecutionContextProvider {
       case hr @ HandlerResult(pr: AuthenticatorResult, _) => Future.successful(hr)
       case hr @ HandlerResult(pr, _) => auth match {
         // Authenticator was touched so we update the authenticator and maybe the result
-        case Left(a) => environment.authenticatorService.update(a, pr).map(pr => hr.copy(pr))
+        case Left(a)  => environment.authenticatorService.update(a, pr).map(pr => hr.copy(pr))
         // Authenticator was not touched so we return the original result
         case Right(a) => Future.successful(hr)
       }
@@ -216,7 +216,7 @@ trait RequestHandlerBuilder[E <: Env, +R[_]] extends ExecutionContextProvider {
         case Nil => Future.successful(None)
         case h :: t => h.authenticate(request).flatMap {
           case Some(i) => Future.successful(Some(i))
-          case None => if (t.isEmpty) Future.successful(None) else auth(t)
+          case None    => if (t.isEmpty) Future.successful(None) else auth(t)
         }
       }
     }

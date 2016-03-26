@@ -108,7 +108,7 @@ object SessionAuthenticator extends Logger {
   private def buildAuthenticator(str: String): Try[SessionAuthenticator] = {
     Try(Json.parse(str)) match {
       case Success(json) => json.validate[SessionAuthenticator].asEither match {
-        case Left(error) => Failure(new AuthenticatorException(InvalidJsonFormat.format(ID, error)))
+        case Left(error)          => Failure(new AuthenticatorException(InvalidJsonFormat.format(ID, error)))
         case Right(authenticator) => Success(authenticator)
       }
       case Failure(error) => Failure(new AuthenticatorException(JsonParseError.format(ID, str), error))
@@ -244,7 +244,8 @@ class SessionAuthenticatorService(
    * @return The original or a manipulated result.
    */
   override def update(authenticator: SessionAuthenticator, result: Result)(
-    implicit request: RequestHeader): Future[AuthenticatorResult] = {
+    implicit
+    request: RequestHeader): Future[AuthenticatorResult] = {
 
     Future.fromTry(Try {
       AuthenticatorResult(result.addingToSession(settings.sessionKey -> serialize(authenticator)(settings)))
@@ -265,7 +266,8 @@ class SessionAuthenticatorService(
    * @return The serialized expression of the authenticator.
    */
   override def renew(authenticator: SessionAuthenticator)(
-    implicit request: RequestHeader): Future[Session] = {
+    implicit
+    request: RequestHeader): Future[Session] = {
 
     create(authenticator.loginInfo).flatMap(init).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
@@ -284,7 +286,8 @@ class SessionAuthenticatorService(
    * @return The original or a manipulated result.
    */
   override def renew(authenticator: SessionAuthenticator, result: Result)(
-    implicit request: RequestHeader): Future[AuthenticatorResult] = {
+    implicit
+    request: RequestHeader): Future[AuthenticatorResult] = {
 
     renew(authenticator).flatMap(v => embed(v, result)).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
@@ -299,7 +302,8 @@ class SessionAuthenticatorService(
    * @return The manipulated result.
    */
   override def discard(authenticator: SessionAuthenticator, result: Result)(
-    implicit request: RequestHeader): Future[AuthenticatorResult] = {
+    implicit
+    request: RequestHeader): Future[AuthenticatorResult] = {
 
     Future.fromTry(Try {
       AuthenticatorResult(result.removingFromSession(settings.sessionKey))

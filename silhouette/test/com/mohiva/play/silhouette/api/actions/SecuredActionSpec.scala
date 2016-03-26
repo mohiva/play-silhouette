@@ -700,7 +700,8 @@ object SecuredActionSpec {
      * @return True if the user is authorized, false otherwise.
      */
     def isAuthorized[B](identity: FakeIdentity, authenticator: FakeAuthenticator)(
-      implicit request: Request[B]): Future[Boolean] = {
+      implicit
+      request: Request[B]): Future[Boolean] = {
 
       Future.successful(isAuthorized)
     }
@@ -818,7 +819,7 @@ object SecuredActionSpec {
         Future.successful(HandlerResult(Ok, Some(securedRequest.identity)))
       }.map {
         case HandlerResult(r, Some(user)) => Ok(Json.toJson(user.loginInfo))
-        case HandlerResult(r, None) => Unauthorized
+        case HandlerResult(r, None)       => Unauthorized
       }
     }
 

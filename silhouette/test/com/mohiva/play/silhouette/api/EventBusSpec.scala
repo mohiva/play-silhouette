@@ -66,7 +66,7 @@ class EventBusSpec extends PlaySpecification with NoLanguageFeatures {
       val eventBus = new EventBus
       val listener = system.actorOf(Props(new Actor {
         def receive = {
-          case e @ LoginEvent(_, _) => theProbe.ref ! e
+          case e @ LoginEvent(_, _)  => theProbe.ref ! e
           case e @ LogoutEvent(_, _) => theProbe.ref ! e
         }
       }))

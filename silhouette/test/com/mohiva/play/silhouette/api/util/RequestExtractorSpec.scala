@@ -346,7 +346,8 @@ class RequestExtractorSpec extends PlaySpecification {
      * @return The extracted value or None if the value couldn't be extracted.
      */
     def extract[B](name: String, parts: Option[Seq[RequestPart.Value]] = None)(
-      implicit request: ExtractableRequest[B]): Option[String] = {
+      implicit
+      request: ExtractableRequest[B]): Option[String] = {
 
       request.extractString(name, parts)
     }

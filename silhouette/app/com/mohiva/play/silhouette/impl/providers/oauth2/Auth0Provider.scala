@@ -103,7 +103,7 @@ trait BaseAuth0Provider extends OAuth2Provider {
   override protected def getAccessToken(code: String)(implicit request: RequestHeader): Future[OAuth2Info] = {
     request.getQueryString("token_type") match {
       case Some("bearer") => Future(OAuth2Info(code))
-      case _ => super.getAccessToken(code)
+      case _              => super.getAccessToken(code)
     }
   }
 }
