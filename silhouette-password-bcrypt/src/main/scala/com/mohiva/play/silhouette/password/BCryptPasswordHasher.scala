@@ -36,7 +36,7 @@ class BCryptPasswordHasher(logRounds: Int = 10) extends PasswordHasher {
    *
    * @return The ID of the hasher.
    */
-  override def id = ID
+  override def id = ID + logRounds
 
   /**
    * Hashes a password.
