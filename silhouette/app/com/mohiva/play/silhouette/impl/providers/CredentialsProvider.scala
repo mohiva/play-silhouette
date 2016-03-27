@@ -49,6 +49,9 @@ class CredentialsProvider @Inject() (
   passwordHasher: PasswordHasher,
   passwordHasherList: Seq[PasswordHasher])(implicit val executionContext: ExecutionContext)
   extends Provider with ExecutionContextProvider {
+    
+  require(passwordHasherList.map(_.id).toSet.size == passwordHasherList.size,
+    "Every PasswordHasher must have a unique ID")
 
   /**
    * Gets the provider ID.
