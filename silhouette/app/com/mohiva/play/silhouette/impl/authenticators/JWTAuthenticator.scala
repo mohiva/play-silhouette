@@ -155,12 +155,12 @@ object JWTAuthenticator {
    */
   private def serializeCustomClaims(claims: JsObject): java.util.Map[String, Any] = {
     def toJava(value: JsValue): Any = value match {
-      case v: JsString => v.value
-      case v: JsNumber => v.value
+      case v: JsString  => v.value
+      case v: JsNumber  => v.value
       case v: JsBoolean => v.value
-      case v: JsObject => serializeCustomClaims(v)
-      case v: JsArray => v.value.map(toJava).asJava
-      case v => throw new AuthenticatorException(UnexpectedJsonValue.format(ID, v))
+      case v: JsObject  => serializeCustomClaims(v)
+      case v: JsArray   => v.value.map(toJava).asJava
+      case v            => throw new AuthenticatorException(UnexpectedJsonValue.format(ID, v))
     }
 
     claims.fieldSet.map { case (name, value) => name -> toJava(value) }.toMap.asJava
@@ -174,12 +174,12 @@ object JWTAuthenticator {
    */
   private def unserializeCustomClaims(claims: java.util.Map[String, Any]): JsObject = {
     def toJson(value: Any): JsValue = value match {
-      case v: java.lang.String => JsString(v)
-      case v: java.lang.Number => JsNumber(BigDecimal(v.toString))
-      case v: java.lang.Boolean => JsBoolean(v)
+      case v: java.lang.String    => JsString(v)
+      case v: java.lang.Number    => JsNumber(BigDecimal(v.toString))
+      case v: java.lang.Boolean   => JsBoolean(v)
       case v: java.util.Map[_, _] => unserializeCustomClaims(v.asInstanceOf[java.util.Map[String, Any]])
-      case v: java.util.List[_] => JsArray(v.map(toJson))
-      case v => throw new AuthenticatorException(UnexpectedJsonValue.format(ID, v))
+      case v: java.util.List[_]   => JsArray(v.map(toJson))
+      case v                      => throw new AuthenticatorException(UnexpectedJsonValue.format(ID, v))
     }
 
     JsObject(claims.map { case (name, value) => name -> toJson(value) }.toSeq)
@@ -337,7 +337,8 @@ class JWTAuthenticatorService(
    * @return The original or a manipulated result.
    */
   override def update(authenticator: JWTAuthenticator, result: Result)(
-    implicit request: RequestHeader): Future[AuthenticatorResult] = {
+    implicit
+    request: RequestHeader): Future[AuthenticatorResult] = {
 
     repository.fold(Future.successful(authenticator))(_.update(authenticator)).map { a =>
       AuthenticatorResult(result.withHeaders(settings.fieldName -> serialize(a)(settings)))
@@ -377,7 +378,8 @@ class JWTAuthenticatorService(
    * @return The original or a manipulated result.
    */
   override def renew(authenticator: JWTAuthenticator, result: Result)(
-    implicit request: RequestHeader): Future[AuthenticatorResult] = {
+    implicit
+    request: RequestHeader): Future[AuthenticatorResult] = {
 
     renew(authenticator).flatMap(v => embed(v, result)).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
@@ -392,7 +394,8 @@ class JWTAuthenticatorService(
    * @return The manipulated result.
    */
   override def discard(authenticator: JWTAuthenticator, result: Result)(
-    implicit request: RequestHeader): Future[AuthenticatorResult] = {
+    implicit
+    request: RequestHeader): Future[AuthenticatorResult] = {
 
     repository.fold(Future.successful(()))(_.remove(authenticator.id)).map { _ =>
       AuthenticatorResult(result)

@@ -126,7 +126,7 @@ object CookieAuthenticator extends Logger {
   private def buildAuthenticator(str: String): Try[CookieAuthenticator] = {
     Try(Json.parse(str)) match {
       case Success(json) => json.validate[CookieAuthenticator].asEither match {
-        case Left(error) => Failure(new AuthenticatorException(InvalidJsonFormat.format(ID, error)))
+        case Left(error)          => Failure(new AuthenticatorException(InvalidJsonFormat.format(ID, error)))
         case Right(authenticator) => Success(authenticator)
       }
       case Failure(error) => Failure(new AuthenticatorException(JsonParseError.format(ID, str), error))
@@ -226,7 +226,7 @@ class CookieAuthenticatorService(
   override def init(authenticator: CookieAuthenticator)(implicit request: RequestHeader): Future[Cookie] = {
     (repository match {
       case Some(d) => d.add(authenticator).map(_.id)
-      case None => Future.successful(serialize(authenticator)(settings))
+      case None    => Future.successful(serialize(authenticator)(settings))
     }).map { value =>
       Cookie(
         name = settings.cookieName,
@@ -296,7 +296,8 @@ class CookieAuthenticatorService(
    * @return The original or a manipulated result.
    */
   override def update(authenticator: CookieAuthenticator, result: Result)(
-    implicit request: RequestHeader): Future[AuthenticatorResult] = {
+    implicit
+    request: RequestHeader): Future[AuthenticatorResult] = {
 
     (repository match {
       case Some(d) => d.update(authenticator).map(_ => AuthenticatorResult(result))
@@ -330,7 +331,7 @@ class CookieAuthenticatorService(
   override def renew(authenticator: CookieAuthenticator)(implicit request: RequestHeader): Future[Cookie] = {
     (repository match {
       case Some(d) => d.remove(authenticator.id)
-      case None => Future.successful(())
+      case None    => Future.successful(())
     }).flatMap { _ =>
       create(authenticator.loginInfo).flatMap(init)
     }.recover {
@@ -350,7 +351,8 @@ class CookieAuthenticatorService(
    * @return The original or a manipulated result.
    */
   override def renew(authenticator: CookieAuthenticator, result: Result)(
-    implicit request: RequestHeader): Future[AuthenticatorResult] = {
+    implicit
+    request: RequestHeader): Future[AuthenticatorResult] = {
 
     renew(authenticator).flatMap(v => embed(v, result)).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
@@ -367,11 +369,12 @@ class CookieAuthenticatorService(
    * @return The manipulated result.
    */
   override def discard(authenticator: CookieAuthenticator, result: Result)(
-    implicit request: RequestHeader): Future[AuthenticatorResult] = {
+    implicit
+    request: RequestHeader): Future[AuthenticatorResult] = {
 
     (repository match {
       case Some(d) => d.remove(authenticator.id)
-      case None => Future.successful(())
+      case None    => Future.successful(())
     }).map { _ =>
       AuthenticatorResult(result.discardingCookies(DiscardingCookie(
         name = settings.cookieName,

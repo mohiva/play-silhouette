@@ -129,7 +129,8 @@ class DummyAuthenticatorService(implicit val executionContext: ExecutionContext)
    * @return The original or a manipulated result.
    */
   override def update(authenticator: DummyAuthenticator, result: Result)(
-    implicit request: RequestHeader): Future[AuthenticatorResult] = {
+    implicit
+    request: RequestHeader): Future[AuthenticatorResult] = {
 
     Future.successful(AuthenticatorResult(result))
   }
@@ -154,7 +155,8 @@ class DummyAuthenticatorService(implicit val executionContext: ExecutionContext)
    * @return The original or a manipulated result.
    */
   override def renew(authenticator: DummyAuthenticator, result: Result)(
-    implicit request: RequestHeader): Future[AuthenticatorResult] = {
+    implicit
+    request: RequestHeader): Future[AuthenticatorResult] = {
 
     Future.successful(AuthenticatorResult(result))
   }
@@ -167,7 +169,8 @@ class DummyAuthenticatorService(implicit val executionContext: ExecutionContext)
    * @return The manipulated result.
    */
   override def discard(authenticator: DummyAuthenticator, result: Result)(
-    implicit request: RequestHeader): Future[AuthenticatorResult] = {
+    implicit
+    request: RequestHeader): Future[AuthenticatorResult] = {
 
     Future.successful(AuthenticatorResult(result))
   }

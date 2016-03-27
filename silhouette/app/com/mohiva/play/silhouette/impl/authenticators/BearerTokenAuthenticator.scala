@@ -110,7 +110,7 @@ class BearerTokenAuthenticatorService(
   override def retrieve[B](implicit request: ExtractableRequest[B]): Future[Option[BearerTokenAuthenticator]] = {
     Future.fromTry(Try(request.extractString(settings.fieldName, settings.requestParts))).flatMap {
       case Some(token) => repository.find(token)
-      case None => Future.successful(None)
+      case None        => Future.successful(None)
     }.recover {
       case e => throw new AuthenticatorRetrievalException(RetrieveError.format(ID), e)
     }
@@ -182,7 +182,8 @@ class BearerTokenAuthenticatorService(
    * @return The original or a manipulated result.
    */
   override def update(authenticator: BearerTokenAuthenticator, result: Result)(
-    implicit request: RequestHeader): Future[AuthenticatorResult] = {
+    implicit
+    request: RequestHeader): Future[AuthenticatorResult] = {
 
     repository.update(authenticator).map { a =>
       AuthenticatorResult(result)
@@ -203,7 +204,8 @@ class BearerTokenAuthenticatorService(
    * @return The serialized expression of the authenticator.
    */
   override def renew(authenticator: BearerTokenAuthenticator)(
-    implicit request: RequestHeader): Future[String] = {
+    implicit
+    request: RequestHeader): Future[String] = {
 
     repository.remove(authenticator.id).flatMap { _ =>
       create(authenticator.loginInfo).flatMap(init)
@@ -224,7 +226,8 @@ class BearerTokenAuthenticatorService(
    * @return The original or a manipulated result.
    */
   override def renew(authenticator: BearerTokenAuthenticator, result: Result)(
-    implicit request: RequestHeader): Future[AuthenticatorResult] = {
+    implicit
+    request: RequestHeader): Future[AuthenticatorResult] = {
 
     renew(authenticator).flatMap(v => embed(v, result)).recover {
       case e => throw new AuthenticatorRenewalException(RenewError.format(ID, authenticator), e)
@@ -239,7 +242,8 @@ class BearerTokenAuthenticatorService(
    * @return The manipulated result.
    */
   override def discard(authenticator: BearerTokenAuthenticator, result: Result)(
-    implicit request: RequestHeader): Future[AuthenticatorResult] = {
+    implicit
+    request: RequestHeader): Future[AuthenticatorResult] = {
 
     repository.remove(authenticator.id).map { _ =>
       AuthenticatorResult(result)

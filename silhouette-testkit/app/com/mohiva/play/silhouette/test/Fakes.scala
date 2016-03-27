@@ -166,11 +166,11 @@ object FakeAuthenticatorService {
    */
   def apply[T <: Authenticator: TypeTag](): AuthenticatorService[T] = {
     (typeOf[T] match {
-      case t if t <:< typeOf[SessionAuthenticator] => FakeSessionAuthenticatorService()
-      case t if t <:< typeOf[CookieAuthenticator] => FakeCookieAuthenticatorService()
+      case t if t <:< typeOf[SessionAuthenticator]     => FakeSessionAuthenticatorService()
+      case t if t <:< typeOf[CookieAuthenticator]      => FakeCookieAuthenticatorService()
       case t if t <:< typeOf[BearerTokenAuthenticator] => FakeBearerTokenAuthenticatorService()
-      case t if t <:< typeOf[JWTAuthenticator] => FakeJWTAuthenticatorService()
-      case t if t <:< typeOf[DummyAuthenticator] => FakeDummyAuthenticatorService()
+      case t if t <:< typeOf[JWTAuthenticator]         => FakeJWTAuthenticatorService()
+      case t if t <:< typeOf[DummyAuthenticator]       => FakeDummyAuthenticatorService()
     }).asInstanceOf[AuthenticatorService[T]]
   }
 }

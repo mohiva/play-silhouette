@@ -52,8 +52,8 @@ class CasProviderSpec extends SocialProviderSpec[CasAuthInfo] with Mockito with 
         redirectURL = "https://cas-redirect/",
         encoding = ""
       ) must throwA[ConfigurationException].like {
-          case e => e.getMessage must be equalTo CasSettings.EncodingInvalid.format(CasProvider.ID)
-        }
+        case e => e.getMessage must be equalTo CasSettings.EncodingInvalid.format(CasProvider.ID)
+      }
     }
 
     "fail with a ConfigurationException if samlTimeTolerance is negative" in new Context {
@@ -62,8 +62,8 @@ class CasProviderSpec extends SocialProviderSpec[CasAuthInfo] with Mockito with 
         redirectURL = "https://cas-redirect/",
         samlTimeTolerance = -1.millis
       ) must throwA[ConfigurationException].like {
-          case e => e.getMessage must be equalTo CasSettings.TimeToleranceInvalid.format(CasProvider.ID, -1.millis)
-        }
+        case e => e.getMessage must be equalTo CasSettings.TimeToleranceInvalid.format(CasProvider.ID, -1.millis)
+      }
     }
   }
 

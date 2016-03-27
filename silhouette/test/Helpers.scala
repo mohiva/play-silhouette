@@ -68,7 +68,7 @@ object Helper {
   def loadJson(file: String): JsValue = {
     Play.application.resourceAsStream(file) match {
       case Some(is) => Json.parse(Source.fromInputStream(is)(Codec.UTF8).mkString)
-      case None => throw new Exception("Cannot load file: " + file)
+      case None     => throw new Exception("Cannot load file: " + file)
     }
   }
 }

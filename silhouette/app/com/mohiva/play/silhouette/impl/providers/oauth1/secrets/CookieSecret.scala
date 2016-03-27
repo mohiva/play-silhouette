@@ -58,7 +58,7 @@ object CookieSecret {
   def unserialize(str: String): Try[CookieSecret] = {
     Try(Json.parse(Crypto.decryptAES(str))) match {
       case Success(json) => json.validate[CookieSecret].asEither match {
-        case Left(error) => Failure(new OAuth1TokenSecretException(InvalidSecretFormat.format(error)))
+        case Left(error)          => Failure(new OAuth1TokenSecretException(InvalidSecretFormat.format(error)))
         case Right(authenticator) => Success(authenticator)
       }
       case Failure(error) => Failure(new OAuth1TokenSecretException(InvalidSecretFormat.format(error)))
@@ -115,7 +115,8 @@ class CookieSecretProvider @Inject() (
    * @return The build secret.
    */
   override def build[B](info: OAuth1Info)(
-    implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[CookieSecret] = {
+    implicit
+    request: ExtractableRequest[B], ec: ExecutionContext): Future[CookieSecret] = {
 
     Future.successful(CookieSecret(info.secret, clock.now.plusSeconds(settings.expirationTime.toSeconds.toInt)))
   }
@@ -132,8 +133,8 @@ class CookieSecretProvider @Inject() (
     request.cookies.get(settings.cookieName) match {
       case Some(cookie) => CookieSecret.unserialize(cookie.value) match {
         case Success(secret) if secret.isExpired => Future.failed(new OAuth1TokenSecretException(SecretIsExpired))
-        case Success(secret) => Future.successful(secret)
-        case Failure(error) => Future.failed(error)
+        case Success(secret)                     => Future.successful(secret)
+        case Failure(error)                      => Future.failed(error)
       }
       case None => Future.failed(new OAuth1TokenSecretException(ClientSecretDoesNotExists.format(settings.cookieName)))
     }
@@ -149,7 +150,8 @@ class CookieSecretProvider @Inject() (
    * @return The result to send to the client.
    */
   override def publish[B](result: Result, secret: CookieSecret)(implicit request: ExtractableRequest[B]) = {
-    result.withCookies(Cookie(name = settings.cookieName,
+    result.withCookies(Cookie(
+      name = settings.cookieName,
       value = secret.serialize,
       maxAge = Some(settings.expirationTime.toSeconds.toInt),
       path = settings.cookiePath,

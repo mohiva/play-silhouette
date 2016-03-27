@@ -158,7 +158,7 @@ trait RequestExtractor[-B] extends Logger {
   private def isAllowed(part: RequestPart.Value, parts: Option[Parts])(b: => Option[String]): Option[String] = {
     parts match {
       case Some(p) if !p.contains(part) => None
-      case _ => b
+      case _                            => b
     }
   }
 }

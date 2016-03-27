@@ -376,7 +376,7 @@ object FakesSpec {
     def defaultUserAwareAction = silhouette.UserAwareAction { implicit request =>
       request.identity match {
         case Some(identity) => Ok(Json.toJson(identity.loginInfo))
-        case None => Unauthorized
+        case None           => Unauthorized
       }
     }
   }

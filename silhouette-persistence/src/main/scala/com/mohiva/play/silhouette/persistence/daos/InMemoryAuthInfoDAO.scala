@@ -80,7 +80,7 @@ trait InMemoryAuthInfoDAO[T <: AuthInfo] extends DelegableAuthInfoDAO[T] {
   def save(loginInfo: LoginInfo, authInfo: T): Future[T] = {
     find(loginInfo).flatMap {
       case Some(_) => update(loginInfo, authInfo)
-      case None => add(loginInfo, authInfo)
+      case None    => add(loginInfo, authInfo)
     }
   }
 

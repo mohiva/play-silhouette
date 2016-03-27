@@ -19,16 +19,12 @@
 set -o nounset -o errexit
 
 echo ""
-echo "Compiling"
-scripts/sbt clean compile test:compile
-
-echo ""
 echo "Validating code formatting"
 scripts/validate-format
 
 echo ""
 echo "Testing and generating documentation"
-scripts/sbt coverage test doc coverageAggregate
+scripts/sbt clean coverage test doc coverageAggregate
 
 echo ""
 echo "Build finished"

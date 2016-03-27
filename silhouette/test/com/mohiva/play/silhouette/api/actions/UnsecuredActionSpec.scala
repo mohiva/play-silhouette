@@ -396,7 +396,7 @@ object UnsecuredActionSpec {
         Future.successful(HandlerResult(Ok, Some("data")))
       }.map {
         case HandlerResult(r, Some(data)) => Ok(data)
-        case HandlerResult(r, None) => Forbidden
+        case HandlerResult(r, None)       => Forbidden
       }
     }
 

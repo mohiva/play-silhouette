@@ -55,7 +55,8 @@ object Authorization {
    * @param ec The execution context to handle the asynchronous operations.
    */
   implicit final class RichAuthorization[I <: Identity, A <: Authenticator](self: Authorization[I, A])(
-    implicit ec: ExecutionContext) {
+    implicit
+    ec: ExecutionContext) {
 
     /**
      * Performs a logical negation on an `Authorization` result.
@@ -64,7 +65,8 @@ object Authorization {
      */
     def unary_! : Authorization[I, A] = new Authorization[I, A] {
       def isAuthorized[B](identity: I, authenticator: A)(
-        implicit request: Request[B]): Future[Boolean] = {
+        implicit
+        request: Request[B]): Future[Boolean] = {
 
         self.isAuthorized(identity, authenticator).map(x => !x)
       }
@@ -78,7 +80,8 @@ object Authorization {
      */
     def &&(authorization: Authorization[I, A]): Authorization[I, A] = new Authorization[I, A] {
       def isAuthorized[B](identity: I, authenticator: A)(
-        implicit request: Request[B]): Future[Boolean] = {
+        implicit
+        request: Request[B]): Future[Boolean] = {
 
         val leftF = self.isAuthorized(identity, authenticator)
         val rightF = authorization.isAuthorized(identity, authenticator)
@@ -97,7 +100,8 @@ object Authorization {
      */
     def ||(authorization: Authorization[I, A]): Authorization[I, A] = new Authorization[I, A] {
       def isAuthorized[B](identity: I, authenticator: A)(
-        implicit request: Request[B]): Future[Boolean] = {
+        implicit
+        request: Request[B]): Future[Boolean] = {
 
         val leftF = self.isAuthorized(identity, authenticator)
         val rightF = authorization.isAuthorized(identity, authenticator)
