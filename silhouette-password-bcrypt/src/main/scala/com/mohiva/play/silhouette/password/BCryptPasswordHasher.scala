@@ -26,10 +26,14 @@ import org.mindrot.jbcrypt.BCrypt
 /**
  * Implementation of the password hasher based on BCrypt.
  *
+ * We declare this class as case class so that the compiler can create the `equals` method for us. This
+ * is needed for the credentials based providers as an indicator that a password should be re-hashed,
+ * if the log rounds value was changed.
+ *
  * @param logRounds The log2 of the number of rounds of hashing to apply.
  * @see [[http://www.mindrot.org/files/jBCrypt/jBCrypt-0.2-doc/BCrypt.html#gensalt(int) gensalt]]
  */
-class BCryptPasswordHasher(logRounds: Int = 10) extends PasswordHasher {
+case class BCryptPasswordHasher(logRounds: Int = 10) extends PasswordHasher {
 
   /**
    * Gets the ID of the hasher.
