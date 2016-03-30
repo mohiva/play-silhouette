@@ -32,6 +32,13 @@ case class PasswordInfo(hasher: String, password: String, salt: Option[String] =
 
 /**
  * A trait that defines the password hasher interface.
+ *
+ * Some credentials based providers have the ability to change the password hashing method on
+ * the fly. These providers use the `equals` method of a hasher as an indicator that the password
+ * should be re-hashed with a new hashing algorithm. It can be the case that an hasher can provide
+ * higher security based on additional parameters. In this case a default equals check will not work
+ * because the hasher instance is the same. In such a case you should override the equals method
+ * to provide a better check based on the additional parameters.
  */
 trait PasswordHasher {
 

@@ -53,4 +53,20 @@ class BCryptPasswordHasherSpec extends Specification {
       hasher.matches(info, "not-equal") must beFalse
     }
   }
+
+  "The hasher" should {
+    "be equal if the rounds parameter is equal" in {
+      val hasher1 = new BCryptPasswordHasher(1)
+      val hasher2 = new BCryptPasswordHasher(1)
+
+      hasher1 == hasher2 must beTrue
+    }
+
+    "not be equal if the rounds parameter is not equal" in {
+      val hasher1 = new BCryptPasswordHasher(1)
+      val hasher2 = new BCryptPasswordHasher(2)
+
+      hasher1 == hasher2 must beFalse
+    }
+  }
 }
