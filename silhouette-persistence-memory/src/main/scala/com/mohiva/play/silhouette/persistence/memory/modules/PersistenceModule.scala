@@ -15,12 +15,14 @@
  */
 package com.mohiva.play.silhouette.persistence.memory.modules
 
+import javax.inject
+
 import com.google.inject.{ AbstractModule, Provides }
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.PasswordInfo
 import com.mohiva.play.silhouette.impl.providers.{ OAuth1Info, OAuth2Info, OpenIDInfo }
 import com.mohiva.play.silhouette.persistence.daos._
-import com.mohiva.play.silhouette.persistence.memory.daos.{ PasswordInfoDAO, OpenIDInfoDAO, OAuth2InfoDAO, OAuth1InfoDAO }
+import com.mohiva.play.silhouette.persistence.memory.daos.{ OAuth1InfoDAO, OAuth2InfoDAO, OpenIDInfoDAO, PasswordInfoDAO }
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
 import net.codingwell.scalaguice.ScalaModule
 
@@ -35,10 +37,10 @@ class PersistenceModule extends AbstractModule with ScalaModule {
    * Configures the module.
    */
   def configure(): Unit = {
-    bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoDAO]
-    bind[DelegableAuthInfoDAO[OAuth1Info]].to[OAuth1InfoDAO]
-    bind[DelegableAuthInfoDAO[OAuth2Info]].to[OAuth2InfoDAO]
-    bind[DelegableAuthInfoDAO[OpenIDInfo]].to[OpenIDInfoDAO]
+    bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoDAO].in[inject.Singleton]
+    bind[DelegableAuthInfoDAO[OAuth1Info]].to[OAuth1InfoDAO].in[inject.Singleton]
+    bind[DelegableAuthInfoDAO[OAuth2Info]].to[OAuth2InfoDAO].in[inject.Singleton]
+    bind[DelegableAuthInfoDAO[OpenIDInfo]].to[OpenIDInfoDAO].in[inject.Singleton]
   }
 
   /**
