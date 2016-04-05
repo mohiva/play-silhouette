@@ -35,11 +35,12 @@ class BCryptPasswordHasherSpec extends Specification with Mockito {
   "The `hash` method" should {
     "hash a password" in {
       val password = "my_S3cr3t_p@sswQrd"
-      val hasher = new BCryptPasswordHasher
+      val logRounds = 10
+      val hasher = new BCryptPasswordHasher(logRounds)
       val info = hasher.hash(password)
 
       info must beAnInstanceOf[PasswordInfo]
-      info.hasher must be equalTo BCryptPasswordHasher.ID
+      info.hasher must be equalTo BCryptPasswordHasher.ID + logRounds
       info.password must not be equalTo(password)
       info.salt must beNone
     }
