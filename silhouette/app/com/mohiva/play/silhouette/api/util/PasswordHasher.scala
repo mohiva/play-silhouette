@@ -28,7 +28,18 @@ import com.mohiva.play.silhouette.api.AuthInfo
  * @param password The hashed password.
  * @param salt The optional salt used when hashing.
  */
-case class PasswordInfo(hasher: String, password: String, salt: Option[String] = None) extends AuthInfo
+case class PasswordInfo(var hasher: String, password: String, salt: Option[String] = None) extends AuthInfo {
+  if (hasher == "bcrypt") {
+    val PasswordInfo.BCRYPT_PASSWORD_PATTERN(logRounds) = password
+    hasher += logRounds.toInt  // toInt strips leading 0
+  }
+}
+
+object PasswordInfo {
+
+  private val BCRYPT_PASSWORD_PATTERN = """^\$\w{2}\$(\d{2})\$.+""".r
+
+}
 
 /**
  * A trait that defines the password hasher interface.
