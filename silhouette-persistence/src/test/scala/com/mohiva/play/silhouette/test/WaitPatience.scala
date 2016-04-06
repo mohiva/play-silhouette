@@ -19,5 +19,4 @@ trait WaitPatience {
       await(retries, timeout)
     }
   }
-
 }

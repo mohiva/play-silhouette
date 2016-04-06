@@ -17,21 +17,18 @@ package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
-import com.mohiva.play.silhouette.api.util.{ Credentials, PasswordHasher, PasswordInfo }
+import com.mohiva.play.silhouette.api.util.{ Credentials, PasswordInfo }
 import com.mohiva.play.silhouette.impl.exceptions.{ IdentityNotFoundException, InvalidPasswordException }
-import com.mohiva.play.silhouette.impl.providers.CredentialsProvider._
-import org.specs2.mock.Mockito
-import org.specs2.specification.Scope
-import play.api.libs.concurrent.Execution.Implicits._
-import play.api.test.{ PlaySpecification, WithApplication }
+import com.mohiva.play.silhouette.impl.providers.PasswordProvider._
+import play.api.test.WithApplication
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.providers.CredentialsProvider]] class.
  */
-class CredentialsProviderSpec extends PlaySpecification with Mockito {
+class CredentialsProviderSpec extends PasswordProviderSpec {
 
   "The `authenticate` method" should {
     "throw IdentityNotFoundException if no auth info could be found for the given credentials" in new WithApplication with Context {
@@ -40,7 +37,7 @@ class CredentialsProviderSpec extends PlaySpecification with Mockito {
       authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(None)
 
       await(provider.authenticate(credentials)) must throwA[IdentityNotFoundException].like {
-        case e => e.getMessage must beEqualTo(UnknownCredentials.format(provider.id))
+        case e => e.getMessage must beEqualTo(PasswordInfoNotFound.format(provider.id, loginInfo))
       }
     }
 
@@ -52,7 +49,7 @@ class CredentialsProviderSpec extends PlaySpecification with Mockito {
       authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
       await(provider.authenticate(credentials)) must throwA[InvalidPasswordException].like {
-        case e => e.getMessage must beEqualTo(InvalidPassword.format(provider.id))
+        case e => e.getMessage must beEqualTo(PasswordDoesNotMatch.format(provider.id))
       }
     }
 
@@ -63,7 +60,7 @@ class CredentialsProviderSpec extends PlaySpecification with Mockito {
       authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
       await(provider.authenticate(credentials)) must throwA[ConfigurationException].like {
-        case e => e.getMessage must beEqualTo(UnsupportedHasher.format(provider.id, "unknown", "foo, bar"))
+        case e => e.getMessage must beEqualTo(HasherIsNotRegistered.format(provider.id, "unknown", "foo, bar"))
       }
     }
 
@@ -77,7 +74,7 @@ class CredentialsProviderSpec extends PlaySpecification with Mockito {
       await(provider.authenticate(credentials)) must be equalTo loginInfo
     }
 
-    "re-hash password with new hasher" in new WithApplication with Context {
+    "re-hash password with new hasher if hasher is deprecated" in new WithApplication with Context {
       val passwordInfo = PasswordInfo("bar", "hashed(s3cr3t)")
       val loginInfo = LoginInfo(provider.id, credentials.identifier)
 
@@ -89,12 +86,26 @@ class CredentialsProviderSpec extends PlaySpecification with Mockito {
       await(provider.authenticate(credentials)) must be equalTo loginInfo
       there was one(authInfoRepository).update(loginInfo, passwordInfo)
     }
+
+    "re-hash password with new hasher if hasher is deprecated" in new WithApplication with Context {
+      val passwordInfo = PasswordInfo("foo", "hashed(s3cr3t)")
+      val loginInfo = LoginInfo(provider.id, credentials.identifier)
+
+      fooHasher.isDeprecated(passwordInfo) returns Some(true)
+      fooHasher.hash(credentials.password) returns passwordInfo
+      fooHasher.matches(passwordInfo, credentials.password) returns true
+      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
+      authInfoRepository.update[PasswordInfo](loginInfo, passwordInfo) returns Future.successful(passwordInfo)
+
+      await(provider.authenticate(credentials)) must be equalTo loginInfo
+      there was one(authInfoRepository).update(loginInfo, passwordInfo)
+    }
   }
 
   /**
    * The context.
    */
-  trait Context extends Scope {
+  trait Context extends BaseContext {
 
     /**
      * The test credentials.
@@ -102,31 +113,8 @@ class CredentialsProviderSpec extends PlaySpecification with Mockito {
     lazy val credentials = Credentials("apollonia.vanova@watchmen.com", "s3cr3t")
 
     /**
-     * The default password hasher.
-     */
-    lazy val fooHasher = {
-      val h = mock[PasswordHasher]
-      h.id returns "foo"
-      h
-    }
-
-    /**
-     * An optional password hasher.
-     */
-    lazy val barHasher = {
-      val h = mock[PasswordHasher]
-      h.id returns "bar"
-      h
-    }
-
-    /**
-     * The auth info repository mock.
-     */
-    lazy val authInfoRepository = mock[AuthInfoRepository]
-
-    /**
      * The provider to test.
      */
-    lazy val provider = new CredentialsProvider(authInfoRepository, fooHasher, List(fooHasher, barHasher))
+    lazy val provider = new CredentialsProvider(authInfoRepository, passwordHasherRegistry)
   }
 }

@@ -17,6 +17,7 @@ package com.mohiva.play.silhouette.password
 
 import com.mohiva.play.silhouette.api.util.PasswordInfo
 import org.specs2.mutable.Specification
+import org.specs2.specification.Scope
 
 /**
  * Test case for the [[BCryptPasswordHasher]] class.
@@ -24,49 +25,94 @@ import org.specs2.mutable.Specification
 class BCryptPasswordHasherSpec extends Specification {
 
   "The `hash` method" should {
-    "hash a password" in {
-      val password = "my_S3cr3t_p@sswQrd"
-      val hasher = new BCryptPasswordHasher
-      val info = hasher.hash(password)
+    "hash a password" in new Context {
+      val passwordInfo: PasswordInfo = hasher.hash(password)
 
-      info must beAnInstanceOf[PasswordInfo]
-      info.hasher must be equalTo BCryptPasswordHasher.ID
-      info.password must not be equalTo(password)
-      info.salt must beNone
+      passwordInfo.hasher must be equalTo BCryptPasswordHasher.ID
+      passwordInfo.password must not be equalTo(password)
+      passwordInfo.salt must beNone
     }
   }
 
   "The `matches` method" should {
-    "return true if a password matches a previous hashed password" in {
-      val password = "my_S3cr3t_p@sswQrd"
-      val hasher = new BCryptPasswordHasher
-      val info = hasher.hash(password)
+    "return true if a password matches a previous hashed password" in new Context {
+      val passwordInfo = hasher.hash(password)
 
-      hasher.matches(info, password) must beTrue
+      hasher.matches(passwordInfo, password) must beTrue
     }
 
-    "return false if a password doesn't match a previous hashed password" in {
-      val password = "my_S3cr3t_p@sswQrd"
-      val hasher = new BCryptPasswordHasher
-      val info = hasher.hash(password)
+    "return true if a password matches a previous hardcoded password" in new Context {
+      val passwordInfo = PasswordInfo("bcrypt", "$2a$10$PBwXy.iQz9n4QOdbgEV7Ve2aYsvXeAvyT0rzhoZKwaDH/3j3tUSW.")
 
-      hasher.matches(info, "not-equal") must beFalse
+      hasher.matches(passwordInfo, password) must beTrue
+    }
+
+    "return false if a password doesn't match a previous hashed password" in new Context {
+      val passwordInfo = hasher.hash(password)
+
+      hasher.matches(passwordInfo, "not-equal") must beFalse
     }
   }
 
-  "The hasher" should {
-    "be equal if the rounds parameter is equal" in {
-      val hasher1 = new BCryptPasswordHasher(1)
-      val hasher2 = new BCryptPasswordHasher(1)
+  "The `isSuitable` method" should {
+    "return true if the hasher is suitable for the given password info" in new Context {
+      val passwordInfo = hasher.hash(password)
 
-      hasher1 == hasher2 must beTrue
+      hasher.isSuitable(passwordInfo) must beTrue
     }
 
-    "not be equal if the rounds parameter is not equal" in {
-      val hasher1 = new BCryptPasswordHasher(1)
-      val hasher2 = new BCryptPasswordHasher(2)
+    "return true if the hasher is suitable when given a password info with different log rounds" in new Context {
+      val currentHasher = new BCryptPasswordHasher(5)
 
-      hasher1 == hasher2 must beFalse
+      val storedHasher = new BCryptPasswordHasher(10)
+      val passwordInfo = storedHasher.hash(password)
+
+      currentHasher.isSuitable(passwordInfo) must beTrue
     }
+
+    "return false if the hasher isn't suitable for the given password info" in new Context {
+      val passwordInfo = PasswordInfo("scrypt", "")
+
+      hasher.isSuitable(passwordInfo) must beFalse
+    }
+  }
+
+  "The `isDeprecated` method" should {
+    "return None if the hasher isn't suitable for the given password info" in new Context {
+      val passwordInfo = PasswordInfo("scrypt", "")
+
+      hasher.isDeprecated(passwordInfo) must beNone
+    }
+
+    "return Some(true) if the stored log rounds are not equal the hasher log rounds" in new Context {
+      val currentHasher = new BCryptPasswordHasher(5)
+
+      val storedHasher = new BCryptPasswordHasher(10)
+      val passwordInfo = storedHasher.hash(password)
+
+      currentHasher.isDeprecated(passwordInfo) must beSome(true)
+    }
+
+    "return Some(false) if the stored log rounds are equal the hasher log rounds" in new Context {
+      val passwordInfo = hasher.hash(password)
+
+      hasher.isDeprecated(passwordInfo) must beSome(false)
+    }
+  }
+
+  /**
+   * The context.
+   */
+  trait Context extends Scope {
+
+    /**
+     * A plain text password.
+     */
+    lazy val password = "my_S3cr3t_p@sswQrd"
+
+    /**
+     * The hasher to test.
+     */
+    lazy val hasher = new BCryptPasswordHasher(10)
   }
 }

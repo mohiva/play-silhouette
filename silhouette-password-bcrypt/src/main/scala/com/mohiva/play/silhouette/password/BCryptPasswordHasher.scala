@@ -26,14 +26,10 @@ import org.mindrot.jbcrypt.BCrypt
 /**
  * Implementation of the password hasher based on BCrypt.
  *
- * We declare this class as case class so that the compiler can create the `equals` method for us. This
- * is needed for the credentials based providers as an indicator that a password should be re-hashed,
- * if the log rounds value was changed.
- *
  * @param logRounds The log2 of the number of rounds of hashing to apply.
  * @see [[http://www.mindrot.org/files/jBCrypt/jBCrypt-0.2-doc/BCrypt.html#gensalt(int) gensalt]]
  */
-case class BCryptPasswordHasher(logRounds: Int = 10) extends PasswordHasher {
+class BCryptPasswordHasher(logRounds: Int = 10) extends PasswordHasher {
 
   /**
    * Gets the ID of the hasher.
@@ -51,7 +47,10 @@ case class BCryptPasswordHasher(logRounds: Int = 10) extends PasswordHasher {
    * @param plainPassword The password to hash.
    * @return A PasswordInfo containing the hashed password.
    */
-  override def hash(plainPassword: String) = PasswordInfo(id, BCrypt.hashpw(plainPassword, BCrypt.gensalt(logRounds)))
+  override def hash(plainPassword: String) = PasswordInfo(
+    hasher = id,
+    password = BCrypt.hashpw(plainPassword, BCrypt.gensalt(logRounds))
+  )
 
   /**
    * Checks if a password matches the hashed version.
@@ -62,6 +61,24 @@ case class BCryptPasswordHasher(logRounds: Int = 10) extends PasswordHasher {
    */
   override def matches(passwordInfo: PasswordInfo, suppliedPassword: String) = {
     BCrypt.checkpw(suppliedPassword, passwordInfo.password)
+  }
+
+  /**
+   * Indicates if a password info hashed with this hasher is deprecated.
+   *
+   * In case of the BCrypt password hasher, a password is deprecated if the log rounds have changed.
+   *
+   * @param passwordInfo The password info to check the deprecation status for.
+   * @return True if the given password info is deprecated, false otherwise. If a hasher isn't
+   *         suitable for the given password, this method should return None.
+   */
+  override def isDeprecated(passwordInfo: PasswordInfo): Option[Boolean] = {
+    Option(isSuitable(passwordInfo)).collect {
+      case true =>
+        val LogRoundsPattern(lr) = passwordInfo.password
+        // Is deprecated if the log rounds has changed
+        lr != logRounds.toString
+    }
   }
 }
 
@@ -74,4 +91,9 @@ object BCryptPasswordHasher {
    * The ID of the hasher.
    */
   val ID = "bcrypt"
+
+  /**
+   * The pattern to extract the log rounds from the password string.
+   */
+  val LogRoundsPattern = """^\$\w{2}\$(\d{1,2})\$.+""".r
 }

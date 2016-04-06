@@ -28,17 +28,14 @@ import com.mohiva.play.silhouette.api.AuthInfo
  * @param password The hashed password.
  * @param salt The optional salt used when hashing.
  */
-case class PasswordInfo(hasher: String, password: String, salt: Option[String] = None) extends AuthInfo
+case class PasswordInfo(
+  hasher: String,
+  password: String,
+  salt: Option[String] = None
+) extends AuthInfo
 
 /**
  * A trait that defines the password hasher interface.
- *
- * Some credentials based providers have the ability to change the password hashing method on
- * the fly. These providers use the `equals` method of a hasher as an indicator that the password
- * should be re-hashed with a new hashing algorithm. It can be the case that an hasher can provide
- * higher security based on additional parameters. In this case a default equals check will not work
- * because the hasher instance is the same. In such a case you should override the equals method
- * to provide a better check based on the additional parameters.
  */
 trait PasswordHasher {
 
@@ -65,4 +62,71 @@ trait PasswordHasher {
    * @return True if the password matches, false otherwise.
    */
   def matches(passwordInfo: PasswordInfo, suppliedPassword: String): Boolean
+
+  /**
+   * Checks if a password hasher is suitable for the given password info.
+   *
+   * @param passwordInfo The password info to check the hasher is suitable for.
+   * @return True if the hasher is suitable for the given password info, false otherwise.
+   */
+  def isSuitable(passwordInfo: PasswordInfo): Boolean = passwordInfo.hasher == id
+
+  /**
+   * Indicates if a password info hashed with this hasher is deprecated.
+   *
+   * A password can be deprecated if some internal state of a hasher has changed.
+   *
+   * @param passwordInfo The password info to check the deprecation status for.
+   * @return True if the given password info is deprecated, false otherwise. If a hasher isn't
+   *         suitable for the given password, this method should return None.
+   */
+  def isDeprecated(passwordInfo: PasswordInfo): Option[Boolean]
+}
+
+/**
+ * Defines the password hashers used by the application.
+ *
+ * Sometimes it's needed to change the password hashing algorithm, because of a better algorithm or some
+ * similar case. But the passwords stored in the backing store cannot easily be converted with another
+ * algorithm because they're hashed and cannot be decrypted back to plain text. For such case Silhouette
+ * supports the change of hashing algorithms on the fly. So if a user successfully authenticates after
+ * the application has changed the hashing algorithm, the provider hashes the entered plain-text password
+ * again with the new algorithm and overrides the auth info in the backing store with the new hash.
+ *
+ * The password hasher registry defines the current password hasher which is able to hash all new passwords
+ * and also match the passwords store in the backing store for this algorithm. And also a list of deprecated
+ * hashers, which should match passwords that are stored in the baking store but which are different to the
+ * current hasher.
+ *
+ * @param current The current password hasher used by the application.
+ * @param deprecated The deprecated list of password hashers.
+ */
+case class PasswordHasherRegistry(current: PasswordHasher, deprecated: Seq[PasswordHasher] = Seq()) {
+
+  /**
+   * Returns the complete list of supported password hashers.
+   *
+   * @return The complete list of supported password hashers.
+   */
+  def all = current +: deprecated
+
+  /**
+   * Finds the password hasher suitable for the given password info.
+   *
+   * First it checks if the current hasher is suitable for the given password hasher. As next it checks
+   * if a deprecated password hasher is suitable for the given password info. If non of the registered
+   * password hasher is suitable for the given password info, this method returns `None`.
+   *
+   * @param passwordInfo The password info to return a suitable password hasher for.
+   * @return Maybe a suitable password hasher, otherwise None.
+   */
+  def find(passwordInfo: PasswordInfo): Option[PasswordHasher] = all.find(_.isSuitable(passwordInfo))
+
+  /**
+   * Indicates if a hasher is in the list of deprecated hashers.
+   *
+   * @param hasher The hasher to check the deprecation status for.
+   * @return True if the given hasher is deprecated, false otherwise.
+   */
+  def isDeprecated(hasher: PasswordHasher): Boolean = deprecated.contains(hasher)
 }

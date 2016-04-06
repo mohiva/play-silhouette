@@ -24,7 +24,7 @@ import javax.inject.Inject
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.exceptions.ConfigurationException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
-import com.mohiva.play.silhouette.api.util.{ ExecutionContextProvider, Credentials, PasswordHasher, PasswordInfo }
+import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.impl.exceptions.{ IdentityNotFoundException, InvalidPasswordException }
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider._
 
@@ -40,15 +40,13 @@ import scala.concurrent.{ ExecutionContext, Future }
  * algorithm and stores the auth info in the backing store.
  *
  * @param authInfoRepository The auth info repository.
- * @param passwordHasher The default password hasher used by the application.
- * @param passwordHasherList List of password hasher supported by the application.
+ * @param passwordHasherRegistry The password hashers used by the application.
  * @param executionContext The execution context to handle the asynchronous operations.
  */
 class CredentialsProvider @Inject() (
-  authInfoRepository: AuthInfoRepository,
-  passwordHasher: PasswordHasher,
-  passwordHasherList: Seq[PasswordHasher])(implicit val executionContext: ExecutionContext)
-  extends Provider with ExecutionContextProvider {
+  protected val authInfoRepository: AuthInfoRepository,
+  protected val passwordHasherRegistry: PasswordHasherRegistry)(implicit val executionContext: ExecutionContext)
+  extends PasswordProvider {
 
   /**
    * Gets the provider ID.
@@ -65,20 +63,11 @@ class CredentialsProvider @Inject() (
    */
   def authenticate(credentials: Credentials): Future[LoginInfo] = {
     loginInfo(credentials).flatMap { loginInfo =>
-      authInfoRepository.find[PasswordInfo](loginInfo).flatMap {
-        case Some(authInfo) => passwordHasherList.find(_.id == authInfo.hasher) match {
-          case Some(hasher) if hasher.matches(authInfo, credentials.password) =>
-            if (hasher != passwordHasher) {
-              authInfoRepository.update(loginInfo, passwordHasher.hash(credentials.password)).map(_ => loginInfo)
-            } else {
-              Future.successful(loginInfo)
-            }
-          case Some(hasher) => throw new InvalidPasswordException(InvalidPassword.format(id))
-          case None => throw new ConfigurationException(UnsupportedHasher.format(
-            id, authInfo.hasher, passwordHasherList.map(_.id).mkString(", ")
-          ))
-        }
-        case None => throw new IdentityNotFoundException(UnknownCredentials.format(id))
+      authenticate(loginInfo, credentials.password).map {
+        case Authenticated            => loginInfo
+        case InvalidPassword(error)   => throw new InvalidPasswordException(error)
+        case UnsupportedHasher(error) => throw new ConfigurationException(error)
+        case NotFound(error)          => throw new IdentityNotFoundException(error)
       }
     }
   }
@@ -104,13 +93,6 @@ class CredentialsProvider @Inject() (
  * The companion object.
  */
 object CredentialsProvider {
-
-  /**
-   * The error messages.
-   */
-  val UnknownCredentials = "[Silhouette][%s] Could not find auth info for given credentials"
-  val InvalidPassword = "[Silhouette][%s] Passwords does not match"
-  val UnsupportedHasher = "[Silhouette][%s] Stored hasher ID `%s` isn't contained in the list of supported hasher: %s"
 
   /**
    * The provider constants.
