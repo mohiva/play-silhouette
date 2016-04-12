@@ -35,18 +35,18 @@ object Build extends Build {
     base = file("silhouette-persistence"),
     dependencies = Seq(silhouette)
   )
-
-  val silhouettePersistenceMemory = Project(
-    id = "play-silhouette-persistence-memory",
-    base = file("silhouette-persistence-memory"),
-    dependencies = Seq(silhouettePersistence)
-  )
-
+  
   val silhouetteCAS = Project(
     id = "play-silhouette-cas",
     base = file("silhouette-cas"),
     dependencies = Seq(silhouette % "compile->compile;test->test")
   )
+
+  val silhouettePersistenceMemory = Project(
+    id = "play-silhouette-persistence-memory",
+    base = file("silhouette-persistence-memory"),
+    dependencies = Seq(silhouettePersistence, silhouetteCAS)
+  )  
 
   val silhouetteTestkit = Project(
     id = "play-silhouette-testkit",
