@@ -37,15 +37,13 @@ import scala.concurrent.{ ExecutionContext, Future }
  * algorithm and stores the auth info in the backing store.
  *
  * @param authInfoRepository The auth info repository.
- * @param passwordHasher The default password hasher used by the application.
- * @param passwordHasherList List of password hasher supported by the application.
+ * @param passwordHasherRegistry The password hashers used by the application.
  * @param executionContext The execution context to handle the asynchronous operations.
  */
 class BasicAuthProvider @Inject() (
-  authInfoRepository: AuthInfoRepository,
-  passwordHasher: PasswordHasher,
-  passwordHasherList: Seq[PasswordHasher])(implicit val executionContext: ExecutionContext)
-  extends RequestProvider with Logger {
+  protected val authInfoRepository: AuthInfoRepository,
+  protected val passwordHasherRegistry: PasswordHasherRegistry)(implicit val executionContext: ExecutionContext)
+  extends RequestProvider with PasswordProvider with Logger {
 
   /**
    * Gets the provider ID.
@@ -65,24 +63,15 @@ class BasicAuthProvider @Inject() (
     getCredentials(request) match {
       case Some(credentials) =>
         val loginInfo = LoginInfo(id, credentials.identifier)
-        authInfoRepository.find[PasswordInfo](loginInfo).flatMap {
-          case Some(authInfo) => passwordHasherList.find(_.id == authInfo.hasher) match {
-            case Some(hasher) if hasher.matches(authInfo, credentials.password) =>
-              if (hasher != passwordHasher) {
-                authInfoRepository.update(loginInfo, passwordHasher.hash(credentials.password)).map(_ => Some(loginInfo))
-              } else {
-                Future.successful(Some(loginInfo))
-              }
-            case Some(hasher) =>
-              logger.debug(InvalidPassword.format(id))
-              Future.successful(None)
-            case None => throw new ConfigurationException(UnsupportedHasher.format(
-              id, authInfo.hasher, passwordHasherList.map(_.id).mkString(", ")
-            ))
-          }
-          case None =>
-            logger.debug(UnknownCredentials.format(id))
-            Future.successful(None)
+        authenticate(loginInfo, credentials.password).map {
+          case Authenticated => Some(loginInfo)
+          case InvalidPassword(error) =>
+            logger.debug(error)
+            None
+          case UnsupportedHasher(error) => throw new ConfigurationException(error)
+          case NotFound(error) =>
+            logger.debug(error)
+            None
         }
       case None => Future.successful(None)
     }
@@ -110,13 +99,6 @@ class BasicAuthProvider @Inject() (
  * The companion object.
  */
 object BasicAuthProvider {
-
-  /**
-   * The error and log messages.
-   */
-  val UnknownCredentials = "[Silhouette][%s] Could not find auth info for given credentials"
-  val InvalidPassword = "[Silhouette][%s] Passwords does not match"
-  val UnsupportedHasher = "[Silhouette][%s] Stored hasher ID `%s` isn't contained in the list of supported hasher: %s"
 
   /**
    * The provider constants.

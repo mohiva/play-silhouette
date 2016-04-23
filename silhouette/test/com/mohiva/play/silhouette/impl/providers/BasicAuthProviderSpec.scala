@@ -17,20 +17,17 @@ package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
-import com.mohiva.play.silhouette.api.util.{ Base64, Credentials, PasswordHasher, PasswordInfo }
-import com.mohiva.play.silhouette.impl.providers.BasicAuthProvider._
-import org.specs2.mock.Mockito
-import org.specs2.specification.Scope
-import play.api.libs.concurrent.Execution.Implicits._
-import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
+import com.mohiva.play.silhouette.api.util._
+import com.mohiva.play.silhouette.impl.providers.PasswordProvider._
+import play.api.test.{ FakeRequest, WithApplication }
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.providers.BasicAuthProvider]] class.
  */
-class BasicAuthProviderSpec extends PlaySpecification with Mockito {
+class BasicAuthProviderSpec extends PasswordProviderSpec {
 
   "The `authenticate` method" should {
     "throw ConfigurationException if unsupported hasher is stored" in new WithApplication with Context {
@@ -41,7 +38,7 @@ class BasicAuthProviderSpec extends PlaySpecification with Mockito {
       authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
 
       await(provider.authenticate(request)) must throwA[ConfigurationException].like {
-        case e => e.getMessage must beEqualTo(UnsupportedHasher.format(provider.id, "unknown", "foo, bar"))
+        case e => e.getMessage must beEqualTo(HasherIsNotRegistered.format(provider.id, "unknown", "foo, bar"))
       }
     }
 
@@ -98,13 +95,28 @@ class BasicAuthProviderSpec extends PlaySpecification with Mockito {
       await(provider.authenticate(request)) must beSome(loginInfo)
     }
 
-    "re-hash password with new hasher" in new WithApplication with Context {
+    "re-hash password with new hasher if hasher is deprecated" in new WithApplication with Context {
       val passwordInfo = PasswordInfo("bar", "hashed(s3cr3t)")
       val loginInfo = LoginInfo(provider.id, credentials.identifier)
       val request = FakeRequest().withHeaders(AUTHORIZATION -> encodeCredentials(credentials))
 
       fooHasher.hash(credentials.password) returns passwordInfo
       barHasher.matches(passwordInfo, credentials.password) returns true
+      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
+      authInfoRepository.update[PasswordInfo](loginInfo, passwordInfo) returns Future.successful(passwordInfo)
+
+      await(provider.authenticate(request)) must beSome(loginInfo)
+      there was one(authInfoRepository).update(loginInfo, passwordInfo)
+    }
+
+    "re-hash password with new hasher if password info is deprecated" in new WithApplication with Context {
+      val passwordInfo = PasswordInfo("foo", "hashed(s3cr3t)")
+      val loginInfo = LoginInfo(provider.id, credentials.identifier)
+      val request = FakeRequest().withHeaders(AUTHORIZATION -> encodeCredentials(credentials))
+
+      fooHasher.isDeprecated(passwordInfo) returns Some(true)
+      fooHasher.hash(credentials.password) returns passwordInfo
+      fooHasher.matches(passwordInfo, credentials.password) returns true
       authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(Some(passwordInfo))
       authInfoRepository.update[PasswordInfo](loginInfo, passwordInfo) returns Future.successful(passwordInfo)
 
@@ -122,7 +134,7 @@ class BasicAuthProviderSpec extends PlaySpecification with Mockito {
   /**
    * The context.
    */
-  trait Context extends Scope {
+  trait Context extends BaseContext {
 
     /**
      * The test credentials.
@@ -130,32 +142,9 @@ class BasicAuthProviderSpec extends PlaySpecification with Mockito {
     lazy val credentials = Credentials("apollonia.vanova@watchmen.com", "s3cr3t")
 
     /**
-     * The default password hasher.
-     */
-    lazy val fooHasher = {
-      val h = mock[PasswordHasher]
-      h.id returns "foo"
-      h
-    }
-
-    /**
-     * An optional password hasher.
-     */
-    lazy val barHasher = {
-      val h = mock[PasswordHasher]
-      h.id returns "bar"
-      h
-    }
-
-    /**
-     * The auth info repository mock.
-     */
-    lazy val authInfoRepository = mock[AuthInfoRepository]
-
-    /**
      * The provider to test.
      */
-    lazy val provider = new BasicAuthProvider(authInfoRepository, fooHasher, List(fooHasher, barHasher))
+    lazy val provider = new BasicAuthProvider(authInfoRepository, passwordHasherRegistry)
 
     /**
      * Creates the credentials to send within the header.
