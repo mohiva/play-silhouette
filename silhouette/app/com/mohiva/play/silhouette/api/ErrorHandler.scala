@@ -182,11 +182,11 @@ trait DefaultErrorHandler
   protected def produceResponse[S <: Status](status: S, msg: String)(implicit request: RequestHeader): Future[Result] = {
     import Codec._
     Future.successful(render {
-      case Accepts.Html() => status(toHtmlError(msg)).as(HTML).withHeaders(HeaderNames.CONTENT_TYPE -> ContentTypes.HTML)
+      case Accepts.Html() => status(toHtmlError(msg)).as(HTML)
       // This will also be the default content type if the client doesn't request a specific media type.
-      case Accepts.Json() => status(toJsonError(msg)).withHeaders(HeaderNames.CONTENT_TYPE -> ContentTypes.JSON)
-      case Accepts.Xml()  => status(toXmlError(msg)).withHeaders(HeaderNames.CONTENT_TYPE -> ContentTypes.XML)
-      case _              => status(toPlainTextError(msg)).withHeaders(HeaderNames.CONTENT_TYPE -> ContentTypes.TEXT)
+      case Accepts.Json() => status(toJsonError(msg))
+      case Accepts.Xml()  => status(toXmlError(msg))
+      case _              => status(toPlainTextError(msg))
       // The correct HTTP status code must be returned in any situation.
       // The response format will default to plain text in case the request does not specify one of known
       // media types. The user agent is responsible for inspecting the response headers as specified in

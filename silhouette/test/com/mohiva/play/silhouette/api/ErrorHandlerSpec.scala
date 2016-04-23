@@ -16,10 +16,10 @@
 package com.mohiva.play.silhouette.api
 
 import org.specs2.matcher.Scope
-import play.api.http.ContentTypes._
+import play.api.http.MimeTypes._
 import play.api.i18n.{ I18nSupport, Messages, MessagesApi }
-import play.api.mvc.{ Result, RequestHeader }
-import play.api.test.{ FakeRequest, WithApplication, PlaySpecification }
+import play.api.mvc.{ RequestHeader, Result }
+import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
 import scala.concurrent.Future
 
@@ -195,7 +195,7 @@ class ErrorHandlerSpec extends PlaySpecification {
       val result = f(request)
 
       status(result) must equalTo(expectedStatus)
-      header(CONTENT_TYPE, result) must beSome(expectedContentType)
+      contentType(result) must beSome(expectedContentType)
       contentAsString(result) must contain(expectedResponseFragment)
       contentAsString(result) must contain(Messages(expectedMessage))
     }
