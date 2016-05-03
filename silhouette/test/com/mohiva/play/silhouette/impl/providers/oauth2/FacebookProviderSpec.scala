@@ -70,7 +70,7 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       stateProvider.validate(any, any) returns Future.successful(state)
 
       authInfo(provider.authenticate()) {
-        case authInfo => authInfo must be equalTo oAuthInfo.as[OAuth2Info]
+        case authInfo => normalizeTime(authInfo) must be equalTo normalizeTime(oAuthInfo.as[OAuth2Info])
       }
     }
   }
