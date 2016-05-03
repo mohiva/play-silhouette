@@ -51,7 +51,16 @@ case class OAuth2Info(
   tokenType: Option[String] = None,
   expiresIn: Option[Int] = None,
   refreshToken: Option[String] = None,
-  params: Option[Map[String, String]] = None) extends AuthInfo
+  params: Option[Map[String, String]] = None,
+  generatedAt: Instant = new Instant()
+) extends AuthInfo {
+  def expired: Boolean = {
+    expiresIn match {
+      case Some(in) => generatedAt.plus((in * 1000).toLong).isAfter(new Instant())
+      case None     => false
+    }
+  }
+}
 
 /**
  * The Oauth2 info companion object.
