@@ -54,9 +54,9 @@ case class OAuth2Info(
   params: Option[Map[String, String]] = None,
   generatedAt: Instant = new Instant()
 ) extends AuthInfo {
-  def expired: Boolean = {
+  def expired(at: Instant = new Instant()): Boolean = {
     expiresIn match {
-      case Some(in) => generatedAt.plus((in * 1000).toLong).isAfter(new Instant())
+      case Some(in) => generatedAt.plus((in * 1000).toLong).isAfter(at)
       case None     => false
     }
   }
