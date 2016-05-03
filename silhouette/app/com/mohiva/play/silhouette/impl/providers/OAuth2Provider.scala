@@ -184,28 +184,28 @@ trait OAuth2Provider extends SocialProvider with OAuth2Constants with Logger {
   }
 
   /**
-    * Refreshes the OAuth2Info token at the refreshURL. Example code:
-    *
-    * def bearer(token: String) = req.withHeaders("Authorization" -> s"Bearer ${token}")
-    *
-    * def executeOAuth(info: OAuth2Info, provider: OAuth2Provider) = {
-    *   val again = provider.refresh(info.refreshToken).flatMap(token =>
-    *     bearer(token, request).execute().map(_ -> token)
-    *   )
-    *   val response = if (info.expired) {
-    *     again
-    *   } else {
-    *     bearer(info, request).execute().flatMap({ resp =>
-    *       resp.status match {
-    *         case 401 => again
-    *         case _   => Future.successful((resp, info))
-    *       }
-    *     })
-    *   }
-    * }
-    *
-    * @param refreshToken The refresh token, as on OAuth2Info
-    */
+   * Refreshes the OAuth2Info token at the refreshURL. Example code:
+   *
+   * def bearer(token: String) = req.withHeaders("Authorization" -> s"Bearer ${token}")
+   *
+   * def executeOAuth(info: OAuth2Info, provider: OAuth2Provider) = {
+   *   val again = provider.refresh(info.refreshToken).flatMap(token =>
+   *     bearer(token, request).execute().map(_ -> token)
+   *   )
+   *   val response = if (info.expired) {
+   *     again
+   *   } else {
+   *     bearer(info, request).execute().flatMap({ resp =>
+   *       resp.status match {
+   *         case 401 => again
+   *         case _   => Future.successful((resp, info))
+   *       }
+   *     })
+   *   }
+   * }
+   *
+   * @param refreshToken The refresh token, as on OAuth2Info
+   */
 
   def refresh(refreshToken: String): Option[Future[OAuth2Info]] = {
     settings.refreshURL.map({ url =>
