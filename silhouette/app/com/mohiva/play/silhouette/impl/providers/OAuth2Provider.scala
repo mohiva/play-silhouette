@@ -30,9 +30,12 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.libs.ws.WSResponse
 import play.api.mvc._
+import org.joda.time.Instant
+import org.apache.commons.codec.binary.Base64
 
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
+import scala.io.Codec
 
 /**
  * The Oauth2 info.
@@ -165,6 +168,19 @@ trait OAuth2Provider extends SocialProvider with OAuth2Constants with Logger {
       info => Success(info)
     )
   }
+
+  def refresh(refreshToken: String): Option[Future[OAuth2Info]] = {
+    settings.refreshURL.map({ url =>
+      val encodedAuth = Base64.encodeBase64(Codec.toUTF8(s"${settings.clientID}:${settings.clientSecret}")).toString
+      val params = Seq("grant_type" -> "refresh_token", "refresh_token" -> refreshToken) ++ settings.scope.map({ "scope" -> _ })
+      val body = params.map { p => p._1 + "=" + p._2 }.mkString("&")
+      httpLayer.url(url)
+        .withHeaders("Authorization" -> encodedAuth)
+        .withHeaders(settings.refreshHeaders: _*)
+        .post(body)
+        .flatMap(resp => Future.fromTry(buildInfo(resp)))
+    })
+  }
 }
 
 /**
@@ -178,6 +194,7 @@ object OAuth2Provider extends OAuth2Constants {
   val AuthorizationURLUndefined = "[Silhouette][%s] Authorization URL is undefined"
   val AuthorizationError = "[Silhouette][%s] Authorization server returned error: %s"
   val InvalidInfoFormat = "[Silhouette][%s] Cannot build OAuth2Info because of invalid response format: %s"
+
 }
 
 /**
@@ -292,6 +309,11 @@ case class OAuth2Settings(
   accessTokenURL: String,
   redirectURL: String,
   apiURL: Option[String] = None,
+  refreshURL: Option[String] = None,
+  refreshHeaders: Seq[(String, String)] = Seq(
+    "Accept" -> "application/json",
+    "Content-Type" -> "application/x-www-form-urlencoded"
+  ),
   clientID: String,
   clientSecret: String,
   scope: Option[String] = None,

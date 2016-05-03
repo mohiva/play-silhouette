@@ -5,6 +5,7 @@ libraryDependencies ++= Seq(
   Library.Play.ws,
   Library.jwtCore,
   Library.jwtApi,
+  Library.jodaTime,
   Library.Play.specs2 % Test,
   Library.Play.Specs2.matcherExtra % Test,
   Library.Play.Specs2.mock % Test,
