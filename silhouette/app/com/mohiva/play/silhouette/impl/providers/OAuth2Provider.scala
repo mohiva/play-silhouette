@@ -30,7 +30,7 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.libs.ws.WSResponse
 import play.api.mvc._
-import org.joda.time.Instant
+import org.joda.time.{ Instant, Seconds }
 import org.apache.commons.codec.binary.Base64
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -54,9 +54,14 @@ case class OAuth2Info(
   params: Option[Map[String, String]] = None,
   generatedAt: Instant = new Instant()
 ) extends AuthInfo {
+  /*
+   * Checks if the auth token is expired and needs to be refreshed.
+   *
+   * @param at The Instant to check against.
+   */
   def expired(at: Instant = new Instant()): Boolean = {
     expiresIn match {
-      case Some(in) => generatedAt.plus((in * 1000).toLong).isAfter(at)
+      case Some(in) => at.isAfter(generatedAt.plus(Seconds.seconds(in).toStandardDuration()))
       case None     => false
     }
   }
