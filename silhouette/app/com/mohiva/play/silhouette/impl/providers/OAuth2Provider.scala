@@ -19,6 +19,9 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
+import javax.inject.Inject
+
+import com.mohiva.play.silhouette.api.util.Clock
 import java.net.URLEncoder._
 
 import com.mohiva.play.silhouette.api._
@@ -184,25 +187,7 @@ trait OAuth2Provider extends SocialProvider with OAuth2Constants with Logger {
   }
 
   /**
-   * Refreshes the OAuth2Info token at the refreshURL. Example code:
-   *
-   * def bearer(token: String) = req.withHeaders("Authorization" -> s"Bearer ${token}")
-   *
-   * def executeOAuth(info: OAuth2Info, provider: OAuth2Provider) = {
-   *   val again = provider.refresh(info.refreshToken).flatMap(token =>
-   *     bearer(token, request).execute().map(_ -> token)
-   *   )
-   *   val response = if (info.expired) {
-   *     again
-   *   } else {
-   *     bearer(info, request).execute().flatMap({ resp =>
-   *       resp.status match {
-   *         case 401 => again
-   *         case _   => Future.successful((resp, info))
-   *       }
-   *     })
-   *   }
-   * }
+   * Refreshes the OAuth2Info token at the refreshURL.
    *
    * @param refreshToken The refresh token, as on OAuth2Info
    */
@@ -214,7 +199,7 @@ trait OAuth2Provider extends SocialProvider with OAuth2Constants with Logger {
       val body = params.map { p => p._1 + "=" + p._2 }.mkString("&")
       httpLayer.url(url)
         .withHeaders("Authorization" -> encodedAuth)
-        .withHeaders(settings.refreshHeaders: _*)
+        .withHeaders(settings.refreshHeaders.toSeq: _*)
         .post(body)
         .flatMap(resp => Future.fromTry(buildInfo(resp)))
     })
@@ -348,7 +333,7 @@ case class OAuth2Settings(
   redirectURL: String,
   apiURL: Option[String] = None,
   refreshURL: Option[String] = None,
-  refreshHeaders: Seq[(String, String)] = Seq(
+  refreshHeaders: Map[String, String] = Map(
     "Accept" -> "application/json",
     "Content-Type" -> "application/x-www-form-urlencoded"
   ),
