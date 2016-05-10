@@ -62,9 +62,16 @@ case class OAuth2Info(
    *
    * @param at The Instant to check against.
    */
-  def expired(at: Instant = new Instant()): Boolean = {
+  def expired(at: Instant): Boolean = {
     expiresIn match {
       case Some(in) => at.isAfter(generatedAt.plus(Seconds.seconds(in).toStandardDuration()))
+      case None     => false
+    }
+  }
+
+  def expired(at: Clock): Boolean = {
+    expiresIn match {
+      case Some(in) => at.now.isAfter(generatedAt.plus(Seconds.seconds(in).toStandardDuration()))
       case None     => false
     }
   }

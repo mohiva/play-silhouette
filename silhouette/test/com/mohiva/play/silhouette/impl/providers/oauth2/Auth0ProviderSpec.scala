@@ -76,7 +76,7 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
       stateProvider.validate(any, any) returns Future.successful(state)
 
       authInfo(provider.authenticate()) {
-        case authInfo => normalizeTime(authInfo) must be equalTo normalizeTime(oAuthInfo.as[OAuth2Info])
+        case authInfo => authInfo must beTypedEqualTo(oAuthInfo.as[OAuth2Info]) ^^^ normalizeTime
       }
     }
   }
