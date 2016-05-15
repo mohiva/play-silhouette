@@ -25,7 +25,7 @@ import org.joda.time.DateTime
 import scala.concurrent.duration.FiniteDuration
 
 /**
- * An authenticator tracks an authenticated user.
+ * An authenticator recognizes an authenticated user.
  */
 trait Authenticator {
 
