@@ -99,6 +99,7 @@ class CasProviderSpec extends SocialProviderSpec[CasAuthInfo] with Mockito with 
 
   "The `retrieveProfile` method" should {
     "return a valid profile if the CAS client validates the ticket" in new Context {
+      principal.getName returns userName
       principal.getAttributes returns attr
       client.validateServiceTicket(ticket) returns Future.successful(principal)
 
