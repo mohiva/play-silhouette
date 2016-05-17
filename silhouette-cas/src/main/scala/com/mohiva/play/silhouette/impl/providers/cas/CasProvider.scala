@@ -133,7 +133,7 @@ class CasProfileParser
     attr.foreach { case (key, value) => logger.debug("key: [%s], value: [%s]".format(key, value)) }
 
     CommonSocialProfile(
-      LoginInfo(ID, attr.get(UserName).asInstanceOf[String]),
+      LoginInfo(ID, principal.getName),
       firstName = Option(attr.get(FirstName).asInstanceOf[String]),
       lastName = Option(attr.get(LastName).asInstanceOf[String]),
       email = Option(attr.get(Email).asInstanceOf[String]),
