@@ -19,6 +19,9 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
+import javax.inject.Inject
+
+import com.mohiva.play.silhouette.api.util.Clock
 import java.net.URLEncoder._
 
 import com.mohiva.play.silhouette.api._
@@ -30,9 +33,12 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.libs.ws.WSResponse
 import play.api.mvc._
+import org.joda.time.{ Instant, Seconds }
+import org.apache.commons.codec.binary.Base64
 
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
+import scala.io.Codec
 
 /**
  * The Oauth2 info.
@@ -48,7 +54,28 @@ case class OAuth2Info(
   tokenType: Option[String] = None,
   expiresIn: Option[Int] = None,
   refreshToken: Option[String] = None,
-  params: Option[Map[String, String]] = None) extends AuthInfo
+  params: Option[Map[String, String]] = None,
+  generatedAt: Instant = new Instant()
+) extends AuthInfo {
+  /**
+   * Checks if the auth token is expired and needs to be refreshed.
+   *
+   * @param at The Instant to check against.
+   */
+  def expired(at: Instant): Boolean = {
+    expiresIn match {
+      case Some(in) => at.isAfter(generatedAt.plus(Seconds.seconds(in).toStandardDuration()))
+      case None     => false
+    }
+  }
+
+  def expired(at: Clock): Boolean = {
+    expiresIn match {
+      case Some(in) => at.now.isAfter(generatedAt.plus(Seconds.seconds(in).toStandardDuration()))
+      case None     => false
+    }
+  }
+}
 
 /**
  * The Oauth2 info companion object.
@@ -165,6 +192,25 @@ trait OAuth2Provider extends SocialProvider with OAuth2Constants with Logger {
       info => Success(info)
     )
   }
+
+  /**
+   * Refreshes the OAuth2Info token at the refreshURL.
+   *
+   * @param refreshToken The refresh token, as on OAuth2Info
+   */
+
+  def refresh(refreshToken: String): Option[Future[OAuth2Info]] = {
+    settings.refreshURL.map({ url =>
+      val encodedAuth = Base64.encodeBase64(Codec.toUTF8(s"${settings.clientID}:${settings.clientSecret}")).toString
+      val params = Seq("grant_type" -> "refresh_token", "refresh_token" -> refreshToken) ++ settings.scope.map({ "scope" -> _ })
+      val body = params.map { p => p._1 + "=" + p._2 }.mkString("&")
+      httpLayer.url(url)
+        .withHeaders("Authorization" -> encodedAuth)
+        .withHeaders(settings.refreshHeaders.toSeq: _*)
+        .post(body)
+        .flatMap(resp => Future.fromTry(buildInfo(resp)))
+    })
+  }
 }
 
 /**
@@ -178,6 +224,7 @@ object OAuth2Provider extends OAuth2Constants {
   val AuthorizationURLUndefined = "[Silhouette][%s] Authorization URL is undefined"
   val AuthorizationError = "[Silhouette][%s] Authorization server returned error: %s"
   val InvalidInfoFormat = "[Silhouette][%s] Cannot build OAuth2Info because of invalid response format: %s"
+
 }
 
 /**
@@ -292,6 +339,11 @@ case class OAuth2Settings(
   accessTokenURL: String,
   redirectURL: String,
   apiURL: Option[String] = None,
+  refreshURL: Option[String] = None,
+  refreshHeaders: Map[String, String] = Map(
+    "Accept" -> "application/json",
+    "Content-Type" -> "application/x-www-form-urlencoded"
+  ),
   clientID: String,
   clientSecret: String,
   scope: Option[String] = None,

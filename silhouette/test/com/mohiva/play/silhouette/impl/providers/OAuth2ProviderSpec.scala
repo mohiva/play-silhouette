@@ -21,6 +21,7 @@ import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
+import org.joda.time.Instant
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
@@ -209,6 +210,8 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
       c.provider.settings must be equalTo c.oAuthSettings
     }
   }
+
+  def normalizeTime(info: OAuth2Info): OAuth2Info = info.copy(generatedAt = new Instant(0))
 
   /**
    * Defines the context for the abstract OAuth2 provider spec.

@@ -71,7 +71,7 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
       stateProvider.validate(any, any) returns Future.successful(state)
 
       authInfo(provider.authenticate()) {
-        case authInfo => authInfo must be equalTo oAuthInfo.as[OAuth2Info]
+        case authInfo => authInfo must beTypedEqualTo(oAuthInfo.as[OAuth2Info]) ^^^ normalizeTime
       }
     }
   }
