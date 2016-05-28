@@ -9,10 +9,21 @@ env:
   global:
     secure: V6KuFtIP8++7MVr4uXe+VoyUGtjpw9fy/WjdTM5F7cN0w0Nns6JQpbbo4MwWBPIrcx2/fiPWH0hY53HKdhhi27tWSq0lGJO55TU8KtNyVi/UmBhyOp2DYKulXkYmcrOeCv0g5PXwXmrXxPW6SJZ6PR+cG8UhRQAF627jEdKsxBY=
 before_script:
-- echo "TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG, TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST, TRAVIS_BRANCH=$TRAVIS_BRANCH"
-script: scripts/ci-build
+  - echo "TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG, TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST, TRAVIS_BRANCH=$TRAVIS_BRANCH"
+cache:
+  directories:
+    # caching scala stuff based on
+    # http://www.scala-sbt.org/0.13/docs/Travis-CI-with-sbt.html#%28Experimental%29+Reusing+Ivy+cache
+    - $HOME/.ivy2/cache
+    - $HOME/.sbt/boot/
+script:
+  - scripts/ci-build
+  # cleanup travis trick from
+  # http://www.scala-sbt.org/0.13/docs/Travis-CI-with-sbt.html#%28Experimental%29+Reusing+Ivy+cache
+  - find $HOME/.sbt -name "*.lock" -delete
+  - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
 after_success:
-- scripts/api-doc
-- scripts/coveralls
+  - scripts/api-doc
+  - scripts/coveralls
 notifications:
   email: false

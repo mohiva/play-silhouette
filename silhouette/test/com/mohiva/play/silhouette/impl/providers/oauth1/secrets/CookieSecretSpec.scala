@@ -15,6 +15,8 @@
  */
 package com.mohiva.play.silhouette.impl.providers.oauth1.secrets
 
+import java.util.regex.Pattern
+
 import com.mohiva.play.silhouette.api.util.Clock
 import com.mohiva.play.silhouette.impl.exceptions.OAuth1TokenSecretException
 import com.mohiva.play.silhouette.impl.providers.OAuth1Info
@@ -33,6 +35,7 @@ import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 import scala.concurrent.duration._
 import scala.concurrent.Future
 import scala.language.postfixOps
+import scala.util.Failure
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.providers.oauth1.secrets.CookieSecret]] class.
@@ -49,13 +52,34 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
     }
   }
 
-  "The `serialize` method of the secret" should {
-    "serialize the JSON as encrypted string" in new WithApplication with Context {
-      val dateTime = new DateTime(2014, 8, 8, 0, 0, 0)
-      val decoded = Crypto.decryptAES(secret.copy(expirationDate = dateTime).serialize)
+  "The `unserialize` method of the secret" should {
+    "throw an OAuth1TokenSecretException if a secret contains invalid json" in new WithApplication with Context {
+      val value = "invalid"
+      val msg = Pattern.quote(InvalidJson.format(value))
 
-      decoded must /("expirationDate" -> dateTime.getMillis.toDouble)
-      decoded must /("value" -> "value")
+      unserialize(cookieSigner.sign(Crypto.encryptAES(value))) must beFailedTry.withThrowable[OAuth1TokenSecretException](msg)
+    }
+
+    "throw an OAuth1TokenSecretException if a secret contains valid json but invalid secret" in new WithApplication with Context {
+      val value = "{ \"test\": \"test\" }"
+      val msg = "^" + Pattern.quote(InvalidSecretFormat.format("")) + ".*"
+
+      unserialize(cookieSigner.sign(Crypto.encryptAES(value))) must beFailedTry.withThrowable[OAuth1TokenSecretException](msg)
+    }
+
+    "throw an OAuth1TokenSecretException if a secret is badly signed" in new WithApplication with Context {
+      val value = "invalid"
+      val msg = Pattern.quote(InvalidCookieSignature)
+
+      unserialize(value) must beFailedTry.withThrowable[OAuth1TokenSecretException](msg)
+    }
+  }
+
+  "The `serialize/unserialize` method of the secret" should {
+    "serialize/unserialize a secret" in new WithApplication with Context {
+      val serialized = serialize(secret)
+
+      unserialize(serialized) must beSuccessfulTry.withValue(secret)
     }
   }
 
@@ -74,7 +98,7 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
   }
 
   "The `retrieve` method of the provider" should {
-    "throw an TokenSecretException if client secret doesn't exists" in new Context {
+    "throw an OAuth1TokenSecretException if client secret doesn't exists" in new Context {
       implicit val req = FakeRequest()
 
       await(provider.retrieve) must throwA[OAuth1TokenSecretException].like {
@@ -82,8 +106,18 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
       }
     }
 
-    "throw an TokenSecretException if client secret contains invalid json" in new WithApplication with Context {
-      val invalidSecret = Crypto.encryptAES("{")
+    "throw an OAuth1TokenSecretException if client secret contains invalid json" in new WithApplication with Context {
+      val invalidSecret = cookieSigner.sign(Crypto.encryptAES("{"))
+
+      implicit val req = FakeRequest().withCookies(Cookie(settings.cookieName, invalidSecret))
+
+      await(provider.retrieve) must throwA[OAuth1TokenSecretException].like {
+        case e => e.getMessage must startWith(InvalidJson.format(""))
+      }
+    }
+
+    "throw an OAuth1TokenSecretException if client secret contains valid json but invalid secret" in new WithApplication with Context {
+      val invalidSecret = cookieSigner.sign(Crypto.encryptAES("{ \"test\": \"test\" }"))
 
       implicit val req = FakeRequest().withCookies(Cookie(settings.cookieName, invalidSecret))
 
@@ -92,23 +126,21 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
       }
     }
 
-    "throw an TokenSecretException if client secret contains valid json but invalid secret" in new WithApplication with Context {
-      val invalidSecret = Crypto.encryptAES("{ \"test\": \"test\" }")
-
-      implicit val req = FakeRequest().withCookies(Cookie(settings.cookieName, invalidSecret))
-
-      await(provider.retrieve) must throwA[OAuth1TokenSecretException].like {
-        case e => e.getMessage must startWith(InvalidSecretFormat.format(""))
-      }
-    }
-
-    "throw an TokenSecretException if secret is expired" in new WithApplication with Context {
+    "throw an OAuth1TokenSecretException if secret is expired" in new WithApplication with Context {
       val expiredSecret = secret.copy(expirationDate = DateTime.now.minusHours(1))
 
       implicit val req = FakeRequest().withCookies(Cookie(settings.cookieName, expiredSecret.serialize))
 
       await(provider.retrieve) must throwA[OAuth1TokenSecretException].like {
         case e => e.getMessage must startWith(SecretIsExpired.format())
+      }
+    }
+
+    "throw an OAuth1TokenSecretException if client secret is badly signed" in new WithApplication with Context {
+      implicit val req = FakeRequest().withCookies(Cookie(settings.cookieName, "invalid"))
+
+      await(provider.retrieve) must throwA[OAuth1TokenSecretException].like {
+        case e => e.getMessage must startWith(InvalidCookieSignature)
       }
     }
 

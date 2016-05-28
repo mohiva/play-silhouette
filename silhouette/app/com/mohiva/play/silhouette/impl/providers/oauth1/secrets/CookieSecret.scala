@@ -21,6 +21,7 @@ import com.mohiva.play.silhouette.api.util.{ Clock, ExtractableRequest }
 import com.mohiva.play.silhouette.impl.exceptions.OAuth1TokenSecretException
 import com.mohiva.play.silhouette.impl.providers.oauth1.secrets.CookieSecretProvider._
 import com.mohiva.play.silhouette.impl.providers.{ OAuth1Info, OAuth1TokenSecret, OAuth1TokenSecretProvider }
+import com.mohiva.play.silhouette.impl.util.CookieSigner
 import org.joda.time.DateTime
 import play.api.libs.Crypto
 import play.api.libs.json.Json
@@ -42,12 +43,17 @@ object CookieSecret {
   implicit val jsonFormat = Json.format[CookieSecret]
 
   /**
+   * The cookie signer instance.
+   */
+  val cookieSigner = new CookieSigner(None, "-mohiva-silhouette-oauth1-cookie-secret-")
+
+  /**
    * Returns a serialized value of the secret.
    *
    * @param secret The secret to serialize.
    * @return A serialized value of the secret.
    */
-  def serialize(secret: CookieSecret) = Crypto.encryptAES(Json.toJson(secret).toString())
+  def serialize(secret: CookieSecret) = cookieSigner.sign(Crypto.encryptAES(Json.toJson(secret).toString()))
 
   /**
    * Unserializes the secret.
@@ -56,12 +62,25 @@ object CookieSecret {
    * @return Some secret on success, otherwise None.
    */
   def unserialize(str: String): Try[CookieSecret] = {
-    Try(Json.parse(Crypto.decryptAES(str))) match {
+    cookieSigner.extract(str) match {
+      case Success(data) => buildSecret(Crypto.decryptAES(data))
+      case Failure(e) => Failure(new OAuth1TokenSecretException(InvalidCookieSignature, e))
+    }
+  }
+
+  /**
+   * Builds the secret from Json.
+   *
+   * @param str The string representation of the secret.
+   * @return A secret on success, otherwise a failure.
+   */
+  private def buildSecret(str: String): Try[CookieSecret] = {
+    Try(Json.parse(str)) match {
       case Success(json) => json.validate[CookieSecret].asEither match {
         case Left(error) => Failure(new OAuth1TokenSecretException(InvalidSecretFormat.format(error)))
         case Right(authenticator) => Success(authenticator)
       }
-      case Failure(error) => Failure(new OAuth1TokenSecretException(InvalidSecretFormat.format(error)))
+      case Failure(error) => Failure(new OAuth1TokenSecretException(InvalidJson.format(str), error))
     }
   }
 }
@@ -169,7 +188,9 @@ object CookieSecretProvider {
    */
   val ClientSecretDoesNotExists = "[Silhouette][CookieSecretProvider] Secret cookie doesn't exists for name: %s"
   val SecretIsExpired = "[Silhouette][CookieSecretProvider] Secret is expired"
+  val InvalidJson = "[Silhouette][CookieSecretProvider] Cannot parse invalid Json: %s"
   val InvalidSecretFormat = "[Silhouette][CookieSecretProvider] Cannot build token secret because of invalid Json format: %s"
+  val InvalidCookieSignature = "[Silhouette][CookieSecretProvider] Invalid cookie signature"
 }
 
 /**
