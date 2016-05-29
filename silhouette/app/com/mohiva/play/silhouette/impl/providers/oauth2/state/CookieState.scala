@@ -16,11 +16,12 @@
 package com.mohiva.play.silhouette.impl.providers.oauth2.state
 
 import com.mohiva.play.silhouette._
-import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, Base64, Clock, IDGenerator }
+import com.mohiva.play.silhouette.api.util.{ Base64, Clock, ExtractableRequest, IDGenerator }
 import com.mohiva.play.silhouette.impl.exceptions.OAuth2StateException
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.oauth2.state.CookieStateProvider._
 import com.mohiva.play.silhouette.impl.providers.{ OAuth2State, OAuth2StateProvider }
+import com.mohiva.play.silhouette.impl.util.CookieSigner
 import org.joda.time.DateTime
 import play.api.Play
 import play.api.Play.current
@@ -40,6 +41,48 @@ object CookieState {
    * Converts the [[CookieState]]] to Json and vice versa.
    */
   implicit val jsonFormat = Json.format[CookieState]
+
+  /**
+   * The cookie signer instance.
+   */
+  val cookieSigner = new CookieSigner(None, "-mohiva-silhouette-oauth2-cookie-state-")
+
+  /**
+   * Returns a serialized value of the state.
+   *
+   * @param state The state to serialize.
+   * @return A serialized value of the state.
+   */
+  def serialize(state: CookieState) = cookieSigner.sign(Base64.encode(Json.toJson(state)))
+
+  /**
+   * Unserializes the state.
+   *
+   * @param str The string representation of the state.
+   * @return Some state on success, otherwise None.
+   */
+  def unserialize(str: String, id: String): Try[CookieState] = {
+    cookieSigner.extract(str) match {
+      case Success(data) => buildState(Base64.decode(data), id)
+      case Failure(e) => Failure(new OAuth2StateException(InvalidCookieSignature.format(id), e))
+    }
+  }
+
+  /**
+   * Builds the state from Json.
+   *
+   * @param str The string representation of the state.
+   * @return A state on success, otherwise a failure.
+   */
+  private def buildState(str: String, id: String): Try[CookieState] = {
+    Try(Json.parse(str)) match {
+      case Success(json) => json.validate[CookieState].asEither match {
+        case Left(error) => Failure(new OAuth2StateException(InvalidStateFormat.format(id, error)))
+        case Right(authenticator) => Success(authenticator)
+      }
+      case Failure(error) => Failure(new OAuth2StateException(InvalidJson.format(id, str), error))
+    }
+  }
 }
 
 /**
@@ -66,7 +109,7 @@ case class CookieState(expirationDate: DateTime, value: String) extends OAuth2St
    *
    * @return A serialized value of the state.
    */
-  def serialize = Base64.encode(Json.toJson(this))
+  def serialize = CookieState.serialize(this)
 }
 
 /**
@@ -100,7 +143,6 @@ class CookieStateProvider(
   /**
    * Validates the provider and the client state.
    *
-   * @param id The provider ID.
    * @param request The request.
    * @tparam B The type of the request body.
    * @return The state on success, otherwise an failure.
@@ -135,13 +177,12 @@ class CookieStateProvider(
   /**
    * Gets the state from cookie.
    *
-   * @param id The provider ID.
    * @param request The request header.
    * @return The OAuth2 state on success, otherwise a failure.
    */
   private def clientState(id: String)(implicit request: RequestHeader): Try[CookieState] = {
     request.cookies.get(settings.cookieName) match {
-      case Some(cookie) => unserializeState(cookie.value, id)
+      case Some(cookie) => CookieState.unserialize(cookie.value, id)
       case None => Failure(new OAuth2StateException(ClientStateDoesNotExists.format(id, settings.cookieName)))
     }
   }
@@ -150,32 +191,14 @@ class CookieStateProvider(
    * Gets the state from request the after the provider has redirected back from the authorization server
    * with the access code.
    *
-   * @param id The provider ID.
    * @param request The request.
    * @tparam B The type of the request body.
    * @return The OAuth2 state on success, otherwise a failure.
    */
   private def providerState[B](id: String)(implicit request: ExtractableRequest[B]): Try[CookieState] = {
     request.extractString(State) match {
-      case Some(state) => unserializeState(state, id)
+      case Some(state) => CookieState.unserialize(state, id)
       case _ => Failure(new OAuth2StateException(ProviderStateDoesNotExists.format(id, State)))
-    }
-  }
-
-  /**
-   * Unserializes the state.
-   *
-   * @param str The string representation of the state.
-   * @param id The provider ID.
-   * @return Some state on success, otherwise None.
-   */
-  private def unserializeState(str: String, id: String): Try[CookieState] = {
-    Try(Json.parse(Base64.decode(str))) match {
-      case Success(json) => json.validate[CookieState].asEither match {
-        case Left(error) => Failure(new OAuth2StateException(InvalidStateFormat.format(id, error)))
-        case Right(authenticator) => Success(authenticator)
-      }
-      case Failure(error) => Failure(new OAuth2StateException(InvalidStateFormat.format(id, error)))
     }
   }
 }
@@ -192,7 +215,9 @@ object CookieStateProvider {
   val ProviderStateDoesNotExists = "[Silhouette][%s] Couldn't find state in request for param: %s"
   val StateIsNotEqual = "[Silhouette][%s] State isn't equal"
   val StateIsExpired = "[Silhouette][%s] State is expired"
+  val InvalidJson = "[Silhouette][%s] Cannot parse invalid Json: %s"
   val InvalidStateFormat = "[Silhouette][%s] Cannot build OAuth2State because of invalid Json format: %s"
+  val InvalidCookieSignature = "[Silhouette][%s] Invalid cookie signature"
 }
 
 /**
