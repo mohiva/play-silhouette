@@ -94,7 +94,7 @@ trait PasswordHasher {
  * again with the new algorithm and overrides the auth info in the backing store with the new hash.
  *
  * The password hasher registry defines the current password hasher which is able to hash all new passwords
- * and also match the passwords store in the backing store for this algorithm. And also a list of deprecated
+ * and also match the passwords stored in the backing store for this algorithm. And also a list of deprecated
  * hashers, which should match passwords that are stored in the baking store but which are different to the
  * current hasher.
  *
