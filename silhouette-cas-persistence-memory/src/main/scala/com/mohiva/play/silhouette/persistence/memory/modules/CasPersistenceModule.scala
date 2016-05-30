@@ -18,26 +18,22 @@ package com.mohiva.play.silhouette.persistence.memory.modules
 import javax.inject
 
 import com.google.inject.AbstractModule
-import com.mohiva.play.silhouette.api.util.PasswordInfo
-import com.mohiva.play.silhouette.impl.providers.{ OAuth1Info, OAuth2Info, OpenIDInfo }
+import com.mohiva.play.silhouette.impl.providers.CasInfo
 import com.mohiva.play.silhouette.persistence.daos._
-import com.mohiva.play.silhouette.persistence.memory.daos.{ OAuth1InfoDAO, OAuth2InfoDAO, OpenIDInfoDAO, PasswordInfoDAO }
+import com.mohiva.play.silhouette.persistence.memory.daos.CasInfoDAO
 import net.codingwell.scalaguice.ScalaModule
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
- * Provides Guice bindings for the persistence module.
+ * Provides Guice bindings for the CAS persistence module.
  */
-class PersistenceModule extends AbstractModule with ScalaModule {
+class CasPersistenceModule extends AbstractModule with ScalaModule {
 
   /**
    * Configures the module.
    */
   def configure(): Unit = {
-    bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoDAO].in[inject.Singleton]
-    bind[DelegableAuthInfoDAO[OAuth1Info]].to[OAuth1InfoDAO].in[inject.Singleton]
-    bind[DelegableAuthInfoDAO[OAuth2Info]].to[OAuth2InfoDAO].in[inject.Singleton]
-    bind[DelegableAuthInfoDAO[OpenIDInfo]].to[OpenIDInfoDAO].in[inject.Singleton]
+    bind[DelegableAuthInfoDAO[CasInfo]].to[CasInfoDAO].in[inject.Singleton]
   }
 }

@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.providers.cas
+package com.mohiva.play.silhouette.persistence.memory.daos
+
+import com.mohiva.play.silhouette.impl.providers.CasInfo
+import com.mohiva.play.silhouette.persistence.daos.InMemoryAuthInfoDAO
 
 /**
- * An extension to silhouette to add CAS support
- * http://jasig.github.io/cas
+ * The DAO to persist the CAS information.
+ *
+ * Note: Not thread safe, demo only.
  */
-package object cas
+class CasInfoDAO extends InMemoryAuthInfoDAO[CasInfo]

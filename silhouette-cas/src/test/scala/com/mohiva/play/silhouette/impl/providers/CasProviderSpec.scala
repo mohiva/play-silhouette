@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.providers.cas
+package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.exceptions.ConfigurationException
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.api.{ Logger, LoginInfo }
-import com.mohiva.play.silhouette.impl.providers.{ CommonSocialProfile, SocialProviderSpec }
 import org.jasig.cas.client.authentication.AttributePrincipal
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
@@ -31,7 +30,7 @@ import scala.concurrent.duration._
 /**
  * Test case for the [[CasProvider]] class.
  */
-class CasProviderSpec extends SocialProviderSpec[CasAuthInfo] with Mockito with Logger {
+class CasProviderSpec extends SocialProviderSpec[CasInfo] with Mockito with Logger {
 
   "The settings" should {
     "fail with a ConfigurationException if casURL is invalid" in new Context {
@@ -92,7 +91,7 @@ class CasProviderSpec extends SocialProviderSpec[CasAuthInfo] with Mockito with 
       implicit val req = FakeRequest(GET, "/?ticket=%s".format(ticket))
 
       authInfo(provider.authenticate()) {
-        case authInfo => authInfo must be equalTo CasAuthInfo(ticket)
+        case authInfo => authInfo must be equalTo CasInfo(ticket)
       }
     }
   }
@@ -146,7 +145,7 @@ class CasProviderSpec extends SocialProviderSpec[CasAuthInfo] with Mockito with 
 
     lazy val ticket = "ST-12345678"
 
-    lazy val casAuthInfo = new CasAuthInfo(ticket)
+    lazy val casAuthInfo = new CasInfo(ticket)
 
     lazy val principal = mock[AttributePrincipal].smart
 
