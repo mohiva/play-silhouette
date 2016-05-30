@@ -16,6 +16,7 @@
 package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.LoginInfo
+import com.mohiva.play.silhouette.api.crypto.Base64
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.impl.providers.PasswordProvider._

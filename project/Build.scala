@@ -24,6 +24,18 @@ object Build extends Build {
     base = file("silhouette")
   )
 
+  val silhouetteCAS = Project(
+    id = "play-silhouette-cas",
+    base = file("silhouette-cas"),
+    dependencies = Seq(silhouette % "compile->compile;test->test")
+  )
+
+  val silhouetteCryptoJCA = Project(
+    id = "play-silhouette-crypto-jca",
+    base = file("silhouette-crypto-jca"),
+    dependencies = Seq(silhouette)
+  )
+
   val silhouettePasswordBcrypt = Project(
     id = "play-silhouette-password-bcrypt",
     base = file("silhouette-password-bcrypt"),
@@ -42,12 +54,6 @@ object Build extends Build {
     dependencies = Seq(silhouettePersistence)
   )
 
-  val silhouetteCAS = Project(
-    id = "play-silhouette-cas",
-    base = file("silhouette-cas"),
-    dependencies = Seq(silhouette % "compile->compile;test->test")
-  )
-
   val silhouetteTestkit = Project(
     id = "play-silhouette-testkit",
     base = file("silhouette-testkit"),
@@ -59,10 +65,11 @@ object Build extends Build {
     base = file("."),
     aggregate = Seq(
       silhouette,
+      silhouetteCAS,
+      silhouetteCryptoJCA,
       silhouettePasswordBcrypt,
       silhouettePersistence,
       silhouettePersistenceMemory,
-      silhouetteCAS,
       silhouetteTestkit
     ),
     settings = Defaults.coreDefaultSettings ++

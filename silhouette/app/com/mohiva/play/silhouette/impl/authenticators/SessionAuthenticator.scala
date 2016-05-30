@@ -16,16 +16,16 @@
 package com.mohiva.play.silhouette.impl.authenticators
 
 import com.mohiva.play.silhouette.api.Authenticator.Implicits._
+import com.mohiva.play.silhouette.api.crypto.AuthenticatorEncoder
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
-import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, Base64, Clock, FingerprintGenerator }
 import com.mohiva.play.silhouette.api.util.JsonFormats._
+import com.mohiva.play.silhouette.api.util.{ Clock, ExtractableRequest, FingerprintGenerator }
 import com.mohiva.play.silhouette.api.{ Authenticator, ExpirableAuthenticator, Logger, LoginInfo }
 import com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService._
 import org.joda.time.DateTime
 import play.api.http.HeaderNames
-import play.api.libs.Crypto
 import play.api.libs.json.Json
 import play.api.mvc.{ Cookies, RequestHeader, Result, Session }
 
@@ -76,27 +76,22 @@ object SessionAuthenticator extends Logger {
    * Serializes the authenticator.
    *
    * @param authenticator The authenticator to serialize.
-   * @param settings The authenticator settings.
+   * @param authenticatorEncoder The authenticator encoder.
    * @return The serialized authenticator.
    */
-  def serialize(authenticator: SessionAuthenticator)(settings: SessionAuthenticatorSettings) = {
-    if (settings.encryptAuthenticator) {
-      Crypto.encryptAES(Json.toJson(authenticator).toString())
-    } else {
-      Base64.encode(Json.toJson(authenticator))
-    }
+  def serialize(authenticator: SessionAuthenticator, authenticatorEncoder: AuthenticatorEncoder) = {
+    authenticatorEncoder.encode(Json.toJson(authenticator).toString())
   }
 
   /**
    * Unserializes the authenticator.
    *
    * @param str The string representation of the authenticator.
-   * @param settings The authenticator settings.
+   * @param authenticatorEncoder The authenticator encoder.
    * @return Some authenticator on success, otherwise None.
    */
-  def unserialize(str: String)(settings: SessionAuthenticatorSettings): Try[SessionAuthenticator] = {
-    if (settings.encryptAuthenticator) buildAuthenticator(Crypto.decryptAES(str))
-    else buildAuthenticator(Base64.decode(str))
+  def unserialize(str: String, authenticatorEncoder: AuthenticatorEncoder): Try[SessionAuthenticator] = {
+    buildAuthenticator(authenticatorEncoder.decode(str))
   }
 
   /**
@@ -121,12 +116,14 @@ object SessionAuthenticator extends Logger {
  *
  * @param settings The authenticator settings.
  * @param fingerprintGenerator The fingerprint generator implementation.
+ * @param authenticatorEncoder The authenticator encoder.
  * @param clock The clock implementation.
  * @param executionContext The execution context to handle the asynchronous operations.
  */
 class SessionAuthenticatorService(
   settings: SessionAuthenticatorSettings,
   fingerprintGenerator: FingerprintGenerator,
+  authenticatorEncoder: AuthenticatorEncoder,
   clock: Clock)(implicit val executionContext: ExecutionContext)
   extends AuthenticatorService[SessionAuthenticator]
   with Logger {
@@ -167,7 +164,7 @@ class SessionAuthenticatorService(
       if (settings.useFingerprinting) Some(fingerprintGenerator.generate) else None
     }).map { fingerprint =>
       request.session.get(settings.sessionKey).flatMap { value =>
-        unserialize(value)(settings) match {
+        unserialize(value, authenticatorEncoder) match {
           case Success(authenticator) if fingerprint.isDefined && authenticator.fingerprint != fingerprint =>
             logger.info(InvalidFingerprint.format(ID, fingerprint, authenticator))
             None
@@ -190,7 +187,7 @@ class SessionAuthenticatorService(
    * @return The serialized authenticator value.
    */
   override def init(authenticator: SessionAuthenticator)(implicit request: RequestHeader): Future[Session] = {
-    Future.successful(request.session + (settings.sessionKey -> serialize(authenticator)(settings)))
+    Future.successful(request.session + (settings.sessionKey -> serialize(authenticator, authenticatorEncoder)))
   }
 
   /**
@@ -248,7 +245,7 @@ class SessionAuthenticatorService(
     request: RequestHeader): Future[AuthenticatorResult] = {
 
     Future.fromTry(Try {
-      AuthenticatorResult(result.addingToSession(settings.sessionKey -> serialize(authenticator)(settings)))
+      AuthenticatorResult(result.addingToSession(settings.sessionKey -> serialize(authenticator, authenticatorEncoder)))
     }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
     })
@@ -335,14 +332,12 @@ object SessionAuthenticatorService {
  * The settings for the session authenticator.
  *
  * @param sessionKey The key of the authenticator in the session.
- * @param encryptAuthenticator Indicates if the authenticator should be encrypted in session.
  * @param useFingerprinting Indicates if a fingerprint of the user should be stored in the authenticator.
  * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out.
  * @param authenticatorExpiry The duration an authenticator expires after it was created.
  */
 case class SessionAuthenticatorSettings(
   sessionKey: String = "authenticator",
-  encryptAuthenticator: Boolean = true,
   useFingerprinting: Boolean = true,
   authenticatorIdleTimeout: Option[FiniteDuration] = None,
   authenticatorExpiry: FiniteDuration = 12 hours)

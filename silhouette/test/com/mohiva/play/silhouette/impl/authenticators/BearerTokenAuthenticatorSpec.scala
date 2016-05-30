@@ -348,17 +348,17 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
     /**
      * The repository implementation.
      */
-    lazy val repository: AuthenticatorRepository[BearerTokenAuthenticator] = mock[AuthenticatorRepository[BearerTokenAuthenticator]]
+    lazy val repository = mock[AuthenticatorRepository[BearerTokenAuthenticator]].smart
 
     /**
      * The ID generator implementation.
      */
-    lazy val idGenerator: IDGenerator = mock[IDGenerator]
+    lazy val idGenerator = mock[IDGenerator].smart
 
     /**
      * The clock implementation.
      */
-    lazy val clock: Clock = mock[Clock]
+    lazy val clock = mock[Clock].smart
 
     /**
      * The settings.

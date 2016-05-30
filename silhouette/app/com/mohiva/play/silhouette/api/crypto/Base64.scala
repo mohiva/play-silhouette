@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.api.util
+package com.mohiva.play.silhouette.api.crypto
 
-import java.util.{ Base64 => JBase64 }
 import play.api.libs.json.JsValue
 
 /**
@@ -29,7 +28,15 @@ object Base64 {
    * @param str The string to decode.
    * @return The decoded string.
    */
-  def decode(str: String): String = new String(JBase64.getDecoder.decode(str), "UTF-8")
+  def decode(str: String): String = new String(java.util.Base64.getDecoder.decode(str), "UTF-8")
+
+  /**
+   * Encodes a byte array as Base64.
+   *
+   * @param bytes The byte array to encode.
+   * @return The encodes string.
+   */
+  def encode(bytes: Array[Byte]): String = java.util.Base64.getEncoder.encodeToString(bytes)
 
   /**
    * Encodes a string as Base64.
@@ -37,7 +44,7 @@ object Base64 {
    * @param str The string to encode.
    * @return The encodes string.
    */
-  def encode(str: String): String = JBase64.getEncoder.encodeToString(str.getBytes("UTF-8"))
+  def encode(str: String): String = encode(str.getBytes("UTF-8"))
 
   /**
    * Encodes a Json value as Base64.

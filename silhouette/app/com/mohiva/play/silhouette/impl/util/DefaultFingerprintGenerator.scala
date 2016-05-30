@@ -19,7 +19,8 @@
  */
 package com.mohiva.play.silhouette.impl.util
 
-import com.mohiva.play.silhouette.api.util.{ Crypt, FingerprintGenerator }
+import com.mohiva.play.silhouette.api.crypto.Hash
+import com.mohiva.play.silhouette.api.util.FingerprintGenerator
 import play.api.http.HeaderNames._
 import play.api.mvc.RequestHeader
 
@@ -44,7 +45,7 @@ class DefaultFingerprintGenerator(includeRemoteAddress: Boolean = false) extends
    * @return The generated fingerprint.
    */
   override def generate(implicit request: RequestHeader) = {
-    Crypt.sha1(new StringBuilder()
+    Hash.sha1(new StringBuilder()
       .append(request.headers.get(USER_AGENT).getOrElse("")).append(":")
       .append(request.headers.get(ACCEPT_LANGUAGE).getOrElse("")).append(":")
       .append(request.headers.get(ACCEPT_CHARSET).getOrElse("")).append(":")

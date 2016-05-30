@@ -13,30 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.api.util
-
-import java.security.MessageDigest
+package com.mohiva.play.silhouette.api.crypto
 
 /**
- * Crypt helper.
+ * Crypter interface.
+ *
+ * This trait provides a generic encryption/decryption interface for the core, for which a concrete
+ * implementation can be provided in userland.
+ *
+ * It's not guaranteed that the concrete implementations are compatible to each other. This means that
+ * they cannot act as drop-in replacements.
  */
-object Crypt {
+trait Crypter {
 
   /**
-   * Creates a SHA1 hash from the given string.
+   * Encrypts a string.
    *
-   * @param str The string to create a hash from.
-   * @return The SHA1 hash of the string.
+   * @param value The plain text to encrypt.
+   * @return The encrypted string.
    */
-  def sha1(str: String): String = sha1(str.getBytes("UTF-8"))
+  def encrypt(value: String): String
 
   /**
-   * Creates a SHA1 hash from the given byte array.
+   * Decrypts a string.
    *
-   * @param bytes The bytes to create a hash from.
-   * @return The SHA1 hash of the bytes.
+   * @param value The value to decrypt.
+   * @return The plain text string.
    */
-  def sha1(bytes: Array[Byte]): String = {
-    MessageDigest.getInstance("SHA-1").digest(bytes).map("%02x".format(_)).mkString
-  }
+  def decrypt(value: String): String
 }

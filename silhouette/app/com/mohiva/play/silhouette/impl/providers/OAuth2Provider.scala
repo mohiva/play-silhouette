@@ -113,7 +113,7 @@ trait OAuth2Provider extends SocialProvider with OAuth2Constants with Logger {
         }
         // There's no code in the request, this is the first step in the OAuth flow
         case None => stateProvider.build.map { state =>
-          val serializedState = state.serialize
+          val serializedState = stateProvider.serialize(state)
           val stateParam = if (serializedState.isEmpty) List() else List(State -> serializedState)
           val params = settings.scope.foldLeft(List(
             (ClientID, settings.clientID),
@@ -219,13 +219,6 @@ trait OAuth2State {
    * @return True if the state is expired, false otherwise.
    */
   def isExpired: Boolean
-
-  /**
-   * Returns a serialized value of the state.
-   *
-   * @return A serialized value of the state.
-   */
-  def serialize: String
 }
 
 /**
@@ -268,6 +261,14 @@ trait OAuth2StateProvider {
    * @return The result to send to the client.
    */
   def publish[B](result: Result, state: State)(implicit request: ExtractableRequest[B]): Result
+
+  /**
+   * Returns a serialized value of the state.
+   *
+   * @param state The state to serialize.
+   * @return A serialized value of the state.
+   */
+  def serialize(state: State): String
 }
 
 /**

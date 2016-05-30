@@ -18,6 +18,7 @@ package com.mohiva.play.silhouette.impl.authenticators
 import com.atlassian.jwt.SigningAlgorithm
 import com.atlassian.jwt.core.writer.{ JsonSmartJwtJsonBuilder, NimbusJwtWriterFactory }
 import com.mohiva.play.silhouette.api.Authenticator.Implicits._
+import com.mohiva.play.silhouette.api.crypto.AuthenticatorEncoder
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.repositories.AuthenticatorRepository
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
@@ -30,7 +31,6 @@ import com.nimbusds.jose.JWSObject
 import com.nimbusds.jose.crypto.MACVerifier
 import com.nimbusds.jwt.JWTClaimsSet
 import org.joda.time.DateTime
-import play.api.libs.Crypto
 import play.api.libs.json._
 import play.api.mvc.{ RequestHeader, Result }
 
@@ -85,15 +85,20 @@ object JWTAuthenticator {
    * Serializes the authenticator.
    *
    * @param authenticator The authenticator to serialize.
+   * @param authenticatorEncoder The authenticator encoder.
    * @param settings The authenticator settings.
    * @return The serialized authenticator.
    */
-  def serialize(authenticator: JWTAuthenticator)(settings: JWTAuthenticatorSettings): String = {
+  def serialize(
+    authenticator: JWTAuthenticator,
+    authenticatorEncoder: AuthenticatorEncoder,
+    settings: JWTAuthenticatorSettings): String = {
+
     val subject = Json.toJson(authenticator.loginInfo).toString()
     val jwtBuilder = new JsonSmartJwtJsonBuilder()
       .jwtId(authenticator.id)
       .issuer(settings.issuerClaim)
-      .subject(if (settings.encryptSubject) Crypto.encryptAES(subject) else Base64.encode(subject))
+      .subject(authenticatorEncoder.encode(subject))
       .issuedAt(authenticator.lastUsedDateTime.getMillis / 1000)
       .expirationTime(authenticator.expirationDateTime.getMillis / 1000)
 
@@ -116,10 +121,15 @@ object JWTAuthenticator {
    * Unserializes the authenticator.
    *
    * @param str The string representation of the authenticator.
+   * @param authenticatorEncoder The authenticator encoder.
    * @param settings The authenticator settings.
    * @return An authenticator on success, otherwise a failure.
    */
-  def unserialize(str: String)(settings: JWTAuthenticatorSettings): Try[JWTAuthenticator] = {
+  def unserialize(
+    str: String,
+    authenticatorEncoder: AuthenticatorEncoder,
+    settings: JWTAuthenticatorSettings): Try[JWTAuthenticator] = {
+
     Try {
       val verifier = new MACVerifier(settings.sharedSecret)
       val jwsObject = JWSObject.parse(str)
@@ -129,7 +139,7 @@ object JWTAuthenticator {
 
       JWTClaimsSet.parse(jwsObject.getPayload.toJSONObject)
     }.flatMap { c =>
-      val subject = if (settings.encryptSubject) Crypto.decryptAES(c.getSubject) else Base64.decode(c.getSubject)
+      val subject = authenticatorEncoder.decode(c.getSubject)
       buildLoginInfo(subject).map { loginInfo =>
         val filteredClaims = c.getAllClaims.asScala.filterNot { case (k, v) => ReservedClaims.contains(k) || v == null }
         val customClaims = unserializeCustomClaims(filteredClaims)
@@ -215,6 +225,7 @@ object JWTAuthenticator {
  *
  * @param settings The authenticator settings.
  * @param repository The repository to persist the authenticator. Set it to None to use a stateless approach.
+ * @param authenticatorEncoder The authenticator encoder.
  * @param idGenerator The ID generator used to create the authenticator ID.
  * @param clock The clock implementation.
  * @param executionContext The execution context to handle the asynchronous operations.
@@ -222,6 +233,7 @@ object JWTAuthenticator {
 class JWTAuthenticatorService(
   settings: JWTAuthenticatorSettings,
   repository: Option[AuthenticatorRepository[JWTAuthenticator]],
+  authenticatorEncoder: AuthenticatorEncoder,
   idGenerator: IDGenerator,
   clock: Clock)(implicit val executionContext: ExecutionContext)
   extends AuthenticatorService[JWTAuthenticator]
@@ -260,7 +272,7 @@ class JWTAuthenticatorService(
    */
   override def retrieve[B](implicit request: ExtractableRequest[B]): Future[Option[JWTAuthenticator]] = {
     Future.fromTry(Try(request.extractString(settings.fieldName, settings.requestParts))).flatMap {
-      case Some(token) => unserialize(token)(settings) match {
+      case Some(token) => unserialize(token, authenticatorEncoder, settings) match {
         case Success(authenticator) => repository.fold(Future.successful(Option(authenticator)))(_.find(authenticator.id))
         case Failure(e) =>
           logger.info(e.getMessage, e)
@@ -282,7 +294,7 @@ class JWTAuthenticatorService(
    */
   override def init(authenticator: JWTAuthenticator)(implicit request: RequestHeader): Future[String] = {
     repository.fold(Future.successful(authenticator))(_.add(authenticator)).map { a =>
-      serialize(a)(settings)
+      serialize(a, authenticatorEncoder, settings)
     }.recover {
       case e => throw new AuthenticatorInitializationException(InitError.format(ID, authenticator), e)
     }
@@ -341,7 +353,7 @@ class JWTAuthenticatorService(
     request: RequestHeader): Future[AuthenticatorResult] = {
 
     repository.fold(Future.successful(authenticator))(_.update(authenticator)).map { a =>
-      AuthenticatorResult(result.withHeaders(settings.fieldName -> serialize(a)(settings)))
+      AuthenticatorResult(result.withHeaders(settings.fieldName -> serialize(a, authenticatorEncoder, settings)))
     }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
     }
@@ -435,7 +447,6 @@ object JWTAuthenticatorService {
  * @param fieldName The name of the field in which the token will be transferred in any part of the request.
  * @param requestParts Some request parts from which a value can be extracted or None to extract values from any part of the request.
  * @param issuerClaim The issuer claim identifies the principal that issued the JWT.
- * @param encryptSubject Indicates if the subject should be encrypted in JWT.
  * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out.
  * @param authenticatorExpiry The duration an authenticator expires after it was created.
  * @param sharedSecret The shared secret to sign the JWT.
@@ -444,7 +455,6 @@ case class JWTAuthenticatorSettings(
   fieldName: String = "X-Auth-Token",
   requestParts: Option[Seq[RequestPart.Value]] = Some(Seq(RequestPart.Headers)),
   issuerClaim: String = "play-silhouette",
-  encryptSubject: Boolean = true,
   authenticatorIdleTimeout: Option[FiniteDuration] = None,
   authenticatorExpiry: FiniteDuration = 12 hours,
   sharedSecret: String)

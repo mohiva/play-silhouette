@@ -27,7 +27,6 @@ import scala.concurrent.{ ExecutionContext, Future }
  */
 case class DummyState() extends OAuth2State {
   override def isExpired = false
-  override def serialize = ""
 }
 
 /**
@@ -72,4 +71,12 @@ class DummyStateProvider extends OAuth2StateProvider {
    * @return The result to send to the client.
    */
   override def publish[B](result: Result, state: State)(implicit request: ExtractableRequest[B]) = result
+
+  /**
+   * Returns a serialized value of the state.
+   *
+   * @param state The state to serialize.
+   * @return A serialized value of the state.
+   */
+  override def serialize(state: State) = ""
 }

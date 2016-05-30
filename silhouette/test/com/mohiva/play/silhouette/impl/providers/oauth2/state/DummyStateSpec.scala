@@ -33,12 +33,6 @@ class DummyStateSpec extends PlaySpecification with Mockito with JsonMatchers {
     }
   }
 
-  "The `serialize` method of the state" should {
-    "return an empty string" in new Context {
-      state.serialize must be equalTo ""
-    }
-  }
-
   "The `build` method of the provider" should {
     "return a new state" in new Context {
       implicit val req = FakeRequest()
@@ -61,6 +55,12 @@ class DummyStateSpec extends PlaySpecification with Mockito with JsonMatchers {
       val result = Results.Ok
 
       provider.publish(result, state) must be equalTo result
+    }
+  }
+
+  "The `serialize` method of the provider" should {
+    "return an empty string" in new Context {
+      provider.serialize(state) must be equalTo ""
     }
   }
 
