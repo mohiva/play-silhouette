@@ -90,7 +90,25 @@ for different schemes and services.
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.impl.providers.BasicAuthProvider" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="com.mohiva.play.silhouette.impl.providers.BaseCasProvider" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="BaseCasProviderextendsSocialProviderwithCasProviderConstantswithLogger"></a>
+      <a id="BaseCasProvider:BaseCasProvider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="BaseCasProvider.html"><span class="name">BaseCasProvider</span></a><span class="result"> extends <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a> with <a href="CasProviderConstants.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CasProviderConstants">CasProviderConstants</a> with <a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@BaseCasProviderextendsSocialProviderwithCasProviderConstantswithLogger" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Base CAS provider.</p><div class="fullcomment"><div class="comment cmt"><p>Base CAS provider.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>https://github.com/Jasig/cas</p></span><span class="cmt"><p>http://jasig.github.io/cas</p></span></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.BasicAuthProvider" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BasicAuthProviderextendsRequestProviderwithPasswordProviderwithLogger"></a>
       <a id="BasicAuthProvider:BasicAuthProvider"></a>
       <h4 class="signature">
@@ -112,6 +130,127 @@ into plain text passwords, to hash them again with the new algorithm. So if a us
 the application has changed the hashing algorithm, the provider hashes the entered password again with the new
 algorithm and stores the auth info in the backing store.
 </p></div></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.CasClient" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CasClientextendsLogger"></a>
+      <a id="CasClient:CasClient"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CasClient.html"><span class="name">CasClient</span></a><span class="result"> extends <a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@CasClientextendsLogger" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The CAS client.</p>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.CasInfo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="CasInfoextendsAuthInfowithProductwithSerializable"></a>
+      <a id="CasInfo:CasInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CasInfo.html"><span class="name">CasInfo</span></a><span class="params">(<span name="ticket">ticket: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="../../api/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.AuthInfo">AuthInfo</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@CasInfoextendsAuthInfowithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The CAS authentication information.</p><div class="fullcomment"><div class="comment cmt"><p>The CAS authentication information.
+</p></div><dl class="paramcmts block"><dt class="param">ticket</dt><dd class="cmt"><p>The ticket.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.CasProfileParser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CasProfileParserextendsSocialProfileParser[org.jasig.cas.client.authentication.AttributePrincipal,com.mohiva.play.silhouette.impl.providers.CommonSocialProfile,com.mohiva.play.silhouette.impl.providers.CasInfo]withLoggerwithCasProviderConstants"></a>
+      <a id="CasProfileParser:CasProfileParser"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CasProfileParser.html"><span class="name">CasProfileParser</span></a><span class="result"> extends <a href="SocialProfileParser.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProfileParser">SocialProfileParser</a>[<span class="extype" name="org.jasig.cas.client.authentication.AttributePrincipal">AttributePrincipal</span>, <a href="CommonSocialProfile.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfile">CommonSocialProfile</a>, <a href="CasInfo.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CasInfo">CasInfo</a>] with <a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a> with <a href="CasProviderConstants.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CasProviderConstants">CasProviderConstants</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@CasProfileParserextendsSocialProfileParser[org.jasig.cas.client.authentication.AttributePrincipal,com.mohiva.play.silhouette.impl.providers.CommonSocialProfile,com.mohiva.play.silhouette.impl.providers.CasInfo]withLoggerwithCasProviderConstants" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The profile parser for the common social profile.</p>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.CasProtocol" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CasProtocolextendsProductwithSerializable"></a>
+      <a id="CasProtocol:CasProtocol"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CasProtocol.html"><span class="name">CasProtocol</span></a><span class="params">(<span name="protocol">protocol: <span class="extype" name="org.jasig.cas.client.Protocol">Protocol</span></span>, <span name="ticketValidatorFactory">ticketValidatorFactory: (<a href="CasSettings.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CasSettings">CasSettings</a>) ⇒ <span class="extype" name="org.jasig.cas.client.validation.TicketValidator">TicketValidator</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@CasProtocolextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The CAS protocol.</p>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.CasProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CasProviderextendsBaseCasProviderwithCommonSocialProfileBuilder"></a>
+      <a id="CasProvider:CasProvider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CasProvider.html"><span class="name">CasProvider</span></a><span class="result"> extends <a href="BaseCasProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.BaseCasProvider">BaseCasProvider</a> with <a href="CommonSocialProfileBuilder.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfileBuilder">CommonSocialProfileBuilder</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@CasProviderextendsBaseCasProviderwithCommonSocialProfileBuilder" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The CAS provider.</p>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.CasProviderConstants" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="CasProviderConstantsextendsAnyRef"></a>
+      <a id="CasProviderConstants:CasProviderConstants"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="CasProviderConstants.html"><span class="name">CasProviderConstants</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@CasProviderConstantsextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The CAS provider constants.</p>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.CasSettings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="CasSettingsextendsProductwithSerializable"></a>
+      <a id="CasSettings:CasSettings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CasSettings.html"><span class="name">CasSettings</span></a><span class="params">(<span name="casURL">casURL: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="redirectURL">redirectURL: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="encoding">encoding: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;UTF-8&quot;</span></span>, <span name="acceptAnyProxy">acceptAnyProxy: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">false</span></span>, <span name="samlTimeTolerance">samlTimeTolerance: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a> = <span class="symbol">1000 millis</span></span>, <span name="protocol">protocol: <a href="CasProtocol$.html#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.CasProtocol.Value">CasProtocol.Value</a> = <span class="symbol"><span class="name"><a href="CasProtocol$.html">CasProtocol.Default</a></span></span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@CasSettingsextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The CAS settings.</p><div class="fullcomment"><div class="comment cmt"><p>The CAS settings.
+</p></div><dl class="paramcmts block"><dt class="param">casURL</dt><dd class="cmt"><p>The URL of the CAS server.</p></dd><dt class="param">redirectURL</dt><dd class="cmt"><p>The URL the CAS server will redirect to.</p></dd><dt class="param">encoding</dt><dd class="cmt"><p>Specifies the encoding charset the client should use.</p></dd><dt class="param">acceptAnyProxy</dt><dd class="cmt"><p>Accept any proxy in a chain of proxies.</p></dd><dt class="param">samlTimeTolerance</dt><dd class="cmt"><p>Adjust to accommodate clock drift between client/server, increasing tolerance has security consequences.</p></dd><dt class="param">protocol</dt><dd class="cmt"><p>The protocol supported by the CAS server @see <a href="CasProtocol.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CasProtocol">CasProtocol</a>.</p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.CommonSocialProfile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="CommonSocialProfileextendsSocialProfilewithProductwithSerializable"></a>
       <a id="CommonSocialProfile:CommonSocialProfile"></a>
@@ -624,6 +763,75 @@ be reused by other parsers to avoid duplicating code.
       </a>
     </span>
       <p class="shortcomment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.CasClient" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CasClient"></a>
+      <a id="CasClient:CasClient"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CasClient$.html"><span class="name">CasClient</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@CasClient" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">CasClient companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.CasProtocol" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="CasProtocol"></a>
+      <a id="CasProtocol:CasProtocol"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CasProtocol$.html"><span class="name">CasProtocol</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Enumeration" class="extype" target="_top">Enumeration</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@CasProtocol" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">CasProtocol companion object.</p><div class="fullcomment"><div class="comment cmt"><p>CasProtocol companion object.</p><p>Helper to convert a protocol ID into a <a href="CasProtocol.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CasProtocol">CasProtocol</a> instance.</p><p>Allowable values:</p><p>&quot;CAS10&quot;, &quot;CAS20&quot;, &quot;CAS30&quot;, &quot;SAML&quot;</p><p>Default &quot;CAS30&quot;
+</p></div></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.CasProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CasProvider"></a>
+      <a id="CasProvider:CasProvider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CasProvider$.html"><span class="name">CasProvider</span></a><span class="result"> extends <a href="CasProviderConstants.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CasProviderConstants">CasProviderConstants</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@CasProvider" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <a href="CasProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CasProvider">CasProvider</a> companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.CasSettings" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CasSettings"></a>
+      <a id="CasSettings:CasSettings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CasSettings$.html"><span class="name">CasSettings</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@CasSettings" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <a href="CasSettings.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.CasSettings">CasSettings</a> companion object.</p>
     </li><li name="com.mohiva.play.silhouette.impl.providers.CredentialsProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="CredentialsProvider"></a>
       <a id="CredentialsProvider:CredentialsProvider"></a>
@@ -743,23 +951,6 @@ be reused by other parsers to avoid duplicating code.
       </a>
     </span>
       <p class="shortcomment cmt">The companion object.</p>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.cas" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="cas"></a>
-      <a id="cas:cas"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">package</span>
-      </span>
-      <span class="symbol">
-        <a href="cas/package.html"><span class="name">cas</span></a>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@cas" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="com.mohiva.play.silhouette.impl.providers.oauth1" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="oauth1"></a>
       <a id="oauth1:oauth1"></a>
