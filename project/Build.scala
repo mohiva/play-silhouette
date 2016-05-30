@@ -19,42 +19,48 @@ import sbt._
 
 object Build extends Build {
 
-  val silhouette = Project(
+  lazy val silhouette = Project(
     id = "play-silhouette",
     base = file("silhouette")
   )
 
-  val silhouetteCAS = Project(
+  lazy val silhouetteCas = Project(
     id = "play-silhouette-cas",
     base = file("silhouette-cas"),
     dependencies = Seq(silhouette % "compile->compile;test->test")
   )
 
-  val silhouetteCryptoJCA = Project(
+  lazy val silhouetteCasPersistenceMemory = Project(
+    id = "play-silhouette-cas-persistence-memory",
+    base = file("silhouette-cas-persistence-memory"),
+    dependencies = Seq(silhouetteCas, silhouettePersistence % "compile->compile;test->test")
+  )
+
+  lazy val silhouetteCryptoJca = Project(
     id = "play-silhouette-crypto-jca",
     base = file("silhouette-crypto-jca"),
     dependencies = Seq(silhouette)
   )
 
-  val silhouettePasswordBcrypt = Project(
+  lazy val silhouettePasswordBcrypt = Project(
     id = "play-silhouette-password-bcrypt",
     base = file("silhouette-password-bcrypt"),
     dependencies = Seq(silhouette)
   )
 
-  val silhouettePersistence = Project(
+  lazy val silhouettePersistence = Project(
     id = "play-silhouette-persistence",
     base = file("silhouette-persistence"),
     dependencies = Seq(silhouette)
   )
 
-  val silhouettePersistenceMemory = Project(
+  lazy val silhouettePersistenceMemory = Project(
     id = "play-silhouette-persistence-memory",
     base = file("silhouette-persistence-memory"),
-    dependencies = Seq(silhouettePersistence)
+    dependencies = Seq(silhouettePersistence % "compile->compile;test->test")
   )
 
-  val silhouetteTestkit = Project(
+  lazy val silhouetteTestkit = Project(
     id = "play-silhouette-testkit",
     base = file("silhouette-testkit"),
     dependencies = Seq(silhouette)
@@ -65,8 +71,9 @@ object Build extends Build {
     base = file("."),
     aggregate = Seq(
       silhouette,
-      silhouetteCAS,
-      silhouetteCryptoJCA,
+      silhouetteCas,
+      silhouetteCasPersistenceMemory,
+      silhouetteCryptoJca,
       silhouettePasswordBcrypt,
       silhouettePersistence,
       silhouettePersistenceMemory,
