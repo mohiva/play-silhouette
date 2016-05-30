@@ -16,16 +16,18 @@
 package com.mohiva.play.silhouette.persistence.memory.modules
 
 import javax.inject
-
 import com.google.inject.{ AbstractModule, Provides }
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.PasswordInfo
 import com.mohiva.play.silhouette.impl.providers.{ OAuth1Info, OAuth2Info, OpenIDInfo }
+import com.mohiva.play.silhouette.impl.providers.cas.CasAuthInfo
 import com.mohiva.play.silhouette.persistence.daos._
 import com.mohiva.play.silhouette.persistence.memory.daos.{ OAuth1InfoDAO, OAuth2InfoDAO, OpenIDInfoDAO, PasswordInfoDAO }
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
+import com.mohiva.play.silhouette.persistence.memory.daos.CasAuthInfoDAO
+import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
+import play.api.inject.Module
 import net.codingwell.scalaguice.ScalaModule
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
@@ -41,6 +43,7 @@ class PersistenceModule extends AbstractModule with ScalaModule {
     bind[DelegableAuthInfoDAO[OAuth1Info]].to[OAuth1InfoDAO].in[inject.Singleton]
     bind[DelegableAuthInfoDAO[OAuth2Info]].to[OAuth2InfoDAO].in[inject.Singleton]
     bind[DelegableAuthInfoDAO[OpenIDInfo]].to[OpenIDInfoDAO].in[inject.Singleton]
+    bind[DelegableAuthInfoDAO[CasAuthInfo]].to[CasAuthInfoDAO].in[inject.Singleton]
   }
 
   /**
@@ -57,8 +60,9 @@ class PersistenceModule extends AbstractModule with ScalaModule {
     passwordInfoDAO: DelegableAuthInfoDAO[PasswordInfo],
     oauth1InfoDAO: DelegableAuthInfoDAO[OAuth1Info],
     oauth2InfoDAO: DelegableAuthInfoDAO[OAuth2Info],
-    openIDInfoDAO: DelegableAuthInfoDAO[OpenIDInfo]): AuthInfoRepository = {
+    openIDInfoDAO: DelegableAuthInfoDAO[OpenIDInfo],
+    casInfoDAO: DelegableAuthInfoDAO[CasAuthInfo]): AuthInfoRepository = {
 
-    new DelegableAuthInfoRepository(passwordInfoDAO, oauth1InfoDAO, oauth2InfoDAO, openIDInfoDAO)
+    new DelegableAuthInfoRepository(passwordInfoDAO, oauth1InfoDAO, oauth2InfoDAO, openIDInfoDAO, casInfoDAO)
   }
 }
