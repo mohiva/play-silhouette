@@ -595,9 +595,9 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
       new CookieAuthenticatorService(
         settings,
         repository,
-        fingerprintGenerator,
         cookieSigner,
         authenticatorEncoder,
+        fingerprintGenerator,
         idGenerator,
         clock
       )

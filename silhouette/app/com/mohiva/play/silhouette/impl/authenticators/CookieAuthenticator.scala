@@ -147,9 +147,9 @@ object CookieAuthenticator extends Logger {
  *
  * @param settings The cookie settings.
  * @param repository The repository to persist the authenticator. Set it to None to use a stateless approach.
- * @param fingerprintGenerator The fingerprint generator implementation.
  * @param cookieSigner The cookie signer.
  * @param authenticatorEncoder The authenticator encoder.
+ * @param fingerprintGenerator The fingerprint generator implementation.
  * @param idGenerator The ID generator used to create the authenticator ID.
  * @param clock The clock implementation.
  * @param executionContext The execution context to handle the asynchronous operations.
@@ -157,9 +157,9 @@ object CookieAuthenticator extends Logger {
 class CookieAuthenticatorService(
   settings: CookieAuthenticatorSettings,
   repository: Option[AuthenticatorRepository[CookieAuthenticator]],
-  fingerprintGenerator: FingerprintGenerator,
   cookieSigner: CookieSigner,
   authenticatorEncoder: AuthenticatorEncoder,
+  fingerprintGenerator: FingerprintGenerator,
   idGenerator: IDGenerator,
   clock: Clock)(implicit val executionContext: ExecutionContext)
   extends AuthenticatorService[CookieAuthenticator]

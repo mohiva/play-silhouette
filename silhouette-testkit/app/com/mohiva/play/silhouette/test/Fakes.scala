@@ -129,12 +129,12 @@ case class FakeSessionAuthenticatorService() extends SessionAuthenticatorService
 case class FakeCookieAuthenticatorService() extends CookieAuthenticatorService(
   new CookieAuthenticatorSettings(),
   None,
-  new DefaultFingerprintGenerator(),
   new CookieSigner {
     def sign(data: String) = data
     def extract(message: String) = Success(message)
   },
   new Base64AuthenticatorEncoder,
+  new DefaultFingerprintGenerator(),
   new SecureRandomIDGenerator(),
   Clock())
 
