@@ -20,13 +20,16 @@ import com.mohiva.play.silhouette.api.{ AuthInfo, LoginInfo }
 import scala.collection.mutable
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.reflect.ClassTag
 
 /**
  * An implementation of the auth info DAO which stores the data in memory.
  *
  * This is not thread-safe implementation which should only be used for testing or development purpose.
+ *
+ * @tparam T The type of the auth info to store.
  */
-trait InMemoryAuthInfoDAO[T <: AuthInfo] extends DelegableAuthInfoDAO[T] {
+class InMemoryAuthInfoDAO[T <: AuthInfo: ClassTag] extends DelegableAuthInfoDAO[T] {
 
   /**
    * The data store for the auth info.
