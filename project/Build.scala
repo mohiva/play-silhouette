@@ -30,12 +30,6 @@ object Build extends Build {
     dependencies = Seq(silhouette % "compile->compile;test->test")
   )
 
-  lazy val silhouetteCasPersistenceMemory = Project(
-    id = "play-silhouette-cas-persistence-memory",
-    base = file("silhouette-cas-persistence-memory"),
-    dependencies = Seq(silhouetteCas, silhouettePersistence % "compile->compile;test->test")
-  )
-
   lazy val silhouetteCryptoJca = Project(
     id = "play-silhouette-crypto-jca",
     base = file("silhouette-crypto-jca"),
@@ -54,12 +48,6 @@ object Build extends Build {
     dependencies = Seq(silhouette)
   )
 
-  lazy val silhouettePersistenceMemory = Project(
-    id = "play-silhouette-persistence-memory",
-    base = file("silhouette-persistence-memory"),
-    dependencies = Seq(silhouettePersistence % "compile->compile;test->test")
-  )
-
   lazy val silhouetteTestkit = Project(
     id = "play-silhouette-testkit",
     base = file("silhouette-testkit"),
@@ -72,11 +60,9 @@ object Build extends Build {
     aggregate = Seq(
       silhouette,
       silhouetteCas,
-      silhouetteCasPersistenceMemory,
       silhouetteCryptoJca,
       silhouettePasswordBcrypt,
       silhouettePersistence,
-      silhouettePersistenceMemory,
       silhouetteTestkit
     ),
     settings = Defaults.coreDefaultSettings ++
