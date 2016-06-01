@@ -128,13 +128,13 @@ allows us to get the class tag of the auth info it is responsible for. Based on 
 the <a href="../repositories/DelegableAuthInfoRepository.html" class="extype" name="com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository">com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository</a> class
 can delegate operations to the DAO which is responsible for the currently handled auth info.
 </p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the auth info to store.</p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.persistence.daos.InMemoryAuthInfoDAO" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+    </li><li name="com.mohiva.play.silhouette.persistence.daos.InMemoryAuthInfoDAO" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="InMemoryAuthInfoDAO[T&lt;:com.mohiva.play.silhouette.api.AuthInfo]extendsDelegableAuthInfoDAO[T]"></a>
       <a id="InMemoryAuthInfoDAO[T&lt;:AuthInfo]:InMemoryAuthInfoDAO[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
         <a href="InMemoryAuthInfoDAO.html"><span class="name">InMemoryAuthInfoDAO</span></a><span class="tparams">[<span name="T">T &lt;: <a href="../../api/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.AuthInfo">AuthInfo</a></span>]</span><span class="result"> extends <a href="DelegableAuthInfoDAO.html" class="extype" name="com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO">DelegableAuthInfoDAO</a>[<span class="extype" name="com.mohiva.play.silhouette.persistence.daos.InMemoryAuthInfoDAO.T">T</span>]</span>
@@ -145,7 +145,7 @@ can delegate operations to the DAO which is responsible for the currently handle
       </a>
     </span>
       <p class="shortcomment cmt">An implementation of the auth info DAO which stores the data in memory.</p><div class="fullcomment"><div class="comment cmt"><p>An implementation of the auth info DAO which stores the data in memory.</p><p>This is not thread-safe implementation which should only be used for testing or development purpose.
-</p></div></div>
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the auth info to store.</p></dd></dl></div>
     </li></ol>
             </div>
 
