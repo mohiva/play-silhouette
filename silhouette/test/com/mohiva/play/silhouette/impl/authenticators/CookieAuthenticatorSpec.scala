@@ -21,7 +21,7 @@ import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
-import com.mohiva.play.silhouette.api.util.{ Clock, FingerprintGenerator, IDGenerator }
+import com.mohiva.play.silhouette.api.util.{ Base64, Clock, FingerprintGenerator, IDGenerator }
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator._
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
@@ -30,8 +30,8 @@ import org.specs2.control.NoLanguageFeatures
 import org.specs2.matcher.MatchResult
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.libs.Crypto
 import play.api.libs.concurrent.Execution.Implicits._
+import play.api.libs.json.Json
 import play.api.mvc.{ Cookie, Results }
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
@@ -68,29 +68,19 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
       val value = "invalid"
       val msg = Pattern.quote(JsonParseError.format(ID, value))
 
-      unserialize(Crypto.encryptAES(value))(settings) must beFailedTry.withThrowable[AuthenticatorException](msg)
+      unserialize(Base64.encode(value))(settings) must beFailedTry.withThrowable[AuthenticatorException](msg)
     }
 
     "throw an AuthenticatorException if the given value is in the wrong Json format" in new WithApplication with Context {
       val value = "{}"
       val msg = "^" + Pattern.quote(InvalidJsonFormat.format(ID, "")) + ".*"
 
-      unserialize(Crypto.encryptAES(value))(settings) must beFailedTry.withThrowable[AuthenticatorException](msg)
+      unserialize(Base64.encode(value))(settings) must beFailedTry.withThrowable[AuthenticatorException](msg)
     }
   }
 
-  "The `serialize/unserialize` method of the authenticator" should {
-    "handle an encrypted authenticator" in new WithApplication with Context {
-      settings.encryptAuthenticator returns true
-
-      val value = serialize(authenticator)(settings)
-
-      unserialize(value)(settings) must beSuccessfulTry.withValue(authenticator)
-    }
-
-    "handle an unencrypted authenticator" in new Context {
-      settings.encryptAuthenticator returns false
-
+  "The `Authenticator` object" should {
+    "serialize/unserialize an authenticator" in new WithApplication with Context {
       val value = serialize(authenticator)(settings)
 
       unserialize(value)(settings) must beSuccessfulTry.withValue(authenticator)
@@ -189,7 +179,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
     }
 
     "[stateless] return None if no authenticator could be unserialized from cookie" in new WithApplication with Context {
-      implicit val request = FakeRequest().withCookies(Cookie(settings.cookieName, Crypto.encryptAES("invalid")))
+      implicit val request = FakeRequest().withCookies(Cookie(settings.cookieName, Base64.encode("invalid")))
 
       await(service(None).retrieve) must beNone
       there was no(dao).find(any)
@@ -513,6 +503,14 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
     }
   }
 
+  "The `SignedCookieSerializationStrategy` instance" should {
+    "serialize/unserialize an authenticator" in new WithApplication with Context {
+      val value = realSerializationStrategy.serialize(authenticator)
+
+      realSerializationStrategy.unserialize(value) must beSuccessfulTry(authenticator)
+    }
+  }
+
   /**
    * The context.
    */
@@ -539,19 +537,43 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
     lazy val clock: Clock = mock[Clock]
 
     /**
+     * A real encoding strategy.
+     *
+     * This is used to test the functionality of the [[SignedCookieSerializationStrategy]].
+     */
+    lazy val realSerializationStrategy = new SignedCookieSerializationStrategy(
+      keyOption = Some("some-key".getBytes("UTF-8")),
+      encodingStrategy = Base64CookieEncodingStrategy)
+
+    /**
+     * A mocked cookie serialization strategy.
+     *
+     * We use a basic serialization strategy here to test the authenticator functionality. The
+     */
+    lazy val mockSerializationStrategy: CookieSerializationStrategy = {
+      val s = mock[CookieSerializationStrategy].smart
+      s.serialize(any) answers { p => Base64.encode(Json.toJson(p.asInstanceOf[CookieAuthenticator])) }
+      s.unserialize(any) answers { p => buildAuthenticator(Base64.decode(p.asInstanceOf[String])) }
+      s
+    }
+
+    /**
      * The settings.
      */
-    lazy val settings = spy(CookieAuthenticatorSettings(
-      cookieName = "id",
-      cookiePath = "/",
-      cookieDomain = None,
-      secureCookie = true,
-      httpOnlyCookie = true,
-      useFingerprinting = true,
-      cookieMaxAge = Some(12 hours),
-      authenticatorIdleTimeout = Some(30 minutes),
-      authenticatorExpiry = 12 hours
-    ))
+    lazy val settings: CookieAuthenticatorSettings = {
+      val s = mock[CookieAuthenticatorSettings].smart
+      s.cookieName returns "id"
+      s.cookiePath returns "/"
+      s.cookieDomain returns None
+      s.secureCookie returns true
+      s.httpOnlyCookie returns true
+      s.useFingerprinting returns true
+      s.cookieMaxAge returns Some(12 hours)
+      s.authenticatorIdleTimeout returns Some(30 minutes)
+      s.authenticatorExpiry returns 12.hours
+      s.cookieSerializationStrategy returns mockSerializationStrategy
+      s
+    }
 
     /**
      * The authenticator service instance to test.

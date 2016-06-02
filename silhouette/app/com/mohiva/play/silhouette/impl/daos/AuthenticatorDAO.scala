@@ -16,8 +16,10 @@
 package com.mohiva.play.silhouette.impl.daos
 
 import com.mohiva.play.silhouette.api.StorableAuthenticator
+import com.mohiva.play.silhouette.impl.authenticators.{ CookieAuthenticator, CookieSerializationStrategy }
 
 import scala.concurrent.Future
+import scala.util.Try
 
 /**
  * The DAO to persist the authenticator.
@@ -57,4 +59,56 @@ trait AuthenticatorDAO[T <: StorableAuthenticator] {
    * @return An empty future.
    */
   def remove(id: String): Future[Unit]
+}
+
+/**
+ * The companion object.
+ */
+object AuthenticatorDAO {
+
+  /**
+   * Creates AuthenticatorDAO that wraps CookieSerializationStrategy. As a result, custom serialization configuration
+   * is used through the fake DAO.
+   *
+   * This hack was introduced in order to allow using best practices without making any backward compatibility breaks.
+   *
+   * @param cookieSerializationStrategy The serialization strategy to be wrapped by DAO.
+   * @return The DAO wrapping the CookieSerializationStrategy.
+   */
+  def forCookieSerializationStrategy(cookieSerializationStrategy: CookieSerializationStrategy) = new AuthenticatorDAO[CookieAuthenticator]() {
+
+    /**
+     * Finds the authenticator for the given ID.
+     *
+     * @param id The authenticator ID.
+     * @return The found authenticator or None if no authenticator could be found for the given ID.
+     */
+    override def find(id: String): Future[Option[CookieAuthenticator]] = Future.fromTry(cookieSerializationStrategy.unserialize(id).map(Some(_)))
+
+    /**
+     * Removes the authenticator for the given ID.
+     *
+     * @param id The authenticator ID.
+     * @return An empty future.
+     */
+    override def remove(id: String): Future[Unit] = Future.successful(())
+
+    /**
+     * Adds a new authenticator.
+     *
+     * @param authenticator The authenticator to add.
+     * @return The added authenticator.
+     */
+    override def add(authenticator: CookieAuthenticator): Future[CookieAuthenticator] = Future.fromTry(Try {
+      authenticator.copy(id = cookieSerializationStrategy.serialize(authenticator))
+    })
+
+    /**
+     * Updates an already existing authenticator.
+     *
+     * @param authenticator The authenticator to update.
+     * @return The updated authenticator.
+     */
+    override def update(authenticator: CookieAuthenticator): Future[CookieAuthenticator] = add(authenticator)
+  }
 }

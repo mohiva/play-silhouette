@@ -29,6 +29,7 @@ import com.mohiva.play.silhouette.api.util.JsonFormats._
 import com.mohiva.play.silhouette.api.{ ExpirableAuthenticator, Logger, LoginInfo, StorableAuthenticator }
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService._
 import com.mohiva.play.silhouette.impl.daos.AuthenticatorDAO
+import com.mohiva.play.silhouette.impl.util.CookieSigner
 import org.joda.time.DateTime
 import play.api.http.HeaderNames
 import play.api.libs.Crypto
@@ -98,12 +99,8 @@ object CookieAuthenticator extends Logger {
    * @param settings The authenticator settings.
    * @return The serialized authenticator.
    */
-  def serialize(authenticator: CookieAuthenticator)(settings: CookieAuthenticatorSettings) = {
-    if (settings.encryptAuthenticator) {
-      Crypto.encryptAES(Json.toJson(authenticator).toString())
-    } else {
-      Base64.encode(Json.toJson(authenticator))
-    }
+  def serialize(authenticator: CookieAuthenticator)(settings: CookieAuthenticatorSettings): String = {
+    settings.cookieSerializationStrategy.serialize(authenticator)
   }
 
   /**
@@ -114,8 +111,7 @@ object CookieAuthenticator extends Logger {
    * @return Some authenticator on success, otherwise None.
    */
   def unserialize(str: String)(settings: CookieAuthenticatorSettings): Try[CookieAuthenticator] = {
-    if (settings.encryptAuthenticator) buildAuthenticator(Crypto.decryptAES(str))
-    else buildAuthenticator(Base64.decode(str))
+    settings.cookieSerializationStrategy.unserialize(str)
   }
 
   /**
@@ -124,7 +120,7 @@ object CookieAuthenticator extends Logger {
    * @param str The string representation of the authenticator.
    * @return Some authenticator on success, otherwise None.
    */
-  private def buildAuthenticator(str: String): Try[CookieAuthenticator] = {
+  private[authenticators] def buildAuthenticator(str: String): Try[CookieAuthenticator] = {
     Try(Json.parse(str)) match {
       case Success(json) => json.validate[CookieAuthenticator].asEither match {
         case Left(error) => Failure(new AuthenticatorException(InvalidJsonFormat.format(ID, error)))
@@ -403,6 +399,108 @@ object CookieAuthenticatorService {
 }
 
 /**
+ * Handles serializing and deserializing cookies and appropriate verification.
+ */
+trait CookieSerializationStrategy {
+
+  /**
+   * Converts serialized cookie to CookieAuthenticator.
+   *
+   * @param str serialized cookie
+   * @return Authenticator wrapped in Success in case of success, or corresponding Failure in case of wrong supplied data.
+   */
+  def unserialize(str: String): Try[CookieAuthenticator]
+
+  /**
+   * Serialized authenticator to String suitable for cookie.
+   *
+   * @param authenticator authenticator to be serialized
+   * @return serialized authenticator
+   */
+  def serialize(authenticator: CookieAuthenticator): String
+}
+
+/**
+ * Specifies cookie-safe encoding of Strings.
+ */
+trait CookieEncodingStrategy {
+  def encode(data: String): String
+  def decode(data: String): String
+}
+
+/**
+ * Encodes cookie data to base64.
+ */
+object Base64CookieEncodingStrategy extends CookieEncodingStrategy {
+  override def encode(data: String): String = Base64.encode(data)
+  override def decode(data: String): String = Base64.decode(data)
+}
+
+/**
+ * Encrypts cookie data using the Play framework crypto library.
+ *
+ * The strategy relies on not supplying modified data for decoding. If one passes attacker-supplied data here, various
+ * bad things may happen. However, passing this strategy to SignedCookieSerializationStrategy does not break this
+ * requirement, because SignedCookieSerializationStrategy verifies cookie signature.
+ *
+ * The strategy is implemented for backward compatibility, not for enforcing all the security best practices. If
+ * you are not tied with backward compatibility and require encryption, you should not use the shared
+ * application.secret key, which is what this strategy does. If you don't require encryption, the
+ * Base64CookieEncodingStrategy should do the job.
+ */
+object LegacyPlayCryptoEncryptionCookieEncodingStrategy extends CookieEncodingStrategy {
+  override def encode(data: String): String = Crypto.encryptAES(data)
+  override def decode(data: String): String = Crypto.decryptAES(data)
+}
+
+/**
+ * This cookie serialization strategy signs the data with specified key on serializing and verifies this signature when
+ * deserializing. If the signature verification fails, the strategy does not try to decode the cookie data in any way
+ * in order to prevent various types of attacks.
+ *
+ * @param keyOption Key for signing. When None is supplied, application.secret is used. Note that using
+ *                  application.secret is discouraged (because it might cause using one key for multiple purposes) and
+ *                  should be used when required by backward compatibility.
+ * @param encodingStrategy Strategy used for encoding the data to be cookie-safe.
+ * @param pepper Constant prepended and appended to the data before signing. When using one key for multiple purposes,
+ *               using a specific pepper reduces some risks arising from this.
+ */
+class SignedCookieSerializationStrategy(
+  keyOption: Option[Array[Byte]],
+  encodingStrategy: CookieEncodingStrategy,
+  pepper: String = "-mohiva-silhouette-cookie-authenticator-") extends CookieSerializationStrategy {
+  import CookieAuthenticator.buildAuthenticator
+
+  /**
+   * The cookie signer instance.
+   */
+  private val cookieSigner = new CookieSigner(keyOption, pepper)
+
+  /**
+   * Unserializes an authenticator.
+   *
+   * @param str The serialized cookie value.
+   * @return Authenticator wrapped in Success in case of success, or corresponding Failure in case of wrong supplied data.
+   */
+  override def unserialize(str: String): Try[CookieAuthenticator] = {
+    cookieSigner.extract(str).map { data =>
+      buildAuthenticator(encodingStrategy.decode(data))
+    }.flatten
+  }
+
+  /**
+   * Serializes an authenticator.
+   *
+   * @param authenticator The authenticator to serialize.
+   * @return The serialized authenticator.
+   */
+  override def serialize(authenticator: CookieAuthenticator): String = {
+    val data = encodingStrategy.encode(Json.toJson(authenticator).toString())
+    cookieSigner.sign(data)
+  }
+}
+
+/**
  * The settings for the cookie authenticator.
  *
  * @param cookieName The cookie name.
@@ -425,4 +523,16 @@ case class CookieAuthenticatorSettings(
   useFingerprinting: Boolean = true,
   cookieMaxAge: Option[FiniteDuration] = None,
   authenticatorIdleTimeout: Option[FiniteDuration] = None,
-  authenticatorExpiry: FiniteDuration = 12 hours)
+  authenticatorExpiry: FiniteDuration = 12 hours) {
+
+  /**
+   * @return the CookieSerializationStrategy for the specified settings
+   */
+  def cookieSerializationStrategy: CookieSerializationStrategy = new SignedCookieSerializationStrategy(
+    keyOption = None,
+    encodingStrategy = encryptAuthenticator match {
+      case true => LegacyPlayCryptoEncryptionCookieEncodingStrategy
+      case false => Base64CookieEncodingStrategy
+    }
+  )
+}
