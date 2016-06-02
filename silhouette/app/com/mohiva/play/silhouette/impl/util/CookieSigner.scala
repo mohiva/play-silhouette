@@ -61,11 +61,11 @@ class CookieSigner(keyOption: Option[Array[Byte]], pepper: String = "-mohiva-sil
    */
   def extract(message: String): Try[String] = {
     for {
-      (_, actualSignature, actualData) <- fragment(message)
-      (_, expectedSignature, _) <- fragment(sign(actualData))
+      actual <- fragment(message)
+      expected <- fragment(sign(actual._3))
     } yield {
-      if (Crypto.constantTimeEquals(expectedSignature, actualSignature)) {
-        actualData
+      if (Crypto.constantTimeEquals(expected._2, actual._2)) {
+        actual._3
       } else {
         throw new CryptoException(BadSignature)
       }
