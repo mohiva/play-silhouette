@@ -17,9 +17,11 @@
 - Allow to override the API URL in the OAuth1 and OAuth2 providers
 - Allow to override authentication provider constants
 - Support for Auth0 authentication provider (thanks @lucamilanesio)
+- Support for Gitlab authentication provider (thanks @ThmX)
 - Support for CAS authentication provider (thanks @SBSMMO)
 - Issue #435: copy customClaims when renewing JWTToken (thanks @mizerlou)
 - Define meaningful interface for password re-hashing (thanks @alexmojaki)
+- Play Framework independent crypto implementation
 
 ## 3.0 (2015-07-14)
 
