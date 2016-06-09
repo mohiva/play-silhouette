@@ -5,12 +5,6 @@ Silhouette [![Maven Central](https://maven-badges.herokuapp.com/maven-central/co
 
 See [the project documentation] for more information.
 
-## Donation
-
-If you like the project, please consider to support my "[New MTB for spring]" campaign. This is your chance to give something back.
-
-<a target="_blank" style="border:none;" href="http://www.gofundme.com/7qyupykw?utm_medium=wdgt" title="Visit this page now."><img style="border:none;" src="https://funds.gofundme.com/css/3.0_donate/green/widget.png"></a>
-
 ## Support
 
 If you have question regarding Silhouette please use the [chat] or the [mailing list]. **Please do not use the issue tracker for questions!**
