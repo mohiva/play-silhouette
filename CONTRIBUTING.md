@@ -43,7 +43,7 @@ copyright license to the Mohiva Organisation, unless the contribution clearly st
 
 [GitHub]: https://github.com/mohiva/play-silhouette
 [GitHub issue tracker]: https://github.com/mohiva/play-silhouette/issues
-[GitHub workflow for submitting pull requests]: http://docs.openshift.org/origin-m4/oo_contributors_guide.html#submitting-code
+[GitHub workflow for submitting pull requests]: https://www.playframework.com/documentation/2.5.x/WorkingWithGit
 [chat]: https://gitter.im/mohiva/play-silhouette
 [mailing list]: https://groups.google.com/forum/#!forum/play-silhouette
 [Scala Style Guide]: http://docs.scala-lang.org/style/
