@@ -2,7 +2,7 @@
 
 * [ ] Have you read [How to write the perfect pull request](https://github.com/blog/1943-how-to-write-the-perfect-pull-request)?
 * [ ] Have you read through the [contributor guidelines](https://github.com/mohiva/play-silhouette/blob/master/CONTRIBUTING.md)?
-* [ ] Have you [squashed your commits](https://docs.openshift.org/origin-m4/oo_contributors_guide.html#submitting-code)?
+* [ ] Have you [squashed your commits](https://www.playframework.com/documentation/2.5.x/WorkingWithGit#Squashing-commits)?
 * [ ] Have you added copyright headers to new files?
 * [ ] Have you suggest documentation edits?
 * [ ] Have you added tests for any changed functionality?
