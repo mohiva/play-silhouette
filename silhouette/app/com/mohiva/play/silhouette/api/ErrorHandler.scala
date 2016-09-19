@@ -194,14 +194,14 @@ trait DefaultErrorHandler
     })
   }
 
-  private def toHtmlError(message: String) =
+  protected def toHtmlError(message: String) =
     s"<html><head><title>$message</title></head><body>$message</body></html>"
 
-  private def toJsonError(message: String) =
+  protected def toJsonError(message: String) =
     Json.obj("success" -> false, "message" -> message)
 
-  private def toXmlError(message: String) =
+  protected def toXmlError(message: String) =
     <response><success>false</success><message>{ message }</message></response>
 
-  private def toPlainTextError(message: String) = message
+  protected def toPlainTextError(message: String) = message
 }
