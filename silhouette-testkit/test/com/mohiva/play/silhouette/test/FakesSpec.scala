@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.impl.authenticators._
-import com.mohiva.play.silhouette.impl.authenticators.jwt.{JWTAuthenticator, JWTAuthenticatorService}
+import com.mohiva.play.silhouette.impl.authenticators.jwt.{ JWTAuthenticator, JWTAuthenticatorService }
 import com.mohiva.play.silhouette.test.FakesSpec._
 import net.codingwell.scalaguice.ScalaModule
 import org.specs2.matcher.JsonMatchers

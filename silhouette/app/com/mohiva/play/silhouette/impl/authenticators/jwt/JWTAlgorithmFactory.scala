@@ -20,15 +20,15 @@ trait JWTAlgorithmSignerFactory {
 }
 
 class ECDSAAlgorithmFactory(val jwsAlgorithm: JWSAlgorithm) extends JWTAlgorithmFactory {
-
+  val Encoding: String = "UTF-8"
   override def createVerifier(key: String): JWSVerifier = {
-    val publicKey: PublicKey = KeyFactory.getInstance("EC").generatePublic(new X509EncodedKeySpec(Base64.decodeBase64(key.getBytes("UTF-8"))))
+    val publicKey: PublicKey = KeyFactory.getInstance("EC").generatePublic(new X509EncodedKeySpec(Base64.decodeBase64(key.getBytes(Encoding))))
     val eCPublicKey: ECPublicKey = publicKey.asInstanceOf[ECPublicKey]
     new ECDSAVerifier(eCPublicKey.getW.getAffineX, eCPublicKey.getW.getAffineY)
   }
 
   override def createSigner(key: String): JWSSigner = {
-    val privateKey: PrivateKey = KeyFactory.getInstance("EC").generatePrivate(new X509EncodedKeySpec(Base64.decodeBase64(key.getBytes("UTF-8"))))
+    val privateKey: PrivateKey = KeyFactory.getInstance("EC").generatePrivate(new X509EncodedKeySpec(Base64.decodeBase64(key.getBytes(Encoding))))
     val eCPrivateKey: ECPrivateKey = privateKey.asInstanceOf[ECPrivateKey]
     new ECDSASigner(eCPrivateKey.getS)
   }
