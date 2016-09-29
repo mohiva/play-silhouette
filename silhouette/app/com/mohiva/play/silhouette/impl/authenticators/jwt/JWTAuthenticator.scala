@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.authenticators
+package com.mohiva.play.silhouette.impl.authenticators.jwt
 
-import com.atlassian.jwt.SigningAlgorithm
-import com.atlassian.jwt.core.writer.{ JsonSmartJwtJsonBuilder, NimbusJwtWriterFactory }
+import com.atlassian.jwt.core.writer.{ JsonSmartJwtJsonBuilder, NimbusJwtWriter }
 import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api.crypto.AuthenticatorEncoder
 import com.mohiva.play.silhouette.api.exceptions._
@@ -25,10 +24,9 @@ import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
 import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.api.{ ExpirableAuthenticator, Logger, LoginInfo, StorableAuthenticator }
-import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator._
-import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService._
-import com.nimbusds.jose.JWSObject
-import com.nimbusds.jose.crypto.MACVerifier
+import com.mohiva.play.silhouette.impl.authenticators.jwt.JWTAuthenticator._
+import com.mohiva.play.silhouette.impl.authenticators.jwt.JWTAuthenticatorService._
+import com.nimbusds.jose.{ JWSAlgorithm, JWSObject }
 import com.nimbusds.jwt.JWTClaimsSet
 import org.joda.time.DateTime
 import play.api.libs.json._
@@ -92,7 +90,8 @@ object JWTAuthenticator {
   def serialize(
     authenticator: JWTAuthenticator,
     authenticatorEncoder: AuthenticatorEncoder,
-    settings: JWTAuthenticatorSettings): String = {
+    settings: JWTAuthenticatorSettings,
+    jwtAlgorithmSignerFactory: JWTAlgorithmSignerFactory): String = {
 
     val subject = Json.toJson(authenticator.loginInfo).toString()
     val jwtBuilder = new JsonSmartJwtJsonBuilder()
@@ -112,9 +111,8 @@ object JWTAuthenticator {
       }
     }
 
-    new NimbusJwtWriterFactory()
-      .macSigningWriter(SigningAlgorithm.HS256, settings.sharedSecret)
-      .jsonToJwt(jwtBuilder.build())
+    new NimbusJwtWriter(jwtAlgorithmSignerFactory.jwsAlgorithm, jwtAlgorithmSignerFactory.createSigner(settings.sharedSecret)) {
+    }.jsonToJwt(jwtBuilder.build())
   }
 
   /**
@@ -128,10 +126,11 @@ object JWTAuthenticator {
   def unserialize(
     str: String,
     authenticatorEncoder: AuthenticatorEncoder,
-    settings: JWTAuthenticatorSettings): Try[JWTAuthenticator] = {
+    settings: JWTAuthenticatorSettings,
+    jwtAlgorithmVerifier: JWTAlgorithmVerifierFactory): Try[JWTAuthenticator] = {
 
     Try {
-      val verifier = new MACVerifier(settings.sharedSecret)
+      val verifier = jwtAlgorithmVerifier.createVerifier(settings.sharedSecret)
       val jwsObject = JWSObject.parse(str)
       if (!jwsObject.verify(verifier)) {
         throw new IllegalArgumentException("Fraudulent JWT token: " + str)
@@ -235,7 +234,8 @@ class JWTAuthenticatorService(
   repository: Option[AuthenticatorRepository[JWTAuthenticator]],
   authenticatorEncoder: AuthenticatorEncoder,
   idGenerator: IDGenerator,
-  clock: Clock)(implicit val executionContext: ExecutionContext)
+  clock: Clock,
+  jwtAlgorithmFactory: JWTAlgorithmFactory = new MACAlgorithmFactory(JWSAlgorithm.HS256))(implicit val executionContext: ExecutionContext)
   extends AuthenticatorService[JWTAuthenticator]
   with Logger {
 
@@ -272,7 +272,7 @@ class JWTAuthenticatorService(
    */
   override def retrieve[B](implicit request: ExtractableRequest[B]): Future[Option[JWTAuthenticator]] = {
     Future.fromTry(Try(request.extractString(settings.fieldName, settings.requestParts))).flatMap {
-      case Some(token) => unserialize(token, authenticatorEncoder, settings) match {
+      case Some(token) => unserialize(token, authenticatorEncoder, settings, jwtAlgorithmFactory) match {
         case Success(authenticator) => repository.fold(Future.successful(Option(authenticator)))(_.find(authenticator.id))
         case Failure(e) =>
           logger.info(e.getMessage, e)
@@ -294,7 +294,7 @@ class JWTAuthenticatorService(
    */
   override def init(authenticator: JWTAuthenticator)(implicit request: RequestHeader): Future[String] = {
     repository.fold(Future.successful(authenticator))(_.add(authenticator)).map { a =>
-      serialize(a, authenticatorEncoder, settings)
+      serialize(a, authenticatorEncoder, settings, jwtAlgorithmFactory)
     }.recover {
       case e => throw new AuthenticatorInitializationException(InitError.format(ID, authenticator), e)
     }
@@ -353,7 +353,7 @@ class JWTAuthenticatorService(
     request: RequestHeader): Future[AuthenticatorResult] = {
 
     repository.fold(Future.successful(authenticator))(_.update(authenticator)).map { a =>
-      AuthenticatorResult(result.withHeaders(settings.fieldName -> serialize(a, authenticatorEncoder, settings)))
+      AuthenticatorResult(result.withHeaders(settings.fieldName -> serialize(a, authenticatorEncoder, settings, jwtAlgorithmFactory)))
     }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
     }
