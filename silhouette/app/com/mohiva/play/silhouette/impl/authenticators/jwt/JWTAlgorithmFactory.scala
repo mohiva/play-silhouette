@@ -1,7 +1,7 @@
 package com.mohiva.play.silhouette.impl.authenticators.jwt
 
 import java.security.interfaces.{ ECPrivateKey, ECPublicKey }
-import java.security.spec.X509EncodedKeySpec
+import java.security.spec.{ PKCS8EncodedKeySpec, X509EncodedKeySpec }
 import java.security.{ KeyFactory, PrivateKey, PublicKey }
 
 import com.nimbusds.jose.crypto.{ ECDSASigner, ECDSAVerifier, MACSigner, MACVerifier }
@@ -28,7 +28,7 @@ class ECDSAAlgorithmFactory(val jwsAlgorithm: JWSAlgorithm) extends JWTAlgorithm
   }
 
   override def createSigner(key: String): JWSSigner = {
-    val privateKey: PrivateKey = KeyFactory.getInstance("EC").generatePrivate(new X509EncodedKeySpec(Base64.decodeBase64(key.getBytes(Encoding))))
+    val privateKey: PrivateKey = KeyFactory.getInstance("EC").generatePrivate(new PKCS8EncodedKeySpec(Base64.decodeBase64(key.getBytes(Encoding))))
     val eCPrivateKey: ECPrivateKey = privateKey.asInstanceOf[ECPrivateKey]
     new ECDSASigner(eCPrivateKey.getS)
   }
