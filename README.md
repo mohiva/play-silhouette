@@ -11,7 +11,7 @@ See [the project documentation] for more information.
 
 ## Support
 
-If you have question regarding Silhouette please use the [chat] or the [mailing list]. **Please do not use the issue tracker for questions!**
+If you have question regarding Silhouette, please use the [chat] or the [mailing list]. **Please do not use the issue tracker for questions!**
 
 ## Contribution
 
@@ -97,4 +97,3 @@ The code is licensed under [Apache License v2.0] and the documentation under [CC
 [contributing guide]: CONTRIBUTING.md
 [Apache License v2.0]: http://www.apache.org/licenses/LICENSE-2.0
 [CC BY 3.0]: http://creativecommons.org/licenses/by/3.0/
-[New MTB for spring]: http://blog.mohiva.com/2016/01/new-mtb-for-spring-campaign.html
