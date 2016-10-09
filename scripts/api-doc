@@ -22,15 +22,32 @@ if [ "$TRAVIS_REPO_SLUG" == "mohiva/play-silhouette" ] && [ "$TRAVIS_PULL_REQUES
   echo ""
   echo "Starting API-Doc update process"
 
-  GHPAGES_DIR="$HOME/.sbt/ghpages/com.mohiva/root"
-  GIT_DIR="$GHPAGES_DIR/.git"
+  SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+  GH_PAGES_DIR="$HOME/.sbt/ghpages/com.mohiva/root"
+  ENCRYPTED_KEY_VAR="encrypted_${ENCRYPTION_ID}_key"
+  ENCRYPTED_IV_VAR="encrypted_${ENCRYPTION_ID}_iv"
+  ENCRYPTED_KEY_FILE="${SCRIPTS_DIR}/api-doc.key.enc"
+  DECRYPTED_KEY_FILE="${SCRIPTS_DIR}/api-doc.key"
+  ENCRYPTED_KEY=${!ENCRYPTED_KEY_VAR}
+  ENCRYPTED_IV=${!ENCRYPTED_IV_VAR}
 
-  mkdir -p "$(dirname ${GHPAGES_DIR})"
-  git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git "$GHPAGES_DIR" > /dev/null
-  git config credential.helper "store --file=$GIT_DIR/credentials"
-  echo "https://${GH_TOKEN}:@github.com" > "$GIT_DIR/credentials"
+  openssl aes-256-cbc -K ${ENCRYPTED_KEY} -iv ${ENCRYPTED_IV} -in ${ENCRYPTED_KEY_FILE} -out ${DECRYPTED_KEY_FILE} -d
+  chmod 600 ${DECRYPTED_KEY_FILE}
+
+  printf "%s\n" \
+    "Host github.com" \
+    "    HostName github.com" \
+    "    IdentityFile ${DECRYPTED_KEY_FILE}" \
+    "    IdentitiesOnly yes" \
+    >> ~/.ssh/config
+
+  rm -rf "$(dirname ${GH_PAGES_DIR})"
+  mkdir -p "$(dirname ${GH_PAGES_DIR})"
+  git clone --quiet --branch=gh-pages git@github.com:${TRAVIS_REPO_SLUG}.git "$GH_PAGES_DIR" > /dev/null
   git config --global user.email "travis@travis-ci.org"
   git config --global user.name "travis-ci"
+  git config --global push.default simple
+
   scripts/sbt ghpages-push-site
 
   echo ""
