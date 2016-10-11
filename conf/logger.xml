@@ -1,0 +1,27 @@
+<configuration debug="false">
+
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <!-- Added ":-." to avoid "application.home_IS_UNDEFINED" directory creation -->
+        <file>${application.home:-.}/logs/application.log</file>
+        <encoder>
+            <pattern>[%level] %logger{15} - %message%n%xException</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%level] %logger{15} - %message%n%xException{5}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="application" level="ERROR" />
+    <logger name="play" level="ERROR" />
+
+    <root level="ERROR">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>
