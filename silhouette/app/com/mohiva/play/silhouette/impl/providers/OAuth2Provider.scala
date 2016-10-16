@@ -160,10 +160,13 @@ trait OAuth2Provider extends SocialProvider with OAuth2Constants with Logger {
    * @return The OAuth2 info on success, otherwise a failure.
    */
   protected def buildInfo(response: WSResponse): Try[OAuth2Info] = {
-    response.json.validate[OAuth2Info].asEither.fold(
-      error => Failure(new UnexpectedResponseException(InvalidInfoFormat.format(id, error))),
-      info => Success(info)
-    )
+    Try(response.json) match {
+      case Success(json) => json.validate[OAuth2Info].asEither.fold(
+        error => Failure(new UnexpectedResponseException(InvalidInfoFormat.format(id, error))),
+        info => Success(info)
+      )
+      case Failure(error) => Failure(new UnexpectedResponseException(JsonParseError.format(id, response.body, error)))
+    }
   }
 }
 
@@ -178,6 +181,7 @@ object OAuth2Provider extends OAuth2Constants {
   val AuthorizationURLUndefined = "[Silhouette][%s] Authorization URL is undefined"
   val AuthorizationError = "[Silhouette][%s] Authorization server returned error: %s"
   val InvalidInfoFormat = "[Silhouette][%s] Cannot build OAuth2Info because of invalid response format: %s"
+  val JsonParseError = "[Silhouette][%s] Cannot parse response `%s` to Json; got error: %s"
 }
 
 /**

@@ -70,9 +70,7 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       stateProvider.validate(any, any) returns Future.successful(state)
 
-      authInfo(provider.authenticate()) {
-        case authInfo => authInfo must be equalTo oAuthInfo.as[OAuth2Info]
-      }
+      authInfo(provider.authenticate())(_ must be equalTo oAuthInfo.as[OAuth2Info])
     }
   }
 
@@ -125,14 +123,13 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
       requestHolder.get() returns Future.successful(response)
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
-        case p =>
-          p must be equalTo new CommonSocialProfile(
-            loginInfo = LoginInfo(provider.id, "1"),
-            fullName = Some("Apollonia Vanova"),
-            email = Some("apollonia.vanova@watchmen.com"),
-            avatarURL = Some("https://github.com/images/error/apollonia_vanova.gif")
-          )
+      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) { p =>
+        p must be equalTo CommonSocialProfile(
+          loginInfo = LoginInfo(provider.id, "1"),
+          fullName = Some("Apollonia Vanova"),
+          email = Some("apollonia.vanova@watchmen.com"),
+          avatarURL = Some("https://github.com/images/error/apollonia_vanova.gif")
+        )
       }
     }
   }

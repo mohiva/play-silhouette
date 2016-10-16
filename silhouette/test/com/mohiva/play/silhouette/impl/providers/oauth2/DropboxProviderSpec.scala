@@ -69,9 +69,7 @@ class DropboxProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       stateProvider.validate(any, any) returns Future.successful(state)
 
-      authInfo(provider.authenticate()) {
-        case authInfo => authInfo must be equalTo oAuthInfo.as[OAuth2Info]
-      }
+      authInfo(provider.authenticate())(_ must be equalTo oAuthInfo.as[OAuth2Info])
     }
   }
 
@@ -135,14 +133,13 @@ class DropboxProviderSpec extends OAuth2ProviderSpec {
       requestHolder.get() returns Future.successful(response)
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      profile(provider.retrieveProfile(authInfo)) {
-        case p =>
-          p must be equalTo new CommonSocialProfile(
-            loginInfo = LoginInfo(provider.id, "12345678"),
-            firstName = Some("Apollonia"),
-            lastName = Some("Vanova"),
-            fullName = Some("Apollonia Vanova")
-          )
+      profile(provider.retrieveProfile(authInfo)) { p =>
+        p must be equalTo CommonSocialProfile(
+          loginInfo = LoginInfo(provider.id, "12345678"),
+          firstName = Some("Apollonia"),
+          lastName = Some("Vanova"),
+          fullName = Some("Apollonia Vanova")
+        )
       }
     }
   }

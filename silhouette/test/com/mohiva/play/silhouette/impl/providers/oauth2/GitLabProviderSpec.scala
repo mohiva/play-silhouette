@@ -21,7 +21,6 @@ import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.GitLabProvider._
-import play.api.http.HeaderNames
 import play.api.libs.json.Json
 import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.{ FakeRequest, WithApplication }
@@ -70,9 +69,7 @@ class GitLabProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       stateProvider.validate(any, any) returns Future.successful(state)
 
-      authInfo(provider.authenticate()) {
-        case authInfo => authInfo must be equalTo oAuthInfo.as[OAuth2Info]
-      }
+      authInfo(provider.authenticate())(_ must be equalTo oAuthInfo.as[OAuth2Info])
     }
   }
 
@@ -125,14 +122,13 @@ class GitLabProviderSpec extends OAuth2ProviderSpec {
       requestHolder.get() returns Future.successful(response)
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
-        case p =>
-          p must be equalTo new CommonSocialProfile(
-            loginInfo = LoginInfo(provider.id, "1"),
-            fullName = Some("John Smith"),
-            email = Some("john@example.com"),
-            avatarURL = Some("http://gitlab.com/uploads/user/avatar/1/index.jpg")
-          )
+      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) { p =>
+        p must be equalTo CommonSocialProfile(
+          loginInfo = LoginInfo(provider.id, "1"),
+          fullName = Some("John Smith"),
+          email = Some("john@example.com"),
+          avatarURL = Some("http://gitlab.com/uploads/user/avatar/1/index.jpg")
+        )
       }
     }
   }

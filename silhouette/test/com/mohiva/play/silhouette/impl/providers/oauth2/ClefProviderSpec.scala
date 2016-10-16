@@ -69,9 +69,7 @@ class ClefProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       stateProvider.validate(any, any) returns Future.successful(state)
 
-      authInfo(provider.authenticate()) {
-        case authInfo => authInfo must be equalTo oAuthInfo.as[OAuth2Info]
-      }
+      authInfo(provider.authenticate())(_ must be equalTo oAuthInfo.as[OAuth2Info])
     }
   }
 
@@ -124,14 +122,13 @@ class ClefProviderSpec extends OAuth2ProviderSpec {
       requestHolder.get() returns Future.successful(response)
       httpLayer.url(API.format("my.access.token")) returns requestHolder
 
-      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
-        case p =>
-          p must be equalTo new CommonSocialProfile(
-            loginInfo = LoginInfo(provider.id, "12345"),
-            firstName = Some("Apollonia"),
-            lastName = Some("Vanova"),
-            email = Some("apollonia.vanova@watchmen.com")
-          )
+      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) { p =>
+        p must be equalTo CommonSocialProfile(
+          loginInfo = LoginInfo(provider.id, "12345"),
+          firstName = Some("Apollonia"),
+          lastName = Some("Vanova"),
+          email = Some("apollonia.vanova@watchmen.com")
+        )
       }
     }
   }

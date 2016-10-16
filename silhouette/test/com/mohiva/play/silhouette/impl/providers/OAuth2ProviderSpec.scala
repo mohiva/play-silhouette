@@ -26,7 +26,7 @@ import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.libs.concurrent.Execution._
 import play.api.libs.json.{ JsValue, Json }
-import play.api.libs.ws.WSRequest
+import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.mvc.Result
 import play.api.test.{ FakeRequest, WithApplication }
 import play.mvc.Http.HeaderNames
@@ -90,23 +90,22 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
             result.withSession(sessionKey -> c.stateProvider.serialize(state))
           }
 
-          result(c.provider.authenticate()) {
-            case result =>
-              status(result) must equalTo(SEE_OTHER)
-              session(result).get(sessionKey) must beSome(c.stateProvider.serialize(c.state))
-              redirectLocation(result) must beSome.which { url =>
-                val urlParams = c.urlParams(url)
-                val params = c.oAuthSettings.scope.foldLeft(List(
-                  (ClientID, c.oAuthSettings.clientID),
-                  (RedirectURI, c.oAuthSettings.redirectURL),
-                  (ResponseType, Code),
-                  (State, urlParams(State))) ++ c.oAuthSettings.authorizationParams.toList) {
-                  case (p, s) => (Scope, s) :: p
-                }
-                url must be equalTo (authorizationURL + params.map { p =>
-                  encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8")
-                }.mkString("?", "&", ""))
+          result(c.provider.authenticate()) { result =>
+            status(result) must equalTo(SEE_OTHER)
+            session(result).get(sessionKey) must beSome(c.stateProvider.serialize(c.state))
+            redirectLocation(result) must beSome.which { url =>
+              val urlParams = c.urlParams(url)
+              val params = c.oAuthSettings.scope.foldLeft(List(
+                (ClientID, c.oAuthSettings.clientID),
+                (RedirectURI, c.oAuthSettings.redirectURL),
+                (ResponseType, Code),
+                (State, urlParams(State))) ++ c.oAuthSettings.authorizationParams.toList) {
+                case (p, s) => (Scope, s) :: p
               }
+              url must be equalTo (authorizationURL + params.map { p =>
+                encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8")
+              }.mkString("?", "&", ""))
+            }
           }
       }
     }
@@ -138,16 +137,14 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           c.stateProvider.build(any, any) returns Future.successful(c.state)
           c.stateProvider.publish(any, any)(any) answers { (a, m) =>
             val result = a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
-            val state = a.asInstanceOf[Array[Any]](1).asInstanceOf[OAuth2State]
 
             result.withSession(sessionKey -> c.stateProvider.serialize(c.state))
           }
 
-          result(c.provider.authenticate()) {
-            case result =>
-              redirectLocation(result) must beSome.which { url =>
-                url must contain(s"$RedirectURI=${encode(resolvedRedirectURL, "UTF-8")}")
-              }
+          result(c.provider.authenticate()) { result =>
+            redirectLocation(result) must beSome.which { url =>
+              url must contain(s"$RedirectURI=${encode(resolvedRedirectURL, "UTF-8")}")
+            }
           }
       }
     }
@@ -164,10 +161,8 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
             a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
           }
 
-          result(c.provider.authenticate()) {
-            case result =>
-              redirectLocation(result) must beSome.which(_ must not contain State)
-          }
+          result(c.provider.authenticate())(result =>
+            redirectLocation(result) must beSome.which(_ must not contain State))
       }
     }
 
@@ -199,6 +194,25 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
 
       failed[RuntimeException](c.provider.authenticate()) {
         case e => e.getMessage must startWith("success")
+      }
+    }
+
+    "fail with UnexpectedResponseException if Json cannot be parsed from response" in new WithApplication {
+      val requestHolder = mock[WSRequest]
+      val response = mock[WSResponse]
+      implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
+
+      response.json throws new RuntimeException("Unexpected character ('<' (code 60))")
+      response.body returns "<html></html>"
+      requestHolder.withHeaders(any) returns requestHolder
+      requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
+      c.httpLayer.url(c.oAuthSettings.accessTokenURL) returns requestHolder
+      c.stateProvider.validate(any, any) returns Future.successful(c.state)
+
+      failed[UnexpectedResponseException](c.provider.authenticate()) {
+        case e => e.getMessage must startWith(
+          JsonParseError.format(c.provider.id, "<html></html>", "java.lang.RuntimeException: Unexpected character ('<' (code 60))")
+        )
       }
     }
   }
