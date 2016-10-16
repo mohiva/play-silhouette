@@ -69,9 +69,7 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       stateProvider.validate(any, any) returns Future.successful(state)
 
-      authInfo(provider.authenticate()) {
-        case authInfo => authInfo must be equalTo oAuthInfo.as[OAuth2Info]
-      }
+      authInfo(provider.authenticate())(_ must be equalTo oAuthInfo.as[OAuth2Info])
     }
   }
 
@@ -125,15 +123,14 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       requestHolder.get() returns Future.successful(response)
       httpLayer.url(API.format("my.access.token", DefaultAPIVersion)) returns requestHolder
 
-      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
-        case p =>
-          p must be equalTo new CommonSocialProfile(
-            loginInfo = LoginInfo(provider.id, "13221052"),
-            firstName = Some("Apollonia"),
-            lastName = Some("Vanova"),
-            email = Some("apollonia.vanova@watchmen.com"),
-            avatarURL = Some("https://irs0.4sqi.net/img/user/100x100/blank_girl.png")
-          )
+      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) { p =>
+        p must be equalTo CommonSocialProfile(
+          loginInfo = LoginInfo(provider.id, "13221052"),
+          firstName = Some("Apollonia"),
+          lastName = Some("Vanova"),
+          email = Some("apollonia.vanova@watchmen.com"),
+          avatarURL = Some("https://irs0.4sqi.net/img/user/100x100/blank_girl.png")
+        )
       }
     }
 
@@ -144,15 +141,14 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       requestHolder.get() returns Future.successful(response)
       httpLayer.url(API.format("my.access.token", DefaultAPIVersion)) returns requestHolder
 
-      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
-        case p =>
-          p must be equalTo new CommonSocialProfile(
-            loginInfo = LoginInfo(provider.id, "13221052"),
-            firstName = Some("Apollonia"),
-            lastName = Some("Vanova"),
-            email = Some("apollonia.vanova@watchmen.com"),
-            avatarURL = Some("https://irs0.4sqi.net/img/user/100x100/blank_girl.png")
-          )
+      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) { p =>
+        p must be equalTo CommonSocialProfile(
+          loginInfo = LoginInfo(provider.id, "13221052"),
+          firstName = Some("Apollonia"),
+          lastName = Some("Vanova"),
+          email = Some("apollonia.vanova@watchmen.com"),
+          avatarURL = Some("https://irs0.4sqi.net/img/user/100x100/blank_girl.png")
+        )
       }
     }
 
@@ -166,15 +162,14 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(API.format("my.access.token", "20120101")) returns requestHolder
 
       profile(provider.withSettings(_.copy(customProperties = customProperties))
-        .retrieveProfile(oAuthInfo.as[OAuth2Info])) {
-        case p =>
-          p must be equalTo new CommonSocialProfile(
-            loginInfo = LoginInfo(provider.id, "13221052"),
-            firstName = Some("Apollonia"),
-            lastName = Some("Vanova"),
-            email = Some("apollonia.vanova@watchmen.com"),
-            avatarURL = Some("https://irs0.4sqi.net/img/user/100x100/blank_girl.png")
-          )
+        .retrieveProfile(oAuthInfo.as[OAuth2Info])) { p =>
+        p must be equalTo CommonSocialProfile(
+          loginInfo = LoginInfo(provider.id, "13221052"),
+          firstName = Some("Apollonia"),
+          lastName = Some("Vanova"),
+          email = Some("apollonia.vanova@watchmen.com"),
+          avatarURL = Some("https://irs0.4sqi.net/img/user/100x100/blank_girl.png")
+        )
       }
     }
 
@@ -188,15 +183,14 @@ class FoursquareProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(API.format("my.access.token", DefaultAPIVersion)) returns requestHolder
 
       profile(provider.withSettings(_.copy(customProperties = customProperties))
-        .retrieveProfile(oAuthInfo.as[OAuth2Info])) {
-        case p =>
-          p must be equalTo new CommonSocialProfile(
-            loginInfo = LoginInfo(provider.id, "13221052"),
-            firstName = Some("Apollonia"),
-            lastName = Some("Vanova"),
-            email = Some("apollonia.vanova@watchmen.com"),
-            avatarURL = Some("https://irs0.4sqi.net/img/user/150x150/blank_girl.png")
-          )
+        .retrieveProfile(oAuthInfo.as[OAuth2Info])) { p =>
+        p must be equalTo CommonSocialProfile(
+          loginInfo = LoginInfo(provider.id, "13221052"),
+          firstName = Some("Apollonia"),
+          lastName = Some("Vanova"),
+          email = Some("apollonia.vanova@watchmen.com"),
+          avatarURL = Some("https://irs0.4sqi.net/img/user/150x150/blank_girl.png")
+        )
       }
     }
   }

@@ -33,10 +33,6 @@ import scala.concurrent.Future
  */
 class Auth0ProviderSpec extends OAuth2ProviderSpec {
 
-  val Auth0ErrorJson = "providers/custom/auth0.error.json"
-  val Auth0SuccessJson = "providers/custom/auth0.success.json"
-  val Auth0UserProfileJson = "providers/custom/auth0.profile.json"
-
   "The `withSettings` method" should {
     "create a new instance with customized settings" in new WithApplication with Context {
       val s = provider.withSettings { s =>
@@ -75,9 +71,7 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
       stateProvider.validate(any, any) returns Future.successful(state)
 
-      authInfo(provider.authenticate()) {
-        case authInfo => authInfo must be equalTo oAuthInfo.as[OAuth2Info]
-      }
+      authInfo(provider.authenticate())(_ must be equalTo oAuthInfo.as[OAuth2Info])
     }
   }
 
@@ -122,13 +116,12 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
       requestHolder.withHeaders(("Authorization", s"Bearer ${oAuthInfoObject.accessToken}")) returns requestHolder
       httpLayer.url(oAuthSettings.apiURL.get) returns requestHolder
 
-      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
-        case p =>
-          p must be equalTo new CommonSocialProfile(
-            loginInfo = LoginInfo(provider.id, (userProfile \ "user_id").as[String]),
-            email = (userProfile \ "email").asOpt[String],
-            avatarURL = (userProfile \ "picture").asOpt[String]
-          )
+      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) { p =>
+        p must be equalTo CommonSocialProfile(
+          loginInfo = LoginInfo(provider.id, (userProfile \ "user_id").as[String]),
+          email = (userProfile \ "email").asOpt[String],
+          avatarURL = (userProfile \ "picture").asOpt[String]
+        )
       }
     }
   }
@@ -144,6 +137,13 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
    * The context.
    */
   trait Context extends OAuth2ProviderSpecContext {
+
+    /**
+     * Paths to the Json fixtures.
+     */
+    val Auth0ErrorJson = "providers/custom/auth0.error.json"
+    val Auth0SuccessJson = "providers/custom/auth0.success.json"
+    val Auth0UserProfileJson = "providers/custom/auth0.profile.json"
 
     /**
      * The OAuth2 settings.

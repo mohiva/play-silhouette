@@ -85,10 +85,13 @@ trait BaseVKProvider extends OAuth2Provider {
    * @return The OAuth2 info on success, otherwise a failure.
    */
   override protected def buildInfo(response: WSResponse): Try[OAuth2Info] = {
-    response.json.validate[OAuth2Info].asEither.fold(
-      error => Failure(new UnexpectedResponseException(InvalidInfoFormat.format(id, error))),
-      info => Success(info)
-    )
+    Try(response.json) match {
+      case Success(json) => json.validate[OAuth2Info].asEither.fold(
+        error => Failure(new UnexpectedResponseException(InvalidInfoFormat.format(id, error))),
+        info => Success(info)
+      )
+      case Failure(error) => Failure(new UnexpectedResponseException(JsonParseError.format(id, response.body, error)))
+    }
   }
 }
 
