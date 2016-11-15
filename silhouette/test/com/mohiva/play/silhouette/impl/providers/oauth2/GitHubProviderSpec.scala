@@ -149,13 +149,7 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
     /**
      * The OAuth2 settings.
      */
-    lazy val oAuthSettings = spy(OAuth2Settings(
-      authorizationURL = Some("https://github.com/login/oauth/authorize"),
-      accessTokenURL = "https://github.com/login/oauth/access_token",
-      redirectURL = "https://www.mohiva.com",
-      clientID = "my.client.id",
-      clientSecret = "my.client.secret",
-      scope = Some("repo,gist")))
+    lazy val oAuthSettings = spy(OAuth2Settings(authorizationURL = Some("https://github.com/login/oauth/authorize"), accessTokenURL = "https://github.com/login/oauth/access_token", redirectURL = Some("https://www.mohiva.com"), clientID = "my.client.id", clientSecret = "my.client.secret", scope = Some("repo,gist")))
 
     /**
      * The OAuth2 info returned by GitHub.

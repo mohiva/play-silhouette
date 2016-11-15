@@ -115,10 +115,13 @@ trait OAuth2Provider extends SocialProvider with OAuth2Constants with Logger {
         case None => stateProvider.build.map { state =>
           val serializedState = stateProvider.serialize(state)
           val stateParam = if (serializedState.isEmpty) List() else List(State -> serializedState)
+          val redirectParam = settings.redirectURL match {
+            case Some(rUri) => List((RedirectURI, resolveCallbackURL(rUri)))
+            case None       => Nil
+          }
           val params = settings.scope.foldLeft(List(
             (ClientID, settings.clientID),
-            (RedirectURI, resolveCallbackURL(settings.redirectURL)),
-            (ResponseType, Code)) ++ stateParam ++ settings.authorizationParams.toList) {
+            (ResponseType, Code)) ++ stateParam ++ settings.authorizationParams.toList ++ redirectParam) {
             case (p, s) => (Scope, s) :: p
           }
           val encodedParams = params.map { p => encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8") }
@@ -142,12 +145,16 @@ trait OAuth2Provider extends SocialProvider with OAuth2Constants with Logger {
    * @return The info containing the access token.
    */
   protected def getAccessToken(code: String)(implicit request: RequestHeader): Future[OAuth2Info] = {
-    httpLayer.url(settings.accessTokenURL).withHeaders(headers: _*).post(Map(
+    val params = Map(
       ClientID -> Seq(settings.clientID),
       ClientSecret -> Seq(settings.clientSecret),
       GrantType -> Seq(AuthorizationCode),
-      Code -> Seq(code),
-      RedirectURI -> Seq(resolveCallbackURL(settings.redirectURL))) ++ settings.accessTokenParams.mapValues(Seq(_))).flatMap { response =>
+      Code -> Seq(code)) ++ settings.accessTokenParams.mapValues(Seq(_))
+    val updatedParams = settings.redirectURL match {
+      case Some(rUri) => params + (RedirectURI -> Seq(resolveCallbackURL(rUri)))
+      case None       => params
+    }
+    httpLayer.url(settings.accessTokenURL).withHeaders(headers: _*).post(updatedParams).flatMap { response =>
       logger.debug("[Silhouette][%s] Access token response: [%s]".format(id, response.body))
       Future.fromTry(buildInfo(response))
     }
@@ -292,14 +299,4 @@ trait OAuth2StateProvider {
  * @param accessTokenParams   Additional params to add to the access token request.
  * @param customProperties    A map of custom properties for the different providers.
  */
-case class OAuth2Settings(
-  authorizationURL: Option[String] = None,
-  accessTokenURL: String,
-  redirectURL: String,
-  apiURL: Option[String] = None,
-  clientID: String,
-  clientSecret: String,
-  scope: Option[String] = None,
-  authorizationParams: Map[String, String] = Map.empty,
-  accessTokenParams: Map[String, String] = Map.empty,
-  customProperties: Map[String, String] = Map.empty)
+case class OAuth2Settings(authorizationURL: Option[String] = None, accessTokenURL: String, redirectURL: Option[String], apiURL: Option[String] = None, clientID: String, clientSecret: String, scope: Option[String] = None, authorizationParams: Map[String, String] = Map.empty, accessTokenParams: Map[String, String] = Map.empty, customProperties: Map[String, String] = Map.empty)

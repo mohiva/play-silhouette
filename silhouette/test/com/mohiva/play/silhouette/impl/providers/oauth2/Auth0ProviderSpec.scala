@@ -148,14 +148,7 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
     /**
      * The OAuth2 settings.
      */
-    lazy val oAuthSettings = spy(OAuth2Settings(
-      authorizationURL = Some("https://gerritforge.eu.auth0.com/authorize"),
-      accessTokenURL = "https://gerritforge.eu.auth0.com/oauth/token",
-      apiURL = Some("https://gerritforge.eu.auth0.com/userinfo"),
-      redirectURL = "https://www.mohiva.com",
-      clientID = "some.client.id",
-      clientSecret = "some.secret",
-      scope = Some("email")))
+    lazy val oAuthSettings = spy(OAuth2Settings(authorizationURL = Some("https://gerritforge.eu.auth0.com/authorize"), accessTokenURL = "https://gerritforge.eu.auth0.com/oauth/token", redirectURL = Some("https://www.mohiva.com"), apiURL = Some("https://gerritforge.eu.auth0.com/userinfo"), clientID = "some.client.id", clientSecret = "some.secret", scope = Some("email")))
 
     /**
      * The OAuth2 info returned by Auth0.

@@ -95,11 +95,14 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
             session(result).get(sessionKey) must beSome(c.stateProvider.serialize(c.state))
             redirectLocation(result) must beSome.which { url =>
               val urlParams = c.urlParams(url)
+              val redirectParam = c.oAuthSettings.redirectURL match {
+                case Some(rUri) => List((RedirectURI, rUri))
+                case None       => Nil
+              }
               val params = c.oAuthSettings.scope.foldLeft(List(
                 (ClientID, c.oAuthSettings.clientID),
-                (RedirectURI, c.oAuthSettings.redirectURL),
                 (ResponseType, Code),
-                (State, urlParams(State))) ++ c.oAuthSettings.authorizationParams.toList) {
+                (State, urlParams(State))) ++ c.oAuthSettings.authorizationParams.toList ++ redirectParam) {
                 case (p, s) => (Scope, s) :: p
               }
               url must be equalTo (authorizationURL + params.map { p =>
@@ -131,7 +134,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           val sessionValue = "session-value"
 
           req.secure returns secure
-          c.oAuthSettings.redirectURL returns redirectURL
+          c.oAuthSettings.redirectURL returns Some(redirectURL)
 
           c.stateProvider.serialize(c.state) returns sessionValue
           c.stateProvider.build(any, any) returns Future.successful(c.state)
@@ -172,8 +175,11 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
         ClientID -> Seq(c.oAuthSettings.clientID),
         ClientSecret -> Seq(c.oAuthSettings.clientSecret),
         GrantType -> Seq(AuthorizationCode),
-        Code -> Seq("my.code"),
-        RedirectURI -> Seq(c.oAuthSettings.redirectURL)) ++ c.oAuthSettings.accessTokenParams.mapValues(Seq(_))
+        Code -> Seq("my.code")) ++ c.oAuthSettings.accessTokenParams.mapValues(Seq(_))
+      val newParams = c.oAuthSettings.redirectURL match {
+        case Some(redirectUri) => params + (RedirectURI -> Seq(redirectUri))
+        case None              => params
+      }
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
 
       requestHolder.withHeaders(any) returns requestHolder
@@ -185,7 +191,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
       // This protects as for an NPE because of the not mocked dependencies. The other solution would be to execute
       // this test in every provider with the full mocked dependencies.
       requestHolder.post[Map[String, Seq[String]]](any)(any) answers { (a, m) =>
-        a.asInstanceOf[Array[Any]](0).asInstanceOf[Map[String, Seq[String]]].equals(params) match {
+        a.asInstanceOf[Array[Any]](0).asInstanceOf[Map[String, Seq[String]]].equals(newParams) match {
           case true  => throw new RuntimeException("success")
           case false => throw new RuntimeException("failure")
         }
