@@ -145,16 +145,16 @@ trait OAuth2Provider extends SocialProvider with OAuth2Constants with Logger {
    * @return The info containing the access token.
    */
   protected def getAccessToken(code: String)(implicit request: RequestHeader): Future[OAuth2Info] = {
+    val redirectParam = settings.redirectURL match {
+      case Some(rUri) => List((RedirectURI, resolveCallbackURL(rUri)))
+      case None       => Nil
+    }
     val params = Map(
       ClientID -> Seq(settings.clientID),
       ClientSecret -> Seq(settings.clientSecret),
       GrantType -> Seq(AuthorizationCode),
-      Code -> Seq(code)) ++ settings.accessTokenParams.mapValues(Seq(_))
-    val updatedParams = settings.redirectURL match {
-      case Some(rUri) => params + (RedirectURI -> Seq(resolveCallbackURL(rUri)))
-      case None       => params
-    }
-    httpLayer.url(settings.accessTokenURL).withHeaders(headers: _*).post(updatedParams).flatMap { response =>
+      Code -> Seq(code)) ++ settings.accessTokenParams.mapValues(Seq(_)) ++ redirectParam.toMap.mapValues(Seq(_))
+    httpLayer.url(settings.accessTokenURL).withHeaders(headers: _*).post(params).flatMap { response =>
       logger.debug("[Silhouette][%s] Access token response: [%s]".format(id, response.body))
       Future.fromTry(buildInfo(response))
     }

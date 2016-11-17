@@ -279,7 +279,7 @@ trait OAuth2ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
   /**
    * The OAuth2 settings.
    */
-  def oAuthSettings: OAuth2Settings
+  def oAuthSettings: OAuth2Settings = spy(OAuth2Settings(authorizationURL = Some("https://graph.facebook.com/oauth/authorize"), accessTokenURL = "https://graph.facebook.com/oauth/access_token", redirectURL = None, clientID = "my.client.id", clientSecret = "my.client.secret", scope = Some("email")))
 
   /**
    * The provider to test.

@@ -141,7 +141,7 @@ class TwitterProviderSpec extends OAuth1ProviderSpec {
     /**
      * The OAuth1 settings.
      */
-    lazy val oAuthSettings = spy(OAuth1Settings(
+    override lazy val oAuthSettings = spy(OAuth1Settings(
       requestTokenURL = "https://twitter.com/oauth/request_token",
       accessTokenURL = "https://twitter.com/oauth/access_token",
       authorizationURL = "https://twitter.com/oauth/authenticate",
