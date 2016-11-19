@@ -171,17 +171,17 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
 
     "submit the proper params to the access token post request" in new WithApplication {
       val requestHolder = mock[WSRequest]
+      val redirectParam = c.oAuthSettings.redirectURL match {
+        case Some(rUri) =>
+          List((RedirectURI, rUri))
+        case None => Nil
+      }
       val params = Map(
         ClientID -> Seq(c.oAuthSettings.clientID),
         ClientSecret -> Seq(c.oAuthSettings.clientSecret),
         GrantType -> Seq(AuthorizationCode),
-        Code -> Seq("my.code")) ++ c.oAuthSettings.accessTokenParams.mapValues(Seq(_))
-      val newParams = c.oAuthSettings.redirectURL match {
-        case Some(redirectUri) => params + (RedirectURI -> Seq(redirectUri))
-        case None              => params
-      }
+        Code -> Seq("my.code")) ++ c.oAuthSettings.accessTokenParams.mapValues(Seq(_)) ++ redirectParam.toMap.mapValues(Seq(_))
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
-
       requestHolder.withHeaders(any) returns requestHolder
       c.stateProvider.validate(any, any) returns Future.successful(c.state)
 
@@ -191,7 +191,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
       // This protects as for an NPE because of the not mocked dependencies. The other solution would be to execute
       // this test in every provider with the full mocked dependencies.
       requestHolder.post[Map[String, Seq[String]]](any)(any) answers { (a, m) =>
-        a.asInstanceOf[Array[Any]](0).asInstanceOf[Map[String, Seq[String]]].equals(newParams) match {
+        a.asInstanceOf[Array[Any]](0).asInstanceOf[Map[String, Seq[String]]].equals(params) match {
           case true  => throw new RuntimeException("success")
           case false => throw new RuntimeException("failure")
         }
