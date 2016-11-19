@@ -302,7 +302,7 @@ trait OAuth2StateProvider {
 case class OAuth2Settings(
   authorizationURL: Option[String] = None,
   accessTokenURL: String,
-  redirectURL: Option[String],
+  redirectURL: Option[String] = None,
   apiURL: Option[String] = None,
   clientID: String, clientSecret: String,
   scope: Option[String] = None,
