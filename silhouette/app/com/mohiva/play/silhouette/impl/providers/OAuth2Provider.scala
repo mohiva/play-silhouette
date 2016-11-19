@@ -299,13 +299,13 @@ trait OAuth2StateProvider {
  * @param accessTokenParams   Additional params to add to the access token request.
  * @param customProperties    A map of custom properties for the different providers.
  */
-  case class OAuth2Settings(
-    authorizationURL: Option[String] = None,
-    accessTokenURL: String,
-    redirectURL: Option[String],
-    apiURL: Option[String] = None,
-    clientID: String, clientSecret: String,
-    scope: Option[String] = None,
-    authorizationParams: Map[String, String] = Map.empty,
-    accessTokenParams: Map[String, String] = Map.empty,
-    customProperties: Map[String, String] = Map.empty)
+case class OAuth2Settings(
+  authorizationURL: Option[String] = None,
+  accessTokenURL: String,
+  redirectURL: Option[String],
+  apiURL: Option[String] = None,
+  clientID: String, clientSecret: String,
+  scope: Option[String] = None,
+  authorizationParams: Map[String, String] = Map.empty,
+  accessTokenParams: Map[String, String] = Map.empty,
+  customProperties: Map[String, String] = Map.empty)
