@@ -125,7 +125,7 @@ class XingProviderSpec extends OAuth1ProviderSpec {
     /**
      * The OAuth1 settings.
      */
-    lazy val oAuthSettings = spy(OAuth1Settings(
+    override lazy val oAuthSettings = spy(OAuth1Settings(
       requestTokenURL = "https://api.xing.com/v1/request_token",
       accessTokenURL = "https://api.xing.com/v1/access_token",
       authorizationURL = "https://api.xing.com/v1/authorize",

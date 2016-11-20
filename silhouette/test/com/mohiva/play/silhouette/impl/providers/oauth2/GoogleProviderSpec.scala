@@ -169,10 +169,10 @@ class GoogleProviderSpec extends OAuth2ProviderSpec {
     /**
      * The OAuth2 settings.
      */
-    lazy val oAuthSettings = spy(OAuth2Settings(
+    override lazy val oAuthSettings = spy(OAuth2Settings(
       authorizationURL = Some("https://accounts.google.com/o/oauth2/auth"),
       accessTokenURL = "https://accounts.google.com/o/oauth2/token",
-      redirectURL = "https://www.mohiva.com",
+      redirectURL = Some("https://www.mohiva.com"),
       clientID = "my.client.id",
       clientSecret = "my.client.secret",
       scope = Some("profile,email")))

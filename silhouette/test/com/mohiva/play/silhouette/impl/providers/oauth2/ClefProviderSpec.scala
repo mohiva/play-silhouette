@@ -148,9 +148,9 @@ class ClefProviderSpec extends OAuth2ProviderSpec {
     /**
      * The OAuth2 settings.
      */
-    lazy val oAuthSettings = spy(OAuth2Settings(
+    override lazy val oAuthSettings = spy(OAuth2Settings(
       accessTokenURL = "https://clef.io/api/v1/authorize",
-      redirectURL = "https://www.mohiva.com",
+      redirectURL = Some("https://www.mohiva.com"),
       clientID = "my.client.id",
       clientSecret = "my.client.secret"))
 

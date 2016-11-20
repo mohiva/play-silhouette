@@ -167,10 +167,10 @@ class VKProviderSpec extends OAuth2ProviderSpec {
     /**
      * The OAuth2 settings.
      */
-    lazy val oAuthSettings = spy(OAuth2Settings(
+    override lazy val oAuthSettings = spy(OAuth2Settings(
       authorizationURL = Some("http://oauth.vk.com/authorize"),
       accessTokenURL = "https://oauth.vk.com/access_token",
-      redirectURL = "https://www.mohiva.com",
+      redirectURL = Some("https://www.mohiva.com"),
       clientID = "my.client.id",
       clientSecret = "my.client.secret",
       scope = Some("email")))

@@ -128,7 +128,7 @@ class LinkedInProviderSpec extends OAuth1ProviderSpec {
     /**
      * The OAuth1 settings.
      */
-    lazy val oAuthSettings = spy(OAuth1Settings(
+    override lazy val oAuthSettings = spy(OAuth1Settings(
       requestTokenURL = "https://api.linkedin.com/uas/oauth/requestToken",
       accessTokenURL = "https://api.linkedin.com/uas/oauth/accessToken",
       authorizationURL = "https://api.linkedin.com/uas/oauth/authenticate",
