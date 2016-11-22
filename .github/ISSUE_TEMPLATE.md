@@ -1,6 +1,6 @@
 ### Are you looking for help?
 
-This is an issue tracker, used to manage and track the development of Silhouette. It is not a support system and so it is not a place to ask questions or get help. If you're not sure if you have found a bug, the best place to start is with either the [mailing list] or [Gitter channel]. If you have a feature request, the [mailing list] is a better forum than an issue tracker to discuss it.
+This is an issue tracker, used to manage and track the development of Silhouette. It is not a support system and so it is not a place to ask questions or get help. If you're not sure if you have found a bug, the best place to start is with either the [forum] or [Gitter channel]. If you have a feature request, the [forum] is better than the issue tracker to discuss it.
 
 ### Silhouette Version (4.0.x / etc)
 
@@ -41,5 +41,5 @@ Please provide a PR with a failing test.
 
 If the issue is more complex or requires configuration, please provide a link to a project on GitHub that reproduces the issue.
 
-[mailing list]: https://groups.google.com/forum/#!forum/play-silhouette
+[forum]: http://discourse.silhouette.rocks/
 [Gitter channel]: https://gitter.im/mohiva/play-silhouette
