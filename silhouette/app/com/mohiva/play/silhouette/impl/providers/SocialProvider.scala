@@ -150,6 +150,17 @@ case class SocialProviderRegistry(providers: Seq[SocialProvider]) {
   def getSeq[T <: SocialProvider: ClassTag]: Seq[T] = {
     providers.filter(p => TypeUtils.isInstance(p, implicitly[ClassTag[T]].runtimeClass)).map(_.asInstanceOf[T])
   }
+
+  /**
+   * Gets a provider with specific type. Useful whe you are trying to retrieve profile only by token.
+   *
+   * @tparam T The type of the provider
+   * @param id The ID of the provider to return
+   * @return Some specific provider type or None if no provider for the given type could be found.
+   */
+  def getWithType[T <: SocialProvider: ClassTag](id: String): Option[T] = {
+    this.getSeq[T].find(_.id == id)
+  }
 }
 
 /**
