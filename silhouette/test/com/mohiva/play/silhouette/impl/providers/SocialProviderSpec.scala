@@ -43,6 +43,18 @@ abstract class SocialProviderSpec[A <: AuthInfo] extends PlaySpecification with 
   }
 
   /**
+   * Applies a matcher on a stateful result
+   * @param providerResult The result from the provider
+   * @param b The matcher block to apply
+   * @return A specs2 match result
+   */
+  def statefulResult(providerResult: Future[Either[StatefulResult, A]])(b: Future[StatefulResult] => MatchResult[_]) = {
+    await(providerResult) must beLeft[StatefulResult].like {
+      case result => b(Future.successful(result))
+    }
+  }
+
+  /**
    * Applies a matcher on a auth info.
    *
    * @param providerResult The result from the provider.

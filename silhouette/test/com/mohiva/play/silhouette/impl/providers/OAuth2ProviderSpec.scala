@@ -31,7 +31,8 @@ import play.api.mvc.Result
 import play.api.test.{ FakeRequest, WithApplication }
 import play.mvc.Http.HeaderNames
 
-import scala.concurrent.Future
+import scala.concurrent.{ Await, Future }
+import scala.concurrent.duration.Duration
 
 /**
  * Abstract test case for the [[OAuth2Provider]] class.
@@ -218,6 +219,24 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
 
           result(c.provider.authenticate())(result =>
             redirectLocation(result) must beSome.which(_ must not contain State))
+      }
+    }
+
+    "sending and receiving user state params" in new WithApplication() {
+      c.oAuthSettings.authorizationURL match {
+        case None => skipped("authorizationURL is not defined, so this step isn't needed for provider: " + c.provider.getClass)
+        case Some(_) =>
+          implicit val req = FakeRequest(GET, "/")
+
+          c.stateProvider.serialize(c.state) returns ""
+          c.stateProvider.build(any, any) returns Future.successful(c.state)
+          c.stateProvider.publish(any, any)(any) answers { (a, m) =>
+            a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
+          }
+
+          val userParam = Map("path" -> "/login")
+          statefulResult(c.provider.authenticate(Some(userParam)))(result =>
+            Await.result(result, Duration.Inf).userState must_== Some(userParam))
       }
     }
 

@@ -23,6 +23,6 @@ trait SocialStateProvider extends SocialProvider {
    * @param request The request.
    * @return Either a Result or the AuthInfo from the provider.
    */
-  def authenticate[B](userStateParam: Option[Map[String, String]] = None)(implicit request: ExtractableRequest[B]): Future[Either[StatefulResult, A]]
+  def authenticate[B](userStateParam: Option[Map[String, String]])(implicit request: ExtractableRequest[B]): Future[Either[StatefulResult, A]]
 
 }
