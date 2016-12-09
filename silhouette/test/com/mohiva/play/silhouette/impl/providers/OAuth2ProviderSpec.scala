@@ -234,9 +234,9 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
             a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
           }
 
-          val userParam = Map("path" -> "/login")
-          statefulResult(c.provider.authenticate(Some(userParam)))(result =>
-            Await.result(result, Duration.Inf).userState must_== Some(userParam))
+          val userState = Map("path" -> "/login")
+          statefulResult(c.provider.authenticate(userState))(result =>
+            Await.result(result, Duration.Inf).userState must_== userState)
       }
     }
 

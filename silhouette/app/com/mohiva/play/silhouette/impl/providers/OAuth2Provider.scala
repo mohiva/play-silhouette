@@ -94,50 +94,24 @@ trait OAuth2Provider extends SocialStateProvider with OAuth2Constants with Logge
   protected val headers: Seq[(String, String)] = Seq()
 
   /**
-   * Starts the authentication process.
+   * Starts the authentication process without userState.
    *
    * @param request The current request.
    * @tparam B The type of the request body.
    * @return Either a Result or the auth info from the provider.
    */
   def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[Either[Result, OAuth2Info]] = {
-    request.extractString(Error).map {
-      case e @ AccessDenied => new AccessDeniedException(AuthorizationError.format(id, e))
-      case e                => new UnexpectedResponseException(AuthorizationError.format(id, e))
-    } match {
-      case Some(throwable) => Future.failed(throwable)
-      case None => request.extractString(Code) match {
-        // We're being redirected back from the authorization server with the access code
-        case Some(code) => stateProvider.validate.flatMap { state =>
-          getAccessToken(code).map(oauth2Info => Right(oauth2Info))
-        }
-        // There's no code in the request, this is the first step in the OAuth flow
-        case None => stateProvider.build.map { state =>
-          val serializedState = stateProvider.serialize(state)
-          val stateParam = if (serializedState.isEmpty) List() else List(State -> serializedState)
-          val redirectParam = settings.redirectURL match {
-            case Some(rUri) => List((RedirectURI, resolveCallbackURL(rUri)))
-            case None       => Nil
-          }
-          val params = settings.scope.foldLeft(List(
-            (ClientID, settings.clientID),
-            (ResponseType, Code)) ++ stateParam ++ settings.authorizationParams.toList ++ redirectParam) {
-            case (p, s) => (Scope, s) :: p
-          }
-          val encodedParams = params.map { p => encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8") }
-          val url = settings.authorizationURL.getOrElse {
-            throw new ConfigurationException(AuthorizationURLUndefined.format(id))
-          } + encodedParams.mkString("?", "&", "")
-          val redirect = stateProvider.publish(Results.Redirect(url), state)
-          logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
-          logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
-          Left(redirect)
-        }
-      }
-    }
+    authenticate(Map.empty[String, String]).map(_.left.map(_.result))
   }
 
-  override def authenticate[B](userStateParam: Option[Map[String, String]])(implicit request: ExtractableRequest[B]): Future[Either[StatefulResult, OAuth2Info]] = {
+  /**
+    * Starts the authentication process with userState.
+    *
+    * @param request The current request.
+    * @tparam B The type of the request body.
+    * @return Either a StatefulResult or the auth info from the provider.
+    */
+  override def authenticate[B](userState: Map[String, String])(implicit request: ExtractableRequest[B]): Future[Either[StatefulResult, OAuth2Info]] = {
     request.extractString(Error).map {
       case e @ AccessDenied => new AccessDeniedException(AuthorizationError.format(id, e))
       case e                => new UnexpectedResponseException(AuthorizationError.format(id, e))
@@ -168,7 +142,7 @@ trait OAuth2Provider extends SocialStateProvider with OAuth2Constants with Logge
           val redirect = stateProvider.publish(Results.Redirect(url), state)
           logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
           logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
-          Left(StatefulResult(redirect, userStateParam))
+          Left(StatefulResult(redirect, userState))
         }
       }
     }
