@@ -105,12 +105,13 @@ trait OAuth2Provider extends SocialStateProvider with OAuth2Constants with Logge
   }
 
   /**
-    * Starts the authentication process with userState.
-    *
-    * @param request The current request.
-    * @tparam B The type of the request body.
-    * @return Either a StatefulResult or the auth info from the provider.
-    */
+   * Starts the authentication process with userState.
+   *
+   * @param userState The user state for current request
+   * @param request The current request.
+   * @tparam B The type of the request body.
+   * @return Either a StatefulResult or the auth info from the provider.
+   */
   override def authenticate[B](userState: Map[String, String])(implicit request: ExtractableRequest[B]): Future[Either[StatefulResult, OAuth2Info]] = {
     request.extractString(Error).map {
       case e @ AccessDenied => new AccessDeniedException(AuthorizationError.format(id, e))
