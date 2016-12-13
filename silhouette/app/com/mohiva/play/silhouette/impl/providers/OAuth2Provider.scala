@@ -124,7 +124,7 @@ trait OAuth2Provider extends SocialStateProvider with OAuth2Constants with Logge
           getAccessToken(code).map(oauth2Info => Right(oauth2Info))
         }
         // There's no code in the request, this is the first step in the OAuth flow
-        case None => stateProvider.build.map { state =>
+        case None => stateProvider.build(userState).map { state =>
           val serializedState = stateProvider.serialize(state)
           val stateParam = if (serializedState.isEmpty) List() else List(State -> serializedState)
           val redirectParam = settings.redirectURL match {
@@ -262,7 +262,7 @@ trait OAuth2StateProvider {
    * @tparam B The type of the request body.
    * @return The build state.
    */
-  def build[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[State]
+  def build[B](userState: Map[String, String])(implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[State]
 
   /**
    * Validates the provider and the client state.
