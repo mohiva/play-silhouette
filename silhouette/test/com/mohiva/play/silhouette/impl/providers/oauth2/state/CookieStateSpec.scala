@@ -102,7 +102,7 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers w
       clock.now returns dateTime
       idGenerator.generate returns Future.successful(value)
 
-      val s = await(provider.build())
+      val s = await(provider.build)
 
       s.expirationDate must be equalTo dateTime.plusSeconds(settings.expirationTime.toSeconds.toInt)
       s.value must be equalTo value
@@ -268,6 +268,9 @@ class CookieStateSpec extends PlaySpecification with Mockito with JsonMatchers w
     /**
      * A state to test.
      */
-    lazy val state = spy(new CookieState(expirationDate = DateTime.now.plusSeconds(settings.expirationTime.toSeconds.toInt), value = "value", Map("path" -> "/login")))
+    lazy val state = spy(new CookieState(
+      expirationDate = DateTime.now.plusSeconds(settings.expirationTime.toSeconds.toInt),
+      value = "value"
+    ))
   }
 }

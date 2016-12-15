@@ -93,7 +93,7 @@ object CookieState {
  * @param expirationDate The expiration time.
  * @param value A value that binds the request to the user-agent's authenticated state.
  */
-case class CookieState(expirationDate: DateTime, value: String, userState: Map[String, String] = Map.empty) extends OAuth2State {
+case class CookieState(expirationDate: DateTime, value: String) extends OAuth2State {
 
   /**
    * Checks if the state is expired. This is an absolute timeout since the creation of
@@ -132,9 +132,9 @@ class CookieStateProvider @Inject() (
    * @tparam B The type of the request body.
    * @return The build state.
    */
-  override def build[B](userState: Map[String, String] = Map.empty)(implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[CookieState] = {
+  override def build[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[CookieState] = {
     idGenerator.generate.map { id =>
-      CookieState(clock.now.plusSeconds(settings.expirationTime.toSeconds.toInt), id, userState)
+      CookieState(clock.now.plusSeconds(settings.expirationTime.toSeconds.toInt), id)
     }
   }
 

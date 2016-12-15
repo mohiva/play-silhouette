@@ -37,7 +37,7 @@ class DummyStateSpec extends PlaySpecification with Mockito with JsonMatchers {
     "return a new state" in new Context {
       implicit val req = FakeRequest()
 
-      await(provider.build()) must be equalTo state
+      await(provider.build) must be equalTo state
     }
   }
 

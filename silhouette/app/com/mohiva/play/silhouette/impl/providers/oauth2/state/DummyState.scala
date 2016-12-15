@@ -47,7 +47,7 @@ class DummyStateProvider extends OAuth2StateProvider {
    * @tparam B The type of the request body.
    * @return The build state.
    */
-  override def build[B](userState: Map[String, String] = Map.empty)(implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[DummyState] =
+  override def build[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[DummyState] =
     Future.successful(DummyState())
 
   /**

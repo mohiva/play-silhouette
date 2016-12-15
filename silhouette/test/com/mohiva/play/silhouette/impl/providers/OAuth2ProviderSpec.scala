@@ -65,7 +65,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           implicit val req = FakeRequest(GET, "/")
 
           c.stateProvider.serialize(c.state) returns "session-value"
-          c.stateProvider.build(any)(any, any) returns Future.successful(c.state)
+          c.stateProvider.build(any, any) returns Future.successful(c.state)
           c.oAuthSettings.authorizationURL returns None
 
           failed[ConfigurationException](c.provider.authenticate()) {
@@ -83,7 +83,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           val sessionValue = "session-value"
 
           c.stateProvider.serialize(c.state) returns sessionValue
-          c.stateProvider.build(any)(any, any) returns Future.successful(c.state)
+          c.stateProvider.build(any, any) returns Future.successful(c.state)
           c.stateProvider.publish(any, any)(any) answers { (a, m) =>
             val result = a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
             val state = a.asInstanceOf[Array[Any]](1).asInstanceOf[c.TestState]
@@ -154,7 +154,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           c.oAuthSettings.redirectURL returns Some(redirectURL)
 
           c.stateProvider.serialize(c.state) returns sessionValue
-          c.stateProvider.build(any)(any, any) returns Future.successful(c.state)
+          c.stateProvider.build(any, any) returns Future.successful(c.state)
           c.stateProvider.publish(any, any)(any) answers { (a, m) =>
             val result = a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
 
@@ -181,7 +181,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           c.oAuthSettings.redirectURL returns redirectURL
 
           c.stateProvider.serialize(c.state) returns sessionValue
-          c.stateProvider.build(any)(any, any) returns Future.successful(c.state)
+          c.stateProvider.build(any, any) returns Future.successful(c.state)
           c.stateProvider.publish(any, any)(any) answers { (a, m) =>
             val result = a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
 
@@ -212,7 +212,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           implicit val req = FakeRequest(GET, "/")
 
           c.stateProvider.serialize(c.state) returns ""
-          c.stateProvider.build(any)(any, any) returns Future.successful(c.state)
+          c.stateProvider.build(any, any) returns Future.successful(c.state)
           c.stateProvider.publish(any, any)(any) answers { (a, m) =>
             a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
           }
@@ -229,7 +229,7 @@ abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
           implicit val req = FakeRequest(GET, "/")
 
           c.stateProvider.serialize(c.state) returns ""
-          c.stateProvider.build(any)(any, any) returns Future.successful(c.state)
+          c.stateProvider.build(any, any) returns Future.successful(c.state)
           c.stateProvider.publish(any, any)(any) answers { (a, m) =>
             a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
           }
