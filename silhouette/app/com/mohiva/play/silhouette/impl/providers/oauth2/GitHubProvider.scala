@@ -24,6 +24,7 @@ import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.GitHubProvider._
+import com.mohiva.play.silhouette.impl.providers.oauth2.state.StateProvider
 import play.api.http.HeaderNames
 import play.api.libs.json.JsValue
 
@@ -34,7 +35,7 @@ import scala.concurrent.Future
  *
  * @see https://developer.github.com/v3/oauth/
  */
-trait BaseGitHubProvider extends OAuth2Provider {
+trait BaseGitHubProvider extends OAuth2ProviderUpdated {
 
   /**
    * The content type to parse a profile from.
@@ -116,7 +117,7 @@ class GitHubProfileParser extends SocialProfileParser[JsValue, CommonSocialProfi
  */
 class GitHubProvider(
   protected val httpLayer: HTTPLayer,
-  protected val stateProvider: OAuth2StateProvider,
+  protected val stateProvider: StateProvider,
   val settings: OAuth2Settings)
   extends BaseGitHubProvider with CommonSocialProfileBuilder {
 

@@ -32,7 +32,7 @@ import scala.concurrent.Future
 /**
  * Test case for the [[GitHubProvider]] class.
  */
-class GitHubProviderSpec extends OAuth2ProviderSpec {
+class GitHubProviderSpec extends OAuth2ProviderUpdatedSpec {
 
   "The `withSettings` method" should {
     "create a new instance with customized settings" in new WithApplication with Context {
@@ -53,7 +53,7 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
       requestHolder.withHeaders(HeaderNames.ACCEPT -> "application/json") returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      stateProvider.validate(any, any) returns Future.successful(state)
+      stateProvider.validate(any, any) returns Future.successful(true)
 
       failed[UnexpectedResponseException](provider.authenticate()) {
         case e => e.getMessage must startWith(InvalidInfoFormat.format(provider.id, ""))
@@ -68,7 +68,7 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
       requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      stateProvider.validate(any, any) returns Future.successful(state)
+      stateProvider.validate(any, any) returns Future.successful(true)
 
       authInfo(provider.authenticate())(_ must be equalTo oAuthInfo.as[OAuth2Info])
     }
@@ -139,12 +139,12 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
    *
    * @return The Context to use for the abstract OAuth2 provider spec.
    */
-  override protected def context: OAuth2ProviderSpecContext = new Context {}
+  override protected def context: OAuth2ProviderUpdatedSpecContext = new Context {}
 
   /**
    * The context.
    */
-  trait Context extends OAuth2ProviderSpecContext {
+  trait Context extends OAuth2ProviderUpdatedSpecContext {
 
     /**
      * The OAuth2 settings.
