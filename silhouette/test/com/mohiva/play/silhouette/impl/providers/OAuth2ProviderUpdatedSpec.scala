@@ -45,7 +45,7 @@ abstract class OAuth2ProviderUpdatedSpec extends SocialProviderSpec[OAuth2Info] 
 
         val userState = Map("path" -> "/login")
         statefulResult(c.provider.authenticate(userState))(result =>
-          Await.result(result, Duration.Inf).result.header.headers.get("state") must_== userState)
+          Await.result(result, Duration.Inf).userState must_== userState)
     }
   }
   protected def context: OAuth2ProviderUpdatedSpecContext
