@@ -6,7 +6,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 /**
  * Handles state for different purposes.
  */
-trait StateHandler {
+trait SocialStateHandler {
 
   /**
    * Validates the state.
@@ -16,7 +16,7 @@ trait StateHandler {
    * @tparam B The type of the request body.
    * @return True if the state is valid, false otherwise.
    */
-  def validate[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Boolean]
+  def validate[B](stateMap: Map[String, Map[String, String]])(implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Boolean]
 
   /**
    * Gets the state params the handler can handle.
@@ -24,19 +24,17 @@ trait StateHandler {
    * @param ec The execution context to handle the asynchronous operations.
    * @return The state params the handler can handle.
    */
-  def state(implicit ec: ExecutionContext): Future[Map[String, String]]
+  def state(implicit ec: ExecutionContext): Map[String, String]
 
   /**
-   * Unserializes the state handler from the state param.
-   *
-   * @param request The request instance to get additional data to validate against.
-   * @param ec The execution context to handle the asynchronous operations.
-   * @return The state params the handler can handle.
+   * Instantiates a new StateHandler from the state
+   * @param state
+   * @return
    */
-  def unserialize[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[StateHandler]
+  def fromState(state: Map[String, String]): SocialStateHandler
 }
 
-object StateHandler {
+object SocialStateHandler {
   /**
    * The error messages.
    */

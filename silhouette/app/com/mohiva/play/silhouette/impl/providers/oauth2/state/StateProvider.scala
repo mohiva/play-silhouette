@@ -28,7 +28,7 @@ trait StateProvider {
   /**
    * The handler configured for this provider
    */
-  val handlers: Set[StateHandler] = Set.empty
+  val handlers: Set[SocialStateHandler] = Set.empty
 
   /**
    * Creates a copy of the state provider with a new handler added.
@@ -41,7 +41,7 @@ trait StateProvider {
    * @param handler The handler to add.
    * @return A new state provider with a new handler added.
    */
-  def withHandler(handler: StateHandler): Self
+  def withHandler(handler: Set[SocialStateHandler]): Self
 
   /**
    * Serializes the state handlers into a single state value which can be passed with the state param.
@@ -49,7 +49,7 @@ trait StateProvider {
    * @param ec The execution context to handle the asynchronous operations.
    * @return The serialized state as string.
    */
-  def serialize(implicit ec: ExecutionContext): Future[String]
+  def serialize(stateMap: Map[String, Map[String, String]])(implicit ec: ExecutionContext): Future[String]
 
   /**
    * Unserializes the state handlers from the state param.
@@ -59,26 +59,18 @@ trait StateProvider {
    * @tparam B The type of the request body.
    * @return The list of state handlers on success, an error on failure.
    */
-  def unserialize[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Set[StateHandler]]
+  def unserialize[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Map[String, Map[String, String]]]
 
   /**
-   * Validates the provider state and the client state,
-   * in turn calls validate for every state handler configured for the state provider
-   * @param request The request to read the value of the state param from.
-   * @param ec      The execution context to handle the asynchronous operations.
-   * @tparam B The type of the request body.
-   * @return true if validated else false
-   */
-  def validate[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Boolean]
-
-  /**
-   * Publishes the state to the client.
+   * Publishes the state of all the handlers which are PublishableStateHandlers to the client.
    *
    * @param result  The result to send to the client.
-   * @param state   The state to publish.
-   * @param request The current request.
-   * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
-  def publish[B](result: Result, state: String)(implicit request: ExtractableRequest[B]): Result
+  def publish[B](result: Result, stateMap: Map[String, Map[String, String]])(implicit request: ExtractableRequest[B]): Result = {
+    handlers.filter(_.isInstanceOf[PublishableStateHandler]).map(_.asInstanceOf[PublishableStateHandler])
+      .foldLeft(result)((agg, i) => i.publish(agg, stateMap.get(i.toString)))
+  }
+
+  def build[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Map[String, Map[String, String]]]
 }

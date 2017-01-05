@@ -3,7 +3,7 @@ package com.mohiva.play.silhouette.impl.providers.oauth2.state
 import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import play.api.mvc.Result
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * A state handler which can publish its internal state to the client.
@@ -12,8 +12,9 @@ import scala.concurrent.Future
  * such a state handler, then mixin this trait, to publish the state to the client.
  */
 trait PublishableStateHandler {
-  self: StateHandler =>
+  self: SocialStateHandler =>
 
+  def build[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Map[String, String]]
   /**
    * Publishes the state to the client.
    *
@@ -22,5 +23,5 @@ trait PublishableStateHandler {
    * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
-  def publish[B](result: Result)(implicit request: ExtractableRequest[B]): Future[Result]
+  def publish[B](result: Result, state: Option[Map[String, String]])(implicit request: ExtractableRequest[B]): Result
 }

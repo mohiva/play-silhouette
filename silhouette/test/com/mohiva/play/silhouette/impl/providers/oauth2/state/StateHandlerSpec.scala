@@ -1,5 +1,7 @@
 package com.mohiva.play.silhouette.impl.providers.oauth2.state
 
+import com.mohiva.play.silhouette.api.crypto.CookieSigner
+import com.mohiva.play.silhouette.api.util.{ Clock, IDGenerator }
 import com.mohiva.play.silhouette.impl.exceptions.OAuth2StateException
 import org.specs2.control.NoLanguageFeatures
 import org.specs2.matcher.JsonMatchers
@@ -7,20 +9,13 @@ import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.test.{ FakeHeaders, FakeRequest, PlaySpecification, WithApplication }
 import play.api.libs.concurrent.Execution.Implicits._
+import play.api.mvc.Cookie
 
+import scala.concurrent.Future
 import scala.concurrent.duration.FiniteDuration
+import scala.util.Success
 
 class StateHandlerSpec extends PlaySpecification with Mockito with JsonMatchers with NoLanguageFeatures {
-
-  "The `validate` method of the provider" should {
-    "return the state if it's valid" in new WithApplication with Context {
-      val stateParam = await(stateProvider.serialize)
-      val headers = FakeHeaders(Seq(("state", stateParam)))
-      implicit val req = FakeRequest(GET, "/", headers, "")
-
-      await(stateProvider.validate) must be equalTo true
-    }
-  }
 
   "The `serialize` method of the provider" should {
     "return an non empty string" in new Context {
@@ -32,11 +27,11 @@ class StateHandlerSpec extends PlaySpecification with Mockito with JsonMatchers 
     "return list of handlers" in new Context {
       val stateParam = await(stateProvider.serialize)
       val headers = FakeHeaders(Seq(("state", stateParam)))
-      implicit val req = FakeRequest(GET, "/", headers, "")
+      implicit val req = FakeRequest(GET, "/", headers, "").withCookies(Cookie(settings.cookieName, stateParam))
 
-      await(stateProvider.unserialize).toList.foreach {
-        sh => sh must beLike { case handler: StateHandler => ok }
-      }
+      val stateMap = await(stateProvider.unserialize)
+      stateMap.get("userState") must beSome[Map[String, String]]
+      stateMap.get("csrfState") must beSome[Map[String, String]]
     }
   }
 
@@ -45,30 +40,42 @@ class StateHandlerSpec extends PlaySpecification with Mockito with JsonMatchers 
       implicit val req = FakeRequest(GET, "/")
 
       await(stateProvider.unserialize) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(StateHandler.ProviderStateDoesNotExists)
-      }
-    }
-  }
-
-  "The validate method of the provider" should {
-    "throw OAuth2StateException if stateParam doesn't come back from provider" in new Context {
-      implicit val req = FakeRequest(GET, "/")
-
-      await(stateProvider.validate) must throwA[OAuth2StateException].like {
-        case e => e.getMessage must startWith(StateHandler.ProviderStateDoesNotExists)
+        case e => e.getMessage must startWith(SocialStateHandler.ProviderStateDoesNotExists)
       }
     }
   }
 
   trait Context extends Scope {
 
-    val csrfStateHandler = new CsrfStateHandler(Map("value" -> "signed cookie"))
+    /**
+     * The ID generator implementation.
+     */
+    lazy val idGenerator = mock[IDGenerator].smart
 
-    val userStateHandler = new UserStateHandler(Map("path" -> "/login"))
+    /**
+     * The clock implementation.
+     */
+    lazy val clock = mock[Clock].smart
 
-    val settings = StateProviderImplSettings()
+    /**
+     * The cookie signer implementation.
+     *
+     * The cookie signer returns the same value as passed to the methods. This is enough for testing.
+     */
+    lazy val cookieSigner = {
+      val c = mock[CookieSigner].smart
+      c.sign(any) answers { p => p.asInstanceOf[String] }
+      c.extract(any) answers { p => Success(p.asInstanceOf[String]) }
+      c
+    }
 
-    lazy val stateProvider = new StateProviderImpl(Set(csrfStateHandler, userStateHandler), settings)
+    lazy val csrfStateHandler = new CsrfSocialStateHandler(settings, idGenerator, cookieSigner, clock, Map("value" -> "signed cookie"))
+
+    val userStateHandler = new UserSocialStateHandler(Map("path" -> "/login"))
+
+    val settings = CsrfStateSettings()
+
+    lazy val stateProvider = new StateProviderImpl(Set(csrfStateHandler, userStateHandler))
 
   }
 

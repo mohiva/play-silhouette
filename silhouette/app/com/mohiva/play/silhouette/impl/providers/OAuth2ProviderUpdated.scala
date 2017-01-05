@@ -27,8 +27,6 @@ import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.oauth2.state.StateProvider
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
 import play.api.libs.ws.WSResponse
 import play.api.mvc._
 
@@ -121,13 +119,13 @@ trait OAuth2ProviderUpdated extends SocialStateProvider with OAuth2Constants wit
       case Some(throwable) => Future.failed(throwable)
       case None => request.extractString(Code) match {
         // We're being redirected back from the authorization server with the access code
-        case Some(code) => stateProvider.validate.flatMap { state =>
+        case Some(code) => stateProvider.unserialize.flatMap { state =>
           getAccessToken(code).map(oauth2Info => Right(oauth2Info))
         }
         // There's no code in the request, this is the first step in the OAuth flow
-        case None => stateProvider.serialize.map { state =>
-          //val serializedState = stateProvider.serialize
-          val stateParam = if (state.isEmpty) List() else List(State -> state)
+        case None => stateProvider.build.map { stateMap =>
+          val serializedState = stateProvider.serialize(stateMap)
+          val stateParam = if (stateMap.isEmpty) List() else List(State -> serializedState)
           val redirectParam = settings.redirectURL match {
             case Some(rUri) => List((RedirectURI, resolveCallbackURL(rUri)))
             case None       => Nil
