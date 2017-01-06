@@ -123,6 +123,8 @@ trait OAuth2ProviderUpdated extends SocialStateProvider with OAuth2Constants wit
           getAccessToken(code).map(oauth2Info => Right(oauth2Info))
         }
         // There's no code in the request, this is the first step in the OAuth flow
+        //TODO: override the userState with the one in this function's argument
+        //TODO: stateProvider.withHandler(UserStateHandler(userState))
         case None => stateProvider.build.flatMap { stateMap =>
           val serializedState = stateProvider.serialize(stateMap)
           serializedState flatMap {
