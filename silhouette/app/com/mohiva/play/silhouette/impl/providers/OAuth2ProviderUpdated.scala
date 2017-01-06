@@ -123,26 +123,31 @@ trait OAuth2ProviderUpdated extends SocialStateProvider with OAuth2Constants wit
           getAccessToken(code).map(oauth2Info => Right(oauth2Info))
         }
         // There's no code in the request, this is the first step in the OAuth flow
-        case None => stateProvider.build.map { stateMap =>
+        case None => stateProvider.build.flatMap { stateMap =>
           val serializedState = stateProvider.serialize(stateMap)
-          val stateParam = if (stateMap.isEmpty) List() else List(State -> serializedState)
-          val redirectParam = settings.redirectURL match {
-            case Some(rUri) => List((RedirectURI, resolveCallbackURL(rUri)))
-            case None       => Nil
+          serializedState flatMap {
+            state =>
+              {
+                val stateParam = if (stateMap.isEmpty) List() else List(State -> state)
+                val redirectParam = settings.redirectURL match {
+                  case Some(rUri) => List((RedirectURI, resolveCallbackURL(rUri)))
+                  case None       => Nil
+                }
+                val params = settings.scope.foldLeft(List(
+                  (ClientID, settings.clientID),
+                  (ResponseType, Code)) ++ stateParam ++ settings.authorizationParams.toList ++ redirectParam) {
+                  case (p, s) => (Scope, s) :: p
+                }
+                val encodedParams = params.map { p => encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8") }
+                val url = settings.authorizationURL.getOrElse {
+                  throw new ConfigurationException(AuthorizationURLUndefined.format(id))
+                } + encodedParams.mkString("?", "&", "")
+                val redirect = stateProvider.publish(Results.Redirect(url), stateMap)
+                logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
+                logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
+                Future.successful(Left(StatefulResult(redirect, userState)))
+              }
           }
-          val params = settings.scope.foldLeft(List(
-            (ClientID, settings.clientID),
-            (ResponseType, Code)) ++ stateParam ++ settings.authorizationParams.toList ++ redirectParam) {
-            case (p, s) => (Scope, s) :: p
-          }
-          val encodedParams = params.map { p => encode(p._1, "UTF-8") + "=" + encode(p._2, "UTF-8") }
-          val url = settings.authorizationURL.getOrElse {
-            throw new ConfigurationException(AuthorizationURLUndefined.format(id))
-          } + encodedParams.mkString("?", "&", "")
-          val redirect = stateProvider.publish(Results.Redirect(url), state)
-          logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
-          logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
-          Left(StatefulResult(redirect, userState))
         }
       }
     }

@@ -7,9 +7,6 @@ import com.mohiva.play.silhouette.impl.exceptions.OAuth2StateException
 import play.api.libs.json.Json
 import scala.concurrent.{ ExecutionContext, Future }
 
-/**
- * Created by sahebmotiani on 20/12/2016.
- */
 class StateProviderImpl @Inject() (
   override val handlers: Set[SocialStateHandler] = Set.empty) extends StateProvider {
 
@@ -38,12 +35,7 @@ class StateProviderImpl @Inject() (
    * @return The serialized state as string.
    */
   override def serialize(stateMap: Map[String, Map[String, String]])(implicit ec: ExecutionContext): Future[String] = {
-    handlers.foldLeft(Future(Map.empty[String, Map[String, String]]): Future[Map[String, Map[String, String]]])((a, k) => {
-      for {
-        aParam <- a
-        kParam <- Future.successful(k.state)
-      } yield (aParam + (k.toString -> kParam))
-    }).map(state => Base64.encode(Json.toJson(state)))
+    Future.successful(Base64.encode(Json.toJson(stateMap)))
   }
 
   /**
@@ -73,13 +65,12 @@ class StateProviderImpl @Inject() (
     ).map(bools => bools.forall(k => k))
   }
 
-  override def build[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Map[String, Map[String, String]]] = {
-    handlers.filter(_.isInstanceOf[PublishableStateHandler]).map(_.asInstanceOf[PublishableStateHandler]).
-      foldLeft(Future(Map.empty[String, Map[String, String]]))((aF, handler) => {
-        for {
-          a <- aF
-          state <- handler.build
-        } yield (a + (handler.toString -> state))
-      })
+  override def build[B](implicit ec: ExecutionContext): Future[Map[String, Map[String, String]]] = {
+    handlers.foldLeft(Future(Map.empty[String, Map[String, String]]))((aF, hF) => {
+      for {
+        a <- aF
+        h <- hF.state
+      } yield a + (hF.toString -> h)
+    })
   }
 }

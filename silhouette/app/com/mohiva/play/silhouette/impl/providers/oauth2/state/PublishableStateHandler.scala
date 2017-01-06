@@ -14,7 +14,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 trait PublishableStateHandler {
   self: SocialStateHandler =>
 
-  def build[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Map[String, String]]
+  def build[B](implicit ec: ExecutionContext): Future[Map[String, String]]
   /**
    * Publishes the state to the client.
    *

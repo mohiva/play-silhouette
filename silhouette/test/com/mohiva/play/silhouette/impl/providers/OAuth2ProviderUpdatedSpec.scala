@@ -37,9 +37,8 @@ abstract class OAuth2ProviderUpdatedSpec extends SocialProviderSpec[OAuth2Info] 
       case Some(_) =>
         implicit val req = FakeRequest(GET, "/")
 
-        c.stateProvider.serialize(any) returns Future.successful("")
-        //c.stateProvider.build(any, any) returns Future.successful(c.state)
-        c.stateProvider.publish(any)(any) answers { (a, m) =>
+        c.stateProvider.serialize(any)(any) returns Future.successful("")
+        c.stateProvider.publish(any, any)(any) answers { (a, m) =>
           a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
         }
 

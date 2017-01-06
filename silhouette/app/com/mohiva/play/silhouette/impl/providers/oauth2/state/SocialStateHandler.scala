@@ -24,7 +24,7 @@ trait SocialStateHandler {
    * @param ec The execution context to handle the asynchronous operations.
    * @return The state params the handler can handle.
    */
-  def state(implicit ec: ExecutionContext): Map[String, String]
+  def state[B](implicit ec: ExecutionContext): Future[Map[String, String]]
 
   /**
    * Instantiates a new StateHandler from the state

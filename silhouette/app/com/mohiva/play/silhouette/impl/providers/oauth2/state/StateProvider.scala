@@ -72,5 +72,5 @@ trait StateProvider {
       .foldLeft(result)((agg, i) => i.publish(agg, stateMap.get(i.toString)))
   }
 
-  def build[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Map[String, Map[String, String]]]
+  def build[B](implicit ec: ExecutionContext): Future[Map[String, Map[String, String]]]
 }

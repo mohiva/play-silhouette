@@ -12,26 +12,28 @@ import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.Cookie
 
 import scala.concurrent.Future
-import scala.concurrent.duration.FiniteDuration
 import scala.util.Success
 
 class StateHandlerSpec extends PlaySpecification with Mockito with JsonMatchers with NoLanguageFeatures {
 
   "The `serialize` method of the provider" should {
     "return an non empty string" in new Context {
-      await(stateProvider.serialize) must not be equalTo("")
+      idGenerator.generate.returns(Future.successful(""))
+      await(stateProvider.build.flatMap { stateMap => stateProvider.serialize(stateMap) }) must not be equalTo("")
     }
   }
 
   "The unserialize method of the provider" should {
     "return list of handlers" in new Context {
-      val stateParam = await(stateProvider.serialize)
+      idGenerator.generate.returns(Future.successful("value"))
+      val stateMap = await(stateProvider.build)
+      val stateParam = await(stateProvider.serialize(stateMap))
       val headers = FakeHeaders(Seq(("state", stateParam)))
-      implicit val req = FakeRequest(GET, "/", headers, "").withCookies(Cookie(settings.cookieName, stateParam))
+      implicit val req = FakeRequest(GET, "/", headers, "").withCookies(Cookie(settings.cookieName, stateMap.get(csrfStateHandler.toString).get.get("token").get))
 
-      val stateMap = await(stateProvider.unserialize)
-      stateMap.get("userState") must beSome[Map[String, String]]
-      stateMap.get("csrfState") must beSome[Map[String, String]]
+      val unserializedStateMap = await(stateProvider.unserialize)
+      unserializedStateMap.get("userState") must beSome[Map[String, String]]
+      unserializedStateMap.get("csrfState") must beSome[Map[String, String]]
     }
   }
 
@@ -76,7 +78,6 @@ class StateHandlerSpec extends PlaySpecification with Mockito with JsonMatchers 
     val settings = CsrfStateSettings()
 
     lazy val stateProvider = new StateProviderImpl(Set(csrfStateHandler, userStateHandler))
-
   }
 
 }

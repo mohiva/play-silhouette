@@ -7,7 +7,7 @@ import play.api.mvc.{ Cookie, Result }
 
 import scala.concurrent.duration._
 import scala.concurrent.duration.FiniteDuration
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
 import SocialStateHandler._
 import com.google.inject.Inject
@@ -24,15 +24,15 @@ class CsrfSocialStateHandler @Inject() (
     ec: ExecutionContext): Future[Boolean] = {
     Future.fromTry(clientState.flatMap(cS => {
       println(cS)
-      println(this.state)
-      if (cS != this.state) Failure(new OAuth2StateException(StateIsNotEqual))
+      println(this.s)
+      if (cS != this.s) Failure(new OAuth2StateException(StateIsNotEqual))
       else Success(true)
     }
     ))
   }
 
-  override def state(implicit ec: ExecutionContext): Map[String, String] = {
-    this.s
+  override def state[B](implicit ec: ExecutionContext): Future[Map[String, String]] = {
+    this.build
   }
 
   override def publish[B](result: Result, state: Option[Map[String, String]])(implicit request: ExtractableRequest[B]): Result = {
@@ -46,7 +46,7 @@ class CsrfSocialStateHandler @Inject() (
       httpOnly = settings.httpOnlyCookie))
   }
 
-  override def build[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Map[String, String]] = {
+  override def build[B](implicit ec: ExecutionContext): Future[Map[String, String]] = {
     idGenerator.generate.map { id =>
       Map("token" -> cookieSigner.sign(id))
     }

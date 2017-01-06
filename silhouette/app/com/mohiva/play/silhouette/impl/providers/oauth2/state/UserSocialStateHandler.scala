@@ -14,7 +14,7 @@ class UserSocialStateHandler(val userState: Map[String, String]) extends SocialS
 
   override def validate[B](stateMap: Map[String, Map[String, String]])(implicit request: ExtractableRequest[B], ex: ExecutionContext): Future[Boolean] = Future.successful(true)
 
-  override def state(implicit ec: ExecutionContext): Map[String, String] = userState
+  override def state[B](implicit ec: ExecutionContext): Future[Map[String, String]] = Future.successful(userState)
 
   override def fromState(state: Map[String, String]): SocialStateHandler = new UserSocialStateHandler(state)
 
