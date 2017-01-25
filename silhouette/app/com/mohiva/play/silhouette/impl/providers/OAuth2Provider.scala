@@ -71,7 +71,7 @@ object OAuth2Info extends OAuth2Constants {
 /**
  * Base implementation for all OAuth2 providers.
  */
-trait OAuth2Provider extends SocialProvider with OAuth2Constants with Logger {
+trait OAuth2Provider extends SocialStateProvider with OAuth2Constants with Logger {
 
   /**
    * The type of the auth info.
@@ -94,13 +94,25 @@ trait OAuth2Provider extends SocialProvider with OAuth2Constants with Logger {
   protected val headers: Seq[(String, String)] = Seq()
 
   /**
-   * Starts the authentication process.
+   * Starts the authentication process without userState.
    *
    * @param request The current request.
    * @tparam B The type of the request body.
    * @return Either a Result or the auth info from the provider.
    */
   def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[Either[Result, OAuth2Info]] = {
+    authenticate(Map.empty[String, String]).map(_.left.map(_.result))
+  }
+
+  /**
+   * Starts the authentication process with userState.
+   *
+   * @param userState The user state for current request
+   * @param request The current request.
+   * @tparam B The type of the request body.
+   * @return Either a StatefulResult or the auth info from the provider.
+   */
+  override def authenticate[B](userState: Map[String, String])(implicit request: ExtractableRequest[B]): Future[Either[StatefulResult, OAuth2Info]] = {
     request.extractString(Error).map {
       case e @ AccessDenied => new AccessDeniedException(AuthorizationError.format(id, e))
       case e                => new UnexpectedResponseException(AuthorizationError.format(id, e))
@@ -131,7 +143,7 @@ trait OAuth2Provider extends SocialProvider with OAuth2Constants with Logger {
           val redirect = stateProvider.publish(Results.Redirect(url), state)
           logger.debug("[Silhouette][%s] Use authorization URL: %s".format(id, settings.authorizationURL))
           logger.debug("[Silhouette][%s] Redirecting to: %s".format(id, url))
-          Left(redirect)
+          Left(StatefulResult(redirect, userState))
         }
       }
     }

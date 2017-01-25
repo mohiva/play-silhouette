@@ -11,7 +11,7 @@ See [the project documentation] for more information.
 
 ## Support
 
-If you have question regarding Silhouette, please use the [chat] or the [forum]. **Please do not use the issue tracker for questions!**
+If you have question regarding Silhouette, please use the [chat] or the [mailing list]. **Please do not use the issue tracker for questions!**
 
 ## Contribution
 
@@ -91,9 +91,9 @@ Become a sponsor and get your logo on our README on Github with a link to your s
 
 The code is licensed under [Apache License v2.0] and the documentation under [CC BY 3.0].
 
-[the project documentation]: http://www.silhouette.rocks/docs
+[the project documentation]: http://silhouette.mohiva.com/docs
 [chat]: https://gitter.im/mohiva/play-silhouette
-[forum]: http://discourse.silhouette.rocks/
+[mailing list]: https://groups.google.com/forum/#!forum/play-silhouette
 [contributing guide]: CONTRIBUTING.md
 [Apache License v2.0]: http://www.apache.org/licenses/LICENSE-2.0
 [CC BY 3.0]: http://creativecommons.org/licenses/by/3.0/
