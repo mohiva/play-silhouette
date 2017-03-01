@@ -55,7 +55,6 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      stateProvider.validate(any, any) returns Future.successful(state)
 
       failed[UnexpectedResponseException](provider.authenticate()) {
         case e => e.getMessage must startWith(InvalidInfoFormat.format(provider.id, ""))
@@ -70,7 +69,6 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      stateProvider.validate(any, any) returns Future.successful(state)
 
       authInfo(provider.authenticate()) {
         case authInfo => authInfo must be equalTo oAuthInfo.as[OAuth2Info]
@@ -211,12 +209,12 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
    * The custom Facebook OAuth2 Provider.
    *
    * @param httpLayer The HTTP layer implementation.
-   * @param stateProvider The state provider implementation.
+   * @param stateHandler The state provider implementation.
    * @param settings The provider settings.
    */
   class CustomFacebookProvider(
     protected val httpLayer: HTTPLayer,
-    protected val stateProvider: OAuth2StateProvider,
+    protected val stateHandler: SocialStateHandler,
     val settings: OAuth2Settings)
     extends BaseFacebookProvider {
 
@@ -242,7 +240,7 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
      * @return An instance of the provider initialized with new settings.
      */
     def withSettings(f: (Settings) => Settings) = {
-      new CustomFacebookProvider(httpLayer, stateProvider, f(settings))
+      new CustomFacebookProvider(httpLayer, stateHandler, f(settings))
     }
   }
 }
