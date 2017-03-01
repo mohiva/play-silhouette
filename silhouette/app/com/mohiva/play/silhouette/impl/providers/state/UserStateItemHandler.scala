@@ -76,7 +76,7 @@ class UserStateItemHandler[S <: SocialStateItem](userState: S)(
    * @param request The request instance to get additional data to validate against.
    * @return True if the handler can handle the given state item, false otherwise.
    */
-  override def canHandle[B](item: ItemStructure)(implicit request: ExtractableRequest[B]): Boolean = item.id == ID && item.version == Version
+  override def canHandle[B](item: ItemStructure)(implicit request: ExtractableRequest[B]): Boolean = item.id == ID
 
   /**
    * Returns a serialized value of the state item.
@@ -84,7 +84,7 @@ class UserStateItemHandler[S <: SocialStateItem](userState: S)(
    * @param item The state item to serialize.
    * @return The serialized state item.
    */
-  override def serialize(item: Item): ItemStructure = ItemStructure(ID, Version, Json.toJson(item))
+  override def serialize(item: Item): ItemStructure = ItemStructure(ID, Json.toJson(item))
 
   /**
    * Unserializes the state item.
@@ -109,5 +109,4 @@ class UserStateItemHandler[S <: SocialStateItem](userState: S)(
  */
 object UserStateItemHandler {
   val ID = "user-state"
-  val Version = "1"
 }

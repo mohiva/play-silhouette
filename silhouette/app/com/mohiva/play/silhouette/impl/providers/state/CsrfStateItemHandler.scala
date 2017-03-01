@@ -74,7 +74,7 @@ class CsrfStateItemHandler[S <: SocialStateItem] @Inject() (
     item.id == ID && {
       clientState match {
         case Success(token) => token == item.data
-        case Failure(_)    => false
+        case Failure(_)     => false
       }
     }
   }
@@ -85,7 +85,7 @@ class CsrfStateItemHandler[S <: SocialStateItem] @Inject() (
    * @param item The state item to serialize.
    * @return The serialized state item.
    */
-  override def serialize(item: Item): ItemStructure = ItemStructure(ID, Version, Json.toJson(item))
+  override def serialize(item: Item): ItemStructure = ItemStructure(ID, Json.toJson(item))
 
   /**
    * Unserializes the state item.
@@ -139,7 +139,6 @@ class CsrfStateItemHandler[S <: SocialStateItem] @Inject() (
  */
 object CsrfStateItemHandler {
   val ID = "csrf-state"
-  val Version = "1"
   /**
    * The error messages.
    */

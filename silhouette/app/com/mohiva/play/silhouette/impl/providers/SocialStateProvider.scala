@@ -62,17 +62,16 @@ object SocialStateItem {
    * A class which represents the serialized structure of a social state item.
    *
    * @param id      A unique identifier for the state item.
-   * @param version A value which represents the version of a state.
    * @param data    The state item data as JSON value.
    */
-  case class ItemStructure(id: String, version: String, data: JsValue) {
+  case class ItemStructure(id: String, data: JsValue) {
 
     /**
      * Returns the serialized representation of the item.
      *
      * @return The serialized representation of the item.
      */
-    override def toString = s"${Base64.encode(id)}-${Base64.encode(version)}-${Base64.encode(data)}"
+    override def toString = s"${Base64.encode(id)}-${Base64.encode(data)}"
   }
 
   /**
@@ -88,8 +87,8 @@ object SocialStateItem {
      */
     def unapply(str: String): Option[ItemStructure] = {
       Base64.decode(str).split("-").toList match {
-        case List(id, version, data) =>
-          Some(ItemStructure(Base64.decode(id), Base64.decode(version), Json.parse(Base64.decode(data))))
+        case List(id, data) =>
+          Some(ItemStructure(Base64.decode(id), Json.parse(Base64.decode(data))))
         case _ => None
       }
     }
