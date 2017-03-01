@@ -73,9 +73,10 @@ class UserStateItemHandler[S <: SocialStateItem](userState: S)(
    * serialized state item.
    *
    * @param item The item to check for.
+   * @param request The request instance to get additional data to validate against.
    * @return True if the handler can handle the given state item, false otherwise.
    */
-  override def canHandle(item: ItemStructure): Boolean = item.id == ID && item.version == Version
+  override def canHandle[B](item: ItemStructure)(implicit request: ExtractableRequest[B]): Boolean = item.id == ID && item.version == Version
 
   /**
    * Returns a serialized value of the state item.

@@ -329,9 +329,10 @@ trait SocialStateItemHandler {
    * serialized state item.
    *
    * @param item The item to check for.
+   * @param request The request instance to get additional data to validate against.
    * @return True if the handler can handle the given state item, false otherwise.
    */
-  def canHandle(item: ItemStructure): Boolean
+  def canHandle[B](item: ItemStructure)(implicit request: ExtractableRequest[B]): Boolean
 
   /**
    * Returns a serialized value of the state item.
