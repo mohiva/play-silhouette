@@ -13,26 +13,19 @@ import play.api.mvc.{ Cookie, RequestHeader, Result }
 
 import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
-import scala.reflect.ClassTag
 import scala.util.{ Failure, Success, Try }
 
-class CsrfStateItemHandler[S <: SocialStateItem] @Inject() (
+case class CsrfState(value: String) extends SocialStateItem
+
+class CsrfStateItemHandler @Inject() (
   settings: CsrfStateSettings,
   idGenerator: IDGenerator,
-  cookieSigner: CookieSigner)(
-  implicit
-  format: Format[S],
-  classTag: ClassTag[S]) extends SocialStateItemHandler with PublishableSocialStateItemHandler {
-
-  /**
-   * The version of Csrf State it can handle
-   */
-  private val Version = java.util.UUID.randomUUID().toString
+  cookieSigner: CookieSigner) extends SocialStateItemHandler with PublishableSocialStateItemHandler {
 
   /**
    * The item the handler can handle.
    */
-  override type Item = S
+  override type Item = CsrfState
 
   /**
    * Gets the state item the handler can handle.
@@ -42,7 +35,7 @@ class CsrfStateItemHandler[S <: SocialStateItem] @Inject() (
    */
   override def item(implicit ec: ExecutionContext): Future[Item] = {
     idGenerator.generate.map { id =>
-      Json.toJson(cookieSigner.sign(id)).as[Item]
+      CsrfState(cookieSigner.sign(id))
     }
   }
 
@@ -149,6 +142,11 @@ object CsrfStateItemHandler {
   val InvalidJson = "[Silhouette][CookieState] Cannot parse invalid Json: %s"
   val InvalidStateFormat = "[Silhouette][CookieState] Cannot build OAuth2State because of invalid Json format: %s"
   val InvalidCookieSignature = "[Silhouette][CookieState] Invalid cookie signature"
+
+  /**
+   * Json Format for the Csrf State
+   */
+  implicit val csrfFormat: Format[CsrfState] = Json.format[CsrfState]
 }
 
 /**
