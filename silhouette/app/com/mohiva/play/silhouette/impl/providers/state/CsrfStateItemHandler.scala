@@ -35,7 +35,7 @@ class CsrfStateItemHandler @Inject() (
    */
   override def item(implicit ec: ExecutionContext): Future[Item] = {
     idGenerator.generate.map { id =>
-      CsrfState(cookieSigner.sign(id))
+      CsrfState(id)
     }
   }
 
@@ -121,7 +121,7 @@ class CsrfStateItemHandler @Inject() (
    */
   private def clientState(implicit request: RequestHeader): Try[JsValue] = {
     request.cookies.get(settings.cookieName) match {
-      case Some(cookie) => cookieSigner.extract(cookie.value).map(Json.toJson(_))
+      case Some(cookie) => Try(Json.toJson(cookie.value))
       case None         => Failure(new OAuth2StateException(ClientStateDoesNotExists.format(settings.cookieName)))
     }
   }

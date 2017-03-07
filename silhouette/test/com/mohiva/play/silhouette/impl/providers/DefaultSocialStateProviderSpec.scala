@@ -65,6 +65,6 @@ class DefaultSocialStateProviderSpec extends SocialStateProviderSpec {
     /**
      * The state provider implementation to test.
      */
-    lazy val provider = new DefaultSocialStateHandler(Set(csrfStateHandler, userStateHandler))
+    lazy val provider = new DefaultSocialStateHandler(Set(csrfStateHandler, userStateHandler), cookieSigner)
   }
 }

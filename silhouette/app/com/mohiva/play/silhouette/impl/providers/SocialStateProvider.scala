@@ -16,7 +16,7 @@
 package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.AuthInfo
-import com.mohiva.play.silhouette.api.crypto.Base64
+import com.mohiva.play.silhouette.api.crypto.{ Base64, CookieSigner }
 import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.impl.providers.SocialStateItem._
 import play.api.libs.json.{ Format, JsValue, Json }
@@ -204,7 +204,7 @@ trait SocialStateHandler {
  *
  * @param handlers The item handlers configured for this handler.
  */
-class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler]) extends SocialStateHandler {
+class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler], cookieSigner: CookieSigner) extends SocialStateHandler {
 
   /**
    * The concrete instance of the state provider.
@@ -223,7 +223,7 @@ class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler]) exten
    * @return A new state provider with a new handler added.
    */
   override def withHandler(handler: SocialStateItemHandler): DefaultSocialStateHandler = {
-    new DefaultSocialStateHandler(handlers + handler)
+    new DefaultSocialStateHandler(handlers + handler, cookieSigner)
   }
 
   /**
@@ -243,7 +243,7 @@ class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler]) exten
    * @return The serialized state as string.
    */
   override def serialize(state: SocialState): String = {
-    state.items.map(i => handlers.flatMap(h => h.canHandle(i).map(h.serialize))).mkString(".")
+    cookieSigner.sign(state.items.map(i => handlers.flatMap(h => h.canHandle(i).map(h.serialize))).mkString("."))
   }
 
   /**
@@ -260,7 +260,7 @@ class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler]) exten
     request: ExtractableRequest[B],
     ec: ExecutionContext): Future[SocialState] = {
 
-    state.split(".").toList match {
+    Future.fromTry(cookieSigner.extract(state)).flatMap(state => state.split(".").toList match {
       case Nil => Future.successful(SocialState(Set()))
       case items => Future.sequence(items.map {
         case ItemStructure(item) => handlers.find(_.canHandle(item)) match {
@@ -270,7 +270,7 @@ class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler]) exten
         }
         case s => throw new RuntimeException("Cannot extract social state item from string: " + s)
       }).map(items => SocialState(items.toSet))
-    }
+    })
   }
 
   /**
