@@ -34,9 +34,7 @@ class CsrfStateItemHandler @Inject() (
    * @return The state params the handler can handle.
    */
   override def item(implicit ec: ExecutionContext): Future[Item] = {
-    idGenerator.generate.map { id =>
-      CsrfState(cookieSigner.sign(id))
-    }
+    idGenerator.generate.map { CsrfState(_) }
   }
 
   /**
@@ -105,7 +103,7 @@ class CsrfStateItemHandler @Inject() (
   override def publish[B](item: Item, result: Result)(implicit request: ExtractableRequest[B]): Result = {
     result.withCookies(Cookie(
       name = settings.cookieName,
-      value = item.toString,
+      value = cookieSigner.sign(item.toString),
       maxAge = Some(settings.expirationTime.toSeconds.toInt),
       path = settings.cookiePath,
       domain = settings.cookieDomain,
