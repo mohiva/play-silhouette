@@ -86,7 +86,7 @@ object SocialStateItem {
      * @return Some [[ItemStructure]] instance on success, None on failure.
      */
     def unapply(str: String): Option[ItemStructure] = {
-      Base64.decode(str).split("-").toList match {
+      str.split('-').toList match {
         case List(id, data) =>
           Some(ItemStructure(Base64.decode(id), Json.parse(Base64.decode(data))))
         case _ => None
@@ -243,7 +243,7 @@ class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler], cooki
    * @return The serialized state as string.
    */
   override def serialize(state: SocialState): String = {
-    cookieSigner.sign(state.items.map(i => handlers.flatMap(h => h.canHandle(i).map(h.serialize))).mkString("."))
+    cookieSigner.sign(state.items.flatMap(i => handlers.flatMap(h => h.canHandle(i).map(h.serialize))).mkString("."))
   }
 
   /**
@@ -260,16 +260,17 @@ class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler], cooki
     request: ExtractableRequest[B],
     ec: ExecutionContext): Future[SocialState] = {
 
-    Future.fromTry(cookieSigner.extract(state)).flatMap(state => state.split(".").toList match {
+    Future.fromTry(cookieSigner.extract(state)).flatMap(state => state.split('.').toList match {
       case Nil => Future.successful(SocialState(Set()))
-      case items => Future.sequence(items.map {
-        case ItemStructure(item) => handlers.find(_.canHandle(item)) match {
-          case Some(handler) => handler.unserialize(item)
-          case None =>
-            throw new RuntimeException("None of the registered handlers can handle the given state item:" + item)
-        }
-        case s => throw new RuntimeException("Cannot extract social state item from string: " + s)
-      }).map(items => SocialState(items.toSet))
+      case items =>
+        Future.sequence(items.map {
+          case ItemStructure(item) => handlers.find(_.canHandle(item)) match {
+            case Some(handler) => handler.unserialize(item)
+            case None =>
+              throw new RuntimeException("None of the registered handlers can handle the given state item:" + item)
+          }
+          case s => throw new RuntimeException("Cannot extract social state item from string: " + s)
+        }).map(items => SocialState(items.toSet))
     })
   }
 

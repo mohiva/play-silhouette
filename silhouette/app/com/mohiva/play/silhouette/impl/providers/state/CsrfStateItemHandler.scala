@@ -64,8 +64,11 @@ class CsrfStateItemHandler @Inject() (
   override def canHandle[B](item: ItemStructure)(implicit request: ExtractableRequest[B]): Boolean = {
     item.id == ID && {
       clientState match {
-        case Success(token) => token == item.data
-        case Failure(_)     => false
+        case Success(token) =>
+          println("token | " + token)
+          println("item.data | " + item.data.as[Item])
+          token == item.data.as[Item]
+        case Failure(_) => false
       }
     }
   }
@@ -103,7 +106,7 @@ class CsrfStateItemHandler @Inject() (
   override def publish[B](item: Item, result: Result)(implicit request: ExtractableRequest[B]): Result = {
     result.withCookies(Cookie(
       name = settings.cookieName,
-      value = cookieSigner.sign(item.toString),
+      value = cookieSigner.sign(item.value),
       maxAge = Some(settings.expirationTime.toSeconds.toInt),
       path = settings.cookiePath,
       domain = settings.cookieDomain,
@@ -117,9 +120,9 @@ class CsrfStateItemHandler @Inject() (
    * @param request The request header.
    * @return The OAuth2 state on success, otherwise a failure.
    */
-  private def clientState(implicit request: RequestHeader): Try[JsValue] = {
+  private def clientState(implicit request: RequestHeader): Try[Item] = {
     request.cookies.get(settings.cookieName) match {
-      case Some(cookie) => cookieSigner.extract(cookie.value).map(Json.toJson(_))
+      case Some(cookie) => cookieSigner.extract(cookie.value).map(token => CsrfState(token))
       case None         => Failure(new OAuth2StateException(ClientStateDoesNotExists.format(settings.cookieName)))
     }
   }
