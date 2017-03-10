@@ -64,11 +64,8 @@ class CsrfStateItemHandler @Inject() (
   override def canHandle[B](item: ItemStructure)(implicit request: ExtractableRequest[B]): Boolean = {
     item.id == ID && {
       clientState match {
-        case Success(token) =>
-          println("token | " + token)
-          println("item.data | " + item.data.as[Item])
-          token == item.data.as[Item]
-        case Failure(_) => false
+        case Success(token) => token == item.data.as[Item]
+        case Failure(_)     => false
       }
     }
   }

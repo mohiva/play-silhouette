@@ -1,26 +1,27 @@
-package com.mohiva.play.silhouette.impl.providers
+package com.mohiva.play.silhouette.impl.providers.state
 
 import com.mohiva.play.silhouette.api.crypto.CookieSigner
 import com.mohiva.play.silhouette.api.util.IDGenerator
-import com.mohiva.play.silhouette.impl.providers.state.{ CsrfState, CsrfStateItemHandler, CsrfStateSettings, UserStateItemHandler }
+import com.mohiva.play.silhouette.impl.providers.{ DefaultSocialStateHandler, SocialState, SocialStateItem }
+import org.specs2.matcher.JsonMatchers
+import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-
-import scala.concurrent.duration._
-import scala.util.Success
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.{ Format, Json }
 import play.api.mvc.Cookie
-import play.api.test.FakeRequest
+import play.api.test.{ FakeRequest, PlaySpecification }
 
 import scala.concurrent.Future
+import scala.concurrent.duration._
+import scala.util.Success
 
-class DefaultSocialStateProviderSpec extends SocialStateProviderSpec {
+import play.api.libs.concurrent.Execution.Implicits._
+
+class DefaultSocialStateHandlerSpec extends PlaySpecification with Mockito with JsonMatchers {
 
   "state method of the state provider" should {
     "return Social State which wraps set of states" in new Context {
-      val csrfToken = "csrfToken"
       idGenerator.generate returns Future.successful(csrfToken)
-      val socialState = await(provider.state)
+      val socialState = await(stateHandler.state)
       socialState.items must contain(CsrfState(csrfToken))
       socialState.items must contain(userState)
     }
@@ -28,7 +29,7 @@ class DefaultSocialStateProviderSpec extends SocialStateProviderSpec {
 
   "withHandler method of the state provider" should {
     "return new instance with updated set of handlers" in new Context {
-      val updatedProvider = providerWithoutUserState.withHandler(userStateHandler)
+      val updatedProvider = stateHandlerWithoutUserState.withHandler(userStateHandler)
       updatedProvider.handlers must contain(userStateHandler)
       updatedProvider.handlers must haveLength(2)
     }
@@ -36,18 +37,15 @@ class DefaultSocialStateProviderSpec extends SocialStateProviderSpec {
 
   "serialize method" should {
     "create a state String from Social State" in new Context {
-      val csrfToken = "csrfToken"
       idGenerator.generate returns Future.successful(csrfToken)
-      provider.serialize(SocialState(Set(userState, CsrfState(csrfToken)))) must beAnInstanceOf[String]
+      stateHandler.serialize(SocialState(Set(userState, CsrfState(csrfToken)))) must beAnInstanceOf[String]
     }
   }
 
   "unserialize method" should {
     "create Social State from a state String" in new Context {
-      val csrfToken = "csrfToken"
-      val csrfState = CsrfState(csrfToken)
       idGenerator.generate returns Future.successful(csrfToken)
-      val stateParam = provider.serialize(SocialState(Set(userState, csrfState)))
+      val stateParam = stateHandler.serialize(SocialState(Set(userState, csrfState)))
 
       implicit val request = FakeRequest().withCookies(Cookie(
         name = settings.cookieName,
@@ -57,7 +55,7 @@ class DefaultSocialStateProviderSpec extends SocialStateProviderSpec {
         domain = settings.cookieDomain,
         secure = settings.secureCookie,
         httpOnly = settings.httpOnlyCookie))
-      val socialState = await(provider.unserialize(stateParam))
+      val socialState = await(stateHandler.unserialize(stateParam))
       socialState.items must contain(userState)
       socialState.items must contain(csrfState)
     }
@@ -96,6 +94,8 @@ class DefaultSocialStateProviderSpec extends SocialStateProviderSpec {
 
     implicit val userStateFormat: Format[UserState] = Json.format[UserState]
 
+    val csrfToken = "csrfToken"
+    val csrfState = CsrfState(csrfToken)
     val userState = UserState(Map("path" -> "/login"))
 
     val csrfStateHandler = new CsrfStateItemHandler(settings, idGenerator, cookieSigner)
@@ -104,8 +104,8 @@ class DefaultSocialStateProviderSpec extends SocialStateProviderSpec {
     /**
      * The state provider implementation to test.
      */
-    lazy val provider = new DefaultSocialStateHandler(Set(csrfStateHandler, userStateHandler), cookieSigner)
+    lazy val stateHandler = new DefaultSocialStateHandler(Set(csrfStateHandler, userStateHandler), cookieSigner)
 
-    lazy val providerWithoutUserState = new DefaultSocialStateHandler(Set(csrfStateHandler), cookieSigner)
+    lazy val stateHandlerWithoutUserState = new DefaultSocialStateHandler(Set(csrfStateHandler), cookieSigner)
   }
 }
