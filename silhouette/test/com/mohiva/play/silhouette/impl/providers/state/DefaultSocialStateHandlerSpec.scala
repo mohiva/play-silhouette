@@ -93,10 +93,10 @@ class DefaultSocialStateHandlerSpec extends PlaySpecification with Mockito with 
     case class UserState(state: Map[String, String]) extends SocialStateItem
 
     implicit val userStateFormat: Format[UserState] = Json.format[UserState]
+    val userState = UserState(Map("path" -> "/login"))
 
     val csrfToken = "csrfToken"
     val csrfState = CsrfState(csrfToken)
-    val userState = UserState(Map("path" -> "/login"))
 
     val csrfStateHandler = new CsrfStateItemHandler(settings, idGenerator, cookieSigner)
     val userStateHandler = new UserStateItemHandler(userState)
