@@ -33,7 +33,7 @@ import scala.reflect.ClassTag
  * @param authInfo The auth info.
  * @param userState The user state.
  */
-case class StatefulAuthInfo[A <: AuthInfo, S <: SocialStateItem](authInfo: A, userState: S)
+case class StatefulAuthInfo[+A <: AuthInfo, +S <: SocialStateItem](authInfo: A, userState: S)
 
 /**
  * Represents the state a social provider can handle.

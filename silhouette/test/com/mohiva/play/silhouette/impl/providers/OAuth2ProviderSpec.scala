@@ -25,7 +25,7 @@ import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.libs.concurrent.Execution._
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{ Format, JsValue, Json }
 import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.mvc.Result
 import play.api.test.{ FakeRequest, WithApplication }
@@ -38,7 +38,7 @@ import scala.concurrent.{ ExecutionContext, Future }
  *
  * These tests will be additionally executed before every OAuth2 provider spec.
  */
-abstract class OAuth2ProviderSpec extends SocialProviderSpec[OAuth2Info] {
+abstract class OAuth2ProviderSpec extends SocialStateProviderSpec[OAuth2Info, SocialStateItem] {
   isolated
 
   "The `authenticate` method" should {
@@ -304,7 +304,9 @@ trait OAuth2ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
 
   abstract class TestState extends SocialState(Set.empty)
   abstract class TestStateProvider extends SocialStateHandler {
-    type State = TestState
+    override type Self = TestStateProvider
+
+    override def withHandler(handler: SocialStateItemHandler): TestStateProvider
   }
 
   /**
@@ -329,6 +331,15 @@ trait OAuth2ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
    * The OAuth2 state.
    */
   lazy val state = mock[TestState].smart
+
+  /**
+   * The User state
+   */
+  case class UserState(state: Map[String, String]) extends SocialStateItem
+
+  lazy val userState = UserState(Map("path" -> "/login"))
+
+  implicit val userStateFormat: Format[UserState] = Json.format[UserState]
 
   /**
    * The OAuth2 state provider.
