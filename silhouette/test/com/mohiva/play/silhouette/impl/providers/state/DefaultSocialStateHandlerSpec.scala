@@ -18,8 +18,8 @@ import play.api.libs.concurrent.Execution.Implicits._
 
 class DefaultSocialStateHandlerSpec extends PlaySpecification with Mockito with JsonMatchers {
 
-  "state method of the state provider" should {
-    "return Social State which wraps set of states" in new Context {
+  "The `state` method" should {
+    "return `SocialState` which wraps set of states" in new Context {
       idGenerator.generate returns Future.successful(csrfToken)
       val socialState = await(stateHandler.state)
       socialState.items must contain(CsrfState(csrfToken))
@@ -27,23 +27,23 @@ class DefaultSocialStateHandlerSpec extends PlaySpecification with Mockito with 
     }
   }
 
-  "withHandler method of the state provider" should {
-    "return new instance with updated set of handlers" in new Context {
+  "The `withHandler` method" should {
+    "return a new instance with updated set of handlers" in new Context {
       val updatedProvider = stateHandlerWithoutUserState.withHandler(userStateHandler)
       updatedProvider.handlers must contain(userStateHandler)
       updatedProvider.handlers must haveLength(2)
     }
   }
 
-  "serialize method" should {
-    "create a state String from Social State" in new Context {
+  "The `serialize` method" should {
+    "create a state String from `SocialState`" in new Context {
       idGenerator.generate returns Future.successful(csrfToken)
       stateHandler.serialize(SocialState(Set(userState, CsrfState(csrfToken)))) must beAnInstanceOf[String]
     }
   }
 
-  "unserialize method" should {
-    "create Social State from a state String" in new Context {
+  "The `unserialize` method" should {
+    "create `SocialState` from a state String" in new Context {
       idGenerator.generate returns Future.successful(csrfToken)
       val stateParam = stateHandler.serialize(SocialState(Set(userState, csrfState)))
 

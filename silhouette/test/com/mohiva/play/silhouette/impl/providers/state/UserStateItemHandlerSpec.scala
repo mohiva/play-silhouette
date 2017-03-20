@@ -11,46 +11,42 @@ import play.api.libs.concurrent.Execution.Implicits._
 
 class UserStateItemHandlerSpec extends PlaySpecification with Mockito with JsonMatchers {
 
-  "item method of UserStateItemHandler" should {
+  "The `item` method" should {
     "return userState" in new Context {
       await(userStateHandler.item) must be(userState)
     }
   }
 
-  "canHandle method of UserStateItemHandler" should {
-    "should return Some[SocialStateItem] if it can handle the given SocialStateItem." in new Context {
+  "The `canHandle` method" should {
+    "return `Some[SocialStateItem]` if it can handle the given `SocialStateItem`" in new Context {
       userStateHandler.canHandle(userState) must beSome[SocialStateItem]
     }
-  }
 
-  "canHandle method of UserStateItemHandler" should {
-    "should return None if it can't handle the given SocialStateItem." in new Context {
+    "return `None` if it can't handle the given `SocialStateItem`" in new Context {
       userStateHandler.canHandle(csrfState) must beNone
     }
   }
 
-  "canHandle method of UserStateItemHandler" should {
-    "should return true if it can handle the given ItemStructure." in new Context {
+  "The `canHandle` method" should {
+    "return true if it can handle the given `ItemStructure`" in new Context {
       implicit val request = FakeRequest()
       userStateHandler.canHandle(itemStructure) must beTrue
     }
-  }
 
-  "canHandle method of UserStateItemHandler" should {
-    "should return false if it can't handle the given ItemStructure." in new Context {
+    "return false if it can't handle the given `ItemStructure`" in new Context {
       implicit val request = FakeRequest()
       userStateHandler.canHandle(itemStructure.copy(id = "non-user-state")) must beFalse
     }
   }
 
-  "serialize method of UserStateItemHandler" should {
-    "serialize userState to ItemStructure" in new Context {
+  "The `serialize` method" should {
+    "serialize `UserState` to `ItemStructure`" in new Context {
       userStateHandler.serialize(userState) must beAnInstanceOf[ItemStructure]
     }
   }
 
-  "unserialize method of UserStateItemHandler" should {
-    "unserialize ItemStructure to UserState" in new Context {
+  "The `unserialize` method" should {
+    "unserialize `ItemStructure` to `UserState`" in new Context {
       implicit val request = FakeRequest()
       await(userStateHandler.unserialize(itemStructure)) must beAnInstanceOf[UserState]
     }

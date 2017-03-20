@@ -19,27 +19,25 @@ import scala.concurrent.Future
 
 class CsrfStateItemHandlerSpec extends PlaySpecification with Mockito with JsonMatchers {
 
-  "item method of CsrfStateItemHandler" should {
+  "The `item` method" should {
     "return csrfState" in new Context {
       idGenerator.generate returns Future.successful(csrfToken)
       await(csrfStateHandler.item) must beAnInstanceOf[CsrfState]
     }
   }
 
-  "canHandle method of CsrfStateItemHandler" should {
-    "should return Some[SocialStateItem] if it can handle the given SocialStateItem." in new Context {
+  "The `canHandle` method" should {
+    "return `Some[SocialStateItem]` if it can handle the given `SocialStateItem`" in new Context {
       csrfStateHandler.canHandle(csrfState) must beSome[SocialStateItem]
     }
-  }
 
-  "canHandle method of CsrfStateItemHandler" should {
-    "should return None if it can't handle the given SocialStateItem." in new Context {
+    "should return `None` if it can't handle the given `SocialStateItem`" in new Context {
       csrfStateHandler.canHandle(userState) must beNone
     }
   }
 
-  "canHandle method of CsrfStateItemHandler" should {
-    "should return true if it can handle the given ItemStructure." in new Context {
+  "The `canHandle` method" should {
+    "return true if it can handle the given `ItemStructure`" in new Context {
       implicit val request = FakeRequest().withCookies(Cookie(
         name = settings.cookieName,
         value = cookieSigner.sign(csrfState.value),
@@ -50,23 +48,21 @@ class CsrfStateItemHandlerSpec extends PlaySpecification with Mockito with JsonM
         httpOnly = settings.httpOnlyCookie))
       csrfStateHandler.canHandle(itemStructure) must beTrue
     }
-  }
 
-  "canHandle method of CsrfStateItemHandler" should {
-    "should return false if it can't handle the given ItemStructure." in new Context {
+    "return false if it can't handle the given `ItemStructure`" in new Context {
       implicit val request = FakeRequest()
       csrfStateHandler.canHandle(itemStructure.copy(id = "non-csrf-state")) must beFalse
     }
   }
 
-  "serialize method of CsrfStateItemHandler" should {
-    "serialize csrfState to ItemStructure" in new Context {
+  "The `serialize` method" should {
+    "serialize `CsrfState` to `ItemStructure`" in new Context {
       csrfStateHandler.serialize(csrfState) must beAnInstanceOf[ItemStructure]
     }
   }
 
-  "unserialize method of CsrfStateItemHandler" should {
-    "unserialize ItemStructure to CsrfState" in new Context {
+  "The `unserialize` method" should {
+    "unserialize `ItemStructure` to `CsrfState`" in new Context {
       implicit val request = FakeRequest()
       await(csrfStateHandler.unserialize(itemStructure)) must beAnInstanceOf[CsrfState]
     }
