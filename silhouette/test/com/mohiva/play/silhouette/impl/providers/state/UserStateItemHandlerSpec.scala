@@ -9,6 +9,9 @@ import play.api.libs.json.{ Format, Json }
 import play.api.test.{ FakeRequest, PlaySpecification }
 import play.api.libs.concurrent.Execution.Implicits._
 
+/**
+ *  Test case for the [[UserStateItemHandler]] class.
+ */
 class UserStateItemHandlerSpec extends PlaySpecification with Mockito with JsonMatchers {
 
   "The `item` method" should {
@@ -54,16 +57,40 @@ class UserStateItemHandlerSpec extends PlaySpecification with Mockito with JsonM
 
   trait Context extends Scope {
 
+    /**
+     * An example usage of UserState where state is of type Map[String, String]
+     * @param state
+     */
     case class UserState(state: Map[String, String]) extends SocialStateItem
 
+    /**
+     * Format to serialize the UserState
+     */
     implicit val userStateFormat: Format[UserState] = Json.format[UserState]
+
+    /**
+     * An instance of UserState
+     */
     val userState = UserState(Map("path" -> "/login"))
 
+    /**
+     * Serialized type of UserState
+     */
     val itemStructure = ItemStructure("user-state", Json.toJson(userState))
 
+    /**
+     * Csrf State value
+     */
     val csrfToken = "csrfToken"
+
+    /**
+     * An instance of CsrfState
+     */
     val csrfState = CsrfState(csrfToken)
 
+    /**
+     * An instance of User State Handler
+     */
     val userStateHandler = new UserStateItemHandler(userState)
   }
 }

@@ -186,7 +186,7 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
     override lazy val oAuthInfo = Helper.loadJson("providers/oauth2/github.access.token.json")
 
     /**
-     * The statefulAuthInfo
+     * The stateful auth info.
      */
     lazy val stateAuthInfo = StatefulAuthInfo(oAuthInfo.as[OAuth2Info], userState)
 

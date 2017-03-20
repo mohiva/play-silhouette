@@ -17,6 +17,9 @@ import play.api.mvc.Cookie
 
 import scala.concurrent.Future
 
+/**
+ *  Test case for the [[CsrfStateItemHandler]] class.
+ */
 class CsrfStateItemHandlerSpec extends PlaySpecification with Mockito with JsonMatchers {
 
   "The `item` method" should {
@@ -69,12 +72,13 @@ class CsrfStateItemHandlerSpec extends PlaySpecification with Mockito with JsonM
   }
 
   trait Context extends Scope {
-
     import CsrfStateItemHandler._
+
     /**
      * The ID generator implementation.
      */
     lazy val idGenerator = mock[IDGenerator].smart
+
     /**
      * The settings.
      */
@@ -99,15 +103,35 @@ class CsrfStateItemHandlerSpec extends PlaySpecification with Mockito with JsonM
       c
     }
 
+    /**
+     * An example usage of UserState where state is of type Map[String, String]
+     * @param state
+     */
     case class UserState(state: Map[String, String]) extends SocialStateItem
 
+    /**
+     * An instance of UserState
+     */
     val userState = UserState(Map("path" -> "/login"))
 
+    /**
+     * Csrf State value
+     */
     val csrfToken = "csrfToken"
+
+    /**
+     * An instance of CsrfState
+     */
     val csrfState = CsrfState(csrfToken)
 
+    /**
+     * Serialized type of CsrfState
+     */
     val itemStructure = ItemStructure("csrf-state", Json.toJson(csrfState))
 
+    /**
+     * An instance of Csrf State Handler
+     */
     val csrfStateHandler = new CsrfStateItemHandler(settings, idGenerator, cookieSigner)
   }
 }

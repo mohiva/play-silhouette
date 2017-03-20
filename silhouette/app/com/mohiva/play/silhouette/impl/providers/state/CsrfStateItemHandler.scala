@@ -142,6 +142,7 @@ class CsrfStateItemHandler @Inject() (
  */
 object CsrfStateItemHandler {
   val ID = "csrf-state"
+
   /**
    * The error messages.
    */
