@@ -5,7 +5,7 @@ import javax.inject.Inject
 import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, IDGenerator }
 import com.mohiva.play.silhouette.impl.providers.SocialStateItem.ItemStructure
 import com.mohiva.play.silhouette.impl.providers.{ PublishableSocialStateItemHandler, SocialStateItem, SocialStateItemHandler }
-import play.api.libs.json.{ Format, JsValue, Json }
+import play.api.libs.json.{ Format, Json }
 import CsrfStateItemHandler._
 import com.mohiva.play.silhouette.api.crypto.CookieSigner
 import com.mohiva.play.silhouette.impl.exceptions.OAuth2StateException
@@ -15,8 +15,20 @@ import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
 
+/**
+ * Csrf State is a sub type of SocialStateItem
+ *
+ * @param value wrapper around the csrf state value
+ */
 case class CsrfState(value: String) extends SocialStateItem
 
+/**
+ * Handles csrf state.
+ *
+ * @param settings The state settings.
+ * @param idGenerator The ID generator used to create the state value.
+ * @param cookieSigner The cookie signer implementation.
+ */
 class CsrfStateItemHandler @Inject() (
   settings: CsrfStateSettings,
   idGenerator: IDGenerator,
