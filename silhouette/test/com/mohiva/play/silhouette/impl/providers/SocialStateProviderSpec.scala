@@ -6,6 +6,9 @@ import play.api.mvc.Result
 
 import scala.concurrent.Future
 
+/**
+ * Abstract test case for the social state providers.
+ */
 abstract class SocialStateProviderSpec[A <: AuthInfo, S <: SocialStateItem] extends SocialProviderSpec[A] {
 
   /**
