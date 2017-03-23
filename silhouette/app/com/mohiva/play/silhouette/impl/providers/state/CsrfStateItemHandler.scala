@@ -18,17 +18,17 @@ package com.mohiva.play.silhouette.impl.providers.state
 import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api.crypto.CookieSigner
-import com.mohiva.play.silhouette.api.util.{ExtractableRequest, IDGenerator}
+import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, IDGenerator }
 import com.mohiva.play.silhouette.impl.exceptions.OAuth2StateException
 import com.mohiva.play.silhouette.impl.providers.SocialStateItem.ItemStructure
 import com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler._
-import com.mohiva.play.silhouette.impl.providers.{PublishableSocialStateItemHandler, SocialStateItem, SocialStateItemHandler}
-import play.api.libs.json.{Format, Json}
-import play.api.mvc.{Cookie, RequestHeader, Result}
+import com.mohiva.play.silhouette.impl.providers.{ PublishableSocialStateItemHandler, SocialStateItem, SocialStateItemHandler }
+import play.api.libs.json.{ Format, Json }
+import play.api.mvc.{ Cookie, RequestHeader, Result }
 
 import scala.concurrent.duration._
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success, Try}
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.util.{ Failure, Success, Try }
 
 /**
  * Csrf State is a sub type of SocialStateItem
@@ -77,7 +77,7 @@ class CsrfStateItemHandler @Inject() (
    */
   override def canHandle(item: SocialStateItem): Option[Item] = item match {
     case i: Item => Some(i)
-    case _ => None
+    case _       => None
   }
 
   /**
@@ -95,7 +95,7 @@ class CsrfStateItemHandler @Inject() (
     item.id == ID && {
       clientState match {
         case Success(token) => token == item.data.as[Item]
-        case Failure(_) => false
+        case Failure(_)     => false
       }
     }
   }
@@ -150,7 +150,7 @@ class CsrfStateItemHandler @Inject() (
   private def clientState(implicit request: RequestHeader): Try[Item] = {
     request.cookies.get(settings.cookieName) match {
       case Some(cookie) => cookieSigner.extract(cookie.value).map(token => CsrfState(token))
-      case None => Failure(new OAuth2StateException(ClientStateDoesNotExists.format(settings.cookieName)))
+      case None         => Failure(new OAuth2StateException(ClientStateDoesNotExists.format(settings.cookieName)))
     }
   }
 }

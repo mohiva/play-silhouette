@@ -76,6 +76,24 @@ class DropboxProviderSpec extends OAuth2ProviderSpec {
     }
   }
 
+  "The `authenticate` method with user state" should {
+    "return stateful auth info" in new WithApplication with Context {
+      val requestHolder = mock[WSRequest]
+      val response = mock[WSResponse]
+      implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
+      response.json returns oAuthInfo
+      requestHolder.withHeaders(any) returns requestHolder
+      requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
+      httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
+      stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(state)
+      stateProvider.state(any[ExecutionContext]) returns Future.successful(state)
+      stateProvider.withHandler(any[SocialStateItemHandler]) returns stateProvider
+      state.items returns Set(userState)
+
+      statefulAuthInfo(provider.authenticate(userState))(_ must be equalTo stateAuthInfo)
+    }
+  }
+
   "The `retrieveProfile` method" should {
     "fail with ProfileRetrievalException if API returns error" in new WithApplication with Context {
       val authInfo = oAuthInfo.as[OAuth2Info]

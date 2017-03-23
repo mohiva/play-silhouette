@@ -77,7 +77,7 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
     }
   }
 
-  "The `authenticate` method with userState" should {
+  "The `authenticate` method with user state" should {
     "return stateful auth info" in new WithApplication with Context {
       val requestHolder = mock[WSRequest]
       val response = mock[WSResponse]
@@ -184,11 +184,6 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
      * @see http://vk.com/dev/auth_sites
      */
     override lazy val oAuthInfo = Helper.loadJson("providers/oauth2/github.access.token.json")
-
-    /**
-     * The stateful auth info.
-     */
-    lazy val stateAuthInfo = StatefulAuthInfo(oAuthInfo.as[OAuth2Info], userState)
 
     /**
      * The provider to test.

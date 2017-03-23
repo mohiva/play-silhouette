@@ -347,6 +347,11 @@ trait OAuth2ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
   lazy val stateProvider = mock[TestStateProvider].smart
 
   /**
+   * The stateful auth info.
+   */
+  lazy val stateAuthInfo = StatefulAuthInfo(oAuthInfo.as[OAuth2Info], userState)
+
+  /**
    * The OAuth2 settings.
    */
   def oAuthSettings: OAuth2Settings = spy(OAuth2Settings(

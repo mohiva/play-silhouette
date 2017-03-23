@@ -18,10 +18,10 @@ package com.mohiva.play.silhouette.impl.providers.state
 import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.impl.providers.SocialStateItem.ItemStructure
 import com.mohiva.play.silhouette.impl.providers.state.UserStateItemHandler._
-import com.mohiva.play.silhouette.impl.providers.{SocialStateItem, SocialStateItemHandler}
-import play.api.libs.json.{Format, Json}
+import com.mohiva.play.silhouette.impl.providers.{ SocialStateItem, SocialStateItemHandler }
+import play.api.libs.json.{ Format, Json }
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.reflect.ClassTag
 import scala.util.Try
 
@@ -63,7 +63,7 @@ class UserStateItemHandler[S <: SocialStateItem](userState: S)(
    */
   override def canHandle(item: SocialStateItem): Option[Item] = item match {
     case i: Item => Some(i)
-    case _ => None
+    case _       => None
   }
 
   /**

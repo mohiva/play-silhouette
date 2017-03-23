@@ -16,13 +16,13 @@
 package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.AuthInfo
-import com.mohiva.play.silhouette.api.crypto.{Base64, CookieSigner}
+import com.mohiva.play.silhouette.api.crypto.{ Base64, CookieSigner }
 import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.impl.providers.SocialStateItem._
-import play.api.libs.json.{Format, JsValue, Json}
+import play.api.libs.json.{ Format, JsValue, Json }
 import play.api.mvc.Result
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.reflect.ClassTag
 
 /**
