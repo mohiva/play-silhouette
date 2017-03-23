@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,18 +17,18 @@ package com.mohiva.play.silhouette.impl.providers.state
 
 import javax.inject.Inject
 
-import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, IDGenerator }
-import com.mohiva.play.silhouette.impl.providers.SocialStateItem.ItemStructure
-import com.mohiva.play.silhouette.impl.providers.{ PublishableSocialStateItemHandler, SocialStateItem, SocialStateItemHandler }
-import play.api.libs.json.{ Format, Json }
-import CsrfStateItemHandler._
 import com.mohiva.play.silhouette.api.crypto.CookieSigner
+import com.mohiva.play.silhouette.api.util.{ExtractableRequest, IDGenerator}
 import com.mohiva.play.silhouette.impl.exceptions.OAuth2StateException
-import play.api.mvc.{ Cookie, RequestHeader, Result }
+import com.mohiva.play.silhouette.impl.providers.SocialStateItem.ItemStructure
+import com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler._
+import com.mohiva.play.silhouette.impl.providers.{PublishableSocialStateItemHandler, SocialStateItem, SocialStateItemHandler}
+import play.api.libs.json.{Format, Json}
+import play.api.mvc.{Cookie, RequestHeader, Result}
 
 import scala.concurrent.duration._
-import scala.concurrent.{ ExecutionContext, Future }
-import scala.util.{ Failure, Success, Try }
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success, Try}
 
 /**
  * Csrf State is a sub type of SocialStateItem
@@ -40,8 +40,8 @@ case class CsrfState(value: String) extends SocialStateItem
 /**
  * Handles csrf state.
  *
- * @param settings The state settings.
- * @param idGenerator The ID generator used to create the state value.
+ * @param settings     The state settings.
+ * @param idGenerator  The ID generator used to create the state value.
  * @param cookieSigner The cookie signer implementation.
  */
 class CsrfStateItemHandler @Inject() (
@@ -61,7 +61,9 @@ class CsrfStateItemHandler @Inject() (
    * @return The state params the handler can handle.
    */
   override def item(implicit ec: ExecutionContext): Future[Item] = {
-    idGenerator.generate.map { CsrfState(_) }
+    idGenerator.generate.map {
+      CsrfState(_)
+    }
   }
 
   /**
@@ -75,7 +77,7 @@ class CsrfStateItemHandler @Inject() (
    */
   override def canHandle(item: SocialStateItem): Option[Item] = item match {
     case i: Item => Some(i)
-    case _       => None
+    case _ => None
   }
 
   /**
@@ -84,15 +86,16 @@ class CsrfStateItemHandler @Inject() (
    * This method should check if the [[unserialize]] method of this handler can unserialize the given
    * serialized state item.
    *
-   * @param item The item to check for.
+   * @param item    The item to check for.
    * @param request The request instance to get additional data to validate against.
+   * @tparam B The type of the request body.
    * @return True if the handler can handle the given state item, false otherwise.
    */
   override def canHandle[B](item: ItemStructure)(implicit request: ExtractableRequest[B]): Boolean = {
     item.id == ID && {
       clientState match {
         case Success(token) => token == item.data.as[Item]
-        case Failure(_)     => false
+        case Failure(_) => false
       }
     }
   }
@@ -147,7 +150,7 @@ class CsrfStateItemHandler @Inject() (
   private def clientState(implicit request: RequestHeader): Try[Item] = {
     request.cookies.get(settings.cookieName) match {
       case Some(cookie) => cookieSigner.extract(cookie.value).map(token => CsrfState(token))
-      case None         => Failure(new OAuth2StateException(ClientStateDoesNotExists.format(settings.cookieName)))
+      case None => Failure(new OAuth2StateException(ClientStateDoesNotExists.format(settings.cookieName)))
     }
   }
 }
@@ -178,10 +181,10 @@ object CsrfStateItemHandler {
 /**
  * The settings for the Csrf State.
  *
- * @param cookieName The cookie name.
- * @param cookiePath The cookie path.
- * @param cookieDomain The cookie domain.
- * @param secureCookie Whether this cookie is secured, sent only for HTTPS requests.
+ * @param cookieName     The cookie name.
+ * @param cookiePath     The cookie path.
+ * @param cookieDomain   The cookie domain.
+ * @param secureCookie   Whether this cookie is secured, sent only for HTTPS requests.
  * @param httpOnlyCookie Whether this cookie is HTTP only, i.e. not accessible from client-side JavaScript code.
  * @param expirationTime State expiration. Defaults to 5 minutes which provides sufficient time to log in, but
  *                       not too much. This is a balance between convenience and security.

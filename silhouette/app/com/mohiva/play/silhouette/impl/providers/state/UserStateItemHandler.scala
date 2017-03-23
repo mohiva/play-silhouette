@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,20 +18,20 @@ package com.mohiva.play.silhouette.impl.providers.state
 import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.impl.providers.SocialStateItem.ItemStructure
 import com.mohiva.play.silhouette.impl.providers.state.UserStateItemHandler._
-import com.mohiva.play.silhouette.impl.providers.{ SocialStateItem, SocialStateItemHandler }
-import play.api.libs.json.{ Format, Json }
+import com.mohiva.play.silhouette.impl.providers.{SocialStateItem, SocialStateItemHandler}
+import play.api.libs.json.{Format, Json}
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 import scala.reflect.ClassTag
 import scala.util.Try
 
 /**
  * Handles user defined state.
  *
- * @tparam S The type of the user state.
  * @param userState The user state.
- * @param format The JSON format to the transform the user state into JSON.
- * @param classTag The class tag for the user state item.
+ * @param format    The JSON format to the transform the user state into JSON.
+ * @param classTag  The class tag for the user state item.
+ * @tparam S The type of the user state.
  */
 class UserStateItemHandler[S <: SocialStateItem](userState: S)(
   implicit
@@ -63,7 +63,7 @@ class UserStateItemHandler[S <: SocialStateItem](userState: S)(
    */
   override def canHandle(item: SocialStateItem): Option[Item] = item match {
     case i: Item => Some(i)
-    case _       => None
+    case _ => None
   }
 
   /**
@@ -72,8 +72,9 @@ class UserStateItemHandler[S <: SocialStateItem](userState: S)(
    * This method should check if the [[unserialize]] method of this handler can unserialize the given
    * serialized state item.
    *
-   * @param item The item to check for.
+   * @param item    The item to check for.
    * @param request The request instance to get additional data to validate against.
+   * @tparam B The type of the request body.
    * @return True if the handler can handle the given state item, false otherwise.
    */
   override def canHandle[B](item: ItemStructure)(implicit request: ExtractableRequest[B]): Boolean = item.id == ID
