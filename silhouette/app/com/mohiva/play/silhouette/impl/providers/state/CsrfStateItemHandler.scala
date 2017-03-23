@@ -73,7 +73,7 @@ class CsrfStateItemHandler @Inject() (
    * unserialized state item.
    *
    * @param item The item to check for.
-   * @return [[Some]] casted state item if the handler can handle the given state item, [[None]] otherwise.
+   * @return `Some[Item]` casted state item if the handler can handle the given state item, `None` otherwise.
    */
   override def canHandle(item: SocialStateItem): Option[Item] = item match {
     case i: Item => Some(i)

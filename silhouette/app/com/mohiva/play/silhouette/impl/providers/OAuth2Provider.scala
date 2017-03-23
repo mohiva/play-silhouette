@@ -113,7 +113,7 @@ trait OAuth2Provider extends SocialStateProvider with OAuth2Constants with Logge
   /**
    * Authenticates the user and returns the auth information and the user state.
    *
-   * Returns either a [[StatefulAuthInfo]] if all went OK or a [[play.api.mvc.Result]] that the controller
+   * Returns either a [[StatefulAuthInfo]] if all went OK or a `play.api.mvc.Result` that the controller
    * sends to the browser (e.g.: in the case of OAuth where the user needs to be redirected to the service
    * provider).
    *
@@ -122,7 +122,7 @@ trait OAuth2Provider extends SocialStateProvider with OAuth2Constants with Logge
    * @param format The JSON format to the transform the user state into JSON.
    * @param request The request.
    * @param classTag The class tag for the user state item.
-   * @return Either a [[play.api.mvc.Result]] or the [[StatefulAuthInfo]] from the provider.
+   * @return Either a `play.api.mvc.Result` or the [[StatefulAuthInfo]] from the provider.
    */
   def authenticate[S <: SocialStateItem, B](userState: S)(
     implicit

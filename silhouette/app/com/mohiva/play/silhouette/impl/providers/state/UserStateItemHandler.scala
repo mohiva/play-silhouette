@@ -53,13 +53,13 @@ class UserStateItemHandler[S <: SocialStateItem](userState: S)(
   override def item(implicit ec: ExecutionContext): Future[Item] = Future.successful(userState)
 
   /**
-   * Indicates if a handler can handle the given [[SocialStateItem]].
+   * Indicates if a handler can handle the given `SocialStateItem`.
    *
    * This method should check if the [[serialize]] method of this handler can serialize the given
    * unserialized state item.
    *
    * @param item The item to check for.
-   * @return [[Some]] casted state item if the handler can handle the given state item, [[None]] otherwise.
+   * @return `Some[Item]` casted state item if the handler can handle the given state item, `None` otherwise.
    */
   override def canHandle(item: SocialStateItem): Option[Item] = item match {
     case i: Item => Some(i)

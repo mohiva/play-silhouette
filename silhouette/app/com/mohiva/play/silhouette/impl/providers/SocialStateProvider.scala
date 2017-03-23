@@ -26,7 +26,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 import scala.reflect.ClassTag
 
 /**
- * A stateful auth info, wraps the [[AuthInfo]] with user state.
+ * A stateful auth info, wraps the `AuthInfo` with user state.
  *
  * @param authInfo  The auth info.
  * @param userState The user state.
@@ -38,7 +38,7 @@ case class StatefulAuthInfo[+A <: AuthInfo, +S <: SocialStateItem](authInfo: A, 
 /**
  * Represents the state a social provider can handle.
  *
- * The state consists of a [[Set]] containing different state items.
+ * The state consists of a `Set` containing different state items.
  *
  * @param items The list of social state items.
  */
@@ -104,7 +104,7 @@ trait SocialStateProvider extends SocialProvider {
   /**
    * Authenticates the user and returns the auth information and the user state.
    *
-   * Returns either a [[StatefulAuthInfo]] if all went OK or a [[play.api.mvc.Result]] that the controller
+   * Returns either a [[StatefulAuthInfo]] if all went OK or a `play.api.mvc.Result` that the controller
    * sends to the browser (e.g.: in the case of OAuth where the user needs to be redirected to the service
    * provider).
    *
@@ -113,7 +113,7 @@ trait SocialStateProvider extends SocialProvider {
    * @param classTag The class tag for the user state item.
    * @tparam S The type of the user state item.
    * @tparam B The type of the request body.
-   * @return Either a [[play.api.mvc.Result]] or the [[StatefulAuthInfo]] from the provider.
+   * @return Either a `play.api.mvc.Result` or the [[StatefulAuthInfo]] from the provider.
    */
   def authenticate[S <: SocialStateItem, B](userState: S)(
     implicit
@@ -319,7 +319,7 @@ trait SocialStateItemHandler {
    * unserialized state item.
    *
    * @param item The item to check for.
-   * @return [[Some]] casted state item if the handler can handle the given state item, [[None]] otherwise.
+   * @return `Some[Item]` casted state item if the handler can handle the given state item, `None` otherwise.
    */
   def canHandle(item: SocialStateItem): Option[Item]
 
