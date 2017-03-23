@@ -189,6 +189,11 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
     lazy val oAuthInfoObject = oAuthInfo.as[OAuth2Info]
 
     /**
+     * The stateful auth info.
+     */
+    override lazy val stateAuthInfo = StatefulAuthInfo(oAuthInfoObject, userState)
+
+    /**
      * The provider to test.
      */
     lazy val provider = new Auth0Provider(httpLayer, stateProvider, oAuthSettings)

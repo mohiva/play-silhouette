@@ -188,6 +188,11 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
     override lazy val oAuthInfo = Helper.loadJson("providers/oauth2/facebook.access.token.json")
 
     /**
+     * The stateful auth info.
+     */
+    override lazy val stateAuthInfo = StatefulAuthInfo(oAuthInfo.as[OAuth2Info], userState)
+
+    /**
      * The provider to test.
      */
     lazy val provider = new FacebookProvider(httpLayer, stateProvider, oAuthSettings)
