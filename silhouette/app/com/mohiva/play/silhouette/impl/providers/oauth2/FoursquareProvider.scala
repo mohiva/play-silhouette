@@ -118,12 +118,12 @@ class FoursquareProfileParser(settings: OAuth2Settings) extends SocialProfilePar
  * The Foursquare OAuth2 Provider.
  *
  * @param httpLayer     The HTTP layer implementation.
- * @param stateProvider The state provider implementation.
+ * @param stateHandler  The state provider implementation.
  * @param settings      The provider settings.
  */
 class FoursquareProvider(
   protected val httpLayer: HTTPLayer,
-  protected val stateProvider: OAuth2StateProvider,
+  protected val stateHandler: SocialStateHandler,
   val settings: OAuth2Settings)
   extends BaseFoursquareProvider with CommonSocialProfileBuilder {
 
@@ -143,7 +143,7 @@ class FoursquareProvider(
    * @param f A function which gets the settings passed and returns different settings.
    * @return An instance of the provider initialized with new settings.
    */
-  override def withSettings(f: (Settings) => Settings) = new FoursquareProvider(httpLayer, stateProvider, f(settings))
+  override def withSettings(f: (Settings) => Settings) = new FoursquareProvider(httpLayer, stateHandler, f(settings))
 }
 
 /**

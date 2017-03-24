@@ -16,7 +16,8 @@
 package com.mohiva.play.silhouette.impl.providers
 
 import java.net.URI
-import com.mohiva.play.silhouette.api.util.{ HTTPLayer, ExecutionContextProvider, ExtractableRequest }
+
+import com.mohiva.play.silhouette.api.util.{ ExecutionContextProvider, ExtractableRequest, HTTPLayer }
 import com.mohiva.play.silhouette.api.{ AuthInfo, LoginInfo, Provider }
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
@@ -74,12 +75,13 @@ trait SocialProvider extends Provider with SocialProfileBuilder with ExecutionCo
   /**
    * Authenticates the user and returns the auth information.
    *
-   * Returns either a AuthInfo if all went OK or a Result that the controller sends
-   * to the browser (e.g.: in the case of OAuth where the user needs to be redirected to
-   * the service provider).
+   * Returns either a `AuthInfo` if all went OK or a `play.api.mvc.Result` that the controller sends
+   * to the browser (e.g.: in the case of OAuth where the user needs to be redirected to the service
+   * provider).
    *
+   * @tparam B The type of the request body.
    * @param request The request.
-   * @return Either a Result or the AuthInfo from the provider.
+   * @return Either a `play.api.mvc.Result` or the `AuthInfo` from the provider.
    */
   def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[Either[Result, A]]
 

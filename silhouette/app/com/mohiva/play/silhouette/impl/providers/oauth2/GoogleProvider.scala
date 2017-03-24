@@ -115,12 +115,12 @@ class GoogleProfileParser extends SocialProfileParser[JsValue, CommonSocialProfi
  * The Google OAuth2 Provider.
  *
  * @param httpLayer     The HTTP layer implementation.
- * @param stateProvider The state provider implementation.
+ * @param stateHandler  The state provider implementation.
  * @param settings      The provider settings.
  */
 class GoogleProvider(
   protected val httpLayer: HTTPLayer,
-  protected val stateProvider: OAuth2StateProvider,
+  protected val stateHandler: SocialStateHandler,
   val settings: OAuth2Settings)
   extends BaseGoogleProvider with CommonSocialProfileBuilder {
 
@@ -140,7 +140,7 @@ class GoogleProvider(
    * @param f A function which gets the settings passed and returns different settings.
    * @return An instance of the provider initialized with new settings.
    */
-  def withSettings(f: (Settings) => Settings) = new GoogleProvider(httpLayer, stateProvider, f(settings))
+  def withSettings(f: (Settings) => Settings) = new GoogleProvider(httpLayer, stateHandler, f(settings))
 }
 
 /**

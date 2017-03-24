@@ -16,7 +16,8 @@
 package com.mohiva.play.silhouette.impl.providers.oauth2
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.impl.exceptions.{ UnexpectedResponseException, ProfileRetrievalException }
+import com.mohiva.play.silhouette.api.util.ExtractableRequest
+import com.mohiva.play.silhouette.impl.exceptions.{ ProfileRetrievalException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import com.mohiva.play.silhouette.impl.providers._
@@ -26,7 +27,7 @@ import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.{ FakeRequest, WithApplication }
 import test.Helper
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * Test case for the [[DropboxProvider]] class.
@@ -52,7 +53,8 @@ class DropboxProviderSpec extends OAuth2ProviderSpec {
       requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      stateProvider.validate(any, any) returns Future.successful(state)
+      stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(state)
+      stateProvider.state(any[ExecutionContext]) returns Future.successful(state)
 
       failed[UnexpectedResponseException](provider.authenticate()) {
         case e => e.getMessage must startWith(InvalidInfoFormat.format(provider.id, ""))
@@ -67,9 +69,28 @@ class DropboxProviderSpec extends OAuth2ProviderSpec {
       requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      stateProvider.validate(any, any) returns Future.successful(state)
+      stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(state)
+      stateProvider.state(any[ExecutionContext]) returns Future.successful(state)
 
       authInfo(provider.authenticate())(_ must be equalTo oAuthInfo.as[OAuth2Info])
+    }
+  }
+
+  "The `authenticate` method with user state" should {
+    "return stateful auth info" in new WithApplication with Context {
+      val requestHolder = mock[WSRequest]
+      val response = mock[WSResponse]
+      implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
+      response.json returns oAuthInfo
+      requestHolder.withHeaders(any) returns requestHolder
+      requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
+      httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
+      stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(state)
+      stateProvider.state(any[ExecutionContext]) returns Future.successful(state)
+      stateProvider.withHandler(any[SocialStateItemHandler]) returns stateProvider
+      state.items returns Set(userState)
+
+      statefulAuthInfo(provider.authenticate(userState))(_ must be equalTo stateAuthInfo)
     }
   }
 
@@ -173,6 +194,11 @@ class DropboxProviderSpec extends OAuth2ProviderSpec {
      * @see https://www.dropbox.com/developers/core/docs#oa2-token
      */
     override lazy val oAuthInfo = Helper.loadJson("providers/oauth2/dropbox.access.token.json")
+
+    /**
+     * The stateful auth info.
+     */
+    override lazy val stateAuthInfo = StatefulAuthInfo(oAuthInfo.as[OAuth2Info], userState)
 
     /**
      * The provider to test.

@@ -111,12 +111,12 @@ class GitHubProfileParser extends SocialProfileParser[JsValue, CommonSocialProfi
  * The GitHub OAuth2 Provider.
  *
  * @param httpLayer     The HTTP layer implementation.
- * @param stateProvider The state provider implementation.
+ * @param stateHandler  The state provider implementation.
  * @param settings      The provider settings.
  */
 class GitHubProvider(
   protected val httpLayer: HTTPLayer,
-  protected val stateProvider: OAuth2StateProvider,
+  protected val stateHandler: SocialStateHandler,
   val settings: OAuth2Settings)
   extends BaseGitHubProvider with CommonSocialProfileBuilder {
 
@@ -136,7 +136,7 @@ class GitHubProvider(
    * @param f A function which gets the settings passed and returns different settings.
    * @return An instance of the provider initialized with new settings.
    */
-  override def withSettings(f: (Settings) => Settings) = new GitHubProvider(httpLayer, stateProvider, f(settings))
+  override def withSettings(f: (Settings) => Settings) = new GitHubProvider(httpLayer, stateHandler, f(settings))
 }
 
 /**

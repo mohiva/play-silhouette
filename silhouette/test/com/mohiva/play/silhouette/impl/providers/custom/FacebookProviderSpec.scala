@@ -16,19 +16,19 @@
 package com.mohiva.play.silhouette.impl.providers.custom
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.api.util.HTTPLayer
+import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
 import com.mohiva.play.silhouette.impl.exceptions.{ ProfileRetrievalException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.FacebookProvider._
 import com.mohiva.play.silhouette.impl.providers.oauth2.{ BaseFacebookProvider, FacebookProfileParser, FacebookProvider }
-import play.api.libs.json.{ Json, JsValue }
+import play.api.libs.json.{ JsValue, Json }
 import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.{ FakeRequest, WithApplication }
 import test.Helper
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
@@ -55,7 +55,8 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      stateProvider.validate(any, any) returns Future.successful(state)
+      stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(state)
+      stateProvider.state(any[ExecutionContext]) returns Future.successful(state)
 
       failed[UnexpectedResponseException](provider.authenticate()) {
         case e => e.getMessage must startWith(InvalidInfoFormat.format(provider.id, ""))
@@ -70,7 +71,8 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
       requestHolder.withHeaders(any) returns requestHolder
       requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
       httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
-      stateProvider.validate(any, any) returns Future.successful(state)
+      stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(state)
+      stateProvider.state(any[ExecutionContext]) returns Future.successful(state)
 
       authInfo(provider.authenticate()) {
         case authInfo => authInfo must be equalTo oAuthInfo.as[OAuth2Info]
@@ -211,12 +213,12 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
    * The custom Facebook OAuth2 Provider.
    *
    * @param httpLayer The HTTP layer implementation.
-   * @param stateProvider The state provider implementation.
+   * @param stateHandler The state provider implementation.
    * @param settings The provider settings.
    */
   class CustomFacebookProvider(
     protected val httpLayer: HTTPLayer,
-    protected val stateProvider: OAuth2StateProvider,
+    protected val stateHandler: SocialStateHandler,
     val settings: OAuth2Settings)
     extends BaseFacebookProvider {
 
@@ -242,7 +244,7 @@ class FacebookProviderSpec extends OAuth2ProviderSpec {
      * @return An instance of the provider initialized with new settings.
      */
     def withSettings(f: (Settings) => Settings) = {
-      new CustomFacebookProvider(httpLayer, stateProvider, f(settings))
+      new CustomFacebookProvider(httpLayer, stateHandler, f(settings))
     }
   }
 }
