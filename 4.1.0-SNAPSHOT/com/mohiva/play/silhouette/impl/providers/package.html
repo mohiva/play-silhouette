@@ -311,6 +311,23 @@ into plain text passwords, to hash them again with the new algorithm. So if a us
 the application has changed the hashing algorithm, the provider hashes the entered password again with the new
 algorithm and stores the auth info in the backing store.
 </p></div></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.DefaultSocialStateHandler" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DefaultSocialStateHandlerextendsSocialStateHandler"></a>
+      <a id="DefaultSocialStateHandler:DefaultSocialStateHandler"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="DefaultSocialStateHandler.html"><span class="name">DefaultSocialStateHandler</span></a><span class="result"> extends <a href="SocialStateHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateHandler">SocialStateHandler</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@DefaultSocialStateHandlerextendsSocialStateHandler" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The base implementation of the <a href="SocialStateHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateHandler">SocialStateHandler</a>.</p>
     </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth1Constants" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="OAuth1ConstantsextendsAnyRef"></a>
       <a id="OAuth1Constants:OAuth1Constants"></a>
@@ -474,7 +491,7 @@ this implementation provides an abstract way to store the secret in different lo
       <p class="shortcomment cmt">The Oauth2 info.</p><div class="fullcomment"><div class="comment cmt"><p>The Oauth2 info.
 </p></div><dl class="paramcmts block"><dt class="param">accessToken</dt><dd class="cmt"><p>The access token.</p></dd><dt class="param">tokenType</dt><dd class="cmt"><p>The token type.</p></dd><dt class="param">expiresIn</dt><dd class="cmt"><p>The number of seconds before the token expires.</p></dd><dt class="param">refreshToken</dt><dd class="cmt"><p>The refresh token.</p></dd><dt class="param">params</dt><dd class="cmt"><p>Additional params transported in conjunction with the token.</p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="OAuth2ProviderextendsSocialProviderwithOAuth2ConstantswithLogger"></a>
+      <a id="OAuth2ProviderextendsSocialStateProviderwithOAuth2ConstantswithLogger"></a>
       <a id="OAuth2Provider:OAuth2Provider"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -482,10 +499,10 @@ this implementation provides an abstract way to store the secret in different lo
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="OAuth2Provider.html"><span class="name">OAuth2Provider</span></a><span class="result"> extends <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a> with <a href="OAuth2Constants.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Constants">OAuth2Constants</a> with <a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
+        <a href="OAuth2Provider.html"><span class="name">OAuth2Provider</span></a><span class="result"> extends <a href="SocialStateProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateProvider">SocialStateProvider</a> with <a href="OAuth2Constants.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OAuth2Constants">OAuth2Constants</a> with <a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@OAuth2ProviderextendsSocialProviderwithOAuth2ConstantswithLogger" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@OAuth2ProviderextendsSocialStateProviderwithOAuth2ConstantswithLogger" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -651,6 +668,25 @@ this implementation provides an abstract way to store the secret in different lo
       </a>
     </span>
       <p class="shortcomment cmt">Base provider which provides shared functionality to authenticate with a password.</p>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.PublishableSocialStateItemHandler" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="PublishableSocialStateItemHandlerextendsAnyRef"></a>
+      <a id="PublishableSocialStateItemHandler:PublishableSocialStateItemHandler"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="PublishableSocialStateItemHandler.html"><span class="name">PublishableSocialStateItemHandler</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@PublishableSocialStateItemHandlerextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A state item handler which can publish its internal state to the client.</p><div class="fullcomment"><div class="comment cmt"><p>A state item handler which can publish its internal state to the client.</p><p>Some state item handlers, like the CSRF state handler, needs the ability to publish state to a cookie.
+So if you have such a state item handler, then mixin this trait, to publish the state item to the client.
+</p></div></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.SocialProfile" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="SocialProfileextendsAnyRef"></a>
       <a id="SocialProfile:SocialProfile"></a>
@@ -739,6 +775,120 @@ be reused by other parsers to avoid duplicating code.
     </span>
       <p class="shortcomment cmt">A registry that holds and provides access to all social provider implementations.</p><div class="fullcomment"><div class="comment cmt"><p>A registry that holds and provides access to all social provider implementations.
 </p></div><dl class="paramcmts block"><dt class="param">providers</dt><dd class="cmt"><p>The list of social providers.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialState" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SocialStateextendsProductwithSerializable"></a>
+      <a id="SocialState:SocialState"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SocialState.html"><span class="name">SocialState</span></a><span class="params">(<span name="items">items: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="SocialStateItem.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateItem">SocialStateItem</a>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@SocialStateextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Represents the state a social provider can handle.</p><div class="fullcomment"><div class="comment cmt"><p>Represents the state a social provider can handle.</p><p>The state consists of a <code>Set</code> containing different state items.
+</p></div><dl class="paramcmts block"><dt class="param">items</dt><dd class="cmt"><p>The list of social state items.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialStateHandler" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="SocialStateHandlerextendsAnyRef"></a>
+      <a id="SocialStateHandler:SocialStateHandler"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SocialStateHandler.html"><span class="name">SocialStateHandler</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@SocialStateHandlerextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Provides a way to handle different types of state for providers that allow a state param.</p><div class="fullcomment"><div class="comment cmt"><p>Provides a way to handle different types of state for providers that allow a state param.</p><p>Some authentication protocols defines a state param which can be used to transport some
+state to an authentication provider. The authentication provider sends this state back
+to the application, after the authentication to the provider was granted.</p><p>The state parameter can be used for different things. Silhouette provides two state handlers
+out of the box. One state handler can transport additional user state to the provider. This
+could be an URL were the user should be redirected after authentication to the provider, or
+any other per-authentication based state. An other important state handler protects the
+application for CSRF attacks.
+</p></div></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialStateItem" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="SocialStateItemextendsAnyRef"></a>
+      <a id="SocialStateItem:SocialStateItem"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SocialStateItem.html"><span class="name">SocialStateItem</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@SocialStateItemextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An item which can be a part of a social state.</p><div class="fullcomment"><div class="comment cmt"><p>An item which can be a part of a social state.</p><p>The social state consists of one state item per handler. So this item describes the state
+an handler can handle. A state item can be of any type. The handler to which the state item
+pertains, must be able to serialize/deserialize this state item.
+</p></div></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialStateItemHandler" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SocialStateItemHandlerextendsAnyRef"></a>
+      <a id="SocialStateItemHandler:SocialStateItemHandler"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SocialStateItemHandler.html"><span class="name">SocialStateItemHandler</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@SocialStateItemHandlerextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Handles state for different purposes.</p>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialStateProvider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SocialStateProviderextendsSocialProvider"></a>
+      <a id="SocialStateProvider:SocialStateProvider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SocialStateProvider.html"><span class="name">SocialStateProvider</span></a><span class="result"> extends <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@SocialStateProviderextendsSocialProvider" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Extends the <a href="SocialProvider.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialProvider">SocialProvider</a> with the ability to handle provider specific state.</p>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.StatefulAuthInfo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="StatefulAuthInfo[+A&lt;:com.mohiva.play.silhouette.api.AuthInfo,+S&lt;:com.mohiva.play.silhouette.impl.providers.SocialStateItem]extendsProductwithSerializable"></a>
+      <a id="StatefulAuthInfo[+A&lt;:AuthInfo,+S&lt;:SocialStateItem]:StatefulAuthInfo[A,S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="StatefulAuthInfo.html"><span class="name">StatefulAuthInfo</span></a><span class="tparams">[<span name="A">+A &lt;: <a href="../../api/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.AuthInfo">AuthInfo</a></span>, <span name="S">+S &lt;: <a href="SocialStateItem.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateItem">SocialStateItem</a></span>]</span><span class="params">(<span name="authInfo">authInfo: <span class="extype" name="com.mohiva.play.silhouette.impl.providers.StatefulAuthInfo.A">A</span></span>, <span name="userState">userState: <span class="extype" name="com.mohiva.play.silhouette.impl.providers.StatefulAuthInfo.S">S</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@StatefulAuthInfo[+A&lt;:com.mohiva.play.silhouette.api.AuthInfo,+S&lt;:com.mohiva.play.silhouette.impl.providers.SocialStateItem]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A stateful auth info, wraps the <code>AuthInfo</code> with user state.</p><div class="fullcomment"><div class="comment cmt"><p>A stateful auth info, wraps the <code>AuthInfo</code> with user state.
+</p></div><dl class="paramcmts block"><dt class="tparam">A</dt><dd class="cmt"><p>The type of the auth info.</p></dd><dt class="tparam">S</dt><dd class="cmt"><p>The type of the user state.</p></dd><dt class="param">authInfo</dt><dd class="cmt"><p>The auth info.</p></dd><dt class="param">userState</dt><dd class="cmt"><p>The user state.</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -951,6 +1101,23 @@ be reused by other parsers to avoid duplicating code.
       </a>
     </span>
       <p class="shortcomment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.SocialStateItem" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SocialStateItem"></a>
+      <a id="SocialStateItem:SocialStateItem"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SocialStateItem$.html"><span class="name">SocialStateItem</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@SocialStateItem" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object of the <a href="SocialStateItem.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateItem">SocialStateItem</a>.</p>
     </li><li name="com.mohiva.play.silhouette.impl.providers.oauth1" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="oauth1"></a>
       <a id="oauth1:oauth1"></a>
@@ -998,6 +1165,23 @@ be reused by other parsers to avoid duplicating code.
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@openid" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.mohiva.play.silhouette.impl.providers.state" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="state"></a>
+      <a id="state:state"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="state/package.html"><span class="name">state</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@state" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
