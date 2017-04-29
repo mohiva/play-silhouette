@@ -51,7 +51,9 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Handles csrf state.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Protects the application against CSRF attacks.</p><p>The handler stores a unique token in provider state and the same token in a signed client side cookie. After the
+provider redirects back to the application both tokens will be compared. If both tokens are the same than the
+application can trust the redirect source.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="../PublishableSocialStateItemHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.PublishableSocialStateItemHandler">PublishableSocialStateItemHandler</a>, <a href="../SocialStateItemHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateItemHandler">SocialStateItemHandler</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></div>
@@ -117,7 +119,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler.Item" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Item=com.mohiva.play.silhouette.impl.providers.state.CsrfState"></a>
+      <a id="Item=com.mohiva.play.silhouette.impl.providers.state.CsrfStateItem"></a>
       <a id="Item:Item"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -125,10 +127,10 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Item</span><span class="result"> = <a href="CsrfState.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.state.CsrfState">CsrfState</a></span>
+        <span class="name">Item</span><span class="result"> = <a href="CsrfStateItem.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItem">CsrfStateItem</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler@Item=com.mohiva.play.silhouette.impl.providers.state.CsrfState" title="Permalink" target="_top">
+      <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler@Item=com.mohiva.play.silhouette.impl.providers.state.CsrfStateItem" title="Permalink" target="_top">
         <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -237,7 +239,7 @@ serialized state item.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">canHandle</span><span class="params">(<span name="item">item: <a href="../SocialStateItem.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateItem">SocialStateItem</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="#Item=com.mohiva.play.silhouette.impl.providers.state.CsrfState" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler.Item">Item</a>]</span>
+        <span class="name">canHandle</span><span class="params">(<span name="item">item: <a href="../SocialStateItem.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateItem">SocialStateItem</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="#Item=com.mohiva.play.silhouette.impl.providers.state.CsrfStateItem" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler.Item">Item</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler@canHandle(item:com.mohiva.play.silhouette.impl.providers.SocialStateItem):Option[CsrfStateItemHandler.this.Item]" title="Permalink" target="_top">
@@ -387,7 +389,7 @@ unserialized state item.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">item</span><span class="params">(<span class="implicit">implicit </span><span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="#Item=com.mohiva.play.silhouette.impl.providers.state.CsrfState" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler.Item">Item</a>]</span>
+        <span class="name">item</span><span class="params">(<span class="implicit">implicit </span><span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="#Item=com.mohiva.play.silhouette.impl.providers.state.CsrfStateItem" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler.Item">Item</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler@item(implicitec:scala.concurrent.ExecutionContext):scala.concurrent.Future[CsrfStateItemHandler.this.Item]" title="Permalink" target="_top">
@@ -456,14 +458,14 @@ unserialized state item.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">publish</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="item">item: <a href="#Item=com.mohiva.play.silhouette.impl.providers.state.CsrfState" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler.Item">Item</a></span>, <span name="result">result: <span class="extype" name="play.api.mvc.Result">Result</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="../../../api/util/ExtractableRequest.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest">ExtractableRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler.publish.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="play.api.mvc.Result">Result</span></span>
+        <span class="name">publish</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="item">item: <a href="#Item=com.mohiva.play.silhouette.impl.providers.state.CsrfStateItem" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler.Item">Item</a></span>, <span name="result">result: <span class="extype" name="play.api.mvc.Result">Result</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="../../../api/util/ExtractableRequest.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest">ExtractableRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler.publish.B">B</span>]</span>)</span><span class="result">: <span class="extype" name="play.api.mvc.Result">Result</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler@publish[B](item:CsrfStateItemHandler.this.Item,result:play.api.mvc.Result)(implicitrequest:com.mohiva.play.silhouette.api.util.ExtractableRequest[B]):play.api.mvc.Result" title="Permalink" target="_top">
         <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Publishes the Csrf State to the client.</p><div class="fullcomment"><div class="comment cmt"><p>Publishes the Csrf State to the client.
+      <p class="shortcomment cmt">Publishes the CSRF token to the client.</p><div class="fullcomment"><div class="comment cmt"><p>Publishes the CSRF token to the client.
 </p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">item</dt><dd class="cmt"><p>The item to publish.</p></dd><dt class="param">result</dt><dd class="cmt"><p>The result to send to the client.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd><dt>returns</dt><dd class="cmt"><p>The result to send to the client.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler">CsrfStateItemHandler</a> → <a href="../PublishableSocialStateItemHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.PublishableSocialStateItemHandler">PublishableSocialStateItemHandler</a></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler#serialize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="serialize(item:CsrfStateItemHandler.this.Item):com.mohiva.play.silhouette.impl.providers.SocialStateItem.ItemStructure"></a>
@@ -474,7 +476,7 @@ unserialized state item.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">serialize</span><span class="params">(<span name="item">item: <a href="#Item=com.mohiva.play.silhouette.impl.providers.state.CsrfState" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler.Item">Item</a></span>)</span><span class="result">: <a href="../SocialStateItem$$ItemStructure.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateItem.ItemStructure">ItemStructure</a></span>
+        <span class="name">serialize</span><span class="params">(<span name="item">item: <a href="#Item=com.mohiva.play.silhouette.impl.providers.state.CsrfStateItem" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler.Item">Item</a></span>)</span><span class="result">: <a href="../SocialStateItem$$ItemStructure.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateItem.ItemStructure">ItemStructure</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler@serialize(item:CsrfStateItemHandler.this.Item):com.mohiva.play.silhouette.impl.providers.SocialStateItem.ItemStructure" title="Permalink" target="_top">
@@ -526,7 +528,7 @@ unserialized state item.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">unserialize</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="item">item: <a href="../SocialStateItem$$ItemStructure.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateItem.ItemStructure">ItemStructure</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="../../../api/util/ExtractableRequest.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest">ExtractableRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler.unserialize.B">B</span>]</span>, <span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="#Item=com.mohiva.play.silhouette.impl.providers.state.CsrfState" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler.Item">Item</a>]</span>
+        <span class="name">unserialize</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="item">item: <a href="../SocialStateItem$$ItemStructure.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateItem.ItemStructure">ItemStructure</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="request">request: <a href="../../../api/util/ExtractableRequest.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExtractableRequest">ExtractableRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler.unserialize.B">B</span>]</span>, <span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.concurrent.Future" class="extype" target="_top">Future</a>[<a href="#Item=com.mohiva.play.silhouette.impl.providers.state.CsrfStateItem" class="extmbr" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler.Item">Item</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler@unserialize[B](item:com.mohiva.play.silhouette.impl.providers.SocialStateItem.ItemStructure)(implicitrequest:com.mohiva.play.silhouette.api.util.ExtractableRequest[B],implicitec:scala.concurrent.ExecutionContext):scala.concurrent.Future[CsrfStateItemHandler.this.Item]" title="Permalink" target="_top">

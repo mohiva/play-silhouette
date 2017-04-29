@@ -488,7 +488,7 @@ this implementation provides an abstract way to store the secret in different lo
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">The Oauth2 info.</p><div class="fullcomment"><div class="comment cmt"><p>The Oauth2 info.
+      <p class="shortcomment cmt">The OAuth2 info.</p><div class="fullcomment"><div class="comment cmt"><p>The OAuth2 info.
 </p></div><dl class="paramcmts block"><dt class="param">accessToken</dt><dd class="cmt"><p>The access token.</p></dd><dt class="param">tokenType</dt><dd class="cmt"><p>The token type.</p></dd><dt class="param">expiresIn</dt><dd class="cmt"><p>The number of seconds before the token expires.</p></dd><dt class="param">refreshToken</dt><dd class="cmt"><p>The refresh token.</p></dd><dt class="param">params</dt><dd class="cmt"><p>Additional params transported in conjunction with the token.</p></dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth2Provider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="OAuth2ProviderextendsSocialStateProviderwithOAuth2ConstantswithLogger"></a>
@@ -528,41 +528,6 @@ this implementation provides an abstract way to store the secret in different lo
                            provider. The URL can be a relative path which will be resolved against the current
                            request's host.</p></dd><dt class="param">apiURL</dt><dd class="cmt"><p>The URL to fetch the profile from the API. Can be used to override the default URL
                            hardcoded in every provider implementation.</p></dd><dt class="param">clientID</dt><dd class="cmt"><p>The client ID provided by the OAuth provider.</p></dd><dt class="param">clientSecret</dt><dd class="cmt"><p>The client secret provided by the OAuth provider.</p></dd><dt class="param">scope</dt><dd class="cmt"><p>The OAuth2 scope parameter provided by the OAuth provider.</p></dd><dt class="param">authorizationParams</dt><dd class="cmt"><p>Additional params to add to the authorization request.</p></dd><dt class="param">accessTokenParams</dt><dd class="cmt"><p>Additional params to add to the access token request.</p></dd><dt class="param">customProperties</dt><dd class="cmt"><p>A map of custom properties for the different providers.</p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth2State" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="OAuth2StateextendsAnyRef"></a>
-      <a id="OAuth2State:OAuth2State"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="OAuth2State.html"><span class="name">OAuth2State</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@OAuth2StateextendsAnyRef" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">The OAuth2 state.</p><div class="fullcomment"><div class="comment cmt"><p>The OAuth2 state.</p><p>This is to prevent the client for CSRF attacks as described in the OAuth2 RFC.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>https://tools.ietf.org/html/rfc6749#section-10.12</p></span></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth2StateProvider" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="OAuth2StateProviderextendsAnyRef"></a>
-      <a id="OAuth2StateProvider:OAuth2StateProvider"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="OAuth2StateProvider.html"><span class="name">OAuth2StateProvider</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@OAuth2StateProviderextendsAnyRef" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Provides state for authentication providers.</p>
     </li><li name="com.mohiva.play.silhouette.impl.providers.OpenIDConstants" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="OpenIDConstantsextendsAnyRef"></a>
       <a id="OpenIDConstants:OpenIDConstants"></a>
@@ -999,6 +964,23 @@ pertains, must be able to serialize/deserialize this state item.
       </a>
     </span>
       <p class="shortcomment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.DefaultSocialStateHandler" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DefaultSocialStateHandler"></a>
+      <a id="DefaultSocialStateHandler:DefaultSocialStateHandler"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DefaultSocialStateHandler$.html"><span class="name">DefaultSocialStateHandler</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@DefaultSocialStateHandler" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object for the <a href="DefaultSocialStateHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.DefaultSocialStateHandler">DefaultSocialStateHandler</a> class.</p>
     </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth1Provider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="OAuth1Provider"></a>
       <a id="OAuth1Provider:OAuth1Provider"></a>
