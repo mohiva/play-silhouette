@@ -32,12 +32,12 @@ import play.api.libs.json._
 import play.api.libs.ws.WSResponse
 import play.api.mvc._
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.Future
 import scala.reflect.ClassTag
 import scala.util.{ Failure, Success, Try }
 
 /**
- * The Oauth2 info.
+ * The OAuth2 info.
  *
  * @param accessToken  The access token.
  * @param tokenType    The token type.
@@ -145,7 +145,7 @@ trait OAuth2Provider extends SocialStateProvider with OAuth2Constants with Logge
   }
 
   /**
-   * Handles the Oauth2 flow.
+   * Handles the OAuth2 flow.
    *
    * The left flow is the authorization flow, which will be processed, if no `code` parameter exists
    * in the request. The right flow is the access token flow, which will be executed after a successful
@@ -290,74 +290,6 @@ trait OAuth2Constants {
 }
 
 /**
- * The OAuth2 state.
- *
- * This is to prevent the client for CSRF attacks as described in the OAuth2 RFC.
- *
- * @see https://tools.ietf.org/html/rfc6749#section-10.12
- */
-trait OAuth2State {
-
-  /**
-   * Checks if the state is expired. This is an absolute timeout since the creation of
-   * the state.
-   *
-   * @return True if the state is expired, false otherwise.
-   */
-  def isExpired: Boolean
-}
-
-/**
- * Provides state for authentication providers.
- */
-trait OAuth2StateProvider {
-
-  /**
-   * The type of the state implementation.
-   */
-  type State <: OAuth2State
-
-  /**
-   * Builds the state.
-   *
-   * @param request The current request.
-   * @param ec      The execution context to handle the asynchronous operations.
-   * @tparam B The type of the request body.
-   * @return The build state.
-   */
-  def build[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[State]
-
-  /**
-   * Validates the provider and the client state.
-   *
-   * @param request The current request.
-   * @param ec      The execution context to handle the asynchronous operations.
-   * @tparam B The type of the request body.
-   * @return The state on success, otherwise an failure.
-   */
-  def validate[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[State]
-
-  /**
-   * Publishes the state to the client.
-   *
-   * @param result  The result to send to the client.
-   * @param state   The state to publish.
-   * @param request The current request.
-   * @tparam B The type of the request body.
-   * @return The result to send to the client.
-   */
-  def publish[B](result: Result, state: State)(implicit request: ExtractableRequest[B]): Result
-
-  /**
-   * Returns a serialized value of the state.
-   *
-   * @param state The state to serialize.
-   * @return A serialized value of the state.
-   */
-  def serialize(state: State): String
-}
-
-/**
  * The OAuth2 settings.
  *
  * @param authorizationURL    The authorization URL provided by the OAuth provider.
@@ -383,4 +315,5 @@ case class OAuth2Settings(
   scope: Option[String] = None,
   authorizationParams: Map[String, String] = Map.empty,
   accessTokenParams: Map[String, String] = Map.empty,
-  customProperties: Map[String, String] = Map.empty)
+  customProperties: Map[String, String] = Map.empty
+)

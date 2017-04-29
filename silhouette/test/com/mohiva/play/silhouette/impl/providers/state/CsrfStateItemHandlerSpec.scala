@@ -19,18 +19,17 @@ import com.mohiva.play.silhouette.api.crypto.CookieSigner
 import com.mohiva.play.silhouette.api.util.IDGenerator
 import com.mohiva.play.silhouette.impl.providers.SocialStateItem
 import com.mohiva.play.silhouette.impl.providers.SocialStateItem.ItemStructure
+import com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler._
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.libs.json.{ Json }
+import play.api.libs.json.Json
+import play.api.mvc.{ Cookie, Results }
 import play.api.test.{ FakeRequest, PlaySpecification }
 
-import scala.util.Success
-import scala.concurrent.duration._
-import play.api.libs.concurrent.Execution.Implicits._
-import play.api.mvc.Cookie
-
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.util.Success
 
 /**
  *  Test case for the [[CsrfStateItemHandler]] class.
@@ -38,80 +37,89 @@ import scala.concurrent.Future
 class CsrfStateItemHandlerSpec extends PlaySpecification with Mockito with JsonMatchers {
 
   "The `item` method" should {
-    "return csrfState" in new Context {
+    "return the CSRF state item" in new Context {
       idGenerator.generate returns Future.successful(csrfToken)
-      await(csrfStateHandler.item) must beAnInstanceOf[CsrfState]
+
+      await(csrfStateItemHandler.item) must be equalTo csrfStateItem
     }
   }
 
   "The `canHandle` method" should {
-    "return `Some[SocialStateItem]` if it can handle the given `SocialStateItem`" in new Context {
-      csrfStateHandler.canHandle(csrfState) must beSome[SocialStateItem]
+    "return the same item if it can handle the given item" in new Context {
+      csrfStateItemHandler.canHandle(csrfStateItem) must beSome(csrfStateItem)
     }
 
-    "should return `None` if it can't handle the given `SocialStateItem`" in new Context {
-      csrfStateHandler.canHandle(userState) must beNone
+    "should return `None` if it can't handle the given item" in new Context {
+      val nonCsrfState = mock[SocialStateItem].smart
+
+      csrfStateItemHandler.canHandle(nonCsrfState) must beNone
     }
   }
 
   "The `canHandle` method" should {
-    "return true if it can handle the given `ItemStructure`" in new Context {
-      implicit val request = FakeRequest().withCookies(Cookie(
-        name = settings.cookieName,
-        value = cookieSigner.sign(csrfState.value),
-        maxAge = Some(settings.expirationTime.toSeconds.toInt),
-        path = settings.cookiePath,
-        domain = settings.cookieDomain,
-        secure = settings.secureCookie,
-        httpOnly = settings.httpOnlyCookie))
-      csrfStateHandler.canHandle(itemStructure) must beTrue
-    }
+    "return false if the give item is for another handler" in new Context {
+      val nonCsrfItemStructure = mock[ItemStructure].smart
+      nonCsrfItemStructure.id returns "non-csrf-item"
 
-    "return false if it can't handle the given `ItemStructure`" in new Context {
       implicit val request = FakeRequest()
-      csrfStateHandler.canHandle(itemStructure.copy(id = "non-csrf-state")) must beFalse
+      csrfStateItemHandler.canHandle(nonCsrfItemStructure) must beFalse
+    }
+
+    "return false if client state doesn't match the item state" in new Context {
+      implicit val request = FakeRequest().withCookies(cookie("invalid-token"))
+      csrfStateItemHandler.canHandle(csrfItemStructure) must beFalse
+    }
+
+    "return true if it can handle the given `ItemStructure`" in new Context {
+      implicit val request = FakeRequest().withCookies(cookie(csrfStateItem.token))
+      csrfStateItemHandler.canHandle(csrfItemStructure) must beTrue
     }
   }
 
   "The `serialize` method" should {
-    "serialize `CsrfState` to `ItemStructure`" in new Context {
-      csrfStateHandler.serialize(csrfState) must beAnInstanceOf[ItemStructure]
+    "return a serialized value of the state item" in new Context {
+      csrfStateItemHandler.serialize(csrfStateItem).asString must be equalTo csrfItemStructure.asString
     }
   }
 
   "The `unserialize` method" should {
-    "unserialize `ItemStructure` to `CsrfState`" in new Context {
+    "unserialize the state item" in new Context {
       implicit val request = FakeRequest()
-      await(csrfStateHandler.unserialize(itemStructure)) must beAnInstanceOf[CsrfState]
+
+      await(csrfStateItemHandler.unserialize(csrfItemStructure)) must be equalTo csrfStateItem
     }
   }
 
+  "The `publish` method" should {
+    "publish the state item to the client" in new Context {
+      implicit val request = FakeRequest()
+      val result = csrfStateItemHandler.publish(csrfStateItem, Results.Ok)
+
+      cookies(Future.successful(result)).get(settings.cookieName) must beSome(cookie(csrfToken))
+    }
+  }
+
+  /**
+   * The context.
+   */
   trait Context extends Scope {
-    import CsrfStateItemHandler._
 
     /**
      * The ID generator implementation.
      */
-    lazy val idGenerator = mock[IDGenerator].smart
+    val idGenerator = mock[IDGenerator].smart
 
     /**
      * The settings.
      */
-    lazy val settings = CsrfStateSettings(
-      cookieName = "OAuth2CsrfState",
-      cookiePath = "/",
-      cookieDomain = None,
-      secureCookie = true,
-      httpOnlyCookie = true,
-      expirationTime = 5 minutes
-    )
+    val settings = CsrfStateSettings()
 
     /**
      * The cookie signer implementation.
      *
      * The cookie signer returns the same value as passed to the methods. This is enough for testing.
      */
-    lazy val cookieSigner = {
+    val cookieSigner = {
       val c = mock[CookieSigner].smart
       c.sign(any) answers { p => p.asInstanceOf[String] }
       c.extract(any) answers { p => Success(p.asInstanceOf[String]) }
@@ -119,35 +127,38 @@ class CsrfStateItemHandlerSpec extends PlaySpecification with Mockito with JsonM
     }
 
     /**
-     * An example usage of UserState where state is of type Map[String, String]
-     * @param state
-     */
-    case class UserState(state: Map[String, String]) extends SocialStateItem
-
-    /**
-     * An instance of UserState
-     */
-    val userState = UserState(Map("path" -> "/login"))
-
-    /**
-     * Csrf State value
+     * A CSRF token.
      */
     val csrfToken = "csrfToken"
 
     /**
-     * An instance of CsrfState
+     * A CSRF state item.
      */
-    val csrfState = CsrfState(csrfToken)
+    val csrfStateItem = CsrfStateItem(csrfToken)
 
     /**
-     * Serialized type of CsrfState
+     * The serialized type of the CSRF state item.
      */
-    val itemStructure = ItemStructure("csrf-state", Json.toJson(csrfState))
+    val csrfItemStructure = ItemStructure(ID, Json.toJson(csrfStateItem))
 
     /**
-     * An instance of Csrf State Handler
+     * An instance of the CSRF state item handler.
      */
-    val csrfStateHandler = new CsrfStateItemHandler(settings, idGenerator, cookieSigner)
+    val csrfStateItemHandler = new CsrfStateItemHandler(settings, idGenerator, cookieSigner)
+
+    /**
+     * A helper method to create a cookie.
+     *
+     * @param value The cookie value.
+     * @return A cookie instance with the given value.
+     */
+    def cookie(value: String): Cookie = Cookie(
+      name = settings.cookieName,
+      value = cookieSigner.sign(value),
+      maxAge = Some(settings.expirationTime.toSeconds.toInt),
+      path = settings.cookiePath,
+      domain = settings.cookieDomain,
+      secure = settings.secureCookie,
+      httpOnly = settings.httpOnlyCookie)
   }
 }
-

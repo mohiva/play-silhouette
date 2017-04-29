@@ -30,6 +30,7 @@ import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.mvc.Result
 import play.api.test.{ FakeRequest, WithApplication }
 import play.mvc.Http.HeaderNames
+import test.SocialStateProviderSpec
 
 import scala.concurrent.{ ExecutionContext, Future }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Mohiva Organisation (license at mohiva dot com)
+ * Copyright 2017 Mohiva Organisation (license at mohiva dot com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,9 @@ package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.AuthInfo
 import com.mohiva.play.silhouette.api.crypto.{ Base64, CookieSigner }
+import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.util.ExtractableRequest
+import com.mohiva.play.silhouette.impl.providers.DefaultSocialStateHandler._
 import com.mohiva.play.silhouette.impl.providers.SocialStateItem._
 import play.api.libs.json.{ Format, JsValue, Json }
 import play.api.mvc.Result
@@ -71,7 +73,7 @@ object SocialStateItem {
      *
      * @return The serialized representation of the item.
      */
-    override def toString = s"${Base64.encode(id)}-${Base64.encode(data)}"
+    def asString = s"${Base64.encode(id)}-${Base64.encode(data)}"
   }
 
   /**
@@ -93,7 +95,6 @@ object SocialStateItem {
       }
     }
   }
-
 }
 
 /**
@@ -108,7 +109,7 @@ trait SocialStateProvider extends SocialProvider {
    * sends to the browser (e.g.: in the case of OAuth where the user needs to be redirected to the service
    * provider).
    *
-   * @param format   The JSON format to the transform the user state into JSON.
+   * @param format   The JSON format to transform the user state into JSON.
    * @param request  The request.
    * @param classTag The class tag for the user state item.
    * @tparam S The type of the user state item.
@@ -205,7 +206,8 @@ trait SocialStateHandler {
  *
  * @param handlers The item handlers configured for this handler.
  */
-class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler], cookieSigner: CookieSigner) extends SocialStateHandler {
+class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler], cookieSigner: CookieSigner)
+  extends SocialStateHandler {
 
   /**
    * The concrete instance of the state provider.
@@ -259,20 +261,24 @@ class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler], cooki
   override def unserialize[B](state: String)(
     implicit
     request: ExtractableRequest[B],
-    ec: ExecutionContext): Future[SocialState] = {
-
-    Future.fromTry(cookieSigner.extract(state)).flatMap(state => state.split('.').toList match {
-      case Nil => Future.successful(SocialState(Set()))
-      case items =>
-        Future.sequence(items.map {
-          case ItemStructure(item) => handlers.find(_.canHandle(item)) match {
-            case Some(handler) => handler.unserialize(item)
-            case None =>
-              throw new RuntimeException("None of the registered handlers can handle the given state item:" + item)
-          }
-          case s => throw new RuntimeException("Cannot extract social state item from string: " + s)
-        }).map(items => SocialState(items.toSet))
-    })
+    ec: ExecutionContext
+  ): Future[SocialState] = {
+    Future.fromTry(cookieSigner.extract(state)).flatMap { state =>
+      state.split('.').toList match {
+        case Nil | List("") =>
+          Future.successful(SocialState(Set()))
+        case items =>
+          Future.sequence {
+            items.map {
+              case ItemStructure(item) => handlers.find(_.canHandle(item)) match {
+                case Some(handler) => handler.unserialize(item)
+                case None          => throw new ProviderException(MissingItemHandlerError.format(item))
+              }
+              case item => throw new ProviderException(ItemExtractionError.format(item))
+            }
+          }.map(items => SocialState(items.toSet))
+      }
+    }
   }
 
   /**
@@ -292,6 +298,19 @@ class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler], cooki
       }
     }
   }
+}
+
+/**
+ * The companion object for the [[DefaultSocialStateHandler]] class.
+ */
+object DefaultSocialStateHandler {
+
+  /**
+   * Some errors.
+   */
+  val MissingItemHandlerError = "None of the registered handlers can handle the given state item: %s"
+  val ItemExtractionError = "Cannot extract social state item from string: %s"
+
 }
 
 /**

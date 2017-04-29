@@ -23,6 +23,7 @@ import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.test.FakeRequest
+import test.SocialProviderSpec
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
@@ -70,29 +71,25 @@ class CasProviderSpec extends SocialProviderSpec[CasInfo] with Mockito with Logg
     "redirect to CAS server if service ticket is not present in request" in new Context {
       implicit val req = FakeRequest(GET, "/")
 
-      result(provider.authenticate()) {
-        case result =>
-          status(result) must equalTo(SEE_OTHER)
-          redirectLocation(result) must beSome("https://cas-url/?service=https%3A%2F%2Fcas-redirect%2F")
+      result(provider.authenticate()) { result =>
+        status(result) must equalTo(SEE_OTHER)
+        redirectLocation(result) must beSome("https://cas-url/?service=https%3A%2F%2Fcas-redirect%2F")
       }
     }
 
     "redirect to CAS server with the original requested URL if service ticket is not present in the request" in new Context {
       implicit val req = FakeRequest(GET, redirectURLWithOrigin)
 
-      result(provider.authenticate()) {
-        case result =>
-          status(result) must equalTo(SEE_OTHER)
-          redirectLocation(result) must beSome("https://cas-url/?service=https%3A%2F%2Fcas-redirect%2F")
+      result(provider.authenticate()) { result =>
+        status(result) must equalTo(SEE_OTHER)
+        redirectLocation(result) must beSome("https://cas-url/?service=https%3A%2F%2Fcas-redirect%2F")
       }
     }
 
     "return a valid CASAuthInfo object if service ticket is present in request" in new Context {
       implicit val req = FakeRequest(GET, "/?ticket=%s".format(ticket))
 
-      authInfo(provider.authenticate()) {
-        case authInfo => authInfo must be equalTo CasInfo(ticket)
-      }
+      authInfo(provider.authenticate())(authInfo => authInfo must be equalTo CasInfo(ticket))
     }
   }
 
@@ -111,7 +108,7 @@ class CasProviderSpec extends SocialProviderSpec[CasInfo] with Mockito with Logg
 
       await(futureProfile) must beLike[CommonSocialProfile] {
         case profile =>
-          profile must be equalTo new CommonSocialProfile(
+          profile must be equalTo CommonSocialProfile(
             loginInfo = new LoginInfo(CasProvider.ID, userName),
             firstName = Some(firstName),
             lastName = Some(lastName),
@@ -145,7 +142,7 @@ class CasProviderSpec extends SocialProviderSpec[CasInfo] with Mockito with Logg
 
     lazy val ticket = "ST-12345678"
 
-    lazy val casAuthInfo = new CasInfo(ticket)
+    lazy val casAuthInfo = CasInfo(ticket)
 
     lazy val principal = mock[AttributePrincipal].smart
 
