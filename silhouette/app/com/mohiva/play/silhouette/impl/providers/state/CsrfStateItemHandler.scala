@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Mohiva Organisation (license at mohiva dot com)
+ * Copyright 2017 Mohiva Organisation (license at mohiva dot com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,17 +28,33 @@ import play.api.mvc.{ Cookie, RequestHeader, Result }
 
 import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.language.postfixOps
 import scala.util.{ Failure, Success, Try }
 
 /**
- * Csrf State is a sub type of SocialStateItem
+ * The item the handler can handle.
  *
- * @param value wrapper around the csrf state value
+ * @param token A unique token used to protect the application against CSRF attacks.
  */
-case class CsrfState(value: String) extends SocialStateItem
+case class CsrfStateItem(token: String) extends SocialStateItem
 
 /**
- * Handles csrf state.
+ * The companion object of the [[CsrfStateItem]].
+ */
+object CsrfStateItem {
+
+  /**
+   * Converts the [[CsrfStateItem]] to JSON and vice versa.
+   */
+  implicit val csrfFormat: Format[CsrfStateItem] = Json.format[CsrfStateItem]
+}
+
+/**
+ * Protects the application against CSRF attacks.
+ *
+ * The handler stores a unique token in provider state and the same token in a signed client side cookie. After the
+ * provider redirects back to the application both tokens will be compared. If both tokens are the same than the
+ * application can trust the redirect source.
  *
  * @param settings     The state settings.
  * @param idGenerator  The ID generator used to create the state value.
@@ -47,12 +63,14 @@ case class CsrfState(value: String) extends SocialStateItem
 class CsrfStateItemHandler @Inject() (
   settings: CsrfStateSettings,
   idGenerator: IDGenerator,
-  cookieSigner: CookieSigner) extends SocialStateItemHandler with PublishableSocialStateItemHandler {
+  cookieSigner: CookieSigner
+) extends SocialStateItemHandler
+  with PublishableSocialStateItemHandler {
 
   /**
    * The item the handler can handle.
    */
-  override type Item = CsrfState
+  override type Item = CsrfStateItem
 
   /**
    * Gets the state item the handler can handle.
@@ -60,11 +78,7 @@ class CsrfStateItemHandler @Inject() (
    * @param ec The execution context to handle the asynchronous operations.
    * @return The state params the handler can handle.
    */
-  override def item(implicit ec: ExecutionContext): Future[Item] = {
-    idGenerator.generate.map {
-      CsrfState(_)
-    }
-  }
+  override def item(implicit ec: ExecutionContext): Future[Item] = idGenerator.generate.map(CsrfStateItem.apply)
 
   /**
    * Indicates if a handler can handle the given [[SocialStateItem]].
@@ -94,8 +108,8 @@ class CsrfStateItemHandler @Inject() (
   override def canHandle[B](item: ItemStructure)(implicit request: ExtractableRequest[B]): Boolean = {
     item.id == ID && {
       clientState match {
-        case Success(token) => token == item.data.as[Item]
-        case Failure(_)     => false
+        case Success(i) => i == item.data.as[Item]
+        case Failure(_) => false
       }
     }
   }
@@ -117,12 +131,16 @@ class CsrfStateItemHandler @Inject() (
    * @tparam B The type of the request body.
    * @return The unserialized state item.
    */
-  override def unserialize[B](item: ItemStructure)(implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Item] = {
+  override def unserialize[B](item: ItemStructure)(
+    implicit
+    request: ExtractableRequest[B],
+    ec: ExecutionContext
+  ): Future[Item] = {
     Future.fromTry(Try(item.data.as[Item]))
   }
 
   /**
-   * Publishes the Csrf State to the client.
+   * Publishes the CSRF token to the client.
    *
    * @param item    The item to publish.
    * @param result  The result to send to the client.
@@ -133,23 +151,24 @@ class CsrfStateItemHandler @Inject() (
   override def publish[B](item: Item, result: Result)(implicit request: ExtractableRequest[B]): Result = {
     result.withCookies(Cookie(
       name = settings.cookieName,
-      value = cookieSigner.sign(item.value),
+      value = cookieSigner.sign(item.token),
       maxAge = Some(settings.expirationTime.toSeconds.toInt),
       path = settings.cookiePath,
       domain = settings.cookieDomain,
       secure = settings.secureCookie,
-      httpOnly = settings.httpOnlyCookie))
+      httpOnly = settings.httpOnlyCookie
+    ))
   }
 
   /**
-   * Gets the Csrf State from the cookie.
+   * Gets the CSRF token from the cookie.
    *
    * @param request The request header.
-   * @return The OAuth2 state on success, otherwise a failure.
+   * @return The CSRF token on success, otherwise a failure.
    */
   private def clientState(implicit request: RequestHeader): Try[Item] = {
     request.cookies.get(settings.cookieName) match {
-      case Some(cookie) => cookieSigner.extract(cookie.value).map(token => CsrfState(token))
+      case Some(cookie) => cookieSigner.extract(cookie.value).map(token => CsrfStateItem(token))
       case None         => Failure(new OAuth2StateException(ClientStateDoesNotExists.format(settings.cookieName)))
     }
   }
@@ -159,23 +178,16 @@ class CsrfStateItemHandler @Inject() (
  * The companion object.
  */
 object CsrfStateItemHandler {
+
+  /**
+   * The ID of the handler.
+   */
   val ID = "csrf-state"
 
   /**
    * The error messages.
    */
-  val ClientStateDoesNotExists = "[Silhouette][CookieState] State cookie doesn't exists for name: %s"
-  val ProviderStateDoesNotExists = "[Silhouette][CookieState] Couldn't find state in request for param: %s"
-  val StateIsNotEqual = "[Silhouette][CookieState] State isn't equal"
-  val StateIsExpired = "[Silhouette][CookieState] State is expired"
-  val InvalidJson = "[Silhouette][CookieState] Cannot parse invalid Json: %s"
-  val InvalidStateFormat = "[Silhouette][CookieState] Cannot build OAuth2State because of invalid Json format: %s"
-  val InvalidCookieSignature = "[Silhouette][CookieState] Invalid cookie signature"
-
-  /**
-   * Json Format for the Csrf State
-   */
-  implicit val csrfFormat: Format[CsrfState] = Json.format[CsrfState]
+  val ClientStateDoesNotExists = "[Silhouette][CsrfStateItemHandler] State cookie doesn't exists for name: %s"
 }
 
 /**
@@ -190,7 +202,7 @@ object CsrfStateItemHandler {
  *                       not too much. This is a balance between convenience and security.
  */
 case class CsrfStateSettings(
-  cookieName: String = "OAuth2CsrfState",
+  cookieName: String = "CsrfState",
   cookiePath: String = "/",
   cookieDomain: Option[String] = None,
   secureCookie: Boolean = true,

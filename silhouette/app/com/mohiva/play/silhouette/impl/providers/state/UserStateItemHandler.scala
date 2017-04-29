@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Mohiva Organisation (license at mohiva dot com)
+ * Copyright 2017 Mohiva Organisation (license at mohiva dot com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,18 +26,34 @@ import scala.reflect.ClassTag
 import scala.util.Try
 
 /**
+ * A default user state item where state is of type Map[String, String].
+ */
+case class UserStateItem(state: Map[String, String]) extends SocialStateItem
+
+/**
+ * The companion object of the [[UserStateItem]].
+ */
+object UserStateItem {
+
+  /**
+   * Converts the [[UserStateItem]] to JSON and vice versa.
+   */
+  implicit val csrfFormat: Format[UserStateItem] = Json.format[UserStateItem]
+}
+
+/**
  * Handles user defined state.
  *
- * @param userState The user state.
- * @param format    The JSON format to the transform the user state into JSON.
- * @param classTag  The class tag for the user state item.
+ * @param item     The user state item.
+ * @param format   The JSON format to the transform the user state into JSON and vice versa.
+ * @param classTag The class tag for the user state item.
  * @tparam S The type of the user state.
  */
-class UserStateItemHandler[S <: SocialStateItem](userState: S)(
+class UserStateItemHandler[S <: SocialStateItem](item: S)(
   implicit
   format: Format[S],
-  classTag: ClassTag[S])
-  extends SocialStateItemHandler {
+  classTag: ClassTag[S]
+) extends SocialStateItemHandler {
 
   /**
    * The item the handler can handle.
@@ -50,7 +66,7 @@ class UserStateItemHandler[S <: SocialStateItem](userState: S)(
    * @param ec The execution context to handle the asynchronous operations.
    * @return The state params the handler can handle.
    */
-  override def item(implicit ec: ExecutionContext): Future[Item] = Future.successful(userState)
+  override def item(implicit ec: ExecutionContext): Future[Item] = Future.successful(item)
 
   /**
    * Indicates if a handler can handle the given `SocialStateItem`.
@@ -109,5 +125,9 @@ class UserStateItemHandler[S <: SocialStateItem](userState: S)(
  * The companion object.
  */
 object UserStateItemHandler {
+
+  /**
+   * The ID of the state handler.
+   */
   val ID = "user-state"
 }

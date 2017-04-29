@@ -17,12 +17,14 @@ package com.mohiva.play.silhouette.impl.providers.state
 
 import com.mohiva.play.silhouette.impl.providers.SocialStateItem
 import com.mohiva.play.silhouette.impl.providers.SocialStateItem.ItemStructure
+import com.mohiva.play.silhouette.impl.providers.state.UserStateItemHandler._
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.libs.json.{ Format, Json }
+import play.api.libs.json.Json
 import play.api.test.{ FakeRequest, PlaySpecification }
-import play.api.libs.concurrent.Execution.Implicits._
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  *  Test case for the [[UserStateItemHandler]] class.
@@ -30,82 +32,70 @@ import play.api.libs.concurrent.Execution.Implicits._
 class UserStateItemHandlerSpec extends PlaySpecification with Mockito with JsonMatchers {
 
   "The `item` method" should {
-    "return userState" in new Context {
-      await(userStateHandler.item) must be(userState)
+    "return the user state item" in new Context {
+      await(userStateItemHandler.item) must be equalTo userStateItem
     }
   }
 
   "The `canHandle` method" should {
-    "return `Some[SocialStateItem]` if it can handle the given `SocialStateItem`" in new Context {
-      userStateHandler.canHandle(userState) must beSome[SocialStateItem]
+    "return the same item if it can handle the given item" in new Context {
+      userStateItemHandler.canHandle(userStateItem) must beSome(userStateItem)
     }
 
-    "return `None` if it can't handle the given `SocialStateItem`" in new Context {
-      userStateHandler.canHandle(csrfState) must beNone
+    "should return `None` if it can't handle the given item" in new Context {
+      val nonUserState = mock[SocialStateItem].smart
+
+      userStateItemHandler.canHandle(nonUserState) must beNone
     }
   }
 
   "The `canHandle` method" should {
+    "return false if the give item is for another handler" in new Context {
+      val nonUserItemStructure = mock[ItemStructure].smart
+      nonUserItemStructure.id returns "non-user-item"
+
+      implicit val request = FakeRequest()
+      userStateItemHandler.canHandle(nonUserItemStructure) must beFalse
+    }
+
     "return true if it can handle the given `ItemStructure`" in new Context {
       implicit val request = FakeRequest()
-      userStateHandler.canHandle(itemStructure) must beTrue
-    }
-
-    "return false if it can't handle the given `ItemStructure`" in new Context {
-      implicit val request = FakeRequest()
-      userStateHandler.canHandle(itemStructure.copy(id = "non-user-state")) must beFalse
+      userStateItemHandler.canHandle(userItemStructure) must beTrue
     }
   }
 
   "The `serialize` method" should {
-    "serialize `UserState` to `ItemStructure`" in new Context {
-      userStateHandler.serialize(userState) must beAnInstanceOf[ItemStructure]
+    "return a serialized value of the state item" in new Context {
+      userStateItemHandler.serialize(userStateItem).asString must be equalTo userItemStructure.asString
     }
   }
 
   "The `unserialize` method" should {
-    "unserialize `ItemStructure` to `UserState`" in new Context {
+    "unserialize the state item" in new Context {
       implicit val request = FakeRequest()
-      await(userStateHandler.unserialize(itemStructure)) must beAnInstanceOf[UserState]
+
+      await(userStateItemHandler.unserialize(userItemStructure)) must be equalTo userStateItem
     }
   }
 
+  /**
+   * The context.
+   */
   trait Context extends Scope {
 
     /**
-     * An example usage of UserState where state is of type Map[String, String]
-     * @param state
+     * A user state item.
      */
-    case class UserState(state: Map[String, String]) extends SocialStateItem
+    val userStateItem = UserStateItem(Map("path" -> "/login"))
 
     /**
-     * Format to serialize the UserState
+     * The serialized type of the user state item.
      */
-    implicit val userStateFormat: Format[UserState] = Json.format[UserState]
+    val userItemStructure = ItemStructure(ID, Json.toJson(userStateItem))
 
     /**
-     * An instance of UserState
+     * An instance of the user state item handler.
      */
-    val userState = UserState(Map("path" -> "/login"))
-
-    /**
-     * Serialized type of UserState
-     */
-    val itemStructure = ItemStructure("user-state", Json.toJson(userState))
-
-    /**
-     * Csrf State value
-     */
-    val csrfToken = "csrfToken"
-
-    /**
-     * An instance of CsrfState
-     */
-    val csrfState = CsrfState(csrfToken)
-
-    /**
-     * An instance of User State Handler
-     */
-    val userStateHandler = new UserStateItemHandler(userState)
+    val userStateItemHandler = new UserStateItemHandler[UserStateItem](userStateItem)
   }
 }

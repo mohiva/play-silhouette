@@ -26,6 +26,7 @@ import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ Result, Results }
 import play.api.test.{ FakeRequest, WithApplication }
 import play.mvc.Http.HeaderNames
+import test.SocialProviderSpec
 
 import scala.concurrent.Future
 
