@@ -27,7 +27,7 @@ import com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorServic
 import org.joda.time.DateTime
 import play.api.http.HeaderNames
 import play.api.libs.json.Json
-import play.api.mvc.{ Cookies, RequestHeader, Result, Session }
+import play.api.mvc._
 
 import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
@@ -42,11 +42,11 @@ import scala.util.{ Failure, Success, Try }
  * out after a certain time if it wasn't used. This can be controlled with the [[idleTimeout]]
  * property.
  *
- * @param loginInfo The linked login info for an identity.
- * @param lastUsedDateTime The last used date/time.
+ * @param loginInfo          The linked login info for an identity.
+ * @param lastUsedDateTime   The last used date/time.
  * @param expirationDateTime The expiration date/time.
- * @param idleTimeout The duration an authenticator can be idle before it timed out.
- * @param fingerprint Maybe a fingerprint of the user.
+ * @param idleTimeout        The duration an authenticator can be idle before it timed out.
+ * @param fingerprint        Maybe a fingerprint of the user.
  */
 case class SessionAuthenticator(
   loginInfo: LoginInfo,
@@ -75,7 +75,7 @@ object SessionAuthenticator extends Logger {
   /**
    * Serializes the authenticator.
    *
-   * @param authenticator The authenticator to serialize.
+   * @param authenticator        The authenticator to serialize.
    * @param authenticatorEncoder The authenticator encoder.
    * @return The serialized authenticator.
    */
@@ -86,7 +86,7 @@ object SessionAuthenticator extends Logger {
   /**
    * Unserializes the authenticator.
    *
-   * @param str The string representation of the authenticator.
+   * @param str                  The string representation of the authenticator.
    * @param authenticatorEncoder The authenticator encoder.
    * @return Some authenticator on success, otherwise None.
    */
@@ -114,16 +114,20 @@ object SessionAuthenticator extends Logger {
 /**
  * The service that handles the session authenticator.
  *
- * @param settings The authenticator settings.
+ * @param settings             The authenticator settings.
  * @param fingerprintGenerator The fingerprint generator implementation.
  * @param authenticatorEncoder The authenticator encoder.
- * @param clock The clock implementation.
- * @param executionContext The execution context to handle the asynchronous operations.
+ * @param sessionCookieBaker   The session cookie baker.
+ * @param cookieHeaderEncoding The cookie header encoder.
+ * @param clock                The clock implementation.
+ * @param executionContext     The execution context to handle the asynchronous operations.
  */
 class SessionAuthenticatorService(
   settings: SessionAuthenticatorSettings,
   fingerprintGenerator: FingerprintGenerator,
   authenticatorEncoder: AuthenticatorEncoder,
+  sessionCookieBaker: SessionCookieBaker,
+  cookieHeaderEncoding: CookieHeaderEncoding,
   clock: Clock)(implicit val executionContext: ExecutionContext)
   extends AuthenticatorService[SessionAuthenticator]
   with Logger {
@@ -134,7 +138,7 @@ class SessionAuthenticatorService(
    * Creates a new authenticator for the specified login info.
    *
    * @param loginInfo The login info for which the authenticator should be created.
-   * @param request The request header.
+   * @param request   The request header.
    * @return An authenticator.
    */
   override def create(loginInfo: LoginInfo)(implicit request: RequestHeader): Future[SessionAuthenticator] = {
@@ -183,7 +187,7 @@ class SessionAuthenticatorService(
    * Returns a new user session containing the authenticator.
    *
    * @param authenticator The authenticator instance.
-   * @param request The request header.
+   * @param request       The request header.
    * @return The serialized authenticator value.
    */
   override def init(authenticator: SessionAuthenticator)(implicit request: RequestHeader): Future[Session] = {
@@ -194,7 +198,7 @@ class SessionAuthenticatorService(
    * Embeds the user session into the result.
    *
    * @param session The session to embed.
-   * @param result The result to manipulate.
+   * @param result  The result to manipulate.
    * @return The manipulated result.
    */
   override def embed(session: Session, result: Result)(implicit request: RequestHeader): Future[AuthenticatorResult] = {
@@ -209,10 +213,10 @@ class SessionAuthenticatorService(
    * @return The manipulated request header.
    */
   override def embed(session: Session, request: RequestHeader): RequestHeader = {
-    val sessionCookie = Session.encodeAsCookie(session)
-    val cookies = Cookies.mergeCookieHeader(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(sessionCookie))
+    val sessionCookie = sessionCookieBaker.encodeAsCookie(session)
+    val cookies = cookieHeaderEncoding.mergeCookieHeader(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(sessionCookie))
     val additional = Seq(HeaderNames.COOKIE -> cookies)
-    request.copy(headers = request.headers.replace(additional: _*))
+    request.withHeaders(request.headers.replace(additional: _*))
   }
 
   /**
@@ -236,8 +240,8 @@ class SessionAuthenticatorService(
    * the authenticator in the session on every subsequent request to keep the last used date in sync.
    *
    * @param authenticator The authenticator to update.
-   * @param result The result to manipulate.
-   * @param request The request header.
+   * @param result        The result to manipulate.
+   * @param request       The request header.
    * @return The original or a manipulated result.
    */
   override def update(authenticator: SessionAuthenticator, result: Result)(
@@ -259,7 +263,7 @@ class SessionAuthenticatorService(
    * into the result. This must be done manually if needed or use the other renew method otherwise.
    *
    * @param authenticator The authenticator to renew.
-   * @param request The request header.
+   * @param request       The request header.
    * @return The serialized expression of the authenticator.
    */
   override def renew(authenticator: SessionAuthenticator)(
@@ -278,8 +282,8 @@ class SessionAuthenticatorService(
    * one authenticator can be bound to a user session.
    *
    * @param authenticator The authenticator to update.
-   * @param result The result to manipulate.
-   * @param request The request header.
+   * @param result        The result to manipulate.
+   * @param request       The request header.
    * @return The original or a manipulated result.
    */
   override def renew(authenticator: SessionAuthenticator, result: Result)(
@@ -294,7 +298,7 @@ class SessionAuthenticatorService(
   /**
    * Removes the authenticator from session.
    *
-   * @param result The result to manipulate.
+   * @param result  The result to manipulate.
    * @param request The request header.
    * @return The manipulated result.
    */
@@ -331,10 +335,10 @@ object SessionAuthenticatorService {
 /**
  * The settings for the session authenticator.
  *
- * @param sessionKey The key of the authenticator in the session.
- * @param useFingerprinting Indicates if a fingerprint of the user should be stored in the authenticator.
+ * @param sessionKey               The key of the authenticator in the session.
+ * @param useFingerprinting        Indicates if a fingerprint of the user should be stored in the authenticator.
  * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out.
- * @param authenticatorExpiry The duration an authenticator expires after it was created.
+ * @param authenticatorExpiry      The duration an authenticator expires after it was created.
  */
 case class SessionAuthenticatorSettings(
   sessionKey: String = "authenticator",

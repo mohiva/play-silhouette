@@ -32,7 +32,7 @@ object BasicSettings extends AutoPlugin {
 
   override def projectSettings = Seq(
     organization := "com.mohiva",
-    version := "4.1.0-SNAPSHOT",
+    version := "5.0.0-SNAPSHOT",
     resolvers ++= Dependencies.resolvers,
     scalaVersion := Dependencies.Versions.scalaVersion,
     crossScalaVersions := Dependencies.Versions.crossScala,
@@ -151,18 +151,18 @@ object APIDoc {
     ghpages.settings ++
     Seq(
       // Create version
-      siteMappings <++= (mappings in (ScalaUnidoc, packageDoc), version).map { (mapping, ver) =>
+      siteMappings ++= (mappings in (ScalaUnidoc, packageDoc), version).map { (mapping, ver) =>
         for ((file, path) <- mapping) yield (file, s"$ver/$path")
-      },
+      }.value,
       // Add custom files from site directory
-      siteMappings <++= baseDirectory.map { dir =>
+      siteMappings ++= baseDirectory.map { dir =>
         for (file <- files) yield (new File(dir.getAbsolutePath + "/site/" + file), file.name)
-      },
+      }.value,
       // Do not delete old versions
-      synchLocal <<= (privateMappings, updatedRepository, gitRunner, streams).map { (mappings, repo, git, s) =>
-        val betterMappings = mappings.map { case (file, tgt) => (file, repo / tgt) }
+      synchLocal := {
+        val betterMappings = privateMappings.value.map { case (file, tgt) => (file, updatedRepository.value / tgt) }
         IO.copy(betterMappings)
-        repo
+        updatedRepository.value
       },
       git.remoteRepo := "git@github.com:mohiva/play-silhouette.git"
     )

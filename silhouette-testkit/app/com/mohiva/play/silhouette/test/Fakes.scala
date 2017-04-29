@@ -24,10 +24,10 @@ import com.mohiva.play.silhouette.api.services.{ AuthenticatorService, IdentityS
 import com.mohiva.play.silhouette.api.util.Clock
 import com.mohiva.play.silhouette.impl.authenticators._
 import com.mohiva.play.silhouette.impl.util.{ DefaultFingerprintGenerator, SecureRandomIDGenerator }
-import play.api.libs.concurrent.Execution.Implicits._
-import play.api.mvc.RequestHeader
+import play.api.mvc.{ DefaultCookieHeaderEncoding, DefaultSessionCookieBaker, RequestHeader }
 
 import scala.collection.mutable
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.reflect.runtime.universe._
 import scala.util.Success
@@ -118,21 +118,24 @@ class FakeAuthenticatorRepository[T <: StorableAuthenticator] extends Authentica
  * A fake session authenticator service.
  */
 case class FakeSessionAuthenticatorService() extends SessionAuthenticatorService(
-  new SessionAuthenticatorSettings(),
+  SessionAuthenticatorSettings(),
   new DefaultFingerprintGenerator(),
   new Base64AuthenticatorEncoder,
+  new DefaultSessionCookieBaker(),
+  new DefaultCookieHeaderEncoding(),
   Clock())
 
 /**
  * A fake cookie authenticator service.
  */
 case class FakeCookieAuthenticatorService() extends CookieAuthenticatorService(
-  new CookieAuthenticatorSettings(),
+  CookieAuthenticatorSettings(),
   None,
   new CookieSigner {
     def sign(data: String) = data
     def extract(message: String) = Success(message)
   },
+  new DefaultCookieHeaderEncoding(),
   new Base64AuthenticatorEncoder,
   new DefaultFingerprintGenerator(),
   new SecureRandomIDGenerator(),
@@ -142,7 +145,7 @@ case class FakeCookieAuthenticatorService() extends CookieAuthenticatorService(
  * A fake bearer token authenticator service.
  */
 case class FakeBearerTokenAuthenticatorService() extends BearerTokenAuthenticatorService(
-  new BearerTokenAuthenticatorSettings(),
+  BearerTokenAuthenticatorSettings(),
   new FakeAuthenticatorRepository[BearerTokenAuthenticator],
   new SecureRandomIDGenerator(),
   Clock())
@@ -151,7 +154,7 @@ case class FakeBearerTokenAuthenticatorService() extends BearerTokenAuthenticato
  * A fake JWT authenticator service.
  */
 case class FakeJWTAuthenticatorService() extends JWTAuthenticatorService(
-  new JWTAuthenticatorSettings(sharedSecret = UUID.randomUUID().toString),
+  JWTAuthenticatorSettings(sharedSecret = UUID.randomUUID().toString),
   None,
   new Base64AuthenticatorEncoder,
   new SecureRandomIDGenerator(),
@@ -226,10 +229,12 @@ object FakeAuthenticator {
 case class FakeEnvironment[E <: Env](
   identities: Seq[(LoginInfo, E#I)],
   requestProviders: Seq[RequestProvider] = Seq(),
-  eventBus: EventBus = EventBus())(
+  eventBus: EventBus = EventBus()
+)(
   implicit
-  val executionContext: ExecutionContext, tt: TypeTag[E#A])
-  extends Environment[E] {
+  val executionContext: ExecutionContext,
+  tt: TypeTag[E#A]
+) extends Environment[E] {
 
   /**
    * The identity service implementation.

@@ -56,13 +56,13 @@ import scala.util.{ Failure, Success, Try }
  *
  * Note: If deploying to multiple nodes the backing store will need to synchronize.
  *
- * @param id The authenticator ID.
- * @param loginInfo The linked login info for an identity.
- * @param lastUsedDateTime The last used date/time.
+ * @param id                 The authenticator ID.
+ * @param loginInfo          The linked login info for an identity.
+ * @param lastUsedDateTime   The last used date/time.
  * @param expirationDateTime The expiration date/time.
- * @param idleTimeout The duration an authenticator can be idle before it timed out.
- * @param cookieMaxAge The duration a cookie expires. `None` for a transient cookie.
- * @param fingerprint Maybe a fingerprint of the user.
+ * @param idleTimeout        The duration an authenticator can be idle before it timed out.
+ * @param cookieMaxAge       The duration a cookie expires. `None` for a transient cookie.
+ * @param fingerprint        Maybe a fingerprint of the user.
  */
 case class CookieAuthenticator(
   id: String,
@@ -93,8 +93,8 @@ object CookieAuthenticator extends Logger {
   /**
    * Serializes the authenticator.
    *
-   * @param authenticator The authenticator to serialize.
-   * @param cookieSigner The cookie signer.
+   * @param authenticator        The authenticator to serialize.
+   * @param cookieSigner         The cookie signer.
    * @param authenticatorEncoder The authenticator encoder.
    * @return The serialized authenticator.
    */
@@ -109,8 +109,8 @@ object CookieAuthenticator extends Logger {
   /**
    * Unserializes the authenticator.
    *
-   * @param str The string representation of the authenticator.
-   * @param cookieSigner The cookie signer.
+   * @param str                  The string representation of the authenticator.
+   * @param cookieSigner         The cookie signer.
    * @param authenticatorEncoder The authenticator encoder.
    * @return Some authenticator on success, otherwise None.
    */
@@ -145,25 +145,29 @@ object CookieAuthenticator extends Logger {
 /**
  * The service that handles the cookie authenticator.
  *
- * @param settings The cookie settings.
- * @param repository The repository to persist the authenticator. Set it to None to use a stateless approach.
- * @param cookieSigner The cookie signer.
+ * @param settings             The cookie settings.
+ * @param repository           The repository to persist the authenticator. Set it to None to use a stateless approach.
+ * @param cookieSigner         The cookie signer.
+ * @param cookieHeaderEncoding Logic for encoding and decoding `Cookie` and `Set-Cookie` headers.
  * @param authenticatorEncoder The authenticator encoder.
  * @param fingerprintGenerator The fingerprint generator implementation.
- * @param idGenerator The ID generator used to create the authenticator ID.
- * @param clock The clock implementation.
- * @param executionContext The execution context to handle the asynchronous operations.
+ * @param idGenerator          The ID generator used to create the authenticator ID.
+ * @param clock                The clock implementation.
+ * @param executionContext     The execution context to handle the asynchronous operations.
  */
 class CookieAuthenticatorService(
   settings: CookieAuthenticatorSettings,
   repository: Option[AuthenticatorRepository[CookieAuthenticator]],
   cookieSigner: CookieSigner,
+  cookieHeaderEncoding: CookieHeaderEncoding,
   authenticatorEncoder: AuthenticatorEncoder,
   fingerprintGenerator: FingerprintGenerator,
   idGenerator: IDGenerator,
-  clock: Clock)(implicit val executionContext: ExecutionContext)
-  extends AuthenticatorService[CookieAuthenticator]
-  with Logger {
+  clock: Clock
+)(
+  implicit
+  val executionContext: ExecutionContext
+) extends AuthenticatorService[CookieAuthenticator] with Logger {
 
   import CookieAuthenticator._
 
@@ -171,7 +175,7 @@ class CookieAuthenticatorService(
    * Creates a new authenticator for the specified login info.
    *
    * @param loginInfo The login info for which the authenticator should be created.
-   * @param request The request header.
+   * @param request   The request header.
    * @return An authenticator.
    */
   override def create(loginInfo: LoginInfo)(implicit request: RequestHeader): Future[CookieAuthenticator] = {
@@ -232,7 +236,7 @@ class CookieAuthenticatorService(
    * stored in the backing store.
    *
    * @param authenticator The authenticator instance.
-   * @param request The request header.
+   * @param request       The request header.
    * @return The serialized authenticator value.
    */
   override def init(authenticator: CookieAuthenticator)(implicit request: RequestHeader): Future[Cookie] = {
@@ -259,8 +263,8 @@ class CookieAuthenticatorService(
   /**
    * Embeds the cookie into the result.
    *
-   * @param cookie The cookie to embed.
-   * @param result The result to manipulate.
+   * @param cookie  The cookie to embed.
+   * @param result  The result to manipulate.
    * @param request The request header.
    * @return The manipulated result.
    */
@@ -271,18 +275,19 @@ class CookieAuthenticatorService(
   /**
    * Embeds the cookie into the request.
    *
-   * @param cookie The cookie to embed.
+   * @param cookie  The cookie to embed.
    * @param request The request header.
    * @return The manipulated request header.
    */
   override def embed(cookie: Cookie, request: RequestHeader): RequestHeader = {
-    val cookies = Cookies.mergeCookieHeader(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(cookie))
+    val cookies = cookieHeaderEncoding.mergeCookieHeader(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(cookie))
     val additional = Seq(HeaderNames.COOKIE -> cookies)
-    request.copy(headers = request.headers.replace(additional: _*))
+    request.withHeaders(request.headers.replace(additional: _*))
   }
 
   /**
    * @inheritdoc
+   *
    * @param authenticator The authenticator to touch.
    * @return The touched authenticator on the left or the untouched authenticator on the right.
    */
@@ -302,8 +307,8 @@ class CookieAuthenticatorService(
    * authenticator in the backing store will be changed.
    *
    * @param authenticator The authenticator to update.
-   * @param result The result to manipulate.
-   * @param request The request header.
+   * @param result        The result to manipulate.
+   * @param request       The request header.
    * @return The original or a manipulated result.
    */
   override def update(authenticator: CookieAuthenticator, result: Result)(
@@ -336,7 +341,7 @@ class CookieAuthenticatorService(
    * or use the other renew method otherwise.
    *
    * @param authenticator The authenticator to renew.
-   * @param request The request header.
+   * @param request       The request header.
    * @return The serialized expression of the authenticator.
    */
   override def renew(authenticator: CookieAuthenticator)(implicit request: RequestHeader): Future[Cookie] = {
@@ -357,8 +362,8 @@ class CookieAuthenticatorService(
    * store. After that it isn't possible to use a cookie which was bound to this authenticator.
    *
    * @param authenticator The authenticator to update.
-   * @param result The result to manipulate.
-   * @param request The request header.
+   * @param result        The result to manipulate.
+   * @param request       The request header.
    * @return The original or a manipulated result.
    */
   override def renew(authenticator: CookieAuthenticator, result: Result)(
@@ -375,7 +380,7 @@ class CookieAuthenticatorService(
    *
    * If the stateful approach will be used then the authenticator will also be removed from backing store.
    *
-   * @param result The result to manipulate.
+   * @param result  The result to manipulate.
    * @param request The request header.
    * @return The manipulated result.
    */
@@ -420,15 +425,15 @@ object CookieAuthenticatorService {
 /**
  * The settings for the cookie authenticator.
  *
- * @param cookieName The cookie name.
- * @param cookiePath The cookie path.
- * @param cookieDomain The cookie domain.
- * @param secureCookie Whether this cookie is secured, sent only for HTTPS requests.
- * @param httpOnlyCookie Whether this cookie is HTTP only, i.e. not accessible from client-side JavaScript code.
- * @param useFingerprinting Indicates if a fingerprint of the user should be stored in the authenticator.
- * @param cookieMaxAge The duration a cookie expires. `None` for a transient cookie.
+ * @param cookieName               The cookie name.
+ * @param cookiePath               The cookie path.
+ * @param cookieDomain             The cookie domain.
+ * @param secureCookie             Whether this cookie is secured, sent only for HTTPS requests.
+ * @param httpOnlyCookie           Whether this cookie is HTTP only, i.e. not accessible from client-side JavaScript code.
+ * @param useFingerprinting        Indicates if a fingerprint of the user should be stored in the authenticator.
+ * @param cookieMaxAge             The duration a cookie expires. `None` for a transient cookie.
  * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out.
- * @param authenticatorExpiry The duration an authenticator expires after it was created.
+ * @param authenticatorExpiry      The duration an authenticator expires after it was created.
  */
 case class CookieAuthenticatorSettings(
   cookieName: String = "id",

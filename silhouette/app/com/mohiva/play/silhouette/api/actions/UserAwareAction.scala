@@ -24,15 +24,15 @@ import javax.inject.Inject
 import com.mohiva.play.silhouette.api._
 import play.api.{ Configuration, Environment => PlayEnv }
 import play.api.inject.Module
-import play.api.mvc.{ ActionBuilder, Request, Result, WrappedRequest }
+import play.api.mvc._
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.language.reflectiveCalls
 
 /**
  * A request that adds maybe the identity and maybe the authenticator for the current call.
  *
- * @param identity Some identity implementation if authentication was successful, None otherwise.
+ * @param identity      Some identity implementation if authentication was successful, None otherwise.
  * @param authenticator Some authenticator implementation if authentication was successful, None otherwise.
  * @param request The current request.
  * @tparam E The type of the environment.
@@ -53,7 +53,7 @@ case class UserAwareRequestHandlerBuilder[E <: Env](environment: Environment[E])
   /**
    * Invokes the block.
    *
-   * @param block The block of code to invoke.
+   * @param block   The block of code to invoke.
    * @param request The current request.
    * @tparam B The type of the request body.
    * @tparam T The type of the data included in the handler result.
@@ -113,16 +113,20 @@ class DefaultUserAwareRequestHandler extends UserAwareRequestHandler {
  * Action builder implementation to provide the foundation for user-aware actions.
  *
  * @param requestHandler The request handler instance.
+ * @param parser         The body parser.
  * @tparam E The type of the environment.
+ * @tparam P The type of the request body.
  */
-case class UserAwareActionBuilder[E <: Env](requestHandler: UserAwareRequestHandlerBuilder[E])
-  extends ActionBuilder[({ type R[B] = UserAwareRequest[E, B] })#R] {
+case class UserAwareActionBuilder[E <: Env, P](
+  requestHandler: UserAwareRequestHandlerBuilder[E],
+  parser: BodyParser[P]
+) extends ActionBuilder[({ type R[B] = UserAwareRequest[E, B] })#R, P] {
 
   /**
    * Invokes the block.
    *
    * @param request The current request.
-   * @param block The block of code to invoke.
+   * @param block   The block of code to invoke.
    * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
@@ -132,6 +136,13 @@ case class UserAwareActionBuilder[E <: Env](requestHandler: UserAwareRequestHand
       block(r).map(r => HandlerResult(r))
     }.map(_.result)
   }
+
+  /**
+   * Get the execution context to run the request in.
+   *
+   * @return The execution context.
+   */
+  override protected def executionContext: ExecutionContext = requestHandler.executionContext
 }
 
 /**
@@ -148,10 +159,12 @@ trait UserAwareAction {
    * Applies the environment to the action stack.
    *
    * @param environment The environment instance to handle the request.
+   * @param parser      The body parser.
    * @tparam E The type of the environment.
+   * @tparam B The type of the request body.
    * @return A user-aware action builder.
    */
-  def apply[E <: Env](environment: Environment[E]): UserAwareActionBuilder[E]
+  def apply[E <: Env, B](environment: Environment[E], parser: BodyParser[B]): UserAwareActionBuilder[E, B]
 }
 
 /**
@@ -166,11 +179,13 @@ class DefaultUserAwareAction @Inject() (val requestHandler: UserAwareRequestHand
    * Applies the environment to the action stack.
    *
    * @param environment The environment instance to handle the request.
+   * @param parser      The body parser.
    * @tparam E The type of the environment.
+   * @tparam B The type of the request body.
    * @return A user-aware action builder.
    */
-  override def apply[E <: Env](environment: Environment[E]) =
-    UserAwareActionBuilder[E](requestHandler[E](environment))
+  override def apply[E <: Env, B](environment: Environment[E], parser: BodyParser[B]) =
+    UserAwareActionBuilder[E, B](requestHandler[E](environment), parser)
 }
 
 /**

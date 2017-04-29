@@ -86,7 +86,7 @@ class RequestExtractorSpec extends PlaySpecification {
     "extract a value from tags if part is allowed" in new Context {
       implicit val request = FakeRequest.apply(Map("code" -> "value"))
 
-      extract("code", Some(Seq(RequestPart.Tags))) must beSome("value")
+      extract("code", Some(Seq(RequestPart.Attributes))) must beSome("value")
     }
 
     "do not extract a value from tags if part isn't allowed" in new Context {

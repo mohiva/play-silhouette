@@ -18,7 +18,7 @@ package com.mohiva.play.silhouette.impl.util
 import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api.util.CacheLayer
-import play.api.cache.CacheApi
+import play.api.cache.AsyncCacheApi
 
 import scala.concurrent.Future
 import scala.concurrent.duration.Duration
@@ -29,7 +29,7 @@ import scala.reflect.ClassTag
  *
  * @param cacheApi Plays cache API implementation.
  */
-class PlayCacheLayer @Inject() (cacheApi: CacheApi) extends CacheLayer {
+class PlayCacheLayer @Inject() (cacheApi: AsyncCacheApi) extends CacheLayer {
 
   /**
    * Save a value in cache.
@@ -51,7 +51,7 @@ class PlayCacheLayer @Inject() (cacheApi: CacheApi) extends CacheLayer {
    * @tparam T The type of the object to return.
    * @return The found value or None if no value could be found.
    */
-  override def find[T: ClassTag](key: String): Future[Option[T]] = Future.successful(cacheApi.get[T](key))
+  override def find[T: ClassTag](key: String): Future[Option[T]] = cacheApi.get[T](key)
 
   /**
    * Remove a value from the cache.

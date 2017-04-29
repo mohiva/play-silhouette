@@ -18,6 +18,7 @@ package com.mohiva.play.silhouette.api.util
 import com.mohiva.play.silhouette.api.Logger
 import com.mohiva.play.silhouette.api.util.RequestExtractor._
 import play.api.libs.json.JsValue
+import play.api.libs.typedmap.TypedKey
 import play.api.mvc._
 
 import scala.language.implicitConversions
@@ -74,17 +75,18 @@ trait RequestExtractor[-B] extends Logger {
   }
 
   /**
-   * Extracts a value from tags.
+   * Extracts a value from attributes.
    *
    * @param name The name of the value to extract.
    * @param parts The request parts from which a value can be extracted.
    * @param request The request from which the value should be extract.
    * @return The extracted value as string.
    */
-  protected def fromTags(name: String, parts: Option[Parts])(implicit request: Request[B]): Option[String] = {
-    isAllowed(RequestPart.Tags, parts) {
-      logger.debug("[Silhouette] Try to extract value with name `%s` from tags: %s".format(name, request.tags))
-      request.tags.get(name)
+  protected def fromAttributes(name: String, parts: Option[Parts])(implicit request: Request[B]): Option[String] = {
+    isAllowed(RequestPart.Attributes, parts) {
+      val key: TypedKey[String] = TypedKey(name)
+      logger.debug("[Silhouette] Try to extract value with name `%s` from attributes: %s".format(name, request.attrs))
+      request.attrs.get(key)
     }
   }
 
@@ -144,7 +146,7 @@ trait RequestExtractor[-B] extends Logger {
   protected def fromDefaultParts(name: String, parts: Option[Parts])(implicit request: Request[B]): Option[String] = {
     fromQueryString(name, parts)
       .orElse(fromHeaders(name, parts))
-      .orElse(fromTags(name, parts))
+      .orElse(fromAttributes(name, parts))
   }
 
   /**
@@ -184,9 +186,9 @@ object RequestPart extends Enumeration {
   val Headers = Value("headers")
 
   /**
-   * Allows to extract a request value from the tags.
+   * Allows to extract a request value from the attributes.
    */
-  val Tags = Value("tags")
+  val Attributes = Value("attributes")
 
   /**
    * Allows to extract a request value from a Json body.
