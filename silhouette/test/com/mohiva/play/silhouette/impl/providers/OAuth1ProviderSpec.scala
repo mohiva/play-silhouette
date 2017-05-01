@@ -22,12 +22,12 @@ import com.mohiva.play.silhouette.impl.providers.oauth1.services.PlayOAuth1Servi
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{ Result, Results }
 import play.api.test.{ FakeRequest, WithApplication }
 import play.mvc.Http.HeaderNames
 import test.SocialProviderSpec
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 /**
@@ -72,14 +72,13 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
       c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.successful(c.oAuthInfo)
       c.oAuthService.redirectUrl(any) returns c.oAuthSettings.authorizationURL
       c.oAuthTokenSecretProvider.build(any)(any, any) returns Future.successful(c.oAuthTokenSecret)
-      c.oAuthTokenSecretProvider.publish(any, any)(any) answers { (a, m) =>
+      c.oAuthTokenSecretProvider.publish(any, any)(any) answers { (a, _) =>
         a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
       }
 
-      result(c.provider.authenticate()) {
-        case result =>
-          status(result) must equalTo(SEE_OTHER)
-          redirectLocation(result) must beSome.which(_ == c.oAuthSettings.authorizationURL)
+      result(c.provider.authenticate()) { result =>
+        status(result) must equalTo(SEE_OTHER)
+        redirectLocation(result) must beSome.which(_ == c.oAuthSettings.authorizationURL)
       }
     }
 
@@ -130,9 +129,7 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
       c.oAuthTokenSecretProvider.retrieve(any, any) returns Future.successful(c.oAuthTokenSecret)
       c.oAuthService.retrieveAccessToken(c.oAuthInfo.copy(secret = tokenSecret), "my.verifier") returns Future.successful(c.oAuthInfo)
 
-      authInfo(c.provider.authenticate()) {
-        case authInfo => authInfo must be equalTo c.oAuthInfo
-      }
+      authInfo(c.provider.authenticate())(_ must be equalTo c.oAuthInfo)
     }
   }
 
@@ -166,7 +163,7 @@ trait OAuth1ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
    */
   lazy val httpLayer = {
     val m = mock[HTTPLayer]
-    m.executionContext returns defaultContext
+    m.executionContext returns global
     m
   }
 

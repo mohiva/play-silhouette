@@ -15,9 +15,10 @@
  */
 package com.mohiva.play.silhouette.api.util
 
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.ws.{ WSClient, WSRequest }
 import play.api.test._
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.api.util.PlayHTTPLayer]] class.

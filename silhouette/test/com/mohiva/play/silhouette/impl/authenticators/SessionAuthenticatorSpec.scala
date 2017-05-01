@@ -29,11 +29,11 @@ import org.joda.time.DateTime
 import org.specs2.control.NoLanguageFeatures
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.Json
-import play.api.mvc.{ Result, Results, Session }
+import play.api.mvc._
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.language.postfixOps
@@ -410,7 +410,7 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito with NoLan
     "throws an AuthenticatorRenewalException exception if an error occurred during renewal" in new Context {
       implicit val request = spy(FakeRequest())
       val now = DateTime.now
-      val okResult = (a: Authenticator) => Future.successful(Results.Ok)
+      val okResult = (_: Authenticator) => Future.successful(Results.Ok)
 
       request.session throws new RuntimeException("Cannot get session")
       settings.useFingerprinting returns false
@@ -481,8 +481,6 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito with NoLan
      * The settings.
      */
     lazy val settings = spy(SessionAuthenticatorSettings(
-      sessionKey = "authenticator",
-      useFingerprinting = true,
       authenticatorIdleTimeout = Some(30 minutes),
       authenticatorExpiry = 12 hours
     ))
@@ -490,7 +488,14 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito with NoLan
     /**
      * The cache service instance to test.
      */
-    lazy val service = new SessionAuthenticatorService(settings, fingerprintGenerator, authenticatorEncoder, clock)
+    lazy val service = new SessionAuthenticatorService(
+      settings,
+      fingerprintGenerator,
+      authenticatorEncoder,
+      new DefaultSessionCookieBaker(),
+      new DefaultCookieHeaderEncoding(),
+      clock
+    )
 
     /**
      * The login info.

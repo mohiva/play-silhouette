@@ -21,11 +21,11 @@ import com.mohiva.play.silhouette.impl.providers.OpenIDProvider._
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.test.{ FakeRequest, WithApplication }
 import play.mvc.Http.HeaderNames
 import test.SocialProviderSpec
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 /**
@@ -52,10 +52,9 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
       implicit val req = FakeRequest()
       c.openIDService.redirectURL(any, any)(any) returns Future.successful(c.openIDSettings.providerURL)
 
-      result(c.provider.authenticate()) {
-        case result =>
-          status(result) must equalTo(SEE_OTHER)
-          redirectLocation(result) must beSome.which(_ == c.openIDSettings.providerURL)
+      result(c.provider.authenticate()) { result =>
+        status(result) must equalTo(SEE_OTHER)
+        redirectLocation(result) must beSome.which(_ == c.openIDSettings.providerURL)
       }
     }
 
@@ -63,10 +62,9 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
       implicit val req = FakeRequest(GET, "?openID=my.open.id")
       c.openIDService.redirectURL(any, any)(any) returns Future.successful(c.openIDSettings.providerURL)
 
-      result(c.provider.authenticate()) {
-        case result =>
-          status(result) must equalTo(SEE_OTHER)
-          redirectLocation(result) must beSome.which(_ == c.openIDSettings.providerURL)
+      result(c.provider.authenticate()) { result =>
+        status(result) must equalTo(SEE_OTHER)
+        redirectLocation(result) must beSome.which(_ == c.openIDSettings.providerURL)
       }
     }
 
@@ -106,9 +104,7 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
       implicit val req = FakeRequest(GET, "?" + Mode + "=id_res")
       c.openIDService.verifiedID(any, any) returns Future.successful(c.openIDInfo)
 
-      authInfo(c.provider.authenticate()) {
-        case authInfo => authInfo must be equalTo c.openIDInfo
-      }
+      authInfo(c.provider.authenticate())(_ must be equalTo c.openIDInfo)
     }
   }
 
@@ -137,7 +133,7 @@ trait OpenIDProviderSpecContext extends Scope with Mockito with ThrownExpectatio
    */
   lazy val httpLayer = {
     val m = mock[HTTPLayer]
-    m.executionContext returns defaultContext
+    m.executionContext returns global
     m
   }
 

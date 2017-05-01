@@ -18,7 +18,7 @@ package com.mohiva.play.silhouette.api
 import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api.actions._
-import play.api.mvc.{ AnyContent, BodyParser, BodyParsers }
+import play.api.mvc.AnyContent
 
 /**
  * The Silhouette stack.
@@ -50,25 +50,11 @@ trait Silhouette[E <: Env] {
   val userAwareAction: UserAwareAction
 
   /**
-   * The default Play body parser.
-   */
-  val defaultBodyParser: BodyParsers.Default
-
-  /**
-   * Provides the secured action implementation with the given body parser.
-   *
-   * @param parser The body parser.
-   * @tparam B The type of the request body.
-   * @return The secured action implementation.
-   */
-  def SecuredAction[B](parser: BodyParser[B]): SecuredActionBuilder[E, B] = securedAction(env, parser)
-
-  /**
-   * Provides the secured action implementation with the default body parser.
+   * Provides the secured action implementation.
    *
    * @return The secured action implementation.
    */
-  def SecuredAction: SecuredActionBuilder[E, AnyContent] = securedAction(env, defaultBodyParser)
+  def SecuredAction: SecuredActionBuilder[E, AnyContent] = securedAction(env)
 
   /**
    * Provides the secured request handler implementation.
@@ -78,20 +64,11 @@ trait Silhouette[E <: Env] {
   def SecuredRequestHandler: SecuredRequestHandlerBuilder[E] = securedAction.requestHandler(env)
 
   /**
-   * Provides the unsecured action implementation with the given body parser.
-   *
-   * @param parser The body parser.
-   * @tparam B The type of the request body.
-   * @return The unsecured action implementation.
-   */
-  def UnsecuredAction[B](parser: BodyParser[B]): UnsecuredActionBuilder[E, B] = unsecuredAction(env, parser)
-
-  /**
-   * Provides the unsecured action implementation with the default body parser.
+   * Provides the unsecured action implementation.
    *
    * @return The unsecured action implementation.
    */
-  def UnsecuredAction: UnsecuredActionBuilder[E, AnyContent] = unsecuredAction(env, defaultBodyParser)
+  def UnsecuredAction: UnsecuredActionBuilder[E, AnyContent] = unsecuredAction(env)
 
   /**
    * Provides the unsecured request handler implementation.
@@ -101,20 +78,11 @@ trait Silhouette[E <: Env] {
   def UnsecuredRequestHandler: UnsecuredRequestHandlerBuilder[E] = unsecuredAction.requestHandler(env)
 
   /**
-   * Provides the user-aware action implementation with the given body parser.
-   *
-   * @param parser The body parser.
-   * @tparam B The type of the request body.
-   * @return The user-aware action implementation.
-   */
-  def UserAwareAction[B](parser: BodyParser[B]): UserAwareActionBuilder[E, B] = userAwareAction(env, parser)
-
-  /**
-   * Provides the user-aware action implementation with the default body parser.
+   * Provides the user-aware action implementation.
    *
    * @return The user-aware action implementation.
    */
-  def UserAwareAction: UserAwareActionBuilder[E, AnyContent] = userAwareAction(env, defaultBodyParser)
+  def UserAwareAction: UserAwareActionBuilder[E, AnyContent] = userAwareAction(env)
 
   /**
    * Provides the user-aware request handler implementation.
@@ -130,13 +98,11 @@ trait Silhouette[E <: Env] {
  * @param env               The Silhouette environment.
  * @param securedAction     The secured action stack.
  * @param userAwareAction   The user aware action stack.
- * @param defaultBodyParser The default Play body parser.
  * @tparam E The type of the environment.
  */
 class SilhouetteProvider[E <: Env] @Inject() (
   val env: Environment[E],
   val securedAction: SecuredAction,
   val unsecuredAction: UnsecuredAction,
-  val userAwareAction: UserAwareAction,
-  val defaultBodyParser: BodyParsers.Default)
-  extends Silhouette[E]
+  val userAwareAction: UserAwareAction
+) extends Silhouette[E]

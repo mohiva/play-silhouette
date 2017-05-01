@@ -28,15 +28,15 @@ import org.specs2.control.NoLanguageFeatures
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.i18n.{ Lang, Messages, MessagesApi }
+import play.api.i18n.MessagesProvider
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.Json
 import play.api.mvc.Results._
 import play.api.mvc._
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.language.postfixOps
@@ -558,12 +558,12 @@ class SecuredActionSpec extends PlaySpecification with Mockito with JsonMatchers
       /**
        * An identity.
        */
-      lazy val identity = new FakeIdentity(LoginInfo("test", "1"))
+      lazy val identity = FakeIdentity(LoginInfo("test", "1"))
 
       /**
        * An authenticator.
        */
-      lazy val authenticator = new FakeAuthenticator(LoginInfo("test", "1"))
+      lazy val authenticator = FakeAuthenticator(LoginInfo("test", "1"))
 
       /**
        * A fake request.
@@ -571,19 +571,14 @@ class SecuredActionSpec extends PlaySpecification with Mockito with JsonMatchers
       lazy implicit val request = FakeRequest()
 
       /**
-       * The messages API.
+       * The messages provider.
        */
-      lazy implicit val messagesApi = app.injector.instanceOf[MessagesApi]
+      lazy implicit val messagesProvider = app.injector.instanceOf[MessagesProvider]
 
       /**
        * The secured controller.
        */
       lazy implicit val controller = app.injector.instanceOf[SecuredController]
-
-      /**
-       * The messages for the current language.
-       */
-      lazy implicit val messages = Messages(Lang.defaultLang, messagesApi)
 
       /**
        * The Play actor system.
@@ -741,11 +736,13 @@ object SecuredActionSpec {
    *
    * @param silhouette The Silhouette stack.
    * @param authorization An authorization implementation.
+   * @param components The Play controller components.
    */
   class SecuredController @Inject() (
     silhouette: Silhouette[SecuredEnv],
-    authorization: Authorization[FakeIdentity, FakeAuthenticator])
-    extends Controller {
+    authorization: Authorization[FakeIdentity, FakeAuthenticator],
+    components: ControllerComponents
+  ) extends AbstractController(components) {
 
     /**
      * A local error handler.

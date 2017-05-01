@@ -26,10 +26,10 @@ import org.joda.time.DateTime
 import org.specs2.control.NoLanguageFeatures
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.Results
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.language.postfixOps

@@ -238,36 +238,40 @@ trait SecuredAction {
   val requestHandler: SecuredRequestHandler
 
   /**
+   * The default body parser.
+   */
+  val bodyParser: BodyParsers.Default
+
+  /**
    * Applies the environment to the action stack.
    *
    * @param environment The environment instance to handle the request.
-   * @param parser      The body parser.
    * @tparam E The type of the environment.
-   * @tparam B The type of the request body.
    * @return A secured action builder.
    */
-  def apply[E <: Env, B](environment: Environment[E], parser: BodyParser[B]): SecuredActionBuilder[E, B]
+  def apply[E <: Env](environment: Environment[E]): SecuredActionBuilder[E, AnyContent]
 }
 
 /**
  * Default implementation of the [[SecuredAction]].
  *
  * @param requestHandler The instance of the secured request handler.
+ * @param bodyParser     The default body parser.
  */
-class DefaultSecuredAction @Inject() (val requestHandler: SecuredRequestHandler)
-  extends SecuredAction {
+class DefaultSecuredAction @Inject() (
+  val requestHandler: SecuredRequestHandler,
+  val bodyParser: BodyParsers.Default
+) extends SecuredAction {
 
   /**
    * Applies the environment to the action stack.
    *
    * @param environment The environment instance to handle the request.
-   * @param parser      The body parser.
    * @tparam E The type of the environment.
-   * @tparam B The type of the request body.
    * @return A secured action builder.
    */
-  override def apply[E <: Env, B](environment: Environment[E], parser: BodyParser[B]) =
-    SecuredActionBuilder[E, B](requestHandler[E](environment), parser)
+  override def apply[E <: Env](environment: Environment[E]) =
+    SecuredActionBuilder[E, AnyContent](requestHandler[E](environment), bodyParser)
 }
 
 /**
@@ -341,9 +345,10 @@ class SecuredErrorHandlerModule extends Module {
 trait SecuredActionComponents {
 
   def securedErrorHandler: SecuredErrorHandler
+  def securedBodyParser: BodyParsers.Default
 
   lazy val securedRequestHandler: SecuredRequestHandler = new DefaultSecuredRequestHandler(securedErrorHandler)
-  lazy val securedAction: SecuredAction = new DefaultSecuredAction(securedRequestHandler)
+  lazy val securedAction: SecuredAction = new DefaultSecuredAction(securedRequestHandler, securedBodyParser)
 }
 
 /**

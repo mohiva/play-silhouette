@@ -88,9 +88,9 @@ class ClefProviderSpec extends OAuth2ProviderSpec {
       stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(state)
       stateProvider.state(any[ExecutionContext]) returns Future.successful(state)
       stateProvider.withHandler(any[SocialStateItemHandler]) returns stateProvider
-      state.items returns Set(userState)
+      state.items returns Set(userStateItem)
 
-      statefulAuthInfo(provider.authenticate(userState))(_ must be equalTo stateAuthInfo)
+      statefulAuthInfo(provider.authenticate(userStateItem))(_ must be equalTo stateAuthInfo)
     }
   }
 

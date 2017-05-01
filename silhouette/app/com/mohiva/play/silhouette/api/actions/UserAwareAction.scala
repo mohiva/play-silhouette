@@ -65,9 +65,9 @@ case class UserAwareRequestHandlerBuilder[E <: Env](environment: Environment[E])
       case (Some(authenticator), identity) if authenticator.extract.isValid =>
         handleBlock(authenticator, a => block(UserAwareRequest(identity, Some(a), request)))
       // An invalid authenticator was found. The authenticator will be discarded
-      case (Some(authenticator), identity) if !authenticator.extract.isValid =>
+      case (Some(authenticator), _) if !authenticator.extract.isValid =>
         block(UserAwareRequest(None, None, request)).flatMap {
-          case hr @ HandlerResult(pr, d) =>
+          case hr @ HandlerResult(pr, _) =>
             environment.authenticatorService.discard(authenticator.extract, pr).map(r => hr.copy(r))
         }
       // No authenticator and no user was found
@@ -156,36 +156,40 @@ trait UserAwareAction {
   val requestHandler: UserAwareRequestHandler
 
   /**
+   * The default body parser.
+   */
+  val bodyParser: BodyParsers.Default
+
+  /**
    * Applies the environment to the action stack.
    *
    * @param environment The environment instance to handle the request.
-   * @param parser      The body parser.
    * @tparam E The type of the environment.
-   * @tparam B The type of the request body.
    * @return A user-aware action builder.
    */
-  def apply[E <: Env, B](environment: Environment[E], parser: BodyParser[B]): UserAwareActionBuilder[E, B]
+  def apply[E <: Env](environment: Environment[E]): UserAwareActionBuilder[E, AnyContent]
 }
 
 /**
  * Default implementation of the [[UserAwareAction]].
  *
  * @param requestHandler The instance of the user-aware request handler.
+ * @param bodyParser     The default body parser.
  */
-class DefaultUserAwareAction @Inject() (val requestHandler: UserAwareRequestHandler)
-  extends UserAwareAction {
+class DefaultUserAwareAction @Inject() (
+  val requestHandler: UserAwareRequestHandler,
+  val bodyParser: BodyParsers.Default
+) extends UserAwareAction {
 
   /**
    * Applies the environment to the action stack.
    *
    * @param environment The environment instance to handle the request.
-   * @param parser      The body parser.
    * @tparam E The type of the environment.
-   * @tparam B The type of the request body.
    * @return A user-aware action builder.
    */
-  override def apply[E <: Env, B](environment: Environment[E], parser: BodyParser[B]) =
-    UserAwareActionBuilder[E, B](requestHandler[E](environment), parser)
+  override def apply[E <: Env](environment: Environment[E]) =
+    UserAwareActionBuilder[E, AnyContent](requestHandler[E](environment), bodyParser)
 }
 
 /**
@@ -205,6 +209,8 @@ class UserAwareActionModule extends Module {
  */
 trait UserAwareActionComponents {
 
+  def userAwareBodyParser: BodyParsers.Default
+
   lazy val userAwareRequestHandler: UserAwareRequestHandler = new DefaultUserAwareRequestHandler()
-  lazy val userAwareAction: UserAwareAction = new DefaultUserAwareAction(userAwareRequestHandler)
+  lazy val userAwareAction: UserAwareAction = new DefaultUserAwareAction(userAwareRequestHandler, userAwareBodyParser)
 }

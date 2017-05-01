@@ -31,10 +31,10 @@ import org.specs2.control.NoLanguageFeatures
 import org.specs2.matcher.MatchResult
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.libs.concurrent.Execution.Implicits._
-import play.api.mvc.{ Cookie, Results }
+import play.api.mvc.{ Cookie, DefaultCookieHeaderEncoding, Results }
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.language.postfixOps
@@ -577,12 +577,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
      * The settings.
      */
     lazy val settings = spy(CookieAuthenticatorSettings(
-      cookieName = "id",
-      cookiePath = "/",
       cookieDomain = None,
-      secureCookie = true,
-      httpOnlyCookie = true,
-      useFingerprinting = true,
       cookieMaxAge = Some(12 hours),
       authenticatorIdleTimeout = Some(30 minutes),
       authenticatorExpiry = 12 hours
@@ -596,6 +591,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
         settings,
         repository,
         cookieSigner,
+        new DefaultCookieHeaderEncoding(),
         authenticatorEncoder,
         fingerprintGenerator,
         idGenerator,

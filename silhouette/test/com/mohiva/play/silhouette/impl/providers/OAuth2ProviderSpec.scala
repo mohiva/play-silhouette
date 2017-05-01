@@ -21,17 +21,18 @@ import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
+import com.mohiva.play.silhouette.impl.providers.state.UserStateItem
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.libs.concurrent.Execution._
-import play.api.libs.json.{ Format, JsValue, Json }
+import play.api.libs.json.{ JsValue, Json }
 import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.mvc.Result
 import play.api.test.{ FakeRequest, WithApplication }
 import play.mvc.Http.HeaderNames
 import test.SocialStateProviderSpec
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ ExecutionContext, Future }
 
 /**
@@ -61,7 +62,7 @@ abstract class OAuth2ProviderSpec extends SocialStateProviderSpec[OAuth2Info, So
     "fail with an ConfigurationException if authorization URL is undefined when it's needed" in new WithApplication {
       c.oAuthSettings.authorizationURL match {
         case None => skipped("authorizationURL is not defined, so this step isn't needed for provider: " + c.provider.getClass)
-        case Some(authorizationURL) =>
+        case Some(_) =>
           implicit val req = FakeRequest(GET, "/")
 
           c.stateProvider.serialize(c.state) returns "session-value"
@@ -86,7 +87,7 @@ abstract class OAuth2ProviderSpec extends SocialStateProviderSpec[OAuth2Info, So
           c.stateProvider.serialize(c.state) returns sessionValue
           c.stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(c.state)
           c.stateProvider.state(any[ExecutionContext]) returns Future.successful(c.state)
-          c.stateProvider.publish(any, any)(any) answers { (a, m) =>
+          c.stateProvider.publish(any, any)(any) answers { (a, _) =>
             val result = a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
             val state = a.asInstanceOf[Array[Any]](1).asInstanceOf[c.TestState]
 
@@ -147,7 +148,7 @@ abstract class OAuth2ProviderSpec extends SocialStateProviderSpec[OAuth2Info, So
     def verifyRelativeRedirectResolution(redirectURL: String, secure: Boolean, resolvedRedirectURL: String) = {
       c.oAuthSettings.authorizationURL match {
         case None => skipped("authorizationURL is not defined, so this step isn't needed for provider: " + c.provider.getClass)
-        case Some(authorizationURL) =>
+        case Some(_) =>
           implicit val req = spy(FakeRequest(GET, "/request-path/something").withHeaders(HeaderNames.HOST -> "www.example.com"))
           val sessionKey = "session-key"
           val sessionValue = "session-value"
@@ -158,7 +159,7 @@ abstract class OAuth2ProviderSpec extends SocialStateProviderSpec[OAuth2Info, So
           c.stateProvider.serialize(c.state) returns sessionValue
           c.stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(c.state)
           c.stateProvider.state(any[ExecutionContext]) returns Future.successful(c.state)
-          c.stateProvider.publish(any, any)(any) answers { (a, m) =>
+          c.stateProvider.publish(any, any)(any) answers { (a, _) =>
             val result = a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
 
             result.withSession(sessionKey -> c.stateProvider.serialize(c.state))
@@ -175,7 +176,7 @@ abstract class OAuth2ProviderSpec extends SocialStateProviderSpec[OAuth2Info, So
     def verifyPresenceOrAbsenceOfRedirectURL(redirectURL: Option[String], secure: Boolean, resolvedRedirectURL: String) = {
       c.oAuthSettings.authorizationURL match {
         case None => skipped("authorizationURL is not defined, so this step isn't needed for provider: " + c.provider.getClass)
-        case Some(authorizationURL) =>
+        case Some(_) =>
           implicit val req = spy(FakeRequest(GET, "/request-path/something").withHeaders(HeaderNames.HOST -> "www.example.com"))
           val sessionKey = "session-key"
           val sessionValue = "session-value"
@@ -186,14 +187,14 @@ abstract class OAuth2ProviderSpec extends SocialStateProviderSpec[OAuth2Info, So
           c.stateProvider.serialize(c.state) returns sessionValue
           c.stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(c.state)
           c.stateProvider.state(any[ExecutionContext]) returns Future.successful(c.state)
-          c.stateProvider.publish(any, any)(any) answers { (a, m) =>
+          c.stateProvider.publish(any, any)(any) answers { (a, _) =>
             val result = a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
 
             result.withSession(sessionKey -> c.stateProvider.serialize(c.state))
           }
 
           redirectURL match {
-            case Some(rUri) =>
+            case Some(_) =>
               result(c.provider.authenticate()) { result =>
                 redirectLocation(result) must beSome.which { url =>
                   url must contain(s"$RedirectURI=${encode(resolvedRedirectURL, "UTF-8")}")
@@ -202,7 +203,7 @@ abstract class OAuth2ProviderSpec extends SocialStateProviderSpec[OAuth2Info, So
             case None =>
               result(c.provider.authenticate()) { result =>
                 redirectLocation(result) must beSome.which { url =>
-                  url must not contain (s"$RedirectURI=")
+                  url must not contain s"$RedirectURI="
                 }
               }
           }
@@ -218,7 +219,7 @@ abstract class OAuth2ProviderSpec extends SocialStateProviderSpec[OAuth2Info, So
           c.stateProvider.serialize(c.state) returns ""
           c.stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(c.state)
           c.stateProvider.state(any[ExecutionContext]) returns Future.successful(c.state)
-          c.stateProvider.publish(any, any)(any) answers { (a, m) =>
+          c.stateProvider.publish(any, any)(any) answers { (a, _) =>
             a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
           }
 
@@ -247,10 +248,11 @@ abstract class OAuth2ProviderSpec extends SocialStateProviderSpec[OAuth2Info, So
       // spec, because we throw an exception in both cases which stops the test once the post method was called.
       // This protects as for an NPE because of the not mocked dependencies. The other solution would be to execute
       // this test in every provider with the full mocked dependencies.
-      requestHolder.post[Map[String, Seq[String]]](any)(any) answers { (a, m) =>
-        a.asInstanceOf[Array[Any]](0).asInstanceOf[Map[String, Seq[String]]].equals(params) match {
-          case true  => throw new RuntimeException("success")
-          case false => throw new RuntimeException("failure")
+      requestHolder.post[Map[String, Seq[String]]](any)(any) answers { (a, _) =>
+        if (a.asInstanceOf[Array[Any]](0).asInstanceOf[Map[String, Seq[String]]].equals(params)) {
+          throw new RuntimeException("success")
+        } else {
+          throw new RuntimeException("failure")
         }
       }
       c.httpLayer.url(c.oAuthSettings.accessTokenURL) returns requestHolder
@@ -263,15 +265,15 @@ abstract class OAuth2ProviderSpec extends SocialStateProviderSpec[OAuth2Info, So
     }
 
     "fail with UnexpectedResponseException if Json cannot be parsed from response" in new WithApplication {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[WSRequest]
+      val wsResponse = mock[WSResponse]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
 
-      response.json throws new RuntimeException("Unexpected character ('<' (code 60))")
-      response.body returns "<html></html>"
-      requestHolder.withHeaders(any) returns requestHolder
-      requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
-      c.httpLayer.url(c.oAuthSettings.accessTokenURL) returns requestHolder
+      wsResponse.json throws new RuntimeException("Unexpected character ('<' (code 60))")
+      wsResponse.body returns "<html></html>"
+      wsRequest.withHeaders(any) returns wsRequest
+      wsRequest.post[Map[String, Seq[String]]](any)(any) returns Future.successful(wsResponse)
+      c.httpLayer.url(c.oAuthSettings.accessTokenURL) returns wsRequest
       c.stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(c.state)
       c.stateProvider.state(any[ExecutionContext]) returns Future.successful(c.state)
 
@@ -315,7 +317,7 @@ trait OAuth2ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
    */
   lazy val httpLayer = {
     val m = mock[HTTPLayer].smart
-    m.executionContext returns defaultContext
+    m.executionContext returns global
     m
   }
 
@@ -334,13 +336,9 @@ trait OAuth2ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
   lazy val state = mock[TestState].smart
 
   /**
-   * The User state
+   * A user state item.
    */
-  case class UserState(state: Map[String, String]) extends SocialStateItem
-
-  lazy val userState = UserState(Map("path" -> "/login"))
-
-  implicit val userStateFormat: Format[UserState] = Json.format[UserState]
+  lazy val userStateItem = UserStateItem(Map("path" -> "/login"))
 
   /**
    * The OAuth2 state provider.
@@ -350,7 +348,7 @@ trait OAuth2ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
   /**
    * The stateful auth info.
    */
-  lazy val stateAuthInfo = StatefulAuthInfo(oAuthInfo.as[OAuth2Info], userState)
+  lazy val stateAuthInfo = StatefulAuthInfo(oAuthInfo.as[OAuth2Info], userStateItem)
 
   /**
    * The OAuth2 settings.

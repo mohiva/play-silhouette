@@ -16,13 +16,14 @@
 package com.mohiva.play.silhouette.impl.providers.oauth1.services
 
 import com.mohiva.play.silhouette.impl.providers.{ OAuth1Info, OAuth1Settings }
-import oauth.signpost.exception.{ OAuthException, OAuthMessageSignerException }
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.oauth.{ OAuth, RequestToken }
 import play.api.libs.ws.WSSignatureCalculator
-import play.api.test.{ WithApplication, PlaySpecification }
+import play.api.test.{ PlaySpecification, WithApplication }
+import play.shaded.oauth.oauth.signpost.exception.{ OAuthException, OAuthMessageSignerException }
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Test case for the [[PlayOAuth1Service]] class.
