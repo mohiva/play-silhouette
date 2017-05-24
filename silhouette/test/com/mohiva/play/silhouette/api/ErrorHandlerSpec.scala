@@ -17,7 +17,7 @@ package com.mohiva.play.silhouette.api
 
 import org.specs2.matcher.Scope
 import play.api.http.MimeTypes._
-import play.api.i18n.{ I18nSupport, Messages, MessagesApi }
+import play.api.i18n.{ I18nSupport, Lang, Langs, MessagesApi }
 import play.api.mvc.{ RequestHeader, Result }
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
@@ -64,7 +64,7 @@ class ErrorHandlerSpec extends PlaySpecification {
         acceptedMediaType = Some(TEXT),
         expectedStatus = UNAUTHORIZED,
         expectedContentType = TEXT,
-        expectedResponseFragment = Messages("silhouette.not.authenticated"),
+        expectedResponseFragment = messagesApi("silhouette.not.authenticated"),
         expectedMessage = "silhouette.not.authenticated",
         f = { r: RequestHeader => notAuthenticated.onNotAuthenticated(r) })
     }
@@ -74,7 +74,7 @@ class ErrorHandlerSpec extends PlaySpecification {
         acceptedMediaType = Some(BINARY),
         expectedStatus = UNAUTHORIZED,
         expectedContentType = TEXT,
-        expectedResponseFragment = Messages("silhouette.not.authenticated"),
+        expectedResponseFragment = messagesApi("silhouette.not.authenticated"),
         expectedMessage = "silhouette.not.authenticated",
         f = { r: RequestHeader => notAuthenticated.onNotAuthenticated(r) })
     }
@@ -84,7 +84,7 @@ class ErrorHandlerSpec extends PlaySpecification {
         acceptedMediaType = None,
         expectedStatus = UNAUTHORIZED,
         expectedContentType = HTML,
-        expectedResponseFragment = Messages("silhouette.not.authenticated"),
+        expectedResponseFragment = messagesApi("silhouette.not.authenticated"),
         expectedMessage = "silhouette.not.authenticated",
         f = { r: RequestHeader => notAuthenticated.onNotAuthenticated(r) })
     }
@@ -126,7 +126,7 @@ class ErrorHandlerSpec extends PlaySpecification {
         acceptedMediaType = Some(TEXT),
         expectedStatus = FORBIDDEN,
         expectedContentType = TEXT,
-        expectedResponseFragment = Messages("silhouette.not.authorized"),
+        expectedResponseFragment = messagesApi("silhouette.not.authorized"),
         expectedMessage = "silhouette.not.authorized",
         f = { r: RequestHeader => notAuthorized.onNotAuthorized(r) })
     }
@@ -136,7 +136,7 @@ class ErrorHandlerSpec extends PlaySpecification {
         acceptedMediaType = Some(BINARY),
         expectedStatus = FORBIDDEN,
         expectedContentType = TEXT,
-        expectedResponseFragment = Messages("silhouette.not.authorized"),
+        expectedResponseFragment = messagesApi("silhouette.not.authorized"),
         expectedMessage = "silhouette.not.authorized",
         f = { r: RequestHeader => notAuthorized.onNotAuthorized(r) })
     }
@@ -146,7 +146,7 @@ class ErrorHandlerSpec extends PlaySpecification {
         acceptedMediaType = None,
         expectedStatus = FORBIDDEN,
         expectedContentType = HTML,
-        expectedResponseFragment = Messages("silhouette.not.authorized"),
+        expectedResponseFragment = messagesApi("silhouette.not.authorized"),
         expectedMessage = "silhouette.not.authorized",
         f = { r: RequestHeader => notAuthorized.onNotAuthorized(r) })
     }
@@ -159,9 +159,14 @@ class ErrorHandlerSpec extends PlaySpecification {
     self: WithApplication =>
 
     /**
-     * The Play messages API.
+     * The Play messages provider.
      */
     lazy val messagesApi = app.injector.instanceOf[MessagesApi]
+
+    /**
+     * The implicit lang.
+     */
+    lazy implicit val lang: Lang = app.injector.instanceOf[Langs].availables.head
 
     /**
      * The default not-authenticated error handler.
@@ -197,7 +202,7 @@ class ErrorHandlerSpec extends PlaySpecification {
       status(result) must equalTo(expectedStatus)
       contentType(result) must beSome(expectedContentType)
       contentAsString(result) must contain(expectedResponseFragment)
-      contentAsString(result) must contain(Messages(expectedMessage))
+      contentAsString(result) must contain(messagesApi(expectedMessage))
     }
   }
 }

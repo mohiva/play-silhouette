@@ -16,11 +16,11 @@
 package com.mohiva.play.silhouette.impl.providers.oauth1
 
 import com.mohiva.play.silhouette.api.LoginInfo
+import com.mohiva.play.silhouette.api.util.MockWSRequest
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth1.XingProvider._
-import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.WithApplication
 import test.Helper
 
@@ -45,12 +45,12 @@ class XingProviderSpec extends OAuth1ProviderSpec {
 
   "The `retrieveProfile` method" should {
     "fail with ProfileRetrievalException if API returns error" in new WithApplication with Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
-      requestHolder.sign(any) returns requestHolder
-      requestHolder.get() returns Future.successful(response)
-      response.json returns Helper.loadJson("providers/oauth1/xing.error.json")
-      httpLayer.url(API) returns requestHolder
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
+      wsRequest.sign(any) returns wsRequest
+      wsRequest.get() returns Future.successful(wsResponse)
+      wsResponse.json returns Helper.loadJson("providers/oauth1/xing.error.json")
+      httpLayer.url(API) returns wsRequest
 
       failed[ProfileRetrievalException](provider.retrieveProfile(oAuthInfo)) {
         case e => e.getMessage must equalTo(SpecifiedProfileError.format(
@@ -61,12 +61,12 @@ class XingProviderSpec extends OAuth1ProviderSpec {
     }
 
     "throw ProfileRetrievalException if an unexpected error occurred" in new WithApplication with Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
-      requestHolder.sign(any) returns requestHolder
-      requestHolder.get() returns Future.successful(response)
-      response.json throws new RuntimeException("")
-      httpLayer.url(API) returns requestHolder
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
+      wsRequest.sign(any) returns wsRequest
+      wsRequest.get() returns Future.successful(wsResponse)
+      wsResponse.json throws new RuntimeException("")
+      httpLayer.url(API) returns wsRequest
 
       failed[ProfileRetrievalException](provider.retrieveProfile(oAuthInfo)) {
         case e => e.getMessage must equalTo(UnspecifiedProfileError.format(provider.id))
@@ -75,13 +75,13 @@ class XingProviderSpec extends OAuth1ProviderSpec {
 
     "use the overridden API URL" in new WithApplication with Context {
       val url = "https://custom.api.url"
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
       oAuthSettings.apiURL returns Some(url)
-      requestHolder.sign(any) returns requestHolder
-      requestHolder.get() returns Future.successful(response)
-      response.json returns Helper.loadJson("providers/oauth1/xing.success.json")
-      httpLayer.url(url) returns requestHolder
+      wsRequest.sign(any) returns wsRequest
+      wsRequest.get() returns Future.successful(wsResponse)
+      wsResponse.json returns Helper.loadJson("providers/oauth1/xing.success.json")
+      httpLayer.url(url) returns wsRequest
 
       await(provider.retrieveProfile(oAuthInfo))
 
@@ -89,23 +89,22 @@ class XingProviderSpec extends OAuth1ProviderSpec {
     }
 
     "return the social profile" in new WithApplication with Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
-      requestHolder.sign(any) returns requestHolder
-      requestHolder.get() returns Future.successful(response)
-      response.json returns Helper.loadJson("providers/oauth1/xing.success.json")
-      httpLayer.url(API) returns requestHolder
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
+      wsRequest.sign(any) returns wsRequest
+      wsRequest.get() returns Future.successful(wsResponse)
+      wsResponse.json returns Helper.loadJson("providers/oauth1/xing.success.json")
+      httpLayer.url(API) returns wsRequest
 
-      profile(provider.retrieveProfile(oAuthInfo)) {
-        case p =>
-          p must be equalTo new CommonSocialProfile(
-            loginInfo = LoginInfo(provider.id, "1235468792"),
-            firstName = Some("Apollonia"),
-            lastName = Some("Vanova"),
-            fullName = Some("Apollonia Vanova"),
-            avatarURL = Some("http://www.xing.com/img/users/e/3/d/f94ef165a.123456,1.140x185.jpg"),
-            email = Some("apollonia.vanova@watchmen.com")
-          )
+      profile(provider.retrieveProfile(oAuthInfo)) { p =>
+        p must be equalTo CommonSocialProfile(
+          loginInfo = LoginInfo(provider.id, "1235468792"),
+          firstName = Some("Apollonia"),
+          lastName = Some("Vanova"),
+          fullName = Some("Apollonia Vanova"),
+          avatarURL = Some("http://www.xing.com/img/users/e/3/d/f94ef165a.123456,1.140x185.jpg"),
+          email = Some("apollonia.vanova@watchmen.com")
+        )
       }
     }
   }
@@ -131,7 +130,8 @@ class XingProviderSpec extends OAuth1ProviderSpec {
       authorizationURL = "https://api.xing.com/v1/authorize",
       callbackURL = "https://www.mohiva.com",
       consumerKey = "my.consumer.key",
-      consumerSecret = "my.consumer.secret"))
+      consumerSecret = "my.consumer.secret"
+    ))
 
     /**
      * The provider to test.

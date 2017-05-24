@@ -23,12 +23,12 @@ import com.mohiva.play.silhouette.test.FakesSpec._
 import net.codingwell.scalaguice.ScalaModule
 import org.specs2.matcher.JsonMatchers
 import org.specs2.specification.Scope
-import play.api.i18n.MessagesApi
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.Json
-import play.api.mvc.Controller
+import play.api.mvc.{ AbstractController, ControllerComponents }
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.test]] helpers.
@@ -351,13 +351,13 @@ object FakesSpec {
   /**
    * A secured controller implementation.
    *
-   * @param messagesApi The Play messages API.
    * @param silhouette The Silhouette stack.
+   * @param components The Play controller components.
    */
   class SecuredController @Inject() (
-    val messagesApi: MessagesApi,
-    val silhouette: Silhouette[CookieEnv])
-    extends Controller {
+    silhouette: Silhouette[CookieEnv],
+    components: ControllerComponents
+  ) extends AbstractController(components) {
 
     /**
      * A secured action.

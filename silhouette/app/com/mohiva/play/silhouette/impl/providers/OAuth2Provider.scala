@@ -229,7 +229,7 @@ trait OAuth2Provider extends SocialStateProvider with OAuth2Constants with Logge
       ClientSecret -> Seq(settings.clientSecret),
       GrantType -> Seq(AuthorizationCode),
       Code -> Seq(code)) ++ settings.accessTokenParams.mapValues(Seq(_)) ++ redirectParam.toMap.mapValues(Seq(_))
-    httpLayer.url(settings.accessTokenURL).withHeaders(headers: _*).post(params).flatMap { response =>
+    httpLayer.url(settings.accessTokenURL).withHttpHeaders(headers: _*).post(params).flatMap { response =>
       logger.debug("[Silhouette][%s] Access token response: [%s]".format(id, response.body))
       Future.fromTry(buildInfo(response))
     }

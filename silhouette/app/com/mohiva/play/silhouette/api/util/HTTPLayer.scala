@@ -25,11 +25,16 @@ import scala.concurrent.ExecutionContext
 trait HTTPLayer extends ExecutionContextProvider {
 
   /**
+   * The type of the request.
+   */
+  type Request <: WSRequest
+
+  /**
    * Prepare a new request. You can then construct it by chaining calls.
    *
    * @param url The URL to request.
    */
-  def url(url: String): WSRequest
+  def url(url: String): Request
 }
 
 /**
@@ -44,9 +49,42 @@ trait HTTPLayer extends ExecutionContextProvider {
 class PlayHTTPLayer(client: WSClient)(implicit val executionContext: ExecutionContext) extends HTTPLayer {
 
   /**
+   * The type of the request.
+   */
+  type Request = WSRequest
+
+  /**
    * Prepare a new request. You can then construct it by chaining calls.
    *
    * @param url The URL to request.
    */
-  def url(url: String): WSRequest = client.url(url)
+  def url(url: String): Request = client.url(url)
+}
+
+/**
+ * A mockable WS request.
+ *
+ * @see https://github.com/playframework/play-ws/issues/108
+ */
+trait MockWSRequest extends WSRequest {
+  type Self = WSRequest
+  type Response = WSResponse
+}
+
+/**
+ * A mockable HTTP layer.
+ */
+trait MockHTTPLayer extends HTTPLayer {
+
+  /**
+   * The type of the request.
+   */
+  type Request = MockWSRequest
+
+  /**
+   * Prepare a new request. You can then construct it by chaining calls.
+   *
+   * @param url The URL to request.
+   */
+  def url(url: String): Request
 }

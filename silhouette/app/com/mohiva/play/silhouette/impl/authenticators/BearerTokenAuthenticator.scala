@@ -42,11 +42,11 @@ import scala.util.Try
  *
  * Note: If deploying to multiple nodes the backing store will need to synchronize.
  *
- * @param id The authenticator ID.
- * @param loginInfo The linked login info for an identity.
- * @param lastUsedDateTime The last used date/time.
+ * @param id                 The authenticator ID.
+ * @param loginInfo          The linked login info for an identity.
+ * @param lastUsedDateTime   The last used date/time.
  * @param expirationDateTime The expiration date/time.
- * @param idleTimeout The duration an authenticator can be idle before it timed out.
+ * @param idleTimeout        The duration an authenticator can be idle before it timed out.
  */
 case class BearerTokenAuthenticator(
   id: String,
@@ -65,10 +65,10 @@ case class BearerTokenAuthenticator(
 /**
  * The service that handles the bearer token authenticator.
  *
- * @param settings The authenticator settings.
- * @param repository The repository to persist the authenticator.
- * @param idGenerator The ID generator used to create the authenticator ID.
- * @param clock The clock implementation.
+ * @param settings         The authenticator settings.
+ * @param repository       The repository to persist the authenticator.
+ * @param idGenerator      The ID generator used to create the authenticator ID.
+ * @param clock            The clock implementation.
  * @param executionContext The execution context to handle the asynchronous operations.
  */
 class BearerTokenAuthenticatorService(
@@ -83,7 +83,7 @@ class BearerTokenAuthenticatorService(
    * Creates a new authenticator for the specified login info.
    *
    * @param loginInfo The login info for which the authenticator should be created.
-   * @param request The request header.
+   * @param request   The request header.
    * @return An authenticator.
    */
   override def create(loginInfo: LoginInfo)(implicit request: RequestHeader): Future[BearerTokenAuthenticator] = {
@@ -121,7 +121,7 @@ class BearerTokenAuthenticatorService(
    * stored in the backing store.
    *
    * @param authenticator The authenticator instance.
-   * @param request The request header.
+   * @param request       The request header.
    * @return The serialized authenticator value.
    */
   override def init(authenticator: BearerTokenAuthenticator)(implicit request: RequestHeader): Future[String] = {
@@ -135,8 +135,8 @@ class BearerTokenAuthenticatorService(
   /**
    * Adds a header with the token as value to the result.
    *
-   * @param token The token to embed.
-   * @param result The result to manipulate.
+   * @param token   The token to embed.
+   * @param result  The result to manipulate.
    * @param request The request header.
    * @return The manipulated result.
    */
@@ -147,13 +147,13 @@ class BearerTokenAuthenticatorService(
   /**
    * Adds a header with the token as value to the request.
    *
-   * @param token The token to embed.
+   * @param token   The token to embed.
    * @param request The request header.
    * @return The manipulated request header.
    */
   override def embed(token: String, request: RequestHeader): RequestHeader = {
     val additional = Seq(settings.fieldName -> token)
-    request.copy(headers = request.headers.replace(additional: _*))
+    request.withHeaders(request.headers.replace(additional: _*))
   }
 
   /**
@@ -177,15 +177,15 @@ class BearerTokenAuthenticatorService(
    * Only the authenticator in the backing store will be changed.
    *
    * @param authenticator The authenticator to update.
-   * @param result The result to manipulate.
-   * @param request The request header.
+   * @param result        The result to manipulate.
+   * @param request       The request header.
    * @return The original or a manipulated result.
    */
   override def update(authenticator: BearerTokenAuthenticator, result: Result)(
     implicit
     request: RequestHeader): Future[AuthenticatorResult] = {
 
-    repository.update(authenticator).map { a =>
+    repository.update(authenticator).map { _ =>
       AuthenticatorResult(result)
     }.recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
@@ -200,7 +200,7 @@ class BearerTokenAuthenticatorService(
    * or use the other renew method otherwise.
    *
    * @param authenticator The authenticator to renew.
-   * @param request The request header.
+   * @param request       The request header.
    * @return The serialized expression of the authenticator.
    */
   override def renew(authenticator: BearerTokenAuthenticator)(
@@ -221,8 +221,8 @@ class BearerTokenAuthenticatorService(
    * bound to this authenticator.
    *
    * @param authenticator The authenticator to update.
-   * @param result The result to manipulate.
-   * @param request The request header.
+   * @param result        The result to manipulate.
+   * @param request       The request header.
    * @return The original or a manipulated result.
    */
   override def renew(authenticator: BearerTokenAuthenticator, result: Result)(
@@ -237,7 +237,7 @@ class BearerTokenAuthenticatorService(
   /**
    * Removes the authenticator from cache.
    *
-   * @param result The result to manipulate.
+   * @param result  The result to manipulate.
    * @param request The request header.
    * @return The manipulated result.
    */
@@ -267,10 +267,12 @@ object BearerTokenAuthenticatorService {
 /**
  * The settings for the bearer token authenticator.
  *
- * @param fieldName The name of the field in which the token will be transferred in any part of the request.
- * @param requestParts Some request parts from which a value can be extracted or None to extract values from any part of the request.
+ * @param fieldName                The name of the field in which the token will be transferred in any part
+ *                                 of the request.
+ * @param requestParts             Some request parts from which a value can be extracted or None to extract
+ *                                 values from any part of the request.
  * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out.
- * @param authenticatorExpiry The duration an authenticator expires after it was created.
+ * @param authenticatorExpiry      The duration an authenticator expires after it was created.
  */
 case class BearerTokenAuthenticatorSettings(
   fieldName: String = "X-Auth-Token",

@@ -24,15 +24,15 @@ import javax.inject.Inject
 import com.mohiva.play.silhouette.api._
 import play.api.{ Configuration, Environment => PlayEnv }
 import play.api.inject.Module
-import play.api.mvc.{ ActionBuilder, Request, Result, WrappedRequest }
+import play.api.mvc._
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.language.reflectiveCalls
 
 /**
  * A request that adds maybe the identity and maybe the authenticator for the current call.
  *
- * @param identity Some identity implementation if authentication was successful, None otherwise.
+ * @param identity      Some identity implementation if authentication was successful, None otherwise.
  * @param authenticator Some authenticator implementation if authentication was successful, None otherwise.
  * @param request The current request.
  * @tparam E The type of the environment.
@@ -53,7 +53,7 @@ case class UserAwareRequestHandlerBuilder[E <: Env](environment: Environment[E])
   /**
    * Invokes the block.
    *
-   * @param block The block of code to invoke.
+   * @param block   The block of code to invoke.
    * @param request The current request.
    * @tparam B The type of the request body.
    * @tparam T The type of the data included in the handler result.
@@ -65,9 +65,9 @@ case class UserAwareRequestHandlerBuilder[E <: Env](environment: Environment[E])
       case (Some(authenticator), identity) if authenticator.extract.isValid =>
         handleBlock(authenticator, a => block(UserAwareRequest(identity, Some(a), request)))
       // An invalid authenticator was found. The authenticator will be discarded
-      case (Some(authenticator), identity) if !authenticator.extract.isValid =>
+      case (Some(authenticator), _) if !authenticator.extract.isValid =>
         block(UserAwareRequest(None, None, request)).flatMap {
-          case hr @ HandlerResult(pr, d) =>
+          case hr @ HandlerResult(pr, _) =>
             environment.authenticatorService.discard(authenticator.extract, pr).map(r => hr.copy(r))
         }
       // No authenticator and no user was found
@@ -113,16 +113,20 @@ class DefaultUserAwareRequestHandler extends UserAwareRequestHandler {
  * Action builder implementation to provide the foundation for user-aware actions.
  *
  * @param requestHandler The request handler instance.
+ * @param parser         The body parser.
  * @tparam E The type of the environment.
+ * @tparam P The type of the request body.
  */
-case class UserAwareActionBuilder[E <: Env](requestHandler: UserAwareRequestHandlerBuilder[E])
-  extends ActionBuilder[({ type R[B] = UserAwareRequest[E, B] })#R] {
+case class UserAwareActionBuilder[E <: Env, P](
+  requestHandler: UserAwareRequestHandlerBuilder[E],
+  parser: BodyParser[P]
+) extends ActionBuilder[({ type R[B] = UserAwareRequest[E, B] })#R, P] {
 
   /**
    * Invokes the block.
    *
    * @param request The current request.
-   * @param block The block of code to invoke.
+   * @param block   The block of code to invoke.
    * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
@@ -132,6 +136,13 @@ case class UserAwareActionBuilder[E <: Env](requestHandler: UserAwareRequestHand
       block(r).map(r => HandlerResult(r))
     }.map(_.result)
   }
+
+  /**
+   * Get the execution context to run the request in.
+   *
+   * @return The execution context.
+   */
+  override protected def executionContext: ExecutionContext = requestHandler.executionContext
 }
 
 /**
@@ -145,22 +156,30 @@ trait UserAwareAction {
   val requestHandler: UserAwareRequestHandler
 
   /**
+   * The default body parser.
+   */
+  val bodyParser: BodyParsers.Default
+
+  /**
    * Applies the environment to the action stack.
    *
    * @param environment The environment instance to handle the request.
    * @tparam E The type of the environment.
    * @return A user-aware action builder.
    */
-  def apply[E <: Env](environment: Environment[E]): UserAwareActionBuilder[E]
+  def apply[E <: Env](environment: Environment[E]): UserAwareActionBuilder[E, AnyContent]
 }
 
 /**
  * Default implementation of the [[UserAwareAction]].
  *
  * @param requestHandler The instance of the user-aware request handler.
+ * @param bodyParser     The default body parser.
  */
-class DefaultUserAwareAction @Inject() (val requestHandler: UserAwareRequestHandler)
-  extends UserAwareAction {
+class DefaultUserAwareAction @Inject() (
+  val requestHandler: UserAwareRequestHandler,
+  val bodyParser: BodyParsers.Default
+) extends UserAwareAction {
 
   /**
    * Applies the environment to the action stack.
@@ -170,7 +189,7 @@ class DefaultUserAwareAction @Inject() (val requestHandler: UserAwareRequestHand
    * @return A user-aware action builder.
    */
   override def apply[E <: Env](environment: Environment[E]) =
-    UserAwareActionBuilder[E](requestHandler[E](environment))
+    UserAwareActionBuilder[E, AnyContent](requestHandler[E](environment), bodyParser)
 }
 
 /**
@@ -190,6 +209,8 @@ class UserAwareActionModule extends Module {
  */
 trait UserAwareActionComponents {
 
+  def userAwareBodyParser: BodyParsers.Default
+
   lazy val userAwareRequestHandler: UserAwareRequestHandler = new DefaultUserAwareRequestHandler()
-  lazy val userAwareAction: UserAwareAction = new DefaultUserAwareAction(userAwareRequestHandler)
+  lazy val userAwareAction: UserAwareAction = new DefaultUserAwareAction(userAwareRequestHandler, userAwareBodyParser)
 }

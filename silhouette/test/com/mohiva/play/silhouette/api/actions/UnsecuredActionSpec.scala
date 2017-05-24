@@ -28,14 +28,13 @@ import org.specs2.control.NoLanguageFeatures
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.i18n.{ Lang, Messages, MessagesApi }
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.Results._
 import play.api.mvc._
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.language.postfixOps
 import scala.reflect.ClassTag
@@ -212,12 +211,12 @@ class UnsecuredActionSpec extends PlaySpecification with Mockito with JsonMatche
       /**
        * An identity.
        */
-      lazy val identity = new FakeIdentity(LoginInfo("test", "1"))
+      lazy val identity = FakeIdentity(LoginInfo("test", "1"))
 
       /**
        * An authenticator.
        */
-      lazy val authenticator = new FakeAuthenticator(LoginInfo("test", "1"))
+      lazy val authenticator = FakeAuthenticator(LoginInfo("test", "1"))
 
       /**
        * A fake request.
@@ -225,19 +224,9 @@ class UnsecuredActionSpec extends PlaySpecification with Mockito with JsonMatche
       lazy implicit val request = FakeRequest()
 
       /**
-       * The messages API.
-       */
-      lazy implicit val messagesApi = app.injector.instanceOf[MessagesApi]
-
-      /**
        * The unsecured controller.
        */
       lazy implicit val controller = app.injector.instanceOf[UnsecuredController]
-
-      /**
-       * The messages for the current language.
-       */
-      lazy implicit val messages = Messages(Lang.defaultLang, messagesApi)
 
       /**
        * The Play actor system.
@@ -358,9 +347,12 @@ object UnsecuredActionSpec {
    * An unsecured controller.
    *
    * @param silhouette The Silhouette stack.
+   * @param components The Play controller components.
    */
-  class UnsecuredController @Inject() (silhouette: Silhouette[UnsecuredEnv])
-    extends Controller {
+  class UnsecuredController @Inject() (
+    silhouette: Silhouette[UnsecuredEnv],
+    components: ControllerComponents
+  ) extends AbstractController(components) {
 
     /**
      * A local error handler.

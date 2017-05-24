@@ -34,7 +34,6 @@ import org.joda.time.DateTime
 import play.api.libs.json._
 import play.api.mvc.{ RequestHeader, Result }
 
-import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
 import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
@@ -54,12 +53,12 @@ import scala.util.{ Failure, Success, Try }
  * @see http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html#Claims
  * @see https://developer.atlassian.com/static/connect/docs/concepts/understanding-jwt.html
  *
- * @param id The authenticator ID.
- * @param loginInfo The linked login info for an identity.
- * @param lastUsedDateTime The last used date/time.
+ * @param id                 The authenticator ID.
+ * @param loginInfo          The linked login info for an identity.
+ * @param lastUsedDateTime   The last used date/time.
  * @param expirationDateTime The expiration date/time.
- * @param idleTimeout The duration an authenticator can be idle before it timed out.
- * @param customClaims Custom claims to embed into the token.
+ * @param idleTimeout        The duration an authenticator can be idle before it timed out.
+ * @param customClaims       Custom claims to embed into the token.
  */
 case class JWTAuthenticator(
   id: String,
@@ -84,9 +83,9 @@ object JWTAuthenticator {
   /**
    * Serializes the authenticator.
    *
-   * @param authenticator The authenticator to serialize.
+   * @param authenticator        The authenticator to serialize.
    * @param authenticatorEncoder The authenticator encoder.
-   * @param settings The authenticator settings.
+   * @param settings             The authenticator settings.
    * @return The serialized authenticator.
    */
   def serialize(
@@ -103,7 +102,7 @@ object JWTAuthenticator {
       .expirationTime(authenticator.expirationDateTime.getMillis / 1000)
 
     authenticator.customClaims.foreach { data =>
-      serializeCustomClaims(data).foreach {
+      serializeCustomClaims(data).asScala.foreach {
         case (key, value) =>
           if (ReservedClaims.contains(key)) {
             throw new AuthenticatorException(OverrideReservedClaim.format(ID, key, ReservedClaims.mkString(", ")))
@@ -120,9 +119,9 @@ object JWTAuthenticator {
   /**
    * Unserializes the authenticator.
    *
-   * @param str The string representation of the authenticator.
+   * @param str                  The string representation of the authenticator.
    * @param authenticatorEncoder The authenticator encoder.
-   * @param settings The authenticator settings.
+   * @param settings             The authenticator settings.
    * @return An authenticator on success, otherwise a failure.
    */
   def unserialize(
@@ -142,7 +141,7 @@ object JWTAuthenticator {
       val subject = authenticatorEncoder.decode(c.getSubject)
       buildLoginInfo(subject).map { loginInfo =>
         val filteredClaims = c.getAllClaims.asScala.filterNot { case (k, v) => ReservedClaims.contains(k) || v == null }
-        val customClaims = unserializeCustomClaims(filteredClaims)
+        val customClaims = unserializeCustomClaims(filteredClaims.asJava)
         JWTAuthenticator(
           id = c.getJWTID,
           loginInfo = loginInfo,
@@ -182,17 +181,17 @@ object JWTAuthenticator {
    * @param claims The custom claims to deserialize.
    * @return A Json object representing the custom claims.
    */
-  private def unserializeCustomClaims(claims: java.util.Map[String, Any]): JsObject = {
+  private def unserializeCustomClaims(claims: java.util.Map[String, AnyRef]): JsObject = {
     def toJson(value: Any): JsValue = value match {
       case v: java.lang.String    => JsString(v)
       case v: java.lang.Number    => JsNumber(BigDecimal(v.toString))
       case v: java.lang.Boolean   => JsBoolean(v)
-      case v: java.util.Map[_, _] => unserializeCustomClaims(v.asInstanceOf[java.util.Map[String, Any]])
-      case v: java.util.List[_]   => JsArray(v.map(toJson))
+      case v: java.util.Map[_, _] => unserializeCustomClaims(v.asInstanceOf[java.util.Map[String, AnyRef]])
+      case v: java.util.List[_]   => JsArray(v.asScala.map(toJson))
       case v                      => throw new AuthenticatorException(UnexpectedJsonValue.format(ID, v))
     }
 
-    JsObject(claims.map { case (name, value) => name -> toJson(value) }.toSeq)
+    JsObject(claims.asScala.map { case (name, value) => name -> toJson(value) }.toSeq)
   }
 
   /**
@@ -223,12 +222,12 @@ object JWTAuthenticator {
  * If the authenticator DAO is deactivated then a stateless approach will be used. But note
  * that you will loose the possibility to invalidate a JWT.
  *
- * @param settings The authenticator settings.
- * @param repository The repository to persist the authenticator. Set it to None to use a stateless approach.
+ * @param settings             The authenticator settings.
+ * @param repository           The repository to persist the authenticator. Set it to None to use a stateless approach.
  * @param authenticatorEncoder The authenticator encoder.
- * @param idGenerator The ID generator used to create the authenticator ID.
- * @param clock The clock implementation.
- * @param executionContext The execution context to handle the asynchronous operations.
+ * @param idGenerator          The ID generator used to create the authenticator ID.
+ * @param clock                The clock implementation.
+ * @param executionContext     The execution context to handle the asynchronous operations.
  */
 class JWTAuthenticatorService(
   settings: JWTAuthenticatorSettings,
@@ -289,7 +288,7 @@ class JWTAuthenticatorService(
    * authenticator will be stored in it.
    *
    * @param authenticator The authenticator instance.
-   * @param request The request header.
+   * @param request       The request header.
    * @return The serialized authenticator value.
    */
   override def init(authenticator: JWTAuthenticator)(implicit request: RequestHeader): Future[String] = {
@@ -303,7 +302,7 @@ class JWTAuthenticatorService(
   /**
    * Adds a header with the token as value to the result.
    *
-   * @param token The token to embed.
+   * @param token  The token to embed.
    * @param result The result to manipulate.
    * @return The manipulated result.
    */
@@ -314,13 +313,13 @@ class JWTAuthenticatorService(
   /**
    * Adds a header with the token as value to the request.
    *
-   * @param token The token to embed.
+   * @param token   The token to embed.
    * @param request The request header.
    * @return The manipulated request header.
    */
   override def embed(token: String, request: RequestHeader): RequestHeader = {
     val additional = Seq(settings.fieldName -> token)
-    request.copy(headers = request.headers.replace(additional: _*))
+    request.withHeaders(request.headers.replace(additional: _*))
   }
 
   /**
@@ -344,8 +343,8 @@ class JWTAuthenticatorService(
    * method will not be executed.
    *
    * @param authenticator The authenticator to update.
-   * @param result The result to manipulate.
-   * @param request The request header.
+   * @param result        The result to manipulate.
+   * @param request       The request header.
    * @return The original or a manipulated result.
    */
   override def update(authenticator: JWTAuthenticator, result: Result)(
@@ -367,7 +366,7 @@ class JWTAuthenticatorService(
    * or use the other renew method otherwise.
    *
    * @param authenticator The authenticator to renew.
-   * @param request The request header.
+   * @param request       The request header.
    * @return The serialized expression of the authenticator.
    */
   override def renew(authenticator: JWTAuthenticator)(implicit request: RequestHeader): Future[String] = {
@@ -385,8 +384,8 @@ class JWTAuthenticatorService(
    * possible to use a JWT which was bound to this authenticator.
    *
    * @param authenticator The authenticator to update.
-   * @param result The result to manipulate.
-   * @param request The request header.
+   * @param result        The result to manipulate.
+   * @param request       The request header.
    * @return The original or a manipulated result.
    */
   override def renew(authenticator: JWTAuthenticator, result: Result)(
@@ -401,7 +400,7 @@ class JWTAuthenticatorService(
   /**
    * Removes the authenticator from backing store.
    *
-   * @param result The result to manipulate.
+   * @param result  The result to manipulate.
    * @param request The request header.
    * @return The manipulated result.
    */
@@ -444,12 +443,14 @@ object JWTAuthenticatorService {
 /**
  * The settings for the JWT authenticator.
  *
- * @param fieldName The name of the field in which the token will be transferred in any part of the request.
- * @param requestParts Some request parts from which a value can be extracted or None to extract values from any part of the request.
- * @param issuerClaim The issuer claim identifies the principal that issued the JWT.
+ * @param fieldName                The name of the field in which the token will be transferred in any part
+ *                                 of the request.
+ * @param requestParts             Some request parts from which a value can be extracted or None to extract
+ *                                 values from any part of the request.
+ * @param issuerClaim              The issuer claim identifies the principal that issued the JWT.
  * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out.
- * @param authenticatorExpiry The duration an authenticator expires after it was created.
- * @param sharedSecret The shared secret to sign the JWT.
+ * @param authenticatorExpiry      The duration an authenticator expires after it was created.
+ * @param sharedSecret             The shared secret to sign the JWT.
  */
 case class JWTAuthenticatorSettings(
   fieldName: String = "X-Auth-Token",

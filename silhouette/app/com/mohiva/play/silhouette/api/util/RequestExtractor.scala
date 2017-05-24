@@ -16,7 +16,6 @@
 package com.mohiva.play.silhouette.api.util
 
 import com.mohiva.play.silhouette.api.Logger
-import com.mohiva.play.silhouette.api.util.RequestExtractor._
 import play.api.libs.json.JsValue
 import play.api.mvc._
 
@@ -70,21 +69,6 @@ trait RequestExtractor[-B] extends Logger {
     isAllowed(RequestPart.Headers, parts) {
       logger.debug("[Silhouette] Try to extract value with name `%s` from headers: %s".format(name, request.headers))
       request.headers.get(name)
-    }
-  }
-
-  /**
-   * Extracts a value from tags.
-   *
-   * @param name The name of the value to extract.
-   * @param parts The request parts from which a value can be extracted.
-   * @param request The request from which the value should be extract.
-   * @return The extracted value as string.
-   */
-  protected def fromTags(name: String, parts: Option[Parts])(implicit request: Request[B]): Option[String] = {
-    isAllowed(RequestPart.Tags, parts) {
-      logger.debug("[Silhouette] Try to extract value with name `%s` from tags: %s".format(name, request.tags))
-      request.tags.get(name)
     }
   }
 
@@ -144,7 +128,6 @@ trait RequestExtractor[-B] extends Logger {
   protected def fromDefaultParts(name: String, parts: Option[Parts])(implicit request: Request[B]): Option[String] = {
     fromQueryString(name, parts)
       .orElse(fromHeaders(name, parts))
-      .orElse(fromTags(name, parts))
   }
 
   /**
@@ -182,11 +165,6 @@ object RequestPart extends Enumeration {
    * Allows to extract a request value from the headers.
    */
   val Headers = Value("headers")
-
-  /**
-   * Allows to extract a request value from the tags.
-   */
-  val Tags = Value("tags")
 
   /**
    * Allows to extract a request value from a Json body.

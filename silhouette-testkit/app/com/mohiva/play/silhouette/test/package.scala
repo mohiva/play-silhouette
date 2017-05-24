@@ -16,7 +16,8 @@
 package com.mohiva.play.silhouette
 
 import com.mohiva.play.silhouette.api._
-import play.api.test.{ FakeHeaders, FakeRequest }
+import play.api.mvc.Request
+import play.api.test.FakeRequest
 
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, Future }
@@ -56,17 +57,8 @@ package object test {
     def withAuthenticator[E <: Env](authenticator: E#A)(implicit env: Environment[E]): FakeRequest[A] = {
       implicit val ec = env.executionContext
       val rh = env.authenticatorService.init(authenticator).map(v => env.authenticatorService.embed(v, f))
-      new FakeRequest(
-        id = rh.id,
-        tags = rh.tags,
-        uri = rh.uri,
-        body = f.body,
-        method = rh.method,
-        version = rh.version,
-        headers = FakeHeaders(rh.headers.headers),
-        remoteAddress = rh.remoteAddress,
-        secure = rh.secure
-      )
+
+      new FakeRequest(Request.apply(rh, f.body))
     }
 
     /**

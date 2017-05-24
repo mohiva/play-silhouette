@@ -72,9 +72,9 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
     "throw a ConfigurationException if an unsupported type was given" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      service.find[UnsupportedInfo](loginInfo) must throwA[ConfigurationException].like {
+      Await.result(service.find[UnsupportedInfo](loginInfo), 5 seconds) must throwA[ConfigurationException].like {
         case e => e.getMessage must startWith(FindError.format(classOf[UnsupportedInfo]))
-      }.awaitWithPatience
+      }
     }
   }
 
@@ -103,9 +103,9 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
     "throw a ConfigurationException if an unsupported type was given" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      service.add(loginInfo, new UnsupportedInfo) must throwA[ConfigurationException].like {
+      Await.result(service.add(loginInfo, new UnsupportedInfo), 5 seconds) must throwA[ConfigurationException].like {
         case e => e.getMessage must startWith(AddError.format(classOf[UnsupportedInfo]))
-      }.awaitWithPatience
+      }
     }
   }
 
@@ -134,9 +134,9 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
     "throw a ConfigurationException if an unsupported type was given" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      service.update(loginInfo, new UnsupportedInfo) must throwA[ConfigurationException].like {
+      Await.result(service.update(loginInfo, new UnsupportedInfo), 5 seconds) must throwA[ConfigurationException].like {
         case e => e.getMessage must startWith(UpdateError.format(classOf[UnsupportedInfo]))
-      }.awaitWithPatience
+      }
     }
   }
 
@@ -165,9 +165,9 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
     "throw a ConfigurationException if an unsupported type was given" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      service.save(loginInfo, new UnsupportedInfo) must throwA[ConfigurationException].like {
+      Await.result(service.save(loginInfo, new UnsupportedInfo), 5 seconds) must throwA[ConfigurationException].like {
         case e => e.getMessage must startWith(SaveError.format(classOf[UnsupportedInfo]))
-      }.awaitWithPatience
+      }
     }
   }
 
@@ -202,9 +202,9 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
     "throw a ConfigurationException if an unsupported type was given" in new Context {
       val loginInfo = LoginInfo("credentials", "1")
 
-      service.remove[UnsupportedInfo](loginInfo) must throwA[ConfigurationException].like {
+      Await.result(service.remove[UnsupportedInfo](loginInfo), 5 seconds) must throwA[ConfigurationException].like {
         case e => e.getMessage must startWith(RemoveError.format(classOf[UnsupportedInfo]))
-      }.awaitWithPatience
+      }
     }
   }
 

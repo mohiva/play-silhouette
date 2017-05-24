@@ -27,7 +27,7 @@ import org.jasig.cas.client.authentication.AttributePrincipal
 import org.jasig.cas.client.validation.{ AbstractUrlBasedTicketValidator, _ }
 import play.api.mvc.{ Result, Results }
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.language.postfixOps
@@ -131,7 +131,7 @@ class CasProfileParser
     val attr = principal.getAttributes
 
     logger.debug("AttributePrincipal, attributes:")
-    attr.foreach { case (key, value) => logger.debug("key: [%s], value: [%s]".format(key, value)) }
+    attr.asScala.foreach { case (key, value) => logger.debug("key: [%s], value: [%s]".format(key, value)) }
 
     CommonSocialProfile(
       LoginInfo(ID, principal.getName),

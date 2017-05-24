@@ -23,7 +23,6 @@ import com.mohiva.play.silhouette.impl.providers.SocialStateItem.ItemStructure
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.Json
 import play.api.mvc.Results
 import play.api.test.{ FakeRequest, PlaySpecification }

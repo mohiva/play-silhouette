@@ -16,13 +16,12 @@
 package com.mohiva.play.silhouette.impl.providers.oauth2
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.api.util.ExtractableRequest
+import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, MockWSRequest }
 import com.mohiva.play.silhouette.impl.exceptions.{ ProfileRetrievalException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.Auth0Provider._
 import play.api.libs.json.Json
-import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.{ FakeRequest, WithApplication }
 import play.mvc.Http
 import test.Helper
@@ -46,14 +45,14 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
 
   "The `authenticate` method" should {
     "fail with UnexpectedResponseException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
 
-      response.json returns Json.obj()
-      requestHolder.withHeaders(any) returns requestHolder
-      requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
-      httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
+      wsResponse.json returns Json.obj()
+      wsRequest.withHttpHeaders(any) returns wsRequest
+      wsRequest.post[Map[String, Seq[String]]](any)(any) returns Future.successful(wsResponse)
+      httpLayer.url(oAuthSettings.accessTokenURL) returns wsRequest
       stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(state)
       stateProvider.state(any[ExecutionContext]) returns Future.successful(state)
 
@@ -63,14 +62,14 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
     }
 
     "return the auth info" in new WithApplication with Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
 
-      response.json returns oAuthInfo
-      requestHolder.withHeaders(any) returns requestHolder
-      requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
-      httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
+      wsResponse.json returns oAuthInfo
+      wsRequest.withHttpHeaders(any) returns wsRequest
+      wsRequest.post[Map[String, Seq[String]]](any)(any) returns Future.successful(wsResponse)
+      httpLayer.url(oAuthSettings.accessTokenURL) returns wsRequest
       stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(state)
       stateProvider.state(any[ExecutionContext]) returns Future.successful(state)
 
@@ -80,32 +79,32 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
 
   "The `authenticate` method with user state" should {
     "return stateful auth info" in new WithApplication with Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
-      response.json returns oAuthInfo
-      requestHolder.withHeaders(any) returns requestHolder
-      requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
-      httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
+      wsResponse.json returns oAuthInfo
+      wsRequest.withHttpHeaders(any) returns wsRequest
+      wsRequest.post[Map[String, Seq[String]]](any)(any) returns Future.successful(wsResponse)
+      httpLayer.url(oAuthSettings.accessTokenURL) returns wsRequest
       stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(state)
       stateProvider.state(any[ExecutionContext]) returns Future.successful(state)
       stateProvider.withHandler(any[SocialStateItemHandler]) returns stateProvider
-      state.items returns Set(userState)
+      state.items returns Set(userStateItem)
 
-      statefulAuthInfo(provider.authenticate(userState))(_ must be equalTo stateAuthInfo)
+      statefulAuthInfo(provider.authenticate(userStateItem))(_ must be equalTo stateAuthInfo)
     }
   }
 
   "The `retrieveProfile` method" should {
     "fail with ProfileRetrievalException if API returns error" in new WithApplication with Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
       val statusCode = Http.Status.UNAUTHORIZED
 
-      response.status returns statusCode
-      requestHolder.get() returns Future.successful(response)
-      requestHolder.withHeaders(("Authorization", s"Bearer ${oAuthInfoObject.accessToken}")) returns requestHolder
-      httpLayer.url(oAuthSettings.apiURL.get) returns requestHolder
+      wsResponse.status returns statusCode
+      wsRequest.get() returns Future.successful(wsResponse)
+      wsRequest.withHttpHeaders(("Authorization", s"Bearer ${oAuthInfoObject.accessToken}")) returns wsRequest
+      httpLayer.url(oAuthSettings.apiURL.get) returns wsRequest
 
       failed[ProfileRetrievalException](provider.retrieveProfile(oAuthInfoObject)) {
         case e => e.getMessage must equalTo(GenericHttpStatusProfileError.format(provider.id, statusCode))
@@ -113,13 +112,13 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
     }
 
     "fail with ProfileRetrievalException if an unexpected error occurred" in new WithApplication with Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
 
-      response.json throws new RuntimeException("")
-      requestHolder.get() returns Future.successful(response)
-      requestHolder.withHeaders(("Authorization", s"Bearer ${oAuthInfoObject.accessToken}")) returns requestHolder
-      httpLayer.url(oAuthSettings.apiURL.get) returns requestHolder
+      wsResponse.json throws new RuntimeException("")
+      wsRequest.get() returns Future.successful(wsResponse)
+      wsRequest.withHttpHeaders(("Authorization", s"Bearer ${oAuthInfoObject.accessToken}")) returns wsRequest
+      httpLayer.url(oAuthSettings.apiURL.get) returns wsRequest
 
       failed[ProfileRetrievalException](provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
         case e => e.getMessage must equalTo("[Silhouette][auth0] error retrieving profile information")
@@ -127,15 +126,15 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
     }
 
     "return the social profile" in new WithApplication with Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
       val userProfile = Helper.loadJson(Auth0UserProfileJson)
 
-      response.status returns Http.Status.OK
-      response.json returns userProfile
-      requestHolder.get() returns Future.successful(response)
-      requestHolder.withHeaders(("Authorization", s"Bearer ${oAuthInfoObject.accessToken}")) returns requestHolder
-      httpLayer.url(oAuthSettings.apiURL.get) returns requestHolder
+      wsResponse.status returns Http.Status.OK
+      wsResponse.json returns userProfile
+      wsRequest.get() returns Future.successful(wsResponse)
+      wsRequest.withHttpHeaders(("Authorization", s"Bearer ${oAuthInfoObject.accessToken}")) returns wsRequest
+      httpLayer.url(oAuthSettings.apiURL.get) returns wsRequest
 
       profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) { p =>
         p must be equalTo CommonSocialProfile(
@@ -191,7 +190,7 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
     /**
      * The stateful auth info.
      */
-    override lazy val stateAuthInfo = StatefulAuthInfo(oAuthInfoObject, userState)
+    override lazy val stateAuthInfo = StatefulAuthInfo(oAuthInfoObject, userStateItem)
 
     /**
      * The provider to test.

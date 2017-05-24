@@ -3,6 +3,8 @@ import Dependencies._
 libraryDependencies ++= Seq(
   Library.Play.cache,
   Library.Play.ws,
+  Library.Play.openid,
+  Library.Play.jsonJoda,
   Library.jwtCore,
   Library.jwtApi,
   Library.Play.specs2 % Test,

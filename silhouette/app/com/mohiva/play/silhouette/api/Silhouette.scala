@@ -18,6 +18,7 @@ package com.mohiva.play.silhouette.api
 import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api.actions._
+import play.api.mvc.AnyContent
 
 /**
  * The Silhouette stack.
@@ -53,7 +54,7 @@ trait Silhouette[E <: Env] {
    *
    * @return The secured action implementation.
    */
-  def SecuredAction: SecuredActionBuilder[E] = securedAction(env)
+  def SecuredAction: SecuredActionBuilder[E, AnyContent] = securedAction(env)
 
   /**
    * Provides the secured request handler implementation.
@@ -67,7 +68,7 @@ trait Silhouette[E <: Env] {
    *
    * @return The unsecured action implementation.
    */
-  def UnsecuredAction: UnsecuredActionBuilder[E] = unsecuredAction(env)
+  def UnsecuredAction: UnsecuredActionBuilder[E, AnyContent] = unsecuredAction(env)
 
   /**
    * Provides the unsecured request handler implementation.
@@ -81,7 +82,7 @@ trait Silhouette[E <: Env] {
    *
    * @return The user-aware action implementation.
    */
-  def UserAwareAction: UserAwareActionBuilder[E] = userAwareAction(env)
+  def UserAwareAction: UserAwareActionBuilder[E, AnyContent] = userAwareAction(env)
 
   /**
    * Provides the user-aware request handler implementation.
@@ -94,14 +95,14 @@ trait Silhouette[E <: Env] {
 /**
  * Provides the Silhouette stack.
  *
- * @param env The Silhouette environment.
- * @param securedAction The secured action stack.
- * @param userAwareAction The user aware action stack.
+ * @param env               The Silhouette environment.
+ * @param securedAction     The secured action stack.
+ * @param userAwareAction   The user aware action stack.
  * @tparam E The type of the environment.
  */
 class SilhouetteProvider[E <: Env] @Inject() (
   val env: Environment[E],
   val securedAction: SecuredAction,
   val unsecuredAction: UnsecuredAction,
-  val userAwareAction: UserAwareAction)
-  extends Silhouette[E]
+  val userAwareAction: UserAwareAction
+) extends Silhouette[E]

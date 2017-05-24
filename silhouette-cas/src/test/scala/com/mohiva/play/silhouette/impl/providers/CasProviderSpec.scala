@@ -21,10 +21,10 @@ import com.mohiva.play.silhouette.api.{ Logger, LoginInfo }
 import org.jasig.cas.client.authentication.AttributePrincipal
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.test.FakeRequest
 import test.SocialProviderSpec
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
@@ -130,7 +130,7 @@ class CasProviderSpec extends SocialProviderSpec[CasInfo] with Mockito with Logg
 
     lazy val httpLayer = {
       val m = mock[HTTPLayer]
-      m.executionContext returns defaultContext
+      m.executionContext returns global
       m
     }
 
