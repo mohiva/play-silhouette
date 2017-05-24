@@ -16,14 +16,13 @@
 package com.mohiva.play.silhouette.impl.providers.oauth2
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.api.util.ExtractableRequest
+import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, MockWSRequest }
 import com.mohiva.play.silhouette.impl.exceptions.{ ProfileRetrievalException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.DropboxProvider._
 import play.api.libs.json.Json
-import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.{ FakeRequest, WithApplication }
 import test.Helper
 
@@ -46,13 +45,13 @@ class DropboxProviderSpec extends OAuth2ProviderSpec {
 
   "The `authenticate` method" should {
     "fail with UnexpectedResponseException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
-      response.json returns Json.obj()
-      requestHolder.withHeaders(any) returns requestHolder
-      requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
-      httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
+      wsResponse.json returns Json.obj()
+      wsRequest.withHttpHeaders(any) returns wsRequest
+      wsRequest.post[Map[String, Seq[String]]](any)(any) returns Future.successful(wsResponse)
+      httpLayer.url(oAuthSettings.accessTokenURL) returns wsRequest
       stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(state)
       stateProvider.state(any[ExecutionContext]) returns Future.successful(state)
 
@@ -62,13 +61,13 @@ class DropboxProviderSpec extends OAuth2ProviderSpec {
     }
 
     "return the auth info" in new WithApplication with Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
-      response.json returns oAuthInfo
-      requestHolder.withHeaders(any) returns requestHolder
-      requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
-      httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
+      wsResponse.json returns oAuthInfo
+      wsRequest.withHttpHeaders(any) returns wsRequest
+      wsRequest.post[Map[String, Seq[String]]](any)(any) returns Future.successful(wsResponse)
+      httpLayer.url(oAuthSettings.accessTokenURL) returns wsRequest
       stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(state)
       stateProvider.state(any[ExecutionContext]) returns Future.successful(state)
 
@@ -78,13 +77,13 @@ class DropboxProviderSpec extends OAuth2ProviderSpec {
 
   "The `authenticate` method with user state" should {
     "return stateful auth info" in new WithApplication with Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
-      response.json returns oAuthInfo
-      requestHolder.withHeaders(any) returns requestHolder
-      requestHolder.post[Map[String, Seq[String]]](any)(any) returns Future.successful(response)
-      httpLayer.url(oAuthSettings.accessTokenURL) returns requestHolder
+      wsResponse.json returns oAuthInfo
+      wsRequest.withHttpHeaders(any) returns wsRequest
+      wsRequest.post[Map[String, Seq[String]]](any)(any) returns Future.successful(wsResponse)
+      httpLayer.url(oAuthSettings.accessTokenURL) returns wsRequest
       stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(state)
       stateProvider.state(any[ExecutionContext]) returns Future.successful(state)
       stateProvider.withHandler(any[SocialStateItemHandler]) returns stateProvider
@@ -97,13 +96,13 @@ class DropboxProviderSpec extends OAuth2ProviderSpec {
   "The `retrieveProfile` method" should {
     "fail with ProfileRetrievalException if API returns error" in new WithApplication with Context {
       val authInfo = oAuthInfo.as[OAuth2Info]
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
-      response.json returns Helper.loadJson("providers/oauth2/dropbox.error.json")
-      response.status returns 401
-      requestHolder.withHeaders(AUTHORIZATION -> s"Bearer ${authInfo.accessToken}") returns requestHolder
-      requestHolder.get() returns Future.successful(response)
-      httpLayer.url(API.format("my.access.token")) returns requestHolder
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
+      wsResponse.json returns Helper.loadJson("providers/oauth2/dropbox.error.json")
+      wsResponse.status returns 401
+      wsRequest.withHttpHeaders(AUTHORIZATION -> s"Bearer ${authInfo.accessToken}") returns wsRequest
+      wsRequest.get() returns Future.successful(wsResponse)
+      httpLayer.url(API.format("my.access.token")) returns wsRequest
 
       failed[ProfileRetrievalException](provider.retrieveProfile(authInfo)) {
         case e => e.getMessage must equalTo(SpecifiedProfileError.format(
@@ -115,12 +114,12 @@ class DropboxProviderSpec extends OAuth2ProviderSpec {
 
     "fail with ProfileRetrievalException if an unexpected error occurred" in new WithApplication with Context {
       val authInfo = oAuthInfo.as[OAuth2Info]
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
-      response.json throws new RuntimeException("")
-      requestHolder.withHeaders(AUTHORIZATION -> s"Bearer ${authInfo.accessToken}") returns requestHolder
-      requestHolder.get() returns Future.successful(response)
-      httpLayer.url(API.format("my.access.token")) returns requestHolder
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
+      wsResponse.json throws new RuntimeException("")
+      wsRequest.withHttpHeaders(AUTHORIZATION -> s"Bearer ${authInfo.accessToken}") returns wsRequest
+      wsRequest.get() returns Future.successful(wsResponse)
+      httpLayer.url(API.format("my.access.token")) returns wsRequest
 
       failed[ProfileRetrievalException](provider.retrieveProfile(authInfo)) {
         case e => e.getMessage must equalTo(UnspecifiedProfileError.format(provider.id))
@@ -130,14 +129,14 @@ class DropboxProviderSpec extends OAuth2ProviderSpec {
     "use the overridden API URL" in new WithApplication with Context {
       val url = "https://custom.api.url"
       val authInfo = oAuthInfo.as[OAuth2Info]
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
       oAuthSettings.apiURL returns Some(url)
-      response.status returns 200
-      response.json returns Helper.loadJson("providers/oauth2/dropbox.success.json")
-      requestHolder.withHeaders(AUTHORIZATION -> s"Bearer ${authInfo.accessToken}") returns requestHolder
-      requestHolder.get() returns Future.successful(response)
-      httpLayer.url(url) returns requestHolder
+      wsResponse.status returns 200
+      wsResponse.json returns Helper.loadJson("providers/oauth2/dropbox.success.json")
+      wsRequest.withHttpHeaders(AUTHORIZATION -> s"Bearer ${authInfo.accessToken}") returns wsRequest
+      wsRequest.get() returns Future.successful(wsResponse)
+      httpLayer.url(url) returns wsRequest
 
       await(provider.retrieveProfile(authInfo))
 
@@ -146,13 +145,13 @@ class DropboxProviderSpec extends OAuth2ProviderSpec {
 
     "return the social profile" in new WithApplication with Context {
       val authInfo = oAuthInfo.as[OAuth2Info]
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
-      response.status returns 200
-      response.json returns Helper.loadJson("providers/oauth2/dropbox.success.json")
-      requestHolder.withHeaders(AUTHORIZATION -> s"Bearer ${authInfo.accessToken}") returns requestHolder
-      requestHolder.get() returns Future.successful(response)
-      httpLayer.url(API.format("my.access.token")) returns requestHolder
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
+      wsResponse.status returns 200
+      wsResponse.json returns Helper.loadJson("providers/oauth2/dropbox.success.json")
+      wsRequest.withHttpHeaders(AUTHORIZATION -> s"Bearer ${authInfo.accessToken}") returns wsRequest
+      wsRequest.get() returns Future.successful(wsResponse)
+      httpLayer.url(API.format("my.access.token")) returns wsRequest
 
       profile(provider.retrieveProfile(authInfo)) { p =>
         p must be equalTo CommonSocialProfile(

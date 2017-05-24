@@ -21,7 +21,8 @@ import com.mohiva.play.silhouette.impl.providers.OpenIDProvider._
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.test.{ FakeRequest, WithApplication }
+import play.api.mvc.{ AnyContent, AnyContentAsEmpty }
+import play.api.test.{ FakeHeaders, FakeRequest, WithApplication }
 import play.mvc.Http.HeaderNames
 import test.SocialProviderSpec
 
@@ -81,9 +82,14 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
     }
 
     def verifyRelativeCallbackURLResolution(callbackURL: String, secure: Boolean, resolvedCallbackURL: String) = {
-      implicit val req = spy(FakeRequest(GET, "/request-path/something").withHeaders(HeaderNames.HOST -> "www.example.com"))
+      implicit val req = FakeRequest[AnyContent](
+        method = GET,
+        uri = "/request-path/something",
+        headers = FakeHeaders(Seq(HeaderNames.HOST -> "www.example.com")),
+        body = AnyContentAsEmpty,
+        secure = secure
+      )
 
-      req.secure returns secure
       c.openIDSettings.callbackURL returns callbackURL
       c.openIDService.redirectURL(any, any)(any) returns Future.successful(c.openIDSettings.providerURL)
 

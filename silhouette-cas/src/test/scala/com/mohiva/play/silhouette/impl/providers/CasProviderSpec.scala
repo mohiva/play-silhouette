@@ -130,7 +130,7 @@ class CasProviderSpec extends SocialProviderSpec[CasInfo] with Mockito with Logg
 
     lazy val httpLayer = {
       val m = mock[HTTPLayer]
-      m.executionContext returns defaultContext
+      m.executionContext returns global
       m
     }
 

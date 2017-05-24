@@ -492,7 +492,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
       cookies(result).get(settings.cookieName) should beSome[Cookie].which { c =>
         c.name must be equalTo settings.cookieName
         c.value must be equalTo ""
-        c.maxAge must beSome(0)
+        c.maxAge must beSome(Cookie.DiscardedMaxAge)
         c.path must be equalTo settings.cookiePath
         c.domain must be equalTo settings.cookieDomain
         c.secure must be equalTo settings.secureCookie
@@ -507,7 +507,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
       cookies(result).get(settings.cookieName) should beSome[Cookie].which { c =>
         c.name must be equalTo settings.cookieName
         c.value must be equalTo ""
-        c.maxAge must beSome(0)
+        c.maxAge must beSome(Cookie.DiscardedMaxAge)
         c.path must be equalTo settings.cookiePath
         c.domain must be equalTo settings.cookieDomain
         c.secure must be equalTo settings.secureCookie

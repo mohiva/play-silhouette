@@ -18,9 +18,10 @@ package com.mohiva.play.silhouette.impl.util
 import org.joda.time.DateTime
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.cache.CacheApi
+import play.api.cache.AsyncCacheApi
 import play.api.test.PlaySpecification
 
+import scala.concurrent.Future
 import scala.concurrent.duration.Duration
 
 /**
@@ -30,7 +31,7 @@ class PlayCacheLayerSpec extends PlaySpecification with Mockito {
 
   "The `find` method" should {
     "return value from cache" in new Context {
-      cacheAPI.get[DateTime]("id") returns Some(value)
+      cacheAPI.get[DateTime]("id") returns Future.successful(Some(value))
 
       await(layer.find[DateTime]("id")) should beSome(value)
 
@@ -62,7 +63,7 @@ class PlayCacheLayerSpec extends PlaySpecification with Mockito {
     /**
      * The cache API.
      */
-    lazy val cacheAPI = mock[CacheApi]
+    lazy val cacheAPI = mock[AsyncCacheApi]
 
     /**
      * The layer to test.

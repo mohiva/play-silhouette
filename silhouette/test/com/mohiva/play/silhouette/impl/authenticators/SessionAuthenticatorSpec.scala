@@ -221,12 +221,12 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito with NoLan
   }
 
   "The `init` method of the service" should {
-    "return a session with an encoded authenticator" in new WithApplication with Context {
+    "return a session with an encoded authenticator" in new WithApplication with AppContext {
       implicit val request = FakeRequest()
       val data = authenticatorEncoder.encode(Json.toJson(authenticator).toString())
       val session = await(service.init(authenticator))
 
-      session must be equalTo Session(Map(settings.sessionKey -> data))
+      session must be equalTo sessionCookieBaker.deserialize(Map(settings.sessionKey -> data))
     }
 
     "override existing authenticator from request" in new WithApplication with Context {
@@ -247,26 +247,26 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito with NoLan
   }
 
   "The result `embed` method of the service" should {
-    "return the response with the session" in new WithApplication with Context {
+    "return the response with the session" in new WithApplication with AppContext {
       implicit val request = FakeRequest()
       val data = authenticatorEncoder.encode(Json.toJson(authenticator).toString())
-      val result = service.embed(Session(Map(settings.sessionKey -> data)), Results.Ok)
+      val result = service.embed(sessionCookieBaker.deserialize(Map(settings.sessionKey -> data)), Results.Ok)
 
       session(result).get(settings.sessionKey) should beSome(data)
     }
 
-    "override existing authenticator from request" in new WithApplication with Context {
+    "override existing authenticator from request" in new WithApplication with AppContext {
       implicit val request = FakeRequest().withSession(settings.sessionKey -> "existing")
       val data = authenticatorEncoder.encode(Json.toJson(authenticator).toString())
-      val result = service.embed(Session(Map(settings.sessionKey -> data)), Results.Ok)
+      val result = service.embed(sessionCookieBaker.deserialize(Map(settings.sessionKey -> data)), Results.Ok)
 
       session(result).get(settings.sessionKey) should beSome(data)
     }
 
-    "keep non authenticator related session data" in new WithApplication with Context {
+    "keep non authenticator related session data" in new WithApplication with AppContext {
       implicit val request = FakeRequest().withSession("request-other" -> "keep")
       val data = authenticatorEncoder.encode(Json.toJson(authenticator).toString())
-      val result = service.embed(Session(Map(settings.sessionKey -> data)), Results.Ok.addingToSession(
+      val result = service.embed(sessionCookieBaker.deserialize(Map(settings.sessionKey -> data)), Results.Ok.addingToSession(
         "result-other" -> "keep"
       ))
 
@@ -277,20 +277,28 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito with NoLan
   }
 
   "The request `embed` method of the service" should {
-    "return the request with the session" in new WithApplication with Context {
+    "return the request with the session" in new WithApplication with AppContext {
       val data = authenticatorEncoder.encode(Json.toJson(authenticator).toString())
-      val session = Session(Map(settings.sessionKey -> data))
+      val session = sessionCookieBaker.deserialize(Map(settings.sessionKey -> data))
       val request = service.embed(session, FakeRequest())
 
       request.session.get(settings.sessionKey) should beSome(data)
     }
 
-    "override an existing session" in new WithApplication with Context {
+    "override an existing session" in new WithApplication with AppContext {
       val data = authenticatorEncoder.encode(Json.toJson(authenticator).toString())
-      val session = Session(Map(settings.sessionKey -> data))
+      val session = sessionCookieBaker.deserialize(Map(settings.sessionKey -> data))
       val request = service.embed(session, FakeRequest().withSession(settings.sessionKey -> "test"))
 
       request.session.get(settings.sessionKey) should beSome(data)
+    }
+
+    "should not remove an existing session key" in new WithApplication with AppContext {
+      val session = sessionCookieBaker.deserialize(Map(settings.sessionKey -> "test"))
+      val request = service.embed(session, FakeRequest().withSession("existing" -> "test"))
+
+      request.session.get("existing") should beSome("test")
+      request.session.get(settings.sessionKey) should beSome("test")
     }
   }
 
@@ -493,7 +501,6 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito with NoLan
       fingerprintGenerator,
       authenticatorEncoder,
       new DefaultSessionCookieBaker(),
-      new DefaultCookieHeaderEncoding(),
       clock
     )
 
@@ -512,5 +519,17 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito with NoLan
       idleTimeout = settings.authenticatorIdleTimeout,
       fingerprint = None
     ))
+  }
+
+  /**
+   * The application context.
+   */
+  trait AppContext extends Context {
+    self: WithApplication =>
+
+    /**
+     * The session cookie baker instance.
+     */
+    lazy val sessionCookieBaker = app.injector.instanceOf[SessionCookieBaker]
   }
 }

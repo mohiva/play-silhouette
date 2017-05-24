@@ -16,7 +16,6 @@
 
 import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
 import com.typesafe.sbt.SbtGhPages.ghpages
-import com.typesafe.sbt.SbtGit.GitKeys._
 import com.typesafe.sbt.SbtGit.git
 import com.typesafe.sbt.SbtSite.SiteKeys._
 import com.typesafe.sbt.SbtSite.site
@@ -151,9 +150,11 @@ object APIDoc {
     ghpages.settings ++
     Seq(
       // Create version
-      siteMappings ++= (mappings in (ScalaUnidoc, packageDoc), version).map { (mapping, ver) =>
+      siteMappings ++= {
+        val mapping = (mappings in (ScalaUnidoc, packageDoc)).value
+        val ver = version.value
         for ((file, path) <- mapping) yield (file, s"$ver/$path")
-      }.value,
+      },
       // Add custom files from site directory
       siteMappings ++= baseDirectory.map { dir =>
         for (file <- files) yield (new File(dir.getAbsolutePath + "/site/" + file), file.name)

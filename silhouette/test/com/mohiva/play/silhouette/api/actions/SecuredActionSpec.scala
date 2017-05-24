@@ -28,7 +28,6 @@ import org.specs2.control.NoLanguageFeatures
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.i18n.MessagesProvider
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
@@ -569,11 +568,6 @@ class SecuredActionSpec extends PlaySpecification with Mockito with JsonMatchers
        * A fake request.
        */
       lazy implicit val request = FakeRequest()
-
-      /**
-       * The messages provider.
-       */
-      lazy implicit val messagesProvider = app.injector.instanceOf[MessagesProvider]
 
       /**
        * The secured controller.

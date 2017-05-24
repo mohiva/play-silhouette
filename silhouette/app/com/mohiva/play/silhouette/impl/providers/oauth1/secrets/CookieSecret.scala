@@ -35,6 +35,8 @@ import scala.util.{ Failure, Success, Try }
  * The cookie secret companion object.
  */
 object CookieSecret {
+  import play.api.libs.json.JodaReads._
+  import play.api.libs.json.JodaWrites._
 
   /**
    * Converts the [[CookieSecret]]] to Json and vice versa.

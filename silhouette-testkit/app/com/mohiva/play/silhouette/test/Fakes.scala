@@ -122,7 +122,6 @@ case class FakeSessionAuthenticatorService() extends SessionAuthenticatorService
   new DefaultFingerprintGenerator(),
   new Base64AuthenticatorEncoder,
   new DefaultSessionCookieBaker(),
-  new DefaultCookieHeaderEncoding(),
   Clock())
 
 /**

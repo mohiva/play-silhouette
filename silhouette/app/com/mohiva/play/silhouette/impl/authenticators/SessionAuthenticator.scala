@@ -20,14 +20,14 @@ import com.mohiva.play.silhouette.api.crypto.AuthenticatorEncoder
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
-import com.mohiva.play.silhouette.api.util.JsonFormats._
 import com.mohiva.play.silhouette.api.util.{ Clock, ExtractableRequest, FingerprintGenerator }
 import com.mohiva.play.silhouette.api.{ Authenticator, ExpirableAuthenticator, Logger, LoginInfo }
 import com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService._
 import org.joda.time.DateTime
-import play.api.http.HeaderNames
 import play.api.libs.json.Json
+import play.api.libs.typedmap.TypedMap
 import play.api.mvc._
+import play.api.mvc.request.{ Cell, RequestAttrKey }
 
 import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
@@ -66,6 +66,9 @@ case class SessionAuthenticator(
  * The companion object of the authenticator.
  */
 object SessionAuthenticator extends Logger {
+  import com.mohiva.play.silhouette.api.util.JsonFormats._
+  import play.api.libs.json.JodaReads._
+  import play.api.libs.json.JodaWrites._
 
   /**
    * Converts the SessionAuthenticator to Json and vice versa.
@@ -118,7 +121,6 @@ object SessionAuthenticator extends Logger {
  * @param fingerprintGenerator The fingerprint generator implementation.
  * @param authenticatorEncoder The authenticator encoder.
  * @param sessionCookieBaker   The session cookie baker.
- * @param cookieHeaderEncoding The cookie header encoder.
  * @param clock                The clock implementation.
  * @param executionContext     The execution context to handle the asynchronous operations.
  */
@@ -127,7 +129,6 @@ class SessionAuthenticatorService(
   fingerprintGenerator: FingerprintGenerator,
   authenticatorEncoder: AuthenticatorEncoder,
   sessionCookieBaker: SessionCookieBaker,
-  cookieHeaderEncoding: CookieHeaderEncoding,
   clock: Clock)(implicit val executionContext: ExecutionContext)
   extends AuthenticatorService[SessionAuthenticator]
   with Logger {
@@ -213,10 +214,12 @@ class SessionAuthenticatorService(
    * @return The manipulated request header.
    */
   override def embed(session: Session, request: RequestHeader): RequestHeader = {
-    val sessionCookie = sessionCookieBaker.encodeAsCookie(session)
-    val cookies = cookieHeaderEncoding.mergeCookieHeader(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(sessionCookie))
-    val additional = Seq(HeaderNames.COOKIE -> cookies)
-    request.withHeaders(request.headers.replace(additional: _*))
+    val s = request.attrs.get(RequestAttrKey.Session) match {
+      case Some(existing) => sessionCookieBaker.deserialize(existing.value.data ++ session.data)
+      case None           => session
+    }
+
+    request.withAttrs(TypedMap(RequestAttrKey.Session.bindValue(Cell(s))))
   }
 
   /**

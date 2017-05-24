@@ -15,15 +15,15 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
-import com.mohiva.play.silhouette.api.util.HTTPLayer
+import com.mohiva.play.silhouette.api.util.MockHTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth1Provider._
 import com.mohiva.play.silhouette.impl.providers.oauth1.services.PlayOAuth1Service
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.mvc.{ Result, Results }
-import play.api.test.{ FakeRequest, WithApplication }
+import play.api.mvc.{ AnyContent, AnyContentAsEmpty, Result, Results }
+import play.api.test.{ FakeHeaders, FakeRequest, WithApplication }
 import play.mvc.Http.HeaderNames
 import test.SocialProviderSpec
 
@@ -95,8 +95,14 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
     }
 
     def verifyCallbackURLResolution(callbackURL: String, secure: Boolean, resolvedCallbackURL: String) = {
-      implicit val req = spy(FakeRequest(GET, "/request-path/something").withHeaders(HeaderNames.HOST -> "www.example.com"))
-      req.secure returns secure
+      implicit val req = FakeRequest[AnyContent](
+        method = GET,
+        uri = "/request-path/something",
+        headers = FakeHeaders(Seq(HeaderNames.HOST -> "www.example.com")),
+        body = AnyContentAsEmpty,
+        secure = secure
+      )
+
       c.oAuthSettings.callbackURL returns callbackURL
 
       c.oAuthService.retrieveRequestToken(any)(any) returns Future.successful(c.oAuthInfo)
@@ -162,7 +168,7 @@ trait OAuth1ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
    * The HTTP layer mock.
    */
   lazy val httpLayer = {
-    val m = mock[HTTPLayer]
+    val m = mock[MockHTTPLayer]
     m.executionContext returns global
     m
   }

@@ -18,7 +18,7 @@ package com.mohiva.play.silhouette.impl.providers
 import java.net.URLEncoder._
 
 import com.mohiva.play.silhouette.api.exceptions._
-import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, HTTPLayer }
+import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, MockHTTPLayer, MockWSRequest }
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.state.UserStateItem
@@ -26,9 +26,8 @@ import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.libs.json.{ JsValue, Json }
-import play.api.libs.ws.{ WSRequest, WSResponse }
-import play.api.mvc.Result
-import play.api.test.{ FakeRequest, WithApplication }
+import play.api.mvc.{ AnyContent, AnyContentAsEmpty, Result }
+import play.api.test.{ FakeHeaders, FakeRequest, WithApplication }
 import play.mvc.Http.HeaderNames
 import test.SocialStateProviderSpec
 
@@ -149,11 +148,17 @@ abstract class OAuth2ProviderSpec extends SocialStateProviderSpec[OAuth2Info, So
       c.oAuthSettings.authorizationURL match {
         case None => skipped("authorizationURL is not defined, so this step isn't needed for provider: " + c.provider.getClass)
         case Some(_) =>
-          implicit val req = spy(FakeRequest(GET, "/request-path/something").withHeaders(HeaderNames.HOST -> "www.example.com"))
+          implicit val req = FakeRequest[AnyContent](
+            method = GET,
+            uri = "/request-path/something",
+            headers = FakeHeaders(Seq(HeaderNames.HOST -> "www.example.com")),
+            body = AnyContentAsEmpty,
+            secure = secure
+          )
+
           val sessionKey = "session-key"
           val sessionValue = "session-value"
 
-          req.secure returns secure
           c.oAuthSettings.redirectURL returns Some(redirectURL)
 
           c.stateProvider.serialize(c.state) returns sessionValue
@@ -177,11 +182,17 @@ abstract class OAuth2ProviderSpec extends SocialStateProviderSpec[OAuth2Info, So
       c.oAuthSettings.authorizationURL match {
         case None => skipped("authorizationURL is not defined, so this step isn't needed for provider: " + c.provider.getClass)
         case Some(_) =>
-          implicit val req = spy(FakeRequest(GET, "/request-path/something").withHeaders(HeaderNames.HOST -> "www.example.com"))
+          implicit val req = FakeRequest[AnyContent](
+            method = GET,
+            uri = "/request-path/something",
+            headers = FakeHeaders(Seq(HeaderNames.HOST -> "www.example.com")),
+            body = AnyContentAsEmpty,
+            secure = secure
+          )
+
           val sessionKey = "session-key"
           val sessionValue = "session-value"
 
-          req.secure returns secure
           c.oAuthSettings.redirectURL returns redirectURL
 
           c.stateProvider.serialize(c.state) returns sessionValue
@@ -229,7 +240,7 @@ abstract class OAuth2ProviderSpec extends SocialStateProviderSpec[OAuth2Info, So
     }
 
     "submit the proper params to the access token post request" in new WithApplication {
-      val requestHolder = mock[WSRequest]
+      val wsRequest = mock[MockWSRequest]
       val redirectParam = c.oAuthSettings.redirectURL match {
         case Some(rUri) =>
           List((RedirectURI, rUri))
@@ -241,21 +252,21 @@ abstract class OAuth2ProviderSpec extends SocialStateProviderSpec[OAuth2Info, So
         GrantType -> Seq(AuthorizationCode),
         Code -> Seq("my.code")) ++ c.oAuthSettings.accessTokenParams.mapValues(Seq(_)) ++ redirectParam.toMap.mapValues(Seq(_))
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
-      requestHolder.withHeaders(any) returns requestHolder
+      wsRequest.withHttpHeaders(any) returns wsRequest
 
       // We must use this neat trick here because it isn't possible to check the post call with a verification,
       // because of the implicit params needed for the post call. On the other hand we can test it in the abstract
       // spec, because we throw an exception in both cases which stops the test once the post method was called.
       // This protects as for an NPE because of the not mocked dependencies. The other solution would be to execute
       // this test in every provider with the full mocked dependencies.
-      requestHolder.post[Map[String, Seq[String]]](any)(any) answers { (a, _) =>
+      wsRequest.post[Map[String, Seq[String]]](any)(any) answers { (a, _) =>
         if (a.asInstanceOf[Array[Any]](0).asInstanceOf[Map[String, Seq[String]]].equals(params)) {
           throw new RuntimeException("success")
         } else {
           throw new RuntimeException("failure")
         }
       }
-      c.httpLayer.url(c.oAuthSettings.accessTokenURL) returns requestHolder
+      c.httpLayer.url(c.oAuthSettings.accessTokenURL) returns wsRequest
       c.stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(c.state)
       c.stateProvider.state(any[ExecutionContext]) returns Future.successful(c.state)
 
@@ -265,13 +276,13 @@ abstract class OAuth2ProviderSpec extends SocialStateProviderSpec[OAuth2Info, So
     }
 
     "fail with UnexpectedResponseException if Json cannot be parsed from response" in new WithApplication {
-      val wsRequest = mock[WSRequest]
-      val wsResponse = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
 
       wsResponse.json throws new RuntimeException("Unexpected character ('<' (code 60))")
       wsResponse.body returns "<html></html>"
-      wsRequest.withHeaders(any) returns wsRequest
+      wsRequest.withHttpHeaders(any) returns wsRequest
       wsRequest.post[Map[String, Seq[String]]](any)(any) returns Future.successful(wsResponse)
       c.httpLayer.url(c.oAuthSettings.accessTokenURL) returns wsRequest
       c.stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(c.state)
@@ -316,7 +327,7 @@ trait OAuth2ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
    * The HTTP layer mock.
    */
   lazy val httpLayer = {
-    val m = mock[HTTPLayer].smart
+    val m = mock[MockHTTPLayer].smart
     m.executionContext returns global
     m
   }
@@ -328,7 +339,8 @@ trait OAuth2ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
     AccessToken -> "my.access.token",
     TokenType -> "bearer",
     ExpiresIn -> 3600,
-    RefreshToken -> "my.refresh.token")
+    RefreshToken -> "my.refresh.token"
+  )
 
   /**
    * The OAuth2 state.

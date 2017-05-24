@@ -17,7 +17,7 @@ package com.mohiva.play.silhouette.api
 
 import org.specs2.matcher.Scope
 import play.api.http.MimeTypes._
-import play.api.i18n.{ I18nSupport, MessagesApi }
+import play.api.i18n.{ I18nSupport, Lang, Langs, MessagesApi }
 import play.api.mvc.{ RequestHeader, Result }
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
@@ -162,6 +162,11 @@ class ErrorHandlerSpec extends PlaySpecification {
      * The Play messages provider.
      */
     lazy val messagesApi = app.injector.instanceOf[MessagesApi]
+
+    /**
+     * The implicit lang.
+     */
+    lazy implicit val lang: Lang = app.injector.instanceOf[Langs].availables.head
 
     /**
      * The default not-authenticated error handler.

@@ -15,14 +15,13 @@
  */
 package com.mohiva.play.silhouette.impl.services
 
-import com.mohiva.play.silhouette.api.util.HTTPLayer
+import com.mohiva.play.silhouette.api.util.{ MockHTTPLayer, MockWSRequest }
 import com.mohiva.play.silhouette.impl.services.GravatarService._
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.libs.ws.{ WSRequest, WSResponse }
 import play.api.test.PlaySpecification
-import play.api.libs.concurrent.Execution._
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 /**
@@ -36,70 +35,69 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
     }
 
     "return None if HTTP status code isn't 200" in new Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
 
-      response.status returns 404
-      requestHolder.get() returns Future.successful(response)
-      httpLayer.executionContext returns defaultContext
-      httpLayer.url(any) returns requestHolder
+      wsResponse.status returns 404
+      wsRequest.get() returns Future.successful(wsResponse)
+      httpLayer.url(any) returns wsRequest
 
       await(service.retrieveURL(email)) should beNone
     }
 
     "return None if HTTP status code isn't 200" in new Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
 
-      response.status returns 404
-      requestHolder.get() returns Future.successful(response)
-      httpLayer.url(any) returns requestHolder
+      wsResponse.status returns 404
+      wsRequest.get() returns Future.successful(wsResponse)
+      httpLayer.url(any) returns wsRequest
 
       await(service.retrieveURL(email)) should beNone
     }
 
     "return None if exception will be thrown during API request" in new Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
 
-      response.status throws new RuntimeException("Timeout error")
-      requestHolder.get() returns Future.successful(response)
-      httpLayer.url(any) returns requestHolder
+      wsResponse.status throws new RuntimeException("Timeout error")
+      wsRequest.get() returns Future.successful(wsResponse)
+      httpLayer.url(any) returns wsRequest
 
       await(service.retrieveURL(email)) should beNone
     }
 
     "return secure Avatar url" in new Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
 
-      response.status returns 200
-      requestHolder.get() returns Future.successful(response)
-      httpLayer.url(any) returns requestHolder
+      wsResponse.status returns 200
+      wsRequest.get() returns Future.successful(wsResponse)
+      httpLayer.url(any) returns wsRequest
 
       await(service.retrieveURL(email)) should beSome(SecureURL.format(hash, "?d=404"))
     }
 
     "return insecure Avatar url" in new Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
 
       settings.secure returns false
-      response.status returns 200
-      requestHolder.get() returns Future.successful(response)
-      httpLayer.url(any) returns requestHolder
+      wsResponse.status returns 200
+      wsRequest.get() returns Future.successful(wsResponse)
+      httpLayer.url(any) returns wsRequest
 
       await(service.retrieveURL(email)) should beSome(InsecureURL.format(hash, "?d=404"))
     }
 
     "return an url with additional parameters" in new Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
 
       settings.params returns Map("d" -> "http://example.com/images/avatar.jpg", "s" -> "400")
-      response.status returns 200
-      requestHolder.get() returns Future.successful(response)
-      httpLayer.url(any) returns requestHolder
+      wsResponse.status returns 200
+      wsRequest.get() returns Future.successful(wsResponse)
+      httpLayer.url(any) returns wsRequest
 
       await(service.retrieveURL(email)) should beSome(
         SecureURL.format(hash, "?d=http%3A%2F%2Fexample.com%2Fimages%2Favatar.jpg&s=400")
@@ -107,12 +105,12 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
     }
 
     "not trim leading zeros" in new Context {
-      val requestHolder = mock[WSRequest]
-      val response = mock[WSResponse]
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
 
-      response.status returns 200
-      requestHolder.get() returns Future.successful(response)
-      httpLayer.url(any) returns requestHolder
+      wsResponse.status returns 200
+      wsRequest.get() returns Future.successful(wsResponse)
+      httpLayer.url(any) returns wsRequest
 
       await(service.retrieveURL("123test@test.com")) should beSome(
         SecureURL.format("0d77aed6b4c5857473c9a04c2017f8b8", "?d=404")
@@ -129,8 +127,8 @@ class GravatarServiceSpec extends PlaySpecification with Mockito {
      * The HTTP layer implementation.
      */
     val httpLayer = {
-      val m = mock[HTTPLayer]
-      m.executionContext returns defaultContext
+      val m = mock[MockHTTPLayer]
+      m.executionContext returns global
       m
     }
 

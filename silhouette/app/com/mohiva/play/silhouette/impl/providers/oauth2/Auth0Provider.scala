@@ -71,7 +71,7 @@ trait BaseAuth0Provider extends OAuth2Provider {
    */
   override protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
     val request = httpLayer.url(urls("api"))
-    val requestWithHeader = request.withHeaders(("Authorization", s"Bearer ${authInfo.accessToken}"))
+    val requestWithHeader = request.withHttpHeaders(("Authorization", s"Bearer ${authInfo.accessToken}"))
 
     val httpResponse = requestWithHeader.get()
     httpResponse.flatMap { response =>

@@ -21,18 +21,18 @@ package com.mohiva.play.silhouette.impl.authenticators
 
 import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.crypto.{ CookieSigner, AuthenticatorEncoder }
+import com.mohiva.play.silhouette.api.crypto.{ AuthenticatorEncoder, CookieSigner }
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.repositories.AuthenticatorRepository
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorResult, AuthenticatorService }
-import com.mohiva.play.silhouette.api.util.JsonFormats._
 import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService._
 import org.joda.time.DateTime
-import play.api.http.HeaderNames
 import play.api.libs.json.Json
+import play.api.libs.typedmap.TypedMap
 import play.api.mvc._
+import play.api.mvc.request.{ Cell, RequestAttrKey }
 
 import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
@@ -84,6 +84,9 @@ case class CookieAuthenticator(
  * The companion object of the authenticator.
  */
 object CookieAuthenticator extends Logger {
+  import com.mohiva.play.silhouette.api.util.JsonFormats._
+  import play.api.libs.json.JodaReads._
+  import play.api.libs.json.JodaWrites._
 
   /**
    * Converts the CookieAuthenticator to Json and vice versa.
@@ -280,9 +283,11 @@ class CookieAuthenticatorService(
    * @return The manipulated request header.
    */
   override def embed(cookie: Cookie, request: RequestHeader): RequestHeader = {
-    val cookies = cookieHeaderEncoding.mergeCookieHeader(request.headers.get(HeaderNames.COOKIE).getOrElse(""), Seq(cookie))
-    val additional = Seq(HeaderNames.COOKIE -> cookies)
-    request.withHeaders(request.headers.replace(additional: _*))
+    val filteredCookies = request.cookies.filter(_.name != cookie.name).toSeq
+    val combinedCookies = filteredCookies :+ cookie
+    val cookies = Cookies(combinedCookies)
+
+    request.withAttrs(TypedMap(RequestAttrKey.Cookies.bindValue(Cell(cookies))))
   }
 
   /**

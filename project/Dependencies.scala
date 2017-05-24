@@ -24,8 +24,7 @@ object Dependencies {
 
   val resolvers = Seq(
     "Atlassian Releases" at "https://maven.atlassian.com/public/",
-    "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases",
-    "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
+    "Akka Snapshot Repository" at "http://repo.akka.io/snapshots/"
   )
 
   object Library {
@@ -37,6 +36,7 @@ object Dependencies {
       val test = "com.typesafe.play" %% "play-test" % version
       val specs2 = "com.typesafe.play" %% "play-specs2" % version
       val openid = "com.typesafe.play" %% "play-openid" % version
+      val jsonJoda = "com.typesafe.play" %% "play-json-joda" % version
       object Specs2 {
         private val version = "3.8.9"
         val matcherExtra = "org.specs2" %% "specs2-matcher-extra" % version

@@ -25,7 +25,7 @@ import org.specs2.control.NoLanguageFeatures
 import org.specs2.matcher.JsonMatchers
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import play.api.i18n.{ Messages, MessagesProvider }
+import play.api.i18n.{ Lang, Langs, MessagesApi }
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.mvc.{ ControllerComponents, _ }
@@ -48,7 +48,7 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
         val result = controller.defaultAction(request)
 
         status(result) must equalTo(OK)
-        contentAsString(result) must contain(Messages("without.identity.and.authenticator"))
+        contentAsString(result) must contain(messagesApi("without.identity.and.authenticator"))
       }
     }
 
@@ -62,7 +62,7 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
         val result = controller.defaultAction(request)
 
         status(result) must equalTo(OK)
-        contentAsString(result) must contain(Messages("without.identity.and.authenticator"))
+        contentAsString(result) must contain(messagesApi("without.identity.and.authenticator"))
         there was one(env.authenticatorService).discard(any, any)(any)
       }
     }
@@ -79,7 +79,7 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
         val result = controller.defaultAction(request)
 
         status(result) must equalTo(OK)
-        contentAsString(result) must contain(Messages("without.identity.and.with.authenticator"))
+        contentAsString(result) must contain(messagesApi("without.identity.and.with.authenticator"))
         there was one(env.authenticatorService).touch(any)
         there was one(env.authenticatorService).update(any, any)(any)
       }
@@ -97,7 +97,7 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
         val result = controller.defaultAction(request)
 
         status(result) must equalTo(OK)
-        contentAsString(result) must contain(Messages("with.identity.and.authenticator"))
+        contentAsString(result) must contain(messagesApi("with.identity.and.authenticator"))
         there was one(env.authenticatorService).touch(any)
         there was one(env.authenticatorService).update(any, any)(any)
       }
@@ -151,7 +151,7 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
         val result = controller.defaultAction(request)
 
         status(result) must equalTo(OK)
-        contentAsString(result) must contain(Messages("with.identity.and.authenticator"))
+        contentAsString(result) must contain(messagesApi("with.identity.and.authenticator"))
         there was one(env.authenticatorService).touch(any)
         there was no(env.authenticatorService).update(any, any)(any)
       }
@@ -189,7 +189,7 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
         val result = controller.renewAction(request)
 
         status(result) must equalTo(OK)
-        contentAsString(result) must contain(Messages("renewed"))
+        contentAsString(result) must contain(messagesApi("renewed"))
         there was one(env.authenticatorService).touch(any)
         there was one(env.authenticatorService).renew(any, any)(any)
         there was no(env.authenticatorService).update(any, any)(any)
@@ -227,7 +227,7 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
         val result = controller.discardAction(request)
 
         status(result) must equalTo(OK)
-        contentAsString(result) must contain(Messages("discarded"))
+        contentAsString(result) must contain(messagesApi("discarded"))
         there was one(env.authenticatorService).touch(any)
         there was one(env.authenticatorService).discard(any, any)(any)
         there was no(env.authenticatorService).update(any, any)(any)
@@ -340,9 +340,14 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
       lazy implicit val request = FakeRequest()
 
       /**
-       * The messages provider.
+       * The messages API.
        */
-      lazy implicit val messagesProvider = app.injector.instanceOf[MessagesProvider]
+      lazy val messagesApi = app.injector.instanceOf[MessagesApi]
+
+      /**
+       * The implicit lang.
+       */
+      lazy implicit val lang: Lang = app.injector.instanceOf[Langs].availables.head
 
       /**
        * The user aware controller.
