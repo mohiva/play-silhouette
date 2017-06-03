@@ -246,7 +246,7 @@ class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler], cooki
    * @return The serialized state as string.
    */
   override def serialize(state: SocialState): String = {
-    cookieSigner.sign(state.items.flatMap(i => handlers.flatMap(h => h.canHandle(i).map(h.serialize))).mkString("."))
+    cookieSigner.sign(state.items.flatMap(i => handlers.flatMap(h => h.canHandle(i).map(h.serialize))).map(_.asString).mkString("."))
   }
 
   /**
