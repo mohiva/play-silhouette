@@ -15,7 +15,7 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
-import com.mohiva.play.silhouette.api.crypto.CookieSigner
+import com.mohiva.play.silhouette.api.crypto.Signer
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.impl.providers.DefaultSocialStateHandler._
@@ -170,12 +170,12 @@ class DefaultSocialStateHandlerSpec extends PlaySpecification with Mockito with 
     }
 
     /**
-     * The cookie signer implementation.
+     * The signer implementation.
      *
-     * The cookie signer returns the same value as passed to the methods. This is enough for testing.
+     * The signer returns the same value as passed to the methods. This is enough for testing.
      */
-    val cookieSigner = {
-      val c = mock[CookieSigner].smart
+    val signer = {
+      val c = mock[Signer].smart
       c.sign(any) answers { p => p.asInstanceOf[String] }
       c.extract(any) answers { p => Success(p.asInstanceOf[String]) }
       c
@@ -189,6 +189,6 @@ class DefaultSocialStateHandlerSpec extends PlaySpecification with Mockito with 
     /**
      * The state handler to test.
      */
-    val stateHandler = new DefaultSocialStateHandler(Set(Default.itemHandler, Publishable.itemHandler), cookieSigner)
+    val stateHandler = new DefaultSocialStateHandler(Set(Default.itemHandler, Publishable.itemHandler), signer)
   }
 }

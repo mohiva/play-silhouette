@@ -18,7 +18,7 @@ package com.mohiva.play.silhouette.test
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.crypto.{ Base64AuthenticatorEncoder, CookieSigner }
+import com.mohiva.play.silhouette.api.crypto.{ Base64AuthenticatorEncoder, Signer }
 import com.mohiva.play.silhouette.api.repositories.AuthenticatorRepository
 import com.mohiva.play.silhouette.api.services.{ AuthenticatorService, IdentityService }
 import com.mohiva.play.silhouette.api.util.Clock
@@ -130,7 +130,7 @@ case class FakeSessionAuthenticatorService() extends SessionAuthenticatorService
 case class FakeCookieAuthenticatorService() extends CookieAuthenticatorService(
   CookieAuthenticatorSettings(),
   None,
-  new CookieSigner {
+  new Signer {
     def sign(data: String) = data
     def extract(message: String) = Success(message)
   },

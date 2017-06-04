@@ -19,13 +19,13 @@ import java.util.regex.Pattern
 
 import org.specs2.mutable.Specification
 import org.specs2.specification.Scope
-import JcaCookieSigner._
+import JcaSigner._
 import com.mohiva.play.silhouette.api.exceptions.CryptoException
 
 /**
- * Test case for the [[JcaCookieSigner]] class.
+ * Test case for the [[JcaSigner]] class.
  */
-class JcaCookieSignerSpec extends Specification {
+class JcaSignerSpec extends Specification {
 
   "The `sign` method" should {
     "return a signed message in the form [VERSION]-[SIGNATURE]-[DATA]" in new Context {
@@ -75,11 +75,11 @@ class JcaCookieSignerSpec extends Specification {
     /**
      * The settings instance.
      */
-    val settings = new JcaCookieSignerSettings(key)
+    val settings = JcaSignerSettings(key)
 
     /**
      * The cookie signer to test.
      */
-    val signer = new JcaCookieSigner(settings)
+    val signer = new JcaSigner(settings)
   }
 }

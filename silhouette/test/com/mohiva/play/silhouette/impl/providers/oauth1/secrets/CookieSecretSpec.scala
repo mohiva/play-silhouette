@@ -17,7 +17,7 @@ package com.mohiva.play.silhouette.impl.providers.oauth1.secrets
 
 import java.util.regex.Pattern
 
-import com.mohiva.play.silhouette.api.crypto.{ Base64, CookieSigner, Crypter }
+import com.mohiva.play.silhouette.api.crypto.{ Base64, Signer, Crypter }
 import com.mohiva.play.silhouette.api.util.Clock
 import com.mohiva.play.silhouette.impl.exceptions.OAuth1TokenSecretException
 import com.mohiva.play.silhouette.impl.providers.OAuth1Info
@@ -54,13 +54,13 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
 
   "The `serialize` method of the secret" should {
     "sign the cookie" in new WithApplication with Context {
-      serialize(secret, cookieSigner, crypter)
+      serialize(secret, signer, crypter)
 
-      there was one(cookieSigner).sign(any)
+      there was one(signer).sign(any)
     }
 
     "encrypt the cookie" in new WithApplication with Context {
-      serialize(secret, cookieSigner, crypter)
+      serialize(secret, signer, crypter)
 
       there was one(crypter).encrypt(any)
     }
@@ -71,31 +71,31 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
       val value = "invalid"
       val msg = Pattern.quote(InvalidJson.format(value))
 
-      unserialize(crypter.encrypt(value), cookieSigner, crypter) must beFailedTry.withThrowable[OAuth1TokenSecretException](msg)
+      unserialize(crypter.encrypt(value), signer, crypter) must beFailedTry.withThrowable[OAuth1TokenSecretException](msg)
     }
 
     "throw an OAuth1TokenSecretException if a secret contains valid json but invalid secret" in new WithApplication with Context {
       val value = "{ \"test\": \"test\" }"
       val msg = "^" + Pattern.quote(InvalidSecretFormat.format("")) + ".*"
 
-      unserialize(crypter.encrypt(value), cookieSigner, crypter) must beFailedTry.withThrowable[OAuth1TokenSecretException](msg)
+      unserialize(crypter.encrypt(value), signer, crypter) must beFailedTry.withThrowable[OAuth1TokenSecretException](msg)
     }
 
     "throw an OAuth1TokenSecretException if a secret is badly signed" in new WithApplication with Context {
-      cookieSigner.extract(any) returns Failure(new Exception("Bad signature"))
+      signer.extract(any) returns Failure(new Exception("Bad signature"))
 
-      val value = serialize(secret, cookieSigner, crypter)
+      val value = serialize(secret, signer, crypter)
       val msg = Pattern.quote(InvalidCookieSignature)
 
-      unserialize(crypter.encrypt(value), cookieSigner, crypter) must beFailedTry.withThrowable[OAuth1TokenSecretException](msg)
+      unserialize(crypter.encrypt(value), signer, crypter) must beFailedTry.withThrowable[OAuth1TokenSecretException](msg)
     }
   }
 
   "The `serialize/unserialize` method of the secret" should {
     "serialize/unserialize a secret" in new WithApplication with Context {
-      val serialized = serialize(secret, cookieSigner, crypter)
+      val serialized = serialize(secret, signer, crypter)
 
-      unserialize(serialized, cookieSigner, crypter) must beSuccessfulTry.withValue(secret)
+      unserialize(serialized, signer, crypter) must beSuccessfulTry.withValue(secret)
     }
   }
 
@@ -125,7 +125,7 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
     "throw an OAuth1TokenSecretException if secret is expired" in new WithApplication with Context {
       val expiredSecret = secret.copy(expirationDate = DateTime.now.minusHours(1))
 
-      implicit val req = FakeRequest().withCookies(Cookie(settings.cookieName, CookieSecret.serialize(expiredSecret, cookieSigner, crypter)))
+      implicit val req = FakeRequest().withCookies(Cookie(settings.cookieName, CookieSecret.serialize(expiredSecret, signer, crypter)))
 
       await(provider.retrieve) must throwA[OAuth1TokenSecretException].like {
         case e => e.getMessage must startWith(SecretIsExpired.format())
@@ -149,9 +149,9 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
     }
 
     "throw an OAuth1TokenSecretException if client secret is badly signed" in new WithApplication with Context {
-      cookieSigner.extract(any) returns Failure(new Exception("Bad signature"))
+      signer.extract(any) returns Failure(new Exception("Bad signature"))
 
-      implicit val req = FakeRequest().withCookies(Cookie(settings.cookieName, CookieSecret.serialize(secret, cookieSigner, crypter)))
+      implicit val req = FakeRequest().withCookies(Cookie(settings.cookieName, CookieSecret.serialize(secret, signer, crypter)))
 
       await(provider.retrieve) must throwA[OAuth1TokenSecretException].like {
         case e => e.getMessage must startWith(InvalidCookieSignature)
@@ -159,7 +159,7 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
     }
 
     "return the secret if it's valid" in new WithApplication with Context {
-      implicit val req = FakeRequest().withCookies(Cookie(settings.cookieName, CookieSecret.serialize(secret, cookieSigner, crypter)))
+      implicit val req = FakeRequest().withCookies(Cookie(settings.cookieName, CookieSecret.serialize(secret, signer, crypter)))
 
       await(provider.retrieve) must be equalTo secret
     }
@@ -172,7 +172,7 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
 
       cookies(result).get(settings.cookieName) should beSome[Cookie].which { c =>
         c.name must be equalTo settings.cookieName
-        unserialize(c.value, cookieSigner, crypter).get must be equalTo secret
+        unserialize(c.value, signer, crypter).get must be equalTo secret
         c.maxAge must beSome(settings.expirationTime.toSeconds.toInt)
         c.path must be equalTo settings.cookiePath
         c.domain must be equalTo settings.cookieDomain
@@ -195,11 +195,7 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
      * The settings.
      */
     lazy val settings = CookieSecretSettings(
-      cookieName = "OAuth1TokenSecret",
-      cookiePath = "/",
       cookieDomain = None,
-      secureCookie = true,
-      httpOnlyCookie = true,
       expirationTime = 5 minutes
     )
 
@@ -217,12 +213,12 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
     }
 
     /**
-     * The cookie signer implementation.
+     * The signer implementation.
      *
-     * The cookie signer returns the same value as passed to the methods. This is enough for testing.
+     * The signer returns the same value as passed to the methods. This is enough for testing.
      */
-    lazy val cookieSigner = {
-      val c = mock[CookieSigner].smart
+    lazy val signer = {
+      val c = mock[Signer].smart
       c.sign(any) answers { p => p.asInstanceOf[String] }
       c.extract(any) answers { p => Success(p.asInstanceOf[String]) }
       c
@@ -231,7 +227,7 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
     /**
      * The provider implementation to test.
      */
-    lazy val provider = new CookieSecretProvider(settings, cookieSigner, crypter, clock)
+    lazy val provider = new CookieSecretProvider(settings, signer, crypter, clock)
 
     /**
      * An OAuth1 info.

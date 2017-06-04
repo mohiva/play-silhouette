@@ -17,7 +17,7 @@ package com.mohiva.play.silhouette.impl.providers.oauth1.secrets
 
 import javax.inject.Inject
 
-import com.mohiva.play.silhouette.api.crypto.{ CookieSigner, Crypter }
+import com.mohiva.play.silhouette.api.crypto.{ Signer, Crypter }
 import com.mohiva.play.silhouette.api.util.{ Clock, ExtractableRequest }
 import com.mohiva.play.silhouette.impl.exceptions.OAuth1TokenSecretException
 import com.mohiva.play.silhouette.impl.providers.oauth1.secrets.CookieSecretProvider._
@@ -46,25 +46,25 @@ object CookieSecret {
   /**
    * Returns a serialized value of the secret.
    *
-   * @param secret The secret to serialize.
-   * @param cookieSigner The cookie signer implementation.
+   * @param secret  The secret to serialize.
+   * @param signer  The signer implementation.
    * @param crypter The crypter implementation.
    * @return A serialized value of the secret.
    */
-  def serialize(secret: CookieSecret, cookieSigner: CookieSigner, crypter: Crypter) = {
-    cookieSigner.sign(crypter.encrypt(Json.toJson(secret).toString()))
+  def serialize(secret: CookieSecret, signer: Signer, crypter: Crypter) = {
+    signer.sign(crypter.encrypt(Json.toJson(secret).toString()))
   }
 
   /**
    * Unserializes the secret.
    *
-   * @param str The string representation of the secret.
-   * @param cookieSigner The cookie signer implementation.
+   * @param str     The string representation of the secret.
+   * @param signer  The signer implementation.
    * @param crypter The crypter implementation.
    * @return Some secret on success, otherwise None.
    */
-  def unserialize(str: String, cookieSigner: CookieSigner, crypter: Crypter): Try[CookieSecret] = {
-    cookieSigner.extract(str) match {
+  def unserialize(str: String, signer: Signer, crypter: Crypter): Try[CookieSecret] = {
+    signer.extract(str) match {
       case Success(data) => buildSecret(crypter.decrypt(data))
       case Failure(e)    => Failure(new OAuth1TokenSecretException(InvalidCookieSignature, e))
     }
@@ -107,16 +107,16 @@ case class CookieSecret(value: String, expirationDate: DateTime) extends OAuth1T
  * Saves the secret in a cookie.
  *
  * @param settings The secret settings.
- * @param cookieSigner The cookie signer implementation.
- * @param crypter The crypter implementation.
- * @param clock The clock implementation.
+ * @param signer   The signer implementation.
+ * @param crypter  The crypter implementation.
+ * @param clock    The clock implementation.
  */
 class CookieSecretProvider @Inject() (
   settings: CookieSecretSettings,
-  cookieSigner: CookieSigner,
+  signer: Signer,
   crypter: Crypter,
-  clock: Clock)
-  extends OAuth1TokenSecretProvider {
+  clock: Clock
+) extends OAuth1TokenSecretProvider {
 
   /**
    * The type of the secret implementation.
@@ -149,7 +149,7 @@ class CookieSecretProvider @Inject() (
    */
   override def retrieve[B](implicit request: ExtractableRequest[B], ec: ExecutionContext): Future[Secret] = {
     request.cookies.get(settings.cookieName) match {
-      case Some(cookie) => CookieSecret.unserialize(cookie.value, cookieSigner, crypter) match {
+      case Some(cookie) => CookieSecret.unserialize(cookie.value, signer, crypter) match {
         case Success(secret) if secret.isExpired => Future.failed(new OAuth1TokenSecretException(SecretIsExpired))
         case Success(secret)                     => Future.successful(secret)
         case Failure(error)                      => Future.failed(error)
@@ -170,12 +170,13 @@ class CookieSecretProvider @Inject() (
   override def publish[B](result: Result, secret: CookieSecret)(implicit request: ExtractableRequest[B]) = {
     result.withCookies(Cookie(
       name = settings.cookieName,
-      value = CookieSecret.serialize(secret, cookieSigner, crypter),
+      value = CookieSecret.serialize(secret, signer, crypter),
       maxAge = Some(settings.expirationTime.toSeconds.toInt),
       path = settings.cookiePath,
       domain = settings.cookieDomain,
       secure = settings.secureCookie,
-      httpOnly = settings.httpOnlyCookie))
+      httpOnly = settings.httpOnlyCookie
+    ))
   }
 }
 
@@ -211,4 +212,5 @@ case class CookieSecretSettings(
   cookieDomain: Option[String] = None,
   secureCookie: Boolean = true,
   httpOnlyCookie: Boolean = true,
-  expirationTime: FiniteDuration = 5 minutes)
+  expirationTime: FiniteDuration = 5 minutes
+)

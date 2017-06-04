@@ -17,7 +17,7 @@ package com.mohiva.play.silhouette.impl.providers.state
 
 import javax.inject.Inject
 
-import com.mohiva.play.silhouette.api.crypto.CookieSigner
+import com.mohiva.play.silhouette.api.crypto.Signer
 import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, IDGenerator }
 import com.mohiva.play.silhouette.impl.exceptions.OAuth2StateException
 import com.mohiva.play.silhouette.impl.providers.SocialStateItem.ItemStructure
@@ -58,12 +58,12 @@ object CsrfStateItem {
  *
  * @param settings     The state settings.
  * @param idGenerator  The ID generator used to create the state value.
- * @param cookieSigner The cookie signer implementation.
+ * @param signer       The signer implementation.
  */
 class CsrfStateItemHandler @Inject() (
   settings: CsrfStateSettings,
   idGenerator: IDGenerator,
-  cookieSigner: CookieSigner
+  signer: Signer
 ) extends SocialStateItemHandler
   with PublishableSocialStateItemHandler {
 
@@ -151,7 +151,7 @@ class CsrfStateItemHandler @Inject() (
   override def publish[B](item: Item, result: Result)(implicit request: ExtractableRequest[B]): Result = {
     result.withCookies(Cookie(
       name = settings.cookieName,
-      value = cookieSigner.sign(item.token),
+      value = signer.sign(item.token),
       maxAge = Some(settings.expirationTime.toSeconds.toInt),
       path = settings.cookiePath,
       domain = settings.cookieDomain,
@@ -168,7 +168,7 @@ class CsrfStateItemHandler @Inject() (
    */
   private def clientState(implicit request: RequestHeader): Try[Item] = {
     request.cookies.get(settings.cookieName) match {
-      case Some(cookie) => cookieSigner.extract(cookie.value).map(token => CsrfStateItem(token))
+      case Some(cookie) => signer.extract(cookie.value).map(token => CsrfStateItem(token))
       case None         => Failure(new OAuth2StateException(ClientStateDoesNotExists.format(settings.cookieName)))
     }
   }
@@ -207,4 +207,5 @@ case class CsrfStateSettings(
   cookieDomain: Option[String] = None,
   secureCookie: Boolean = true,
   httpOnlyCookie: Boolean = true,
-  expirationTime: FiniteDuration = 5 minutes)
+  expirationTime: FiniteDuration = 5 minutes
+)

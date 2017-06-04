@@ -15,7 +15,7 @@
  */
 package com.mohiva.play.silhouette.impl.providers.state
 
-import com.mohiva.play.silhouette.api.crypto.CookieSigner
+import com.mohiva.play.silhouette.api.crypto.Signer
 import com.mohiva.play.silhouette.api.util.IDGenerator
 import com.mohiva.play.silhouette.impl.providers.SocialStateItem
 import com.mohiva.play.silhouette.impl.providers.SocialStateItem.ItemStructure
@@ -115,12 +115,12 @@ class CsrfStateItemHandlerSpec extends PlaySpecification with Mockito with JsonM
     val settings = CsrfStateSettings()
 
     /**
-     * The cookie signer implementation.
+     * The signer implementation.
      *
-     * The cookie signer returns the same value as passed to the methods. This is enough for testing.
+     * The signer returns the same value as passed to the methods. This is enough for testing.
      */
-    val cookieSigner = {
-      val c = mock[CookieSigner].smart
+    val signer = {
+      val c = mock[Signer].smart
       c.sign(any) answers { p => p.asInstanceOf[String] }
       c.extract(any) answers { p => Success(p.asInstanceOf[String]) }
       c
@@ -144,7 +144,7 @@ class CsrfStateItemHandlerSpec extends PlaySpecification with Mockito with JsonM
     /**
      * An instance of the CSRF state item handler.
      */
-    val csrfStateItemHandler = new CsrfStateItemHandler(settings, idGenerator, cookieSigner)
+    val csrfStateItemHandler = new CsrfStateItemHandler(settings, idGenerator, signer)
 
     /**
      * A helper method to create a cookie.
@@ -154,11 +154,12 @@ class CsrfStateItemHandlerSpec extends PlaySpecification with Mockito with JsonM
      */
     def cookie(value: String): Cookie = Cookie(
       name = settings.cookieName,
-      value = cookieSigner.sign(value),
+      value = signer.sign(value),
       maxAge = Some(settings.expirationTime.toSeconds.toInt),
       path = settings.cookiePath,
       domain = settings.cookieDomain,
       secure = settings.secureCookie,
-      httpOnly = settings.httpOnlyCookie)
+      httpOnly = settings.httpOnlyCookie
+    )
   }
 }
