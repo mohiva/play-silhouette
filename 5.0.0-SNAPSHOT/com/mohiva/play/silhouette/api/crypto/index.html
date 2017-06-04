@@ -220,12 +220,6 @@ including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes.
                         </a>
                       </li><li class="current-entities indented6">
                         <span class="separator"></span>
-                        <a class="trait" href="CookieSigner.html" title="Specifies a strategy how cookies should be signed with a MAC."></a>
-                        <a href="CookieSigner.html" title="Specifies a strategy how cookies should be signed with a MAC.">
-                          CookieSigner
-                        </a>
-                      </li><li class="current-entities indented6">
-                        <span class="separator"></span>
                         <a class="trait" href="Crypter.html" title="Crypter interface."></a>
                         <a href="Crypter.html" title="Crypter interface.">
                           Crypter
@@ -241,6 +235,12 @@ including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes.
                         <a class="object" href="Hash$.html" title="Hash helper."></a>
                         <a href="Hash$.html" title="Hash helper.">
                           Hash
+                        </a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="trait" href="Signer.html" title="Specifies a strategy how data can be signed."></a>
+                        <a href="Signer.html" title="Specifies a strategy how data can be signed.">
+                          Signer
                         </a>
                       </li><li name="com.mohiva.play.silhouette.api.exceptions" visbl="pub" class="indented6 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="exceptions"></a><a id="exceptions:exceptions"></a>
@@ -417,24 +417,6 @@ including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes.
       </span>
       
       <p class="shortcomment cmt">Authenticator encoder implementation based on Base64.</p>
-    </li><li name="com.mohiva.play.silhouette.api.crypto.CookieSigner" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="CookieSignerextendsAnyRef"></a><a id="CookieSigner:CookieSigner"></a>
-      <span class="permalink">
-      <a href="../../../../../../com/mohiva/play/silhouette/api/crypto/index.html#CookieSignerextendsAnyRef" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a title="Specifies a strategy how cookies should be signed with a MAC." href="CookieSigner.html">
-              <span class="name">CookieSigner</span>
-            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
-      </span>
-      
-      <p class="shortcomment cmt">Specifies a strategy how cookies should be signed with a MAC.</p>
     </li><li name="com.mohiva.play.silhouette.api.crypto.Crypter" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="CrypterextendsAnyRef"></a><a id="Crypter:Crypter"></a>
       <span class="permalink">
@@ -474,6 +456,24 @@ they cannot act as drop-in replacements.
       </span>
       
       <p class="shortcomment cmt">Authenticator encoder implementation based on the <a href="Crypter.html" class="extype" name="com.mohiva.play.silhouette.api.crypto.Crypter">Crypter</a>.</p>
+    </li><li name="com.mohiva.play.silhouette.api.crypto.Signer" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SignerextendsAnyRef"></a><a id="Signer:Signer"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/crypto/index.html#SignerextendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="Specifies a strategy how data can be signed." href="Signer.html">
+              <span class="name">Signer</span>
+            </a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Specifies a strategy how data can be signed.</p>
     </li></ol>
             </div>
 

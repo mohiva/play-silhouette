@@ -183,18 +183,6 @@ including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a></dd></dl></div>
     </li><li class="current-entities indented5">
-                        <a class="object" href="JcaCookieSigner$.html" title="The companion object."></a>
-                        <a class="class" href="JcaCookieSigner.html" title="Cookie signer implementation based on JCA (Java Cryptography Architecture)."></a>
-                        <a href="JcaCookieSigner.html" title="Cookie signer implementation based on JCA (Java Cryptography Architecture).">
-                          JcaCookieSigner
-                        </a>
-                      </li><li class="current-entities indented5">
-                        <span class="separator"></span>
-                        <a class="class" href="JcaCookieSignerSettings.html" title="The settings for the JCA cookie signer."></a>
-                        <a href="JcaCookieSignerSettings.html" title="The settings for the JCA cookie signer.">
-                          JcaCookieSignerSettings
-                        </a>
-                      </li><li class="current-entities indented5">
                         <a class="object" href="JcaCrypter$.html" title="The companion object."></a>
                         <a class="class" href="JcaCrypter.html" title="Crypter implementation based on JCA (Java Cryptography Architecture)."></a>
                         <a href="JcaCrypter.html" title="Crypter implementation based on JCA (Java Cryptography Architecture).">
@@ -205,6 +193,18 @@ including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes.
                         <a class="class" href="JcaCrypterSettings.html" title="The settings for the JCA crypter."></a>
                         <a href="JcaCrypterSettings.html" title="The settings for the JCA crypter.">
                           JcaCrypterSettings
+                        </a>
+                      </li><li class="current-entities indented5">
+                        <a class="object" href="JcaSigner$.html" title="The companion object."></a>
+                        <a class="class" href="JcaSigner.html" title="Signer implementation based on JCA (Java Cryptography Architecture)."></a>
+                        <a href="JcaSigner.html" title="Signer implementation based on JCA (Java Cryptography Architecture).">
+                          JcaSigner
+                        </a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="JcaSignerSettings.html" title="The settings for the JCA signer."></a>
+                        <a href="JcaSignerSettings.html" title="The settings for the JCA signer.">
+                          JcaSignerSettings
                         </a>
                       </li><li name="com.mohiva.play.silhouette.impl" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="impl"></a><a id="impl:impl"></a>
@@ -343,48 +343,7 @@ including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes.
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.mohiva.play.silhouette.crypto.JcaCookieSigner" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="JcaCookieSignerextendsCookieSigner"></a><a id="JcaCookieSigner:JcaCookieSigner"></a>
-      <span class="permalink">
-      <a href="../../../../../com/mohiva/play/silhouette/crypto/index.html#JcaCookieSignerextendsCookieSigner" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a title="Cookie signer implementation based on JCA (Java Cryptography Architecture)." href="JcaCookieSigner.html">
-              <span class="name">JcaCookieSigner</span>
-            </a><span class="result"> extends <a href="../api/crypto/CookieSigner.html" class="extype" name="com.mohiva.play.silhouette.api.crypto.CookieSigner">CookieSigner</a></span>
-      </span>
-      
-      <p class="shortcomment cmt">Cookie signer implementation based on JCA (Java Cryptography Architecture).</p><div class="fullcomment"><div class="comment cmt"><p>Cookie signer implementation based on JCA (Java Cryptography Architecture).</p><p>This cookie signer signs the data with the specified key. If the signature verification fails,
-the signer does not try to decode the cookie data in any way in order to prevent various types
-of attacks.
-</p></div></div>
-    </li><li name="com.mohiva.play.silhouette.crypto.JcaCookieSignerSettings" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="JcaCookieSignerSettingsextendsProductwithSerializable"></a><a id="JcaCookieSignerSettings:JcaCookieSignerSettings"></a>
-      <span class="permalink">
-      <a href="../../../../../com/mohiva/play/silhouette/crypto/index.html#JcaCookieSignerSettingsextendsProductwithSerializable" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a title="The settings for the JCA cookie signer." href="JcaCookieSignerSettings.html">
-              <span class="name">JcaCookieSignerSettings</span>
-            </a><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="pepper">pepper: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;-mohiva-silhouette-cookie-signer-&quot;</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      
-      <p class="shortcomment cmt">The settings for the JCA cookie signer.</p><div class="fullcomment"><div class="comment cmt"><p>The settings for the JCA cookie signer.
-</p></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>Key for signing.</p></dd><dt class="param">pepper</dt><dd class="cmt"><p>Constant prepended and appended to the data before signing. When using one key for multiple purposes,
-              using a specific pepper reduces some risks arising from this.</p></dd></dl></div>
-    </li><li name="com.mohiva.play.silhouette.crypto.JcaCrypter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="com.mohiva.play.silhouette.crypto.JcaCrypter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="JcaCrypterextendsCrypter"></a><a id="JcaCrypter:JcaCrypter"></a>
       <span class="permalink">
       <a href="../../../../../com/mohiva/play/silhouette/crypto/index.html#JcaCrypterextendsCrypter" title="Permalink">
@@ -425,6 +384,46 @@ be abused for various attacks if messages are not properly
       
       <p class="shortcomment cmt">The settings for the JCA crypter.</p><div class="fullcomment"><div class="comment cmt"><p>The settings for the JCA crypter.
 </p></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>The encryption key.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.crypto.JcaSigner" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="JcaSignerextendsSigner"></a><a id="JcaSigner:JcaSigner"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/crypto/index.html#JcaSignerextendsSigner" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Signer implementation based on JCA (Java Cryptography Architecture)." href="JcaSigner.html">
+              <span class="name">JcaSigner</span>
+            </a><span class="result"> extends <a href="../api/crypto/Signer.html" class="extype" name="com.mohiva.play.silhouette.api.crypto.Signer">Signer</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Signer implementation based on JCA (Java Cryptography Architecture).</p><div class="fullcomment"><div class="comment cmt"><p>Signer implementation based on JCA (Java Cryptography Architecture).</p><p>This signer signs the data with the specified key. If the signature verification fails, the signer
+does not try to decode the data in any way in order to prevent various types of attacks.
+</p></div></div>
+    </li><li name="com.mohiva.play.silhouette.crypto.JcaSignerSettings" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="JcaSignerSettingsextendsProductwithSerializable"></a><a id="JcaSignerSettings:JcaSignerSettings"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/crypto/index.html#JcaSignerSettingsextendsProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="The settings for the JCA signer." href="JcaSignerSettings.html">
+              <span class="name">JcaSignerSettings</span>
+            </a><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="pepper">pepper: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;-mohiva-silhouette-signer-&quot;</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">The settings for the JCA signer.</p><div class="fullcomment"><div class="comment cmt"><p>The settings for the JCA signer.
+</p></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>Key for signing.</p></dd><dt class="param">pepper</dt><dd class="cmt"><p>Constant prepended and appended to the data before signing. When using one key for multiple purposes,
+              using a specific pepper reduces some risks arising from this.</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -433,25 +432,7 @@ be abused for various attacks if messages are not properly
         <div class="values members">
               <h3>Value Members</h3>
               <ol>
-                <li name="com.mohiva.play.silhouette.crypto.JcaCookieSigner" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="JcaCookieSigner"></a><a id="JcaCookieSigner:JcaCookieSigner"></a>
-      <span class="permalink">
-      <a href="../../../../../com/mohiva/play/silhouette/crypto/index.html#JcaCookieSigner" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a title="The companion object." href="JcaCookieSigner$.html">
-              <span class="name">JcaCookieSigner</span>
-            </a>
-      </span>
-      
-      <p class="shortcomment cmt">The companion object.</p>
-    </li><li name="com.mohiva.play.silhouette.crypto.JcaCrypter" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+                <li name="com.mohiva.play.silhouette.crypto.JcaCrypter" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="JcaCrypter"></a><a id="JcaCrypter:JcaCrypter"></a>
       <span class="permalink">
       <a href="../../../../../com/mohiva/play/silhouette/crypto/index.html#JcaCrypter" title="Permalink">
@@ -465,6 +446,24 @@ be abused for various attacks if messages are not properly
       <span class="symbol">
         <a title="The companion object." href="JcaCrypter$.html">
               <span class="name">JcaCrypter</span>
+            </a>
+      </span>
+      
+      <p class="shortcomment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.crypto.JcaSigner" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JcaSigner"></a><a id="JcaSigner:JcaSigner"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/crypto/index.html#JcaSigner" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="The companion object." href="JcaSigner$.html">
+              <span class="name">JcaSigner</span>
             </a>
       </span>
       
