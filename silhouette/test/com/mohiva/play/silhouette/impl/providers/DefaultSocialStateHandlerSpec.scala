@@ -64,7 +64,7 @@ class DefaultSocialStateHandlerSpec extends PlaySpecification with Mockito with 
       Publishable.itemHandler.canHandle(Publishable.item) returns Some(Publishable.item)
       Publishable.itemHandler.serialize(Publishable.item) returns Publishable.structure
 
-      stateHandler.serialize(state) must be equalTo s"${Default.structure}.${Publishable.structure}"
+      stateHandler.serialize(state) must be equalTo s"${Default.structure.asString}.${Publishable.structure.asString}"
     }
   }
 
