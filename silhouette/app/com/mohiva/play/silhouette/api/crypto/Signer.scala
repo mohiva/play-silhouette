@@ -18,12 +18,12 @@ package com.mohiva.play.silhouette.api.crypto
 import scala.util.Try
 
 /**
- * Specifies a strategy how cookies should be signed with a MAC.
+ * Specifies a strategy how data can be signed.
  */
-trait CookieSigner {
+trait Signer {
 
   /**
-   * Signs (MAC) the given data using the given secret key.
+   * Signs the given data using the given secret key.
    *
    * @param data The data to sign.
    * @return A message authentication code.
@@ -31,7 +31,7 @@ trait CookieSigner {
   def sign(data: String): String
 
   /**
-   * Extracts a message that was signed by [[CookieSigner.sign]].
+   * Extracts a message that was signed by [[Signer.sign]].
    *
    * @param message The signed message to extract.
    * @return The verified raw data, or an error if the message isn't valid.

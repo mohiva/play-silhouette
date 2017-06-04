@@ -16,7 +16,7 @@
 package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.AuthInfo
-import com.mohiva.play.silhouette.api.crypto.{ Base64, CookieSigner }
+import com.mohiva.play.silhouette.api.crypto.{ Base64, Signer }
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.impl.providers.DefaultSocialStateHandler._
@@ -205,8 +205,9 @@ trait SocialStateHandler {
  * The base implementation of the [[SocialStateHandler]].
  *
  * @param handlers The item handlers configured for this handler.
+ * @param signer   The signer implementation to sign the state.
  */
-class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler], cookieSigner: CookieSigner)
+class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler], signer: Signer)
   extends SocialStateHandler {
 
   /**
@@ -226,7 +227,7 @@ class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler], cooki
    * @return A new state provider with a new handler added.
    */
   override def withHandler(handler: SocialStateItemHandler): DefaultSocialStateHandler = {
-    new DefaultSocialStateHandler(handlers + handler, cookieSigner)
+    new DefaultSocialStateHandler(handlers + handler, signer)
   }
 
   /**
@@ -246,7 +247,9 @@ class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler], cooki
    * @return The serialized state as string.
    */
   override def serialize(state: SocialState): String = {
-    cookieSigner.sign(state.items.flatMap(i => handlers.flatMap(h => h.canHandle(i).map(h.serialize)).map(_.asString)).mkString("."))
+    signer.sign(state.items.flatMap { i =>
+      handlers.flatMap(h => h.canHandle(i).map(h.serialize)).map(_.asString)
+    }.mkString("."))
   }
 
   /**
@@ -263,7 +266,7 @@ class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler], cooki
     request: ExtractableRequest[B],
     ec: ExecutionContext
   ): Future[SocialState] = {
-    Future.fromTry(cookieSigner.extract(state)).flatMap { state =>
+    Future.fromTry(signer.extract(state)).flatMap { state =>
       state.split('.').toList match {
         case Nil | List("") =>
           Future.successful(SocialState(Set()))

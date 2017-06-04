@@ -18,22 +18,21 @@ package com.mohiva.play.silhouette.crypto
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
-import com.mohiva.play.silhouette.api.crypto.CookieSigner
+import com.mohiva.play.silhouette.api.crypto.Signer
 import com.mohiva.play.silhouette.api.exceptions.CryptoException
 import org.apache.commons.codec.binary.Hex
-import JcaCookieSigner._
+import JcaSigner._
 import scala.util.{ Failure, Success, Try }
 
 /**
- * Cookie signer implementation based on JCA (Java Cryptography Architecture).
+ * Signer implementation based on JCA (Java Cryptography Architecture).
  *
- * This cookie signer signs the data with the specified key. If the signature verification fails,
- * the signer does not try to decode the cookie data in any way in order to prevent various types
- * of attacks.
+ * This signer signs the data with the specified key. If the signature verification fails, the signer
+ * does not try to decode the data in any way in order to prevent various types of attacks.
  *
  * @param settings The settings instance.
  */
-class JcaCookieSigner(settings: JcaCookieSignerSettings) extends CookieSigner {
+class JcaSigner(settings: JcaSignerSettings) extends Signer {
 
   /**
    * Signs (MAC) the given data using the given secret key.
@@ -105,18 +104,18 @@ class JcaCookieSigner(settings: JcaCookieSignerSettings) extends CookieSigner {
 /**
  * The companion object.
  */
-object JcaCookieSigner {
+object JcaSigner {
 
-  val BadSignature = "[Silhouette][JcaCookieSigner] Bad signature"
-  val UnknownVersion = "[Silhouette][JcaCookieSigner] Unknown version: %s"
-  val InvalidMessageFormat = "[Silhouette][JcaCookieSigner] Invalid message format; Expected [VERSION]-[SIGNATURE]-[DATA]"
+  val BadSignature = "[Silhouette][JcaSigner] Bad signature"
+  val UnknownVersion = "[Silhouette][JcaSigner] Unknown version: %s"
+  val InvalidMessageFormat = "[Silhouette][JcaSigner] Invalid message format; Expected [VERSION]-[SIGNATURE]-[DATA]"
 }
 
 /**
- * The settings for the JCA cookie signer.
+ * The settings for the JCA signer.
  *
  * @param key    Key for signing.
  * @param pepper Constant prepended and appended to the data before signing. When using one key for multiple purposes,
  *               using a specific pepper reduces some risks arising from this.
  */
-case class JcaCookieSignerSettings(key: String, pepper: String = "-mohiva-silhouette-cookie-signer-")
+case class JcaSignerSettings(key: String, pepper: String = "-mohiva-silhouette-signer-")

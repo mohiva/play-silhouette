@@ -19,7 +19,7 @@ import java.util.regex.Pattern
 
 import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.api.crypto.{ Base64AuthenticatorEncoder, CookieSigner }
+import com.mohiva.play.silhouette.api.crypto.{ Base64AuthenticatorEncoder, Signer }
 import com.mohiva.play.silhouette.api.exceptions._
 import com.mohiva.play.silhouette.api.repositories.AuthenticatorRepository
 import com.mohiva.play.silhouette.api.services.AuthenticatorService._
@@ -66,13 +66,13 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
 
   "The `serialize` method of the authenticator" should {
     "sign the cookie" in new WithApplication with Context {
-      serialize(authenticator, cookieSigner, authenticatorEncoder)
+      serialize(authenticator, signer, authenticatorEncoder)
 
-      there was one(cookieSigner).sign(any)
+      there was one(signer).sign(any)
     }
 
     "encode the cookie" in new WithApplication with Context {
-      serialize(authenticator, cookieSigner, authenticatorEncoder)
+      serialize(authenticator, signer, authenticatorEncoder)
 
       there was one(authenticatorEncoder).encode(any)
     }
@@ -83,31 +83,31 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
       val value = "invalid"
       val msg = Pattern.quote(InvalidJson.format(ID, value))
 
-      unserialize(authenticatorEncoder.encode(value), cookieSigner, authenticatorEncoder) must beFailedTry.withThrowable[AuthenticatorException](msg)
+      unserialize(authenticatorEncoder.encode(value), signer, authenticatorEncoder) must beFailedTry.withThrowable[AuthenticatorException](msg)
     }
 
     "throw an AuthenticatorException if the given value is in the wrong Json format" in new WithApplication with Context {
       val value = "{}"
       val msg = "^" + Pattern.quote(InvalidJsonFormat.format(ID, "")) + ".*"
 
-      unserialize(authenticatorEncoder.encode(value), cookieSigner, authenticatorEncoder) must beFailedTry.withThrowable[AuthenticatorException](msg)
+      unserialize(authenticatorEncoder.encode(value), signer, authenticatorEncoder) must beFailedTry.withThrowable[AuthenticatorException](msg)
     }
 
     "throw an AuthenticatorException if the cookie signer declines the authenticator" in new WithApplication with Context {
       val value = "value"
       val msg = "^" + Pattern.quote(InvalidCookieSignature.format(ID, "")) + ".*"
 
-      cookieSigner.extract(any) returns Failure(new Exception("invalid"))
+      signer.extract(any) returns Failure(new Exception("invalid"))
 
-      unserialize(authenticatorEncoder.encode(value), cookieSigner, authenticatorEncoder) must beFailedTry.withThrowable[AuthenticatorException](msg)
+      unserialize(authenticatorEncoder.encode(value), signer, authenticatorEncoder) must beFailedTry.withThrowable[AuthenticatorException](msg)
     }
   }
 
   "The `serialize/unserialize` method of the authenticator" should {
     "serialize/unserialize an authenticator" in new WithApplication with Context {
-      val value = serialize(authenticator, cookieSigner, authenticatorEncoder)
+      val value = serialize(authenticator, signer, authenticatorEncoder)
 
-      unserialize(value, cookieSigner, authenticatorEncoder) must beSuccessfulTry.withValue(authenticator)
+      unserialize(value, signer, authenticatorEncoder) must beSuccessfulTry.withValue(authenticator)
     }
   }
 
@@ -225,7 +225,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
       settings.useFingerprinting returns true
       authenticator.fingerprint returns Some("test")
 
-      implicit val request = FakeRequest().withCookies(Cookie(settings.cookieName, serialize(authenticator, cookieSigner, authenticatorEncoder)))
+      implicit val request = FakeRequest().withCookies(Cookie(settings.cookieName, serialize(authenticator, signer, authenticatorEncoder)))
 
       await(service(None).retrieve) must beNone
       there was no(repository).find(any)
@@ -247,7 +247,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
       settings.useFingerprinting returns true
       authenticator.fingerprint returns Some("test")
 
-      implicit val request = FakeRequest().withCookies(Cookie(settings.cookieName, serialize(authenticator, cookieSigner, authenticatorEncoder)))
+      implicit val request = FakeRequest().withCookies(Cookie(settings.cookieName, serialize(authenticator, signer, authenticatorEncoder)))
 
       await(service(None).retrieve) must beSome(authenticator)
       there was no(repository).find(any)
@@ -265,7 +265,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
     "[stateless] return authenticator if fingerprinting is disabled" in new WithApplication with Context {
       settings.useFingerprinting returns false
 
-      implicit val request = FakeRequest().withCookies(Cookie(settings.cookieName, serialize(authenticator, cookieSigner, authenticatorEncoder)))
+      implicit val request = FakeRequest().withCookies(Cookie(settings.cookieName, serialize(authenticator, signer, authenticatorEncoder)))
 
       repository.find(authenticator.id) returns Future.successful(Some(authenticator))
 
@@ -301,7 +301,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
 
       val cookie = await(service(None).init(authenticator))
 
-      unserialize(cookie.value, cookieSigner, authenticatorEncoder) must be equalTo unserialize(statelessCookie.value, cookieSigner, authenticatorEncoder)
+      unserialize(cookie.value, signer, authenticatorEncoder) must be equalTo unserialize(statelessCookie.value, signer, authenticatorEncoder)
       there was no(repository).add(any)
     }
 
@@ -549,12 +549,12 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
     lazy val idGenerator = mock[IDGenerator].smart
 
     /**
-     * The cookie signer implementation.
+     * The signer implementation.
      *
-     * The cookie signer returns the same value as passed to the methods. This is enough for testing.
+     * The signer returns the same value as passed to the methods. This is enough for testing.
      */
-    lazy val cookieSigner = {
-      val c = mock[CookieSigner].smart
+    lazy val signer = {
+      val c = mock[Signer].smart
       c.sign(any) answers { p => p.asInstanceOf[String] }
       c.extract(any) answers { p => Success(p.asInstanceOf[String]) }
       c
@@ -590,7 +590,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
       new CookieAuthenticatorService(
         settings,
         repository,
-        cookieSigner,
+        signer,
         new DefaultCookieHeaderEncoding(),
         authenticatorEncoder,
         fingerprintGenerator,
@@ -634,7 +634,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
      */
     lazy val statelessCookie = Cookie(
       name = settings.cookieName,
-      value = serialize(authenticator, cookieSigner, authenticatorEncoder),
+      value = serialize(authenticator, signer, authenticatorEncoder),
       maxAge = settings.cookieMaxAge.map(_.toSeconds.toInt),
       path = settings.cookiePath,
       domain = settings.cookieDomain,
@@ -661,7 +661,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
      */
     def statelessResponseCookieMatcher(a: CookieAuthenticator): Cookie => MatchResult[Any] = { c =>
       c.name must be equalTo settings.cookieName
-      unserialize(c.value, cookieSigner, authenticatorEncoder).get must be equalTo a
+      unserialize(c.value, signer, authenticatorEncoder).get must be equalTo a
       // https://github.com/mohiva/play-silhouette/issues/273
       c.maxAge must beSome[Int].which(_ <= settings.cookieMaxAge.get.toSeconds.toInt)
       c.path must be equalTo settings.cookiePath
