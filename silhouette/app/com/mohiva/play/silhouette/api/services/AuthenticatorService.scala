@@ -59,9 +59,9 @@ class AuthenticatorResult(result: Result)
   override def copy(
     header: ResponseHeader,
     body: HttpEntity,
-    newSession: Option[Session] = None,
-    newFlash: Option[Flash] = None,
-    newCookies: Seq[Cookie] = Seq.empty
+    newSession: Option[Session],
+    newFlash: Option[Flash],
+    newCookies: Seq[Cookie]
   ) = {
     AuthenticatorResult(super.copy(header, body, newSession, newFlash, newCookies))
   }
