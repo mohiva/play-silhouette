@@ -225,6 +225,12 @@ including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes.
                         <a href="BCryptPasswordHasher.html" title="Implementation of the password hasher based on BCrypt.">
                           BCryptPasswordHasher
                         </a>
+                      </li><li class="current-entities indented5">
+                        <a class="object" href="BCryptSha256PasswordHasher$.html" title="The companion object."></a>
+                        <a class="class" href="BCryptSha256PasswordHasher.html" title="Implementation of the password hasher based on BCrypt."></a>
+                        <a href="BCryptSha256PasswordHasher.html" title="Implementation of the password hasher based on BCrypt.">
+                          BCryptSha256PasswordHasher
+                        </a>
                       </li><li name="com.mohiva.play.silhouette.persistence" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="persistence"></a><a id="persistence:persistence"></a>
       <span class="permalink">
@@ -344,6 +350,32 @@ including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes.
       
       <p class="shortcomment cmt">Implementation of the password hasher based on BCrypt.</p><div class="fullcomment"><div class="comment cmt"><p>Implementation of the password hasher based on BCrypt.
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="http://www.mindrot.org/files/jBCrypt/jBCrypt-0.2-doc/BCrypt.html#gensalt(int)" target="_blank">gensalt</a></p></span></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.password.BCryptSha256PasswordHasher" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BCryptSha256PasswordHasherextendsBCryptPasswordHasher"></a><a id="BCryptSha256PasswordHasher:BCryptSha256PasswordHasher"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/password/index.html#BCryptSha256PasswordHasherextendsBCryptPasswordHasher" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Implementation of the password hasher based on BCrypt." href="BCryptSha256PasswordHasher.html">
+              <span class="name">BCryptSha256PasswordHasher</span>
+            </a><span class="result"> extends <a href="BCryptPasswordHasher.html" class="extype" name="com.mohiva.play.silhouette.password.BCryptPasswordHasher">BCryptPasswordHasher</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Implementation of the password hasher based on BCrypt.</p><div class="fullcomment"><div class="comment cmt"><p>Implementation of the password hasher based on BCrypt.</p><p>The designers of bcrypt truncate all passwords at 72 characters which means that <code>bcrypt(password_with_100_chars) ==
+bcrypt(password_with_100_chars[:72])</code>. The original <code>BCryptPasswordHasher</code> does not have any special handling and
+thus is also subject to this hidden password length limit. <code>BCryptSha256PasswordHasher</code> fixes this by first hashing
+the password using sha256. This prevents the password truncation and so should be preferred over the
+<code>BCryptPasswordHasher</code>. The practical ramification of this truncation is pretty marginal as the average user does
+not have a password greater than 72 characters in length and even being truncated at 72 the compute powered required
+to brute force bcrypt in any useful amount of time is still astronomical. Nonetheless, we recommend you use
+<code>BCryptSha256PasswordHasher</code> anyway on the principle of &quot;better safe than sorry&quot;.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>https://crypto.stackexchange.com/questions/24993/is-there-a-way-to-use-bcrypt-with-passwords-longer-than-72-bytes-securely</p></span><span class="cmt"><p>https://docs.djangoproject.com/en/1.10/topics/auth/passwords/#using-bcrypt-with-django</p></span><span class="cmt"><p><a href="http://www.mindrot.org/files/jBCrypt/jBCrypt-0.2-doc/BCrypt.html#gensalt(int)" target="_blank">gensalt</a></p></span></dd></dl></div>
     </li></ol>
             </div>
 
@@ -366,6 +398,24 @@ including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes.
       <span class="symbol">
         <a title="The companion object." href="BCryptPasswordHasher$.html">
               <span class="name">BCryptPasswordHasher</span>
+            </a>
+      </span>
+      
+      <p class="shortcomment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.password.BCryptSha256PasswordHasher" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BCryptSha256PasswordHasher"></a><a id="BCryptSha256PasswordHasher:BCryptSha256PasswordHasher"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/password/index.html#BCryptSha256PasswordHasher" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="The companion object." href="BCryptSha256PasswordHasher$.html">
+              <span class="name">BCryptSha256PasswordHasher</span>
             </a>
       </span>
       
