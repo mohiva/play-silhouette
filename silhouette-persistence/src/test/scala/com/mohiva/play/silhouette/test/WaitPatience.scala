@@ -21,7 +21,6 @@ import org.specs2.matcher.Matcher
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
-import scala.languageFeature.implicitConversions
 
 /**
  * Helper to wait with patience to a result.

@@ -28,7 +28,6 @@ import play.api.mvc._
 import play.api.{ Configuration, Environment => PlayEnv }
 
 import scala.concurrent.{ ExecutionContext, Future }
-import scala.language.{ higherKinds, reflectiveCalls }
 
 /**
  * A request that only allows access if an identity is authenticated and authorized.

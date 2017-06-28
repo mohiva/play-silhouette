@@ -27,7 +27,6 @@ import play.api.inject.Module
 import play.api.mvc._
 
 import scala.concurrent.{ ExecutionContext, Future }
-import scala.language.reflectiveCalls
 
 /**
  * A request that adds maybe the identity and maybe the authenticator for the current call.

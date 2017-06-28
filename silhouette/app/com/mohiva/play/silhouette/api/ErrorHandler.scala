@@ -20,7 +20,7 @@
 package com.mohiva.play.silhouette.api
 
 import com.mohiva.play.silhouette.api.exceptions.{ NotAuthorizedException, NotAuthenticatedException }
-import play.api.http.{ HeaderNames, ContentTypes, Status }
+import play.api.http.{ ContentTypes, Status }
 import play.api.i18n.{ I18nSupport, Messages }
 import play.api.libs.json.Json
 import play.api.mvc._

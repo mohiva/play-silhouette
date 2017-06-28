@@ -33,7 +33,6 @@ import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.language.postfixOps
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.api.actions.UserAwareAction]].
