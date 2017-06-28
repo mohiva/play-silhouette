@@ -20,15 +20,15 @@ import org.specs2.mutable.Specification
 import org.specs2.specification.Scope
 
 /**
- * Test case for the [[BCryptPasswordHasher]] class.
+ * Test case for the [[BCryptSha256PasswordHasher]] class.
  */
-class BCryptPasswordHasherSpec extends Specification {
+class BCryptSha256PasswordHasherSpec extends Specification {
 
   "The `hash` method" should {
     "hash a password" in new Context {
       val passwordInfo: PasswordInfo = hasher.hash(password)
 
-      passwordInfo.hasher must be equalTo BCryptPasswordHasher.ID
+      passwordInfo.hasher must be equalTo BCryptSha256PasswordHasher.ID
       passwordInfo.password must not be equalTo(password)
       passwordInfo.salt must beNone
     }
@@ -42,7 +42,7 @@ class BCryptPasswordHasherSpec extends Specification {
     }
 
     "return true if a password matches a previous hardcoded password" in new Context {
-      val passwordInfo = PasswordInfo("bcrypt", "$2a$10$PBwXy.iQz9n4QOdbgEV7Ve2aYsvXeAvyT0rzhoZKwaDH/3j3tUSW.")
+      val passwordInfo = PasswordInfo("bcrypt", "$2a$10$W0Agnc85R3ek3DC7Iya0puJ07U1p.PQ6oV9jI6S2btBKZjtxx5WRq")
 
       hasher.matches(passwordInfo, password) must beTrue
     }
@@ -53,11 +53,11 @@ class BCryptPasswordHasherSpec extends Specification {
       hasher.matches(passwordInfo, "not-equal") must beFalse
     }
 
-    "not accurately match passwords greater than 72 characters" in new Context {
+    "accurately match passwords greater than 72 characters" in new Context {
       val passwordInfo = hasher.hash("a" * 80)
 
       hasher.matches(passwordInfo, "a" * 80) must beTrue
-      hasher.matches(passwordInfo, "a" * 79) must beTrue
+      hasher.matches(passwordInfo, "a" * 79) must beFalse
     }
   }
 
@@ -69,9 +69,9 @@ class BCryptPasswordHasherSpec extends Specification {
     }
 
     "return true if the hasher is suitable when given a password info with different log rounds" in new Context {
-      val currentHasher = new BCryptPasswordHasher(5)
+      val currentHasher = new BCryptSha256PasswordHasher(5)
 
-      val storedHasher = new BCryptPasswordHasher(10)
+      val storedHasher = new BCryptSha256PasswordHasher(10)
       val passwordInfo = storedHasher.hash(password)
 
       currentHasher.isSuitable(passwordInfo) must beTrue
@@ -92,9 +92,9 @@ class BCryptPasswordHasherSpec extends Specification {
     }
 
     "return Some(true) if the stored log rounds are not equal the hasher log rounds" in new Context {
-      val currentHasher = new BCryptPasswordHasher(5)
+      val currentHasher = new BCryptSha256PasswordHasher(5)
 
-      val storedHasher = new BCryptPasswordHasher(10)
+      val storedHasher = new BCryptSha256PasswordHasher(10)
       val passwordInfo = storedHasher.hash(password)
 
       currentHasher.isDeprecated(passwordInfo) must beSome(true)
@@ -120,6 +120,6 @@ class BCryptPasswordHasherSpec extends Specification {
     /**
      * The hasher to test.
      */
-    lazy val hasher = new BCryptPasswordHasher(10)
+    lazy val hasher = new BCryptSha256PasswordHasher(10)
   }
 }
