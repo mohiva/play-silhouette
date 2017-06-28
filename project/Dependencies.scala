@@ -18,7 +18,7 @@ import sbt._
 object Dependencies {
 
   object Versions {
-    val crossScala = Seq("2.12.1", "2.11.8")
+    val crossScala = Seq("2.12.2", "2.11.11")
     val scalaVersion = crossScala.head
   }
 
@@ -55,7 +55,7 @@ object Dependencies {
     val jwtCore = "com.atlassian.jwt" % "jwt-core" % "1.6.1"
     val jwtApi = "com.atlassian.jwt" % "jwt-api" % "1.6.1"
     val scalaGuice = "net.codingwell" %% "scala-guice" % "4.1.0"
-    val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % "2.5.0"
+    val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % "2.5.3"
     val casClient = "org.jasig.cas.client" % "cas-client-core" % "3.4.1"
     val casClientSupportSAML = "org.jasig.cas.client" % "cas-client-support-saml" % "3.4.1"
   }

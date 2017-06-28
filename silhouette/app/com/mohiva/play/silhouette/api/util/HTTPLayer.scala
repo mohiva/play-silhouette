@@ -67,8 +67,8 @@ class PlayHTTPLayer(client: WSClient)(implicit val executionContext: ExecutionCo
  * @see https://github.com/playframework/play-ws/issues/108
  */
 trait MockWSRequest extends WSRequest {
-  type Self = WSRequest
-  type Response = WSResponse
+  override type Self = WSRequest
+  override type Response = WSResponse
 }
 
 /**

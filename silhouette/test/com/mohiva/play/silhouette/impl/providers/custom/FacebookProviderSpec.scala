@@ -22,7 +22,7 @@ import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.FacebookProvider._
-import com.mohiva.play.silhouette.impl.providers.oauth2.{ BaseFacebookProvider, FacebookProfileParser, FacebookProvider }
+import com.mohiva.play.silhouette.impl.providers.oauth2.{ BaseFacebookProvider, FacebookProfileParser }
 import play.api.libs.json.{ JsValue, Json }
 import play.api.test.{ FakeRequest, WithApplication }
 import test.Helper
@@ -31,7 +31,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ ExecutionContext, Future }
 
 /**
- * Test case for the [[FacebookProvider]] class which uses a custom social profile.
+ * Test case for the [[com.mohiva.play.silhouette.impl.providers.oauth2.FacebookProvider]] class which uses a custom social profile.
  */
 class FacebookProviderSpec extends OAuth2ProviderSpec {
 
