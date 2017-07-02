@@ -31,7 +31,7 @@ object BasicSettings extends AutoPlugin {
 
   override def projectSettings = Seq(
     organization := "com.mohiva",
-    version := "5.0.0-SNAPSHOT",
+    version := "5.0.0-RC1",
     resolvers ++= Dependencies.resolvers,
     scalaVersion := Dependencies.Versions.scalaVersion,
     crossScalaVersions := Dependencies.Versions.crossScala,
