@@ -30,7 +30,6 @@ import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService._
 import org.joda.time.DateTime
 import play.api.libs.json.Json
-import play.api.libs.typedmap.TypedMap
 import play.api.mvc._
 import play.api.mvc.request.{ Cell, RequestAttrKey }
 
@@ -286,7 +285,7 @@ class CookieAuthenticatorService(
     val combinedCookies = filteredCookies :+ cookie
     val cookies = Cookies(combinedCookies)
 
-    request.withAttrs(TypedMap(RequestAttrKey.Cookies.bindValue(Cell(cookies))))
+    request.withAttrs(request.attrs + RequestAttrKey.Cookies.bindValue(Cell(cookies)))
   }
 
   /**

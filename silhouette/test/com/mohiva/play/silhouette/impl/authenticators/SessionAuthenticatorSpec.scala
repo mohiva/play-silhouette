@@ -300,6 +300,17 @@ class SessionAuthenticatorSpec extends PlaySpecification with Mockito with NoLan
       request.session.get("existing") should beSome("test")
       request.session.get(settings.sessionKey) should beSome("test")
     }
+
+    "keep other request parts" in new WithApplication with AppContext {
+      val session = sessionCookieBaker.deserialize(Map(settings.sessionKey -> "test"))
+      val request = service.embed(session, FakeRequest().withCookies(Cookie("test", "test")))
+
+      request.session.get(settings.sessionKey) should beSome("test")
+      request.cookies.get("test") should beSome[Cookie].which { c =>
+        c.name must be equalTo "test"
+        c.value must be equalTo "test"
+      }
+    }
   }
 
   "The `touch` method of the service" should {

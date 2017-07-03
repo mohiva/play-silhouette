@@ -371,6 +371,14 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       unserialize(request.headers.get(settings.fieldName).get, authenticatorEncoder, settings).get must be equalTo authenticator
       request.headers.get("test") should beSome("test")
     }
+
+    "keep other request parts" in new WithApplication with Context {
+      val token = serialize(authenticator, authenticatorEncoder, settings)
+      val request = service(Some(repository)).embed(token, FakeRequest().withSession("test" -> "test"))
+
+      unserialize(request.headers.get(settings.fieldName).get, authenticatorEncoder, settings).get must be equalTo authenticator
+      request.session.get("test") should beSome("test")
+    }
   }
 
   "The `touch` method of the service" should {

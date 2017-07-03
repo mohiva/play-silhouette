@@ -23,8 +23,7 @@ object Dependencies {
   }
 
   val resolvers = Seq(
-    "Atlassian Releases" at "https://maven.atlassian.com/public/",
-    "Akka Snapshot Repository" at "http://repo.akka.io/snapshots/"
+    "Atlassian Releases" at "https://maven.atlassian.com/public/"
   )
 
   object Library {
