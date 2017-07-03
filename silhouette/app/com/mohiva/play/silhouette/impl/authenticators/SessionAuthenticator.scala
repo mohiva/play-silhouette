@@ -25,7 +25,6 @@ import com.mohiva.play.silhouette.api.{ Authenticator, ExpirableAuthenticator, L
 import com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService._
 import org.joda.time.DateTime
 import play.api.libs.json.Json
-import play.api.libs.typedmap.TypedMap
 import play.api.mvc._
 import play.api.mvc.request.{ Cell, RequestAttrKey }
 
@@ -218,7 +217,7 @@ class SessionAuthenticatorService(
       case None           => session
     }
 
-    request.withAttrs(TypedMap(RequestAttrKey.Session.bindValue(Cell(s))))
+    request.withAttrs(request.attrs + RequestAttrKey.Session.bindValue(Cell(s)))
   }
 
   /**

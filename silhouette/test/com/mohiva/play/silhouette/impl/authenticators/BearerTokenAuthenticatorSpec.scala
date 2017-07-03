@@ -212,6 +212,14 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
       request.headers.get(settings.fieldName) should beSome(authenticator.id)
       request.headers.get("test") should beSome("test")
     }
+
+    "keep other request parts" in new Context {
+      val value = authenticator.id
+      val request = service.embed(value, FakeRequest().withSession("test" -> "test"))
+
+      request.headers.get(settings.fieldName) should beSome(authenticator.id)
+      request.session.get("test") should beSome("test")
+    }
   }
 
   "The `touch` method of the service" should {

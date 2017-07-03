@@ -350,6 +350,13 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
         c.value must be equalTo "test"
       }
     }
+
+    "keep other request parts" in new Context {
+      val request = service(Some(repository)).embed(statefulCookie, FakeRequest().withSession("test" -> "test"))
+
+      request.cookies.get(settings.cookieName) should beSome[Cookie].which(requestCookieMatcher(authenticator.id))
+      request.session.get("test") should beSome("test")
+    }
   }
 
   "The `touch` method of the service" should {
