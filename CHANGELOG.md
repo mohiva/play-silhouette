@@ -1,5 +1,14 @@
-## 4.0
+## 5.0
 
+- Update to Play 2.6
+- Handling of OAuth2 based user state with the help of the new social state handler implementation (thanks to @Saheb)
+- Implement BCryptSha256PasswordHasher to avoid password truncating issue
+- Better error messages for OAuth2 based errors
+- Remove Clef support
+
+## 4.0 (2016-07-14)
+
+- Update to Play 2.5
 - Removed Play Messages instance from Event, Authorization and ErrorHandler types. The I18nSupport trait should be used instead, to get the Messages instance for the current request
 - Rewrite Silhouette trait to provide injectable actions (this is now the default method from Play 2.5 on)
   - Every SecuredAction can now override the global(default injected) error handler if needed

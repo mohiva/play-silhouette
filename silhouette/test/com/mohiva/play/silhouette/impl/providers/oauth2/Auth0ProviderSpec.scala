@@ -23,7 +23,6 @@ import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.Auth0Provider._
 import play.api.libs.json.Json
 import play.api.test.{ FakeRequest, WithApplication }
-import play.mvc.Http
 import test.Helper
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -44,11 +43,29 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
   }
 
   "The `authenticate` method" should {
+    "fail with UnexpectedResponseException for an unexpected response" in new WithApplication with Context {
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
+      implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
+      wsResponse.status returns 401
+      wsResponse.body returns "Unauthorized"
+      wsRequest.withHttpHeaders(any) returns wsRequest
+      wsRequest.post[Map[String, Seq[String]]](any)(any) returns Future.successful(wsResponse)
+      httpLayer.url(oAuthSettings.accessTokenURL) returns wsRequest
+      stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(state)
+      stateProvider.state(any[ExecutionContext]) returns Future.successful(state)
+
+      failed[UnexpectedResponseException](provider.authenticate()) {
+        case e => e.getMessage must startWith(UnexpectedResponse.format(provider.id, "Unauthorized", 401))
+      }
+    }
+
     "fail with UnexpectedResponseException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
 
+      wsResponse.status returns 200
       wsResponse.json returns Json.obj()
       wsRequest.withHttpHeaders(any) returns wsRequest
       wsRequest.post[Map[String, Seq[String]]](any)(any) returns Future.successful(wsResponse)
@@ -66,6 +83,7 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
       val wsResponse = mock[MockWSRequest#Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
 
+      wsResponse.status returns 200
       wsResponse.json returns oAuthInfo
       wsRequest.withHttpHeaders(any) returns wsRequest
       wsRequest.post[Map[String, Seq[String]]](any)(any) returns Future.successful(wsResponse)
@@ -82,6 +100,7 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
+      wsResponse.status returns 200
       wsResponse.json returns oAuthInfo
       wsRequest.withHttpHeaders(any) returns wsRequest
       wsRequest.post[Map[String, Seq[String]]](any)(any) returns Future.successful(wsResponse)
@@ -99,15 +118,14 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
     "fail with ProfileRetrievalException if API returns error" in new WithApplication with Context {
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
-      val statusCode = Http.Status.UNAUTHORIZED
 
-      wsResponse.status returns statusCode
+      wsResponse.status returns 400
       wsRequest.get() returns Future.successful(wsResponse)
       wsRequest.withHttpHeaders(("Authorization", s"Bearer ${oAuthInfoObject.accessToken}")) returns wsRequest
       httpLayer.url(oAuthSettings.apiURL.get) returns wsRequest
 
       failed[ProfileRetrievalException](provider.retrieveProfile(oAuthInfoObject)) {
-        case e => e.getMessage must equalTo(GenericHttpStatusProfileError.format(provider.id, statusCode))
+        case e => e.getMessage must equalTo(GenericHttpStatusProfileError.format(provider.id, 400))
       }
     }
 
@@ -115,6 +133,7 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
 
+      wsResponse.status returns 500
       wsResponse.json throws new RuntimeException("")
       wsRequest.get() returns Future.successful(wsResponse)
       wsRequest.withHttpHeaders(("Authorization", s"Bearer ${oAuthInfoObject.accessToken}")) returns wsRequest
@@ -130,7 +149,7 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
       val wsResponse = mock[MockWSRequest#Response]
       val userProfile = Helper.loadJson(Auth0UserProfileJson)
 
-      wsResponse.status returns Http.Status.OK
+      wsResponse.status returns 200
       wsResponse.json returns userProfile
       wsRequest.get() returns Future.successful(wsResponse)
       wsRequest.withHttpHeaders(("Authorization", s"Bearer ${oAuthInfoObject.accessToken}")) returns wsRequest
