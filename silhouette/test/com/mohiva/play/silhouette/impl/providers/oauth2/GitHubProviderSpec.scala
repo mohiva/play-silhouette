@@ -45,10 +45,28 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
   }
 
   "The `authenticate` method" should {
+    "fail with UnexpectedResponseException for an unexpected response" in new WithApplication with Context {
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
+      implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
+      wsResponse.status returns 401
+      wsResponse.body returns "Unauthorized"
+      wsRequest.withHttpHeaders(HeaderNames.ACCEPT -> "application/json") returns wsRequest
+      wsRequest.post[Map[String, Seq[String]]](any)(any) returns Future.successful(wsResponse)
+      httpLayer.url(oAuthSettings.accessTokenURL) returns wsRequest
+      stateProvider.unserialize(anyString)(any[ExtractableRequest[String]], any[ExecutionContext]) returns Future.successful(state)
+      stateProvider.state(any[ExecutionContext]) returns Future.successful(state)
+
+      failed[UnexpectedResponseException](provider.authenticate()) {
+        case e => e.getMessage must startWith(UnexpectedResponse.format(provider.id, "Unauthorized", 401))
+      }
+    }
+
     "fail with UnexpectedResponseException if OAuth2Info can be build because of an unexpected response" in new WithApplication with Context {
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
+      wsResponse.status returns 200
       wsResponse.json returns Json.obj()
       wsRequest.withHttpHeaders(HeaderNames.ACCEPT -> "application/json") returns wsRequest
       wsRequest.post[Map[String, Seq[String]]](any)(any) returns Future.successful(wsResponse)
@@ -65,6 +83,7 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
+      wsResponse.status returns 200
       wsResponse.json returns oAuthInfo
       wsRequest.withHttpHeaders(any) returns wsRequest
       wsRequest.post[Map[String, Seq[String]]](any)(any) returns Future.successful(wsResponse)
@@ -81,6 +100,7 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
+      wsResponse.status returns 200
       wsResponse.json returns oAuthInfo
       wsRequest.withHttpHeaders(any) returns wsRequest
       wsRequest.post[Map[String, Seq[String]]](any)(any) returns Future.successful(wsResponse)
@@ -98,6 +118,7 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
     "fail with ProfileRetrievalException if API returns error" in new WithApplication with Context {
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
+      wsResponse.status returns 400
       wsResponse.json returns Helper.loadJson("providers/oauth2/github.error.json")
       wsRequest.get() returns Future.successful(wsResponse)
       httpLayer.url(API.format("my.access.token")) returns wsRequest
@@ -113,6 +134,7 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
     "fail with ProfileRetrievalException if an unexpected error occurred" in new WithApplication with Context {
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
+      wsResponse.status returns 500
       wsResponse.json throws new RuntimeException("")
       wsRequest.get() returns Future.successful(wsResponse)
       httpLayer.url(API.format("my.access.token")) returns wsRequest
@@ -127,6 +149,7 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
       oAuthSettings.apiURL returns Some(url)
+      wsResponse.status returns 200
       wsResponse.json returns Helper.loadJson("providers/oauth2/github.success.json")
       wsRequest.get() returns Future.successful(wsResponse)
       httpLayer.url(url.format("my.access.token")) returns wsRequest
@@ -139,6 +162,7 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
     "return the social profile" in new WithApplication with Context {
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
+      wsResponse.status returns 200
       wsResponse.json returns Helper.loadJson("providers/oauth2/github.success.json")
       wsRequest.get() returns Future.successful(wsResponse)
       httpLayer.url(API.format("my.access.token")) returns wsRequest

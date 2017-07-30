@@ -280,6 +280,7 @@ abstract class OAuth2ProviderSpec extends SocialStateProviderSpec[OAuth2Info, So
       val wsResponse = mock[MockWSRequest#Response]
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
 
+      wsResponse.status returns 200
       wsResponse.json throws new RuntimeException("Unexpected character ('<' (code 60))")
       wsResponse.body returns "<html></html>"
       wsRequest.withHttpHeaders(any) returns wsRequest

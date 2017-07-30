@@ -96,6 +96,20 @@ trait OAuth2Provider extends SocialStateProvider with OAuth2Constants with Logge
   protected val headers: Seq[(String, String)] = Seq()
 
   /**
+   * The default access token response code.
+   *
+   * Override this if a specific provider uses another HTTP status code for a successful access token response.
+   */
+  protected val accessTokeResponseCode: Int = 200
+
+  /**
+   * The implicit access token reads.
+   *
+   * Override this if a specific provider needs another reads.
+   */
+  implicit protected val accessTokenReads: Reads[OAuth2Info] = OAuth2Info.infoReads
+
+  /**
    * Starts the authentication process.
    *
    * @param request The current request.
@@ -242,12 +256,20 @@ trait OAuth2Provider extends SocialStateProvider with OAuth2Constants with Logge
    * @return The OAuth2 info on success, otherwise a failure.
    */
   protected def buildInfo(response: WSResponse): Try[OAuth2Info] = {
-    Try(response.json) match {
-      case Success(json) => json.validate[OAuth2Info].asEither.fold(
-        error => Failure(new UnexpectedResponseException(InvalidInfoFormat.format(id, error))),
-        info => Success(info)
+    response.status match {
+      case status if status == accessTokeResponseCode =>
+        Try(response.json) match {
+          case Success(json) => json.validate[OAuth2Info].asEither.fold(
+            error => Failure(new UnexpectedResponseException(InvalidInfoFormat.format(id, error))),
+            info => Success(info)
+          )
+          case Failure(error) => Failure(
+            new UnexpectedResponseException(JsonParseError.format(id, response.body, error))
+          )
+        }
+      case status => Failure(
+        new UnexpectedResponseException(UnexpectedResponse.format(id, response.body, status))
       )
-      case Failure(error) => Failure(new UnexpectedResponseException(JsonParseError.format(id, response.body, error)))
     }
   }
 }
@@ -264,6 +286,7 @@ object OAuth2Provider extends OAuth2Constants {
   val AuthorizationError = "[Silhouette][%s] Authorization server returned error: %s"
   val InvalidInfoFormat = "[Silhouette][%s] Cannot build OAuth2Info because of invalid response format: %s"
   val JsonParseError = "[Silhouette][%s] Cannot parse response `%s` to Json; got error: %s"
+  val UnexpectedResponse = "[Silhouette][%s] Got unexpected response `%s`; status code: %s"
 }
 
 /**

@@ -21,16 +21,14 @@ package com.mohiva.play.silhouette.impl.providers.oauth2
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.HTTPLayer
-import com.mohiva.play.silhouette.impl.exceptions.{ UnexpectedResponseException, ProfileRetrievalException }
+import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.VKProvider._
-import play.api.libs.json._
 import play.api.libs.functional.syntax._
-import play.api.libs.ws.WSResponse
+import play.api.libs.json._
 
 import scala.concurrent.Future
-import scala.util.{ Success, Failure, Try }
 
 /**
  * Base Vk OAuth 2 provider.
@@ -57,6 +55,13 @@ trait BaseVKProvider extends OAuth2Provider {
   override protected val urls = Map("api" -> settings.apiURL.getOrElse(API))
 
   /**
+   * The implicit access token reads.
+   *
+   * VK provider needs it own Json reads to extract the email from response.
+   */
+  override implicit protected val accessTokenReads: Reads[OAuth2Info] = VKProvider.infoReads
+
+  /**
    * Builds the social profile.
    *
    * @param authInfo The auth info received from the provider.
@@ -73,24 +78,6 @@ trait BaseVKProvider extends OAuth2Provider {
           throw new ProfileRetrievalException(SpecifiedProfileError.format(id, errorCode, errorMsg))
         case _ => profileParser.parse(json, authInfo)
       }
-    }
-  }
-
-  /**
-   * Builds the OAuth2 info from response.
-   *
-   * VK provider needs it own Json reads to extract the email from response.
-   *
-   * @param response The response from the provider.
-   * @return The OAuth2 info on success, otherwise a failure.
-   */
-  override protected def buildInfo(response: WSResponse): Try[OAuth2Info] = {
-    Try(response.json) match {
-      case Success(json) => json.validate[OAuth2Info].asEither.fold(
-        error => Failure(new UnexpectedResponseException(InvalidInfoFormat.format(id, error))),
-        info => Success(info)
-      )
-      case Failure(error) => Failure(new UnexpectedResponseException(JsonParseError.format(id, response.body, error)))
     }
   }
 }

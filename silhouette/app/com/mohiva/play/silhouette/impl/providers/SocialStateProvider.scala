@@ -243,17 +243,27 @@ class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler], signe
   /**
    * Serializes the given state into a single state value which can be passed with the state param.
    *
+   * If no handler is registered on the provider then we omit state signing, because it makes no sense the sign
+   * an empty state.
+   *
    * @param state The social state to serialize.
    * @return The serialized state as string.
    */
   override def serialize(state: SocialState): String = {
-    signer.sign(state.items.flatMap { i =>
-      handlers.flatMap(h => h.canHandle(i).map(h.serialize)).map(_.asString)
-    }.mkString("."))
+    if (handlers.isEmpty || state.items.isEmpty) {
+      ""
+    } else {
+      signer.sign(state.items.flatMap { i =>
+        handlers.flatMap(h => h.canHandle(i).map(h.serialize)).map(_.asString)
+      }.mkString("."))
+    }
   }
 
   /**
    * Unserializes the social state from the state param.
+   *
+   * If no handler is registered on the provider then we omit the state validation. This is needed in some cases
+   * where the authentication process was started from a client side library and not from Silhouette.
    *
    * @param state   The state to unserialize.
    * @param request The request to read the value of the state param from.
@@ -266,20 +276,24 @@ class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler], signe
     request: ExtractableRequest[B],
     ec: ExecutionContext
   ): Future[SocialState] = {
-    Future.fromTry(signer.extract(state)).flatMap { state =>
-      state.split('.').toList match {
-        case Nil | List("") =>
-          Future.successful(SocialState(Set()))
-        case items =>
-          Future.sequence {
-            items.map {
-              case ItemStructure(item) => handlers.find(_.canHandle(item)) match {
-                case Some(handler) => handler.unserialize(item)
-                case None          => throw new ProviderException(MissingItemHandlerError.format(item))
+    if (handlers.isEmpty) {
+      Future.successful(SocialState(Set()))
+    } else {
+      Future.fromTry(signer.extract(state)).flatMap { state =>
+        state.split('.').toList match {
+          case Nil | List("") =>
+            Future.successful(SocialState(Set()))
+          case items =>
+            Future.sequence {
+              items.map {
+                case ItemStructure(item) => handlers.find(_.canHandle(item)) match {
+                  case Some(handler) => handler.unserialize(item)
+                  case None          => throw new ProviderException(MissingItemHandlerError.format(item))
+                }
+                case item => throw new ProviderException(ItemExtractionError.format(item))
               }
-              case item => throw new ProviderException(ItemExtractionError.format(item))
-            }
-          }.map(items => SocialState(items.toSet))
+            }.map(items => SocialState(items.toSet))
+        }
       }
     }
   }
@@ -313,7 +327,6 @@ object DefaultSocialStateHandler {
    */
   val MissingItemHandlerError = "None of the registered handlers can handle the given state item: %s"
   val ItemExtractionError = "Cannot extract social state item from string: %s"
-
 }
 
 /**

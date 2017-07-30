@@ -29,7 +29,7 @@ import play.api.test.{ FakeRequest, PlaySpecification }
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.Success
+import scala.util.{ Failure, Success }
 
 /**
  *  Test case for the [[DefaultSocialStateHandler]] class.
@@ -55,6 +55,16 @@ class DefaultSocialStateHandlerSpec extends PlaySpecification with Mockito with 
   }
 
   "The `serialize` method" should {
+    "return an empty string if no handler is registered" in new Context {
+      override val stateHandler = new DefaultSocialStateHandler(Set(), signer)
+
+      stateHandler.serialize(state) must be equalTo ""
+    }
+
+    "return an empty string if the items are empty" in new Context {
+      stateHandler.serialize(SocialState(Set())) must be equalTo ""
+    }
+
     "return the serialized social state" in new Context {
       Default.itemHandler.canHandle(Publishable.item) returns None
       Default.itemHandler.canHandle(Default.item) returns Some(Default.item)
@@ -69,10 +79,22 @@ class DefaultSocialStateHandlerSpec extends PlaySpecification with Mockito with 
   }
 
   "The `unserialize` method" should {
-    "return an empty social state for an empty string" in new Context {
+    "omit state validation if no handler is registered" in new Context {
+      override val stateHandler = new DefaultSocialStateHandler(Set(), signer)
       implicit val request = new ExtractableRequest(FakeRequest())
 
-      await(stateHandler.unserialize("")) must be equalTo SocialState(Set())
+      await(stateHandler.unserialize(""))
+
+      there was no(signer).extract(any[String])
+    }
+
+    "throw an Exception for an empty string" in new Context {
+      implicit val request = new ExtractableRequest(FakeRequest())
+
+      await(stateHandler.unserialize("")) must throwA[RuntimeException].like {
+        case e =>
+          e.getMessage must startWith("Wrong state format")
+      }
     }
 
     "throw an ProviderException if the serialized item structure cannot be extracted" in new Context {
@@ -177,7 +199,12 @@ class DefaultSocialStateHandlerSpec extends PlaySpecification with Mockito with 
     val signer = {
       val c = mock[Signer].smart
       c.sign(any) answers { p => p.asInstanceOf[String] }
-      c.extract(any) answers { p => Success(p.asInstanceOf[String]) }
+      c.extract(any) answers { p =>
+        p.asInstanceOf[String] match {
+          case "" => Failure(new RuntimeException("Wrong state format"))
+          case s  => Success(s)
+        }
+      }
       c
     }
 
