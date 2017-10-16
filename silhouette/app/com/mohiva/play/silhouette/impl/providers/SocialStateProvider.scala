@@ -311,7 +311,7 @@ class DefaultSocialStateHandler(val handlers: Set[SocialStateItemHandler], signe
   override def publish[B](result: Result, state: SocialState)(implicit request: ExtractableRequest[B]): Result = {
     handlers.collect { case h: PublishableSocialStateItemHandler => h }.foldLeft(result) { (r, handler) =>
       state.items.foldLeft(r) { (r, item) =>
-        handler.canHandle(item).map(item => handler.publish(item, r)).getOrElse(result)
+        handler.canHandle(item).map(item => handler.publish(item, r)).getOrElse(r)
       }
     }
   }
