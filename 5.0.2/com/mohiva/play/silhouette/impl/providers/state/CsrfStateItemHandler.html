@@ -261,7 +261,7 @@ for different schemes and services.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">CsrfStateItemHandler</span><span class="result"> extends <a href="../SocialStateItemHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateItemHandler">SocialStateItemHandler</a> with <a href="../PublishableSocialStateItemHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.PublishableSocialStateItemHandler">PublishableSocialStateItemHandler</a></span>
+        <span class="name">CsrfStateItemHandler</span><span class="result"> extends <a href="../SocialStateItemHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateItemHandler">SocialStateItemHandler</a> with <a href="../../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a> with <a href="../PublishableSocialStateItemHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.PublishableSocialStateItemHandler">PublishableSocialStateItemHandler</a></span>
       </span>
       </h4>
 
@@ -273,7 +273,7 @@ application can trust the redirect source.
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="../PublishableSocialStateItemHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.PublishableSocialStateItemHandler">PublishableSocialStateItemHandler</a>, <a href="../SocialStateItemHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateItemHandler">SocialStateItemHandler</a>, <a href="http://www.scala-lang.org/api/2.12.3/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.3/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../PublishableSocialStateItemHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.PublishableSocialStateItemHandler">PublishableSocialStateItemHandler</a>, <a href="../../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a>, <a href="../SocialStateItemHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateItemHandler">SocialStateItemHandler</a>, <a href="http://www.scala-lang.org/api/2.12.3/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.3/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></div>
         </div></div>
         
 
@@ -299,7 +299,7 @@ application can trust the redirect source.
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler"><span>CsrfStateItemHandler</span></li><li class="in" name="com.mohiva.play.silhouette.impl.providers.PublishableSocialStateItemHandler"><span>PublishableSocialStateItemHandler</span></li><li class="in" name="com.mohiva.play.silhouette.impl.providers.SocialStateItemHandler"><span>SocialStateItemHandler</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler"><span>CsrfStateItemHandler</span></li><li class="in" name="com.mohiva.play.silhouette.impl.providers.PublishableSocialStateItemHandler"><span>PublishableSocialStateItemHandler</span></li><li class="in" name="com.mohiva.play.silhouette.api.Logger"><span>Logger</span></li><li class="in" name="com.mohiva.play.silhouette.impl.providers.SocialStateItemHandler"><span>SocialStateItemHandler</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -609,6 +609,23 @@ unserialized state item.
       
       <p class="shortcomment cmt">Gets the state item the handler can handle.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the state item the handler can handle.
 </p></div><dl class="paramcmts block"><dt class="param">ec</dt><dd class="cmt"><p>The execution context to handle the asynchronous operations.</p></dd><dt>returns</dt><dd class="cmt"><p>The state params the handler can handle.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.state.CsrfStateItemHandler">CsrfStateItemHandler</a> → <a href="../SocialStateItemHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateItemHandler">SocialStateItemHandler</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.Logger#logger" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logger:play.api.Logger"></a><a id="logger:Logger"></a>
+      <span class="permalink">
+      <a href="../../../../../../../com/mohiva/play/silhouette/impl/providers/state/CsrfStateItemHandler.html#logger:play.api.Logger" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logger</span><span class="result">: <span class="extype" name="play.api.Logger">Logger</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">A named logger instance.</p><div class="fullcomment"><div class="comment cmt"><p>A named logger instance.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -818,6 +835,8 @@ unserialized state item.
         <div id="inheritedMembers">
         <div class="parent" name="com.mohiva.play.silhouette.impl.providers.PublishableSocialStateItemHandler">
               <h3>Inherited from <a href="../PublishableSocialStateItemHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.PublishableSocialStateItemHandler">PublishableSocialStateItemHandler</a></h3>
+            </div><div class="parent" name="com.mohiva.play.silhouette.api.Logger">
+              <h3>Inherited from <a href="../../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></h3>
             </div><div class="parent" name="com.mohiva.play.silhouette.impl.providers.SocialStateItemHandler">
               <h3>Inherited from <a href="../SocialStateItemHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateItemHandler">SocialStateItemHandler</a></h3>
             </div><div class="parent" name="scala.AnyRef">
