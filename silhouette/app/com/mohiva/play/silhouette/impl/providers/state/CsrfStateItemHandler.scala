@@ -17,6 +17,7 @@ package com.mohiva.play.silhouette.impl.providers.state
 
 import javax.inject.Inject
 
+import com.mohiva.play.silhouette.api.Logger
 import com.mohiva.play.silhouette.api.crypto.Signer
 import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, IDGenerator }
 import com.mohiva.play.silhouette.impl.exceptions.OAuth2StateException
@@ -63,7 +64,7 @@ class CsrfStateItemHandler @Inject() (
   settings: CsrfStateSettings,
   idGenerator: IDGenerator,
   signer: Signer
-) extends SocialStateItemHandler
+) extends SocialStateItemHandler with Logger
   with PublishableSocialStateItemHandler {
 
   /**
@@ -108,7 +109,9 @@ class CsrfStateItemHandler @Inject() (
     item.id == ID && {
       clientState match {
         case Success(i) => i == item.data.as[Item]
-        case Failure(_) => false
+        case Failure(e) =>
+          logger.warn(e.getMessage, e)
+          false
       }
     }
   }
