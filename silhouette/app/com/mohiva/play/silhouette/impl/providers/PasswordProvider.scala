@@ -98,7 +98,7 @@ object PasswordProvider {
   /**
    * The error messages.
    */
-  val PasswordDoesNotMatch = "[Silhouette][%s] Passwords does not match"
+  val PasswordDoesNotMatch = "[Silhouette][%s] Password does not match"
   val HasherIsNotRegistered = "[Silhouette][%s] Stored hasher ID `%s` isn't registered as supported hasher: %s"
   val PasswordInfoNotFound = "[Silhouette][%s] Could not find password info for given login info: %s"
 }
