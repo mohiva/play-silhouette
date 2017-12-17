@@ -52,7 +52,7 @@ class BasicAuthProviderSpec extends PasswordProviderSpec {
       await(provider.authenticate(request)) must beNone
     }
 
-    "return None if passwords does not match" in new WithApplication with Context {
+    "return None if password does not match" in new WithApplication with Context {
       val passwordInfo = PasswordInfo("foo", "hashed(s3cr3t)")
       val loginInfo = LoginInfo(provider.id, credentials.identifier)
       val request = FakeRequest().withHeaders(AUTHORIZATION -> encodeCredentials(credentials))
