@@ -181,7 +181,7 @@ class VKProviderSpec extends OAuth2ProviderSpec {
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
       wsResponse.status returns 200
-      wsResponse.json returns (Helper.loadJson("providers/oauth2/vk.success.json").as[JsObject] - "photo_max_orig")
+      wsResponse.json returns Helper.loadJson("providers/oauth2/vk.success.without.photo.json").as[JsObject]
       wsRequest.get() returns Future.successful(wsResponse)
       httpLayer.url(API.format("my.access.token")) returns wsRequest
 
