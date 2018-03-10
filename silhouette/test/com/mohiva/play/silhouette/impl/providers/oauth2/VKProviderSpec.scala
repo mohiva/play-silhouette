@@ -158,6 +158,21 @@ class VKProviderSpec extends OAuth2ProviderSpec {
       there was one(httpLayer).url(url.format("my.access.token"))
     }
 
+    "use the overridden API URL with deprecated fields" in new WithApplication with Context {
+      val url = "https://custom.api.url?access_token=%s"
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
+      oAuthSettings.apiURL returns Some(url)
+      wsResponse.status returns 200
+      wsResponse.json returns Helper.loadJson("providers/oauth2/vk.success.deprecated.json")
+      wsRequest.get() returns Future.successful(wsResponse)
+      httpLayer.url(url.format("my.access.token")) returns wsRequest
+
+      await(provider.retrieveProfile(oAuthInfo.as[OAuth2Info]))
+
+      there was one(httpLayer).url(url.format("my.access.token"))
+    }
+
     "return the social profile with email" in new WithApplication with Context {
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]

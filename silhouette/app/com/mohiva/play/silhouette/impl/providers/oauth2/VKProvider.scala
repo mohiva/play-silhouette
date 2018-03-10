@@ -97,10 +97,12 @@ class VKProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile, 
    */
   override def parse(json: JsValue, authInfo: OAuth2Info) = Future.successful {
     val response = (json \ "response").apply(0)
-    val userId = (response \ "id").as[Long]
+    // `uid` field was deprecated in v.5.0
+    val userId = Seq("id", "uid").map(response \ _).flatMap(_.asOpt[Long]).head
     val firstName = (response \ "first_name").asOpt[String]
     val lastName = (response \ "last_name").asOpt[String]
-    val avatarURL = (response \ "photo_max_orig").asOpt[String]
+    // `photo` field was deprecated in v.5.4
+    val avatarURL = Seq("photo_max_orig", "photo").map(response \ _).flatMap(_.asOpt[String]).headOption
 
     CommonSocialProfile(
       loginInfo = LoginInfo(ID, userId.toString),
