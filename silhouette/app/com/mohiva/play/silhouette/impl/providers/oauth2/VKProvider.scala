@@ -157,7 +157,7 @@ object VKProvider {
    * The VK constants.
    */
   val ID = "vk"
-  val API = "https://api.vk.com/method/users.get?fields=uid,first_name,last_name,photo_max_orig&v=5.73&access_token=%s"
+  val API = "https://api.vk.com/method/users.get?fields=id,first_name,last_name,photo_max_orig&v=5.73&access_token=%s"
 
   /**
    * Converts the JSON into a [[OAuth2Info]] object.
