@@ -102,7 +102,7 @@ class VKProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile, 
     val firstName = (response \ "first_name").asOpt[String]
     val lastName = (response \ "last_name").asOpt[String]
     // `photo` field was deprecated in v.5.4
-    val avatarURL = Seq("photo_max_orig", "photo").flatMap(fieldName => (response \ fieldName).asOpt[String]).headOption
+    val avatarURL = (response \ "photo").asOpt[String].orElse((response \ "photo_max_orig").asOpt[String])
 
     CommonSocialProfile(
       loginInfo = LoginInfo(ID, userId.toString),
