@@ -177,7 +177,26 @@ class VKProviderSpec extends OAuth2ProviderSpec {
       }
     }
 
-    "return the social profile with email and deprecated API response" in new WithApplication with Context {
+    "return the social profile from response without photo" in new WithApplication with Context {
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
+      wsResponse.status returns 200
+      wsResponse.json returns (Helper.loadJson("providers/oauth2/vk.success.json").as[JsObject] - "photo_max_orig")
+      wsRequest.get() returns Future.successful(wsResponse)
+      httpLayer.url(API.format("my.access.token")) returns wsRequest
+
+      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) { p =>
+        p must be equalTo CommonSocialProfile(
+          loginInfo = LoginInfo(provider.id, "66748"),
+          firstName = Some("Apollonia"),
+          lastName = Some("Vanova"),
+          email = Some("apollonia.vanova@watchmen.com"),
+          avatarURL = None
+        )
+      }
+    }
+
+    "return the social profile from deprecated API response" in new WithApplication with Context {
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
       wsResponse.status returns 200
