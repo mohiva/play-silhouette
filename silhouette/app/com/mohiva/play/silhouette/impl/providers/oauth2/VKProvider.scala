@@ -33,9 +33,10 @@ import scala.concurrent.Future
 /**
  * Base Vk OAuth 2 provider.
  *
- * @see http://vk.com/dev/auth_sites
- * @see http://vk.com/dev/api_requests
- * @see http://vk.com/pages.php?o=-1&p=getProfiles
+ * @see https://vk.com/dev/auth_sites
+ * @see https://vk.com/dev/api_requests
+ * @see https://vk.com/dev/users.get
+ * @see https://vk.com/dev/objects/user
  */
 trait BaseVKProvider extends OAuth2Provider {
 
@@ -96,10 +97,12 @@ class VKProfileParser extends SocialProfileParser[JsValue, CommonSocialProfile, 
    */
   override def parse(json: JsValue, authInfo: OAuth2Info) = Future.successful {
     val response = (json \ "response").apply(0)
-    val userId = (response \ "uid").as[Long]
+    // `uid` field was deprecated in v.5.0
+    val userId = (response \ "uid").asOpt[Long].getOrElse((response \ "id").as[Long])
     val firstName = (response \ "first_name").asOpt[String]
     val lastName = (response \ "last_name").asOpt[String]
-    val avatarURL = (response \ "photo").asOpt[String]
+    // `photo` field was deprecated in v.5.4
+    val avatarURL = (response \ "photo").asOpt[String].orElse((response \ "photo_max_orig").asOpt[String])
 
     CommonSocialProfile(
       loginInfo = LoginInfo(ID, userId.toString),
@@ -156,7 +159,7 @@ object VKProvider {
    * The VK constants.
    */
   val ID = "vk"
-  val API = "https://api.vk.com/method/getProfiles?fields=uid,first_name,last_name,photo&access_token=%s"
+  val API = "https://api.vk.com/method/users.get?fields=id,first_name,last_name,photo_max_orig&v=5.73&access_token=%s"
 
   /**
    * Converts the JSON into a [[OAuth2Info]] object.
