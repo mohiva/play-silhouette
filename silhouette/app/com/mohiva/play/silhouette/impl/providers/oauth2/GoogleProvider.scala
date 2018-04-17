@@ -92,6 +92,7 @@ class GoogleProfileParser extends SocialProfileParser[JsValue, CommonSocialProfi
     val lastName = (json \ "name" \ "familyName").asOpt[String]
     val fullName = (json \ "displayName").asOpt[String]
     val avatarURL = (json \ "image" \ "url").asOpt[String]
+    val isDefaultAvatar = (json \ "image" \ "isDefault").asOpt[Boolean].getOrElse(false)
 
     // https://developers.google.com/+/api/latest/people#emails.type
     val emailIndex = (json \ "emails" \\ "type").indexWhere(_.as[String] == "account")
@@ -106,7 +107,7 @@ class GoogleProfileParser extends SocialProfileParser[JsValue, CommonSocialProfi
       firstName = firstName,
       lastName = lastName,
       fullName = fullName,
-      avatarURL = avatarURL,
+      avatarURL = if (isDefaultAvatar) None else avatarURL, // skip the default avatar picture
       email = emailValue)
   }
 }
