@@ -1,0 +1,22 @@
+{
+  "emails": [
+    {
+      "value": "home@watchmen.com",
+      "type": "home"
+    },
+    {
+      "value": "apollonia.vanova@watchmen.com",
+      "type": "account"
+    }
+  ],
+  "id": "109476598527568979481",
+  "displayName": "Apollonia Vanova",
+  "name": {
+    "familyName": "Vanova",
+    "givenName": "Apollonia"
+  },
+  "image": {
+    "url": "https://lh6.googleusercontent.com/-m34A6I77dJU/ASASAASADAAI/AVABAAAAAJk/5cg1hcjo_4s/photo.jpg?sz=50",
+    "isDefault" : true
+  }
+}

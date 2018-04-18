@@ -197,6 +197,44 @@ class GoogleProviderSpec extends OAuth2ProviderSpec {
         )
       }
     }
+    "return the social profile with an avatar url" in new WithApplication with Context {
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
+      wsResponse.status returns 200
+      wsResponse.json returns Helper.loadJson("providers/oauth2/google.img.non-default.json")
+      wsRequest.get() returns Future.successful(wsResponse)
+      httpLayer.url(API.format("my.access.token")) returns wsRequest
+
+      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) { p =>
+        p must be equalTo CommonSocialProfile(
+          loginInfo = LoginInfo(provider.id, "109476598527568979481"),
+          firstName = Some("Apollonia"),
+          lastName = Some("Vanova"),
+          fullName = Some("Apollonia Vanova"),
+          email = Some("apollonia.vanova@watchmen.com"),
+          avatarURL = Some("https://lh6.googleusercontent.com/-m34A6I77dJU/ASASAASADAAI/AVABAAAAAJk/5cg1hcjo_4s/photo.jpg?sz=50")
+        )
+      }
+    }
+    "return the social profile without an avatar url" in new WithApplication with Context {
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
+      wsResponse.status returns 200
+      wsResponse.json returns Helper.loadJson("providers/oauth2/google.img.default.json")
+      wsRequest.get() returns Future.successful(wsResponse)
+      httpLayer.url(API.format("my.access.token")) returns wsRequest
+
+      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) { p =>
+        p must be equalTo CommonSocialProfile(
+          loginInfo = LoginInfo(provider.id, "109476598527568979481"),
+          firstName = Some("Apollonia"),
+          lastName = Some("Vanova"),
+          fullName = Some("Apollonia Vanova"),
+          email = Some("apollonia.vanova@watchmen.com"),
+          avatarURL = None
+        )
+      }
+    }
   }
 
   /**
