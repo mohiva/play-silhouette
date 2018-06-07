@@ -159,7 +159,8 @@ class CsrfStateItemHandlerSpec extends PlaySpecification with Mockito with JsonM
       path = settings.cookiePath,
       domain = settings.cookieDomain,
       secure = settings.secureCookie,
-      httpOnly = settings.httpOnlyCookie
+      httpOnly = settings.httpOnlyCookie,
+      sameSite = settings.sameSite
     )
   }
 }

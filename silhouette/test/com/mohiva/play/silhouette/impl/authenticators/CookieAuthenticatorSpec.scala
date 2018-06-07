@@ -633,7 +633,8 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
       path = settings.cookiePath,
       domain = settings.cookieDomain,
       secure = settings.secureCookie,
-      httpOnly = settings.httpOnlyCookie
+      httpOnly = settings.httpOnlyCookie,
+      sameSite = settings.sameSite
     )
 
     /**
@@ -646,7 +647,8 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
       path = settings.cookiePath,
       domain = settings.cookieDomain,
       secure = settings.secureCookie,
-      httpOnly = settings.httpOnlyCookie
+      httpOnly = settings.httpOnlyCookie,
+      sameSite = settings.sameSite
     )
 
     /**
@@ -661,6 +663,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
       c.domain must be equalTo settings.cookieDomain
       c.secure must be equalTo settings.secureCookie
       c.httpOnly must be equalTo settings.httpOnlyCookie
+      c.sameSite must be equalTo settings.sameSite
     }
 
     /**
@@ -675,6 +678,7 @@ class CookieAuthenticatorSpec extends PlaySpecification with Mockito with NoLang
       c.domain must be equalTo settings.cookieDomain
       c.secure must be equalTo settings.secureCookie
       c.httpOnly must be equalTo settings.httpOnlyCookie
+      c.sameSite must be equalTo settings.sameSite
     }
 
     /**

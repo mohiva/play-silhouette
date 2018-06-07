@@ -174,7 +174,8 @@ class CookieSecretProvider @Inject() (
       path = settings.cookiePath,
       domain = settings.cookieDomain,
       secure = settings.secureCookie,
-      httpOnly = settings.httpOnlyCookie
+      httpOnly = settings.httpOnlyCookie,
+      sameSite = settings.sameSite
     ))
   }
 }
@@ -197,11 +198,12 @@ object CookieSecretProvider {
 /**
  * The settings for the cookie secret.
  *
- * @param cookieName The cookie name.
- * @param cookiePath The cookie path.
- * @param cookieDomain The cookie domain.
- * @param secureCookie Whether this cookie is secured, sent only for HTTPS requests.
+ * @param cookieName     The cookie name.
+ * @param cookiePath     The cookie path.
+ * @param cookieDomain   The cookie domain.
+ * @param secureCookie   Whether this cookie is secured, sent only for HTTPS requests.
  * @param httpOnlyCookie Whether this cookie is HTTP only, i.e. not accessible from client-side JavaScript code.
+ * @param sameSite       The SameSite attribute for this cookie (for CSRF protection).
  * @param expirationTime Secret expiration. Defaults to 5 minutes which provides sufficient time to log in, but
  *                       not too much. This is a balance between convenience and security.
  */
@@ -211,5 +213,6 @@ case class CookieSecretSettings(
   cookieDomain: Option[String] = None,
   secureCookie: Boolean = true,
   httpOnlyCookie: Boolean = true,
+  sameSite: Option[Cookie.SameSite] = Some(Cookie.SameSite.Lax),
   expirationTime: FiniteDuration = 5 minutes
 )
