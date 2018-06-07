@@ -254,7 +254,8 @@ class CookieAuthenticatorService(
         path = settings.cookiePath,
         domain = settings.cookieDomain,
         secure = settings.secureCookie,
-        httpOnly = settings.httpOnlyCookie
+        httpOnly = settings.httpOnlyCookie,
+        sameSite = settings.sameSite
       )
     }.recover {
       case e => throw new AuthenticatorInitializationException(InitError.format(ID, authenticator), e)
@@ -329,7 +330,8 @@ class CookieAuthenticatorService(
         path = settings.cookiePath,
         domain = settings.cookieDomain,
         secure = settings.secureCookie,
-        httpOnly = settings.httpOnlyCookie
+        httpOnly = settings.httpOnlyCookie,
+        sameSite = settings.sameSite
       ))))
     }).recover {
       case e => throw new AuthenticatorUpdateException(UpdateError.format(ID, authenticator), e)
@@ -433,6 +435,7 @@ object CookieAuthenticatorService {
  * @param cookieDomain             The cookie domain.
  * @param secureCookie             Whether this cookie is secured, sent only for HTTPS requests.
  * @param httpOnlyCookie           Whether this cookie is HTTP only, i.e. not accessible from client-side JavaScript code.
+ * @param sameSite                 The SameSite attribute for this cookie (for CSRF protection).
  * @param useFingerprinting        Indicates if a fingerprint of the user should be stored in the authenticator.
  * @param cookieMaxAge             The duration a cookie expires. `None` for a transient cookie.
  * @param authenticatorIdleTimeout The duration an authenticator can be idle before it timed out.
@@ -444,6 +447,7 @@ case class CookieAuthenticatorSettings(
   cookieDomain: Option[String] = None,
   secureCookie: Boolean = true,
   httpOnlyCookie: Boolean = true,
+  sameSite: Option[Cookie.SameSite] = Some(Cookie.SameSite.Lax),
   useFingerprinting: Boolean = true,
   cookieMaxAge: Option[FiniteDuration] = None,
   authenticatorIdleTimeout: Option[FiniteDuration] = None,
