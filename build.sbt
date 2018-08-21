@@ -39,6 +39,12 @@ val silhouettePasswordBcrypt = Project(
   dependencies = Seq(silhouette)
 )
 
+val silhouettePasswordArgon2 = Project(
+  id = "play-silhouette-password-argon2",
+  base = file("silhouette-password-argon2"),
+  dependencies = Seq(silhouette)
+)
+
 val silhouettePersistence = Project(
   id = "play-silhouette-persistence",
   base = file("silhouette-persistence"),
@@ -59,6 +65,7 @@ val root = Project(
     silhouetteCas,
     silhouetteCryptoJca,
     silhouettePasswordBcrypt,
+    silhouettePasswordArgon2,
     silhouettePersistence,
     silhouetteTestkit
   ),

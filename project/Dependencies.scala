@@ -57,5 +57,7 @@ object Dependencies {
     val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % "2.5.4"
     val casClient = "org.jasig.cas.client" % "cas-client-core" % "3.4.1"
     val casClientSupportSAML = "org.jasig.cas.client" % "cas-client-support-saml" % "3.4.1"
+    val argon2Jvm = "de.mkammerer" % "argon2-jvm" % "2.4"
+
   }
 }
