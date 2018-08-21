@@ -68,8 +68,8 @@ class Argon2PasswordHasherSpec extends Specification {
       hasher.isSuitable(passwordInfo) must beTrue
     }
 
-    "return true if the hasher is suitable when given a password info with different log rounds" in new Context {
-      val currentHasher = new Argon2PasswordHasher(maxMilliSecs = 500)
+    "return true if the hasher is suitable when given a password info with different parameters" in new Context {
+      val currentHasher = new Argon2PasswordHasher(parallelism = 2)
 
       val storedHasher = new Argon2PasswordHasher()
       val passwordInfo = storedHasher.hash(password)
@@ -91,8 +91,8 @@ class Argon2PasswordHasherSpec extends Specification {
       hasher.isDeprecated(passwordInfo) must beNone
     }
 
-    "return Some(true) if the stored log rounds are not equal the hasher log rounds" in new Context {
-      val currentHasher = new Argon2PasswordHasher(maxMilliSecs = 500)
+    "return Some(true) if the stored log rounds are not equal the hasher parameters" in new Context {
+      val currentHasher = new Argon2PasswordHasher(parallelism = 2)
 
       val storedHasher = new Argon2PasswordHasher()
       val passwordInfo = storedHasher.hash(password)
@@ -100,7 +100,7 @@ class Argon2PasswordHasherSpec extends Specification {
       currentHasher.isDeprecated(passwordInfo) must beSome(true)
     }
 
-    "return Some(false) if the stored log rounds are equal the hasher log rounds" in new Context {
+    "return Some(false) if the stored log rounds are equal the hasher parameters" in new Context {
       val passwordInfo = hasher.hash(password)
 
       hasher.isDeprecated(passwordInfo) must beSome(false)
