@@ -254,7 +254,7 @@ class DelegableAuthInfoRepositorySpec(implicit ev: ExecutionEnv)
       /**
        * Configures the module.
        */
-      def configure() {
+      override def configure() {
         bind[DelegableAuthInfoDAO[PasswordInfo]].toInstance(passwordInfoDAO)
         bind[DelegableAuthInfoDAO[OAuth1Info]].toInstance(oauth1InfoDAO)
         bind[DelegableAuthInfoDAO[OAuth2Info]].toInstance(oauth2InfoDAO)

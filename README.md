@@ -1,6 +1,6 @@
 Silhouette 
 ==========
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mohiva/play-silhouette_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.mohiva/play-silhouette_2.11) [![Build Status](https://travis-ci.org/mohiva/play-silhouette.png)](https://travis-ci.org/mohiva/play-silhouette) [![Coverage Status](https://coveralls.io/repos/mohiva/play-silhouette/badge.svg?branch=master&service=github)](https://coveralls.io/github/mohiva/play-silhouette?branch=master) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mohiva/play-silhouette?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mohiva/play-silhouette_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.mohiva/play-silhouette_2.12) [![Build Status](https://travis-ci.org/mohiva/play-silhouette.png)](https://travis-ci.org/mohiva/play-silhouette) [![Coverage Status](https://coveralls.io/repos/mohiva/play-silhouette/badge.svg?branch=master&service=github)](https://coveralls.io/github/mohiva/play-silhouette?branch=master) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mohiva/play-silhouette?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![OpenCollective](https://opencollective.com/silhouette/backers/badge.svg)](#backers) 
 [![OpenCollective](https://opencollective.com/silhouette/sponsors/badge.svg)](#sponsors)
 

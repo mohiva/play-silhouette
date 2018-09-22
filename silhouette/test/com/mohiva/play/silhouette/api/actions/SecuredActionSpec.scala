@@ -540,7 +540,7 @@ class SecuredActionSpec extends PlaySpecification with Mockito with JsonMatchers
      * The guice module.
      */
     class GuiceModule extends ScalaModule {
-      def configure(): Unit = {
+      override def configure(): Unit = {
         bind[Environment[SecuredEnv]].toInstance(env)
         bind[Authorization[SecuredEnv#I, SecuredEnv#A]].toInstance(authorization)
         bind[Silhouette[SecuredEnv]].to[SilhouetteProvider[SecuredEnv]]

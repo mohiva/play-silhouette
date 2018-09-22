@@ -310,7 +310,7 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
      * The guice module.
      */
     class GuiceModule extends ScalaModule {
-      def configure(): Unit = {
+      override def configure(): Unit = {
         bind[Silhouette[UserAwareEnv]].to[SilhouetteProvider[UserAwareEnv]]
         bind[Environment[UserAwareEnv]].toInstance(env)
         bind[UserAwareController]

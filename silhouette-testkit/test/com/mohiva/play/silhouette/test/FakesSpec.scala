@@ -294,7 +294,7 @@ class FakesSpec extends PlaySpecification with JsonMatchers {
      * The guice module.
      */
     class GuiceModule extends ScalaModule {
-      def configure(): Unit = {
+      override def configure(): Unit = {
         bind[Silhouette[CookieEnv]].to[SilhouetteProvider[CookieEnv]]
         bind[Environment[CookieEnv]].toInstance(env)
         bind[SecuredController]
