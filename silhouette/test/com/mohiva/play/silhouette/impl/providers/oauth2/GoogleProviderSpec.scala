@@ -130,6 +130,24 @@ class GoogleProviderSpec extends OAuth2ProviderSpec {
       }
     }
 
+    "fail with ProfileRetrievalException if API returns missing People API config" in new WithApplication with Context {
+      val wsRequest = mock[MockWSRequest]
+      val wsResponse = mock[MockWSRequest#Response]
+      wsResponse.status returns 403
+      wsResponse.json returns Helper.loadJson("providers/oauth2/google.error.api.missing.json")
+      wsRequest.get() returns Future.successful(wsResponse)
+      httpLayer.url(API.format("my.access.token")) returns wsRequest
+
+      val apiErrMsg = "People API has not been used in project 1234567890 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/people.googleapis.com/overview?project=1234567890 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+      failed[ProfileRetrievalException](provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
+        case e => e.getMessage must equalTo(SpecifiedProfileError.format(
+          provider.id,
+          403,
+          apiErrMsg))
+      }
+    }
+
     "fail with ProfileRetrievalException if an unexpected error occurred" in new WithApplication with Context {
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
