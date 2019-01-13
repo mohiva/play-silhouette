@@ -1,29 +1,23 @@
 sudo: false
 language: scala
 scala:
-  - 2.11.12
-  - 2.12.6
+  - 2.12.8
 jdk:
   - oraclejdk8
 env:
   global:
-  - ENCRYPTION_ID: "9eb27d59440e"
-before_script:
-  - echo "TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG, TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST, TRAVIS_BRANCH=$TRAVIS_BRANCH"
+   - ENCRYPTION_ID: "9eb27d59440e"
 cache:
   directories:
-    # caching scala stuff based on
-    # http://www.scala-sbt.org/0.13/docs/Travis-CI-with-sbt.html#%28Experimental%29+Reusing+Ivy+cache
-    - $HOME/.ivy2/cache
-    - $HOME/.sbt/boot/
+    - "$HOME/.ivy2/cache"
+    - "$HOME/.sbt/boot/"
 script:
-  - scripts/ci-build
-  # cleanup travis trick from
-  # http://www.scala-sbt.org/0.13/docs/Travis-CI-with-sbt.html#%28Experimental%29+Reusing+Ivy+cache
+  - scripts/ci-build.sh
   - find $HOME/.sbt -name "*.lock" -delete
   - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
 after_success:
-  - scripts/api-doc
-  - scripts/coveralls
+  - scripts/api-doc.sh
+  - scripts/publish.sh
+  - scripts/coveralls.sh
 notifications:
   email: false
