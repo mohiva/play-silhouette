@@ -194,4 +194,13 @@ object PlayRequestPipeline {
    * @return The converted instance.
    */
   implicit def toPlayRequest[B](requestPipeline: PlayRequestPipeline[B]): Request[B] = requestPipeline.unbox
+
+  /**
+   * Converts the [[play.api.mvc.Request]] type to a [[silhouette.play.http.PlayRequestPipeline]] type.
+   *
+   * @param request The instance to convert.
+   * @tparam B The type of the request body.
+   * @return The converted instance.
+   */
+  implicit def fromPlayRequest[B](request: Request[B]): PlayRequestPipeline[B] = PlayRequestPipeline(request)
 }

@@ -15,26 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import sbt._
+package silhouette.play.action
 
-lazy val buildVersions = taskKey[Unit]("Show some build versions")
+import silhouette.SilhouetteException
 
-lazy val `silhouette-play-http` = project in file("modules/http")
-lazy val `silhouette-play-action` = (project in file("modules/action"))
-  .dependsOn(
-    `silhouette-play-http`
-  )
-
-lazy val `silhouette-play` = (project in file("."))
-  .aggregate(
-    `silhouette-play-http`,
-    `silhouette-play-action`
-  ).settings(
-  publish := {},
-  buildVersions := {
-    // scalastyle:off println
-    println(s"PROJECT_VERSION ${version.value}")
-    println(s"SCALA_VERSION ${scalaVersion.value}")
-    // scalastyle:on println
-  }
-)
+/**
+ * Indicates that a user is not authenticated to access a secured endpoint.
+ *
+ * @param msg   The exception message.
+ * @param cause Maybe the exception cause.
+ */
+class NotAuthenticatedException(msg: String, cause: Option[Throwable] = None)
+  extends SilhouetteException(msg, cause)

@@ -15,26 +15,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import sbt._
+package silhouette.play.action
 
-lazy val buildVersions = taskKey[Unit]("Show some build versions")
+import play.api.mvc.Request
+import silhouette.{ Credentials, LoginInfo }
 
-lazy val `silhouette-play-http` = project in file("modules/http")
-lazy val `silhouette-play-action` = (project in file("modules/action"))
-  .dependsOn(
-    `silhouette-play-http`
-  )
-
-lazy val `silhouette-play` = (project in file("."))
-  .aggregate(
-    `silhouette-play-http`,
-    `silhouette-play-action`
-  ).settings(
-  publish := {},
-  buildVersions := {
-    // scalastyle:off println
-    println(s"PROJECT_VERSION ${version.value}")
-    println(s"SCALA_VERSION ${scalaVersion.value}")
-    // scalastyle:on println
-  }
-)
+/**
+ * The authorization context.
+ *
+ * @param loginInfo   The login info for which the identity was found.
+ * @param credentials The found credentials.
+ * @param request     The current request.
+ * @tparam B The type of the request body.
+ */
+case class AuthorizationContext[B](
+  loginInfo: LoginInfo,
+  credentials: Credentials,
+  request: Request[B]
+) extends silhouette.authorization.AuthorizationContext

@@ -18,7 +18,7 @@
 package silhouette.play.http
 
 import play.api.mvc._
-import silhouette.http._
+import silhouette.http.{ Request => _, _ }
 
 /**
  * The request body extractor based on the [[play.api.mvc.Request]].

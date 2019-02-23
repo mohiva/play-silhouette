@@ -15,26 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import sbt._
+import Dependencies._
 
-lazy val buildVersions = taskKey[Unit]("Show some build versions")
-
-lazy val `silhouette-play-http` = project in file("modules/http")
-lazy val `silhouette-play-action` = (project in file("modules/action"))
-  .dependsOn(
-    `silhouette-play-http`
-  )
-
-lazy val `silhouette-play` = (project in file("."))
-  .aggregate(
-    `silhouette-play-http`,
-    `silhouette-play-action`
-  ).settings(
-  publish := {},
-  buildVersions := {
-    // scalastyle:off println
-    println(s"PROJECT_VERSION ${version.value}")
-    println(s"SCALA_VERSION ${scalaVersion.value}")
-    // scalastyle:on println
-  }
+libraryDependencies ++= Seq(
+  Library.Silhouette.core,
+  Library.Silhouette.http,
+  Library.Silhouette.authenticator,
+  Library.Silhouette.authorization,
+  Library.Silhouette.provider,
+  Library.Silhouette.specs2 % Test,
+  Library.Play.core,
+  Library.Play.test % Test
 )
+//enablePlugins(Doc)

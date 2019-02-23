@@ -18,7 +18,7 @@ package com.mohiva.play.silhouette.api.exceptions
 /**
  * Indicates that a user is not authenticated to access a secured endpoint.
  *
- * @param msg The exception message.
+ * @param msg   The exception message.
  * @param cause The exception cause.
  */
 class NotAuthenticatedException(msg: String, cause: Throwable = null)

@@ -28,6 +28,7 @@ object Dependencies {
 
   object Library {
     object Play {
+      val core = "com.typesafe.play" %% "play" % Versions.play
       val ws = "com.typesafe.play" %% "play-ws" % Versions.play
       val test = "com.typesafe.play" %% "play-test" % Versions.play
       val specs2 = "com.typesafe.play" %% "play-specs2" % Versions.play
@@ -36,6 +37,9 @@ object Dependencies {
     object Silhouette {
       val core = "group.minutemen" %% "silhouette-core" % Versions.silhouette
       val http = "group.minutemen" %% "silhouette-http" % Versions.silhouette
+      val authenticator = "group.minutemen" %% "silhouette-authenticator" % Versions.silhouette
+      val authorization = "group.minutemen" %% "silhouette-authorization" % Versions.silhouette
+      val provider = "group.minutemen" %% "silhouette-provider" % Versions.silhouette
       val specs2 = "group.minutemen" %% "silhouette-specs2" % Versions.silhouette
     }
 
