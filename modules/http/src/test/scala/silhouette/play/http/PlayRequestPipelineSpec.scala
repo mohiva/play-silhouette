@@ -21,7 +21,7 @@ import org.specs2.mutable.Specification
 import org.specs2.specification.Scope
 import play.api.libs.json.Json
 import play.api.mvc.request.RequestTarget
-import play.api.mvc.{ AnyContent, AnyContentAsEmpty, AnyContentAsFormUrlEncoded, AnyContentAsJson, AnyContentAsXml, Headers, Request, Cookie => PlayCookie }
+import play.api.mvc.{ Cookie => PlayCookie, _ }
 import play.api.test.FakeRequest
 import silhouette.crypto.Hash
 import silhouette.crypto.Hash._
@@ -212,26 +212,27 @@ class PlayRequestPipelineSpec extends Specification {
 
   "The `withBodyExtractor` method" should {
     "set a new body extractor for the request" in new Context {
-      requestPipeline.withBodyExtractor(new CustomBodyExtractor).bodyExtractor.raw(request) must be equalTo "custom"
+      requestPipeline.withBodyExtractor(new CustomBodyExtractor)
+        .bodyExtractor.raw(Some(request.body -> MimeType.`application/octet-stream`)) must be equalTo "custom"
     }
   }
 
   "The default `fingerprint` method" should {
     "return fingerprint including the `User-Agent` header" in new Context {
       val userAgent = "test-user-agent"
-      requestPipeline.withHeaders(Header("User-Agent", userAgent)).fingerprint must
+      requestPipeline.withHeaders(Header("User-Agent", userAgent)).fingerprint() must
         be equalTo Hash.sha1(userAgent + "::")
     }
 
     "return fingerprint including the `Accept-Language` header" in new Context {
       val acceptLanguage = "test-accept-language"
-      requestPipeline.withHeaders(Header("Accept-Language", acceptLanguage)).fingerprint must
+      requestPipeline.withHeaders(Header("Accept-Language", acceptLanguage)).fingerprint() must
         be equalTo Hash.sha1(":" + acceptLanguage + ":")
     }
 
     "return fingerprint including the `Accept-Charset` header" in new Context {
       val acceptCharset = "test-accept-charset"
-      requestPipeline.withHeaders(Header("Accept-Charset", acceptCharset)).fingerprint must
+      requestPipeline.withHeaders(Header("Accept-Charset", acceptCharset)).fingerprint() must
         be equalTo Hash.sha1("::" + acceptCharset)
     }
 
@@ -243,7 +244,7 @@ class PlayRequestPipelineSpec extends Specification {
         Header("User-Agent", userAgent),
         Header("Accept-Language", acceptLanguage),
         Header("Accept-Charset", acceptCharset)
-      ).fingerprint must be equalTo Hash.sha1(
+      ).fingerprint() must be equalTo Hash.sha1(
           userAgent + ":" + acceptLanguage + ":" + acceptCharset
         )
     }
@@ -388,7 +389,7 @@ class PlayRequestPipelineSpec extends Specification {
      * A custom body extractor for testing.
      */
     case class CustomBodyExtractor[B]() extends PlayRequestBodyExtractor[B] {
-      override def raw(request: Request[B]): String = "custom"
+      override def raw(body: Option[(B, MimeType)]): String = "custom"
     }
 
     /**

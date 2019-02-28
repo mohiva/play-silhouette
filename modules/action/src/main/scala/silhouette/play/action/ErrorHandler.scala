@@ -33,10 +33,11 @@ sealed trait ErrorHandler {
   /**
    * Calls the error handler methods based on a caught exception.
    *
-   * @param request The request header.
+   * @param request The current request.
+   * @tparam B The type of the request body.
    * @return A partial function which maps an exception to a Play result.
    */
-  def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[Result]]
+  def exceptionHandler[B](implicit request: Request[B]): PartialFunction[Throwable, Future[Result]]
 }
 
 /**
@@ -47,10 +48,11 @@ trait NotAuthenticatedErrorHandler extends ErrorHandler {
   /**
    * Exception handler which translates an [[NotAuthenticatedException]] into a 401 Unauthorized result.
    *
-   * @param request The request header.
+   * @param request The current request.
+   * @tparam B The type of the request body.
    * @return A partial function which maps an exception to a Play result.
    */
-  def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[Result]] = {
+  def exceptionHandler[B](implicit request: Request[B]): PartialFunction[Throwable, Future[Result]] = {
     case _: NotAuthenticatedException => onNotAuthenticated
   }
 
@@ -59,10 +61,11 @@ trait NotAuthenticatedErrorHandler extends ErrorHandler {
    *
    * As defined by RFC 2616, the status code of the response should be 401 Unauthorized.
    *
-   * @param request The request header.
+   * @param request The current request.
+   * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
-  def onNotAuthenticated(implicit request: RequestHeader): Future[Result]
+  def onNotAuthenticated[B](implicit request: Request[B]): Future[Result]
 }
 
 /**
@@ -73,11 +76,12 @@ trait NotAuthorizedErrorHandler extends ErrorHandler {
   /**
    * Exception handler which translates an [[NotAuthorizedException]] into a 403 Forbidden result.
    *
-   * @param request The request header.
+   * @param request The current request.
+   * @tparam B The type of the request body.
    * @return A partial function which maps an exception to a Play result.
    */
-  def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[Result]] = {
-    case _: NotAuthorizedException => onNotAuthorized
+  def exceptionHandler[B](implicit request: Request[B]): PartialFunction[Throwable, Future[Result]] = {
+    case _: NotAuthorizedException => onNotAuthorized(request)
   }
 
   /**
@@ -85,10 +89,11 @@ trait NotAuthorizedErrorHandler extends ErrorHandler {
    *
    * As defined by RFC 2616, the status code of the response should be 403 Forbidden.
    *
-   * @param request The request header.
+   * @param request The current request.
+   * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
-  def onNotAuthorized(implicit request: RequestHeader): Future[Result]
+  def onNotAuthorized[B](implicit request: Request[B]): Future[Result]
 }
 
 /**
@@ -103,10 +108,11 @@ trait DefaultNotAuthenticatedErrorHandler
   /**
    * @inheritdoc
    *
-   * @param request The request header.
+   * @param request The current request.
+   * @tparam B The type of the request body.
    * @return A partial function which maps an exception to a Play result.
    */
-  override def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[Result]] = {
+  override def exceptionHandler[B](implicit request: Request[B]): PartialFunction[Throwable, Future[Result]] = {
     case e: NotAuthenticatedException =>
       logger.info(e.getMessage, e)
       super.exceptionHandler(request)(e)
@@ -115,10 +121,11 @@ trait DefaultNotAuthenticatedErrorHandler
   /**
    * @inheritdoc
    *
-   * @param request The request header.
+   * @param request The current request.
+   * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
-  override def onNotAuthenticated(implicit request: RequestHeader): Future[Result] = {
+  override def onNotAuthenticated[B](implicit request: Request[B]): Future[Result] = {
     logger.debug("[Silhouette] Unauthenticated user trying to access '%s'".format(request.uri))
     produceResponse(Unauthorized, Messages("silhouette.not.authenticated"))
   }
@@ -136,10 +143,11 @@ trait DefaultNotAuthorizedErrorHandler
   /**
    * @inheritdoc
    *
-   * @param request The request header.
+   * @param request The current request.
+   * @tparam B The type of the request body.
    * @return A partial function which maps an exception to a Play result.
    */
-  override def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[Result]] = {
+  override def exceptionHandler[B](implicit request: Request[B]): PartialFunction[Throwable, Future[Result]] = {
     case e: NotAuthorizedException =>
       logger.info(e.getMessage, e)
       super.exceptionHandler(request)(e)
@@ -148,10 +156,11 @@ trait DefaultNotAuthorizedErrorHandler
   /**
    * @inheritdoc
    *
-   * @param request The request header.
+   * @param request The current request.
+   * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
-  override def onNotAuthorized(implicit request: RequestHeader): Future[Result] = {
+  override def onNotAuthorized[B](implicit request: Request[B]): Future[Result] = {
     logger.debug("[Silhouette] Unauthorized user trying to access '%s'".format(request.uri))
     produceResponse(Forbidden, Messages("silhouette.not.authorized"))
   }
@@ -175,9 +184,9 @@ trait DefaultErrorHandler
    * @param msg The user-friendly message.
    * @param request The request header.
    */
-  protected def produceResponse[S <: Status](status: S, msg: String)(
+  protected def produceResponse[B, S <: Status](status: S, msg: String)(
     implicit
-    request: RequestHeader
+    request: Request[B]
   ): Future[Result] = {
     import Codec._
     Future.successful(render {

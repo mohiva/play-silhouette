@@ -51,7 +51,7 @@ case class UnsecuredRequestHandlerBuilder[I <: Identity](
   /**
    * Invokes the block.
    *
-   * @param block The block of code to invoke.
+   * @param block   The block of code to invoke.
    * @param request The current request.
    * @tparam B The type of the request body.
    * @tparam T The type of the data included in the handler result.
@@ -65,7 +65,7 @@ case class UnsecuredRequestHandlerBuilder[I <: Identity](
       // A user is authenticated. The request will be forbidden
       case Some(Authenticated(identity, _, _)) =>
         environment.eventBus.publish(NotAuthorizedEvent(identity, request))
-        errorHandler.onNotAuthorized.map(r => HandlerResult(r))
+        errorHandler.onNotAuthorized(request).map(r => HandlerResult(r))
       // A user isn't authenticated. The request will be granted
       case None =>
         block(request)
@@ -103,7 +103,7 @@ trait UnsecuredRequestHandler {
  *
  * @param errorHandler The instance of the unsecured error handler.
  */
-class DefaultUnsecuredRequestHandler @Inject() (val errorHandler: UnsecuredErrorHandler)
+case class DefaultUnsecuredRequestHandler @Inject() (errorHandler: UnsecuredErrorHandler)
   extends UnsecuredRequestHandler {
 
   /**
@@ -149,10 +149,9 @@ case class UnsecuredActionBuilder[I <: Identity, P](
    */
   override def invokeBlock[B](request: Request[B], block: Request[B] => Future[Result]): Future[Result] = {
     implicit val ec: ExecutionContext = executionContext
-    implicit val req: Request[B] = request
     val b = (r: Request[B]) => block(r).map(r => HandlerResult(r))
 
-    requestHandler(request)(b).map(_.result).recoverWith(requestHandler.errorHandler.exceptionHandler)
+    requestHandler(request)(b).map(_.result).recoverWith(requestHandler.errorHandler.exceptionHandler(request))
   }
 
   /**
@@ -165,8 +164,10 @@ case class UnsecuredActionBuilder[I <: Identity, P](
 
 /**
  * An action based on the [[UnsecuredRequestHandler]].
+ *
+ * @tparam B The type of the request body.
  */
-trait UnsecuredAction {
+trait UnsecuredAction[B] {
 
   /**
    * The instance of the unsecured request handler.
@@ -174,9 +175,9 @@ trait UnsecuredAction {
   val requestHandler: UnsecuredRequestHandler
 
   /**
-   * The default body parser.
+   * The body parser.
    */
-  val bodyParser: BodyParsers.Default
+  val bodyParser: BodyParser[B]
 
   /**
    * Applies the environment to the action stack.
@@ -185,7 +186,7 @@ trait UnsecuredAction {
    * @tparam I The type of the environment.
    * @return An unsecured action builder.
    */
-  def apply[I <: Identity](environment: Environment[I]): UnsecuredActionBuilder[I, AnyContent]
+  def apply[I <: Identity](environment: Environment[I]): UnsecuredActionBuilder[I, B]
 }
 
 /**
@@ -193,11 +194,12 @@ trait UnsecuredAction {
  *
  * @param requestHandler The instance of the unsecured request handler.
  * @param bodyParser     The default body parser.
+ * @tparam B The type of the request body.
  */
-class DefaultUnsecuredAction @Inject() (
-  val requestHandler: UnsecuredRequestHandler,
-  val bodyParser: BodyParsers.Default
-) extends UnsecuredAction {
+case class DefaultUnsecuredAction[B] @Inject() (
+  requestHandler: UnsecuredRequestHandler,
+  bodyParser: BodyParser[B]
+) extends UnsecuredAction[B] {
 
   /**
    * Applies the environment to the action stack.
@@ -206,8 +208,8 @@ class DefaultUnsecuredAction @Inject() (
    * @tparam I The type of the identity.
    * @return An unsecured action builder.
    */
-  override def apply[I <: Identity](environment: Environment[I]): UnsecuredActionBuilder[I, AnyContent] =
-    UnsecuredActionBuilder[I, AnyContent](requestHandler[I](environment), bodyParser)
+  override def apply[I <: Identity](environment: Environment[I]): UnsecuredActionBuilder[I, B] =
+    UnsecuredActionBuilder[I, B](requestHandler(environment), bodyParser)
 }
 
 /**
@@ -220,17 +222,19 @@ trait UnsecuredErrorHandler extends NotAuthorizedErrorHandler
  *
  * @param messagesApi The Play messages API.
  */
-class DefaultUnsecuredErrorHandler @Inject() (val messagesApi: MessagesApi)
+case class DefaultUnsecuredErrorHandler @Inject() (messagesApi: MessagesApi)
   extends UnsecuredErrorHandler
   with DefaultNotAuthorizedErrorHandler
 
 /**
  * Play module for providing the unsecured action components.
+ *
+ * @tparam B The type of the request body.
  */
-class UnsecuredActionModule extends Module {
+class UnsecuredActionModule[B] extends Module {
   def bindings(environment: PlayEnv, configuration: Configuration): Seq[Binding[_]] = {
     Seq(
-      bind[UnsecuredAction].to[DefaultUnsecuredAction],
+      bind[UnsecuredAction[B]].to[DefaultUnsecuredAction[B]],
       bind[UnsecuredRequestHandler].to[DefaultUnsecuredRequestHandler]
     )
   }
@@ -251,15 +255,19 @@ class UnsecuredErrorHandlerModule extends Module {
 }
 
 /**
- * Injection helper for unsecured action components
+ * Injection helper for unsecured action components.
+ *
+ * @tparam B The type of the request body.
  */
-trait UnsecuredActionComponents {
+trait UnsecuredActionComponents[B] {
 
-  def unsecuredBodyParser: BodyParsers.Default
+  def unsecuredBodyParser: BodyParser[B]
   def unsecuredErrorHandler: UnsecuredErrorHandler
 
-  lazy val unsecuredRequestHandler: UnsecuredRequestHandler = new DefaultUnsecuredRequestHandler(unsecuredErrorHandler)
-  lazy val unsecuredAction: UnsecuredAction = new DefaultUnsecuredAction(unsecuredRequestHandler, unsecuredBodyParser)
+  lazy val unsecuredRequestHandler: UnsecuredRequestHandler = DefaultUnsecuredRequestHandler(unsecuredErrorHandler)
+
+  lazy val unsecuredAction: UnsecuredAction[B] =
+    DefaultUnsecuredAction(unsecuredRequestHandler, unsecuredBodyParser)
 }
 
 /**
@@ -272,5 +280,5 @@ trait UnsecuredErrorHandlerComponents {
 
   def messagesApi: MessagesApi
 
-  lazy val unsecuredErrorHandler: UnsecuredErrorHandler = new DefaultUnsecuredErrorHandler(messagesApi)
+  lazy val unsecuredErrorHandler: UnsecuredErrorHandler = DefaultUnsecuredErrorHandler(messagesApi)
 }

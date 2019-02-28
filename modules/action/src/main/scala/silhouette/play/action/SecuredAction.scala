@@ -100,13 +100,13 @@ case class SecuredRequestHandlerBuilder[I <: Identity](
           // A user is authenticated but not authorized. The request will be forbidden
           case false =>
             environment.eventBus.publish(NotAuthorizedEvent(identity, request))
-            errorHandler.onNotAuthorized.map(r => HandlerResult(r))
+            errorHandler.onNotAuthorized(request).map(r => HandlerResult(r))
         }
 
       // A user isn't authenticated. The request will ask for authentication
       case None =>
         environment.eventBus.publish(NotAuthenticatedEvent(request))
-        errorHandler.onNotAuthenticated.map(r => HandlerResult(r))
+        errorHandler.onNotAuthenticated(request).map(r => HandlerResult(r))
     }
   }
 }
@@ -142,7 +142,7 @@ trait SecuredRequestHandler {
  *
  * @param errorHandler The instance of the secured error handler.
  */
-class DefaultSecuredRequestHandler @Inject() (val errorHandler: SecuredErrorHandler)
+case class DefaultSecuredRequestHandler @Inject() (errorHandler: SecuredErrorHandler)
   extends SecuredRequestHandler {
 
   /**
@@ -197,10 +197,9 @@ case class SecuredActionBuilder[I <: Identity, P](
    */
   override def invokeBlock[B](request: Request[B], block: SecuredRequest[I, B] => Future[Result]): Future[Result] = {
     implicit val ec: ExecutionContext = executionContext
-    implicit val req: Request[B] = request
     val b = (r: SecuredRequest[I, B]) => block(r).map(r => HandlerResult(r))
 
-    requestHandler(request)(b).map(_.result).recoverWith(requestHandler.errorHandler.exceptionHandler)
+    requestHandler(request)(b).map(_.result).recoverWith(requestHandler.errorHandler.exceptionHandler(request))
   }
 
   /**
@@ -224,7 +223,7 @@ trait SecuredAction[B] {
   val requestHandler: SecuredRequestHandler
 
   /**
-   * The default body parser.
+   * The body parser.
    */
   val bodyParser: BodyParser[B]
 
@@ -245,9 +244,9 @@ trait SecuredAction[B] {
  * @param bodyParser     The default body parser.
  * @tparam B The type of the request body.
  */
-class DefaultSecuredAction[B] @Inject() (
-  val requestHandler: SecuredRequestHandler,
-  val bodyParser: BodyParser[B]
+case class DefaultSecuredAction[B] @Inject() (
+  requestHandler: SecuredRequestHandler,
+  bodyParser: BodyParser[B]
 ) extends SecuredAction[B] {
 
   /**
@@ -269,10 +268,11 @@ trait SecuredErrorHandler extends NotAuthenticatedErrorHandler with NotAuthorize
   /**
    * Exception handler which chains the exceptions handlers from the sub types.
    *
-   * @param request The request header.
+   * @param request The current request.
+   * @tparam B The type of the request body.
    * @return A partial function which maps an exception to a Play result.
    */
-  override def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[Result]] = {
+  override def exceptionHandler[B](implicit request: Request[B]): PartialFunction[Throwable, Future[Result]] = {
     super[NotAuthenticatedErrorHandler].exceptionHandler orElse
       super[NotAuthorizedErrorHandler].exceptionHandler
   }
@@ -291,10 +291,11 @@ class DefaultSecuredErrorHandler @Inject() (val messagesApi: MessagesApi)
   /**
    * Exception handler which chains the exceptions handlers from the sub types.
    *
-   * @param request The request header.
+   * @param request The current request.
+   * @tparam B The type of the request body.
    * @return A partial function which maps an exception to a Play result.
    */
-  override def exceptionHandler(implicit request: RequestHeader): PartialFunction[Throwable, Future[Result]] = {
+  override def exceptionHandler[B](implicit request: Request[B]): PartialFunction[Throwable, Future[Result]] = {
     super[DefaultNotAuthenticatedErrorHandler].exceptionHandler orElse
       super[DefaultNotAuthorizedErrorHandler].exceptionHandler
   }
@@ -339,8 +340,9 @@ trait SecuredActionComponents[B] {
   def securedErrorHandler: SecuredErrorHandler
   def securedBodyParser: BodyParser[B]
 
-  lazy val securedRequestHandler: SecuredRequestHandler = new DefaultSecuredRequestHandler(securedErrorHandler)
-  lazy val securedAction: SecuredAction[B] = new DefaultSecuredAction(securedRequestHandler, securedBodyParser)
+  lazy val securedRequestHandler: SecuredRequestHandler = DefaultSecuredRequestHandler(securedErrorHandler)
+
+  lazy val securedAction: SecuredAction[B] = DefaultSecuredAction(securedRequestHandler, securedBodyParser)
 }
 
 /**

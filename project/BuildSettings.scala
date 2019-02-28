@@ -31,7 +31,7 @@ object BasicSettings extends AutoPlugin {
     resolvers ++= Dependencies.resolvers,
     scalaVersion := crossScalaVersions.value.head,
     crossScalaVersions := Seq("2.12.8"),
-    updateOptions := updateOptions.value.withLatestSnapshots(true),
+    //updateOptions := updateOptions.value.withLatestSnapshots(true),
     scalacOptions ++= Seq(
       "-deprecation", // Emit warning and location for usages of deprecated APIs.
       "-feature", // Emit warning and location for usages of features that should be imported explicitly.

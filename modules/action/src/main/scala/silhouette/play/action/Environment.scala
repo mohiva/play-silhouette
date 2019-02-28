@@ -42,7 +42,7 @@ trait Environment[I <: Identity] extends ExecutionContextProvider {
    *
    * @return The list of request providers.
    */
-  def requestProviders[B]: List[RequestProvider[Request[B], I, Credentials]]
+  def requestProviders: List[RequestProvider[Request[_], I, Credentials]]
 
   /**
    * The event bus implementation.

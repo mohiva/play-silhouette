@@ -45,7 +45,8 @@ case class HandlerResult[+T](result: Result, data: Option[T] = None)
  * @tparam I The type of the identity.
  * @tparam R The type of the request.
  */
-trait RequestHandlerBuilder[I <: Identity, +R[_]] extends ExecutionContextProvider with LazyLogging {
+trait RequestHandlerBuilder[I <: Identity, +R[_]]
+  extends ExecutionContextProvider with LazyLogging {
 
   /**
    * The execution context to handle the asynchronous operations.
@@ -111,13 +112,13 @@ trait RequestHandlerBuilder[I <: Identity, +R[_]] extends ExecutionContextProvid
   protected def handleAuthentication[B](
     request: PlayRequestPipeline[B]
   ): Future[Option[Authenticated[I, Credentials]]] = {
-    type Provider = RequestProvider[Request[B], I, Credentials]
+    type Provider = RequestProvider[Request[_], I, Credentials]
     def auth(providers: List[Provider]): Future[Option[Authenticated[I, Credentials]]] = {
       def next(remaining: List[Provider]) = if (remaining.isEmpty) Future.successful(None) else auth(remaining)
       providers match {
         case Nil => Future.successful(None)
         case h :: t => h.authenticate(request).flatMap {
-          case state: Authenticated[I, Credentials] => Future.successful(Some(state))
+          case state @ Authenticated(_, _, _) => Future.successful(Some(state))
           case MissingCredentials() =>
             logger.info(s"Couldn't find credentials for provider ${h.id}")
             next(t)

@@ -35,8 +35,22 @@ import scala.language.implicitConversions
  */
 final case class PlayRequestPipeline[B](
   request: Request[B],
-  bodyExtractor: RequestBodyExtractor[Request[B]] = new PlayRequestBodyExtractor[B]
+  bodyExtractor: RequestBodyExtractor[Option[(B, MimeType)]] = new PlayRequestBodyExtractor[B]
 ) extends RequestPipeline[Request[B]] {
+
+  /**
+   * The type of the request body.
+   */
+  type RB = Option[(B, MimeType)]
+
+  /**
+   * The framework specific request body.
+   */
+  protected val requestBody: RB = if (request.hasBody) {
+    Some(request.body -> request.contentType.map(MimeType.fromString).getOrElse(MimeType.`application/octet-stream`))
+  } else {
+    None
+  }
 
   /**
    * Gets the absolute URI of the request target.
@@ -169,7 +183,7 @@ final case class PlayRequestPipeline[B](
    * @param bodyExtractor The body extractor to set.
    * @return A new request pipeline instance with the set body extractor.
    */
-  override def withBodyExtractor(bodyExtractor: RequestBodyExtractor[Request[B]]): PlayRequestPipeline[B] = {
+  override def withBodyExtractor(bodyExtractor: RequestBodyExtractor[Option[(B, MimeType)]]): PlayRequestPipeline[B] = {
     copy(bodyExtractor = bodyExtractor)
   }
 

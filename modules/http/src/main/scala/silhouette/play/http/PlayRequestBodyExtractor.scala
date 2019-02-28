@@ -18,97 +18,89 @@
 package silhouette.play.http
 
 import play.api.mvc._
-import silhouette.http.{ Request => _, _ }
+import silhouette.http.RequestBodyExtractor._
+import silhouette.http._
 
 /**
  * The request body extractor based on the [[play.api.mvc.Request]].
  *
  * @tparam B The type of the body.
  */
-class PlayRequestBodyExtractor[B] extends RequestBodyExtractor[Request[B]] {
+class PlayRequestBodyExtractor[B] extends RequestBodyExtractor[Option[(B, MimeType)]] {
 
   /**
    * Gets the raw string representation of the body for debugging purpose.
    *
-   * @param request The request from which the body should be extracted.
+   * @param maybeBody Maybe the body to extract from and the content type.
    * @return The raw string representation of the body for debugging purpose.
    */
-  override def raw(request: Request[B]): String = request.body match {
-    case AnyContentAsFormUrlEncoded(map) => map.toString()
-    case AnyContentAsJson(json)          => json.toString()
-    case AnyContentAsXml(xml)            => xml.toString()
-    case _                               => ""
+  override def raw(maybeBody: Option[(B, MimeType)]): String = maybeBody match {
+    case Some((AnyContentAsFormUrlEncoded(map), _)) => map.toString()
+    case Some((AnyContentAsJson(json), _)) => json.toString()
+    case Some((AnyContentAsXml(xml), _)) => xml.toString()
+    case _ => ""
   }
 
   /**
    * Extracts a value from JSON body.
    *
-   * @param request The request from which the body should be extracted.
-   * @param name    The name of the value to extract.
+   * @param maybeBody Maybe the body to extract from and the content type.
+   * @param name      The name of the value to extract.
    * @return The extracted value on success, otherwise an error on failure.
    */
-  override def fromJson(request: Request[B], name: String): ExtractionResult = {
-    if (!request.hasBody) {
-      EmptyBody
-    } else {
-      request.body match {
-        case AnyContentAsJson(json) => json.\(name).asOpt[String] match {
-          case Some(value) => ExtractedValue(value)
-          case None        => NotFound
+  override def fromJson(maybeBody: Option[(B, MimeType)], name: String): ExtractionResult = {
+    maybeBody match {
+      case None => WithoutBody
+      case Some((body, contentType)) =>
+        body match {
+          case AnyContentAsJson(json) => json.\(name).asOpt[String] match {
+            case Some(value) => ExtractedValue(value)
+            case None        => NotFound
+          }
+          case _ => WrongContentType(contentType, JsonBody.allowedTypes)
         }
-        case _ => WrongContentType(contentType(request), JsonBody.allowedTypes)
-      }
     }
   }
 
   /**
    * Extracts a value from XML body.
    *
-   * @param request The request from which the body should be extracted.
-   * @param name    The name of the value to extract.
+   * @param maybeBody Maybe the body to extract from and the content type.
+   * @param name      The name of the value to extract.
    * @return The extracted value on success, otherwise an error on failure.
    */
-  override def fromXml(request: Request[B], name: String): ExtractionResult = {
-    if (!request.hasBody) {
-      EmptyBody
-    } else {
-      request.body match {
-        case AnyContentAsXml(xml) => xml.\\(name).headOption.map(_.text) match {
-          case Some(value) => ExtractedValue(value)
-          case None        => NotFound
+  override def fromXml(maybeBody: Option[(B, MimeType)], name: String): ExtractionResult = {
+    maybeBody match {
+      case None => WithoutBody
+      case Some((body, contentType)) =>
+        body match {
+          case AnyContentAsXml(xml) => xml.\\(name).headOption.map(_.text) match {
+            case Some(value) => ExtractedValue(value)
+            case None        => NotFound
+          }
+          case _ => WrongContentType(contentType, XmlBody.allowedTypes)
         }
-        case _ => WrongContentType(contentType(request), XmlBody.allowedTypes)
-      }
     }
   }
 
   /**
    * Extracts a value from form-url-encoded body.
    *
-   * @param request The request from which the body should be extracted.
-   * @param name    The name of the value to extract.
+   * @param maybeBody Maybe the body to extract from and the content type.
+   * @param name      The name of the value to extract.
    * @return The extracted value on success, otherwise an error on failure.
    */
-  override def fromFormUrlEncoded(request: Request[B], name: String): ExtractionResult = {
-    if (!request.hasBody) {
-      EmptyBody
-    } else {
-      request.body match {
-        case AnyContentAsFormUrlEncoded(map) => map.get(name).flatMap(_.headOption) match {
-          case Some(value) => ExtractedValue(value)
-          case None        => NotFound
+  override def fromFormUrlEncoded(maybeBody: Option[(B, MimeType)], name: String): ExtractionResult = {
+    maybeBody match {
+      case None => WithoutBody
+      case Some((body, contentType)) =>
+        body match {
+          case AnyContentAsFormUrlEncoded(map) => map.get(name).flatMap(_.headOption) match {
+            case Some(value) => ExtractedValue(value)
+            case None        => NotFound
+          }
+          case _ => WrongContentType(contentType, Seq(FormUrlEncodedBody.contentType))
         }
-        case _ => WrongContentType(contentType(request), Seq(FormUrlEncodedBody.contentType))
-      }
     }
   }
-
-  /**
-   * Tries to get the content type from request.
-   *
-   * @param request The request from which the content type should be returned.
-   * @return The content type if found, application/octet-stream otherwise.
-   */
-  private def contentType(request: Request[B]): MimeType =
-    request.contentType.map(MimeType.fromString).getOrElse(MimeType.`application/octet-stream`)
 }

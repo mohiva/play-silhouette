@@ -18,7 +18,6 @@
 package silhouette.play.action
 
 import javax.inject.Inject
-import play.api.mvc.AnyContent
 import silhouette.Identity
 
 /**
@@ -44,12 +43,12 @@ trait Silhouette[I <: Identity, B] {
   /**
    * The unsecured action stack.
    */
-  protected val unsecuredAction: UnsecuredAction
+  protected val unsecuredAction: UnsecuredAction[B]
 
   /**
    * The user aware action stack.
    */
-  protected val userAwareAction: UserAwareAction
+  protected val userAwareAction: UserAwareAction[B]
 
   // scalastyle:off method.name
   /**
@@ -71,7 +70,7 @@ trait Silhouette[I <: Identity, B] {
    *
    * @return The unsecured action implementation.
    */
-  def UnsecuredAction: UnsecuredActionBuilder[I, AnyContent] = unsecuredAction(env)
+  def UnsecuredAction: UnsecuredActionBuilder[I, B] = unsecuredAction(env)
 
   /**
    * Provides the unsecured request handler implementation.
@@ -85,7 +84,7 @@ trait Silhouette[I <: Identity, B] {
    *
    * @return The user-aware action implementation.
    */
-  def UserAwareAction: UserAwareActionBuilder[I, AnyContent] = userAwareAction(env)
+  def UserAwareAction: UserAwareActionBuilder[I, B] = userAwareAction(env)
 
   /**
    * Provides the user-aware request handler implementation.
@@ -95,6 +94,7 @@ trait Silhouette[I <: Identity, B] {
   def UserAwareRequestHandler: UserAwareRequestHandlerBuilder[I] = userAwareAction.requestHandler(env)
   // scalastyle:on method.name
 }
+
 /**
  * Provides the Silhouette stack.
  *
@@ -107,6 +107,6 @@ trait Silhouette[I <: Identity, B] {
 class SilhouetteProvider[I <: Identity, B] @Inject() (
   val env: Environment[I],
   val securedAction: SecuredAction[B],
-  val unsecuredAction: UnsecuredAction,
-  val userAwareAction: UserAwareAction
+  val unsecuredAction: UnsecuredAction[B],
+  val userAwareAction: UserAwareAction[B]
 ) extends Silhouette[I, B]

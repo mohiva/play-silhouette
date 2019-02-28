@@ -21,8 +21,8 @@ import javax.inject.Inject
 import play.api.inject.{ Binding, Module }
 import play.api.mvc._
 import play.api.{ Configuration, Environment => PlayEnv }
+import silhouette._
 import silhouette.play.http.PlayRequestPipeline.fromPlayRequest
-import silhouette.{ Authenticated, Credentials, Identity, LoginInfo }
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -36,7 +36,7 @@ import scala.concurrent.{ ExecutionContext, Future }
  * @tparam I The type of the identity.
  * @tparam B The type of the request body.
  */
-case class UserAwareRequest[I <: Identity, B](
+case class UserAwareRequest[I <: Identity, +B](
   identity: Option[I],
   loginInfo: Option[LoginInfo],
   credentials: Option[Credentials],
@@ -95,7 +95,7 @@ trait UserAwareRequestHandler {
 /**
  * Default implementation of the [[UserAwareRequestHandler]].
  */
-class DefaultUserAwareRequestHandler extends UserAwareRequestHandler {
+case class DefaultUserAwareRequestHandler() extends UserAwareRequestHandler {
 
   /**
    * Applies the environment to the request handler stack.
@@ -146,8 +146,10 @@ case class UserAwareActionBuilder[I <: Identity, P](
 
 /**
  * An action based on the [[UserAwareRequestHandler]].
+ *
+ * @tparam B The type of the request body.
  */
-trait UserAwareAction {
+trait UserAwareAction[B] {
 
   /**
    * The instance of the user-aware request handler.
@@ -155,9 +157,9 @@ trait UserAwareAction {
   val requestHandler: UserAwareRequestHandler
 
   /**
-   * The default body parser.
+   * The body parser.
    */
-  val bodyParser: BodyParsers.Default
+  val bodyParser: BodyParser[B]
 
   /**
    * Applies the environment to the action stack.
@@ -166,7 +168,7 @@ trait UserAwareAction {
    * @tparam I The type of the identity.
    * @return A user-aware action builder.
    */
-  def apply[I <: Identity](environment: Environment[I]): UserAwareActionBuilder[I, AnyContent]
+  def apply[I <: Identity](environment: Environment[I]): UserAwareActionBuilder[I, B]
 }
 
 /**
@@ -174,11 +176,12 @@ trait UserAwareAction {
  *
  * @param requestHandler The instance of the user-aware request handler.
  * @param bodyParser     The default body parser.
+ * @tparam B The type of the request body.
  */
-class DefaultUserAwareAction @Inject() (
-  val requestHandler: UserAwareRequestHandler,
-  val bodyParser: BodyParsers.Default
-) extends UserAwareAction {
+case class DefaultUserAwareAction[B] @Inject() (
+  requestHandler: UserAwareRequestHandler,
+  bodyParser: BodyParser[B]
+) extends UserAwareAction[B] {
 
   /**
    * Applies the environment to the action stack.
@@ -187,17 +190,19 @@ class DefaultUserAwareAction @Inject() (
    * @tparam I The type of the identity.
    * @return A user-aware action builder.
    */
-  override def apply[I <: Identity](environment: Environment[I]): UserAwareActionBuilder[I, AnyContent] =
-    UserAwareActionBuilder[I, AnyContent](requestHandler[I](environment), bodyParser)
+  override def apply[I <: Identity](environment: Environment[I]): UserAwareActionBuilder[I, B] =
+    UserAwareActionBuilder[I, B](requestHandler[I](environment), bodyParser)
 }
 
 /**
  * Play module for providing the user-aware action components.
+ *
+ * @tparam B The type of the request body.
  */
-class UserAwareActionModule extends Module {
+class UserAwareActionModule[B] extends Module {
   def bindings(environment: PlayEnv, configuration: Configuration): Seq[Binding[_]] = {
     Seq(
-      bind[UserAwareAction].to[DefaultUserAwareAction],
+      bind[UserAwareAction[B]].to[DefaultUserAwareAction[B]],
       bind[UserAwareRequestHandler].to[DefaultUserAwareRequestHandler]
     )
   }
@@ -205,11 +210,15 @@ class UserAwareActionModule extends Module {
 
 /**
  * Injection helper for user-aware action components
+ *
+ * @tparam B The type of the request body.
  */
-trait UserAwareActionComponents {
+trait UserAwareActionComponents[B] {
 
-  def userAwareBodyParser: BodyParsers.Default
+  def userAwareBodyParser: BodyParser[B]
 
-  lazy val userAwareRequestHandler: UserAwareRequestHandler = new DefaultUserAwareRequestHandler()
-  lazy val userAwareAction: UserAwareAction = new DefaultUserAwareAction(userAwareRequestHandler, userAwareBodyParser)
+  lazy val userAwareRequestHandler: UserAwareRequestHandler = DefaultUserAwareRequestHandler()
+
+  lazy val userAwareAction: UserAwareAction[B] =
+    DefaultUserAwareAction[B](userAwareRequestHandler, userAwareBodyParser)
 }
