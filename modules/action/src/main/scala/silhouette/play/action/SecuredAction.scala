@@ -240,14 +240,15 @@ trait SecuredAction[B] {
 /**
  * Default implementation of the [[SecuredAction]].
  *
+ * This action uses the default body parser that can parse all the content as defined in [[AnyContent]].
+ *
  * @param requestHandler The instance of the secured request handler.
  * @param bodyParser     The default body parser.
- * @tparam B The type of the request body.
  */
-case class DefaultSecuredAction[B] @Inject() (
+case class DefaultSecuredAction @Inject() (
   requestHandler: SecuredRequestHandler,
-  bodyParser: BodyParser[B]
-) extends SecuredAction[B] {
+  bodyParser: BodyParsers.Default
+) extends SecuredAction[AnyContent] {
 
   /**
    * Applies the environment to the action stack.
@@ -256,8 +257,8 @@ case class DefaultSecuredAction[B] @Inject() (
    * @tparam I The type of the identity.
    * @return A secured action builder.
    */
-  override def apply[I <: Identity](environment: Environment[I]): SecuredActionBuilder[I, B] =
-    SecuredActionBuilder[I, B](requestHandler(environment), bodyParser)
+  override def apply[I <: Identity](environment: Environment[I]): SecuredActionBuilder[I, AnyContent] =
+    SecuredActionBuilder[I, AnyContent](requestHandler(environment), bodyParser)
 }
 
 /**
@@ -303,14 +304,11 @@ class DefaultSecuredErrorHandler @Inject() (val messagesApi: MessagesApi)
 
 /**
  * Play module for providing the secured action components.
- *
- * @tparam B The type of the request body.
  */
-class SecuredActionModule[B] extends Module {
+class SecuredActionModule extends Module {
   def bindings(environment: PlayEnv, configuration: Configuration): Seq[Binding[_]] = {
     Seq(
-      bind[BodyParser[AnyContent]].to[BodyParsers.Default],
-      bind[SecuredAction[B]].to[DefaultSecuredAction[B]],
+      bind[SecuredAction[AnyContent]].to[DefaultSecuredAction],
       bind[SecuredRequestHandler].to[DefaultSecuredRequestHandler]
     )
   }
@@ -332,17 +330,13 @@ class SecuredErrorHandlerModule extends Module {
 
 /**
  * Injection helper for secured action components.
- *
- * @tparam B The type of the request body.
  */
-trait SecuredActionComponents[B] {
-
+trait SecuredActionComponents {
   def securedErrorHandler: SecuredErrorHandler
-  def securedBodyParser: BodyParser[B]
+  def securedBodyParser: BodyParsers.Default
 
   lazy val securedRequestHandler: SecuredRequestHandler = DefaultSecuredRequestHandler(securedErrorHandler)
-
-  lazy val securedAction: SecuredAction[B] = DefaultSecuredAction(securedRequestHandler, securedBodyParser)
+  lazy val securedAction: SecuredAction[AnyContent] = DefaultSecuredAction(securedRequestHandler, securedBodyParser)
 }
 
 /**
@@ -352,7 +346,6 @@ trait SecuredActionComponents[B] {
  * without to declare bindings for the other secured action component.
  */
 trait SecuredErrorHandlerComponents {
-
   def messagesApi: MessagesApi
 
   lazy val securedErrorHandler: SecuredErrorHandler = new DefaultSecuredErrorHandler(messagesApi)

@@ -174,14 +174,15 @@ trait UserAwareAction[B] {
 /**
  * Default implementation of the [[UserAwareAction]].
  *
+ * This action uses the default body parser that can parse all the content as defined in [[AnyContent]].
+ *
  * @param requestHandler The instance of the user-aware request handler.
  * @param bodyParser     The default body parser.
- * @tparam B The type of the request body.
  */
-case class DefaultUserAwareAction[B] @Inject() (
+case class DefaultUserAwareAction @Inject() (
   requestHandler: UserAwareRequestHandler,
-  bodyParser: BodyParser[B]
-) extends UserAwareAction[B] {
+  bodyParser: BodyParsers.Default
+) extends UserAwareAction[AnyContent] {
 
   /**
    * Applies the environment to the action stack.
@@ -190,19 +191,17 @@ case class DefaultUserAwareAction[B] @Inject() (
    * @tparam I The type of the identity.
    * @return A user-aware action builder.
    */
-  override def apply[I <: Identity](environment: Environment[I]): UserAwareActionBuilder[I, B] =
-    UserAwareActionBuilder[I, B](requestHandler[I](environment), bodyParser)
+  override def apply[I <: Identity](environment: Environment[I]): UserAwareActionBuilder[I, AnyContent] =
+    UserAwareActionBuilder[I, AnyContent](requestHandler[I](environment), bodyParser)
 }
 
 /**
  * Play module for providing the user-aware action components.
- *
- * @tparam B The type of the request body.
  */
-class UserAwareActionModule[B] extends Module {
+class UserAwareActionModule extends Module {
   def bindings(environment: PlayEnv, configuration: Configuration): Seq[Binding[_]] = {
     Seq(
-      bind[UserAwareAction[B]].to[DefaultUserAwareAction[B]],
+      bind[UserAwareAction[AnyContent]].to[DefaultUserAwareAction],
       bind[UserAwareRequestHandler].to[DefaultUserAwareRequestHandler]
     )
   }
@@ -210,15 +209,11 @@ class UserAwareActionModule[B] extends Module {
 
 /**
  * Injection helper for user-aware action components
- *
- * @tparam B The type of the request body.
  */
-trait UserAwareActionComponents[B] {
-
-  def userAwareBodyParser: BodyParser[B]
+trait UserAwareActionComponents {
+  def userAwareBodyParser: BodyParsers.Default
 
   lazy val userAwareRequestHandler: UserAwareRequestHandler = DefaultUserAwareRequestHandler()
-
-  lazy val userAwareAction: UserAwareAction[B] =
-    DefaultUserAwareAction[B](userAwareRequestHandler, userAwareBodyParser)
+  lazy val userAwareAction: UserAwareAction[AnyContent] =
+    DefaultUserAwareAction(userAwareRequestHandler, userAwareBodyParser)
 }

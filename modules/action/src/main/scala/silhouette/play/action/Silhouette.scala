@@ -18,6 +18,7 @@
 package silhouette.play.action
 
 import javax.inject.Inject
+import play.api.mvc.AnyContent
 import silhouette.Identity
 
 /**
@@ -26,9 +27,8 @@ import silhouette.Identity
  * Inject an instance of this trait into your controller to provide all the Silhouette actions.
  *
  * @tparam I The type of the identity.
- * @tparam B The type of the request body.
  */
-trait Silhouette[I <: Identity, B] {
+trait Silhouette[I <: Identity] {
 
   /**
    * The Silhouette environment.
@@ -38,17 +38,17 @@ trait Silhouette[I <: Identity, B] {
   /**
    * The secured action stack.
    */
-  protected val securedAction: SecuredAction[B]
+  protected val securedAction: SecuredAction[AnyContent]
 
   /**
    * The unsecured action stack.
    */
-  protected val unsecuredAction: UnsecuredAction[B]
+  protected val unsecuredAction: UnsecuredAction[AnyContent]
 
   /**
    * The user aware action stack.
    */
-  protected val userAwareAction: UserAwareAction[B]
+  protected val userAwareAction: UserAwareAction[AnyContent]
 
   // scalastyle:off method.name
   /**
@@ -56,7 +56,7 @@ trait Silhouette[I <: Identity, B] {
    *
    * @return The secured action implementation.
    */
-  def SecuredAction: SecuredActionBuilder[I, B] = securedAction(env)
+  def SecuredAction: SecuredActionBuilder[I, AnyContent] = securedAction(env)
 
   /**
    * Provides the secured request handler implementation.
@@ -70,7 +70,7 @@ trait Silhouette[I <: Identity, B] {
    *
    * @return The unsecured action implementation.
    */
-  def UnsecuredAction: UnsecuredActionBuilder[I, B] = unsecuredAction(env)
+  def UnsecuredAction: UnsecuredActionBuilder[I, AnyContent] = unsecuredAction(env)
 
   /**
    * Provides the unsecured request handler implementation.
@@ -84,7 +84,7 @@ trait Silhouette[I <: Identity, B] {
    *
    * @return The user-aware action implementation.
    */
-  def UserAwareAction: UserAwareActionBuilder[I, B] = userAwareAction(env)
+  def UserAwareAction: UserAwareActionBuilder[I, AnyContent] = userAwareAction(env)
 
   /**
    * Provides the user-aware request handler implementation.
@@ -102,11 +102,10 @@ trait Silhouette[I <: Identity, B] {
  * @param securedAction   The secured action stack.
  * @param userAwareAction The user aware action stack.
  * @tparam I The type of the identity.
- * @tparam B The type of the body.
  */
-class SilhouetteProvider[I <: Identity, B] @Inject() (
+class SilhouetteProvider[I <: Identity] @Inject() (
   val env: Environment[I],
-  val securedAction: SecuredAction[B],
-  val unsecuredAction: UnsecuredAction[B],
-  val userAwareAction: UserAwareAction[B]
-) extends Silhouette[I, B]
+  val securedAction: SecuredAction[AnyContent],
+  val unsecuredAction: UnsecuredAction[AnyContent],
+  val userAwareAction: UserAwareAction[AnyContent]
+) extends Silhouette[I]

@@ -192,14 +192,15 @@ trait UnsecuredAction[B] {
 /**
  * Default implementation of the [[UnsecuredAction]].
  *
+ * This action uses the default body parser that can parse all the content as defined in [[AnyContent]].
+ *
  * @param requestHandler The instance of the unsecured request handler.
  * @param bodyParser     The default body parser.
- * @tparam B The type of the request body.
  */
-case class DefaultUnsecuredAction[B] @Inject() (
+case class DefaultUnsecuredAction @Inject() (
   requestHandler: UnsecuredRequestHandler,
-  bodyParser: BodyParser[B]
-) extends UnsecuredAction[B] {
+  bodyParser: BodyParsers.Default
+) extends UnsecuredAction[AnyContent] {
 
   /**
    * Applies the environment to the action stack.
@@ -208,8 +209,8 @@ case class DefaultUnsecuredAction[B] @Inject() (
    * @tparam I The type of the identity.
    * @return An unsecured action builder.
    */
-  override def apply[I <: Identity](environment: Environment[I]): UnsecuredActionBuilder[I, B] =
-    UnsecuredActionBuilder[I, B](requestHandler(environment), bodyParser)
+  override def apply[I <: Identity](environment: Environment[I]): UnsecuredActionBuilder[I, AnyContent] =
+    UnsecuredActionBuilder[I, AnyContent](requestHandler(environment), bodyParser)
 }
 
 /**
@@ -228,13 +229,11 @@ case class DefaultUnsecuredErrorHandler @Inject() (messagesApi: MessagesApi)
 
 /**
  * Play module for providing the unsecured action components.
- *
- * @tparam B The type of the request body.
  */
-class UnsecuredActionModule[B] extends Module {
+class UnsecuredActionModule extends Module {
   def bindings(environment: PlayEnv, configuration: Configuration): Seq[Binding[_]] = {
     Seq(
-      bind[UnsecuredAction[B]].to[DefaultUnsecuredAction[B]],
+      bind[UnsecuredAction[AnyContent]].to[DefaultUnsecuredAction],
       bind[UnsecuredRequestHandler].to[DefaultUnsecuredRequestHandler]
     )
   }
@@ -256,17 +255,13 @@ class UnsecuredErrorHandlerModule extends Module {
 
 /**
  * Injection helper for unsecured action components.
- *
- * @tparam B The type of the request body.
  */
-trait UnsecuredActionComponents[B] {
-
-  def unsecuredBodyParser: BodyParser[B]
+trait UnsecuredActionComponents {
   def unsecuredErrorHandler: UnsecuredErrorHandler
+  def unsecuredBodyParser: BodyParsers.Default
 
   lazy val unsecuredRequestHandler: UnsecuredRequestHandler = DefaultUnsecuredRequestHandler(unsecuredErrorHandler)
-
-  lazy val unsecuredAction: UnsecuredAction[B] =
+  lazy val unsecuredAction: UnsecuredAction[AnyContent] =
     DefaultUnsecuredAction(unsecuredRequestHandler, unsecuredBodyParser)
 }
 
@@ -277,7 +272,6 @@ trait UnsecuredActionComponents[B] {
  * without to declare bindings for the other secured action component.
  */
 trait UnsecuredErrorHandlerComponents {
-
   def messagesApi: MessagesApi
 
   lazy val unsecuredErrorHandler: UnsecuredErrorHandler = DefaultUnsecuredErrorHandler(messagesApi)

@@ -23,7 +23,7 @@ object Dependencies {
   object Versions {
     val silhouette = "1.0.0-SNAPSHOT"
     val play = _root_.play.core.PlayVersion.current
-    val specs2 = "4.3.5"
+    val specs2 = "4.3.6"
   }
 
   object Library {
