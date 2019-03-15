@@ -18,7 +18,7 @@ import sbt._
 object Dependencies {
 
   object Versions {
-    val crossScala = Seq("2.12.6", "2.11.12")
+    val crossScala = Seq("2.12.8", "2.11.12")
     val scalaVersion = crossScala.head
   }
 
@@ -35,27 +35,23 @@ object Dependencies {
       val test = "com.typesafe.play" %% "play-test" % version
       val specs2 = "com.typesafe.play" %% "play-specs2" % version
       val openid = "com.typesafe.play" %% "play-openid" % version
-      val jsonJoda = "com.typesafe.play" %% "play-json-joda" % "2.6.10"
-      object Specs2 {
-        private val version = "3.8.9"
-        val matcherExtra = "org.specs2" %% "specs2-matcher-extra" % version
-        val mock = "org.specs2" %% "specs2-mock" % version
-      }
+      val jsonJoda = "com.typesafe.play" %% "play-json-joda" % "2.7.1"
     }
 
     object Specs2 {
-      private val version = "3.8.9"
+      private val version = "4.3.6"
       val core = "org.specs2" %% "specs2-core" % version
       val matcherExtra = "org.specs2" %% "specs2-matcher-extra" % version
       val mock = "org.specs2" %% "specs2-mock" % version
     }
 
     val jbcrypt = "de.svenkubiak" % "jBCrypt" % "0.4.1"
-    val jwtCore = "com.atlassian.jwt" % "jwt-core" % "2.0.2"
-    val jwtApi = "com.atlassian.jwt" % "jwt-api" % "2.0.2"
-    val scalaGuice = "net.codingwell" %% "scala-guice" % "4.2.1"
-    val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % "2.5.4"
+    val jwtCore = "com.atlassian.jwt" % "jwt-core" % "2.0.5"
+    val jwtApi = "com.atlassian.jwt" % "jwt-api" % "2.0.5"
+    val scalaGuice = "net.codingwell" %% "scala-guice" % "4.2.2"
+    val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % "2.5.19"
     val casClient = "org.jasig.cas.client" % "cas-client-core" % "3.4.1"
     val casClientSupportSAML = "org.jasig.cas.client" % "cas-client-support-saml" % "3.4.1"
+    val apacheCommonLang = "org.apache.commons" % "commons-lang3" % "3.8.1"
   }
 }

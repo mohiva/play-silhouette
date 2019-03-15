@@ -246,7 +246,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
 
   "The `update` method of the service" should {
     "update the authenticator in backing store" in new Context {
-      repository.update(any) returns Future.successful(authenticator)
+      repository.update(any) answers { _ => Future.successful(authenticator) }
 
       implicit val request = FakeRequest()
 

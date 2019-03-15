@@ -1,3 +1,7 @@
+## 6.0
+
+- Update to Play 2.7
+
 ## 5.0
 
 - Update to Play 2.6
