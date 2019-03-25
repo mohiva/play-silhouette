@@ -56,13 +56,13 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
     "sign the cookie" in new WithApplication with Context {
       serialize(secret, signer, crypter)
 
-      there was one(signer).sign(any)
+      there was one(signer).sign(any())
     }
 
     "encrypt the cookie" in new WithApplication with Context {
       serialize(secret, signer, crypter)
 
-      there was one(crypter).encrypt(any)
+      there was one(crypter).encrypt(any())
     }
   }
 
@@ -82,7 +82,7 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
     }
 
     "throw an OAuth1TokenSecretException if a secret is badly signed" in new WithApplication with Context {
-      signer.extract(any) returns Failure(new Exception("Bad signature"))
+      signer.extract(any()) returns Failure(new Exception("Bad signature"))
 
       val value = serialize(secret, signer, crypter)
       val msg = Pattern.quote(InvalidCookieSignature)
@@ -149,7 +149,7 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
     }
 
     "throw an OAuth1TokenSecretException if client secret is badly signed" in new WithApplication with Context {
-      signer.extract(any) returns Failure(new Exception("Bad signature"))
+      signer.extract(any()) returns Failure(new Exception("Bad signature"))
 
       implicit val req = FakeRequest().withCookies(Cookie(settings.cookieName, CookieSecret.serialize(secret, signer, crypter)))
 
@@ -207,8 +207,8 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
      */
     lazy val crypter = {
       val c = mock[Crypter].smart
-      c.encrypt(any) answers { p => Base64.encode(p.asInstanceOf[String]) }
-      c.decrypt(any) answers { p => Base64.decode(p.asInstanceOf[String]) }
+      c.encrypt(any()) answers { p: Any => Base64.encode(p.asInstanceOf[String]) }
+      c.decrypt(any()) answers { p: Any => Base64.decode(p.asInstanceOf[String]) }
       c
     }
 
@@ -219,8 +219,8 @@ class CookieSecretSpec extends PlaySpecification with Mockito with JsonMatchers 
      */
     lazy val signer = {
       val c = mock[Signer].smart
-      c.sign(any) answers { p => p.asInstanceOf[String] }
-      c.extract(any) answers { p => Success(p.asInstanceOf[String]) }
+      c.sign(any()) answers { p: Any => p.asInstanceOf[String] }
+      c.extract(any()) answers { p: Any => Success(p.asInstanceOf[String]) }
       c
     }
 

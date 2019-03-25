@@ -31,7 +31,7 @@ object BasicSettings extends AutoPlugin {
 
   override def projectSettings = Seq(
     organization := "com.mohiva",
-    version := "6.0.0",
+    version := "6.0.0-SNAPSHOT",
     resolvers ++= Dependencies.resolvers,
     scalaVersion := Dependencies.Versions.scalaVersion,
     crossScalaVersions := Dependencies.Versions.crossScala,
@@ -47,7 +47,7 @@ object BasicSettings extends AutoPlugin {
       "-Ywarn-nullary-override", // Warn when non-nullary overrides nullary, e.g. def foo() over def foo.
       "-Ywarn-numeric-widen" // Warn when numerics are widened.
     ),
-    scalacOptions in Test ~= { (options: Seq[String]) =>
+    scalacOptions in Test ~= { options: Seq[String] =>
       options filterNot (_ == "-Ywarn-dead-code") // Allow dead code in tests (to support using mockito).
     },
     parallelExecution in Test := false,

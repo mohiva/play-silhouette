@@ -159,7 +159,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
 
   "The `init` method of the service" should {
     "save the authenticator in backing store" in new Context {
-      repository.add(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
+      repository.add(any()) answers { p: Any => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
 
       implicit val request = FakeRequest()
       val token = await(service.init(authenticator))
@@ -169,7 +169,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
     }
 
     "throws an AuthenticatorInitializationException exception if an error occurred during initialization" in new Context {
-      repository.add(any) returns Future.failed(new Exception("Cannot store authenticator"))
+      repository.add(any()) returns Future.failed(new Exception("Cannot store authenticator"))
 
       implicit val request = FakeRequest()
 
@@ -246,7 +246,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
 
   "The `update` method of the service" should {
     "update the authenticator in backing store" in new Context {
-      repository.update(any) answers { _ => Future.successful(authenticator) }
+      repository.update(any()) answers { _: Any => Future.successful(authenticator) }
 
       implicit val request = FakeRequest()
 
@@ -256,7 +256,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
     }
 
     "return the result if the authenticator could be stored in backing store" in new Context {
-      repository.update(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
+      repository.update(any()) answers { p: Any => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
 
       implicit val request = FakeRequest()
       val result = service.update(authenticator, Results.Ok)
@@ -265,7 +265,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
     }
 
     "throws an AuthenticatorUpdateException exception if an error occurred during update" in new Context {
-      repository.update(any) returns Future.failed(new Exception("Cannot store authenticator"))
+      repository.update(any()) returns Future.failed(new Exception("Cannot store authenticator"))
 
       implicit val request = FakeRequest()
 
@@ -283,7 +283,7 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
       val id = "new-test-id"
 
       repository.remove(authenticator.id) returns Future.successful(())
-      repository.add(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
+      repository.add(any()) answers { p: Any => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
@@ -297,8 +297,8 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
       val now = new DateTime
       val id = "new-test-id"
 
-      repository.remove(any) returns Future.successful(())
-      repository.add(any) answers { p => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
+      repository.remove(any()) returns Future.successful(())
+      repository.add(any()) answers { p: Any => Future.successful(p.asInstanceOf[BearerTokenAuthenticator]) }
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 
@@ -312,8 +312,8 @@ class BearerTokenAuthenticatorSpec extends PlaySpecification with Mockito with N
       val now = new DateTime
       val id = "new-test-id"
 
-      repository.remove(any) returns Future.successful(())
-      repository.add(any) returns Future.failed(new Exception("Cannot store authenticator"))
+      repository.remove(any()) returns Future.successful(())
+      repository.add(any()) returns Future.failed(new Exception("Cannot store authenticator"))
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
 

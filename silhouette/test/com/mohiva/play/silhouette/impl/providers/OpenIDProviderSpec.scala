@@ -42,7 +42,7 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
     "fail with an UnexpectedResponseException if redirect URL couldn't be retrieved" in new WithApplication {
       implicit val req = FakeRequest()
 
-      c.openIDService.redirectURL(any, any)(any) returns Future.failed(new Exception(""))
+      c.openIDService.redirectURL(any(), any())(any()) returns Future.failed(new Exception(""))
 
       failed[UnexpectedResponseException](c.provider.authenticate()) {
         case e => e.getMessage must startWith(ErrorRedirectURL.format(c.provider.id, ""))
@@ -51,7 +51,7 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
 
     "redirect to provider by using the provider URL" in new WithApplication {
       implicit val req = FakeRequest()
-      c.openIDService.redirectURL(any, any)(any) answers { _ => Future.successful(c.openIDSettings.providerURL) }
+      c.openIDService.redirectURL(any(), any())(any()) answers { _: Any => Future.successful(c.openIDSettings.providerURL) }
 
       result(c.provider.authenticate()) { result =>
         status(result) must equalTo(SEE_OTHER)
@@ -61,7 +61,7 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
 
     "redirect to provider by using a openID" in new WithApplication {
       implicit val req = FakeRequest(GET, "?openID=my.open.id")
-      c.openIDService.redirectURL(any, any)(any) answers { _ => Future.successful(c.openIDSettings.providerURL) }
+      c.openIDService.redirectURL(any(), any())(any()) answers { _: Any => Future.successful(c.openIDSettings.providerURL) }
 
       result(c.provider.authenticate()) { result =>
         status(result) must equalTo(SEE_OTHER)
@@ -91,15 +91,15 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
       )
 
       c.openIDSettings.callbackURL returns callbackURL
-      c.openIDService.redirectURL(any, any)(any) answers { _ => Future.successful(c.openIDSettings.providerURL) }
+      c.openIDService.redirectURL(any(), any())(any()) answers { _: Any => Future.successful(c.openIDSettings.providerURL) }
 
       await(c.provider.authenticate())
-      there was one(c.openIDService).redirectURL(any, ===(resolvedCallbackURL))(any)
+      there was one(c.openIDService).redirectURL(any(), ===(resolvedCallbackURL))(any())
     }
 
     "fail with an UnexpectedResponseException if auth info cannot be retrieved" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + Mode + "=id_res")
-      c.openIDService.verifiedID(any, any) returns Future.failed(new Exception(""))
+      c.openIDService.verifiedID(any(), any()) returns Future.failed(new Exception(""))
 
       failed[UnexpectedResponseException](c.provider.authenticate()) {
         case e => e.getMessage must startWith(ErrorVerification.format(c.provider.id, ""))
@@ -108,7 +108,7 @@ abstract class OpenIDProviderSpec extends SocialProviderSpec[OpenIDInfo] {
 
     "return the auth info" in new WithApplication {
       implicit val req = FakeRequest(GET, "?" + Mode + "=id_res")
-      c.openIDService.verifiedID(any, any) answers { _ => Future.successful(c.openIDInfo) }
+      c.openIDService.verifiedID(any(), any()) answers { _: Any => Future.successful(c.openIDInfo) }
 
       authInfo(c.provider.authenticate())(_ must be equalTo c.openIDInfo)
     }

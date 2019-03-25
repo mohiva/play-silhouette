@@ -2,9 +2,10 @@ sudo: false
 language: scala
 scala:
   - 2.11.12
-  - 2.12.6
+  - 2.12.8
 jdk:
   - oraclejdk8
+  - openjdk11
 env:
   global:
   - ENCRYPTION_ID: "9eb27d59440e"
