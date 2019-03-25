@@ -42,7 +42,7 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
   "The `UserAwareAction` action" should {
     "invoke action without identity and authenticator if no authenticator could be found" in new InjectorContext {
       new WithApplication(app) with Context {
-        env.authenticatorService.retrieve(any) returns Future.successful(None)
+        env.authenticatorService.retrieve(any()) returns Future.successful(None)
 
         val result = controller.defaultAction(request)
 
@@ -53,8 +53,8 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
 
     "invoke action without identity and authenticator if invalid authenticator was found" in new InjectorContext {
       new WithApplication(app) with Context {
-        env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator.copy(isValid = false)))
-        env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
+        env.authenticatorService.retrieve(any()) returns Future.successful(Some(authenticator.copy(isValid = false)))
+        env.authenticatorService.discard(any(), any())(any()) answers { (a, m) =>
           Future.successful(AuthenticatorResult(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result]))
         }
 
@@ -62,15 +62,15 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
 
         status(result) must equalTo(OK)
         contentAsString(result) must contain(messagesApi("without.identity.and.authenticator"))
-        there was one(env.authenticatorService).discard(any, any)(any)
+        there was one(env.authenticatorService).discard(any(), any())(any())
       }
     }
 
     "invoke action with valid authenticator if no identity could be found" in new InjectorContext {
       new WithApplication(app) with Context {
-        env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
-        env.authenticatorService.touch(any) returns Left(authenticator)
-        env.authenticatorService.update(any, any)(any) answers { (a, m) =>
+        env.authenticatorService.retrieve(any()) returns Future.successful(Some(authenticator))
+        env.authenticatorService.touch(any()) returns Left(authenticator)
+        env.authenticatorService.update(any(), any())(any()) answers { (a, m) =>
           Future.successful(AuthenticatorResult(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result]))
         }
         env.identityService.retrieve(identity.loginInfo) returns Future.successful(None)
@@ -79,16 +79,16 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
 
         status(result) must equalTo(OK)
         contentAsString(result) must contain(messagesApi("without.identity.and.with.authenticator"))
-        there was one(env.authenticatorService).touch(any)
-        there was one(env.authenticatorService).update(any, any)(any)
+        there was one(env.authenticatorService).touch(any())
+        there was one(env.authenticatorService).update(any(), any())(any())
       }
     }
 
     "invoke action with authenticator and identity" in new InjectorContext {
       new WithApplication(app) with Context {
-        env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
-        env.authenticatorService.touch(any) returns Left(authenticator)
-        env.authenticatorService.update(any, any)(any) answers { (a, m) =>
+        env.authenticatorService.retrieve(any()) returns Future.successful(Some(authenticator))
+        env.authenticatorService.touch(any()) returns Left(authenticator)
+        env.authenticatorService.update(any(), any())(any()) answers { (a, m) =>
           Future.successful(AuthenticatorResult(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result]))
         }
         env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
@@ -97,19 +97,19 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
 
         status(result) must equalTo(OK)
         contentAsString(result) must contain(messagesApi("with.identity.and.authenticator"))
-        there was one(env.authenticatorService).touch(any)
-        there was one(env.authenticatorService).update(any, any)(any)
+        there was one(env.authenticatorService).touch(any())
+        there was one(env.authenticatorService).update(any(), any())(any())
       }
     }
 
     "use next request provider in the chain if first isn't responsible" in new InjectorContext with WithRequestProvider {
       new WithApplication(app) with Context {
-        tokenRequestProvider.authenticate(any) returns Future.successful(None)
-        basicAuthRequestProvider.authenticate(any) returns Future.successful(Some(identity.loginInfo))
-        env.authenticatorService.retrieve(any) returns Future.successful(None)
-        env.authenticatorService.create(any)(any) returns Future.successful(authenticator)
-        env.authenticatorService.init(any)(any) answers { p => Future.successful(p.asInstanceOf[FakeAuthenticator#Value]) }
-        env.authenticatorService.embed(any, any[Result])(any) answers { (a, m) =>
+        tokenRequestProvider.authenticate(any()) returns Future.successful(None)
+        basicAuthRequestProvider.authenticate(any()) returns Future.successful(Some(identity.loginInfo))
+        env.authenticatorService.retrieve(any()) returns Future.successful(None)
+        env.authenticatorService.create(any())(any()) returns Future.successful(authenticator)
+        env.authenticatorService.init(any())(any()) answers { p: Any => Future.successful(p.asInstanceOf[FakeAuthenticator#Value]) }
+        env.authenticatorService.embed(any(), any[Result]())(any()) answers { (a, m) =>
           Future.successful(AuthenticatorResult(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result]))
         }
         env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
@@ -118,17 +118,17 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
 
         status(result) must equalTo(OK)
         contentAsString(result) must contain("with.identity.and.authenticator")
-        there was one(env.authenticatorService).create(any)(any)
-        there was one(env.authenticatorService).init(any)(any)
+        there was one(env.authenticatorService).create(any())(any())
+        there was one(env.authenticatorService).init(any())(any())
       }
     }
 
     "update an initialized authenticator if it was touched" in new InjectorContext {
       new WithApplication(app) with Context {
-        env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
-        env.authenticatorService.touch(any) returns Left(authenticator)
+        env.authenticatorService.retrieve(any()) returns Future.successful(Some(authenticator))
+        env.authenticatorService.touch(any()) returns Left(authenticator)
         env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
-        env.authenticatorService.update(any, any)(any) answers { (a, m) =>
+        env.authenticatorService.update(any(), any())(any()) answers { (a, m) =>
           Future.successful(AuthenticatorResult(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result]))
         }
 
@@ -136,33 +136,33 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
 
         status(result) must equalTo(OK)
         contentAsString(result) must contain("with.identity.and.authenticator")
-        there was one(env.authenticatorService).touch(any)
-        there was one(env.authenticatorService).update(any, any)(any)
+        there was one(env.authenticatorService).touch(any())
+        there was one(env.authenticatorService).update(any(), any())(any())
       }
     }
 
     "do not update an initialized authenticator if it was not touched" in new InjectorContext {
       new WithApplication(app) with Context {
-        env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
-        env.authenticatorService.touch(any) returns Right(authenticator)
+        env.authenticatorService.retrieve(any()) returns Future.successful(Some(authenticator))
+        env.authenticatorService.touch(any()) returns Right(authenticator)
         env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
 
         val result = controller.defaultAction(request)
 
         status(result) must equalTo(OK)
         contentAsString(result) must contain(messagesApi("with.identity.and.authenticator"))
-        there was one(env.authenticatorService).touch(any)
-        there was no(env.authenticatorService).update(any, any)(any)
+        there was one(env.authenticatorService).touch(any())
+        there was no(env.authenticatorService).update(any(), any())(any())
       }
     }
 
     "init an uninitialized authenticator" in new InjectorContext with WithRequestProvider {
       new WithApplication(app) with Context {
-        tokenRequestProvider.authenticate(any) returns Future.successful(Some(identity.loginInfo))
-        env.authenticatorService.retrieve(any) returns Future.successful(None)
-        env.authenticatorService.create(any)(any) returns Future.successful(authenticator)
-        env.authenticatorService.init(any)(any) answers { p => Future.successful(p.asInstanceOf[FakeAuthenticator#Value]) }
-        env.authenticatorService.embed(any, any[Result])(any) answers { (a, m) =>
+        tokenRequestProvider.authenticate(any()) returns Future.successful(Some(identity.loginInfo))
+        env.authenticatorService.retrieve(any()) returns Future.successful(None)
+        env.authenticatorService.create(any())(any()) returns Future.successful(authenticator)
+        env.authenticatorService.init(any())(any()) answers { p: Any => Future.successful(p.asInstanceOf[FakeAuthenticator#Value]) }
+        env.authenticatorService.embed(any(), any[Result]())(any()) answers { (a, m) =>
           Future.successful(AuthenticatorResult(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result]))
         }
         env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
@@ -171,16 +171,16 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
 
         status(result) must equalTo(OK)
         contentAsString(result) must contain("with.identity.and.authenticator")
-        there was one(env.authenticatorService).create(any)(any)
-        there was one(env.authenticatorService).init(any)(any)
+        there was one(env.authenticatorService).create(any())(any())
+        there was one(env.authenticatorService).init(any())(any())
       }
     }
 
     "renew an initialized authenticator" in new InjectorContext {
       new WithApplication(app) with Context {
-        env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
-        env.authenticatorService.touch(any) returns Left(authenticator)
-        env.authenticatorService.renew(any, any)(any) answers { (a, m) =>
+        env.authenticatorService.retrieve(any()) returns Future.successful(Some(authenticator))
+        env.authenticatorService.touch(any()) returns Left(authenticator)
+        env.authenticatorService.renew(any(), any())(any()) answers { (a, m) =>
           Future.successful(AuthenticatorResult(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result]))
         }
         env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
@@ -189,18 +189,18 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
 
         status(result) must equalTo(OK)
         contentAsString(result) must contain(messagesApi("renewed"))
-        there was one(env.authenticatorService).touch(any)
-        there was one(env.authenticatorService).renew(any, any)(any)
-        there was no(env.authenticatorService).update(any, any)(any)
+        there was one(env.authenticatorService).touch(any())
+        there was one(env.authenticatorService).renew(any(), any())(any())
+        there was no(env.authenticatorService).update(any(), any())(any())
       }
     }
 
     "renew an uninitialized authenticator" in new InjectorContext with WithRequestProvider {
       new WithApplication(app) with Context {
-        tokenRequestProvider.authenticate(any) returns Future.successful(Some(identity.loginInfo))
-        env.authenticatorService.retrieve(any) returns Future.successful(None)
-        env.authenticatorService.create(any)(any) returns Future.successful(authenticator)
-        env.authenticatorService.renew(any, any)(any) answers { (a, m) =>
+        tokenRequestProvider.authenticate(any()) returns Future.successful(Some(identity.loginInfo))
+        env.authenticatorService.retrieve(any()) returns Future.successful(None)
+        env.authenticatorService.create(any())(any()) returns Future.successful(authenticator)
+        env.authenticatorService.renew(any(), any())(any()) answers { (a, m) =>
           Future.successful(AuthenticatorResult(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result]))
         }
         env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
@@ -209,16 +209,16 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
 
         status(result) must equalTo(OK)
         contentAsString(result) must contain("renewed")
-        there was one(env.authenticatorService).create(any)(any)
-        there was one(env.authenticatorService).renew(any, any)(any)
+        there was one(env.authenticatorService).create(any())(any())
+        there was one(env.authenticatorService).renew(any(), any())(any())
       }
     }
 
     "discard an initialized authenticator" in new InjectorContext {
       new WithApplication(app) with Context {
-        env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
-        env.authenticatorService.touch(any) returns Left(authenticator)
-        env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
+        env.authenticatorService.retrieve(any()) returns Future.successful(Some(authenticator))
+        env.authenticatorService.touch(any()) returns Left(authenticator)
+        env.authenticatorService.discard(any(), any())(any()) answers { (a, m) =>
           Future.successful(AuthenticatorResult(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result]))
         }
         env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
@@ -227,18 +227,18 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
 
         status(result) must equalTo(OK)
         contentAsString(result) must contain(messagesApi("discarded"))
-        there was one(env.authenticatorService).touch(any)
-        there was one(env.authenticatorService).discard(any, any)(any)
-        there was no(env.authenticatorService).update(any, any)(any)
+        there was one(env.authenticatorService).touch(any())
+        there was one(env.authenticatorService).discard(any(), any())(any())
+        there was no(env.authenticatorService).update(any(), any())(any())
       }
     }
 
     "discard an uninitialized authenticator" in new InjectorContext with WithRequestProvider {
       new WithApplication(app) with Context {
-        tokenRequestProvider.authenticate(any) returns Future.successful(Some(identity.loginInfo))
-        env.authenticatorService.retrieve(any) returns Future.successful(None)
-        env.authenticatorService.create(any)(any) returns Future.successful(authenticator)
-        env.authenticatorService.discard(any, any)(any) answers { (a, m) =>
+        tokenRequestProvider.authenticate(any()) returns Future.successful(Some(identity.loginInfo))
+        env.authenticatorService.retrieve(any()) returns Future.successful(None)
+        env.authenticatorService.create(any())(any()) returns Future.successful(authenticator)
+        env.authenticatorService.discard(any(), any())(any()) answers { (a, m) =>
           Future.successful(AuthenticatorResult(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result]))
         }
         env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
@@ -246,8 +246,8 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
         val result = controller.discardAction(request)
 
         status(result) must equalTo(OK)
-        there was one(env.authenticatorService).create(any)(any)
-        there was one(env.authenticatorService).discard(any, any)(any)
+        there was one(env.authenticatorService).create(any())(any())
+        there was one(env.authenticatorService).discard(any(), any())(any())
       }
     }
   }
@@ -255,21 +255,21 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
   "The `UserAwareRequestHandler`" should {
     "return status 401 if authentication was not successful" in new InjectorContext {
       new WithApplication(app) with Context {
-        env.authenticatorService.retrieve(any) returns Future.successful(None)
+        env.authenticatorService.retrieve(any()) returns Future.successful(None)
 
         val result = controller.defaultHandler(request)
 
         status(result) must equalTo(UNAUTHORIZED)
-        there was no(env.authenticatorService).touch(any)
-        there was no(env.authenticatorService).update(any, any)(any)
+        there was no(env.authenticatorService).touch(any())
+        there was no(env.authenticatorService).update(any(), any())(any())
       }
     }
 
     "return the user if authentication was successful" in new InjectorContext {
       new WithApplication(app) with Context {
-        env.authenticatorService.retrieve(any) returns Future.successful(Some(authenticator))
-        env.authenticatorService.touch(any) returns Left(authenticator)
-        env.authenticatorService.update(any, any)(any) answers { (a, m) =>
+        env.authenticatorService.retrieve(any()) returns Future.successful(Some(authenticator))
+        env.authenticatorService.touch(any()) returns Left(authenticator)
+        env.authenticatorService.update(any(), any())(any()) answers { (a, m) =>
           Future.successful(AuthenticatorResult(a.asInstanceOf[Array[Any]](1).asInstanceOf[Result]))
         }
         env.identityService.retrieve(identity.loginInfo) returns Future.successful(Some(identity))
@@ -278,8 +278,8 @@ class UserAwareActionSpec extends PlaySpecification with Mockito with JsonMatche
 
         status(result) must equalTo(OK)
         contentAsString(result) must */("providerID" -> "test") and */("providerKey" -> "1")
-        there was one(env.authenticatorService).touch(any)
-        there was one(env.authenticatorService).update(any, any)(any)
+        there was one(env.authenticatorService).touch(any())
+        there was one(env.authenticatorService).update(any(), any())(any())
       }
     }
   }

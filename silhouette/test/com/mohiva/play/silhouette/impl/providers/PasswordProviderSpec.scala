@@ -60,10 +60,10 @@ trait PasswordProviderSpec extends PlaySpecification with Mockito {
     private def hasher(id: String) = {
       val h = mock[PasswordHasher]
       h.id returns id
-      h.isSuitable(any) answers { p =>
+      h.isSuitable(any()) answers { p: Any =>
         p.asInstanceOf[PasswordInfo].hasher == h.id
       }
-      h.isDeprecated(any) returns Some(false)
+      h.isDeprecated(any()) returns Some(false)
       h
     }
   }

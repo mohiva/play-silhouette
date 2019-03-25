@@ -121,8 +121,8 @@ class CsrfStateItemHandlerSpec extends PlaySpecification with Mockito with JsonM
      */
     val signer = {
       val c = mock[Signer].smart
-      c.sign(any) answers { p => p.asInstanceOf[String] }
-      c.extract(any) answers { p => Success(p.asInstanceOf[String]) }
+      c.sign(any()) answers { p: Any => p.asInstanceOf[String] }
+      c.extract(any()) answers { p: Any => Success(p.asInstanceOf[String]) }
       c
     }
 
