@@ -70,7 +70,7 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
       val serializedTokenSecret = "my.serialized.token.secret"
 
       c.oAuthService.retrieveRequestToken(c.oAuthSettings.callbackURL) returns Future.successful(c.oAuthInfo)
-      c.oAuthService.redirectUrl(any) returns c.oAuthSettings.authorizationURL
+      c.oAuthService.redirectUrl(any()) answers { _ => c.oAuthSettings.authorizationURL }
       c.oAuthTokenSecretProvider.build(any)(any, any) returns Future.successful(c.oAuthTokenSecret)
       c.oAuthTokenSecretProvider.publish(any, any)(any) answers { (a, _) =>
         a.asInstanceOf[Array[Any]](0).asInstanceOf[Result]
@@ -108,7 +108,7 @@ abstract class OAuth1ProviderSpec extends SocialProviderSpec[OAuth1Info] {
       c.oAuthService.retrieveRequestToken(any)(any) returns Future.successful(c.oAuthInfo)
       c.oAuthService.redirectUrl(c.oAuthInfo.token) returns c.oAuthSettings.authorizationURL
       c.oAuthTokenSecretProvider.build(any)(any, any) returns Future.successful(c.oAuthTokenSecret)
-      c.oAuthTokenSecretProvider.publish(any, any)(any) returns Results.Redirect(c.oAuthSettings.authorizationURL)
+      c.oAuthTokenSecretProvider.publish(any, any)(any) answers { _ => Results.Redirect(c.oAuthSettings.authorizationURL) }
 
       await(c.provider.authenticate())
       there was one(c.oAuthService).retrieveRequestToken(resolvedCallbackURL)

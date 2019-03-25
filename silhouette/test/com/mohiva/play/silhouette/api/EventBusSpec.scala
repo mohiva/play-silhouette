@@ -90,7 +90,7 @@ class EventBusSpec extends PlaySpecification with NoLanguageFeatures {
       eventBus.subscribe(listener, classOf[LogoutEvent[TestIdentity]])
       eventBus.publish(logoutEvent)
 
-      theProbe.expectNoMsg(500 millis)
+      theProbe.expectNoMessage(500 millis)
     }
 
     "not handle not subscribed events" in new WithApplication with Context {
@@ -103,7 +103,7 @@ class EventBusSpec extends PlaySpecification with NoLanguageFeatures {
 
       eventBus.publish(loginEvent)
 
-      theProbe.expectNoMsg(500 millis)
+      theProbe.expectNoMessage(500 millis)
     }
 
     "not handle events between different event buses" in new WithApplication with Context {
@@ -119,7 +119,7 @@ class EventBusSpec extends PlaySpecification with NoLanguageFeatures {
       eventBus1.subscribe(listener, classOf[LoginEvent[TestIdentity]])
       eventBus2.publish(loginEvent)
 
-      theProbe.expectNoMsg(500 millis)
+      theProbe.expectNoMessage(500 millis)
     }
 
     "returns a singleton event bus" in new WithApplication with Context {

@@ -367,7 +367,7 @@ object UnsecuredActionSpec {
      *
      * @return The result to send to the client.
      */
-    def defaultAction = silhouette.UnsecuredAction { implicit request =>
+    def defaultAction = silhouette.UnsecuredAction {
       Ok("full.access")
     }
 

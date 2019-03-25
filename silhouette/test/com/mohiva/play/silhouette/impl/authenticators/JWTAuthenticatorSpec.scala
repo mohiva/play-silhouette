@@ -405,7 +405,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
 
   "The `update` method of the service" should {
     "update the authenticator in backing store" in new WithApplication with Context {
-      repository.update(any) returns Future.successful(authenticator)
+      repository.update(any) answers { _ => Future.successful(authenticator) }
 
       implicit val request = FakeRequest()
 
@@ -454,7 +454,7 @@ class JWTAuthenticatorSpec extends PlaySpecification with Mockito with JsonMatch
       val now = new DateTime(2015, 2, 25, 19, 0, 0, 0)
       val id = "new-test-id"
 
-      repository.remove(any) returns Future.successful(())
+      repository.remove(any) answers { _ => Future.successful(()) }
       repository.add(any) answers { p => Future.successful(p.asInstanceOf[JWTAuthenticator]) }
       idGenerator.generate returns Future.successful(id)
       clock.now returns now
