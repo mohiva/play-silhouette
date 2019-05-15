@@ -8,6 +8,7 @@ libraryDependencies ++= Seq(
   Library.jwtCore,
   Library.jwtApi,
   Library.apacheCommonLang,
+  Library.googleAuth,
   Library.Play.specs2 % Test,
   Library.Specs2.matcherExtra % Test,
   Library.Specs2.mock % Test,
