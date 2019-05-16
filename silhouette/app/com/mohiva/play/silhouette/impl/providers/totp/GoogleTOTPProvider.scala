@@ -19,19 +19,21 @@
  */
 package com.mohiva.play.silhouette.impl.providers.totp
 
+import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.totp.GoogleTOTPProvider._
-import com.warrenstrange.googleauth.GoogleAuthenticator
+import com.warrenstrange.googleauth.IGoogleAuthenticator
 import javax.inject.Inject
 
 import scala.concurrent.ExecutionContext
 
 /**
- * A provider for authenticating
+ * A provider for TOTP authentication using Google Authenticator
  */
 class GoogleTOTPProvider @Inject() (
-  protected val authInfoRepository: AuthInfoRepository)(implicit val executionContext: ExecutionContext)
+  protected val authInfoRepository: AuthInfoRepository,
+  val googleAuthenticator: IGoogleAuthenticator)(implicit val executionContext: ExecutionContext)
   extends TOTPProvider {
 
   /**
@@ -42,10 +44,15 @@ class GoogleTOTPProvider @Inject() (
   override def id: String = ID
 
   /**
-   * TODO:
+   * Indicates if verification code is valid for related shared key
+   *
+   * @param sharedKey        TOTP shared key accociated with user
+   * @param verificationCode Verification code, presumably valid at this moment
+   * @return True if the given verification code is valid, false otherwise.
    */
   override protected def isVerificationCodeValid(sharedKey: String, verificationCode: String): Boolean = {
-    googleAuthenticator.authorize(sharedKey, verificationCode.toInt)
+    if (verificationCode.forall(_.isDigit)) googleAuthenticator.authorize(sharedKey, verificationCode.toInt)
+    else throw new ProviderException(VerificationCodeNotNumber.format(id))
   }
 }
 
@@ -53,10 +60,14 @@ class GoogleTOTPProvider @Inject() (
  * The companion object.
  */
 object GoogleTOTPProvider {
-  private val googleAuthenticator = new GoogleAuthenticator()
 
   /**
    * The provider constants.
    */
   val ID = "googleTOTP"
+
+  /**
+   * Messages
+   */
+  val VerificationCodeNotNumber = "[Silhouette][%s] Google verification code must be a number"
 }
