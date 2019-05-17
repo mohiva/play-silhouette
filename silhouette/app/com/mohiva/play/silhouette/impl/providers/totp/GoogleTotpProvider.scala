@@ -57,11 +57,11 @@ class GoogleTotpProvider @Inject() (implicit val executionContext: ExecutionCont
    * @param issuer The issuer name. This parameter cannot contain the colon
    * @return The unique shared key
    */
-  override def createCredentials(accountName: String, issuer: Option[String]): TotpInfo = {
+  override def createCredentials(accountName: String, issuer: Option[String]): TotpCredentials = {
     val credentials = googleAuthenticator.createCredentials()
     val qrUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL(issuer.orNull, accountName, credentials)
     val scratchCodes = credentials.getScratchCodes.asScala.map(_.toString).toList
-    TotpInfo(credentials.getKey, scratchCodes, qrUrl)
+    TotpCredentials(credentials.getKey, scratchCodes, qrUrl)
   }
 }
 
