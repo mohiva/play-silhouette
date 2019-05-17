@@ -21,8 +21,9 @@ package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.util.{ ExecutionContextProvider, ExtractableRequest }
-import com.mohiva.play.silhouette.api.{ Logger, Provider }
+import com.mohiva.play.silhouette.api.{ AuthInfo, Logger, Provider }
 import com.mohiva.play.silhouette.impl.providers.TotpProvider._
+
 import scala.concurrent.Future
 
 /**
@@ -32,7 +33,7 @@ import scala.concurrent.Future
  * @param scratchCodes The list of scratch codes, which can be used instead of verification codes
  * @param qrUrl The QR-code which contains shared key
  */
-case class TotpCredentials(sharedKey: String, scratchCodes: List[String], qrUrl: String)
+case class TotpInfo(sharedKey: String, scratchCodes: List[String], qrUrl: String) extends AuthInfo
 
 /**
  * The base interface for all TOTP (Time-based One-time Password) providers.
@@ -45,7 +46,7 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
    * @param issuer The issuer name. This parameter cannot contain the colon
    * @return The unique shared key
    */
-  def createCredentials(providerKey: String, issuer: Option[String] = None): TotpCredentials
+  def createCredentials(providerKey: String, issuer: Option[String] = None): TotpInfo
 
   /**
    * Starts the authentication process.
