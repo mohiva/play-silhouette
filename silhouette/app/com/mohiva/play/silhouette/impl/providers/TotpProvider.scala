@@ -21,30 +21,23 @@ package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.util.{ ExecutionContextProvider, ExtractableRequest }
-import com.mohiva.play.silhouette.api.{ AuthInfo, Logger, Provider }
+import com.mohiva.play.silhouette.api.{ Logger, Provider }
 import com.mohiva.play.silhouette.impl.providers.TotpProvider._
 import scala.concurrent.Future
 
 /**
- * TOTP details
+ * TOTP credentials data.
  *
- * @param sharedKey The shared key used together with verification code in TOTP-authentication
- */
-case class TotpInfo(sharedKey: String) extends AuthInfo
-
-/**
- * Storage for all TOTP-authentication data
- * @param sharedKey The shared key which used together with verification code in TOTP-authentication
+ * @param sharedKey The key shared assciated with the user.
  * @param scratchCodes The list of scratch codes, which can be used instead of verification codes
  * @param qrUrl The QR-code which contains shared key
  */
-case class TotpKeyHolder(sharedKey: String, scratchCodes: List[String], qrUrl: String)
+case class TotpCredentials(sharedKey: String, scratchCodes: List[String], qrUrl: String)
 
 /**
  * The base interface for all TOTP (Time-based One-time Password) providers.
  */
 trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
-
   /**
    * Generate shared key used together with verification code in TOTP-authentication
    *
@@ -52,7 +45,7 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
    * @param issuer The issuer name. This parameter cannot contain the colon
    * @return The unique shared key
    */
-  def generateKeyHolder(providerKey: String, issuer: Option[String] = None): TotpKeyHolder
+  def createCredentials(providerKey: String, issuer: Option[String] = None): TotpCredentials
 
   /**
    * Starts the authentication process.
@@ -82,14 +75,17 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
 }
 
 object TotpProvider {
-
   /**
    * Constants
    */
   val sharedKeyParam = "sharedKey"
   val verificationCodeParam = "verificationCode"
-
   val requiredParams = List(sharedKeyParam, verificationCodeParam)
+
+  /**
+   * The provider Id.
+   */
+  val ID = "totp"
 
   /**
    * Messages

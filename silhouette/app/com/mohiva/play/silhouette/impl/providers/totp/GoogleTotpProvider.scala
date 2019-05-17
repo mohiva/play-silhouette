@@ -28,10 +28,9 @@ import scala.concurrent.ExecutionContext
 import scala.collection.JavaConverters._
 
 /**
- * Google's TOTP authentication provider
+ * Google's TOTP authentication provider concrete implementation.
  */
 class GoogleTotpProvider @Inject() (implicit val executionContext: ExecutionContext) extends TotpProvider {
-
   /**
    * Gets the provider ID.
    *
@@ -40,7 +39,7 @@ class GoogleTotpProvider @Inject() (implicit val executionContext: ExecutionCont
   override def id: String = ID
 
   /**
-   * Indicates if verification code is valid for related shared key
+   * Indicates whether verification code is valid for the related shared key.
    *
    * @param sharedKey TOTP shared key associated with the user.
    * @param verificationCode Verification code, presumably valid at this moment.
@@ -52,17 +51,17 @@ class GoogleTotpProvider @Inject() (implicit val executionContext: ExecutionCont
   }
 
   /**
-   * Generate shared key used together with verification code in TOTP-authentication
+   * Generates the shared key used together with verification code in TOTP-authentication.
    *
-   * @param providerKey A unique key which identifies a user on this provider (userID, email, ...).
-   * @param issuer      The issuer name. This parameter cannot contain the colon
+   * @param accountName A unique key which identifies a user on this provider (userID, email, ...).
+   * @param issuer The issuer name. This parameter cannot contain the colon
    * @return The unique shared key
    */
-  override def generateKeyHolder(providerKey: String, issuer: Option[String]): TotpKeyHolder = {
-    val gKey = googleAuthenticator.createCredentials()
-    val qrUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL(issuer.orNull, providerKey, gKey)
-    val scratchCodes = gKey.getScratchCodes.asScala.map(_.toString).toList
-    TotpKeyHolder(gKey.getKey, scratchCodes, qrUrl)
+  override def createCredentials(accountName: String, issuer: Option[String]): TotpCredentials = {
+    val credentials = googleAuthenticator.createCredentials()
+    val qrUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL(issuer.orNull, accountName, credentials)
+    val scratchCodes = credentials.getScratchCodes.asScala.map(_.toString).toList
+    TotpCredentials(credentials.getKey, scratchCodes, qrUrl)
   }
 }
 
@@ -70,13 +69,15 @@ class GoogleTotpProvider @Inject() (implicit val executionContext: ExecutionCont
  * The companion object.
  */
 object GoogleTotpProvider {
-
+  /**
+   * Actual Google authenticator provider.
+   */
   private val googleAuthenticator = new GoogleAuthenticator()
 
   /**
-   * The provider constants.
+   * The provider Id.
    */
-  val ID = "google-totp"
+  val ID = TotpProvider.ID
 
   /**
    * Messages
