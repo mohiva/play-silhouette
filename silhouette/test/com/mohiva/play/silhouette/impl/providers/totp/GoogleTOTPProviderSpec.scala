@@ -56,9 +56,9 @@ class GoogleTOTPProviderSpec extends TOTPProviderSpec {
     }
   }
 
-  "The `generateKeyHolder` method" should {
+  "The `createCredentials` method" should {
 
-    "return correct key TotpKeyHolder" in new WithApplication with Context {
+    "return correct key TotpCredentials" in new WithApplication with Context {
       val keyHolder = provider.createCredentials(credentials.identifier)
       keyHolder.sharedKey must not be empty
       keyHolder.qrUrl must not be empty
