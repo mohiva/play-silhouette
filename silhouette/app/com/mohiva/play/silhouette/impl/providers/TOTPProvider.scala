@@ -23,7 +23,6 @@ import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.util.{ ExecutionContextProvider, ExtractableRequest }
 import com.mohiva.play.silhouette.api.{ AuthInfo, Logger, Provider }
 import com.mohiva.play.silhouette.impl.providers.TOTPProvider._
-
 import scala.concurrent.Future
 
 /**
@@ -62,29 +61,26 @@ trait TOTPProvider extends Provider with ExecutionContextProvider with Logger {
    * @return The login info if the authentication was successful, otherwise a failure.
    */
   def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[Boolean] = {
-    (
-      request.extractString(sharedKeyParam),
-      request.extractString(verificationCodeParam)) match {
-        case (Some(sharedKey), Some(verificationCode)) =>
-          Future(isVerificationCodeValid(sharedKey, verificationCode))
-        case _ => throw new ProviderException(
-          IncorrectRequest.format(id, requiredParams.mkString(","))
-        )
-      }
+    (request.extractString(sharedKeyParam), request.extractString(verificationCodeParam)) match {
+      case (Some(sharedKey), Some(verificationCode)) =>
+        Future(isVerificationCodeValid(sharedKey, verificationCode))
+      case _ => throw new ProviderException(
+        IncorrectRequest.format(id, requiredParams.mkString(","))
+      )
+    }
   }
 
   /**
-   * Indicates if verification code is valid for related shared key
+   * Indicates if verification code is valid for given shared key
    *
-   * @param sharedKey TOTP shared key accociated with user
-   * @param verificationCode Verification code, presumably valid at this moment
+   * @param sharedKey TOTP shared key associated with the user.
+   * @param verificationCode Verification code, presumably valid at this moment.
    * @return True if the given verification code is valid, false otherwise.
    */
   protected def isVerificationCodeValid(sharedKey: String, verificationCode: String): Boolean
 }
 
 object TOTPProvider {
-
   /**
    * Constants
    */
@@ -97,5 +93,5 @@ object TOTPProvider {
    * Messages
    */
   val IncorrectRequest = "[Silhouette][%s] Incorrect request. At least one of the required parameters missing: %s"
-  val VerificationCodeDoesNotMatch = "[Silhouette][%s] TOTP verification code does not match"
+  val VerificationCodeDoesNotMatch = "[Silhouette][%s] TOTP verification code doesn't match"
 }

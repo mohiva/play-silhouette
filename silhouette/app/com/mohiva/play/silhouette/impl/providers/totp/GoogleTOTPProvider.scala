@@ -24,13 +24,14 @@ import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.totp.GoogleTOTPProvider._
 import com.warrenstrange.googleauth.{ GoogleAuthenticator, GoogleAuthenticatorQRGenerator }
 import javax.inject.Inject
-
 import scala.concurrent.ExecutionContext
 
 /**
- * A provider for TOTP authentication using Google Authenticator
+ * Google's TOTP authentication provider
  */
-class GoogleTOTPProvider @Inject() (implicit val executionContext: ExecutionContext)
+class GoogleTOTPProvider @Inject() (
+  implicit
+  val executionContext: ExecutionContext)
   extends TOTPProvider {
 
   /**
@@ -43,8 +44,8 @@ class GoogleTOTPProvider @Inject() (implicit val executionContext: ExecutionCont
   /**
    * Indicates if verification code is valid for related shared key
    *
-   * @param sharedKey        TOTP shared key accociated with user
-   * @param verificationCode Verification code, presumably valid at this moment
+   * @param sharedKey TOTP shared key associated with the user.
+   * @param verificationCode Verification code, presumably valid at this moment.
    * @return True if the given verification code is valid, false otherwise.
    */
   override protected def isVerificationCodeValid(sharedKey: String, verificationCode: String): Boolean = {
@@ -76,13 +77,12 @@ class GoogleTOTPProvider @Inject() (implicit val executionContext: ExecutionCont
  * The companion object.
  */
 object GoogleTOTPProvider {
-
   private val googleAuthenticator = new GoogleAuthenticator()
 
   /**
    * The provider constants.
    */
-  val ID = "googleTOTP"
+  val ID = "google-totp"
 
   /**
    * Messages
