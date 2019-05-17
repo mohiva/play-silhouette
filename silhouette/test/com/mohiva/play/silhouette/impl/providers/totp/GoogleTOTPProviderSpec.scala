@@ -17,15 +17,13 @@ package com.mohiva.play.silhouette.impl.providers.totp
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
-import com.mohiva.play.silhouette.api.util.{Credentials, PasswordInfo}
-import com.mohiva.play.silhouette.impl.exceptions.IdentityNotFoundException
+import com.mohiva.play.silhouette.api.util.Credentials
 import com.mohiva.play.silhouette.impl.providers.TOTPProvider._
+import com.mohiva.play.silhouette.impl.providers.TOTPProviderSpec
 import com.mohiva.play.silhouette.impl.providers.totp.GoogleTOTPProvider._
-import com.mohiva.play.silhouette.impl.providers.{TOTPInfo, TOTPProviderSpec}
-import play.api.test.{FakeRequest, WithApplication}
+import play.api.test.{ FakeRequest, WithApplication }
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.providers.totp.GoogleTOTPProvider#GoogleTOTPProvider]] class.
@@ -39,36 +37,17 @@ class GoogleTOTPProviderSpec extends TOTPProviderSpec {
 
       val loginInfo = new LoginInfo(provider.id, credentials.identifier)
 
-      authInfoRepository.find[PasswordInfo](loginInfo) returns Future.successful(None)
-
       await(provider.authenticate()) must throwA[ProviderException].like {
         case e => e.getMessage must beEqualTo(IncorrectRequest.format(provider.id, requiredParams.mkString(",")))
       }
     }
 
-    "throw IdentityNotFoundException if no auth info could be found for the given credentials" in new WithApplication with Context {
-      implicit val req = FakeRequest(
-        GET, "?" + providerKeyParam + "=" + credentials.identifier +
-        "&" + verificationCodeParam + "=" + testVerificationCode)
-
-      val loginInfo = new LoginInfo(provider.id, credentials.identifier)
-
-      authInfoRepository.find[TOTPInfo](loginInfo) returns Future.successful(None)
-
-      await(provider.authenticate()) must throwA[IdentityNotFoundException].like {
-        case e =>
-          e.getMessage must beEqualTo(TOTPInfoNotFound.format(provider.id, credentials.identifier))
-      }
-    }
-
     "throw ProviderException if verification code is not a number" in new WithApplication with Context {
       implicit val req = FakeRequest(
-        GET, "?" + providerKeyParam + "=" + credentials.identifier +
+        GET, "?" + sharedKeyParam + "=" + testSharedKey +
         "&" + verificationCodeParam + "=" + testWrongVerificationCode)
 
       val loginInfo = new LoginInfo(provider.id, credentials.identifier)
-
-      authInfoRepository.find[TOTPInfo](loginInfo) returns Future.successful(Some(TOTPInfo(testSharedKey)))
 
       await(provider.authenticate()) must throwA[ProviderException].like {
         case e =>
@@ -105,6 +84,6 @@ class GoogleTOTPProviderSpec extends TOTPProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new GoogleTOTPProvider(authInfoRepository)
+    lazy val provider = new GoogleTOTPProvider()
   }
 }

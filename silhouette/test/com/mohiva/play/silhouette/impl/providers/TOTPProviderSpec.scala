@@ -15,7 +15,6 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
-import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
 import play.api.test.PlaySpecification
@@ -30,9 +29,5 @@ trait TOTPProviderSpec extends PlaySpecification with Mockito {
    */
   trait BaseContext extends Scope {
 
-    /**
-     * The auth info repository mock.
-     */
-    lazy val authInfoRepository = mock[AuthInfoRepository]
   }
 }

@@ -20,10 +20,8 @@
 package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
-import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.{ ExecutionContextProvider, ExtractableRequest }
-import com.mohiva.play.silhouette.api.{ AuthInfo, Logger, LoginInfo, Provider }
-import com.mohiva.play.silhouette.impl.exceptions.{ IdentityNotFoundException, InvalidTOTPCodeException }
+import com.mohiva.play.silhouette.api.{ AuthInfo, Logger, Provider }
 import com.mohiva.play.silhouette.impl.providers.TOTPProvider._
 
 import scala.concurrent.Future
@@ -40,30 +38,18 @@ case class TOTPInfo(sharedKey: String) extends AuthInfo
 trait TOTPProvider extends Provider with ExecutionContextProvider with Logger {
 
   /**
-   * The auth info repository.
-   */
-  protected val authInfoRepository: AuthInfoRepository
-
-  /**
    * Starts the authentication process.
    *
    * @param request The current request.
    * @tparam B The type of the request body.
    * @return The login info if the authentication was successful, otherwise a failure.
    */
-  def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[LoginInfo] = {
+  def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[Boolean] = {
     (
-      request.extractString(providerKeyParam),
+      request.extractString(sharedKeyParam),
       request.extractString(verificationCodeParam)) match {
-        case (Some(providerKey), Some(verificationCode)) =>
-          val loginInfo = LoginInfo(id, providerKey)
-          authInfoRepository.find[TOTPInfo](loginInfo).flatMap {
-            case Some(authInfo) =>
-              if (isVerificationCodeValid(authInfo.sharedKey, verificationCode)) {
-                Future.successful(loginInfo)
-              } else throw new InvalidTOTPCodeException(VerificationCodeDoesNotMatch.format(id))
-            case None => throw new IdentityNotFoundException(TOTPInfoNotFound.format(id, providerKey))
-          }
+        case (Some(sharedKey), Some(verificationCode)) =>
+          Future(isVerificationCodeValid(sharedKey, verificationCode))
         case _ => throw new ProviderException(
           IncorrectRequest.format(id, requiredParams.mkString(","))
         )
@@ -85,15 +71,14 @@ object TOTPProvider {
   /**
    * Constants
    */
-  val providerKeyParam = "providerKey"
+  val sharedKeyParam = "sharedKey"
   val verificationCodeParam = "verificationCode"
 
-  val requiredParams = List(providerKeyParam, verificationCodeParam)
+  val requiredParams = List(sharedKeyParam, verificationCodeParam)
 
   /**
    * Messages
    */
   val IncorrectRequest = "[Silhouette][%s] Incorrect request. At least one of the required parameters missing: %s"
-  val TOTPInfoNotFound = "[Silhouette][%s] Could not find TOTP info for given login info: %s"
   val VerificationCodeDoesNotMatch = "[Silhouette][%s] TOTP verification code does not match"
 }

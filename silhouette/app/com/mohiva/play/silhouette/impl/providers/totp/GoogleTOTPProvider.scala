@@ -20,7 +20,6 @@
 package com.mohiva.play.silhouette.impl.providers.totp
 
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
-import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.totp.GoogleTOTPProvider._
 import com.warrenstrange.googleauth.GoogleAuthenticator
@@ -31,8 +30,7 @@ import scala.concurrent.ExecutionContext
 /**
  * A provider for TOTP authentication using Google Authenticator
  */
-class GoogleTOTPProvider @Inject() (
-  protected val authInfoRepository: AuthInfoRepository)(implicit val executionContext: ExecutionContext)
+class GoogleTOTPProvider @Inject() (implicit val executionContext: ExecutionContext)
   extends TOTPProvider {
 
   /**
