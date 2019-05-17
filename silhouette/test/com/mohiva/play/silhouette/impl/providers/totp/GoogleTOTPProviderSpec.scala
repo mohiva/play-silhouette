@@ -18,15 +18,15 @@ package com.mohiva.play.silhouette.impl.providers.totp
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.util.Credentials
-import com.mohiva.play.silhouette.impl.providers.TOTPProvider._
+import com.mohiva.play.silhouette.impl.providers.TotpProvider._
 import com.mohiva.play.silhouette.impl.providers.TOTPProviderSpec
-import com.mohiva.play.silhouette.impl.providers.totp.GoogleTOTPProvider._
+import com.mohiva.play.silhouette.impl.providers.totp.GoogleTotpProvider._
 import play.api.test.{ FakeRequest, WithApplication }
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.impl.providers.totp.GoogleTOTPProvider#GoogleTOTPProvider]] class.
+ * Test case for the [[com.mohiva.play.silhouette.impl.providers.totp.GoogleTotpProvider#GoogleTOTPProvider]] class.
  */
 class GoogleTOTPProviderSpec extends TOTPProviderSpec {
 
@@ -53,6 +53,16 @@ class GoogleTOTPProviderSpec extends TOTPProviderSpec {
         case e =>
           e.getMessage must beEqualTo(VerificationCodeNotNumber.format(provider.id))
       }
+    }
+  }
+
+  "The `generateKeyHolder` method" should {
+
+    "return correct key TotpKeyHolder" in new WithApplication with Context {
+      val keyHolder = provider.generateKeyHolder(credentials.identifier)
+      keyHolder.sharedKey must not be empty
+      keyHolder.qrUrl must not be empty
+      keyHolder.scratchCodes must not be empty
     }
   }
 
@@ -84,6 +94,6 @@ class GoogleTOTPProviderSpec extends TOTPProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new GoogleTOTPProvider()
+    lazy val provider = new GoogleTotpProvider()
   }
 }

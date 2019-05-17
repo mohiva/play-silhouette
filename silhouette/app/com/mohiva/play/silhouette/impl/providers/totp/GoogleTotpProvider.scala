@@ -21,18 +21,16 @@ package com.mohiva.play.silhouette.impl.providers.totp
 
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.impl.providers._
-import com.mohiva.play.silhouette.impl.providers.totp.GoogleTOTPProvider._
+import com.mohiva.play.silhouette.impl.providers.totp.GoogleTotpProvider._
 import com.warrenstrange.googleauth.{ GoogleAuthenticator, GoogleAuthenticatorQRGenerator }
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
+import scala.collection.JavaConverters._
 
 /**
  * Google's TOTP authentication provider
  */
-class GoogleTOTPProvider @Inject() (
-  implicit
-  val executionContext: ExecutionContext)
-  extends TOTPProvider {
+class GoogleTotpProvider @Inject() (implicit val executionContext: ExecutionContext) extends TotpProvider {
 
   /**
    * Gets the provider ID.
@@ -56,27 +54,23 @@ class GoogleTOTPProvider @Inject() (
   /**
    * Generate shared key used together with verification code in TOTP-authentication
    *
-   * @return The unique shared key
-   */
-  override def generateSharedKey: String = googleAuthenticator.createCredentials().getKey
-
-  /**
-   * Generate URL with QR-code which contains shared key used together with verification code in TOTP-authentication
-   *
    * @param providerKey A unique key which identifies a user on this provider (userID, email, ...).
    * @param issuer      The issuer name. This parameter cannot contain the colon
-   * @return The URL of image with QR-code
+   * @return The unique shared key
    */
-  override def generateQrUrl(providerKey: String, issuer: Option[String]): String = {
+  override def generateKeyHolder(providerKey: String, issuer: Option[String]): TotpKeyHolder = {
     val gKey = googleAuthenticator.createCredentials()
-    GoogleAuthenticatorQRGenerator.getOtpAuthURL(issuer.orNull, providerKey, gKey)
+    val qrUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL(issuer.orNull, providerKey, gKey)
+    val scratchCodes = gKey.getScratchCodes.asScala.map(_.toString).toList
+    TotpKeyHolder(gKey.getKey, scratchCodes, qrUrl)
   }
 }
 
 /**
  * The companion object.
  */
-object GoogleTOTPProvider {
+object GoogleTotpProvider {
+
   private val googleAuthenticator = new GoogleAuthenticator()
 
   /**

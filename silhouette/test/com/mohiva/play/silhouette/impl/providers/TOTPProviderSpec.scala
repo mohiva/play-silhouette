@@ -20,7 +20,7 @@ import org.specs2.specification.Scope
 import play.api.test.PlaySpecification
 
 /**
- * Abstract test case for the [[com.mohiva.play.silhouette.impl.providers.TOTPProvider]] based class.
+ * Abstract test case for the [[com.mohiva.play.silhouette.impl.providers.TotpProvider]] based class.
  */
 trait TOTPProviderSpec extends PlaySpecification with Mockito {
 

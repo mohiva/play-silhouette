@@ -22,36 +22,37 @@ package com.mohiva.play.silhouette.impl.providers
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.util.{ ExecutionContextProvider, ExtractableRequest }
 import com.mohiva.play.silhouette.api.{ AuthInfo, Logger, Provider }
-import com.mohiva.play.silhouette.impl.providers.TOTPProvider._
+import com.mohiva.play.silhouette.impl.providers.TotpProvider._
 import scala.concurrent.Future
 
 /**
  * TOTP details
  *
- * @param sharedKey Shared key used together with verification code in TOTP-authentication
+ * @param sharedKey The shared key used together with verification code in TOTP-authentication
  */
-case class TOTPInfo(sharedKey: String) extends AuthInfo
+case class TotpInfo(sharedKey: String) extends AuthInfo
+
+/**
+ * Storage for all TOTP-authentication data
+ * @param sharedKey The shared key which used together with verification code in TOTP-authentication
+ * @param scratchCodes The list of scratch codes, which can be used instead of verification codes
+ * @param qrUrl The QR-code which contains shared key
+ */
+case class TotpKeyHolder(sharedKey: String, scratchCodes: List[String], qrUrl: String)
 
 /**
  * The base interface for all TOTP (Time-based One-time Password) providers.
  */
-trait TOTPProvider extends Provider with ExecutionContextProvider with Logger {
+trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
 
   /**
    * Generate shared key used together with verification code in TOTP-authentication
    *
-   * @return The unique shared key
-   */
-  def generateSharedKey: String
-
-  /**
-   * Generate URL with QR-code which contains shared key used together with verification code in TOTP-authentication
-   *
    * @param providerKey A unique key which identifies a user on this provider (userID, email, ...).
    * @param issuer The issuer name. This parameter cannot contain the colon
-   * @return The URL of image with QR-code
+   * @return The unique shared key
    */
-  def generateQrUrl(providerKey: String, issuer: Option[String] = None): String
+  def generateKeyHolder(providerKey: String, issuer: Option[String] = None): TotpKeyHolder
 
   /**
    * Starts the authentication process.
@@ -73,14 +74,15 @@ trait TOTPProvider extends Provider with ExecutionContextProvider with Logger {
   /**
    * Indicates if verification code is valid for given shared key
    *
-   * @param sharedKey TOTP shared key associated with the user.
-   * @param verificationCode Verification code, presumably valid at this moment.
+   * @param sharedKey The TOTP shared key associated with the user.
+   * @param verificationCode The verification code, presumably valid at this moment.
    * @return True if the given verification code is valid, false otherwise.
    */
   protected def isVerificationCodeValid(sharedKey: String, verificationCode: String): Boolean
 }
 
-object TOTPProvider {
+object TotpProvider {
+
   /**
    * Constants
    */
