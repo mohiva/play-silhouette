@@ -27,8 +27,9 @@ import com.mohiva.play.silhouette.impl.providers.TOTPProvider._
 import scala.concurrent.Future
 
 /**
- * TODO:
- * what about QR code?
+ * TOTP details
+ *
+ * @param sharedKey Shared key used together with verification code in TOTP-authentication
  */
 case class TOTPInfo(sharedKey: String) extends AuthInfo
 
@@ -36,6 +37,22 @@ case class TOTPInfo(sharedKey: String) extends AuthInfo
  * The base interface for all TOTP (Time-based One-time Password) providers.
  */
 trait TOTPProvider extends Provider with ExecutionContextProvider with Logger {
+
+  /**
+   * Generate shared key used together with verification code in TOTP-authentication
+   *
+   * @return The unique shared key
+   */
+  def generateSharedKey: String
+
+  /**
+   * Generate URL with QR-code which contains shared key used together with verification code in TOTP-authentication
+   *
+   * @param providerKey A unique key which identifies a user on this provider (userID, email, ...).
+   * @param issuer The issuer name. This parameter cannot contain the colon
+   * @return The URL of image with QR-code
+   */
+  def generateQrUrl(providerKey: String, issuer: Option[String] = None): String
 
   /**
    * Starts the authentication process.

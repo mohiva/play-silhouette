@@ -22,7 +22,7 @@ package com.mohiva.play.silhouette.impl.providers.totp
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.totp.GoogleTOTPProvider._
-import com.warrenstrange.googleauth.GoogleAuthenticator
+import com.warrenstrange.googleauth.{ GoogleAuthenticator, GoogleAuthenticatorQRGenerator }
 import javax.inject.Inject
 
 import scala.concurrent.ExecutionContext
@@ -50,6 +50,25 @@ class GoogleTOTPProvider @Inject() (implicit val executionContext: ExecutionCont
   override protected def isVerificationCodeValid(sharedKey: String, verificationCode: String): Boolean = {
     if (verificationCode.forall(_.isDigit)) googleAuthenticator.authorize(sharedKey, verificationCode.toInt)
     else throw new ProviderException(VerificationCodeNotNumber.format(id))
+  }
+
+  /**
+   * Generate shared key used together with verification code in TOTP-authentication
+   *
+   * @return The unique shared key
+   */
+  override def generateSharedKey: String = googleAuthenticator.createCredentials().getKey
+
+  /**
+   * Generate URL with QR-code which contains shared key used together with verification code in TOTP-authentication
+   *
+   * @param providerKey A unique key which identifies a user on this provider (userID, email, ...).
+   * @param issuer      The issuer name. This parameter cannot contain the colon
+   * @return The URL of image with QR-code
+   */
+  override def generateQrUrl(providerKey: String, issuer: Option[String]): String = {
+    val gKey = googleAuthenticator.createCredentials()
+    GoogleAuthenticatorQRGenerator.getOtpAuthURL(issuer.orNull, providerKey, gKey)
   }
 }
 
