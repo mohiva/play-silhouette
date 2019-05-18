@@ -46,8 +46,11 @@ class GoogleTotpProvider @Inject() (implicit val executionContext: ExecutionCont
    * @return True if the given verification code is valid, false otherwise.
    */
   override protected def isVerificationCodeValid(sharedKey: String, verificationCode: String): Boolean = {
-    if (verificationCode.forall(_.isDigit)) googleAuthenticator.authorize(sharedKey, verificationCode.toInt)
-    else throw new ProviderException(VerificationCodeNotNumber.format(id))
+    if (verificationCode.forall(_.isDigit)) {
+      googleAuthenticator.authorize(sharedKey, verificationCode.toInt)
+    } else {
+      throw new ProviderException(VerificationCodeNotNumber.format(id))
+    }
   }
 
   /**
