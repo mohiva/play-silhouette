@@ -27,10 +27,17 @@ import scala.concurrent.ExecutionContext.Implicits.global
  */
 class GoogleTotpProviderSpec extends TotpProviderSpec {
   "The `authenticate` method" should {
-    "return None when the verification code is empty" in new WithApplication with Context {
+    "return None when the verification code is null or empty" in new WithApplication with Context {
       implicit val req = FakeRequest()
       val loginInfo = new LoginInfo(provider.id, credentials.identifier)
+      await(provider.authenticate(credentials.identifier, null)) should be(None)
       await(provider.authenticate(credentials.identifier, "")) should be(None)
+    }
+
+    "return None when the sharedKey is null" in new WithApplication with Context {
+      implicit val req = FakeRequest()
+      val loginInfo = new LoginInfo(provider.id, credentials.identifier)
+      await(provider.authenticate(null, testVerificationCode)) should be(None)
     }
 
     "return None when the verification code isn't a number" in new WithApplication with Context {
@@ -40,11 +47,11 @@ class GoogleTotpProviderSpec extends TotpProviderSpec {
   }
 
   "The `createCredentials` method" should {
-    "return correct key TotpCredentials" in new WithApplication with Context {
-      val keyHolder = provider.createCredentials(credentials.identifier)
-      keyHolder.sharedKey must not be empty
-      keyHolder.qrUrl must not be empty
-      keyHolder.scratchCodes must not be empty
+    "return the correct TotpCredentials shared key" in new WithApplication with Context {
+      val result = provider.createCredentials(credentials.identifier)
+      result.sharedKey must not be empty
+      result.qrUrl must not be empty
+      result.scratchCodes must not be empty
     }
   }
 
@@ -52,7 +59,6 @@ class GoogleTotpProviderSpec extends TotpProviderSpec {
    * The context.
    */
   trait Context extends BaseContext {
-
     /**
      * The test credentials.
      */

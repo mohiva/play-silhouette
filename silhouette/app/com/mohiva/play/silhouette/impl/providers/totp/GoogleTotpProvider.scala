@@ -50,7 +50,14 @@ class GoogleTotpProvider @Inject() (implicit val executionContext: ExecutionCont
       false
     } else {
       if (verificationCode.forall(_.isDigit)) {
-        googleAuthenticator.authorize(sharedKey, verificationCode.toInt)
+        try {
+          googleAuthenticator.authorize(sharedKey, verificationCode.toInt)
+        } catch {
+          case e: IllegalArgumentException => {
+            logger.debug(e.getMessage)
+            false
+          }
+        }
       } else {
         logger.debug(VerificationCodeMustBeANumber.format(id))
         false
@@ -63,7 +70,7 @@ class GoogleTotpProvider @Inject() (implicit val executionContext: ExecutionCont
    *
    * @param accountName A unique key which identifies a user on this provider (userID, email, ...).
    * @param issuer The issuer name. This parameter cannot contain the colon
-   * @return The unique shared key
+   * @return The totp credentials including the shared key, scratch codes and qr url.
    */
   override def createCredentials(accountName: String, issuer: Option[String]): TotpCredentials = {
     val credentials = googleAuthenticator.createCredentials()
