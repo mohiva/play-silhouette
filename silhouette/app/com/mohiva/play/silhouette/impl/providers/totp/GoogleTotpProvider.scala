@@ -19,7 +19,6 @@
  */
 package com.mohiva.play.silhouette.impl.providers.totp
 
-import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.totp.GoogleTotpProvider._
 import com.warrenstrange.googleauth.{ GoogleAuthenticator, GoogleAuthenticatorQRGenerator }
@@ -46,10 +45,16 @@ class GoogleTotpProvider @Inject() (implicit val executionContext: ExecutionCont
    * @return True if the given verification code is valid, false otherwise.
    */
   override protected def isVerificationCodeValid(sharedKey: String, verificationCode: String): Boolean = {
-    if (verificationCode.forall(_.isDigit)) {
-      googleAuthenticator.authorize(sharedKey, verificationCode.toInt)
+    if (verificationCode == null || verificationCode.isEmpty) {
+      logger.debug(VerificationCodeMustNotBeNullOrEmpty.format(id))
+      false
     } else {
-      throw new ProviderException(VerificationCodeNotNumber.format(id))
+      if (verificationCode.forall(_.isDigit)) {
+        googleAuthenticator.authorize(sharedKey, verificationCode.toInt)
+      } else {
+        logger.debug(VerificationCodeMustBeANumber.format(id))
+        false
+      }
     }
   }
 
@@ -85,5 +90,6 @@ object GoogleTotpProvider {
   /**
    * Messages
    */
-  val VerificationCodeNotNumber = "[Silhouette][%s] Google verification code must be a number"
+  val VerificationCodeMustNotBeNullOrEmpty = "[Silhouette][%s] verification code must not be null or empty"
+  val VerificationCodeMustBeANumber = "[Silhouette][%s] Google's verification code must be a number"
 }

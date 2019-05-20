@@ -16,11 +16,8 @@
 package com.mohiva.play.silhouette.impl.providers.totp
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.util.Credentials
-import com.mohiva.play.silhouette.impl.providers.TotpProvider._
-import com.mohiva.play.silhouette.impl.providers.TOTPProviderSpec
-import com.mohiva.play.silhouette.impl.providers.totp.GoogleTotpProvider._
+import com.mohiva.play.silhouette.impl.providers.TotpProviderSpec
 import play.api.test.{ FakeRequest, WithApplication }
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -28,36 +25,21 @@ import scala.concurrent.ExecutionContext.Implicits.global
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.providers.totp.GoogleTotpProvider#GoogleTOTPProvider]] class.
  */
-class GoogleTOTPProviderSpec extends TOTPProviderSpec {
-
+class GoogleTotpProviderSpec extends TotpProviderSpec {
   "The `authenticate` method" should {
-
-    "throw ProviderException if request doesn't contains required parameters" in new WithApplication with Context {
+    "return None when the verification code is empty" in new WithApplication with Context {
       implicit val req = FakeRequest()
-
       val loginInfo = new LoginInfo(provider.id, credentials.identifier)
-
-      await(provider.authenticate()) must throwA[ProviderException].like {
-        case e => e.getMessage must beEqualTo(IncorrectRequest.format(provider.id, requiredParams.mkString(",")))
-      }
+      await(provider.authenticate(credentials.identifier, "")) should be(None)
     }
 
-    "throw ProviderException if verification code is not a number" in new WithApplication with Context {
-      implicit val req = FakeRequest(
-        GET, "?" + sharedKeyParam + "=" + testSharedKey +
-        "&" + verificationCodeParam + "=" + testWrongVerificationCode)
-
+    "return None when the verification code isn't a number" in new WithApplication with Context {
       val loginInfo = new LoginInfo(provider.id, credentials.identifier)
-
-      await(provider.authenticate()) must throwA[ProviderException].like {
-        case e =>
-          e.getMessage must beEqualTo(VerificationCodeNotNumber.format(provider.id))
-      }
+      await(provider.authenticate(credentials.identifier, "ABCDEF")) should be(None)
     }
   }
 
   "The `createCredentials` method" should {
-
     "return correct key TotpCredentials" in new WithApplication with Context {
       val keyHolder = provider.createCredentials(credentials.identifier)
       keyHolder.sharedKey must not be empty

@@ -22,12 +22,9 @@ import play.api.test.PlaySpecification
 /**
  * Abstract test case for the [[com.mohiva.play.silhouette.impl.providers.TotpProvider]] based class.
  */
-trait TOTPProviderSpec extends PlaySpecification with Mockito {
-
+trait TotpProviderSpec extends PlaySpecification with Mockito {
   /**
    * The context.
    */
-  trait BaseContext extends Scope {
-
-  }
+  trait BaseContext extends Scope
 }

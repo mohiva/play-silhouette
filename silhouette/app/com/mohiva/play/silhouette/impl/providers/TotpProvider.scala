@@ -19,19 +19,11 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
-import com.mohiva.play.silhouette.api.exceptions.ProviderException
-import com.mohiva.play.silhouette.api.util.{ ExecutionContextProvider, ExtractableRequest }
-import com.mohiva.play.silhouette.api.{ AuthInfo, Logger, Provider }
+import com.mohiva.play.silhouette.api.util.ExecutionContextProvider
+import com.mohiva.play.silhouette.api.{ Logger, LoginInfo, Provider }
 import com.mohiva.play.silhouette.impl.providers.TotpProvider._
 
 import scala.concurrent.Future
-
-/**
- * TOTP details
- *
- * @param sharedKey Shared key used together with verification code in TOTP-authentication
- */
-case class TotpInfo(sharedKey: String) extends AuthInfo
 
 /**
  * TOTP credentials data.
@@ -50,26 +42,28 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
    * Generate shared key used together with verification code in TOTP-authentication
    *
    * @param providerKey A unique key which identifies a user on this provider (userID, email, ...).
-   * @param issuer The issuer name. This parameter cannot contain the colon
-   * @return The unique shared key
+   * @param issuer The issuer name. This parameter cannot contain the colon character.
+   * @return The unique shared key.
    */
   def createCredentials(providerKey: String, issuer: Option[String] = None): TotpCredentials
 
   /**
    * Starts the authentication process.
    *
-   * @param request The current request.
-   * @tparam B The type of the request body.
-   * @return The login info if the authentication was successful, otherwise a failure.
+   * @param sharedKey A unique key which identifies a user on this provider (userID, email, ...).
+   * @param verificationCode the verification code generated using TOTP.
+   * @return Some login info if the authentication was successful, none otherwise.
    */
-  def authenticate[B]()(implicit request: ExtractableRequest[B]): Future[Boolean] = {
-    (request.extractString(sharedKeyParam), request.extractString(verificationCodeParam)) match {
-      case (Some(sharedKey), Some(verificationCode)) =>
-        Future(isVerificationCodeValid(sharedKey, verificationCode))
-      case _ => throw new ProviderException(
-        IncorrectRequest.format(id, requiredParams.mkString(","))
-      )
-    }
+  def authenticate(sharedKey: String, verificationCode: String): Future[Option[LoginInfo]] = {
+    Future(
+      isVerificationCodeValid(sharedKey, verificationCode) match {
+        case true => Some(LoginInfo(ID, sharedKey))
+        case _ => {
+          logger.debug(VerificationCodeDoesNotMatch)
+          None
+        }
+      }
+    )
   }
 
   /**
@@ -84,13 +78,6 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
 
 object TotpProvider {
   /**
-   * Constants
-   */
-  val sharedKeyParam = "sharedKey"
-  val verificationCodeParam = "verificationCode"
-  val requiredParams = List(sharedKeyParam, verificationCodeParam)
-
-  /**
    * The provider Id.
    */
   val ID = "totp"
@@ -98,6 +85,5 @@ object TotpProvider {
   /**
    * Messages
    */
-  val IncorrectRequest = "[Silhouette][%s] Incorrect request. At least one of the required parameters missing: %s"
   val VerificationCodeDoesNotMatch = "[Silhouette][%s] TOTP verification code doesn't match"
 }
