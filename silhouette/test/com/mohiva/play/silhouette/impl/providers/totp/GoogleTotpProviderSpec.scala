@@ -15,7 +15,6 @@
  */
 package com.mohiva.play.silhouette.impl.providers.totp
 
-import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.Credentials
 import com.mohiva.play.silhouette.impl.providers.TotpProviderSpec
 import play.api.test.{ FakeRequest, WithApplication }
@@ -29,20 +28,17 @@ class GoogleTotpProviderSpec extends TotpProviderSpec {
   "The `authenticate` method" should {
     "return None when the verification code is null or empty" in new WithApplication with Context {
       implicit val req = FakeRequest()
-      val loginInfo = new LoginInfo(provider.id, credentials.identifier)
-      await(provider.authenticate(credentials.identifier, null)) should be(None)
-      await(provider.authenticate(credentials.identifier, "")) should be(None)
+      await(provider.authenticate(testSharedKey, null)) should be(None)
+      await(provider.authenticate(testSharedKey, "")) should be(None)
     }
 
     "return None when the sharedKey is null" in new WithApplication with Context {
       implicit val req = FakeRequest()
-      val loginInfo = new LoginInfo(provider.id, credentials.identifier)
       await(provider.authenticate(null, testVerificationCode)) should be(None)
     }
 
     "return None when the verification code isn't a number" in new WithApplication with Context {
-      val loginInfo = new LoginInfo(provider.id, credentials.identifier)
-      await(provider.authenticate(credentials.identifier, "ABCDEF")) should be(None)
+      await(provider.authenticate(testSharedKey, testWrongVerificationCode)) should be(None)
     }
   }
 
