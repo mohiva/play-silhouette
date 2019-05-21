@@ -76,7 +76,7 @@ class GoogleTotpProvider @Inject() (implicit val executionContext: ExecutionCont
     val credentials = googleAuthenticator.createCredentials()
     val qrUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL(issuer.orNull, accountName, credentials)
     val scratchCodes = credentials.getScratchCodes.asScala.map(_.toString).toList
-    TotpCredentials(credentials.getKey, scratchCodes, qrUrl)
+    TotpCredentials(TotpInfo(credentials.getKey, scratchCodes), qrUrl)
   }
 }
 

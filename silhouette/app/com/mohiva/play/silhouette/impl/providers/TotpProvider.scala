@@ -19,20 +19,27 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
+import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.util.ExecutionContextProvider
-import com.mohiva.play.silhouette.api.{ Logger, LoginInfo, Provider }
 import com.mohiva.play.silhouette.impl.providers.TotpProvider._
 
 import scala.concurrent.Future
 
 /**
- * TOTP credentials data.
+ * TOTP authentication information.
  *
- * @param sharedKey The shared key which used together with verification code in TOTP-authentication
+ * @param sharedKey The shared key which is used together with verification code in TOTP-authentication
  * @param scratchCodes The list of scratch codes, which can be used instead of verification codes
- * @param qrUrl The QR-code which contains shared key
  */
-case class TotpCredentials(sharedKey: String, scratchCodes: List[String], qrUrl: String)
+case class TotpInfo(sharedKey: String, scratchCodes: Seq[String]) extends AuthInfo
+
+/**
+ * TOTP authentication credentials data.
+ *
+ * @param totpInfo The TOTP authentication info
+ * @param qrUrl The QR-code that matches this shared key
+ */
+case class TotpCredentials(totpInfo: TotpInfo, qrUrl: String)
 
 /**
  * The base interface for all TOTP (Time-based One-time Password) providers.
@@ -43,7 +50,7 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
    *
    * @param providerKey A unique key which identifies a user on this provider (userID, email, ...).
    * @param issuer The issuer name. This parameter cannot contain the colon character.
-   * @return The unique shared key.
+   * @return TotpInfo contaning the credentials data including sharedKey and scratch codes.
    */
   def createCredentials(providerKey: String, issuer: Option[String] = None): TotpCredentials
 
