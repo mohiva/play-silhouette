@@ -53,5 +53,6 @@ object Dependencies {
     val casClient = "org.jasig.cas.client" % "cas-client-core" % "3.4.1"
     val casClientSupportSAML = "org.jasig.cas.client" % "cas-client-support-saml" % "3.4.1"
     val apacheCommonLang = "org.apache.commons" % "commons-lang3" % "3.8.1"
+    val googleAuth = "com.warrenstrange" % "googleauth" % "1.2.0"
   }
 }
