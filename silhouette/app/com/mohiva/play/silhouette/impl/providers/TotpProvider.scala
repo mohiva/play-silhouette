@@ -30,10 +30,10 @@ import scala.concurrent.Future
  *
  * @param sharedKey The key associated to an user that together with a verification
  *                  code enables authentication
- * @param scratchCodes A sequence of scratch or recovery codes, which can be used as
- *                     alternative to verification codes
+ * @param scratchCodes A set of scratch or recovery codes, which can be used each once and
+ *                     as alternative to verification codes
  */
-case class TotpInfo(sharedKey: String, scratchCodes: Seq[String]) extends AuthInfo
+case class TotpInfo(sharedKey: String, scratchCodes: Set[String]) extends AuthInfo
 
 /**
  * TOTP authentication credentials data including an URL to the QR-code for first-time
