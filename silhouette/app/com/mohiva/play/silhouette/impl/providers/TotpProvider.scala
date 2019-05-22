@@ -26,18 +26,22 @@ import com.mohiva.play.silhouette.impl.providers.TotpProvider._
 import scala.concurrent.Future
 
 /**
- * TOTP authentication information.
+ * TOTP authentication information that should be stored in an authentication repository.
  *
- * @param sharedKey The shared key which is used together with verification code in TOTP-authentication
- * @param scratchCodes The list of scratch codes, which can be used instead of verification codes
+ * @param sharedKey The key associated to an user that together with a verification
+ *                  code enables authentication
+ * @param scratchCodes A sequence of scratch or recovery codes, which can be used as
+ *                     alternative to verification codes
  */
 case class TotpInfo(sharedKey: String, scratchCodes: Seq[String]) extends AuthInfo
 
 /**
- * TOTP authentication credentials data.
+ * TOTP authentication credentials data including an URL to the QR-code for first-time
+ * activation of the TOTP.
  *
- * @param totpInfo The TOTP authentication info
- * @param qrUrl The QR-code that matches this shared key
+ * @param totpInfo The TOTP authentication info that will be persisted in an
+ *                 authentication repository.
+ * @param qrUrl The QR-code that matches this shared key for first time activation
  */
 case class TotpCredentials(totpInfo: TotpInfo, qrUrl: String)
 

@@ -27,7 +27,7 @@ import scala.concurrent.ExecutionContext
 import scala.collection.JavaConverters._
 
 /**
- * Google's TOTP authentication provider concrete implementation.
+ * Google's TOTP authentication concrete provider implementation.
  */
 class GoogleTotpProvider @Inject() (implicit val executionContext: ExecutionContext) extends TotpProvider {
   /**
@@ -75,7 +75,7 @@ class GoogleTotpProvider @Inject() (implicit val executionContext: ExecutionCont
   override def createCredentials(accountName: String, issuer: Option[String]): TotpCredentials = {
     val credentials = googleAuthenticator.createCredentials()
     val qrUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL(issuer.orNull, accountName, credentials)
-    val scratchCodes = credentials.getScratchCodes.asScala.map(_.toString).toList
+    val scratchCodes = credentials.getScratchCodes.asScala.map(_.toString)
     TotpCredentials(TotpInfo(credentials.getKey, scratchCodes), qrUrl)
   }
 }
