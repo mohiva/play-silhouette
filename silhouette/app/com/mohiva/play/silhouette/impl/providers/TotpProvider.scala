@@ -20,7 +20,8 @@
 package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.util.ExecutionContextProvider
+import com.mohiva.play.silhouette.api.util._
+import com.mohiva.play.silhouette.impl.providers.PasswordProvider.HasherIsNotRegistered
 import com.mohiva.play.silhouette.impl.providers.TotpProvider._
 
 import scala.concurrent.Future
@@ -29,11 +30,11 @@ import scala.concurrent.Future
  * TOTP authentication information that should be stored in an authentication repository.
  *
  * @param sharedKey The key associated to an user that together with a verification
- *                  code enables authentication
- * @param scratchCodes A set of scratch or recovery codes, which can be used each once and
- *                     as alternative to verification codes
+ *                  code enables authentication.
+ * @param scratchCodes A sequence of hashed scratch (or recovery) codes, which can be
+ *                     used each once and as alternative to verification codes.
  */
-case class TotpInfo(sharedKey: String, scratchCodes: Set[String]) extends AuthInfo
+case class TotpInfo(sharedKey: String, scratchCodes: Seq[PasswordInfo]) extends AuthInfo
 
 /**
  * TOTP authentication credentials data including an URL to the QR-code for first-time
@@ -50,6 +51,11 @@ case class TotpCredentials(totpInfo: TotpInfo, qrUrl: String)
  */
 trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
   /**
+   * The Password hasher registry to use.
+   */
+  val passwordHasherRegistry: PasswordHasherRegistry
+
+  /**
    * Generate shared key used together with verification code in TOTP-authentication
    *
    * @param providerKey A unique key which identifies a user on this provider (userID, email, ...).
@@ -59,7 +65,7 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
   def createCredentials(providerKey: String, issuer: Option[String] = None): TotpCredentials
 
   /**
-   * Starts the authentication process.
+   * Authenticate the user using a TOTP verification code.
    *
    * @param sharedKey A unique key which identifies a user on this provider (userID, email, ...).
    * @param verificationCode the verification code generated using TOTP.
@@ -75,6 +81,43 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
         }
       }
     )
+  }
+
+  /**
+   * Authenticate the user using a TOTP scratch (or recovery) code. This method will
+   * check each of the previously hashed scratch codes and find the first one that
+   * matches the one entered by the user. The one found is removed from the `totpInfo`.
+   *
+   * @param totpInfo The original TOTP info containing the hashed scratch codes.
+   * @param plainScratchCode The plain scratch code entered by the user.
+   * @return Some updated TOTP info if the authentication was successful, none otherwise.
+   */
+  def authenticate(totpInfo: TotpInfo, plainScratchCode: String): Future[Option[TotpInfo]] = Future {
+    Option(totpInfo).map {
+      case totpInfo => {
+        Option(plainScratchCode).map {
+          case plainScratchCode: String if plainScratchCode.nonEmpty => {
+            val updated = totpInfo.scratchCodes.filterNot { passwordInfo =>
+              passwordHasherRegistry.find(passwordInfo) match {
+                case Some(hasher) if hasher.matches(passwordInfo, plainScratchCode) => true
+                case Some(hasher) => false
+                case None => {
+                  logger.error(HasherIsNotRegistered.format(id, passwordInfo.hasher, passwordHasherRegistry.all.map(_.id).mkString(", ")))
+                  false
+                }
+              }
+            }
+
+            if (updated.size == (totpInfo.scratchCodes.size - 1)) {
+              Some(totpInfo.copy(scratchCodes = updated))
+            } else {
+              None
+            }
+          }
+          case _ => None
+        }
+      }.flatten
+    }.flatten
   }
 
   /**

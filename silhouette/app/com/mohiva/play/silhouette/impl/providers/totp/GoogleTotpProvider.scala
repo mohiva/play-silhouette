@@ -19,23 +19,32 @@
  */
 package com.mohiva.play.silhouette.impl.providers.totp
 
+import com.mohiva.play.silhouette.api.util.PasswordHasherRegistry
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.totp.GoogleTotpProvider._
 import com.warrenstrange.googleauth.{ GoogleAuthenticator, GoogleAuthenticatorQRGenerator }
 import javax.inject.Inject
+
 import scala.concurrent.ExecutionContext
 import scala.collection.JavaConverters._
 
 /**
  * Google's TOTP authentication concrete provider implementation.
+ * @param injectedPasswordHasherRegistry used to hash the scratch (or recovery) codes.
+ * @param executionContext the execution context.
  */
-class GoogleTotpProvider @Inject() (implicit val executionContext: ExecutionContext) extends TotpProvider {
+class GoogleTotpProvider @Inject() (injectedPasswordHasherRegistry: PasswordHasherRegistry)(implicit val executionContext: ExecutionContext) extends TotpProvider {
   /**
    * Gets the provider ID.
    *
    * @return The provider ID.
    */
   override def id: String = ID
+
+  /**
+   * The Password hasher registry to use
+   */
+  override val passwordHasherRegistry = injectedPasswordHasherRegistry
 
   /**
    * Indicates whether verification code is valid for the related shared key.
@@ -45,24 +54,34 @@ class GoogleTotpProvider @Inject() (implicit val executionContext: ExecutionCont
    * @return True if the given verification code is valid, false otherwise.
    */
   override protected def isVerificationCodeValid(sharedKey: String, verificationCode: String): Boolean = {
-    if (verificationCode == null || verificationCode.isEmpty) {
-      logger.debug(VerificationCodeMustNotBeNullOrEmpty.format(id))
-      false
-    } else {
-      if (verificationCode.forall(_.isDigit)) {
-        try {
-          googleAuthenticator.authorize(sharedKey, verificationCode.toInt)
-        } catch {
-          case e: IllegalArgumentException => {
-            logger.debug(e.getMessage)
+    Option(sharedKey).map {
+      case sharedKey: String if sharedKey.nonEmpty => {
+        Option(verificationCode).map {
+          case verificationCode: String if verificationCode.nonEmpty && verificationCode.forall(_.isDigit) => {
+            try {
+              googleAuthenticator.authorize(sharedKey, verificationCode.toInt)
+            } catch {
+              case e: IllegalArgumentException => {
+                logger.debug(e.getMessage)
+                false
+              }
+            }
+          }
+          case verificationCode: String if verificationCode.nonEmpty => {
+            logger.debug(VerificationCodeMustBeANumber.format(id))
             false
           }
-        }
-      } else {
-        logger.debug(VerificationCodeMustBeANumber.format(id))
+          case _ => {
+            logger.debug(VerificationCodeMustNotBeNullOrEmpty.format(id))
+            false
+          }
+        }.getOrElse(false)
+      }
+      case _ => {
+        logger.debug(SharedKeyMustNotBeNullOrEmpty.format(id))
         false
       }
-    }
+    }.getOrElse(false)
   }
 
   /**
@@ -75,8 +94,11 @@ class GoogleTotpProvider @Inject() (implicit val executionContext: ExecutionCont
   override def createCredentials(accountName: String, issuer: Option[String]): TotpCredentials = {
     val credentials = googleAuthenticator.createCredentials()
     val qrUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL(issuer.orNull, accountName, credentials)
-    val scratchCodes = credentials.getScratchCodes.asScala.map(_.toString).toSet
-    TotpCredentials(TotpInfo(credentials.getKey, scratchCodes), qrUrl)
+    val currentHasher = passwordHasherRegistry.current
+    val hashedScratchCodes = credentials.getScratchCodes.asScala.map { scratchCode =>
+      currentHasher.hash(scratchCode.toString)
+    }
+    TotpCredentials(TotpInfo(credentials.getKey, hashedScratchCodes), qrUrl)
   }
 }
 
@@ -97,6 +119,7 @@ object GoogleTotpProvider {
   /**
    * Messages
    */
+  val SharedKeyMustNotBeNullOrEmpty = "[Silhouette][%s] shared key must not be null or empty"
   val VerificationCodeMustNotBeNullOrEmpty = "[Silhouette][%s] verification code must not be null or empty"
   val VerificationCodeMustBeANumber = "[Silhouette][%s] Google's verification code must be a number"
 }
