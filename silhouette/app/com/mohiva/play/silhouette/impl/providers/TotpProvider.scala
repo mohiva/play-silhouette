@@ -33,8 +33,17 @@ import scala.concurrent.Future
  *                  code enables authentication.
  * @param scratchCodes A sequence of hashed scratch (or recovery) codes, which can be
  *                     used each once and as alternative to verification codes.
+ * @param scratchCodesPlain A sequence of scratch codes in plain text. This variant
+ *                          is provided for the user to secure save the first time and
+ *                          should be cleared to None immediately after see `#withoutPlain`.
  */
-case class TotpInfo(sharedKey: String, scratchCodes: Seq[PasswordInfo]) extends AuthInfo
+case class TotpInfo(sharedKey: String, scratchCodes: Seq[PasswordInfo], scratchCodesPlain: Option[Seq[String]]) extends AuthInfo {
+  /**
+   * Returns this instance with `scratchCodesPlain` set to None.
+   * @return this instance with `scratchCodesPlain` set to None.
+   */
+  def withoutPlain: TotpInfo = this.copy(scratchCodesPlain = None)
+}
 
 /**
  * TOTP authentication credentials data including an URL to the QR-code for first-time
@@ -93,14 +102,13 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
    * @return Some updated TOTP info if the authentication was successful, none otherwise.
    */
   def authenticate(totpInfo: TotpInfo, plainScratchCode: String): Future[Option[TotpInfo]] = Future {
-    Option(totpInfo).map {
-      case totpInfo => {
-        Option(plainScratchCode).map {
+    Option(totpInfo).flatMap { totpInfo =>
+      {
+        Option(plainScratchCode).flatMap {
           case plainScratchCode: String if plainScratchCode.nonEmpty => {
             val updated = totpInfo.scratchCodes.filterNot { passwordInfo =>
               passwordHasherRegistry.find(passwordInfo) match {
-                case Some(hasher) if hasher.matches(passwordInfo, plainScratchCode) => true
-                case Some(hasher) => false
+                case Some(hasher) => hasher.matches(passwordInfo, plainScratchCode)
                 case None => {
                   logger.error(HasherIsNotRegistered.format(id, passwordInfo.hasher, passwordHasherRegistry.all.map(_.id).mkString(", ")))
                   false
@@ -116,8 +124,8 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
           }
           case _ => None
         }
-      }.flatten
-    }.flatten
+      }
+    }
   }
 
   /**

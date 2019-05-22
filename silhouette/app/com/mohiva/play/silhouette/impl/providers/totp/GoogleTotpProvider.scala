@@ -95,10 +95,11 @@ class GoogleTotpProvider @Inject() (injectedPasswordHasherRegistry: PasswordHash
     val credentials = googleAuthenticator.createCredentials()
     val qrUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL(issuer.orNull, accountName, credentials)
     val currentHasher = passwordHasherRegistry.current
-    val hashedScratchCodes = credentials.getScratchCodes.asScala.map { scratchCode =>
-      currentHasher.hash(scratchCode.toString)
+    val scratchCodesPlain = credentials.getScratchCodes.asScala.map(_.toString)
+    val hashedScratchCodes = scratchCodesPlain.map { scratchCode =>
+      currentHasher.hash(scratchCode)
     }
-    TotpCredentials(TotpInfo(credentials.getKey, hashedScratchCodes), qrUrl)
+    TotpCredentials(TotpInfo(credentials.getKey, hashedScratchCodes, Some(scratchCodesPlain)), qrUrl)
   }
 }
 
