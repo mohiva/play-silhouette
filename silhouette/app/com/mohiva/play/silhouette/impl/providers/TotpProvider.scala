@@ -103,27 +103,28 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
    */
   def authenticate(totpInfo: TotpInfo, plainScratchCode: String): Future[Option[TotpInfo]] = Future {
     Option(totpInfo).flatMap { totpInfo =>
-      {
-        Option(plainScratchCode).flatMap {
-          case plainScratchCode: String if plainScratchCode.nonEmpty => {
-            val updated = totpInfo.scratchCodes.filterNot { passwordInfo =>
-              passwordHasherRegistry.find(passwordInfo) match {
-                case Some(hasher) => hasher.matches(passwordInfo, plainScratchCode)
-                case None => {
-                  logger.error(HasherIsNotRegistered.format(id, passwordInfo.hasher, passwordHasherRegistry.all.map(_.id).mkString(", ")))
-                  false
-                }
+      if (totpInfo.scratchCodesPlain.nonEmpty)
+        throw new IllegalArgumentException(ScratchCodesMustBeClearedOut)
+
+      Option(plainScratchCode).flatMap {
+        case plainScratchCode: String if plainScratchCode.nonEmpty => {
+          val updated = totpInfo.scratchCodes.filterNot { passwordInfo =>
+            passwordHasherRegistry.find(passwordInfo) match {
+              case Some(hasher) => hasher.matches(passwordInfo, plainScratchCode)
+              case None => {
+                logger.error(HasherIsNotRegistered.format(id, passwordInfo.hasher, passwordHasherRegistry.all.map(_.id).mkString(", ")))
+                false
               }
             }
-
-            if (updated.size == (totpInfo.scratchCodes.size - 1)) {
-              Some(totpInfo.copy(scratchCodes = updated))
-            } else {
-              None
-            }
           }
-          case _ => None
+
+          if (updated.size == (totpInfo.scratchCodes.size - 1)) {
+            Some(totpInfo.copy(scratchCodes = updated))
+          } else {
+            None
+          }
         }
+        case _ => None
       }
     }
   }
@@ -148,4 +149,5 @@ object TotpProvider {
    * Messages
    */
   val VerificationCodeDoesNotMatch = "[Silhouette][%s] TOTP verification code doesn't match"
+  val ScratchCodesMustBeClearedOut = "[Silhouette][%s] TOTP plain scratch codes must be cleared out"
 }
