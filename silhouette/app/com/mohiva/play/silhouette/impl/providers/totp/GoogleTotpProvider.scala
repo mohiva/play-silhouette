@@ -99,7 +99,7 @@ class GoogleTotpProvider @Inject() (injectedPasswordHasherRegistry: PasswordHash
     val hashedScratchCodes = scratchCodesPlain.map { scratchCode =>
       currentHasher.hash(scratchCode)
     }
-    TotpCredentials(TotpInfo(credentials.getKey, hashedScratchCodes, Some(scratchCodesPlain)), qrUrl)
+    TotpCredentials(TotpInfo(credentials.getKey, hashedScratchCodes), scratchCodesPlain, qrUrl)
   }
 }
 

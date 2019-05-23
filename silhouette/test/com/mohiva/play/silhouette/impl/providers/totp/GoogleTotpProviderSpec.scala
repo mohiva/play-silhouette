@@ -18,7 +18,6 @@ package com.mohiva.play.silhouette.impl.providers.totp
 import com.mohiva.play.silhouette.api.util.Credentials
 import com.mohiva.play.silhouette.impl.providers.{ TotpInfo, TotpProviderSpec }
 import com.warrenstrange.googleauth.GoogleAuthenticator
-import com.mohiva.play.silhouette.impl.providers.TotpProvider
 import play.api.test.WithApplication
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -65,16 +64,8 @@ class GoogleTotpProviderSpec extends TotpProviderSpec {
 
     "return None when the plain scratch code is null or empty" in new WithApplication with Context {
       val result = provider.createCredentials(credentials.identifier)
-      await(provider.authenticate(result.totpInfo.withoutPlain, null.asInstanceOf[String])) should be(None)
-      await(provider.authenticate(result.totpInfo.withoutPlain, "")) should be(None)
-    }
-
-    "throw an IllegalArgumentException when the TotpInfo plain scratch codes aren't cleared out" in new WithApplication with Context {
-      val result = provider.createCredentials(credentials.identifier)
-      await(provider.authenticate(result.totpInfo, testWrongVerificationCode)) must throwA[IllegalArgumentException].like {
-        case e =>
-          e.getMessage must beEqualTo(TotpProvider.ScratchCodesMustBeClearedOut)
-      }
+      await(provider.authenticate(result.totpInfo, null.asInstanceOf[String])) should be(None)
+      await(provider.authenticate(result.totpInfo, "")) should be(None)
     }
   }
 

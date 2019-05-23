@@ -27,33 +27,27 @@ import com.mohiva.play.silhouette.impl.providers.TotpProvider._
 import scala.concurrent.Future
 
 /**
- * TOTP authentication information that should be stored in an authentication repository.
+ * TOTP authentication information intended to be stored in an authentication repository.
  *
  * @param sharedKey The key associated to an user that together with a verification
  *                  code enables authentication.
  * @param scratchCodes A sequence of hashed scratch (or recovery) codes, which can be
  *                     used each once and as alternative to verification codes.
- * @param scratchCodesPlain A sequence of scratch codes in plain text. This variant
- *                          is provided for the user to secure save the first time and
- *                          should be cleared to None immediately after see `#withoutPlain`.
  */
-case class TotpInfo(sharedKey: String, scratchCodes: Seq[PasswordInfo], scratchCodesPlain: Option[Seq[String]]) extends AuthInfo {
-  /**
-   * Returns this instance with `scratchCodesPlain` set to None.
-   * @return this instance with `scratchCodesPlain` set to None.
-   */
-  def withoutPlain: TotpInfo = this.copy(scratchCodesPlain = None)
-}
+case class TotpInfo(sharedKey: String, scratchCodes: Seq[PasswordInfo]) extends AuthInfo
 
 /**
- * TOTP authentication credentials data including an URL to the QR-code for first-time
- * activation of the TOTP.
+ * TOTP authentication credentials data including plain recovery codes and URL to the
+ * QR-code for first-time activation of the TOTP.
  *
  * @param totpInfo The TOTP authentication info that will be persisted in an
  *                 authentication repository.
+ * @param scratchCodesPlain A sequence of scratch codes in plain text. This variant
+ *                          is provided for the user to secure save the first time and
+ *                          should be cleared to None immediately after see `#withoutPlain`.
  * @param qrUrl The QR-code that matches this shared key for first time activation
  */
-case class TotpCredentials(totpInfo: TotpInfo, qrUrl: String)
+case class TotpCredentials(totpInfo: TotpInfo, scratchCodesPlain: Seq[String], qrUrl: String)
 
 /**
  * The base interface for all TOTP (Time-based One-time Password) providers.
@@ -103,9 +97,6 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
    */
   def authenticate(totpInfo: TotpInfo, plainScratchCode: String): Future[Option[TotpInfo]] = Future {
     Option(totpInfo).flatMap { totpInfo =>
-      if (totpInfo.scratchCodesPlain.nonEmpty)
-        throw new IllegalArgumentException(ScratchCodesMustBeClearedOut)
-
       Option(plainScratchCode).flatMap {
         case plainScratchCode: String if plainScratchCode.nonEmpty => {
           val updated = totpInfo.scratchCodes.filterNot { passwordInfo =>
