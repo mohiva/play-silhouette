@@ -16,8 +16,9 @@
 package com.mohiva.play.silhouette.impl.providers.totp
 
 import com.mohiva.play.silhouette.api.util.Credentials
-import com.mohiva.play.silhouette.impl.providers.TotpProviderSpec
-import play.api.test.{ FakeRequest, WithApplication }
+import com.mohiva.play.silhouette.impl.providers.{ TotpInfo, TotpProviderSpec }
+import com.warrenstrange.googleauth.GoogleAuthenticator
+import play.api.test.WithApplication
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -25,29 +26,46 @@ import scala.concurrent.ExecutionContext.Implicits.global
  * Test case for the [[com.mohiva.play.silhouette.impl.providers.totp.GoogleTotpProvider#GoogleTOTPProvider]] class.
  */
 class GoogleTotpProviderSpec extends TotpProviderSpec {
-  "The `authenticate` method" should {
+  "The `authenticate` with verification code method" should {
+    "return None when the sharedKey is null or empty" in new WithApplication with Context {
+      await(provider.authenticate(null.asInstanceOf[String], testVerificationCode)) should be(None)
+      await(provider.authenticate("", testVerificationCode)) should be(None)
+    }
+
     "return None when the verification code is null or empty" in new WithApplication with Context {
-      implicit val req = FakeRequest()
       await(provider.authenticate(testSharedKey, null)) should be(None)
       await(provider.authenticate(testSharedKey, "")) should be(None)
     }
 
-    "return None when the sharedKey is null" in new WithApplication with Context {
-      implicit val req = FakeRequest()
-      await(provider.authenticate(null, testVerificationCode)) should be(None)
-    }
-
     "return None when the verification code isn't a number" in new WithApplication with Context {
       await(provider.authenticate(testSharedKey, testWrongVerificationCode)) should be(None)
+    }
+
+    "return valid `Some(TotpInfo)` when the verification code is correct" in new WithApplication with Context {
+      val googleAuthenticator = new GoogleAuthenticator()
+      val validVerificationCode = googleAuthenticator.getTotpPassword(testSharedKey)
+      await(provider.authenticate(testSharedKey, validVerificationCode.toString)) should not be empty
     }
   }
 
   "The `createCredentials` method" should {
     "return the correct TotpCredentials shared key" in new WithApplication with Context {
       val result = provider.createCredentials(credentials.identifier)
-      result.sharedKey must not be empty
+      result.totpInfo.sharedKey must not be empty
+      result.totpInfo.scratchCodes must not be empty
       result.qrUrl must not be empty
-      result.scratchCodes must not be empty
+    }
+  }
+
+  "The `authenticate` with verification code method" should {
+    "return None when the input totpInfo is null" in new WithApplication with Context {
+      await(provider.authenticate(null.asInstanceOf[TotpInfo], testWrongVerificationCode)) should be(None)
+    }
+
+    "return None when the plain scratch code is null or empty" in new WithApplication with Context {
+      val result = provider.createCredentials(credentials.identifier)
+      await(provider.authenticate(result.totpInfo, null.asInstanceOf[String])) should be(None)
+      await(provider.authenticate(result.totpInfo, "")) should be(None)
     }
   }
 
@@ -78,6 +96,6 @@ class GoogleTotpProviderSpec extends TotpProviderSpec {
     /**
      * The provider to test.
      */
-    lazy val provider = new GoogleTotpProvider()
+    lazy val provider = new GoogleTotpProvider(passwordHasherRegistry)
   }
 }

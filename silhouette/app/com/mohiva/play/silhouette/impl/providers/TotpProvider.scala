@@ -19,36 +19,56 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
-import com.mohiva.play.silhouette.api.util.ExecutionContextProvider
-import com.mohiva.play.silhouette.api.{ Logger, LoginInfo, Provider }
+import com.mohiva.play.silhouette.api._
+import com.mohiva.play.silhouette.api.util._
+import com.mohiva.play.silhouette.impl.providers.PasswordProvider.HasherIsNotRegistered
 import com.mohiva.play.silhouette.impl.providers.TotpProvider._
 
 import scala.concurrent.Future
 
 /**
- * TOTP credentials data.
+ * TOTP authentication information intended to be stored in an authentication repository.
  *
- * @param sharedKey The shared key which used together with verification code in TOTP-authentication
- * @param scratchCodes The list of scratch codes, which can be used instead of verification codes
- * @param qrUrl The QR-code which contains shared key
+ * @param sharedKey The key associated to an user that together with a verification
+ *                  code enables authentication.
+ * @param scratchCodes A sequence of hashed scratch (or recovery) codes, which can be
+ *                     used each once and as alternative to verification codes.
  */
-case class TotpCredentials(sharedKey: String, scratchCodes: List[String], qrUrl: String)
+case class TotpInfo(sharedKey: String, scratchCodes: Seq[PasswordInfo]) extends AuthInfo
+
+/**
+ * TOTP authentication credentials data including plain recovery codes and URL to the
+ * QR-code for first-time activation of the TOTP.
+ *
+ * @param totpInfo The TOTP authentication info that will be persisted in an
+ *                 authentication repository.
+ * @param scratchCodesPlain A sequence of scratch codes in plain text. This variant
+ *                          is provided for the user to secure save the first time and
+ *                          should be cleared to None immediately after see `#withoutPlain`.
+ * @param qrUrl The QR-code that matches this shared key for first time activation
+ */
+case class TotpCredentials(totpInfo: TotpInfo, scratchCodesPlain: Seq[String], qrUrl: String)
 
 /**
  * The base interface for all TOTP (Time-based One-time Password) providers.
  */
 trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
   /**
+   * The Password hasher registry to use.
+   */
+  val passwordHasherRegistry: PasswordHasherRegistry
+
+  /**
    * Generate shared key used together with verification code in TOTP-authentication
    *
    * @param providerKey A unique key which identifies a user on this provider (userID, email, ...).
    * @param issuer The issuer name. This parameter cannot contain the colon character.
-   * @return The unique shared key.
+   * @return TotpInfo contaning the credentials data including sharedKey and scratch codes.
    */
   def createCredentials(providerKey: String, issuer: Option[String] = None): TotpCredentials
 
   /**
-   * Starts the authentication process.
+   * Authenticate the user using a TOTP verification code.
    *
    * @param sharedKey A unique key which identifies a user on this provider (userID, email, ...).
    * @param verificationCode the verification code generated using TOTP.
@@ -64,6 +84,40 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
         }
       }
     )
+  }
+
+  /**
+   * Authenticate the user using a TOTP scratch (or recovery) code. This method will
+   * check each of the previously hashed scratch codes and find the first one that
+   * matches the one entered by the user. The one found is removed from the `totpInfo`.
+   *
+   * @param totpInfo The original TOTP info containing the hashed scratch codes.
+   * @param plainScratchCode The plain scratch code entered by the user.
+   * @return Some updated TOTP info if the authentication was successful, none otherwise.
+   */
+  def authenticate(totpInfo: TotpInfo, plainScratchCode: String): Future[Option[TotpInfo]] = Future {
+    Option(totpInfo).flatMap { totpInfo =>
+      Option(plainScratchCode).flatMap {
+        case plainScratchCode: String if plainScratchCode.nonEmpty => {
+          val updated = totpInfo.scratchCodes.filterNot { passwordInfo =>
+            passwordHasherRegistry.find(passwordInfo) match {
+              case Some(hasher) => hasher.matches(passwordInfo, plainScratchCode)
+              case None => {
+                logger.error(HasherIsNotRegistered.format(id, passwordInfo.hasher, passwordHasherRegistry.all.map(_.id).mkString(", ")))
+                false
+              }
+            }
+          }
+
+          if (updated.size == (totpInfo.scratchCodes.size - 1)) {
+            Some(totpInfo.copy(scratchCodes = updated))
+          } else {
+            None
+          }
+        }
+        case _ => None
+      }
+    }
   }
 
   /**
@@ -86,4 +140,5 @@ object TotpProvider {
    * Messages
    */
   val VerificationCodeDoesNotMatch = "[Silhouette][%s] TOTP verification code doesn't match"
+  val ScratchCodesMustBeClearedOut = "[Silhouette][%s] TOTP plain scratch codes must be cleared out"
 }
