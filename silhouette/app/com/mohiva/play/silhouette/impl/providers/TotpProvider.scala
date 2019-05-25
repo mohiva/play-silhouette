@@ -43,8 +43,7 @@ case class TotpInfo(sharedKey: String, scratchCodes: Seq[PasswordInfo]) extends 
  * @param totpInfo The TOTP authentication info that will be persisted in an
  *                 authentication repository.
  * @param scratchCodesPlain A sequence of scratch codes in plain text. This variant
- *                          is provided for the user to secure save the first time and
- *                          should be cleared to None immediately after see `#withoutPlain`.
+ *                          is provided for the user to secure save the first time.
  * @param qrUrl The QR-code that matches this shared key for first time activation
  */
 case class TotpCredentials(totpInfo: TotpInfo, scratchCodesPlain: Seq[String], qrUrl: String)
