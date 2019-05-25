@@ -30,14 +30,15 @@ import scala.collection.JavaConverters._
 
 /**
  * Google's TOTP authentication concrete provider implementation.
+  *
  * @param injectedPasswordHasherRegistry used to hash the scratch (or recovery) codes.
  * @param executionContext the execution context.
  */
 class GoogleTotpProvider @Inject() (injectedPasswordHasherRegistry: PasswordHasherRegistry)(implicit val executionContext: ExecutionContext) extends TotpProvider {
   /**
-   * Gets the provider ID.
+   * Returns the provider ID.
    *
-   * @return The provider ID.
+   * @return the provider ID.
    */
   override def id: String = ID
 
@@ -47,11 +48,11 @@ class GoogleTotpProvider @Inject() (injectedPasswordHasherRegistry: PasswordHash
   override val passwordHasherRegistry = injectedPasswordHasherRegistry
 
   /**
-   * Indicates whether verification code is valid for the related shared key.
+   * Returns true when the verification code is valid for the related shared key, false otherwise.
    *
    * @param sharedKey TOTP shared key associated with the user.
    * @param verificationCode Verification code, presumably valid at this moment.
-   * @return True if the given verification code is valid, false otherwise.
+   * @return true when the verification code is valid for the related shared key, false otherwise.
    */
   override protected def isVerificationCodeValid(sharedKey: String, verificationCode: String): Boolean = {
     Option(sharedKey).map {
@@ -85,11 +86,12 @@ class GoogleTotpProvider @Inject() (injectedPasswordHasherRegistry: PasswordHash
   }
 
   /**
-   * Generates the shared key used together with verification code in TOTP-authentication.
+   * Returns the generated TOTP credentials including the shared key along with hashed scratch codes
+   * for safe storage, plain text scratch codes for first time use and the url to the QR activation code.
    *
    * @param accountName A unique key which identifies a user on this provider (userID, email, ...).
    * @param issuer The issuer name. This parameter cannot contain the colon
-   * @return The totp credentials including the shared key, scratch codes and qr url.
+   * @return the generated TOTP credentials including the shared key, scratch codes and qr url.
    */
   override def createCredentials(accountName: String, issuer: Option[String]): TotpCredentials = {
     val credentials = googleAuthenticator.createCredentials()

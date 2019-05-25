@@ -43,8 +43,7 @@ case class TotpInfo(sharedKey: String, scratchCodes: Seq[PasswordInfo]) extends 
  * @param totpInfo The TOTP authentication info that will be persisted in an
  *                 authentication repository.
  * @param scratchCodesPlain A sequence of scratch codes in plain text. This variant
- *                          is provided for the user to secure save the first time and
- *                          should be cleared to None immediately after see `#withoutPlain`.
+ *                          is provided for the user to secure save the first time.
  * @param qrUrl The QR-code that matches this shared key for first time activation
  */
 case class TotpCredentials(totpInfo: TotpInfo, scratchCodesPlain: Seq[String], qrUrl: String)
@@ -59,20 +58,21 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
   val passwordHasherRegistry: PasswordHasherRegistry
 
   /**
-   * Generate shared key used together with verification code in TOTP-authentication
+   * Returns TotpInfo containing the credentials data including sharedKey and scratch codes.
    *
    * @param providerKey A unique key which identifies a user on this provider (userID, email, ...).
    * @param issuer The issuer name. This parameter cannot contain the colon character.
-   * @return TotpInfo contaning the credentials data including sharedKey and scratch codes.
+   * @return TotpInfo containing  the credentials data including sharedKey and scratch codes.
    */
   def createCredentials(providerKey: String, issuer: Option[String] = None): TotpCredentials
 
   /**
-   * Authenticate the user using a TOTP verification code.
+   * Returns some login info when the TOTP authentication with verification code was successful,
+    * None otherwise.
    *
    * @param sharedKey A unique key which identifies a user on this provider (userID, email, ...).
    * @param verificationCode the verification code generated using TOTP.
-   * @return Some login info if the authentication was successful, none otherwise.
+   * @return Some login info if the authentication was successful, None otherwise.
    */
   def authenticate(sharedKey: String, verificationCode: String): Future[Option[LoginInfo]] = {
     Future(
@@ -121,11 +121,11 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
   }
 
   /**
-   * Indicates if verification code is valid for given shared key
+   * Returns true in case the verification code is valid for given shared key, false otherwise.
    *
    * @param sharedKey The TOTP shared key associated with the user.
    * @param verificationCode The verification code, presumably valid at this moment.
-   * @return True if the given verification code is valid, false otherwise.
+   * @return true in case the verification code is valid for given shared key, false otherwise.
    */
   protected def isVerificationCodeValid(sharedKey: String, verificationCode: String): Boolean
 }
