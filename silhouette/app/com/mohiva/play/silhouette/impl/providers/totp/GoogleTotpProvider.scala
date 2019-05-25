@@ -30,7 +30,7 @@ import scala.collection.JavaConverters._
 
 /**
  * Google's TOTP authentication concrete provider implementation.
-  *
+ *
  * @param injectedPasswordHasherRegistry used to hash the scratch (or recovery) codes.
  * @param executionContext the execution context.
  */

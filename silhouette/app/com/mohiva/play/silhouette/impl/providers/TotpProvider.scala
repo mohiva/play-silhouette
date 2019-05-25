@@ -68,7 +68,7 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
 
   /**
    * Returns some login info when the TOTP authentication with verification code was successful,
-    * None otherwise.
+   * None otherwise.
    *
    * @param sharedKey A unique key which identifies a user on this provider (userID, email, ...).
    * @param verificationCode the verification code generated using TOTP.
