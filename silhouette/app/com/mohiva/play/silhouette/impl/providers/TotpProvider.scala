@@ -76,12 +76,11 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
    */
   def authenticate(sharedKey: String, verificationCode: String): Future[Option[LoginInfo]] = {
     Future(
-      isVerificationCodeValid(sharedKey, verificationCode) match {
-        case true => Some(LoginInfo(ID, sharedKey))
-        case _ => {
-          logger.debug(VerificationCodeDoesNotMatch)
-          None
-        }
+      if (isVerificationCodeValid(sharedKey, verificationCode)) {
+        Some(LoginInfo(ID, sharedKey))
+      } else {
+        logger.debug(VerificationCodeDoesNotMatch)
+        None
       }
     )
   }
