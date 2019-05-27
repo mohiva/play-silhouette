@@ -30,7 +30,7 @@ import scala.collection.JavaConverters._
 
 /**
  * Google's TOTP authentication concrete provider implementation.
-  *
+ *
  * @param injectedPasswordHasherRegistry used to hash the scratch (or recovery) codes.
  * @param executionContext the execution context.
  */
@@ -45,7 +45,7 @@ class GoogleTotpProvider @Inject() (injectedPasswordHasherRegistry: PasswordHash
   /**
    * The Password hasher registry to use
    */
-  override val passwordHasherRegistry = injectedPasswordHasherRegistry
+  override val passwordHasherRegistry: PasswordHasherRegistry = injectedPasswordHasherRegistry
 
   /**
    * Returns true when the verification code is valid for the related shared key, false otherwise.
@@ -55,9 +55,9 @@ class GoogleTotpProvider @Inject() (injectedPasswordHasherRegistry: PasswordHash
    * @return true when the verification code is valid for the related shared key, false otherwise.
    */
   override protected def isVerificationCodeValid(sharedKey: String, verificationCode: String): Boolean = {
-    Option(sharedKey).map {
+    Option(sharedKey).exists {
       case sharedKey: String if sharedKey.nonEmpty => {
-        Option(verificationCode).map {
+        Option(verificationCode).exists {
           case verificationCode: String if verificationCode.nonEmpty && verificationCode.forall(_.isDigit) => {
             try {
               googleAuthenticator.authorize(sharedKey, verificationCode.toInt)
@@ -76,13 +76,13 @@ class GoogleTotpProvider @Inject() (injectedPasswordHasherRegistry: PasswordHash
             logger.debug(VerificationCodeMustNotBeNullOrEmpty.format(id))
             false
           }
-        }.getOrElse(false)
+        }
       }
       case _ => {
         logger.debug(SharedKeyMustNotBeNullOrEmpty.format(id))
         false
       }
-    }.getOrElse(false)
+    }
   }
 
   /**
