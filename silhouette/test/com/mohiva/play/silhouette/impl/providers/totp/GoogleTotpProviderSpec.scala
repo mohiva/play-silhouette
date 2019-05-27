@@ -15,7 +15,7 @@
  */
 package com.mohiva.play.silhouette.impl.providers.totp
 
-import com.mohiva.play.silhouette.api.util.Credentials
+import com.mohiva.play.silhouette.api.util.{ Credentials, PasswordInfo }
 import com.mohiva.play.silhouette.impl.providers.{ TotpInfo, TotpProviderSpec }
 import com.warrenstrange.googleauth.GoogleAuthenticator
 import play.api.test.WithApplication
@@ -66,6 +66,11 @@ class GoogleTotpProviderSpec extends TotpProviderSpec {
       val result = provider.createCredentials(credentials.identifier)
       await(provider.authenticate(result.totpInfo, null.asInstanceOf[String])) should be(None)
       await(provider.authenticate(result.totpInfo, "")) should be(None)
+    }
+
+    "return Some(PasswordInfo,TotpInfo) when the plain scratch code is valid" in new WithApplication with Context {
+      val result = provider.createCredentials(credentials.identifier)
+      await(provider.authenticate(result.totpInfo, "somecode")) should be(Some((PasswordInfo, TotpInfo)))
     }
   }
 

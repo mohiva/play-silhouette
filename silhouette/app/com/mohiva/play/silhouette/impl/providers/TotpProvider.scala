@@ -86,19 +86,21 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
   }
 
   /**
-   * Authenticate the user using a TOTP scratch (or recovery) code. This method will
+   * Some tuple consisting of (`PasswordInfo`, `TotpInfo`) if the authentication was successful,
+   * None otherwise. Authenticate the user using a TOTP scratch (or recovery) code. This method will
    * check each of the previously hashed scratch codes and find the first one that
-   * matches the one entered by the user. The one found is removed from the `totpInfo`.
+   * matches the one entered by the user. The one found is removed from `totpInfo` and returned
+   * for easy client-side bookkeeping.
    *
    * @param totpInfo The original TOTP info containing the hashed scratch codes.
    * @param plainScratchCode The plain scratch code entered by the user.
-   * @return Some updated TOTP info if the authentication was successful, none otherwise.
+   * @return Some tuple consisting of (`PasswordInfo`, `TotpInfo`) if the authentication was successful, None otherwise.
    */
-  def authenticate(totpInfo: TotpInfo, plainScratchCode: String): Future[Option[TotpInfo]] = Future {
+  def authenticate(totpInfo: TotpInfo, plainScratchCode: String): Future[Option[(PasswordInfo, TotpInfo)]] = Future {
     Option(totpInfo).flatMap { totpInfo =>
       Option(plainScratchCode).flatMap {
         case plainScratchCode: String if plainScratchCode.nonEmpty => {
-          val updated = totpInfo.scratchCodes.filterNot { passwordInfo =>
+          val found: Option[PasswordInfo] = totpInfo.scratchCodes.filter { passwordInfo =>
             passwordHasherRegistry.find(passwordInfo) match {
               case Some(hasher) => hasher.matches(passwordInfo, plainScratchCode)
               case None => {
@@ -106,12 +108,10 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
                 false
               }
             }
-          }
+          }.headOption
 
-          if (updated.size == (totpInfo.scratchCodes.size - 1)) {
-            Some(totpInfo.copy(scratchCodes = updated))
-          } else {
-            None
+          found.map { deleted =>
+            deleted -> totpInfo.copy(scratchCodes = totpInfo.scratchCodes.filterNot(_ == deleted))
           }
         }
         case _ => None
