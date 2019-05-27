@@ -69,8 +69,10 @@ class GoogleTotpProviderSpec extends TotpProviderSpec {
     }
 
     "return Some(PasswordInfo,TotpInfo) when the plain scratch code is valid" in new WithApplication with Context {
+      fooHasher.hash(any()) returns testPasswordInfo
+      barHasher.matches(testPasswordInfo, testScratchCode) returns true
       val result = provider.createCredentials(credentials.identifier)
-      await(provider.authenticate(result.totpInfo, "somecode")) should be(Some((PasswordInfo, TotpInfo)))
+      await(provider.authenticate(result.totpInfo, testScratchCode)) should not be empty
     }
   }
 
@@ -97,6 +99,16 @@ class GoogleTotpProviderSpec extends TotpProviderSpec {
      * The test wrong verification code.
      */
     lazy val testWrongVerificationCode = "q123456"
+
+    /**
+     * The test scratch code.
+     */
+    lazy val testScratchCode = "somecode"
+
+    /**
+     * The test password info.
+     */
+    lazy val testPasswordInfo = PasswordInfo("bar", "hashed(somecode)")
 
     /**
      * The provider to test.
