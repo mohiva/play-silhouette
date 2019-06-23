@@ -35,7 +35,7 @@ object Dependencies {
       val test = "com.typesafe.play" %% "play-test" % version
       val specs2 = "com.typesafe.play" %% "play-specs2" % version
       val openid = "com.typesafe.play" %% "play-openid" % version
-      val jsonJoda = "com.typesafe.play" %% "play-json-joda" % "2.7.1"
+      val jsonJoda = "com.typesafe.play" %% "play-json-joda" % version
     }
 
     object Specs2 {
