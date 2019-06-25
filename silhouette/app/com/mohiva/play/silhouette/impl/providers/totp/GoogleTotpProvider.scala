@@ -56,32 +56,26 @@ class GoogleTotpProvider @Inject() (injectedPasswordHasherRegistry: PasswordHash
    */
   override protected def isVerificationCodeValid(sharedKey: String, verificationCode: String): Boolean = {
     Option(sharedKey).exists {
-      case sharedKey: String if sharedKey.nonEmpty => {
+      case sharedKey: String if sharedKey.nonEmpty =>
         Option(verificationCode).exists {
-          case verificationCode: String if verificationCode.nonEmpty && verificationCode.forall(_.isDigit) => {
+          case verificationCode: String if verificationCode.nonEmpty && verificationCode.forall(_.isDigit) =>
             try {
               googleAuthenticator.authorize(sharedKey, verificationCode.toInt)
             } catch {
-              case e: IllegalArgumentException => {
+              case e: IllegalArgumentException =>
                 logger.debug(e.getMessage)
                 false
-              }
             }
-          }
-          case verificationCode: String if verificationCode.nonEmpty => {
+          case verificationCode: String if verificationCode.nonEmpty =>
             logger.debug(VerificationCodeMustBeANumber.format(id))
             false
-          }
-          case _ => {
+          case _ =>
             logger.debug(VerificationCodeMustNotBeNullOrEmpty.format(id))
             false
-          }
         }
-      }
-      case _ => {
+      case _ =>
         logger.debug(SharedKeyMustNotBeNullOrEmpty.format(id))
         false
-      }
     }
   }
 

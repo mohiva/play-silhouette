@@ -86,8 +86,7 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
   }
 
   /**
-   * Some tuple consisting of (`PasswordInfo`, `TotpInfo`) if the authentication was successful,
-   * None otherwise. Authenticate the user using a TOTP scratch (or recovery) code. This method will
+   * Authenticate the user using a TOTP scratch (or recovery) code. This method will
    * check each of the previously hashed scratch codes and find the first one that
    * matches the one entered by the user. The one found is removed from `totpInfo` and returned
    * for easy client-side bookkeeping.
@@ -99,21 +98,19 @@ trait TotpProvider extends Provider with ExecutionContextProvider with Logger {
   def authenticate(totpInfo: TotpInfo, plainScratchCode: String): Future[Option[(PasswordInfo, TotpInfo)]] = Future {
     Option(totpInfo).flatMap { totpInfo =>
       Option(plainScratchCode).flatMap {
-        case plainScratchCode: String if plainScratchCode.nonEmpty => {
-          val found: Option[PasswordInfo] = totpInfo.scratchCodes.filter { passwordInfo =>
-            passwordHasherRegistry.find(passwordInfo) match {
-              case Some(hasher) => hasher.matches(passwordInfo, plainScratchCode)
-              case None => {
-                logger.error(HasherIsNotRegistered.format(id, passwordInfo.hasher, passwordHasherRegistry.all.map(_.id).mkString(", ")))
+        case plainScratchCode: String if plainScratchCode.nonEmpty =>
+          val found: Option[PasswordInfo] = totpInfo.scratchCodes.find { scratchCode =>
+            passwordHasherRegistry.find(scratchCode) match {
+              case Some(hasher) => hasher.matches(scratchCode, plainScratchCode)
+              case None =>
+                logger.error(HasherIsNotRegistered.format(id, scratchCode.hasher, passwordHasherRegistry.all.map(_.id).mkString(", ")))
                 false
-              }
             }
-          }.headOption
+          }
 
           found.map { deleted =>
             deleted -> totpInfo.copy(scratchCodes = totpInfo.scratchCodes.filterNot(_ == deleted))
           }
-        }
         case _ => None
       }
     }
