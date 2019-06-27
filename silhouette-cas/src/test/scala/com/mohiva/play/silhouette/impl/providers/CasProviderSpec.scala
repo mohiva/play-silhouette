@@ -15,7 +15,7 @@
  */
 package com.mohiva.play.silhouette.impl.providers
 
-import com.mohiva.play.silhouette.api.exceptions.ConfigurationException
+import com.mohiva.play.silhouette.api.exceptions.{ ConfigurationException, SilhouetteException }
 import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.api.{ Logger, LoginInfo }
 import org.jasig.cas.client.authentication.AttributePrincipal
@@ -103,7 +103,8 @@ class CasProviderSpec extends SocialProviderSpec[CasInfo] with Mockito with Logg
 
       val futureProfile = for {
         a <- provider.authenticate()
-        p <- provider.retrieveProfile(a.right.get)
+        c <- a.fold(_ => Future.failed(new SilhouetteException("Missing CasInfo")), Future.successful)
+        p <- provider.retrieveProfile(c)
       } yield p
 
       await(futureProfile) must beLike[CommonSocialProfile] {

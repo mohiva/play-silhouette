@@ -1,3 +1,8 @@
+## 6.0.1
+
+- Update to Play 2.7.3
+- Add support for Scala 2.13
+
 ## 6.0
 
 - Update to Play 2.7

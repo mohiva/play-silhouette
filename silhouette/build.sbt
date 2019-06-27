@@ -16,3 +16,7 @@ libraryDependencies ++= Seq(
 )
 
 enablePlugins(PlayScala, Doc)
+
+unmanagedSourceDirectories in Compile += {
+  baseDirectory.value / (if(Util.priorTo213(scalaVersion.value)) "app-2.13-" else "app-2.13+")
+}
