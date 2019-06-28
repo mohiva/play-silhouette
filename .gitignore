@@ -13,3 +13,4 @@ dist
 /.settings
 /.target
 /.cache
+*.DS_Store

@@ -22,6 +22,7 @@ import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, MockHTTPLayer, 
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.state.UserStateItem
+import com.mohiva.play.silhouette.ScalaCompat._
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
@@ -250,7 +251,7 @@ abstract class OAuth2ProviderSpec extends SocialStateProviderSpec[OAuth2Info, So
         ClientID -> Seq(c.oAuthSettings.clientID),
         ClientSecret -> Seq(c.oAuthSettings.clientSecret),
         GrantType -> Seq(AuthorizationCode),
-        Code -> Seq("my.code")) ++ c.oAuthSettings.accessTokenParams.mapValues(Seq(_)) ++ redirectParam.toMap.mapValues(Seq(_))
+        Code -> Seq("my.code")) ++ c.oAuthSettings.accessTokenParams.transformValues(Seq(_)) ++ redirectParam.toMap.transformValues(Seq(_))
       implicit val req = FakeRequest(GET, "?" + Code + "=my.code")
       wsRequest.withHttpHeaders(any) returns wsRequest
 
