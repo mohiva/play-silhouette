@@ -1,0 +1,181 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>password - com.mohiva.play.silhouette.password</title>
+          <meta name="description" content="password - com.mohiva.play.silhouette.password" />
+          <meta name="keywords" content="password com.mohiva.play.silhouette.password" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../index.html';
+            var hash = 'com.mohiva.play.silhouette.password.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a></p>
+        <h1>password</h1><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.password.package" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">password</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.password.BCryptPasswordHasher" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BCryptPasswordHasherextendsPasswordHasher"></a>
+      <a id="BCryptPasswordHasher:BCryptPasswordHasher"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="BCryptPasswordHasher.html"><span class="name">BCryptPasswordHasher</span></a><span class="result"> extends <a href="../api/util/PasswordHasher.html" class="extype" name="com.mohiva.play.silhouette.api.util.PasswordHasher">PasswordHasher</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.password.package@BCryptPasswordHasherextendsPasswordHasher" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implementation of the password hasher based on BCrypt.</p><div class="fullcomment"><div class="comment cmt"><p>Implementation of the password hasher based on BCrypt.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="http://www.mindrot.org/files/jBCrypt/jBCrypt-0.2-doc/BCrypt.html#gensalt(int)" target="_blank">gensalt</a></p></span></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.password.BCryptSha256PasswordHasher" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BCryptSha256PasswordHasherextendsBCryptPasswordHasher"></a>
+      <a id="BCryptSha256PasswordHasher:BCryptSha256PasswordHasher"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="BCryptSha256PasswordHasher.html"><span class="name">BCryptSha256PasswordHasher</span></a><span class="result"> extends <a href="BCryptPasswordHasher.html" class="extype" name="com.mohiva.play.silhouette.password.BCryptPasswordHasher">BCryptPasswordHasher</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.password.package@BCryptSha256PasswordHasherextendsBCryptPasswordHasher" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implementation of the password hasher based on BCrypt.</p><div class="fullcomment"><div class="comment cmt"><p>Implementation of the password hasher based on BCrypt.</p><p>The designers of bcrypt truncate all passwords at 72 characters which means that <code>bcrypt(password_with_100_chars) ==
+bcrypt(password_with_100_chars[:72])</code>. The original <code>BCryptPasswordHasher</code> does not have any special handling and
+thus is also subject to this hidden password length limit. <code>BCryptSha256PasswordHasher</code> fixes this by first hashing
+the password using sha256. This prevents the password truncation and so should be preferred over the
+<code>BCryptPasswordHasher</code>. The practical ramification of this truncation is pretty marginal as the average user does
+not have a password greater than 72 characters in length and even being truncated at 72 the compute powered required
+to brute force bcrypt in any useful amount of time is still astronomical. Nonetheless, we recommend you use
+<code>BCryptSha256PasswordHasher</code> anyway on the principle of &quot;better safe than sorry&quot;.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>https://crypto.stackexchange.com/questions/24993/is-there-a-way-to-use-bcrypt-with-passwords-longer-than-72-bytes-securely</p></span><span class="cmt"><p>https://docs.djangoproject.com/en/1.10/topics/auth/passwords/#using-bcrypt-with-django</p></span><span class="cmt"><p><a href="http://www.mindrot.org/files/jBCrypt/jBCrypt-0.2-doc/BCrypt.html#gensalt(int)" target="_blank">gensalt</a></p></span></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.password.BCryptPasswordHasher" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BCryptPasswordHasher"></a>
+      <a id="BCryptPasswordHasher:BCryptPasswordHasher"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BCryptPasswordHasher$.html"><span class="name">BCryptPasswordHasher</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.password.package@BCryptPasswordHasher" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.password.BCryptSha256PasswordHasher" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BCryptSha256PasswordHasher"></a>
+      <a id="BCryptSha256PasswordHasher:BCryptSha256PasswordHasher"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BCryptSha256PasswordHasher$.html"><span class="name">BCryptSha256PasswordHasher</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.password.package@BCryptSha256PasswordHasher" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object.</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
