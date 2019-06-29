@@ -31,22 +31,26 @@ object BasicSettings extends AutoPlugin {
 
   override def projectSettings = Seq(
     organization := "com.mohiva",
-    version := "6.0.1-SNAPSHOT",
+    version := "6.0.1",
     resolvers ++= Dependencies.resolvers,
     scalaVersion := Dependencies.Versions.scalaVersion,
     crossScalaVersions := Dependencies.Versions.crossScala,
     scalacOptions ++= Seq(
-      "-deprecation", // Emit warning and location for usages of deprecated APIs.
-      "-feature", // Emit warning and location for usages of features that should be imported explicitly.
-      "-unchecked", // Enable additional warnings where generated code depends on assumptions.
-      "-Xfatal-warnings", // Fail the compilation if there are any warnings.
-      "-Xlint", // Enable recommended additional warnings.
-      "-Ywarn-adapted-args", // Warn if an argument list is modified to match the receiver.
-      "-Ywarn-dead-code", // Warn when dead code is identified.
-      "-Ywarn-inaccessible", // Warn about inaccessible types in method signatures.
-      "-Ywarn-nullary-override", // Warn when non-nullary overrides nullary, e.g. def foo() over def foo.
+      "-deprecation",        // Emit warning and location for usages of deprecated APIs.
+      "-feature",            // Emit warning and location for usages of features that should be imported explicitly.
+      "-unchecked",          // Enable additional warnings where generated code depends on assumptions.
+      "-Xfatal-warnings",    // Fail the compilation if there are any warnings.
+      "-Xlint",              // Enable recommended additional warnings.,
+      "-Xlint:inaccessible", // Warn about inaccessible types in method signatures.
+      "-Ywarn-dead-code",    // Warn when dead code is identified.
       "-Ywarn-numeric-widen" // Warn when numerics are widened.
     ),
+    scalacOptions ++= {
+      if(Util.priorTo213(scalaVersion.value)) Seq(
+        "-Ywarn-adapted-args",    // Warn if an argument list is modified to match the receiver.
+        "-Ywarn-nullary-override" // Warn when non-nullary overrides nullary, e.g. def foo() over def foo.
+      ) else Nil
+    },
     scalacOptions in Test ~= { options: Seq[String] =>
       options filterNot (_ == "-Ywarn-dead-code") // Allow dead code in tests (to support using mockito).
     },
@@ -206,4 +210,14 @@ object Publish extends AutoPlugin {
     pomIncludeRepository := { _ => false },
     pomExtra := pom
   )
+}
+
+object Util {
+
+  def priorTo213(scalaVersion: String): Boolean =
+    CrossVersion.partialVersion(scalaVersion) match {
+      case Some((2, minor)) if minor < 13 => true
+      case _                              => false
+    }
+
 }

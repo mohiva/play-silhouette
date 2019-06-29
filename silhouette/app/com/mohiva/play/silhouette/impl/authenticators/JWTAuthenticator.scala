@@ -34,7 +34,7 @@ import org.joda.time.DateTime
 import play.api.libs.json._
 import play.api.mvc.{ RequestHeader, Result }
 
-import scala.collection.JavaConverters._
+import com.mohiva.play.silhouette.ScalaCompat.JavaConverters._
 import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
