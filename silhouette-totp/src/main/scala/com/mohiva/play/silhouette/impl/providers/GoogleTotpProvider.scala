@@ -17,12 +17,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.providers.totp
+package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.util.{ PasswordHasherRegistry, PasswordInfo, _ }
 import com.mohiva.play.silhouette.api.{ AuthInfo, LoginInfo, _ }
 import com.mohiva.play.silhouette.impl.providers.PasswordProvider.HasherIsNotRegistered
-import com.mohiva.play.silhouette.impl.providers.totp.GoogleTotpProvider._
+import com.mohiva.play.silhouette.impl.providers.GoogleTotpProvider._
 import com.warrenstrange.googleauth.{ GoogleAuthenticator, GoogleAuthenticatorQRGenerator }
 import javax.inject.Inject
 

@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mohiva.play.silhouette.impl.providers.totp
+package com.mohiva.play.silhouette.impl.providers
 
 import com.mohiva.play.silhouette.api.util.{ Credentials, PasswordInfo }
-import com.mohiva.play.silhouette.impl.providers.PasswordProviderSpec
 import com.warrenstrange.googleauth.GoogleAuthenticator
 import org.specs2.mock.Mockito
 import play.api.test.WithApplication
@@ -24,7 +23,7 @@ import play.api.test.WithApplication
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
- * Test case for the [[com.mohiva.play.silhouette.impl.providers.totp.GoogleTotpProvider#GoogleTOTPProvider]] class.
+ * Test case for the [[com.mohiva.play.silhouette.impl.providers.GoogleTotpProvider#GoogleTOTPProvider]] class.
  */
 class GoogleTotpProviderSpec extends PasswordProviderSpec with Mockito {
   "The `authenticate` with verification code method" should {

@@ -27,6 +27,12 @@ val silhouetteCas = Project(
   dependencies = Seq(silhouette % "compile->compile;test->test")
 )
 
+val silhouetteTotp = Project(
+  id = "play-silhouette-totp",
+  base = file("silhouette-totp"),
+  dependencies = Seq(silhouette % "compile->compile;test->test")
+)
+
 val silhouetteCryptoJca = Project(
   id = "play-silhouette-crypto-jca",
   base = file("silhouette-crypto-jca"),
@@ -57,6 +63,7 @@ val root = Project(
   aggregate = Seq(
     silhouette,
     silhouetteCas,
+    silhouetteTotp,
     silhouetteCryptoJca,
     silhouettePasswordBcrypt,
     silhouettePersistence,
