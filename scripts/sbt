@@ -18,4 +18,4 @@
 #
 set -o nounset -o errexit
 
-scripts/sbt-runner -jvm-opts project/build-jvm-opts "$@"
+scripts/sbt-runner -jvm-opts project/build-jvm-opts ++$TRAVIS_SCALA_VERSION "$@"

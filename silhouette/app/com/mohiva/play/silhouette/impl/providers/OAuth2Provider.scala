@@ -27,6 +27,7 @@ import com.mohiva.play.silhouette.api.util.ExtractableRequest
 import com.mohiva.play.silhouette.impl.exceptions.{ AccessDeniedException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.state.UserStateItemHandler
+import com.mohiva.play.silhouette.ScalaCompat._
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.libs.ws.WSResponse
@@ -242,7 +243,7 @@ trait OAuth2Provider extends SocialStateProvider with OAuth2Constants with Logge
       ClientID -> Seq(settings.clientID),
       ClientSecret -> Seq(settings.clientSecret),
       GrantType -> Seq(AuthorizationCode),
-      Code -> Seq(code)) ++ settings.accessTokenParams.mapValues(Seq(_)) ++ redirectParam.toMap.mapValues(Seq(_))
+      Code -> Seq(code)) ++ settings.accessTokenParams.transformValues(Seq(_)) ++ redirectParam.toMap.transformValues(Seq(_))
     httpLayer.url(settings.accessTokenURL).withHttpHeaders(headers: _*).post(params).flatMap { response =>
       logger.debug("[Silhouette][%s] Access token response: [%s]".format(id, response.body))
       Future.fromTry(buildInfo(response))
