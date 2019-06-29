@@ -16,8 +16,9 @@
 package com.mohiva.play.silhouette.impl.providers.totp
 
 import com.mohiva.play.silhouette.api.util.{ Credentials, PasswordInfo }
-import com.mohiva.play.silhouette.impl.providers.{ TotpInfo, TotpProviderSpec }
+import com.mohiva.play.silhouette.impl.providers.PasswordProviderSpec
 import com.warrenstrange.googleauth.GoogleAuthenticator
+import org.specs2.mock.Mockito
 import play.api.test.WithApplication
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -25,7 +26,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 /**
  * Test case for the [[com.mohiva.play.silhouette.impl.providers.totp.GoogleTotpProvider#GoogleTOTPProvider]] class.
  */
-class GoogleTotpProviderSpec extends TotpProviderSpec {
+class GoogleTotpProviderSpec extends PasswordProviderSpec with Mockito {
   "The `authenticate` with verification code method" should {
     "return None when the sharedKey is null or empty" in new WithApplication with Context {
       await(provider.authenticate(null.asInstanceOf[String], testVerificationCode)) should be(None)
@@ -59,7 +60,7 @@ class GoogleTotpProviderSpec extends TotpProviderSpec {
 
   "The `authenticate` with verification code method" should {
     "return None when the input totpInfo is null" in new WithApplication with Context {
-      await(provider.authenticate(null.asInstanceOf[TotpInfo], testWrongVerificationCode)) should be(None)
+      await(provider.authenticate(null.asInstanceOf[GoogleTotpInfo], testWrongVerificationCode)) should be(None)
     }
 
     "return None when the plain scratch code is null or empty" in new WithApplication with Context {
