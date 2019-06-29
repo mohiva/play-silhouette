@@ -26,7 +26,7 @@ import com.mohiva.play.silhouette.impl.providers.totp.GoogleTotpProvider._
 import com.warrenstrange.googleauth.{ GoogleAuthenticator, GoogleAuthenticatorQRGenerator }
 import javax.inject.Inject
 
-import scala.collection.JavaConverters._
+import com.mohiva.play.silhouette.ScalaCompat.JavaConverters._
 import scala.concurrent.{ ExecutionContext, Future }
 
 /**
