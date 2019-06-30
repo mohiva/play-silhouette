@@ -58,13 +58,17 @@ class GoogleTotpProviderSpec extends PasswordProviderSpec with Mockito {
   }
 
   "The `authenticate` with verification code method" should {
-    "return None when the input totpInfo is null" in new WithApplication with Context {
-      await(provider.authenticate(null.asInstanceOf[GoogleTotpInfo], testWrongVerificationCode)) should be(None)
+    "throw NullPointerException when the input totpInfo is null" in new WithApplication with Context {
+      await(provider.authenticate(null.asInstanceOf[GoogleTotpInfo], testWrongVerificationCode)) must throwA[NullPointerException]
     }
 
-    "return None when the plain scratch code is null or empty" in new WithApplication with Context {
+    "return throw NullPointerException when the plain scratch code is null" in new WithApplication with Context {
       val result = provider.createCredentials(credentials.identifier)
-      await(provider.authenticate(result.totpInfo, null.asInstanceOf[String])) should be(None)
+      await(provider.authenticate(result.totpInfo, null.asInstanceOf[String])) must throwA[NullPointerException]
+    }
+
+    "return None when the plain scratch code is empty" in new WithApplication with Context {
+      val result = provider.createCredentials(credentials.identifier)
       await(provider.authenticate(result.totpInfo, "")) should be(None)
     }
 
