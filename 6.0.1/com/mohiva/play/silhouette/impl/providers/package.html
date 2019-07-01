@@ -328,6 +328,65 @@ algorithm and stores the auth info in the backing store.
       </a>
     </span>
       <p class="shortcomment cmt">The base implementation of the <a href="SocialStateHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.SocialStateHandler">SocialStateHandler</a>.</p>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.GoogleTotpCredentials" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="GoogleTotpCredentialsextendsProductwithSerializable"></a>
+      <a id="GoogleTotpCredentials:GoogleTotpCredentials"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="GoogleTotpCredentials.html"><span class="name">GoogleTotpCredentials</span></a><span class="params">(<span name="totpInfo">totpInfo: <a href="GoogleTotpInfo.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.GoogleTotpInfo">GoogleTotpInfo</a></span>, <span name="scratchCodesPlain">scratchCodesPlain: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="qrUrl">qrUrl: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.12/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.12/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@GoogleTotpCredentialsextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">TOTP authentication credentials data including plain recovery codes and URL to the
+QR-code for first-time activation of the TOTP.</p><div class="fullcomment"><div class="comment cmt"><p>TOTP authentication credentials data including plain recovery codes and URL to the
+QR-code for first-time activation of the TOTP.
+</p></div><dl class="paramcmts block"><dt class="param">totpInfo</dt><dd class="cmt"><p>The TOTP authentication info that will be persisted in an
+                         authentication repository.</p></dd><dt class="param">scratchCodesPlain</dt><dd class="cmt"><p>A sequence of scratch codes in plain text. This variant
+                         is provided for the user to secure save the first time.</p></dd><dt class="param">qrUrl</dt><dd class="cmt"><p>The QR-code that matches this shared key for first time activation</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.GoogleTotpInfo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="GoogleTotpInfoextendsAuthInfowithProductwithSerializable"></a>
+      <a id="GoogleTotpInfo:GoogleTotpInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="GoogleTotpInfo.html"><span class="name">GoogleTotpInfo</span></a><span class="params">(<span name="sharedKey">sharedKey: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="scratchCodes">scratchCodes: <span class="extype" name="scala.Seq">Seq</span>[<a href="../../api/util/PasswordInfo.html" class="extype" name="com.mohiva.play.silhouette.api.util.PasswordInfo">PasswordInfo</a>]</span>)</span><span class="result"> extends <a href="../../api/AuthInfo.html" class="extype" name="com.mohiva.play.silhouette.api.AuthInfo">AuthInfo</a> with <a href="http://www.scala-lang.org/api/2.11.12/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.12/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@GoogleTotpInfoextendsAuthInfowithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">TOTP authentication information intended to be stored in an authentication repository.</p><div class="fullcomment"><div class="comment cmt"><p>TOTP authentication information intended to be stored in an authentication repository.
+</p></div><dl class="paramcmts block"><dt class="param">sharedKey</dt><dd class="cmt"><p>The key associated to an user that together with a verification
+                    code enables authentication.</p></dd><dt class="param">scratchCodes</dt><dd class="cmt"><p>A sequence of hashed scratch (or recovery) codes, which can be
+                    used each once and as alternative to verification codes.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.GoogleTotpProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GoogleTotpProviderextendsProviderwithExecutionContextProviderwithLogger"></a>
+      <a id="GoogleTotpProvider:GoogleTotpProvider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GoogleTotpProvider.html"><span class="name">GoogleTotpProvider</span></a><span class="result"> extends <a href="../../api/Provider.html" class="extype" name="com.mohiva.play.silhouette.api.Provider">Provider</a> with <a href="../../api/util/ExecutionContextProvider.html" class="extype" name="com.mohiva.play.silhouette.api.util.ExecutionContextProvider">ExecutionContextProvider</a> with <a href="../../api/Logger.html" class="extype" name="com.mohiva.play.silhouette.api.Logger">Logger</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@GoogleTotpProviderextendsProviderwithExecutionContextProviderwithLogger" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Google's TOTP authentication concrete provider implementation.</p>
     </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth1Constants" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="OAuth1ConstantsextendsAnyRef"></a>
       <a id="OAuth1Constants:OAuth1Constants"></a>
@@ -981,6 +1040,23 @@ pertains, must be able to serialize/deserialize this state item.
       </a>
     </span>
       <p class="shortcomment cmt">The companion object for the <a href="DefaultSocialStateHandler.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.DefaultSocialStateHandler">DefaultSocialStateHandler</a> class.</p>
+    </li><li name="com.mohiva.play.silhouette.impl.providers.GoogleTotpProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GoogleTotpProvider"></a>
+      <a id="GoogleTotpProvider:GoogleTotpProvider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="GoogleTotpProvider$.html"><span class="name">GoogleTotpProvider</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.package@GoogleTotpProvider" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object.</p>
     </li><li name="com.mohiva.play.silhouette.impl.providers.OAuth1Provider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="OAuth1Provider"></a>
       <a id="OAuth1Provider:OAuth1Provider"></a>
