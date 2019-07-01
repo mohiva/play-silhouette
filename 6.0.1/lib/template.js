@@ -1,7 +1,13 @@
 // © 2009–2010 EPFL/LAMP
-// code by Gilles Dubochet with contributions by Pedro Furlanetto and Marcin Kubala
+// code by Gilles Dubochet with contributions by Pedro Furlanetto, Marcin Kubala and Felix Mulder
 
-$(document).ready(function(){
+$(document).ready(function() {
+
+    var oldWidth = $("div#subpackage-spacer").width() + 1 + "px";
+    $("div#packages > ul > li.current").click(function() {
+        $("div#subpackage-spacer").css({ "width": oldWidth });
+        $("li.current-entities").toggle();
+    });
 
     var controls = {
         visibility: {
@@ -34,22 +40,22 @@ $(document).ready(function(){
     function exposeMember(jqElem) {
         var jqElemParent = jqElem.parent(),
             parentName = jqElemParent.attr("name"),
-            linearizationName = /^([^#]*)(#.*)?$/gi.exec(parentName)[1];
+            ancestorName = /^([^#]*)(#.*)?$/gi.exec(parentName)[1];
 
         // switch visibility filter if necessary
         if (jqElemParent.attr("visbl") == "prt") {
             toggleVisibilityFilter(controls.visibility.all, controls.visibility.publicOnly);
         }
 
-        // toggle appropriate linearization buttons
-        if (linearizationName) {
-            $("#linearization li.out[name='" + linearizationName + "']").removeClass("out").addClass("in");
+        // toggle appropriate ancestor filter buttons
+        if (ancestorName) {
+            $("#filterby li.out[name='" + ancestorName + "']").removeClass("out").addClass("in");
         }
 
         filter();
-        window.scrollTo(0, 0);
-        jqElemParent.effect("highlight", {color: "#FFCC85"}, 3000);
-        $('html,body').animate({scrollTop: jqElemParent.offset().top}, 1000);
+        jqElemParent.addClass("selected");
+        commentToggleFct(jqElemParent);
+        $("#content-scroll-container").animate({scrollTop: $("#content-scroll-container").scrollTop() + jqElemParent.offset().top - $("#search").height() - 23 }, 1000);
     }
 
     var isHiddenClass = function (name) {
@@ -69,11 +75,16 @@ $(document).ready(function(){
         return isHidden(this);
     }).removeClass("in").addClass("out");
 
+    $("#memberfilter > i.arrow").click(function() {
+        $(this).toggleClass("rotate");
+        $("#filterby").toggle();
+    });
+
     // Pre-filter members
     filter();
 
     // Member filter box
-    var input = $("#textfilter input");
+    var input = $("#memberfilter input");
     input.bind("keyup", function(event) {
 
         switch ( event.keyCode ) {
@@ -101,7 +112,7 @@ $(document).ready(function(){
             break;
 
         default:
-            window.scrollTo(0, $("#mbrsel").offset().top);
+            window.scrollTo(0, $("#mbrsel").offset().top - 130);
             filter(true);
             break;
 
@@ -110,12 +121,12 @@ $(document).ready(function(){
     input.focus(function(event) {
         input.select();
     });
-    $("#textfilter > .post").click(function() {
-        $("#textfilter input").attr("value", "");
+    $("#memberfilter > .clear").click(function() {
+        $("#memberfilter input").attr("value", "");
+        $(this).hide();
         filter();
     });
     $(document).keydown(function(event) {
-
         if (event.keyCode == 9) { // tab
             $("#index-input", window.parent.document).focus();
             input.attr("value", "");
@@ -127,8 +138,7 @@ $(document).ready(function(){
         if ($(this).hasClass("in")) {
             $(this).removeClass("in");
             $(this).addClass("out");
-        }
-        else if ($(this).hasClass("out")) {
+        } else if ($(this).hasClass("out")) {
             $(this).removeClass("out");
             $(this).addClass("in");
         }
@@ -139,27 +149,26 @@ $(document).ready(function(){
         if ($(this).hasClass("in")) {
             $(this).removeClass("in");
             $(this).addClass("out");
-        }
-        else if ($(this).hasClass("out")) {
+        } else if ($(this).hasClass("out")) {
             $(this).removeClass("out");
             $(this).addClass("in");
         }
         filter();
     });
 
-    $("#mbrsel > div[id=ancestors] > ol > li.hideall").click(function() {
+    $("#mbrsel > div > div.ancestors > ol > li.hideall").click(function() {
         $("#linearization li.in").removeClass("in").addClass("out");
         $("#linearization li:first").removeClass("out").addClass("in");
         $("#implicits li.in").removeClass("in").addClass("out");
 
-        if ($(this).hasClass("out") && $("#mbrsel > div[id=ancestors] > ol > li.showall").hasClass("in")) {
+        if ($(this).hasClass("out") && $("#mbrsel > div > div.ancestors > ol > li.showall").hasClass("in")) {
             $(this).removeClass("out").addClass("in");
-            $("#mbrsel > div[id=ancestors] > ol > li.showall").removeClass("in").addClass("out");
+            $("#mbrsel > div > div.ancestors > ol > li.showall").removeClass("in").addClass("out");
         }
 
         filter();
     })
-    $("#mbrsel > div[id=ancestors] > ol > li.showall").click(function() {
+    $("#mbrsel > div > div.ancestors > ol > li.showall").click(function() {
         var filteredLinearization =
             $("#linearization li.out").filter(function() {
                 return ! isHiddenClass($(this).attr("name"));
@@ -167,32 +176,29 @@ $(document).ready(function(){
         filteredLinearization.removeClass("out").addClass("in");
 
         var filteredImplicits =
-        $("#implicits li.out").filter(function() {
-            return ! isHidden(this);
-        });
+            $("#implicits li.out").filter(function() {
+                return ! isHidden(this);
+            });
         filteredImplicits.removeClass("out").addClass("in");
 
-        if ($(this).hasClass("out") && $("#mbrsel > div[id=ancestors] > ol > li.hideall").hasClass("in")) {
+        if ($(this).hasClass("out") && $("#mbrsel > div > div.ancestors > ol > li.hideall").hasClass("in")) {
             $(this).removeClass("out").addClass("in");
-            $("#mbrsel > div[id=ancestors] > ol > li.hideall").removeClass("in").addClass("out");
+            $("#mbrsel > div > div.ancestors > ol > li.hideall").removeClass("in").addClass("out");
         }
 
         filter();
     });
     $("#order > ol > li.alpha").click(function() {
-        if ($(this).hasClass("out")) {
+        if ($(this).hasClass("out"))
             orderAlpha();
-        }
     })
     $("#order > ol > li.inherit").click(function() {
-        if ($(this).hasClass("out")) {
+        if ($(this).hasClass("out"))
             orderInherit();
-        }
     });
     $("#order > ol > li.group").click(function() {
-        if ($(this).hasClass("out")) {
+        if ($(this).hasClass("out"))
             orderGroup();
-        }
     });
     $("#groupedMembers").hide();
 
@@ -209,48 +215,61 @@ $(document).ready(function(){
     });
 
     /* Add toggle arrows */
-    //var docAllSigs = $("#template li").has(".fullcomment").find(".signature");
-    // trying to speed things up a little bit
-    var docAllSigs = $("#template li[fullComment=yes] .signature");
+    $("#template li[fullComment=yes] .modifier_kind").addClass("closed");
 
-    function commentToggleFct(signature){
-        var parent = signature.parent();
-        var shortComment = $(".shortcomment", parent);
-        var fullComment = $(".fullcomment", parent);
+    function commentToggleFct(element){
+        $("#template li.selected").removeClass("selected");
+        element.toggleClass("open");
+        var signature = element.find(".modifier_kind")
+        var shortComment = element.find(".shortcomment");
+        var fullComment = element.find(".fullcomment");
         var vis = $(":visible", fullComment);
         signature.toggleClass("closed").toggleClass("opened");
         if (vis.length > 0) {
-            shortComment.slideDown(100);
-            fullComment.slideUp(100);
+            if (!isMobile()) {
+                shortComment.slideDown(100);
+                fullComment.slideUp(100);
+            } else {
+                fullComment.hide();
+                shortComment.show();
+            }
         }
         else {
-            shortComment.slideUp(100);
-            fullComment.slideDown(100);
+            if (!isMobile()) {
+                shortComment.slideUp(100);
+                fullComment.slideDown(100);
+            } else {
+                shortComment.hide();
+                fullComment.show();
+            }
         }
     };
-    docAllSigs.addClass("closed");
-    docAllSigs.click(function() {
-        commentToggleFct($(this));
+
+    $("#template li[fullComment=yes]").click(function() {
+        var sel = window.getSelection().toString();
+        if (!sel) commentToggleFct($(this));
     });
 
     /* Linear super types and known subclasses */
     function toggleShowContentFct(e){
       e.toggleClass("open");
-      var content = $(".hiddenContent", e.parent().get(0));
-      if (content.is(':visible')) {
-        content.slideUp(100);
-      }
-      else {
-        content.slideDown(100);
+      var content = $(".hiddenContent", e);
+      if(content.is(':visible')) {
+          if (!isMobile()) content.slideUp(100);
+          else content.hide();
+      } else {
+          // TODO: is there a cleaner way to render the svg only once it's visible?
+          setTimeout(function() {content.trigger('beforeShow');}, 100);
+          if (!isMobile()) content.slideDown(100);
+          else content.show();
       }
     };
 
-    $(".toggle:not(.diagram-link)").click(function() {
-      toggleShowContentFct($(this));
+    $(".toggle").click(function() {
+      toggleShowContentFct($(this).parent());
+      // Stop propagation so that we don't hide/show the parent (this a use case's full sig, which is nested in a member list)
+      if ($(this).parent().hasClass("full-signature-block")) return false;
     });
-
-    // Set parent window title
-    windowTitle();
 
     if ($("#order > ol > li.group").length == 1) { orderGroup(); };
 
@@ -260,13 +279,37 @@ $(document).ready(function(){
         return $(memberSelector);
     }
 
-    // highlight and jump to selected member
+    // highlight and jump to selected member if an anchor is provided
     if (window.location.hash) {
         var jqElem = findElementByHash(window.location.hash);
         if (jqElem.length > 0) {
-            exposeMember(jqElem);
+            if (jqElem.hasClass("toggleContainer")) toggleShowContentFct(jqElem);
+            else exposeMember(jqElem);
         }
     }
+
+    $("#template span.permalink").click(function(e) {
+        e.preventDefault();
+        var href = $("a", this).attr("href");
+        if (href.indexOf("#") != -1) {
+            var hash = href.split("#").pop()
+            try {
+                window.history.pushState({}, "", "#" + hash)
+            } catch (e) {
+                // fallback for file:// URLs, has worse scrolling behavior
+                location.hash = hash;
+            }
+            exposeMember(findElementByHash(hash))
+        }
+        return false;
+    });
+
+    $("#mbrsel-input").on("input", function() {
+        if ($(this).val().length > 0)
+            $("#memberfilter > .clear").show();
+        else
+            $("#memberfilter > .clear").hide();
+    });
 });
 
 function orderAlpha() {
@@ -275,7 +318,7 @@ function orderAlpha() {
     $("#order > ol > li.group").removeClass("in").addClass("out");
     $("#template > div.parent").hide();
     $("#template > div.conversion").hide();
-    $("#mbrsel > div[id=ancestors]").show();
+    $("#mbrsel > div.ancestors").show();
     filter();
 };
 
@@ -285,7 +328,7 @@ function orderInherit() {
     $("#order > ol > li.group").removeClass("in").addClass("out");
     $("#template > div.parent").show();
     $("#template > div.conversion").show();
-    $("#mbrsel > div[id=ancestors]").hide();
+    $("#mbrsel > div.ancestors").hide();
     filter();
 };
 
@@ -295,7 +338,7 @@ function orderGroup() {
     $("#order > ol > li.inherit").removeClass("in").addClass("out");
     $("#template > div.parent").hide();
     $("#template > div.conversion").hide();
-    $("#mbrsel > div[id=ancestors]").show();
+    $("#mbrsel > div.ancestors").show();
     filter();
 };
 
@@ -350,7 +393,7 @@ function initInherit() {
         }
     });
 
-    $("#values > ol > li").each(function(){
+    $(".values > ol > li").each(function(){
         var mbr = $(this);
         this.mbrText = mbr.find("> .fullcomment .cmt").text();
         var qualName = mbr.attr("name");
@@ -393,7 +436,7 @@ function initInherit() {
 
 /* filter used to take boolean scrollToMember */
 function filter() {
-    var query = $.trim($("#textfilter input").val()).toLowerCase();
+    var query = $.trim($("#memberfilter input").val()).toLowerCase();
     query = query.replace(/[-[\]{}()*+?.,\\^$|#]/g, "\\$&").replace(/\s+/g, "|");
     var queryRegExp = new RegExp(query, "i");
     var privateMembersHidden = $("#visbl > ol > li.public").hasClass("in");
@@ -480,21 +523,15 @@ function filter() {
       });
 
       if (membersVisible)
-        members.show();
+          members.show();
       else
-        members.hide();
+          members.hide();
     };
 
     return false;
 };
 
-function windowTitle()
-{
-    try {
-        parent.document.title=document.title;
-    }
-    catch(e) {
-      // Chrome doesn't allow settings the parent's title when
-      // used on the local file system.
-    }
-};
+/** Check if user agent is associated with a known mobile browser */
+function isMobile() {
+    return /Android|webOS|Mobi|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
