@@ -27,7 +27,12 @@ import scala.reflect.ClassTag
  * the [[com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository]] class
  * can delegate operations to the DAO which is responsible for the currently handled auth info.
  *
- * @param classTag The class tag for the type parameter.
  * @tparam T The type of the auth info to store.
  */
-abstract class DelegableAuthInfoDAO[T <: AuthInfo](implicit val classTag: ClassTag[T]) extends AuthInfoDAO[T]
+trait DelegableAuthInfoDAO[T <: AuthInfo] extends AuthInfoDAO[T] {
+
+  /**
+   * The class tag for the type parameter.
+   */
+  val classTag: ClassTag[T]
+}

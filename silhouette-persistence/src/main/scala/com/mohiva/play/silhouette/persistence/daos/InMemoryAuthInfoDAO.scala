@@ -27,9 +27,10 @@ import scala.reflect.ClassTag
  *
  * This is not thread-safe implementation which should only be used for testing or development purpose.
  *
+ * @param classTag The class tag for the type parameter.
  * @tparam T The type of the auth info to store.
  */
-class InMemoryAuthInfoDAO[T <: AuthInfo: ClassTag] extends DelegableAuthInfoDAO[T] {
+class InMemoryAuthInfoDAO[T <: AuthInfo](implicit val classTag: ClassTag[T]) extends DelegableAuthInfoDAO[T] {
 
   /**
    * The data store for the auth info.
