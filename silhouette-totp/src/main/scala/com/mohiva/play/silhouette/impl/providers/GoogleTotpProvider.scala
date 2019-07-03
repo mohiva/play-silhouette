@@ -57,8 +57,11 @@ case class GoogleTotpCredentials(totpInfo: GoogleTotpInfo, scratchCodesPlain: Se
  * @param injectedPasswordHasherRegistry used to hash the scratch (or recovery) codes.
  * @param executionContext               the execution context.
  */
-class GoogleTotpProvider @Inject() (injectedPasswordHasherRegistry: PasswordHasherRegistry)(implicit val executionContext: ExecutionContext)
-  extends Provider with ExecutionContextProvider with Logger {
+class GoogleTotpProvider @Inject() (injectedPasswordHasherRegistry: PasswordHasherRegistry)(
+  implicit
+  val executionContext: ExecutionContext
+) extends Provider with ExecutionContextProvider with Logger {
+
   /**
    * Returns the provider ID.
    *
@@ -94,7 +97,7 @@ class GoogleTotpProvider @Inject() (injectedPasswordHasherRegistry: PasswordHash
    *
    * @param accountName A unique key which identifies a user on this provider (userID, email, ...).
    * @param issuer      The issuer name. This parameter cannot contain the colon
-   * @return the generated TOTP credentials including the shared key, scratch codes and qr url.
+   * @return The generated TOTP credentials including the shared key, scratch codes and qr url.
    */
   def createCredentials(accountName: String, issuer: Option[String] = None): GoogleTotpCredentials = {
     val credentials = googleAuthenticator.createCredentials()
@@ -103,7 +106,8 @@ class GoogleTotpProvider @Inject() (injectedPasswordHasherRegistry: PasswordHash
     val scratchCodesPlain = credentials.getScratchCodes.asScala.map(_.toString).toSeq
     val hashedScratchCodes = scratchCodesPlain.map { scratchCode =>
       currentHasher.hash(scratchCode)
-    }.toSeq
+    }
+
     GoogleTotpCredentials(GoogleTotpInfo(credentials.getKey, hashedScratchCodes), scratchCodesPlain, qrUrl)
   }
 
@@ -158,6 +162,7 @@ class GoogleTotpProvider @Inject() (injectedPasswordHasherRegistry: PasswordHash
  * The companion object.
  */
 object GoogleTotpProvider {
+
   /**
    * Actual Google authenticator provider.
    */
@@ -166,7 +171,7 @@ object GoogleTotpProvider {
   /**
    * The provider Id.
    */
-  val ID = "googleToto"
+  val ID = "googleTotp"
 
   /**
    * Messages
