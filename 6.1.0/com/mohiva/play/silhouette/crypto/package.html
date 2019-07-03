@@ -1,0 +1,215 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>crypto - com.mohiva.play.silhouette.crypto</title>
+          <meta name="description" content="crypto - com.mohiva.play.silhouette.crypto" />
+          <meta name="keywords" content="crypto com.mohiva.play.silhouette.crypto" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../index.html';
+            var hash = 'com.mohiva.play.silhouette.crypto.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../package.html" class="extype" name="com.mohiva.play">play</a>.<a href="../package.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a></p>
+        <h1>crypto</h1><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.crypto.package" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">crypto</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.crypto.JcaCrypter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="JcaCrypterextendsCrypter"></a>
+      <a id="JcaCrypter:JcaCrypter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="JcaCrypter.html"><span class="name">JcaCrypter</span></a><span class="result"> extends <a href="../api/crypto/Crypter.html" class="extype" name="com.mohiva.play.silhouette.api.crypto.Crypter">Crypter</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.crypto.package@JcaCrypterextendsCrypter" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Crypter implementation based on JCA (Java Cryptography Architecture).</p><div class="fullcomment"><div class="comment cmt"><p>Crypter implementation based on JCA (Java Cryptography Architecture).</p><p>The algorithm used in this implementation is <code>AES/CTR/NoPadding</code>. Beware that CTR is
+<a href="https://en.wikipedia.org/wiki/Malleability_%28cryptography%29" target="_blank">malleable</a>, which might
+be abused for various attacks if messages are not properly
+<a href="https://en.wikipedia.org/wiki/Malleability_%28cryptography%29" target="_blank">authenticated</a>.
+</p></div></div>
+    </li><li name="com.mohiva.play.silhouette.crypto.JcaCrypterSettings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="JcaCrypterSettingsextendsProductwithSerializable"></a>
+      <a id="JcaCrypterSettings:JcaCrypterSettings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="JcaCrypterSettings.html"><span class="name">JcaCrypterSettings</span></a><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.12/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.12/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.crypto.package@JcaCrypterSettingsextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The settings for the JCA crypter.</p><div class="fullcomment"><div class="comment cmt"><p>The settings for the JCA crypter.
+</p></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>The encryption key.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.crypto.JcaSigner" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="JcaSignerextendsSigner"></a>
+      <a id="JcaSigner:JcaSigner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="JcaSigner.html"><span class="name">JcaSigner</span></a><span class="result"> extends <a href="../api/crypto/Signer.html" class="extype" name="com.mohiva.play.silhouette.api.crypto.Signer">Signer</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.crypto.package@JcaSignerextendsSigner" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Signer implementation based on JCA (Java Cryptography Architecture).</p><div class="fullcomment"><div class="comment cmt"><p>Signer implementation based on JCA (Java Cryptography Architecture).</p><p>This signer signs the data with the specified key. If the signature verification fails, the signer
+does not try to decode the data in any way in order to prevent various types of attacks.
+</p></div></div>
+    </li><li name="com.mohiva.play.silhouette.crypto.JcaSignerSettings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="JcaSignerSettingsextendsProductwithSerializable"></a>
+      <a id="JcaSignerSettings:JcaSignerSettings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="JcaSignerSettings.html"><span class="name">JcaSignerSettings</span></a><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="pepper">pepper: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;-mohiva-silhouette-signer-&quot;</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.12/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.12/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.crypto.package@JcaSignerSettingsextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The settings for the JCA signer.</p><div class="fullcomment"><div class="comment cmt"><p>The settings for the JCA signer.
+</p></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>Key for signing.</p></dd><dt class="param">pepper</dt><dd class="cmt"><p>Constant prepended and appended to the data before signing. When using one key for multiple purposes,
+              using a specific pepper reduces some risks arising from this.</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.crypto.JcaCrypter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JcaCrypter"></a>
+      <a id="JcaCrypter:JcaCrypter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="JcaCrypter$.html"><span class="name">JcaCrypter</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.crypto.package@JcaCrypter" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object.</p>
+    </li><li name="com.mohiva.play.silhouette.crypto.JcaSigner" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JcaSigner"></a>
+      <a id="JcaSigner:JcaSigner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="JcaSigner$.html"><span class="name">JcaSigner</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.mohiva.play.silhouette.crypto.package@JcaSigner" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The companion object.</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
