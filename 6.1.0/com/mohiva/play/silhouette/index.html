@@ -1,7 +1,316 @@
-<!DOCTYPE html ><html><head><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/><title></title><meta content="" name="description"/><meta content="" name="keywords"/><meta http-equiv="content-type" content="text/html; charset=UTF-8"/><link href="../../../../lib/index.css" media="screen" type="text/css" rel="stylesheet"/><link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet"/><link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css"/><script type="text/javascript" src="../../../../lib/jquery.js"></script><script type="text/javascript" src="../../../../lib/index.js"></script><script type="text/javascript" src="../../../../index.js"></script><script type="text/javascript" src="../../../../lib/scheduler.js"></script><script type="text/javascript" src="../../../../lib/template.js"></script><script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script><script type="text/javascript">/* this variable can be used by the JS to determine the path to the root document */
-var toRoot = '../../../../';</script></head><body><div id="search"><span id="doc-title"><span id="doc-version"></span></span> <span class="close-results"><span class="left">&lt;</span> Back</span><div id="textfilter"><span class="input"><input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/"/><i class="clear material-icons"></i><i id="search-icon" class="material-icons"></i></span></div></div><div id="search-results"><div id="search-progress"><div id="progress-fill"></div></div><div id="results-content"><div id="entity-results"></div><div id="member-results"></div></div></div><div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;"><div id="content-container" style="-webkit-overflow-scrolling: touch;"><div id="subpackage-spacer"><div id="packages"><h1>Packages</h1><ul><li class="indented0 " name="_root_.root" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="_root_"></a><a id="root:_root_"></a> <span class="permalink"><a href="index.html#_root_" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../../../../index.html" title=""><span class="name">root</span></a></span><div class="fullcomment"><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../../../../index.html" name="_root_" id="_root_" class="extype">root</a></dd></dl></div></li><li class="indented1 " name="_root_.com" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="com"></a><a id="com:com"></a> <span class="permalink"><a href="index.html#com" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../../../index.html" title=""><span class="name">com</span></a></span><div class="fullcomment"><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../../../../index.html" name="_root_" id="_root_" class="extype">root</a></dd></dl></div></li><li class="indented2 " name="com.mohiva" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="mohiva"></a><a id="mohiva:mohiva"></a> <span class="permalink"><a href="../com/index.html#mohiva" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../../index.html" title=""><span class="name">mohiva</span></a></span><div class="fullcomment"><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../../../index.html" name="com" id="com" class="extype">com</a></dd></dl></div></li><li class="indented3 " name="com.mohiva.play" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="play"></a><a id="play:play"></a> <span class="permalink"><a href="../../com/mohiva/index.html#play" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../index.html" title=""><span class="name">play</span></a></span><div class="fullcomment"><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../../index.html" name="com.mohiva" id="com.mohiva" class="extype">mohiva</a></dd></dl></div></li><li class="indented4 current" name="com.mohiva.play.silhouette" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="silhouette"></a><a id="silhouette:silhouette"></a> <span class="permalink"><a href="../../../com/mohiva/play/index.html#silhouette" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><span class="name">silhouette</span></span><p class="shortcomment cmt">An authentication library for Play Framework applications that supports several authentication methods,
+<!DOCTYPE html >
+<html>
+        <head>
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title></title>
+          <meta name="description" content="" />
+          <meta name="keywords" content="" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../../../../lib/index.js"></script>
+      <script type="text/javascript" src="../../../../index.js"></script>
+      <script type="text/javascript" src="../../../../lib/scheduler.js"></script>
+      <script type="text/javascript" src="../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../../../../';
+      </script>
+    
+        </head>
+        <body>
+      <div id="search">
+        <span id="doc-title"><span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="index.html#_root_" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../../../index.html"><span class="name">root</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.com" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="com"></a><a id="com:com"></a>
+      <span class="permalink">
+      <a href="index.html#com" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../../index.html"><span class="name">com</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="com.mohiva" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mohiva"></a><a id="mohiva:mohiva"></a>
+      <span class="permalink">
+      <a href="../com/index.html#mohiva" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../index.html"><span class="name">mohiva</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../index.html" class="extype" name="com">com</a></dd></dl></div>
+    </li><li name="com.mohiva.play" visbl="pub" class="indented3 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="play"></a><a id="play:play"></a>
+      <span class="permalink">
+      <a href="../../com/mohiva/index.html#play" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../index.html"><span class="name">play</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="com.mohiva">mohiva</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette" visbl="pub" class="indented4 current" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="silhouette"></a><a id="silhouette:silhouette"></a>
+      <span class="permalink">
+      <a href="../../../com/mohiva/play/index.html#silhouette" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">silhouette</span>
+      </span>
+      
+      <p class="shortcomment cmt">An authentication library for Play Framework applications that supports several authentication methods,
 including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes.</p><div class="fullcomment"><div class="comment cmt"><p>An authentication library for Play Framework applications that supports several authentication methods,
 including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes.
-</p></div><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../index.html" name="com.mohiva.play" id="com.mohiva.play" class="extype">play</a></dd></dl></div></li><li class="indented5 " name="com.mohiva.play.silhouette.api" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="api"></a><a id="api:api"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#api" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="api/index.html" title="The collection of traits and utility classes that form the stable API of Silhouette."><span class="name">api</span></a></span><p class="shortcomment cmt">The collection of traits and utility classes that form the stable API of Silhouette.</p></li><li class="indented5 " name="com.mohiva.play.silhouette.crypto" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="crypto"></a><a id="crypto:crypto"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#crypto" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="crypto/index.html" title=""><span class="name">crypto</span></a></span></li><li class="indented5 " name="com.mohiva.play.silhouette.impl" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="impl"></a><a id="impl:impl"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#impl" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="impl/index.html" title="The reference implementation of Silhouette."><span class="name">impl</span></a></span><p class="shortcomment cmt">The reference implementation of Silhouette.</p></li><li class="indented5 " name="com.mohiva.play.silhouette.password" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="password"></a><a id="password:password"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#password" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="password/index.html" title=""><span class="name">password</span></a></span></li><li class="indented5 " name="com.mohiva.play.silhouette.persistence" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="persistence"></a><a id="persistence:persistence"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#persistence" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="persistence/index.html" title=""><span class="name">persistence</span></a></span></li><li class="indented5 " name="com.mohiva.play.silhouette.test" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="test"></a><a id="test:test"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#test" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="test/index.html" title="Test helpers to test a Silhouette application."><span class="name">test</span></a></span><p class="shortcomment cmt">Test helpers to test a Silhouette application.</p></li></ul></div></div><div id="content"><body class="package value"><div id="definition"><div class="big-circle package">p</div><p id="owner"><a href="../../../index.html" name="com" id="com" class="extype">com</a>.<a href="../../index.html" name="com.mohiva" id="com.mohiva" class="extype">mohiva</a>.<a href="../index.html" name="com.mohiva.play" id="com.mohiva.play" class="extype">play</a></p><h1>silhouette<span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html" title="Permalink"><i class="material-icons"></i></a></span></h1></div><h4 id="signature" class="signature"><span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><span class="name">silhouette</span></span></h4><div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An authentication library for Play Framework applications that supports several authentication methods,
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.mohiva.play">play</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api" visbl="pub" class="indented5 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="api"></a><a id="api:api"></a>
+      <span class="permalink">
+      <a href="../../../../com/mohiva/play/silhouette/index.html#api" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="The collection of traits and utility classes that form the stable API of Silhouette." href="api/index.html"><span class="name">api</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">The collection of traits and utility classes that form the stable API of Silhouette.</p>
+    </li><li name="com.mohiva.play.silhouette.crypto" visbl="pub" class="indented5 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="crypto"></a><a id="crypto:crypto"></a>
+      <span class="permalink">
+      <a href="../../../../com/mohiva/play/silhouette/index.html#crypto" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="crypto/index.html"><span class="name">crypto</span></a>
+      </span>
+      
+      
+    </li><li name="com.mohiva.play.silhouette.impl" visbl="pub" class="indented5 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="impl"></a><a id="impl:impl"></a>
+      <span class="permalink">
+      <a href="../../../../com/mohiva/play/silhouette/index.html#impl" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="The reference implementation of Silhouette." href="impl/index.html"><span class="name">impl</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">The reference implementation of Silhouette.</p>
+    </li><li name="com.mohiva.play.silhouette.password" visbl="pub" class="indented5 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="password"></a><a id="password:password"></a>
+      <span class="permalink">
+      <a href="../../../../com/mohiva/play/silhouette/index.html#password" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="password/index.html"><span class="name">password</span></a>
+      </span>
+      
+      
+    </li><li name="com.mohiva.play.silhouette.persistence" visbl="pub" class="indented5 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="persistence"></a><a id="persistence:persistence"></a>
+      <span class="permalink">
+      <a href="../../../../com/mohiva/play/silhouette/index.html#persistence" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="persistence/index.html"><span class="name">persistence</span></a>
+      </span>
+      
+      
+    </li><li name="com.mohiva.play.silhouette.test" visbl="pub" class="indented5 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="test"></a><a id="test:test"></a>
+      <span class="permalink">
+      <a href="../../../../com/mohiva/play/silhouette/index.html#test" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="Test helpers to test a Silhouette application." href="test/index.html"><span class="name">test</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">Test helpers to test a Silhouette application.</p>
+    </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="package value">
+      <div id="definition">
+        <div class="big-circle package">p</div>
+        <p id="owner"><a href="../../../index.html" class="extype" name="com">com</a>.<a href="../../index.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../index.html" class="extype" name="com.mohiva.play">play</a></p>
+        <h1>silhouette<span class="permalink">
+      <a href="../../../../com/mohiva/play/silhouette/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">silhouette</span>
+      </span>
+      </h4>
+
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An authentication library for Play Framework applications that supports several authentication methods,
 including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes.
-</p></div><div class="toggleContainer"><div class="toggle block"><span>Linear Supertypes</span><div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.13.0/scala/AnyRef.html#scala.AnyRef" name="scala.AnyRef" id="scala.AnyRef" class="extype">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.13.0/scala/Any.html#scala.Any" name="scala.Any" id="scala.Any" class="extype">Any</a></div></div></div></div><div id="template"><div id="allMembers"><div id="packages" class="package members"><h3>Package Members</h3><ol><li class="indented0 " name="com.mohiva.play.silhouette.api" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="api"></a><a id="api:api"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#api" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="api/index.html" title="The collection of traits and utility classes that form the stable API of Silhouette."><span class="name">api</span></a></span><p class="shortcomment cmt">The collection of traits and utility classes that form the stable API of Silhouette.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.crypto" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="crypto"></a><a id="crypto:crypto"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#crypto" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="crypto/index.html" title=""><span class="name">crypto</span></a></span></li><li class="indented0 " name="com.mohiva.play.silhouette.impl" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="impl"></a><a id="impl:impl"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#impl" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="impl/index.html" title="The reference implementation of Silhouette."><span class="name">impl</span></a></span><p class="shortcomment cmt">The reference implementation of Silhouette.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.password" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="password"></a><a id="password:password"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#password" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="password/index.html" title=""><span class="name">password</span></a></span></li><li class="indented0 " name="com.mohiva.play.silhouette.persistence" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="persistence"></a><a id="persistence:persistence"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#persistence" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="persistence/index.html" title=""><span class="name">persistence</span></a></span></li><li class="indented0 " name="com.mohiva.play.silhouette.test" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="test"></a><a id="test:test"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#test" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="test/index.html" title="Test helpers to test a Silhouette application."><span class="name">test</span></a></span><p class="shortcomment cmt">Test helpers to test a Silhouette application.</p></li></ol></div></div><div id="inheritedMembers"><div name="scala.AnyRef" class="parent"><h3>Inherited from <a href="https://www.scala-lang.org/api/2.13.0/scala/AnyRef.html#scala.AnyRef" name="scala.AnyRef" id="scala.AnyRef" class="extype">AnyRef</a></h3></div><div name="scala.Any" class="parent"><h3>Inherited from <a href="https://www.scala-lang.org/api/2.13.0/scala/Any.html#scala.Any" name="scala.Any" id="scala.Any" class="extype">Any</a></h3></div></div><div id="groupedMembers"><div name="Ungrouped" class="group"><h3>Ungrouped</h3></div></div></div><div id="tooltip"></div><div id="footer"></div></body></div></div></div></body></html>
+</p></div><div class="toggleContainer block">
+          <span class="toggle">
+            Linear Supertypes
+          </span>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+        </div></div>
+        
+
+      
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+    </body>
+          </div>
+        </div>
+      </div>
+    </body>
+      </html>
