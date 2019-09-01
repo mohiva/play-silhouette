@@ -1,38 +1,1037 @@
-<!DOCTYPE html ><html><head><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/><title></title><meta content="" name="description"/><meta content="" name="keywords"/><meta http-equiv="content-type" content="text/html; charset=UTF-8"/><link href="../../../../../../lib/index.css" media="screen" type="text/css" rel="stylesheet"/><link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet"/><link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css"/><script type="text/javascript" src="../../../../../../lib/jquery.js"></script><script type="text/javascript" src="../../../../../../lib/index.js"></script><script type="text/javascript" src="../../../../../../index.js"></script><script type="text/javascript" src="../../../../../../lib/scheduler.js"></script><script type="text/javascript" src="../../../../../../lib/template.js"></script><script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script><script type="text/javascript">/* this variable can be used by the JS to determine the path to the root document */
-var toRoot = '../../../../../../';</script></head><body><div id="search"><span id="doc-title"><span id="doc-version"></span></span> <span class="close-results"><span class="left">&lt;</span> Back</span><div id="textfilter"><span class="input"><input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/"/><i class="clear material-icons"></i><i id="search-icon" class="material-icons"></i></span></div></div><div id="search-results"><div id="search-progress"><div id="progress-fill"></div></div><div id="results-content"><div id="entity-results"></div><div id="member-results"></div></div></div><div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;"><div id="content-container" style="-webkit-overflow-scrolling: touch;"><div id="subpackage-spacer"><div id="packages"><h1>Packages</h1><ul><li class="indented0 " name="_root_.root" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="_root_"></a><a id="root:_root_"></a> <span class="permalink"><a href="index.html#_root_" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../../../../../../index.html" title=""><span class="name">root</span></a></span><div class="fullcomment"><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../../../../../../index.html" name="_root_" id="_root_" class="extype">root</a></dd></dl></div></li><li class="indented1 " name="_root_.com" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="com"></a><a id="com:com"></a> <span class="permalink"><a href="index.html#com" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../../../../../index.html" title=""><span class="name">com</span></a></span><div class="fullcomment"><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../../../../../../index.html" name="_root_" id="_root_" class="extype">root</a></dd></dl></div></li><li class="indented2 " name="com.mohiva" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="mohiva"></a><a id="mohiva:mohiva"></a> <span class="permalink"><a href="../com/index.html#mohiva" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../../../../index.html" title=""><span class="name">mohiva</span></a></span><div class="fullcomment"><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../../../../../index.html" name="com" id="com" class="extype">com</a></dd></dl></div></li><li class="indented3 " name="com.mohiva.play" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="play"></a><a id="play:play"></a> <span class="permalink"><a href="../../com/mohiva/index.html#play" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../../../index.html" title=""><span class="name">play</span></a></span><div class="fullcomment"><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../../../../index.html" name="com.mohiva" id="com.mohiva" class="extype">mohiva</a></dd></dl></div></li><li class="indented4 " name="com.mohiva.play.silhouette" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="silhouette"></a><a id="silhouette:silhouette"></a> <span class="permalink"><a href="../../../com/mohiva/play/index.html#silhouette" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../../index.html" title="An authentication library for Play Framework applications that supports several authentication methods, including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes."><span class="name">silhouette</span></a></span><p class="shortcomment cmt">An authentication library for Play Framework applications that supports several authentication methods,
+<!DOCTYPE html >
+<html>
+        <head>
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title></title>
+          <meta name="description" content="" />
+          <meta name="keywords" content="" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/index.js"></script>
+      <script type="text/javascript" src="../../../../../../index.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/scheduler.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../../../../../../';
+      </script>
+    
+        </head>
+        <body>
+      <div id="search">
+        <span id="doc-title"><span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="index.html#_root_" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../../../../../index.html"><span class="name">root</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.com" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="com"></a><a id="com:com"></a>
+      <span class="permalink">
+      <a href="index.html#com" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../../../../index.html"><span class="name">com</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="com.mohiva" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mohiva"></a><a id="mohiva:mohiva"></a>
+      <span class="permalink">
+      <a href="../com/index.html#mohiva" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../../../index.html"><span class="name">mohiva</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../../index.html" class="extype" name="com">com</a></dd></dl></div>
+    </li><li name="com.mohiva.play" visbl="pub" class="indented3 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="play"></a><a id="play:play"></a>
+      <span class="permalink">
+      <a href="../../com/mohiva/index.html#play" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../../index.html"><span class="name">play</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../index.html" class="extype" name="com.mohiva">mohiva</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette" visbl="pub" class="indented4 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="silhouette"></a><a id="silhouette:silhouette"></a>
+      <span class="permalink">
+      <a href="../../../com/mohiva/play/index.html#silhouette" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="An authentication library for Play Framework applications that supports several authentication methods, including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes." href="../../index.html"><span class="name">silhouette</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">An authentication library for Play Framework applications that supports several authentication methods,
 including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes.</p><div class="fullcomment"><div class="comment cmt"><p>An authentication library for Play Framework applications that supports several authentication methods,
 including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes.
-</p></div><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../../../index.html" name="com.mohiva.play" id="com.mohiva.play" class="extype">play</a></dd></dl></div></li><li class="indented5 " name="com.mohiva.play.silhouette.api" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="api"></a><a id="api:api"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#api" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../index.html" title="The collection of traits and utility classes that form the stable API of Silhouette."><span class="name">api</span></a></span><p class="shortcomment cmt">The collection of traits and utility classes that form the stable API of Silhouette.</p><div class="fullcomment"><div class="comment cmt"><p>The collection of traits and utility classes that form the stable API of Silhouette.
-</p></div><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../../index.html" name="com.mohiva.play.silhouette" id="com.mohiva.play.silhouette" class="extype">silhouette</a></dd></dl></div></li><li class="indented6 current" name="com.mohiva.play.silhouette.api.actions" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="actions"></a><a id="actions:actions"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/api/index.html#actions" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><span class="name">actions</span></span><div class="fullcomment"><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../index.html" name="com.mohiva.play.silhouette.api" id="com.mohiva.play.silhouette.api" class="extype">api</a></dd></dl></div></li><li class="current-entities indented6"><span class="separator"></span> <a href="DefaultSecuredAction.html" title="Default implementation of the SecuredAction." class="class"></a><a href="DefaultSecuredAction.html" title="Default implementation of the SecuredAction.">DefaultSecuredAction</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="DefaultSecuredErrorHandler.html" title="Default implementation of the SecuredErrorHandler." class="class"></a><a href="DefaultSecuredErrorHandler.html" title="Default implementation of the SecuredErrorHandler.">DefaultSecuredErrorHandler</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="DefaultSecuredRequestHandler.html" title="Default implementation of the SecuredRequestHandler." class="class"></a><a href="DefaultSecuredRequestHandler.html" title="Default implementation of the SecuredRequestHandler.">DefaultSecuredRequestHandler</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="DefaultUnsecuredAction.html" title="Default implementation of the UnsecuredAction." class="class"></a><a href="DefaultUnsecuredAction.html" title="Default implementation of the UnsecuredAction.">DefaultUnsecuredAction</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="DefaultUnsecuredErrorHandler.html" title="Default implementation of the UnsecuredErrorHandler." class="class"></a><a href="DefaultUnsecuredErrorHandler.html" title="Default implementation of the UnsecuredErrorHandler.">DefaultUnsecuredErrorHandler</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="DefaultUnsecuredRequestHandler.html" title="Default implementation of the UnsecuredRequestHandler." class="class"></a><a href="DefaultUnsecuredRequestHandler.html" title="Default implementation of the UnsecuredRequestHandler.">DefaultUnsecuredRequestHandler</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="DefaultUserAwareAction.html" title="Default implementation of the UserAwareAction." class="class"></a><a href="DefaultUserAwareAction.html" title="Default implementation of the UserAwareAction.">DefaultUserAwareAction</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="DefaultUserAwareRequestHandler.html" title="Default implementation of the UserAwareRequestHandler." class="class"></a><a href="DefaultUserAwareRequestHandler.html" title="Default implementation of the UserAwareRequestHandler.">DefaultUserAwareRequestHandler</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="SecuredAction.html" title="An action based on the SecuredRequestHandler." class="trait"></a><a href="SecuredAction.html" title="An action based on the SecuredRequestHandler.">SecuredAction</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="SecuredActionBuilder.html" title="Action builder implementation to provide the foundation for secured actions." class="class"></a><a href="SecuredActionBuilder.html" title="Action builder implementation to provide the foundation for secured actions.">SecuredActionBuilder</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="SecuredActionComponents.html" title="Injection helper for secured action components" class="trait"></a><a href="SecuredActionComponents.html" title="Injection helper for secured action components">SecuredActionComponents</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="SecuredActionModule.html" title="Play module for providing the secured action components." class="class"></a><a href="SecuredActionModule.html" title="Play module for providing the secured action components.">SecuredActionModule</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="SecuredErrorHandler.html" title="Error handler for secured actions." class="trait"></a><a href="SecuredErrorHandler.html" title="Error handler for secured actions.">SecuredErrorHandler</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="SecuredErrorHandlerComponents.html" title="Injection helper for secured error handler component." class="trait"></a><a href="SecuredErrorHandlerComponents.html" title="Injection helper for secured error handler component.">SecuredErrorHandlerComponents</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="SecuredErrorHandlerModule.html" title="Play module to provide the secured error handler component." class="class"></a><a href="SecuredErrorHandlerModule.html" title="Play module to provide the secured error handler component.">SecuredErrorHandlerModule</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="SecuredRequest.html" title="A request that only allows access if an identity is authenticated and authorized." class="class"></a><a href="SecuredRequest.html" title="A request that only allows access if an identity is authenticated and authorized.">SecuredRequest</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="SecuredRequestHandler.html" title="A secured request handler." class="trait"></a><a href="SecuredRequestHandler.html" title="A secured request handler.">SecuredRequestHandler</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="SecuredRequestHandlerBuilder.html" title="Request handler builder implementation to provide the foundation for secured request handlers." class="class"></a><a href="SecuredRequestHandlerBuilder.html" title="Request handler builder implementation to provide the foundation for secured request handlers.">SecuredRequestHandlerBuilder</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="UnsecuredAction.html" title="An action based on the UnsecuredRequestHandler." class="trait"></a><a href="UnsecuredAction.html" title="An action based on the UnsecuredRequestHandler.">UnsecuredAction</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="UnsecuredActionBuilder.html" title="Action builder implementation to provide the foundation for unsecured actions." class="class"></a><a href="UnsecuredActionBuilder.html" title="Action builder implementation to provide the foundation for unsecured actions.">UnsecuredActionBuilder</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="UnsecuredActionComponents.html" title="Injection helper for unsecured action components" class="trait"></a><a href="UnsecuredActionComponents.html" title="Injection helper for unsecured action components">UnsecuredActionComponents</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="UnsecuredActionModule.html" title="Play module for providing the unsecured action components." class="class"></a><a href="UnsecuredActionModule.html" title="Play module for providing the unsecured action components.">UnsecuredActionModule</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="UnsecuredErrorHandler.html" title="Error handler for unsecured actions." class="trait"></a><a href="UnsecuredErrorHandler.html" title="Error handler for unsecured actions.">UnsecuredErrorHandler</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="UnsecuredErrorHandlerComponents.html" title="Injection helper for unsecured error handler component." class="trait"></a><a href="UnsecuredErrorHandlerComponents.html" title="Injection helper for unsecured error handler component.">UnsecuredErrorHandlerComponents</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="UnsecuredErrorHandlerModule.html" title="Play module to provide the unsecured error handler component." class="class"></a><a href="UnsecuredErrorHandlerModule.html" title="Play module to provide the unsecured error handler component.">UnsecuredErrorHandlerModule</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="UnsecuredRequestHandler.html" title="An unsecured request handler." class="trait"></a><a href="UnsecuredRequestHandler.html" title="An unsecured request handler.">UnsecuredRequestHandler</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="UnsecuredRequestHandlerBuilder.html" title="Request handler builder implementation to provide the foundation for unsecured request handlers." class="class"></a><a href="UnsecuredRequestHandlerBuilder.html" title="Request handler builder implementation to provide the foundation for unsecured request handlers.">UnsecuredRequestHandlerBuilder</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="UserAwareAction.html" title="An action based on the UserAwareRequestHandler." class="trait"></a><a href="UserAwareAction.html" title="An action based on the UserAwareRequestHandler.">UserAwareAction</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="UserAwareActionBuilder.html" title="Action builder implementation to provide the foundation for user-aware actions." class="class"></a><a href="UserAwareActionBuilder.html" title="Action builder implementation to provide the foundation for user-aware actions.">UserAwareActionBuilder</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="UserAwareActionComponents.html" title="Injection helper for user-aware action components" class="trait"></a><a href="UserAwareActionComponents.html" title="Injection helper for user-aware action components">UserAwareActionComponents</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="UserAwareActionModule.html" title="Play module for providing the user-aware action components." class="class"></a><a href="UserAwareActionModule.html" title="Play module for providing the user-aware action components.">UserAwareActionModule</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="UserAwareRequest.html" title="A request that adds maybe the identity and maybe the authenticator for the current call." class="class"></a><a href="UserAwareRequest.html" title="A request that adds maybe the identity and maybe the authenticator for the current call.">UserAwareRequest</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="UserAwareRequestHandler.html" title="A user-aware request handler." class="trait"></a><a href="UserAwareRequestHandler.html" title="A user-aware request handler.">UserAwareRequestHandler</a></li><li class="current-entities indented6"><span class="separator"></span> <a href="UserAwareRequestHandlerBuilder.html" title="Request handler builder implementation to provide the foundation for user-aware request handlers." class="class"></a><a href="UserAwareRequestHandlerBuilder.html" title="Request handler builder implementation to provide the foundation for user-aware request handlers.">UserAwareRequestHandlerBuilder</a></li><li class="indented6 " name="com.mohiva.play.silhouette.api.crypto" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="crypto"></a><a id="crypto:crypto"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/api/index.html#crypto" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../crypto/index.html" title=""><span class="name">crypto</span></a></span><div class="fullcomment"><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../index.html" name="com.mohiva.play.silhouette.api" id="com.mohiva.play.silhouette.api" class="extype">api</a></dd></dl></div></li><li class="indented6 " name="com.mohiva.play.silhouette.api.exceptions" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="exceptions"></a><a id="exceptions:exceptions"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/api/index.html#exceptions" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../exceptions/index.html" title="Provides exceptions used by the API."><span class="name">exceptions</span></a></span><p class="shortcomment cmt">Provides exceptions used by the API.</p><div class="fullcomment"><div class="comment cmt"><p>Provides exceptions used by the API.
-</p></div><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../index.html" name="com.mohiva.play.silhouette.api" id="com.mohiva.play.silhouette.api" class="extype">api</a></dd></dl></div></li><li class="indented6 " name="com.mohiva.play.silhouette.api.repositories" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="repositories"></a><a id="repositories:repositories"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/api/index.html#repositories" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../repositories/index.html" title="Provides repositories used by the API to persist entities."><span class="name">repositories</span></a></span><p class="shortcomment cmt">Provides repositories used by the API to persist entities.</p><div class="fullcomment"><div class="comment cmt"><p>Provides repositories used by the API to persist entities.
-</p></div><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../index.html" name="com.mohiva.play.silhouette.api" id="com.mohiva.play.silhouette.api" class="extype">api</a></dd></dl></div></li><li class="indented6 " name="com.mohiva.play.silhouette.api.services" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="services"></a><a id="services:services"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/api/index.html#services" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../services/index.html" title="Provides services used by the API to call external or internal services."><span class="name">services</span></a></span><p class="shortcomment cmt">Provides services used by the API to call external or internal services.</p><div class="fullcomment"><div class="comment cmt"><p>Provides services used by the API to call external or internal services.
-</p></div><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../index.html" name="com.mohiva.play.silhouette.api" id="com.mohiva.play.silhouette.api" class="extype">api</a></dd></dl></div></li><li class="indented6 " name="com.mohiva.play.silhouette.api.util" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="util"></a><a id="util:util"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/api/index.html#util" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../util/index.html" title="Provides utilities used by the API."><span class="name">util</span></a></span><p class="shortcomment cmt">Provides utilities used by the API.</p><div class="fullcomment"><div class="comment cmt"><p>Provides utilities used by the API.
-</p></div><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../index.html" name="com.mohiva.play.silhouette.api" id="com.mohiva.play.silhouette.api" class="extype">api</a></dd></dl></div></li></ul></div></div><div id="content"><body class="package value"><div id="definition"><div class="big-circle package">p</div><p id="owner"><a href="../../../../../index.html" name="com" id="com" class="extype">com</a>.<a href="../../../../index.html" name="com.mohiva" id="com.mohiva" class="extype">mohiva</a>.<a href="../../../index.html" name="com.mohiva.play" id="com.mohiva.play" class="extype">play</a>.<a href="../../index.html" name="com.mohiva.play.silhouette" id="com.mohiva.play.silhouette" class="extype">silhouette</a>.<a href="../index.html" name="com.mohiva.play.silhouette.api" id="com.mohiva.play.silhouette.api" class="extype">api</a></p><h1>actions<span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html" title="Permalink"><i class="material-icons"></i></a></span></h1></div><h4 id="signature" class="signature"><span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><span class="name">actions</span></span></h4><div id="comment" class="fullcommenttop"></div><div id="template"><div id="allMembers"><div id="types" class="types members"><h3>Type Members</h3><ol><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.DefaultSecuredAction" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="DefaultSecuredActionextendsSecuredAction"></a><a id="DefaultSecuredAction:DefaultSecuredAction"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#DefaultSecuredActionextendsSecuredAction" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">class</span></span> <span class="symbol"><a href="DefaultSecuredAction.html" title="Default implementation of the SecuredAction."><span class="name">DefaultSecuredAction</span></a><span class="result"> extends <a href="SecuredAction.html" name="com.mohiva.play.silhouette.api.actions.SecuredAction" id="com.mohiva.play.silhouette.api.actions.SecuredAction" class="extype">SecuredAction</a></span></span><p class="shortcomment cmt">Default implementation of the <a href="SecuredAction.html" name="com.mohiva.play.silhouette.api.actions.SecuredAction" id="com.mohiva.play.silhouette.api.actions.SecuredAction" class="extype">SecuredAction</a>.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.DefaultSecuredErrorHandler" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="DefaultSecuredErrorHandlerextendsSecuredErrorHandlerwithDefaultNotAuthenticatedErrorHandlerwithDefaultNotAuthorizedErrorHandler"></a><a id="DefaultSecuredErrorHandler:DefaultSecuredErrorHandler"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#DefaultSecuredErrorHandlerextendsSecuredErrorHandlerwithDefaultNotAuthenticatedErrorHandlerwithDefaultNotAuthorizedErrorHandler" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">class</span></span> <span class="symbol"><a href="DefaultSecuredErrorHandler.html" title="Default implementation of the SecuredErrorHandler."><span class="name">DefaultSecuredErrorHandler</span></a><span class="result"> extends <a href="SecuredErrorHandler.html" name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler" id="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler" class="extype">SecuredErrorHandler</a> with <a href="../DefaultNotAuthenticatedErrorHandler.html" name="com.mohiva.play.silhouette.api.DefaultNotAuthenticatedErrorHandler" id="com.mohiva.play.silhouette.api.DefaultNotAuthenticatedErrorHandler" class="extype">DefaultNotAuthenticatedErrorHandler</a> with <a href="../DefaultNotAuthorizedErrorHandler.html" name="com.mohiva.play.silhouette.api.DefaultNotAuthorizedErrorHandler" id="com.mohiva.play.silhouette.api.DefaultNotAuthorizedErrorHandler" class="extype">DefaultNotAuthorizedErrorHandler</a></span></span><p class="shortcomment cmt">Default implementation of the <a href="SecuredErrorHandler.html" name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler" id="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler" class="extype">SecuredErrorHandler</a>.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.DefaultSecuredRequestHandler" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="DefaultSecuredRequestHandlerextendsSecuredRequestHandler"></a><a id="DefaultSecuredRequestHandler:DefaultSecuredRequestHandler"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#DefaultSecuredRequestHandlerextendsSecuredRequestHandler" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">class</span></span> <span class="symbol"><a href="DefaultSecuredRequestHandler.html" title="Default implementation of the SecuredRequestHandler."><span class="name">DefaultSecuredRequestHandler</span></a><span class="result"> extends <a href="SecuredRequestHandler.html" name="com.mohiva.play.silhouette.api.actions.SecuredRequestHandler" id="com.mohiva.play.silhouette.api.actions.SecuredRequestHandler" class="extype">SecuredRequestHandler</a></span></span><p class="shortcomment cmt">Default implementation of the <a href="SecuredRequestHandler.html" name="com.mohiva.play.silhouette.api.actions.SecuredRequestHandler" id="com.mohiva.play.silhouette.api.actions.SecuredRequestHandler" class="extype">SecuredRequestHandler</a>.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.DefaultUnsecuredAction" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="DefaultUnsecuredActionextendsUnsecuredAction"></a><a id="DefaultUnsecuredAction:DefaultUnsecuredAction"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#DefaultUnsecuredActionextendsUnsecuredAction" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">class</span></span> <span class="symbol"><a href="DefaultUnsecuredAction.html" title="Default implementation of the UnsecuredAction."><span class="name">DefaultUnsecuredAction</span></a><span class="result"> extends <a href="UnsecuredAction.html" name="com.mohiva.play.silhouette.api.actions.UnsecuredAction" id="com.mohiva.play.silhouette.api.actions.UnsecuredAction" class="extype">UnsecuredAction</a></span></span><p class="shortcomment cmt">Default implementation of the <a href="UnsecuredAction.html" name="com.mohiva.play.silhouette.api.actions.UnsecuredAction" id="com.mohiva.play.silhouette.api.actions.UnsecuredAction" class="extype">UnsecuredAction</a>.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.DefaultUnsecuredErrorHandler" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="DefaultUnsecuredErrorHandlerextendsUnsecuredErrorHandlerwithDefaultNotAuthorizedErrorHandler"></a><a id="DefaultUnsecuredErrorHandler:DefaultUnsecuredErrorHandler"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#DefaultUnsecuredErrorHandlerextendsUnsecuredErrorHandlerwithDefaultNotAuthorizedErrorHandler" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">class</span></span> <span class="symbol"><a href="DefaultUnsecuredErrorHandler.html" title="Default implementation of the UnsecuredErrorHandler."><span class="name">DefaultUnsecuredErrorHandler</span></a><span class="result"> extends <a href="UnsecuredErrorHandler.html" name="com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandler" id="com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandler" class="extype">UnsecuredErrorHandler</a> with <a href="../DefaultNotAuthorizedErrorHandler.html" name="com.mohiva.play.silhouette.api.DefaultNotAuthorizedErrorHandler" id="com.mohiva.play.silhouette.api.DefaultNotAuthorizedErrorHandler" class="extype">DefaultNotAuthorizedErrorHandler</a></span></span><p class="shortcomment cmt">Default implementation of the <a href="UnsecuredErrorHandler.html" name="com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandler" id="com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandler" class="extype">UnsecuredErrorHandler</a>.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.DefaultUnsecuredRequestHandler" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="DefaultUnsecuredRequestHandlerextendsUnsecuredRequestHandler"></a><a id="DefaultUnsecuredRequestHandler:DefaultUnsecuredRequestHandler"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#DefaultUnsecuredRequestHandlerextendsUnsecuredRequestHandler" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">class</span></span> <span class="symbol"><a href="DefaultUnsecuredRequestHandler.html" title="Default implementation of the UnsecuredRequestHandler."><span class="name">DefaultUnsecuredRequestHandler</span></a><span class="result"> extends <a href="UnsecuredRequestHandler.html" name="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandler" id="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandler" class="extype">UnsecuredRequestHandler</a></span></span><p class="shortcomment cmt">Default implementation of the <a href="UnsecuredRequestHandler.html" name="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandler" id="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandler" class="extype">UnsecuredRequestHandler</a>.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.DefaultUserAwareAction" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="DefaultUserAwareActionextendsUserAwareAction"></a><a id="DefaultUserAwareAction:DefaultUserAwareAction"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#DefaultUserAwareActionextendsUserAwareAction" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">class</span></span> <span class="symbol"><a href="DefaultUserAwareAction.html" title="Default implementation of the UserAwareAction."><span class="name">DefaultUserAwareAction</span></a><span class="result"> extends <a href="UserAwareAction.html" name="com.mohiva.play.silhouette.api.actions.UserAwareAction" id="com.mohiva.play.silhouette.api.actions.UserAwareAction" class="extype">UserAwareAction</a></span></span><p class="shortcomment cmt">Default implementation of the <a href="UserAwareAction.html" name="com.mohiva.play.silhouette.api.actions.UserAwareAction" id="com.mohiva.play.silhouette.api.actions.UserAwareAction" class="extype">UserAwareAction</a>.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.DefaultUserAwareRequestHandler" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="DefaultUserAwareRequestHandlerextendsUserAwareRequestHandler"></a><a id="DefaultUserAwareRequestHandler:DefaultUserAwareRequestHandler"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#DefaultUserAwareRequestHandlerextendsUserAwareRequestHandler" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">class</span></span> <span class="symbol"><a href="DefaultUserAwareRequestHandler.html" title="Default implementation of the UserAwareRequestHandler."><span class="name">DefaultUserAwareRequestHandler</span></a><span class="result"> extends <a href="UserAwareRequestHandler.html" name="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandler" id="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandler" class="extype">UserAwareRequestHandler</a></span></span><p class="shortcomment cmt">Default implementation of the <a href="UserAwareRequestHandler.html" name="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandler" id="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandler" class="extype">UserAwareRequestHandler</a>.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.SecuredAction" group="Ungrouped" fullComment="no" data-isabs="true" visbl="pub"><a id="SecuredActionextendsAnyRef"></a><a id="SecuredAction:SecuredAction"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredActionextendsAnyRef" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">trait</span></span> <span class="symbol"><a href="SecuredAction.html" title="An action based on the SecuredRequestHandler."><span class="name">SecuredAction</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.13.0/scala/AnyRef.html#scala.AnyRef" name="scala.AnyRef" id="scala.AnyRef" class="extype">AnyRef</a></span></span><p class="shortcomment cmt">An action based on the <a href="SecuredRequestHandler.html" name="com.mohiva.play.silhouette.api.actions.SecuredRequestHandler" id="com.mohiva.play.silhouette.api.actions.SecuredRequestHandler" class="extype">SecuredRequestHandler</a>.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.SecuredActionBuilder" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="SecuredActionBuilder[E&lt;:com.mohiva.play.silhouette.api.Env,P]extendsActionBuilder[[B]com.mohiva.play.silhouette.api.actions.SecuredRequest[E,B],P]withProductwithSerializable"></a><a id="SecuredActionBuilder[E&lt;:Env,P]:SecuredActionBuilder[E,P]"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredActionBuilder[E&lt;:com.mohiva.play.silhouette.api.Env,P]extendsActionBuilder[[B]com.mohiva.play.silhouette.api.actions.SecuredRequest[E,B],P]withProductwithSerializable" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">case class</span></span> <span class="symbol"><a href="SecuredActionBuilder.html" title="Action builder implementation to provide the foundation for secured actions."><span class="name">SecuredActionBuilder</span></a><span class="tparams">[<span name="E">E &lt;: <a href="../Env.html" name="com.mohiva.play.silhouette.api.Env" id="com.mohiva.play.silhouette.api.Env" class="extype">Env</a></span>, <span name="P">P</span>]</span><span class="params">(<span name="requestHandler">requestHandler: <a href="SecuredRequestHandlerBuilder.html" name="com.mohiva.play.silhouette.api.actions.SecuredRequestHandlerBuilder" id="com.mohiva.play.silhouette.api.actions.SecuredRequestHandlerBuilder" class="extype">SecuredRequestHandlerBuilder</a>[<span name="com.mohiva.play.silhouette.api.actions.SecuredActionBuilder.E" class="extype">E</span>]</span>, <span name="parser">parser: <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/BodyParser.html#play.api.mvc.BodyParser" name="play.api.mvc.BodyParser" id="play.api.mvc.BodyParser" class="extype">BodyParser</a>[<span name="com.mohiva.play.silhouette.api.actions.SecuredActionBuilder.P" class="extype">P</span>]</span>)</span><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/ActionBuilder.html#play.api.mvc.ActionBuilder" name="play.api.mvc.ActionBuilder" id="play.api.mvc.ActionBuilder" class="extype">ActionBuilder</a>[[B]<a href="SecuredRequest.html" name="com.mohiva.play.silhouette.api.actions.SecuredRequest" id="com.mohiva.play.silhouette.api.actions.SecuredRequest" class="extype">SecuredRequest</a>[<span name="com.mohiva.play.silhouette.api.actions.SecuredActionBuilder.E" class="extype">E</span>, <span name="com.mohiva.play.silhouette.api.actions.&lt;refinement&gt;.R.&lt;local R&gt;.B" class="extype">B</span>], <span name="com.mohiva.play.silhouette.api.actions.SecuredActionBuilder.P" class="extype">P</span>] with <a href="https://www.scala-lang.org/api/2.13.0/scala/Product.html#scala.Product" name="scala.Product" id="scala.Product" class="extype">Product</a> with <span name="scala.Serializable" class="extype">Serializable</span></span></span><p class="shortcomment cmt">Action builder implementation to provide the foundation for secured actions.</p><div class="fullcomment"><div class="comment cmt"><p>Action builder implementation to provide the foundation for secured actions.
-</p></div><dl class="paramcmts block"><dt class="tparam">E</dt><dd class="cmt"><p>The type of the environment.</p></dd><dt class="tparam">P</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">requestHandler</dt><dd class="cmt"><p>The request handler instance.</p></dd><dt class="param">parser</dt><dd class="cmt"><p>The body parser.</p></dd></dl></div></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.SecuredActionComponents" group="Ungrouped" fullComment="no" data-isabs="true" visbl="pub"><a id="SecuredActionComponentsextendsAnyRef"></a><a id="SecuredActionComponents:SecuredActionComponents"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredActionComponentsextendsAnyRef" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">trait</span></span> <span class="symbol"><a href="SecuredActionComponents.html" title="Injection helper for secured action components"><span class="name">SecuredActionComponents</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.13.0/scala/AnyRef.html#scala.AnyRef" name="scala.AnyRef" id="scala.AnyRef" class="extype">AnyRef</a></span></span><p class="shortcomment cmt">Injection helper for secured action components
-</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.SecuredActionModule" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="SecuredActionModuleextendsModule"></a><a id="SecuredActionModule:SecuredActionModule"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredActionModuleextendsModule" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">class</span></span> <span class="symbol"><a href="SecuredActionModule.html" title="Play module for providing the secured action components."><span class="name">SecuredActionModule</span></a><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/inject/Module.html#play.api.inject.Module" name="play.api.inject.Module" id="play.api.inject.Module" class="extype">Module</a></span></span><p class="shortcomment cmt">Play module for providing the secured action components.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler" group="Ungrouped" fullComment="no" data-isabs="true" visbl="pub"><a id="SecuredErrorHandlerextendsNotAuthenticatedErrorHandlerwithNotAuthorizedErrorHandler"></a><a id="SecuredErrorHandler:SecuredErrorHandler"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredErrorHandlerextendsNotAuthenticatedErrorHandlerwithNotAuthorizedErrorHandler" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">trait</span></span> <span class="symbol"><a href="SecuredErrorHandler.html" title="Error handler for secured actions."><span class="name">SecuredErrorHandler</span></a><span class="result"> extends <a href="../NotAuthenticatedErrorHandler.html" name="com.mohiva.play.silhouette.api.NotAuthenticatedErrorHandler" id="com.mohiva.play.silhouette.api.NotAuthenticatedErrorHandler" class="extype">NotAuthenticatedErrorHandler</a> with <a href="../NotAuthorizedErrorHandler.html" name="com.mohiva.play.silhouette.api.NotAuthorizedErrorHandler" id="com.mohiva.play.silhouette.api.NotAuthorizedErrorHandler" class="extype">NotAuthorizedErrorHandler</a></span></span><p class="shortcomment cmt">Error handler for secured actions.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandlerComponents" group="Ungrouped" fullComment="yes" data-isabs="true" visbl="pub"><a id="SecuredErrorHandlerComponentsextendsAnyRef"></a><a id="SecuredErrorHandlerComponents:SecuredErrorHandlerComponents"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredErrorHandlerComponentsextendsAnyRef" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">trait</span></span> <span class="symbol"><a href="SecuredErrorHandlerComponents.html" title="Injection helper for secured error handler component."><span class="name">SecuredErrorHandlerComponents</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.13.0/scala/AnyRef.html#scala.AnyRef" name="scala.AnyRef" id="scala.AnyRef" class="extype">AnyRef</a></span></span><p class="shortcomment cmt">Injection helper for secured error handler component.</p><div class="fullcomment"><div class="comment cmt"><p>Injection helper for secured error handler component.</p><p>We provide an extra component so that it can be easily replaced with a custom implementation
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../index.html" class="extype" name="com.mohiva.play">play</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="api"></a><a id="api:api"></a>
+      <span class="permalink">
+      <a href="../../../../com/mohiva/play/silhouette/index.html#api" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="The collection of traits and utility classes that form the stable API of Silhouette." href="../index.html"><span class="name">api</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">The collection of traits and utility classes that form the stable API of Silhouette.</p><div class="fullcomment"><div class="comment cmt"><p>The collection of traits and utility classes that form the stable API of Silhouette.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.actions" visbl="pub" class="indented6 current" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="actions"></a><a id="actions:actions"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/api/index.html#actions" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">actions</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.mohiva.play.silhouette.api">api</a></dd></dl></div>
+    </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="DefaultSecuredAction.html" title="Default implementation of the SecuredAction."></a>
+                        <a href="DefaultSecuredAction.html" title="Default implementation of the SecuredAction.">DefaultSecuredAction</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="DefaultSecuredErrorHandler.html" title="Default implementation of the SecuredErrorHandler."></a>
+                        <a href="DefaultSecuredErrorHandler.html" title="Default implementation of the SecuredErrorHandler.">DefaultSecuredErrorHandler</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="DefaultSecuredRequestHandler.html" title="Default implementation of the SecuredRequestHandler."></a>
+                        <a href="DefaultSecuredRequestHandler.html" title="Default implementation of the SecuredRequestHandler.">DefaultSecuredRequestHandler</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="DefaultUnsecuredAction.html" title="Default implementation of the UnsecuredAction."></a>
+                        <a href="DefaultUnsecuredAction.html" title="Default implementation of the UnsecuredAction.">DefaultUnsecuredAction</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="DefaultUnsecuredErrorHandler.html" title="Default implementation of the UnsecuredErrorHandler."></a>
+                        <a href="DefaultUnsecuredErrorHandler.html" title="Default implementation of the UnsecuredErrorHandler.">DefaultUnsecuredErrorHandler</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="DefaultUnsecuredRequestHandler.html" title="Default implementation of the UnsecuredRequestHandler."></a>
+                        <a href="DefaultUnsecuredRequestHandler.html" title="Default implementation of the UnsecuredRequestHandler.">DefaultUnsecuredRequestHandler</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="DefaultUserAwareAction.html" title="Default implementation of the UserAwareAction."></a>
+                        <a href="DefaultUserAwareAction.html" title="Default implementation of the UserAwareAction.">DefaultUserAwareAction</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="DefaultUserAwareRequestHandler.html" title="Default implementation of the UserAwareRequestHandler."></a>
+                        <a href="DefaultUserAwareRequestHandler.html" title="Default implementation of the UserAwareRequestHandler.">DefaultUserAwareRequestHandler</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="trait" href="SecuredAction.html" title="An action based on the SecuredRequestHandler."></a>
+                        <a href="SecuredAction.html" title="An action based on the SecuredRequestHandler.">SecuredAction</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="SecuredActionBuilder.html" title="Action builder implementation to provide the foundation for secured actions."></a>
+                        <a href="SecuredActionBuilder.html" title="Action builder implementation to provide the foundation for secured actions.">SecuredActionBuilder</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="trait" href="SecuredActionComponents.html" title="Injection helper for secured action components"></a>
+                        <a href="SecuredActionComponents.html" title="Injection helper for secured action components">SecuredActionComponents</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="SecuredActionModule.html" title="Play module for providing the secured action components."></a>
+                        <a href="SecuredActionModule.html" title="Play module for providing the secured action components.">SecuredActionModule</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="trait" href="SecuredErrorHandler.html" title="Error handler for secured actions."></a>
+                        <a href="SecuredErrorHandler.html" title="Error handler for secured actions.">SecuredErrorHandler</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="trait" href="SecuredErrorHandlerComponents.html" title="Injection helper for secured error handler component."></a>
+                        <a href="SecuredErrorHandlerComponents.html" title="Injection helper for secured error handler component.">SecuredErrorHandlerComponents</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="SecuredErrorHandlerModule.html" title="Play module to provide the secured error handler component."></a>
+                        <a href="SecuredErrorHandlerModule.html" title="Play module to provide the secured error handler component.">SecuredErrorHandlerModule</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="SecuredRequest.html" title="A request that only allows access if an identity is authenticated and authorized."></a>
+                        <a href="SecuredRequest.html" title="A request that only allows access if an identity is authenticated and authorized.">SecuredRequest</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="trait" href="SecuredRequestHandler.html" title="A secured request handler."></a>
+                        <a href="SecuredRequestHandler.html" title="A secured request handler.">SecuredRequestHandler</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="SecuredRequestHandlerBuilder.html" title="Request handler builder implementation to provide the foundation for secured request handlers."></a>
+                        <a href="SecuredRequestHandlerBuilder.html" title="Request handler builder implementation to provide the foundation for secured request handlers.">SecuredRequestHandlerBuilder</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="trait" href="UnsecuredAction.html" title="An action based on the UnsecuredRequestHandler."></a>
+                        <a href="UnsecuredAction.html" title="An action based on the UnsecuredRequestHandler.">UnsecuredAction</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="UnsecuredActionBuilder.html" title="Action builder implementation to provide the foundation for unsecured actions."></a>
+                        <a href="UnsecuredActionBuilder.html" title="Action builder implementation to provide the foundation for unsecured actions.">UnsecuredActionBuilder</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="trait" href="UnsecuredActionComponents.html" title="Injection helper for unsecured action components"></a>
+                        <a href="UnsecuredActionComponents.html" title="Injection helper for unsecured action components">UnsecuredActionComponents</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="UnsecuredActionModule.html" title="Play module for providing the unsecured action components."></a>
+                        <a href="UnsecuredActionModule.html" title="Play module for providing the unsecured action components.">UnsecuredActionModule</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="trait" href="UnsecuredErrorHandler.html" title="Error handler for unsecured actions."></a>
+                        <a href="UnsecuredErrorHandler.html" title="Error handler for unsecured actions.">UnsecuredErrorHandler</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="trait" href="UnsecuredErrorHandlerComponents.html" title="Injection helper for unsecured error handler component."></a>
+                        <a href="UnsecuredErrorHandlerComponents.html" title="Injection helper for unsecured error handler component.">UnsecuredErrorHandlerComponents</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="UnsecuredErrorHandlerModule.html" title="Play module to provide the unsecured error handler component."></a>
+                        <a href="UnsecuredErrorHandlerModule.html" title="Play module to provide the unsecured error handler component.">UnsecuredErrorHandlerModule</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="trait" href="UnsecuredRequestHandler.html" title="An unsecured request handler."></a>
+                        <a href="UnsecuredRequestHandler.html" title="An unsecured request handler.">UnsecuredRequestHandler</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="UnsecuredRequestHandlerBuilder.html" title="Request handler builder implementation to provide the foundation for unsecured request handlers."></a>
+                        <a href="UnsecuredRequestHandlerBuilder.html" title="Request handler builder implementation to provide the foundation for unsecured request handlers.">UnsecuredRequestHandlerBuilder</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="trait" href="UserAwareAction.html" title="An action based on the UserAwareRequestHandler."></a>
+                        <a href="UserAwareAction.html" title="An action based on the UserAwareRequestHandler.">UserAwareAction</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="UserAwareActionBuilder.html" title="Action builder implementation to provide the foundation for user-aware actions."></a>
+                        <a href="UserAwareActionBuilder.html" title="Action builder implementation to provide the foundation for user-aware actions.">UserAwareActionBuilder</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="trait" href="UserAwareActionComponents.html" title="Injection helper for user-aware action components"></a>
+                        <a href="UserAwareActionComponents.html" title="Injection helper for user-aware action components">UserAwareActionComponents</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="UserAwareActionModule.html" title="Play module for providing the user-aware action components."></a>
+                        <a href="UserAwareActionModule.html" title="Play module for providing the user-aware action components.">UserAwareActionModule</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="UserAwareRequest.html" title="A request that adds maybe the identity and maybe the authenticator for the current call."></a>
+                        <a href="UserAwareRequest.html" title="A request that adds maybe the identity and maybe the authenticator for the current call.">UserAwareRequest</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="trait" href="UserAwareRequestHandler.html" title="A user-aware request handler."></a>
+                        <a href="UserAwareRequestHandler.html" title="A user-aware request handler.">UserAwareRequestHandler</a>
+                      </li><li class="current-entities indented6">
+                        <span class="separator"></span>
+                        <a class="class" href="UserAwareRequestHandlerBuilder.html" title="Request handler builder implementation to provide the foundation for user-aware request handlers."></a>
+                        <a href="UserAwareRequestHandlerBuilder.html" title="Request handler builder implementation to provide the foundation for user-aware request handlers.">UserAwareRequestHandlerBuilder</a>
+                      </li><li name="com.mohiva.play.silhouette.api.crypto" visbl="pub" class="indented6 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="crypto"></a><a id="crypto:crypto"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/api/index.html#crypto" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../crypto/index.html"><span class="name">crypto</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.mohiva.play.silhouette.api">api</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.exceptions" visbl="pub" class="indented6 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="exceptions"></a><a id="exceptions:exceptions"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/api/index.html#exceptions" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="Provides exceptions used by the API." href="../exceptions/index.html"><span class="name">exceptions</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">Provides exceptions used by the API.</p><div class="fullcomment"><div class="comment cmt"><p>Provides exceptions used by the API.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.mohiva.play.silhouette.api">api</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.repositories" visbl="pub" class="indented6 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="repositories"></a><a id="repositories:repositories"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/api/index.html#repositories" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="Provides repositories used by the API to persist entities." href="../repositories/index.html"><span class="name">repositories</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">Provides repositories used by the API to persist entities.</p><div class="fullcomment"><div class="comment cmt"><p>Provides repositories used by the API to persist entities.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.mohiva.play.silhouette.api">api</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.services" visbl="pub" class="indented6 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="services"></a><a id="services:services"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/api/index.html#services" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="Provides services used by the API to call external or internal services." href="../services/index.html"><span class="name">services</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">Provides services used by the API to call external or internal services.</p><div class="fullcomment"><div class="comment cmt"><p>Provides services used by the API to call external or internal services.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.mohiva.play.silhouette.api">api</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.util" visbl="pub" class="indented6 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="util"></a><a id="util:util"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/api/index.html#util" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="Provides utilities used by the API." href="../util/index.html"><span class="name">util</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">Provides utilities used by the API.</p><div class="fullcomment"><div class="comment cmt"><p>Provides utilities used by the API.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.mohiva.play.silhouette.api">api</a></dd></dl></div>
+    </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="package value">
+      <div id="definition">
+        <div class="big-circle package">p</div>
+        <p id="owner"><a href="../../../../../index.html" class="extype" name="com">com</a>.<a href="../../../../index.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../../index.html" class="extype" name="com.mohiva.play">play</a>.<a href="../../index.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a>.<a href="../index.html" class="extype" name="com.mohiva.play.silhouette.api">api</a></p>
+        <h1>actions<span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">actions</span>
+      </span>
+      </h4>
+
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.api.actions.DefaultSecuredAction" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DefaultSecuredActionextendsSecuredAction"></a><a id="DefaultSecuredAction:DefaultSecuredAction"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#DefaultSecuredActionextendsSecuredAction" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Default implementation of the SecuredAction." href="DefaultSecuredAction.html"><span class="name">DefaultSecuredAction</span></a><span class="result"> extends <a href="SecuredAction.html" class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredAction">SecuredAction</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Default implementation of the <a href="SecuredAction.html" class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredAction">SecuredAction</a>.</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.DefaultSecuredErrorHandler" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DefaultSecuredErrorHandlerextendsSecuredErrorHandlerwithDefaultNotAuthenticatedErrorHandlerwithDefaultNotAuthorizedErrorHandler"></a><a id="DefaultSecuredErrorHandler:DefaultSecuredErrorHandler"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#DefaultSecuredErrorHandlerextendsSecuredErrorHandlerwithDefaultNotAuthenticatedErrorHandlerwithDefaultNotAuthorizedErrorHandler" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Default implementation of the SecuredErrorHandler." href="DefaultSecuredErrorHandler.html"><span class="name">DefaultSecuredErrorHandler</span></a><span class="result"> extends <a href="SecuredErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler">SecuredErrorHandler</a> with <a href="../DefaultNotAuthenticatedErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.DefaultNotAuthenticatedErrorHandler">DefaultNotAuthenticatedErrorHandler</a> with <a href="../DefaultNotAuthorizedErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.DefaultNotAuthorizedErrorHandler">DefaultNotAuthorizedErrorHandler</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Default implementation of the <a href="SecuredErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler">SecuredErrorHandler</a>.</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.DefaultSecuredRequestHandler" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DefaultSecuredRequestHandlerextendsSecuredRequestHandler"></a><a id="DefaultSecuredRequestHandler:DefaultSecuredRequestHandler"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#DefaultSecuredRequestHandlerextendsSecuredRequestHandler" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Default implementation of the SecuredRequestHandler." href="DefaultSecuredRequestHandler.html"><span class="name">DefaultSecuredRequestHandler</span></a><span class="result"> extends <a href="SecuredRequestHandler.html" class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredRequestHandler">SecuredRequestHandler</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Default implementation of the <a href="SecuredRequestHandler.html" class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredRequestHandler">SecuredRequestHandler</a>.</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.DefaultUnsecuredAction" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DefaultUnsecuredActionextendsUnsecuredAction"></a><a id="DefaultUnsecuredAction:DefaultUnsecuredAction"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#DefaultUnsecuredActionextendsUnsecuredAction" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Default implementation of the UnsecuredAction." href="DefaultUnsecuredAction.html"><span class="name">DefaultUnsecuredAction</span></a><span class="result"> extends <a href="UnsecuredAction.html" class="extype" name="com.mohiva.play.silhouette.api.actions.UnsecuredAction">UnsecuredAction</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Default implementation of the <a href="UnsecuredAction.html" class="extype" name="com.mohiva.play.silhouette.api.actions.UnsecuredAction">UnsecuredAction</a>.</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.DefaultUnsecuredErrorHandler" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DefaultUnsecuredErrorHandlerextendsUnsecuredErrorHandlerwithDefaultNotAuthorizedErrorHandler"></a><a id="DefaultUnsecuredErrorHandler:DefaultUnsecuredErrorHandler"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#DefaultUnsecuredErrorHandlerextendsUnsecuredErrorHandlerwithDefaultNotAuthorizedErrorHandler" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Default implementation of the UnsecuredErrorHandler." href="DefaultUnsecuredErrorHandler.html"><span class="name">DefaultUnsecuredErrorHandler</span></a><span class="result"> extends <a href="UnsecuredErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandler">UnsecuredErrorHandler</a> with <a href="../DefaultNotAuthorizedErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.DefaultNotAuthorizedErrorHandler">DefaultNotAuthorizedErrorHandler</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Default implementation of the <a href="UnsecuredErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandler">UnsecuredErrorHandler</a>.</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.DefaultUnsecuredRequestHandler" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DefaultUnsecuredRequestHandlerextendsUnsecuredRequestHandler"></a><a id="DefaultUnsecuredRequestHandler:DefaultUnsecuredRequestHandler"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#DefaultUnsecuredRequestHandlerextendsUnsecuredRequestHandler" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Default implementation of the UnsecuredRequestHandler." href="DefaultUnsecuredRequestHandler.html"><span class="name">DefaultUnsecuredRequestHandler</span></a><span class="result"> extends <a href="UnsecuredRequestHandler.html" class="extype" name="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandler">UnsecuredRequestHandler</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Default implementation of the <a href="UnsecuredRequestHandler.html" class="extype" name="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandler">UnsecuredRequestHandler</a>.</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.DefaultUserAwareAction" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DefaultUserAwareActionextendsUserAwareAction"></a><a id="DefaultUserAwareAction:DefaultUserAwareAction"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#DefaultUserAwareActionextendsUserAwareAction" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Default implementation of the UserAwareAction." href="DefaultUserAwareAction.html"><span class="name">DefaultUserAwareAction</span></a><span class="result"> extends <a href="UserAwareAction.html" class="extype" name="com.mohiva.play.silhouette.api.actions.UserAwareAction">UserAwareAction</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Default implementation of the <a href="UserAwareAction.html" class="extype" name="com.mohiva.play.silhouette.api.actions.UserAwareAction">UserAwareAction</a>.</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.DefaultUserAwareRequestHandler" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DefaultUserAwareRequestHandlerextendsUserAwareRequestHandler"></a><a id="DefaultUserAwareRequestHandler:DefaultUserAwareRequestHandler"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#DefaultUserAwareRequestHandlerextendsUserAwareRequestHandler" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Default implementation of the UserAwareRequestHandler." href="DefaultUserAwareRequestHandler.html"><span class="name">DefaultUserAwareRequestHandler</span></a><span class="result"> extends <a href="UserAwareRequestHandler.html" class="extype" name="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandler">UserAwareRequestHandler</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Default implementation of the <a href="UserAwareRequestHandler.html" class="extype" name="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandler">UserAwareRequestHandler</a>.</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.SecuredAction" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SecuredActionextendsAnyRef"></a><a id="SecuredAction:SecuredAction"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredActionextendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="An action based on the SecuredRequestHandler." href="SecuredAction.html"><span class="name">SecuredAction</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">An action based on the <a href="SecuredRequestHandler.html" class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredRequestHandler">SecuredRequestHandler</a>.</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.SecuredActionBuilder" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SecuredActionBuilder[E&lt;:com.mohiva.play.silhouette.api.Env,P]extendsActionBuilder[[B]com.mohiva.play.silhouette.api.actions.SecuredRequest[E,B],P]withProductwithSerializable"></a><a id="SecuredActionBuilder[E&lt;:Env,P]:SecuredActionBuilder[E,P]"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredActionBuilder[E&lt;:com.mohiva.play.silhouette.api.Env,P]extendsActionBuilder[[B]com.mohiva.play.silhouette.api.actions.SecuredRequest[E,B],P]withProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="Action builder implementation to provide the foundation for secured actions." href="SecuredActionBuilder.html"><span class="name">SecuredActionBuilder</span></a><span class="tparams">[<span name="E">E &lt;: <a href="../Env.html" class="extype" name="com.mohiva.play.silhouette.api.Env">Env</a></span>, <span name="P">P</span>]</span><span class="params">(<span name="requestHandler">requestHandler: <a href="SecuredRequestHandlerBuilder.html" class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredRequestHandlerBuilder">SecuredRequestHandlerBuilder</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredActionBuilder.E">E</span>]</span>, <span name="parser">parser: <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/BodyParser.html#play.api.mvc.BodyParser" class="extype" name="play.api.mvc.BodyParser">BodyParser</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredActionBuilder.P">P</span>]</span>)</span><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/ActionBuilder.html#play.api.mvc.ActionBuilder" class="extype" name="play.api.mvc.ActionBuilder">ActionBuilder</a>[[B]<a href="SecuredRequest.html" class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredRequest">SecuredRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredActionBuilder.E">E</span>, <span class="extype" name="com.mohiva.play.silhouette.api.actions.&lt;refinement&gt;.R.B">B</span>], <span class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredActionBuilder.P">P</span>] with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Action builder implementation to provide the foundation for secured actions.</p><div class="fullcomment"><div class="comment cmt"><p>Action builder implementation to provide the foundation for secured actions.
+</p></div><dl class="paramcmts block"><dt class="tparam">E</dt><dd class="cmt"><p>The type of the environment.</p></dd><dt class="tparam">P</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">requestHandler</dt><dd class="cmt"><p>The request handler instance.</p></dd><dt class="param">parser</dt><dd class="cmt"><p>The body parser.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.actions.SecuredActionComponents" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SecuredActionComponentsextendsAnyRef"></a><a id="SecuredActionComponents:SecuredActionComponents"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredActionComponentsextendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="Injection helper for secured action components" href="SecuredActionComponents.html"><span class="name">SecuredActionComponents</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Injection helper for secured action components
+</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.SecuredActionModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SecuredActionModuleextendsModule"></a><a id="SecuredActionModule:SecuredActionModule"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredActionModuleextendsModule" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Play module for providing the secured action components." href="SecuredActionModule.html"><span class="name">SecuredActionModule</span></a><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/inject/Module.html#play.api.inject.Module" class="extype" name="play.api.inject.Module">Module</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Play module for providing the secured action components.</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SecuredErrorHandlerextendsNotAuthenticatedErrorHandlerwithNotAuthorizedErrorHandler"></a><a id="SecuredErrorHandler:SecuredErrorHandler"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredErrorHandlerextendsNotAuthenticatedErrorHandlerwithNotAuthorizedErrorHandler" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="Error handler for secured actions." href="SecuredErrorHandler.html"><span class="name">SecuredErrorHandler</span></a><span class="result"> extends <a href="../NotAuthenticatedErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.NotAuthenticatedErrorHandler">NotAuthenticatedErrorHandler</a> with <a href="../NotAuthorizedErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.NotAuthorizedErrorHandler">NotAuthorizedErrorHandler</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Error handler for secured actions.</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandlerComponents" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="SecuredErrorHandlerComponentsextendsAnyRef"></a><a id="SecuredErrorHandlerComponents:SecuredErrorHandlerComponents"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredErrorHandlerComponentsextendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="Injection helper for secured error handler component." href="SecuredErrorHandlerComponents.html"><span class="name">SecuredErrorHandlerComponents</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Injection helper for secured error handler component.</p><div class="fullcomment"><div class="comment cmt"><p>Injection helper for secured error handler component.</p><p>We provide an extra component so that it can be easily replaced with a custom implementation
 without to declare bindings for the other secured action component.
-</p></div></div></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandlerModule" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="SecuredErrorHandlerModuleextendsModule"></a><a id="SecuredErrorHandlerModule:SecuredErrorHandlerModule"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredErrorHandlerModuleextendsModule" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">class</span></span> <span class="symbol"><a href="SecuredErrorHandlerModule.html" title="Play module to provide the secured error handler component."><span class="name">SecuredErrorHandlerModule</span></a><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/inject/Module.html#play.api.inject.Module" name="play.api.inject.Module" id="play.api.inject.Module" class="extype">Module</a></span></span><p class="shortcomment cmt">Play module to provide the secured error handler component.</p><div class="fullcomment"><div class="comment cmt"><p>Play module to provide the secured error handler component.</p><p>We provide an extra module so that it can be easily replaced with a custom implementation
+</p></div></div>
+    </li><li name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandlerModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SecuredErrorHandlerModuleextendsModule"></a><a id="SecuredErrorHandlerModule:SecuredErrorHandlerModule"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredErrorHandlerModuleextendsModule" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Play module to provide the secured error handler component." href="SecuredErrorHandlerModule.html"><span class="name">SecuredErrorHandlerModule</span></a><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/inject/Module.html#play.api.inject.Module" class="extype" name="play.api.inject.Module">Module</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Play module to provide the secured error handler component.</p><div class="fullcomment"><div class="comment cmt"><p>Play module to provide the secured error handler component.</p><p>We provide an extra module so that it can be easily replaced with a custom implementation
 without to declare bindings for the other secured action module.
-</p></div></div></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.SecuredRequest" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="SecuredRequest[E&lt;:com.mohiva.play.silhouette.api.Env,B]extendsWrappedRequest[B]withProductwithSerializable"></a><a id="SecuredRequest[E&lt;:Env,B]:SecuredRequest[E,B]"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredRequest[E&lt;:com.mohiva.play.silhouette.api.Env,B]extendsWrappedRequest[B]withProductwithSerializable" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">case class</span></span> <span class="symbol"><a href="SecuredRequest.html" title="A request that only allows access if an identity is authenticated and authorized."><span class="name">SecuredRequest</span></a><span class="tparams">[<span name="E">E &lt;: <a href="../Env.html" name="com.mohiva.play.silhouette.api.Env" id="com.mohiva.play.silhouette.api.Env" class="extype">Env</a></span>, <span name="B">B</span>]</span><span class="params">(<span name="identity">identity: <span name="com.mohiva.play.silhouette.api.Env.I" class="extype">E.I</span></span>, <span name="authenticator">authenticator: <span name="com.mohiva.play.silhouette.api.Env.A" class="extype">E.A</span></span>, <span name="request">request: <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/Request.html#play.api.mvc.Request" name="play.api.mvc.Request" id="play.api.mvc.Request" class="extype">Request</a>[<span name="com.mohiva.play.silhouette.api.actions.SecuredRequest.B" class="extype">B</span>]</span>)</span><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/WrappedRequest.html#play.api.mvc.WrappedRequest" name="play.api.mvc.WrappedRequest" id="play.api.mvc.WrappedRequest" class="extype">WrappedRequest</a>[<span name="com.mohiva.play.silhouette.api.actions.SecuredRequest.B" class="extype">B</span>] with <a href="https://www.scala-lang.org/api/2.13.0/scala/Product.html#scala.Product" name="scala.Product" id="scala.Product" class="extype">Product</a> with <span name="scala.Serializable" class="extype">Serializable</span></span></span><p class="shortcomment cmt">A request that only allows access if an identity is authenticated and authorized.</p><div class="fullcomment"><div class="comment cmt"><p>A request that only allows access if an identity is authenticated and authorized.
-</p></div><dl class="paramcmts block"><dt class="tparam">E</dt><dd class="cmt"><p>The type of the environment.</p></dd><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The identity implementation.</p></dd><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator implementation.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd></dl></div></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.SecuredRequestHandler" group="Ungrouped" fullComment="yes" data-isabs="true" visbl="pub"><a id="SecuredRequestHandlerextendsAnyRef"></a><a id="SecuredRequestHandler:SecuredRequestHandler"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredRequestHandlerextendsAnyRef" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">trait</span></span> <span class="symbol"><a href="SecuredRequestHandler.html" title="A secured request handler."><span class="name">SecuredRequestHandler</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.13.0/scala/AnyRef.html#scala.AnyRef" name="scala.AnyRef" id="scala.AnyRef" class="extype">AnyRef</a></span></span><p class="shortcomment cmt">A secured request handler.</p><div class="fullcomment"><div class="comment cmt"><p>A secured request handler.</p><p>A handler which intercepts requests and checks if there is an authenticated user.
+</p></div></div>
+    </li><li name="com.mohiva.play.silhouette.api.actions.SecuredRequest" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SecuredRequest[E&lt;:com.mohiva.play.silhouette.api.Env,B]extendsWrappedRequest[B]withProductwithSerializable"></a><a id="SecuredRequest[E&lt;:Env,B]:SecuredRequest[E,B]"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredRequest[E&lt;:com.mohiva.play.silhouette.api.Env,B]extendsWrappedRequest[B]withProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="A request that only allows access if an identity is authenticated and authorized." href="SecuredRequest.html"><span class="name">SecuredRequest</span></a><span class="tparams">[<span name="E">E &lt;: <a href="../Env.html" class="extype" name="com.mohiva.play.silhouette.api.Env">Env</a></span>, <span name="B">B</span>]</span><span class="params">(<span name="identity">identity: <span class="extype" name="com.mohiva.play.silhouette.api.Env.I">E.I</span></span>, <span name="authenticator">authenticator: <span class="extype" name="com.mohiva.play.silhouette.api.Env.A">E.A</span></span>, <span name="request">request: <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/Request.html#play.api.mvc.Request" class="extype" name="play.api.mvc.Request">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredRequest.B">B</span>]</span>)</span><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/WrappedRequest.html#play.api.mvc.WrappedRequest" class="extype" name="play.api.mvc.WrappedRequest">WrappedRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredRequest.B">B</span>] with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A request that only allows access if an identity is authenticated and authorized.</p><div class="fullcomment"><div class="comment cmt"><p>A request that only allows access if an identity is authenticated and authorized.
+</p></div><dl class="paramcmts block"><dt class="tparam">E</dt><dd class="cmt"><p>The type of the environment.</p></dd><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">identity</dt><dd class="cmt"><p>The identity implementation.</p></dd><dt class="param">authenticator</dt><dd class="cmt"><p>The authenticator implementation.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.actions.SecuredRequestHandler" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="SecuredRequestHandlerextendsAnyRef"></a><a id="SecuredRequestHandler:SecuredRequestHandler"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredRequestHandlerextendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="A secured request handler." href="SecuredRequestHandler.html"><span class="name">SecuredRequestHandler</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A secured request handler.</p><div class="fullcomment"><div class="comment cmt"><p>A secured request handler.</p><p>A handler which intercepts requests and checks if there is an authenticated user.
 If there is one, the execution continues and the enclosed code is invoked.</p><p>If the user is not authenticated or not authorized, the request is forwarded to
-the <a href="SecuredErrorHandler.html#onNotAuthenticated(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler#onNotAuthenticated" id="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler#onNotAuthenticated" class="extmbr">com.mohiva.play.silhouette.api.actions.SecuredErrorHandler.onNotAuthenticated</a> or
-the <a href="SecuredErrorHandler.html#onNotAuthorized(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler#onNotAuthorized" id="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler#onNotAuthorized" class="extmbr">com.mohiva.play.silhouette.api.actions.SecuredErrorHandler.onNotAuthorized</a> methods.
-</p></div></div></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.SecuredRequestHandlerBuilder" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="SecuredRequestHandlerBuilder[E&lt;:com.mohiva.play.silhouette.api.Env]extendsRequestHandlerBuilder[E,[B]com.mohiva.play.silhouette.api.actions.SecuredRequest[E,B]]withProductwithSerializable"></a><a id="SecuredRequestHandlerBuilder[E&lt;:Env]:SecuredRequestHandlerBuilder[E]"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredRequestHandlerBuilder[E&lt;:com.mohiva.play.silhouette.api.Env]extendsRequestHandlerBuilder[E,[B]com.mohiva.play.silhouette.api.actions.SecuredRequest[E,B]]withProductwithSerializable" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">case class</span></span> <span class="symbol"><a href="SecuredRequestHandlerBuilder.html" title="Request handler builder implementation to provide the foundation for secured request handlers."><span class="name">SecuredRequestHandlerBuilder</span></a><span class="tparams">[<span name="E">E &lt;: <a href="../Env.html" name="com.mohiva.play.silhouette.api.Env" id="com.mohiva.play.silhouette.api.Env" class="extype">Env</a></span>]</span><span class="params">(<span name="environment">environment: <a href="../Environment.html" name="com.mohiva.play.silhouette.api.Environment" id="com.mohiva.play.silhouette.api.Environment" class="extype">Environment</a>[<span name="com.mohiva.play.silhouette.api.actions.SecuredRequestHandlerBuilder.E" class="extype">E</span>]</span>, <span name="errorHandler">errorHandler: <a href="SecuredErrorHandler.html" name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler" id="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler" class="extype">SecuredErrorHandler</a></span>, <span name="authorization">authorization: <a href="https://www.scala-lang.org/api/2.13.0/scala/Option.html#scala.Option" name="scala.Option" id="scala.Option" class="extype">Option</a>[<a href="../Authorization.html" name="com.mohiva.play.silhouette.api.Authorization" id="com.mohiva.play.silhouette.api.Authorization" class="extype">Authorization</a>[<span name="com.mohiva.play.silhouette.api.Env.I" class="extype">E.I</span>, <span name="com.mohiva.play.silhouette.api.Env.A" class="extype">E.A</span>]]</span>)</span><span class="result"> extends <a href="../RequestHandlerBuilder.html" name="com.mohiva.play.silhouette.api.RequestHandlerBuilder" id="com.mohiva.play.silhouette.api.RequestHandlerBuilder" class="extype">RequestHandlerBuilder</a>[<span name="com.mohiva.play.silhouette.api.actions.SecuredRequestHandlerBuilder.E" class="extype">E</span>, [B]<a href="SecuredRequest.html" name="com.mohiva.play.silhouette.api.actions.SecuredRequest" id="com.mohiva.play.silhouette.api.actions.SecuredRequest" class="extype">SecuredRequest</a>[<span name="com.mohiva.play.silhouette.api.actions.SecuredRequestHandlerBuilder.E" class="extype">E</span>, <span name="com.mohiva.play.silhouette.api.actions.&lt;refinement&gt;.R.&lt;local R&gt;.B" class="extype">B</span>]] with <a href="https://www.scala-lang.org/api/2.13.0/scala/Product.html#scala.Product" name="scala.Product" id="scala.Product" class="extype">Product</a> with <span name="scala.Serializable" class="extype">Serializable</span></span></span><p class="shortcomment cmt">Request handler builder implementation to provide the foundation for secured request handlers.</p><div class="fullcomment"><div class="comment cmt"><p>Request handler builder implementation to provide the foundation for secured request handlers.
-</p></div><dl class="paramcmts block"><dt class="tparam">E</dt><dd class="cmt"><p>The type of the environment.</p></dd><dt class="param">environment</dt><dd class="cmt"><p>The environment instance to handle the request.</p></dd><dt class="param">errorHandler</dt><dd class="cmt"><p>The instance of the secured error handler.</p></dd><dt class="param">authorization</dt><dd class="cmt"><p>Maybe an authorization instance.</p></dd></dl></div></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.UnsecuredAction" group="Ungrouped" fullComment="no" data-isabs="true" visbl="pub"><a id="UnsecuredActionextendsAnyRef"></a><a id="UnsecuredAction:UnsecuredAction"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UnsecuredActionextendsAnyRef" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">trait</span></span> <span class="symbol"><a href="UnsecuredAction.html" title="An action based on the UnsecuredRequestHandler."><span class="name">UnsecuredAction</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.13.0/scala/AnyRef.html#scala.AnyRef" name="scala.AnyRef" id="scala.AnyRef" class="extype">AnyRef</a></span></span><p class="shortcomment cmt">An action based on the <a href="UnsecuredRequestHandler.html" name="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandler" id="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandler" class="extype">UnsecuredRequestHandler</a>.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.UnsecuredActionBuilder" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="UnsecuredActionBuilder[E&lt;:com.mohiva.play.silhouette.api.Env,P]extendsActionBuilder[play.api.mvc.Request,P]withProductwithSerializable"></a><a id="UnsecuredActionBuilder[E&lt;:Env,P]:UnsecuredActionBuilder[E,P]"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UnsecuredActionBuilder[E&lt;:com.mohiva.play.silhouette.api.Env,P]extendsActionBuilder[play.api.mvc.Request,P]withProductwithSerializable" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">case class</span></span> <span class="symbol"><a href="UnsecuredActionBuilder.html" title="Action builder implementation to provide the foundation for unsecured actions."><span class="name">UnsecuredActionBuilder</span></a><span class="tparams">[<span name="E">E &lt;: <a href="../Env.html" name="com.mohiva.play.silhouette.api.Env" id="com.mohiva.play.silhouette.api.Env" class="extype">Env</a></span>, <span name="P">P</span>]</span><span class="params">(<span name="requestHandler">requestHandler: <a href="UnsecuredRequestHandlerBuilder.html" name="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandlerBuilder" id="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandlerBuilder" class="extype">UnsecuredRequestHandlerBuilder</a>[<span name="com.mohiva.play.silhouette.api.actions.UnsecuredActionBuilder.E" class="extype">E</span>]</span>, <span name="parser">parser: <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/BodyParser.html#play.api.mvc.BodyParser" name="play.api.mvc.BodyParser" id="play.api.mvc.BodyParser" class="extype">BodyParser</a>[<span name="com.mohiva.play.silhouette.api.actions.UnsecuredActionBuilder.P" class="extype">P</span>]</span>)</span><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/ActionBuilder.html#play.api.mvc.ActionBuilder" name="play.api.mvc.ActionBuilder" id="play.api.mvc.ActionBuilder" class="extype">ActionBuilder</a>[<a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/Request.html#play.api.mvc.Request" name="play.api.mvc.Request" id="play.api.mvc.Request" class="extype">Request</a>, <span name="com.mohiva.play.silhouette.api.actions.UnsecuredActionBuilder.P" class="extype">P</span>] with <a href="https://www.scala-lang.org/api/2.13.0/scala/Product.html#scala.Product" name="scala.Product" id="scala.Product" class="extype">Product</a> with <span name="scala.Serializable" class="extype">Serializable</span></span></span><p class="shortcomment cmt">Action builder implementation to provide the foundation for unsecured actions.</p><div class="fullcomment"><div class="comment cmt"><p>Action builder implementation to provide the foundation for unsecured actions.
-</p></div><dl class="paramcmts block"><dt class="tparam">E</dt><dd class="cmt"><p>The type of the environment.</p></dd><dt class="tparam">P</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">requestHandler</dt><dd class="cmt"><p>The request handler instance.</p></dd><dt class="param">parser</dt><dd class="cmt"><p>The body parser.</p></dd></dl></div></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.UnsecuredActionComponents" group="Ungrouped" fullComment="no" data-isabs="true" visbl="pub"><a id="UnsecuredActionComponentsextendsAnyRef"></a><a id="UnsecuredActionComponents:UnsecuredActionComponents"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UnsecuredActionComponentsextendsAnyRef" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">trait</span></span> <span class="symbol"><a href="UnsecuredActionComponents.html" title="Injection helper for unsecured action components"><span class="name">UnsecuredActionComponents</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.13.0/scala/AnyRef.html#scala.AnyRef" name="scala.AnyRef" id="scala.AnyRef" class="extype">AnyRef</a></span></span><p class="shortcomment cmt">Injection helper for unsecured action components
-</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.UnsecuredActionModule" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="UnsecuredActionModuleextendsModule"></a><a id="UnsecuredActionModule:UnsecuredActionModule"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UnsecuredActionModuleextendsModule" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">class</span></span> <span class="symbol"><a href="UnsecuredActionModule.html" title="Play module for providing the unsecured action components."><span class="name">UnsecuredActionModule</span></a><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/inject/Module.html#play.api.inject.Module" name="play.api.inject.Module" id="play.api.inject.Module" class="extype">Module</a></span></span><p class="shortcomment cmt">Play module for providing the unsecured action components.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandler" group="Ungrouped" fullComment="no" data-isabs="true" visbl="pub"><a id="UnsecuredErrorHandlerextendsNotAuthorizedErrorHandler"></a><a id="UnsecuredErrorHandler:UnsecuredErrorHandler"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UnsecuredErrorHandlerextendsNotAuthorizedErrorHandler" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">trait</span></span> <span class="symbol"><a href="UnsecuredErrorHandler.html" title="Error handler for unsecured actions."><span class="name">UnsecuredErrorHandler</span></a><span class="result"> extends <a href="../NotAuthorizedErrorHandler.html" name="com.mohiva.play.silhouette.api.NotAuthorizedErrorHandler" id="com.mohiva.play.silhouette.api.NotAuthorizedErrorHandler" class="extype">NotAuthorizedErrorHandler</a></span></span><p class="shortcomment cmt">Error handler for unsecured actions.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandlerComponents" group="Ungrouped" fullComment="yes" data-isabs="true" visbl="pub"><a id="UnsecuredErrorHandlerComponentsextendsAnyRef"></a><a id="UnsecuredErrorHandlerComponents:UnsecuredErrorHandlerComponents"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UnsecuredErrorHandlerComponentsextendsAnyRef" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">trait</span></span> <span class="symbol"><a href="UnsecuredErrorHandlerComponents.html" title="Injection helper for unsecured error handler component."><span class="name">UnsecuredErrorHandlerComponents</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.13.0/scala/AnyRef.html#scala.AnyRef" name="scala.AnyRef" id="scala.AnyRef" class="extype">AnyRef</a></span></span><p class="shortcomment cmt">Injection helper for unsecured error handler component.</p><div class="fullcomment"><div class="comment cmt"><p>Injection helper for unsecured error handler component.</p><p>We provide an extra component so that it can be easily replaced with a custom implementation
+the <a href="SecuredErrorHandler.html#onNotAuthenticated(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" class="extmbr" name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler#onNotAuthenticated">com.mohiva.play.silhouette.api.actions.SecuredErrorHandler.onNotAuthenticated</a> or
+the <a href="SecuredErrorHandler.html#onNotAuthorized(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" class="extmbr" name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler#onNotAuthorized">com.mohiva.play.silhouette.api.actions.SecuredErrorHandler.onNotAuthorized</a> methods.
+</p></div></div>
+    </li><li name="com.mohiva.play.silhouette.api.actions.SecuredRequestHandlerBuilder" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SecuredRequestHandlerBuilder[E&lt;:com.mohiva.play.silhouette.api.Env]extendsRequestHandlerBuilder[E,[B]com.mohiva.play.silhouette.api.actions.SecuredRequest[E,B]]withProductwithSerializable"></a><a id="SecuredRequestHandlerBuilder[E&lt;:Env]:SecuredRequestHandlerBuilder[E]"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#SecuredRequestHandlerBuilder[E&lt;:com.mohiva.play.silhouette.api.Env]extendsRequestHandlerBuilder[E,[B]com.mohiva.play.silhouette.api.actions.SecuredRequest[E,B]]withProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="Request handler builder implementation to provide the foundation for secured request handlers." href="SecuredRequestHandlerBuilder.html"><span class="name">SecuredRequestHandlerBuilder</span></a><span class="tparams">[<span name="E">E &lt;: <a href="../Env.html" class="extype" name="com.mohiva.play.silhouette.api.Env">Env</a></span>]</span><span class="params">(<span name="environment">environment: <a href="../Environment.html" class="extype" name="com.mohiva.play.silhouette.api.Environment">Environment</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredRequestHandlerBuilder.E">E</span>]</span>, <span name="errorHandler">errorHandler: <a href="SecuredErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredErrorHandler">SecuredErrorHandler</a></span>, <span name="authorization">authorization: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="../Authorization.html" class="extype" name="com.mohiva.play.silhouette.api.Authorization">Authorization</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Env.I">E.I</span>, <span class="extype" name="com.mohiva.play.silhouette.api.Env.A">E.A</span>]]</span>)</span><span class="result"> extends <a href="../RequestHandlerBuilder.html" class="extype" name="com.mohiva.play.silhouette.api.RequestHandlerBuilder">RequestHandlerBuilder</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredRequestHandlerBuilder.E">E</span>, [B]<a href="SecuredRequest.html" class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredRequest">SecuredRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.SecuredRequestHandlerBuilder.E">E</span>, <span class="extype" name="com.mohiva.play.silhouette.api.actions.&lt;refinement&gt;.R.B">B</span>]] with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Request handler builder implementation to provide the foundation for secured request handlers.</p><div class="fullcomment"><div class="comment cmt"><p>Request handler builder implementation to provide the foundation for secured request handlers.
+</p></div><dl class="paramcmts block"><dt class="tparam">E</dt><dd class="cmt"><p>The type of the environment.</p></dd><dt class="param">environment</dt><dd class="cmt"><p>The environment instance to handle the request.</p></dd><dt class="param">errorHandler</dt><dd class="cmt"><p>The instance of the secured error handler.</p></dd><dt class="param">authorization</dt><dd class="cmt"><p>Maybe an authorization instance.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.actions.UnsecuredAction" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="UnsecuredActionextendsAnyRef"></a><a id="UnsecuredAction:UnsecuredAction"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UnsecuredActionextendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="An action based on the UnsecuredRequestHandler." href="UnsecuredAction.html"><span class="name">UnsecuredAction</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">An action based on the <a href="UnsecuredRequestHandler.html" class="extype" name="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandler">UnsecuredRequestHandler</a>.</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.UnsecuredActionBuilder" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="UnsecuredActionBuilder[E&lt;:com.mohiva.play.silhouette.api.Env,P]extendsActionBuilder[play.api.mvc.Request,P]withProductwithSerializable"></a><a id="UnsecuredActionBuilder[E&lt;:Env,P]:UnsecuredActionBuilder[E,P]"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UnsecuredActionBuilder[E&lt;:com.mohiva.play.silhouette.api.Env,P]extendsActionBuilder[play.api.mvc.Request,P]withProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="Action builder implementation to provide the foundation for unsecured actions." href="UnsecuredActionBuilder.html"><span class="name">UnsecuredActionBuilder</span></a><span class="tparams">[<span name="E">E &lt;: <a href="../Env.html" class="extype" name="com.mohiva.play.silhouette.api.Env">Env</a></span>, <span name="P">P</span>]</span><span class="params">(<span name="requestHandler">requestHandler: <a href="UnsecuredRequestHandlerBuilder.html" class="extype" name="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandlerBuilder">UnsecuredRequestHandlerBuilder</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.UnsecuredActionBuilder.E">E</span>]</span>, <span name="parser">parser: <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/BodyParser.html#play.api.mvc.BodyParser" class="extype" name="play.api.mvc.BodyParser">BodyParser</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.UnsecuredActionBuilder.P">P</span>]</span>)</span><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/ActionBuilder.html#play.api.mvc.ActionBuilder" class="extype" name="play.api.mvc.ActionBuilder">ActionBuilder</a>[<a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/Request.html#play.api.mvc.Request" class="extype" name="play.api.mvc.Request">Request</a>, <span class="extype" name="com.mohiva.play.silhouette.api.actions.UnsecuredActionBuilder.P">P</span>] with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Action builder implementation to provide the foundation for unsecured actions.</p><div class="fullcomment"><div class="comment cmt"><p>Action builder implementation to provide the foundation for unsecured actions.
+</p></div><dl class="paramcmts block"><dt class="tparam">E</dt><dd class="cmt"><p>The type of the environment.</p></dd><dt class="tparam">P</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">requestHandler</dt><dd class="cmt"><p>The request handler instance.</p></dd><dt class="param">parser</dt><dd class="cmt"><p>The body parser.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.actions.UnsecuredActionComponents" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="UnsecuredActionComponentsextendsAnyRef"></a><a id="UnsecuredActionComponents:UnsecuredActionComponents"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UnsecuredActionComponentsextendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="Injection helper for unsecured action components" href="UnsecuredActionComponents.html"><span class="name">UnsecuredActionComponents</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Injection helper for unsecured action components
+</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.UnsecuredActionModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UnsecuredActionModuleextendsModule"></a><a id="UnsecuredActionModule:UnsecuredActionModule"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UnsecuredActionModuleextendsModule" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Play module for providing the unsecured action components." href="UnsecuredActionModule.html"><span class="name">UnsecuredActionModule</span></a><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/inject/Module.html#play.api.inject.Module" class="extype" name="play.api.inject.Module">Module</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Play module for providing the unsecured action components.</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandler" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="UnsecuredErrorHandlerextendsNotAuthorizedErrorHandler"></a><a id="UnsecuredErrorHandler:UnsecuredErrorHandler"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UnsecuredErrorHandlerextendsNotAuthorizedErrorHandler" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="Error handler for unsecured actions." href="UnsecuredErrorHandler.html"><span class="name">UnsecuredErrorHandler</span></a><span class="result"> extends <a href="../NotAuthorizedErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.NotAuthorizedErrorHandler">NotAuthorizedErrorHandler</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Error handler for unsecured actions.</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandlerComponents" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="UnsecuredErrorHandlerComponentsextendsAnyRef"></a><a id="UnsecuredErrorHandlerComponents:UnsecuredErrorHandlerComponents"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UnsecuredErrorHandlerComponentsextendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="Injection helper for unsecured error handler component." href="UnsecuredErrorHandlerComponents.html"><span class="name">UnsecuredErrorHandlerComponents</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Injection helper for unsecured error handler component.</p><div class="fullcomment"><div class="comment cmt"><p>Injection helper for unsecured error handler component.</p><p>We provide an extra component so that it can be easily replaced with a custom implementation
 without to declare bindings for the other secured action component.
-</p></div></div></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandlerModule" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="UnsecuredErrorHandlerModuleextendsModule"></a><a id="UnsecuredErrorHandlerModule:UnsecuredErrorHandlerModule"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UnsecuredErrorHandlerModuleextendsModule" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">class</span></span> <span class="symbol"><a href="UnsecuredErrorHandlerModule.html" title="Play module to provide the unsecured error handler component."><span class="name">UnsecuredErrorHandlerModule</span></a><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/inject/Module.html#play.api.inject.Module" name="play.api.inject.Module" id="play.api.inject.Module" class="extype">Module</a></span></span><p class="shortcomment cmt">Play module to provide the unsecured error handler component.</p><div class="fullcomment"><div class="comment cmt"><p>Play module to provide the unsecured error handler component.</p><p>We provide an extra module so that it can be easily replaced with a custom implementation
+</p></div></div>
+    </li><li name="com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandlerModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="UnsecuredErrorHandlerModuleextendsModule"></a><a id="UnsecuredErrorHandlerModule:UnsecuredErrorHandlerModule"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UnsecuredErrorHandlerModuleextendsModule" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Play module to provide the unsecured error handler component." href="UnsecuredErrorHandlerModule.html"><span class="name">UnsecuredErrorHandlerModule</span></a><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/inject/Module.html#play.api.inject.Module" class="extype" name="play.api.inject.Module">Module</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Play module to provide the unsecured error handler component.</p><div class="fullcomment"><div class="comment cmt"><p>Play module to provide the unsecured error handler component.</p><p>We provide an extra module so that it can be easily replaced with a custom implementation
 without to declare bindings for the other unsecured action module.
-</p></div></div></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandler" group="Ungrouped" fullComment="yes" data-isabs="true" visbl="pub"><a id="UnsecuredRequestHandlerextendsAnyRef"></a><a id="UnsecuredRequestHandler:UnsecuredRequestHandler"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UnsecuredRequestHandlerextendsAnyRef" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">trait</span></span> <span class="symbol"><a href="UnsecuredRequestHandler.html" title="An unsecured request handler."><span class="name">UnsecuredRequestHandler</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.13.0/scala/AnyRef.html#scala.AnyRef" name="scala.AnyRef" id="scala.AnyRef" class="extype">AnyRef</a></span></span><p class="shortcomment cmt">An unsecured request handler.</p><div class="fullcomment"><div class="comment cmt"><p>An unsecured request handler.</p><p>A handler which intercepts requests and checks if there is no authenticated user.
+</p></div></div>
+    </li><li name="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandler" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="UnsecuredRequestHandlerextendsAnyRef"></a><a id="UnsecuredRequestHandler:UnsecuredRequestHandler"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UnsecuredRequestHandlerextendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="An unsecured request handler." href="UnsecuredRequestHandler.html"><span class="name">UnsecuredRequestHandler</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">An unsecured request handler.</p><div class="fullcomment"><div class="comment cmt"><p>An unsecured request handler.</p><p>A handler which intercepts requests and checks if there is no authenticated user.
 If there is none, the execution continues and the enclosed code is invoked.</p><p>If the user is authenticated, the request is forwarded to
-the <a href="UnsecuredErrorHandler.html#onNotAuthorized(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" name="com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandler#onNotAuthorized" id="com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandler#onNotAuthorized" class="extmbr">com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandler.onNotAuthorized</a> method.
-</p></div></div></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandlerBuilder" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="UnsecuredRequestHandlerBuilder[E&lt;:com.mohiva.play.silhouette.api.Env]extendsRequestHandlerBuilder[E,play.api.mvc.Request]withProductwithSerializable"></a><a id="UnsecuredRequestHandlerBuilder[E&lt;:Env]:UnsecuredRequestHandlerBuilder[E]"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UnsecuredRequestHandlerBuilder[E&lt;:com.mohiva.play.silhouette.api.Env]extendsRequestHandlerBuilder[E,play.api.mvc.Request]withProductwithSerializable" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">case class</span></span> <span class="symbol"><a href="UnsecuredRequestHandlerBuilder.html" title="Request handler builder implementation to provide the foundation for unsecured request handlers."><span class="name">UnsecuredRequestHandlerBuilder</span></a><span class="tparams">[<span name="E">E &lt;: <a href="../Env.html" name="com.mohiva.play.silhouette.api.Env" id="com.mohiva.play.silhouette.api.Env" class="extype">Env</a></span>]</span><span class="params">(<span name="environment">environment: <a href="../Environment.html" name="com.mohiva.play.silhouette.api.Environment" id="com.mohiva.play.silhouette.api.Environment" class="extype">Environment</a>[<span name="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandlerBuilder.E" class="extype">E</span>]</span>, <span name="errorHandler">errorHandler: <a href="UnsecuredErrorHandler.html" name="com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandler" id="com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandler" class="extype">UnsecuredErrorHandler</a></span>)</span><span class="result"> extends <a href="../RequestHandlerBuilder.html" name="com.mohiva.play.silhouette.api.RequestHandlerBuilder" id="com.mohiva.play.silhouette.api.RequestHandlerBuilder" class="extype">RequestHandlerBuilder</a>[<span name="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandlerBuilder.E" class="extype">E</span>, <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/Request.html#play.api.mvc.Request" name="play.api.mvc.Request" id="play.api.mvc.Request" class="extype">Request</a>] with <a href="https://www.scala-lang.org/api/2.13.0/scala/Product.html#scala.Product" name="scala.Product" id="scala.Product" class="extype">Product</a> with <span name="scala.Serializable" class="extype">Serializable</span></span></span><p class="shortcomment cmt">Request handler builder implementation to provide the foundation for unsecured request handlers.</p><div class="fullcomment"><div class="comment cmt"><p>Request handler builder implementation to provide the foundation for unsecured request handlers.
-</p></div><dl class="paramcmts block"><dt class="tparam">E</dt><dd class="cmt"><p>The type of the environment.</p></dd><dt class="param">environment</dt><dd class="cmt"><p>The environment instance to handle the request.</p></dd><dt class="param">errorHandler</dt><dd class="cmt"><p>The instance of the unsecured error handler.</p></dd></dl></div></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.UserAwareAction" group="Ungrouped" fullComment="no" data-isabs="true" visbl="pub"><a id="UserAwareActionextendsAnyRef"></a><a id="UserAwareAction:UserAwareAction"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UserAwareActionextendsAnyRef" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">trait</span></span> <span class="symbol"><a href="UserAwareAction.html" title="An action based on the UserAwareRequestHandler."><span class="name">UserAwareAction</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.13.0/scala/AnyRef.html#scala.AnyRef" name="scala.AnyRef" id="scala.AnyRef" class="extype">AnyRef</a></span></span><p class="shortcomment cmt">An action based on the <a href="UserAwareRequestHandler.html" name="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandler" id="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandler" class="extype">UserAwareRequestHandler</a>.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.UserAwareActionBuilder" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="UserAwareActionBuilder[E&lt;:com.mohiva.play.silhouette.api.Env,P]extendsActionBuilder[[B]com.mohiva.play.silhouette.api.actions.UserAwareRequest[E,B],P]withProductwithSerializable"></a><a id="UserAwareActionBuilder[E&lt;:Env,P]:UserAwareActionBuilder[E,P]"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UserAwareActionBuilder[E&lt;:com.mohiva.play.silhouette.api.Env,P]extendsActionBuilder[[B]com.mohiva.play.silhouette.api.actions.UserAwareRequest[E,B],P]withProductwithSerializable" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">case class</span></span> <span class="symbol"><a href="UserAwareActionBuilder.html" title="Action builder implementation to provide the foundation for user-aware actions."><span class="name">UserAwareActionBuilder</span></a><span class="tparams">[<span name="E">E &lt;: <a href="../Env.html" name="com.mohiva.play.silhouette.api.Env" id="com.mohiva.play.silhouette.api.Env" class="extype">Env</a></span>, <span name="P">P</span>]</span><span class="params">(<span name="requestHandler">requestHandler: <a href="UserAwareRequestHandlerBuilder.html" name="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandlerBuilder" id="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandlerBuilder" class="extype">UserAwareRequestHandlerBuilder</a>[<span name="com.mohiva.play.silhouette.api.actions.UserAwareActionBuilder.E" class="extype">E</span>]</span>, <span name="parser">parser: <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/BodyParser.html#play.api.mvc.BodyParser" name="play.api.mvc.BodyParser" id="play.api.mvc.BodyParser" class="extype">BodyParser</a>[<span name="com.mohiva.play.silhouette.api.actions.UserAwareActionBuilder.P" class="extype">P</span>]</span>)</span><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/ActionBuilder.html#play.api.mvc.ActionBuilder" name="play.api.mvc.ActionBuilder" id="play.api.mvc.ActionBuilder" class="extype">ActionBuilder</a>[[B]<a href="UserAwareRequest.html" name="com.mohiva.play.silhouette.api.actions.UserAwareRequest" id="com.mohiva.play.silhouette.api.actions.UserAwareRequest" class="extype">UserAwareRequest</a>[<span name="com.mohiva.play.silhouette.api.actions.UserAwareActionBuilder.E" class="extype">E</span>, <span name="com.mohiva.play.silhouette.api.actions.&lt;refinement&gt;.R.&lt;local R&gt;.B" class="extype">B</span>], <span name="com.mohiva.play.silhouette.api.actions.UserAwareActionBuilder.P" class="extype">P</span>] with <a href="https://www.scala-lang.org/api/2.13.0/scala/Product.html#scala.Product" name="scala.Product" id="scala.Product" class="extype">Product</a> with <span name="scala.Serializable" class="extype">Serializable</span></span></span><p class="shortcomment cmt">Action builder implementation to provide the foundation for user-aware actions.</p><div class="fullcomment"><div class="comment cmt"><p>Action builder implementation to provide the foundation for user-aware actions.
-</p></div><dl class="paramcmts block"><dt class="tparam">E</dt><dd class="cmt"><p>The type of the environment.</p></dd><dt class="tparam">P</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">requestHandler</dt><dd class="cmt"><p>The request handler instance.</p></dd><dt class="param">parser</dt><dd class="cmt"><p>The body parser.</p></dd></dl></div></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.UserAwareActionComponents" group="Ungrouped" fullComment="no" data-isabs="true" visbl="pub"><a id="UserAwareActionComponentsextendsAnyRef"></a><a id="UserAwareActionComponents:UserAwareActionComponents"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UserAwareActionComponentsextendsAnyRef" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">trait</span></span> <span class="symbol"><a href="UserAwareActionComponents.html" title="Injection helper for user-aware action components"><span class="name">UserAwareActionComponents</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.13.0/scala/AnyRef.html#scala.AnyRef" name="scala.AnyRef" id="scala.AnyRef" class="extype">AnyRef</a></span></span><p class="shortcomment cmt">Injection helper for user-aware action components
-</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.UserAwareActionModule" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="UserAwareActionModuleextendsModule"></a><a id="UserAwareActionModule:UserAwareActionModule"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UserAwareActionModuleextendsModule" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">class</span></span> <span class="symbol"><a href="UserAwareActionModule.html" title="Play module for providing the user-aware action components."><span class="name">UserAwareActionModule</span></a><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/inject/Module.html#play.api.inject.Module" name="play.api.inject.Module" id="play.api.inject.Module" class="extype">Module</a></span></span><p class="shortcomment cmt">Play module for providing the user-aware action components.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.UserAwareRequest" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="UserAwareRequest[E&lt;:com.mohiva.play.silhouette.api.Env,B]extendsWrappedRequest[B]withProductwithSerializable"></a><a id="UserAwareRequest[E&lt;:Env,B]:UserAwareRequest[E,B]"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UserAwareRequest[E&lt;:com.mohiva.play.silhouette.api.Env,B]extendsWrappedRequest[B]withProductwithSerializable" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">case class</span></span> <span class="symbol"><a href="UserAwareRequest.html" title="A request that adds maybe the identity and maybe the authenticator for the current call."><span class="name">UserAwareRequest</span></a><span class="tparams">[<span name="E">E &lt;: <a href="../Env.html" name="com.mohiva.play.silhouette.api.Env" id="com.mohiva.play.silhouette.api.Env" class="extype">Env</a></span>, <span name="B">B</span>]</span><span class="params">(<span name="identity">identity: <a href="https://www.scala-lang.org/api/2.13.0/scala/Option.html#scala.Option" name="scala.Option" id="scala.Option" class="extype">Option</a>[<span name="com.mohiva.play.silhouette.api.Env.I" class="extype">E.I</span>]</span>, <span name="authenticator">authenticator: <a href="https://www.scala-lang.org/api/2.13.0/scala/Option.html#scala.Option" name="scala.Option" id="scala.Option" class="extype">Option</a>[<span name="com.mohiva.play.silhouette.api.Env.A" class="extype">E.A</span>]</span>, <span name="request">request: <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/Request.html#play.api.mvc.Request" name="play.api.mvc.Request" id="play.api.mvc.Request" class="extype">Request</a>[<span name="com.mohiva.play.silhouette.api.actions.UserAwareRequest.B" class="extype">B</span>]</span>)</span><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/WrappedRequest.html#play.api.mvc.WrappedRequest" name="play.api.mvc.WrappedRequest" id="play.api.mvc.WrappedRequest" class="extype">WrappedRequest</a>[<span name="com.mohiva.play.silhouette.api.actions.UserAwareRequest.B" class="extype">B</span>] with <a href="https://www.scala-lang.org/api/2.13.0/scala/Product.html#scala.Product" name="scala.Product" id="scala.Product" class="extype">Product</a> with <span name="scala.Serializable" class="extype">Serializable</span></span></span><p class="shortcomment cmt">A request that adds maybe the identity and maybe the authenticator for the current call.</p><div class="fullcomment"><div class="comment cmt"><p>A request that adds maybe the identity and maybe the authenticator for the current call.
-</p></div><dl class="paramcmts block"><dt class="tparam">E</dt><dd class="cmt"><p>The type of the environment.</p></dd><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">identity</dt><dd class="cmt"><p>Some identity implementation if authentication was successful, None otherwise.</p></dd><dt class="param">authenticator</dt><dd class="cmt"><p>Some authenticator implementation if authentication was successful, None otherwise.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd></dl></div></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandler" group="Ungrouped" fullComment="yes" data-isabs="true" visbl="pub"><a id="UserAwareRequestHandlerextendsAnyRef"></a><a id="UserAwareRequestHandler:UserAwareRequestHandler"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UserAwareRequestHandlerextendsAnyRef" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">trait</span></span> <span class="symbol"><a href="UserAwareRequestHandler.html" title="A user-aware request handler."><span class="name">UserAwareRequestHandler</span></a><span class="result"> extends <a href="https://www.scala-lang.org/api/2.13.0/scala/AnyRef.html#scala.AnyRef" name="scala.AnyRef" id="scala.AnyRef" class="extype">AnyRef</a></span></span><p class="shortcomment cmt">A user-aware request handler.</p><div class="fullcomment"><div class="comment cmt"><p>A user-aware request handler.</p><p>A handler that can be used for endpoints that need to know if there is a current user but
+the <a href="UnsecuredErrorHandler.html#onNotAuthorized(implicitrequest:play.api.mvc.RequestHeader):scala.concurrent.Future[play.api.mvc.Result]" class="extmbr" name="com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandler#onNotAuthorized">com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandler.onNotAuthorized</a> method.
+</p></div></div>
+    </li><li name="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandlerBuilder" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="UnsecuredRequestHandlerBuilder[E&lt;:com.mohiva.play.silhouette.api.Env]extendsRequestHandlerBuilder[E,play.api.mvc.Request]withProductwithSerializable"></a><a id="UnsecuredRequestHandlerBuilder[E&lt;:Env]:UnsecuredRequestHandlerBuilder[E]"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UnsecuredRequestHandlerBuilder[E&lt;:com.mohiva.play.silhouette.api.Env]extendsRequestHandlerBuilder[E,play.api.mvc.Request]withProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="Request handler builder implementation to provide the foundation for unsecured request handlers." href="UnsecuredRequestHandlerBuilder.html"><span class="name">UnsecuredRequestHandlerBuilder</span></a><span class="tparams">[<span name="E">E &lt;: <a href="../Env.html" class="extype" name="com.mohiva.play.silhouette.api.Env">Env</a></span>]</span><span class="params">(<span name="environment">environment: <a href="../Environment.html" class="extype" name="com.mohiva.play.silhouette.api.Environment">Environment</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandlerBuilder.E">E</span>]</span>, <span name="errorHandler">errorHandler: <a href="UnsecuredErrorHandler.html" class="extype" name="com.mohiva.play.silhouette.api.actions.UnsecuredErrorHandler">UnsecuredErrorHandler</a></span>)</span><span class="result"> extends <a href="../RequestHandlerBuilder.html" class="extype" name="com.mohiva.play.silhouette.api.RequestHandlerBuilder">RequestHandlerBuilder</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.UnsecuredRequestHandlerBuilder.E">E</span>, <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/Request.html#play.api.mvc.Request" class="extype" name="play.api.mvc.Request">Request</a>] with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Request handler builder implementation to provide the foundation for unsecured request handlers.</p><div class="fullcomment"><div class="comment cmt"><p>Request handler builder implementation to provide the foundation for unsecured request handlers.
+</p></div><dl class="paramcmts block"><dt class="tparam">E</dt><dd class="cmt"><p>The type of the environment.</p></dd><dt class="param">environment</dt><dd class="cmt"><p>The environment instance to handle the request.</p></dd><dt class="param">errorHandler</dt><dd class="cmt"><p>The instance of the unsecured error handler.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.actions.UserAwareAction" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="UserAwareActionextendsAnyRef"></a><a id="UserAwareAction:UserAwareAction"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UserAwareActionextendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="An action based on the UserAwareRequestHandler." href="UserAwareAction.html"><span class="name">UserAwareAction</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">An action based on the <a href="UserAwareRequestHandler.html" class="extype" name="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandler">UserAwareRequestHandler</a>.</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.UserAwareActionBuilder" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="UserAwareActionBuilder[E&lt;:com.mohiva.play.silhouette.api.Env,P]extendsActionBuilder[[B]com.mohiva.play.silhouette.api.actions.UserAwareRequest[E,B],P]withProductwithSerializable"></a><a id="UserAwareActionBuilder[E&lt;:Env,P]:UserAwareActionBuilder[E,P]"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UserAwareActionBuilder[E&lt;:com.mohiva.play.silhouette.api.Env,P]extendsActionBuilder[[B]com.mohiva.play.silhouette.api.actions.UserAwareRequest[E,B],P]withProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="Action builder implementation to provide the foundation for user-aware actions." href="UserAwareActionBuilder.html"><span class="name">UserAwareActionBuilder</span></a><span class="tparams">[<span name="E">E &lt;: <a href="../Env.html" class="extype" name="com.mohiva.play.silhouette.api.Env">Env</a></span>, <span name="P">P</span>]</span><span class="params">(<span name="requestHandler">requestHandler: <a href="UserAwareRequestHandlerBuilder.html" class="extype" name="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandlerBuilder">UserAwareRequestHandlerBuilder</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.UserAwareActionBuilder.E">E</span>]</span>, <span name="parser">parser: <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/BodyParser.html#play.api.mvc.BodyParser" class="extype" name="play.api.mvc.BodyParser">BodyParser</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.UserAwareActionBuilder.P">P</span>]</span>)</span><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/ActionBuilder.html#play.api.mvc.ActionBuilder" class="extype" name="play.api.mvc.ActionBuilder">ActionBuilder</a>[[B]<a href="UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.actions.UserAwareRequest">UserAwareRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.UserAwareActionBuilder.E">E</span>, <span class="extype" name="com.mohiva.play.silhouette.api.actions.&lt;refinement&gt;.R.B">B</span>], <span class="extype" name="com.mohiva.play.silhouette.api.actions.UserAwareActionBuilder.P">P</span>] with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Action builder implementation to provide the foundation for user-aware actions.</p><div class="fullcomment"><div class="comment cmt"><p>Action builder implementation to provide the foundation for user-aware actions.
+</p></div><dl class="paramcmts block"><dt class="tparam">E</dt><dd class="cmt"><p>The type of the environment.</p></dd><dt class="tparam">P</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">requestHandler</dt><dd class="cmt"><p>The request handler instance.</p></dd><dt class="param">parser</dt><dd class="cmt"><p>The body parser.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.actions.UserAwareActionComponents" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="UserAwareActionComponentsextendsAnyRef"></a><a id="UserAwareActionComponents:UserAwareActionComponents"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UserAwareActionComponentsextendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="Injection helper for user-aware action components" href="UserAwareActionComponents.html"><span class="name">UserAwareActionComponents</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Injection helper for user-aware action components
+</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.UserAwareActionModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UserAwareActionModuleextendsModule"></a><a id="UserAwareActionModule:UserAwareActionModule"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UserAwareActionModuleextendsModule" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Play module for providing the user-aware action components." href="UserAwareActionModule.html"><span class="name">UserAwareActionModule</span></a><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/inject/Module.html#play.api.inject.Module" class="extype" name="play.api.inject.Module">Module</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Play module for providing the user-aware action components.</p>
+    </li><li name="com.mohiva.play.silhouette.api.actions.UserAwareRequest" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="UserAwareRequest[E&lt;:com.mohiva.play.silhouette.api.Env,B]extendsWrappedRequest[B]withProductwithSerializable"></a><a id="UserAwareRequest[E&lt;:Env,B]:UserAwareRequest[E,B]"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UserAwareRequest[E&lt;:com.mohiva.play.silhouette.api.Env,B]extendsWrappedRequest[B]withProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="A request that adds maybe the identity and maybe the authenticator for the current call." href="UserAwareRequest.html"><span class="name">UserAwareRequest</span></a><span class="tparams">[<span name="E">E &lt;: <a href="../Env.html" class="extype" name="com.mohiva.play.silhouette.api.Env">Env</a></span>, <span name="B">B</span>]</span><span class="params">(<span name="identity">identity: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Env.I">E.I</span>]</span>, <span name="authenticator">authenticator: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<span class="extype" name="com.mohiva.play.silhouette.api.Env.A">E.A</span>]</span>, <span name="request">request: <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/Request.html#play.api.mvc.Request" class="extype" name="play.api.mvc.Request">Request</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.UserAwareRequest.B">B</span>]</span>)</span><span class="result"> extends <a href="https://www.playframework.com/documentation/2.7.3/api/scala/play/api/mvc/WrappedRequest.html#play.api.mvc.WrappedRequest" class="extype" name="play.api.mvc.WrappedRequest">WrappedRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.UserAwareRequest.B">B</span>] with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A request that adds maybe the identity and maybe the authenticator for the current call.</p><div class="fullcomment"><div class="comment cmt"><p>A request that adds maybe the identity and maybe the authenticator for the current call.
+</p></div><dl class="paramcmts block"><dt class="tparam">E</dt><dd class="cmt"><p>The type of the environment.</p></dd><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">identity</dt><dd class="cmt"><p>Some identity implementation if authentication was successful, None otherwise.</p></dd><dt class="param">authenticator</dt><dd class="cmt"><p>Some authenticator implementation if authentication was successful, None otherwise.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandler" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="UserAwareRequestHandlerextendsAnyRef"></a><a id="UserAwareRequestHandler:UserAwareRequestHandler"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UserAwareRequestHandlerextendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="A user-aware request handler." href="UserAwareRequestHandler.html"><span class="name">UserAwareRequestHandler</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A user-aware request handler.</p><div class="fullcomment"><div class="comment cmt"><p>A user-aware request handler.</p><p>A handler that can be used for endpoints that need to know if there is a current user but
 can be executed even if there isn't one.
-</p></div></div></li><li class="indented0 " name="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandlerBuilder" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="UserAwareRequestHandlerBuilder[E&lt;:com.mohiva.play.silhouette.api.Env]extendsRequestHandlerBuilder[E,[B]com.mohiva.play.silhouette.api.actions.UserAwareRequest[E,B]]withProductwithSerializable"></a><a id="UserAwareRequestHandlerBuilder[E&lt;:Env]:UserAwareRequestHandlerBuilder[E]"></a> <span class="permalink"><a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UserAwareRequestHandlerBuilder[E&lt;:com.mohiva.play.silhouette.api.Env]extendsRequestHandlerBuilder[E,[B]com.mohiva.play.silhouette.api.actions.UserAwareRequest[E,B]]withProductwithSerializable" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">case class</span></span> <span class="symbol"><a href="UserAwareRequestHandlerBuilder.html" title="Request handler builder implementation to provide the foundation for user-aware request handlers."><span class="name">UserAwareRequestHandlerBuilder</span></a><span class="tparams">[<span name="E">E &lt;: <a href="../Env.html" name="com.mohiva.play.silhouette.api.Env" id="com.mohiva.play.silhouette.api.Env" class="extype">Env</a></span>]</span><span class="params">(<span name="environment">environment: <a href="../Environment.html" name="com.mohiva.play.silhouette.api.Environment" id="com.mohiva.play.silhouette.api.Environment" class="extype">Environment</a>[<span name="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandlerBuilder.E" class="extype">E</span>]</span>)</span><span class="result"> extends <a href="../RequestHandlerBuilder.html" name="com.mohiva.play.silhouette.api.RequestHandlerBuilder" id="com.mohiva.play.silhouette.api.RequestHandlerBuilder" class="extype">RequestHandlerBuilder</a>[<span name="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandlerBuilder.E" class="extype">E</span>, [B]<a href="UserAwareRequest.html" name="com.mohiva.play.silhouette.api.actions.UserAwareRequest" id="com.mohiva.play.silhouette.api.actions.UserAwareRequest" class="extype">UserAwareRequest</a>[<span name="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandlerBuilder.E" class="extype">E</span>, <span name="com.mohiva.play.silhouette.api.actions.&lt;refinement&gt;.R.&lt;local R&gt;.B" class="extype">B</span>]] with <a href="https://www.scala-lang.org/api/2.13.0/scala/Product.html#scala.Product" name="scala.Product" id="scala.Product" class="extype">Product</a> with <span name="scala.Serializable" class="extype">Serializable</span></span></span><p class="shortcomment cmt">Request handler builder implementation to provide the foundation for user-aware request handlers.</p><div class="fullcomment"><div class="comment cmt"><p>Request handler builder implementation to provide the foundation for user-aware request handlers.
-</p></div><dl class="paramcmts block"><dt class="tparam">E</dt><dd class="cmt"><p>The type of the environment.</p></dd><dt class="param">environment</dt><dd class="cmt"><p>The environment instance to handle the request.</p></dd></dl></div></li></ol></div></div><div id="inheritedMembers"></div><div id="groupedMembers"><div name="Ungrouped" class="group"><h3>Ungrouped</h3></div></div></div><div id="tooltip"></div><div id="footer"></div></body></div></div></div></body></html>
+</p></div></div>
+    </li><li name="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandlerBuilder" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="UserAwareRequestHandlerBuilder[E&lt;:com.mohiva.play.silhouette.api.Env]extendsRequestHandlerBuilder[E,[B]com.mohiva.play.silhouette.api.actions.UserAwareRequest[E,B]]withProductwithSerializable"></a><a id="UserAwareRequestHandlerBuilder[E&lt;:Env]:UserAwareRequestHandlerBuilder[E]"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/mohiva/play/silhouette/api/actions/index.html#UserAwareRequestHandlerBuilder[E&lt;:com.mohiva.play.silhouette.api.Env]extendsRequestHandlerBuilder[E,[B]com.mohiva.play.silhouette.api.actions.UserAwareRequest[E,B]]withProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="Request handler builder implementation to provide the foundation for user-aware request handlers." href="UserAwareRequestHandlerBuilder.html"><span class="name">UserAwareRequestHandlerBuilder</span></a><span class="tparams">[<span name="E">E &lt;: <a href="../Env.html" class="extype" name="com.mohiva.play.silhouette.api.Env">Env</a></span>]</span><span class="params">(<span name="environment">environment: <a href="../Environment.html" class="extype" name="com.mohiva.play.silhouette.api.Environment">Environment</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandlerBuilder.E">E</span>]</span>)</span><span class="result"> extends <a href="../RequestHandlerBuilder.html" class="extype" name="com.mohiva.play.silhouette.api.RequestHandlerBuilder">RequestHandlerBuilder</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandlerBuilder.E">E</span>, [B]<a href="UserAwareRequest.html" class="extype" name="com.mohiva.play.silhouette.api.actions.UserAwareRequest">UserAwareRequest</a>[<span class="extype" name="com.mohiva.play.silhouette.api.actions.UserAwareRequestHandlerBuilder.E">E</span>, <span class="extype" name="com.mohiva.play.silhouette.api.actions.&lt;refinement&gt;.R.B">B</span>]] with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Request handler builder implementation to provide the foundation for user-aware request handlers.</p><div class="fullcomment"><div class="comment cmt"><p>Request handler builder implementation to provide the foundation for user-aware request handlers.
+</p></div><dl class="paramcmts block"><dt class="tparam">E</dt><dd class="cmt"><p>The type of the environment.</p></dd><dt class="param">environment</dt><dd class="cmt"><p>The environment instance to handle the request.</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+    </body>
+          </div>
+        </div>
+      </div>
+    </body>
+      </html>

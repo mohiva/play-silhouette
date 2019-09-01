@@ -1,16 +1,641 @@
-<!DOCTYPE html ><html><head><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/><title></title><meta content="" name="description"/><meta content="" name="keywords"/><meta http-equiv="content-type" content="text/html; charset=UTF-8"/><link href="../../../../../lib/index.css" media="screen" type="text/css" rel="stylesheet"/><link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet"/><link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css"/><script type="text/javascript" src="../../../../../lib/jquery.js"></script><script type="text/javascript" src="../../../../../lib/index.js"></script><script type="text/javascript" src="../../../../../index.js"></script><script type="text/javascript" src="../../../../../lib/scheduler.js"></script><script type="text/javascript" src="../../../../../lib/template.js"></script><script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script><script type="text/javascript">/* this variable can be used by the JS to determine the path to the root document */
-var toRoot = '../../../../../';</script></head><body><div id="search"><span id="doc-title"><span id="doc-version"></span></span> <span class="close-results"><span class="left">&lt;</span> Back</span><div id="textfilter"><span class="input"><input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/"/><i class="clear material-icons"></i><i id="search-icon" class="material-icons"></i></span></div></div><div id="search-results"><div id="search-progress"><div id="progress-fill"></div></div><div id="results-content"><div id="entity-results"></div><div id="member-results"></div></div></div><div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;"><div id="content-container" style="-webkit-overflow-scrolling: touch;"><div id="subpackage-spacer"><div id="packages"><h1>Packages</h1><ul><li class="indented0 " name="_root_.root" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="_root_"></a><a id="root:_root_"></a> <span class="permalink"><a href="index.html#_root_" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../../../../../index.html" title=""><span class="name">root</span></a></span><div class="fullcomment"><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../../../../../index.html" name="_root_" id="_root_" class="extype">root</a></dd></dl></div></li><li class="indented1 " name="_root_.com" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="com"></a><a id="com:com"></a> <span class="permalink"><a href="index.html#com" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../../../../index.html" title=""><span class="name">com</span></a></span><div class="fullcomment"><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../../../../../index.html" name="_root_" id="_root_" class="extype">root</a></dd></dl></div></li><li class="indented2 " name="com.mohiva" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="mohiva"></a><a id="mohiva:mohiva"></a> <span class="permalink"><a href="../com/index.html#mohiva" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../../../index.html" title=""><span class="name">mohiva</span></a></span><div class="fullcomment"><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../../../../index.html" name="com" id="com" class="extype">com</a></dd></dl></div></li><li class="indented3 " name="com.mohiva.play" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="play"></a><a id="play:play"></a> <span class="permalink"><a href="../../com/mohiva/index.html#play" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../../index.html" title=""><span class="name">play</span></a></span><div class="fullcomment"><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../../../index.html" name="com.mohiva" id="com.mohiva" class="extype">mohiva</a></dd></dl></div></li><li class="indented4 " name="com.mohiva.play.silhouette" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="silhouette"></a><a id="silhouette:silhouette"></a> <span class="permalink"><a href="../../../com/mohiva/play/index.html#silhouette" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../index.html" title="An authentication library for Play Framework applications that supports several authentication methods, including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes."><span class="name">silhouette</span></a></span><p class="shortcomment cmt">An authentication library for Play Framework applications that supports several authentication methods,
+<!DOCTYPE html >
+<html>
+        <head>
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title></title>
+          <meta name="description" content="" />
+          <meta name="keywords" content="" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../../../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../../../../../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../../../../../lib/index.js"></script>
+      <script type="text/javascript" src="../../../../../index.js"></script>
+      <script type="text/javascript" src="../../../../../lib/scheduler.js"></script>
+      <script type="text/javascript" src="../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../../../../../';
+      </script>
+    
+        </head>
+        <body>
+      <div id="search">
+        <span id="doc-title"><span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="index.html#_root_" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../../../../index.html"><span class="name">root</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.com" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="com"></a><a id="com:com"></a>
+      <span class="permalink">
+      <a href="index.html#com" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../../../index.html"><span class="name">com</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="com.mohiva" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mohiva"></a><a id="mohiva:mohiva"></a>
+      <span class="permalink">
+      <a href="../com/index.html#mohiva" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../../index.html"><span class="name">mohiva</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../index.html" class="extype" name="com">com</a></dd></dl></div>
+    </li><li name="com.mohiva.play" visbl="pub" class="indented3 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="play"></a><a id="play:play"></a>
+      <span class="permalink">
+      <a href="../../com/mohiva/index.html#play" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../index.html"><span class="name">play</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../index.html" class="extype" name="com.mohiva">mohiva</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette" visbl="pub" class="indented4 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="silhouette"></a><a id="silhouette:silhouette"></a>
+      <span class="permalink">
+      <a href="../../../com/mohiva/play/index.html#silhouette" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="An authentication library for Play Framework applications that supports several authentication methods, including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes." href="../index.html"><span class="name">silhouette</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">An authentication library for Play Framework applications that supports several authentication methods,
 including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes.</p><div class="fullcomment"><div class="comment cmt"><p>An authentication library for Play Framework applications that supports several authentication methods,
 including OAuth1, OAuth2, OpenID, Credentials or custom authentication schemes.
-</p></div><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../../index.html" name="com.mohiva.play" id="com.mohiva.play" class="extype">play</a></dd></dl></div></li><li class="indented5 " name="com.mohiva.play.silhouette.api" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="api"></a><a id="api:api"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#api" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../api/index.html" title="The collection of traits and utility classes that form the stable API of Silhouette."><span class="name">api</span></a></span><p class="shortcomment cmt">The collection of traits and utility classes that form the stable API of Silhouette.</p><div class="fullcomment"><div class="comment cmt"><p>The collection of traits and utility classes that form the stable API of Silhouette.
-</p></div><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../index.html" name="com.mohiva.play.silhouette" id="com.mohiva.play.silhouette" class="extype">silhouette</a></dd></dl></div></li><li class="indented5 " name="com.mohiva.play.silhouette.crypto" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="crypto"></a><a id="crypto:crypto"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#crypto" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../crypto/index.html" title=""><span class="name">crypto</span></a></span><div class="fullcomment"><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../index.html" name="com.mohiva.play.silhouette" id="com.mohiva.play.silhouette" class="extype">silhouette</a></dd></dl></div></li><li class="indented5 " name="com.mohiva.play.silhouette.impl" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="impl"></a><a id="impl:impl"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#impl" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../impl/index.html" title="The reference implementation of Silhouette."><span class="name">impl</span></a></span><p class="shortcomment cmt">The reference implementation of Silhouette.</p><div class="fullcomment"><div class="comment cmt"><p>The reference implementation of Silhouette.
-</p></div><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../index.html" name="com.mohiva.play.silhouette" id="com.mohiva.play.silhouette" class="extype">silhouette</a></dd></dl></div></li><li class="indented5 " name="com.mohiva.play.silhouette.password" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="password"></a><a id="password:password"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#password" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../password/index.html" title=""><span class="name">password</span></a></span><div class="fullcomment"><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../index.html" name="com.mohiva.play.silhouette" id="com.mohiva.play.silhouette" class="extype">silhouette</a></dd></dl></div></li><li class="indented5 " name="com.mohiva.play.silhouette.persistence" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="persistence"></a><a id="persistence:persistence"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#persistence" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><a href="../persistence/index.html" title=""><span class="name">persistence</span></a></span><div class="fullcomment"><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../index.html" name="com.mohiva.play.silhouette" id="com.mohiva.play.silhouette" class="extype">silhouette</a></dd></dl></div></li><li class="indented5 current" name="com.mohiva.play.silhouette.test" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="test"></a><a id="test:test"></a> <span class="permalink"><a href="../../../../com/mohiva/play/silhouette/index.html#test" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><span class="name">test</span></span><p class="shortcomment cmt">Test helpers to test a Silhouette application.</p><div class="fullcomment"><div class="comment cmt"><p>Test helpers to test a Silhouette application.
-</p></div><dl class="attributes block"><dt>Definition Classes</dt><dd><a href="../index.html" name="com.mohiva.play.silhouette" id="com.mohiva.play.silhouette" class="extype">silhouette</a></dd></dl></div></li><li class="current-entities indented5"><a href="FakeAuthenticator$.html" title="A fake authenticator factory." class="object"></a> <a href="FakeAuthenticator.html" title="A fake authenticator." class="class"></a><a href="FakeAuthenticator.html" title="A fake authenticator.">FakeAuthenticator</a></li><li class="current-entities indented5"><span class="separator"></span> <a href="FakeAuthenticatorRepository.html" title="A fake authenticator repository which persists authenticators in memory." class="class"></a><a href="FakeAuthenticatorRepository.html" title="A fake authenticator repository which persists authenticators in memory.">FakeAuthenticatorRepository</a></li><li class="current-entities indented5"><span class="separator"></span> <a href="FakeAuthenticatorService$.html" title="A fake authenticator service factory." class="object"></a><a href="FakeAuthenticatorService$.html" title="A fake authenticator service factory.">FakeAuthenticatorService</a></li><li class="current-entities indented5"><span class="separator"></span> <a href="FakeBearerTokenAuthenticatorService.html" title="A fake bearer token authenticator service." class="class"></a><a href="FakeBearerTokenAuthenticatorService.html" title="A fake bearer token authenticator service.">FakeBearerTokenAuthenticatorService</a></li><li class="current-entities indented5"><span class="separator"></span> <a href="FakeCookieAuthenticatorService.html" title="A fake cookie authenticator service." class="class"></a><a href="FakeCookieAuthenticatorService.html" title="A fake cookie authenticator service.">FakeCookieAuthenticatorService</a></li><li class="current-entities indented5"><span class="separator"></span> <a href="FakeDummyAuthenticatorService.html" title="A fake Dummy authenticator service." class="class"></a><a href="FakeDummyAuthenticatorService.html" title="A fake Dummy authenticator service.">FakeDummyAuthenticatorService</a></li><li class="current-entities indented5"><span class="separator"></span> <a href="FakeEnvironment.html" title="A fake environment implementation." class="class"></a><a href="FakeEnvironment.html" title="A fake environment implementation.">FakeEnvironment</a></li><li class="current-entities indented5"><span class="separator"></span> <a href="FakeIdentity.html" title="A fake identity." class="class"></a><a href="FakeIdentity.html" title="A fake identity.">FakeIdentity</a></li><li class="current-entities indented5"><span class="separator"></span> <a href="FakeIdentityService.html" title="A fake identity service implementation which can handle a predefined list of identities." class="class"></a><a href="FakeIdentityService.html" title="A fake identity service implementation which can handle a predefined list of identities.">FakeIdentityService</a></li><li class="current-entities indented5"><span class="separator"></span> <a href="FakeJWTAuthenticatorService.html" title="A fake JWT authenticator service." class="class"></a><a href="FakeJWTAuthenticatorService.html" title="A fake JWT authenticator service.">FakeJWTAuthenticatorService</a></li><li class="current-entities indented5"><span class="separator"></span> <a href="package$$FakeRequestWithAuthenticator.html" title="Provides a method which add an authenticator to a fake request." class="class"></a><a href="package$$FakeRequestWithAuthenticator.html" title="Provides a method which add an authenticator to a fake request.">FakeRequestWithAuthenticator</a></li><li class="current-entities indented5"><span class="separator"></span> <a href="FakeSessionAuthenticatorService.html" title="A fake session authenticator service." class="class"></a><a href="FakeSessionAuthenticatorService.html" title="A fake session authenticator service.">FakeSessionAuthenticatorService</a></li></ul></div></div><div id="content"><body class="package value"><div id="definition"><div class="big-circle package">p</div><p id="owner"><a href="../../../../index.html" name="com" id="com" class="extype">com</a>.<a href="../../../index.html" name="com.mohiva" id="com.mohiva" class="extype">mohiva</a>.<a href="../../index.html" name="com.mohiva.play" id="com.mohiva.play" class="extype">play</a>.<a href="../index.html" name="com.mohiva.play.silhouette" id="com.mohiva.play.silhouette" class="extype">silhouette</a></p><h1>test<span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/test/index.html" title="Permalink"><i class="material-icons"></i></a></span></h1></div><h4 id="signature" class="signature"><span class="modifier_kind"><span class="modifier"></span> <span class="kind">package</span></span> <span class="symbol"><span class="name">test</span></span></h4><div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Test helpers to test a Silhouette application.
-</p></div><div class="toggleContainer"><div class="toggle block"><span>Linear Supertypes</span><div class="superTypes hiddenContent"><a href="https://www.scala-lang.org/api/2.13.0/scala/AnyRef.html#scala.AnyRef" name="scala.AnyRef" id="scala.AnyRef" class="extype">AnyRef</a>, <a href="https://www.scala-lang.org/api/2.13.0/scala/Any.html#scala.Any" name="scala.Any" id="scala.Any" class="extype">Any</a></div></div></div></div><div id="mbrsel"><div class="toggle"></div><div id="memberfilter"><i class="material-icons arrow"></i><span class="input"><input placeholder="Filter all members" id="mbrsel-input" type="text" accesskey="/"/></span><i class="clear material-icons"></i></div><div id="filterby"><div id="order"><span class="filtertype">Ordering</span><ol><li class="alpha in"><span>Alphabetic</span></li><li class="inherit out"><span>By Inheritance</span></li></ol></div><div class="ancestors"><span class="filtertype">Inherited<br/></span><ol id="linearization"><li class="in" name="com.mohiva.play.silhouette.test"><span>test</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li></ol></div><div class="ancestors"><span class="filtertype"></span><ol><li class="hideall out"><span>Hide All</span></li><li class="showall in"><span>Show All</span></li></ol></div><div id="visbl"><span class="filtertype">Visibility</span><ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol></div></div></div><div id="template"><div id="allMembers"><div id="types" class="types members"><h3>Type Members</h3><ol><li class="indented0 " name="com.mohiva.play.silhouette.test.FakeAuthenticator" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="FakeAuthenticatorextendsStorableAuthenticatorwithProductwithSerializable"></a><a id="FakeAuthenticator:FakeAuthenticator"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeAuthenticatorextendsStorableAuthenticatorwithProductwithSerializable" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">case class</span></span> <span class="symbol"><a href="FakeAuthenticator.html" title="A fake authenticator."><span class="name">FakeAuthenticator</span></a><span class="params">(<span name="loginInfo">loginInfo: <a href="../api/LoginInfo.html" name="com.mohiva.play.silhouette.api.LoginInfo" id="com.mohiva.play.silhouette.api.LoginInfo" class="extype">LoginInfo</a></span>, <span name="id">id: <span name="scala.Predef.String" class="extype">String</span> = <span class="symbol">UUID.randomUUID().toString</span></span>, <span name="isValid">isValid: <a href="https://www.scala-lang.org/api/2.13.0/scala/Boolean.html#scala.Boolean" name="scala.Boolean" id="scala.Boolean" class="extype">Boolean</a> = <span class="symbol">true</span></span>)</span><span class="result"> extends <a href="../api/StorableAuthenticator.html" name="com.mohiva.play.silhouette.api.StorableAuthenticator" id="com.mohiva.play.silhouette.api.StorableAuthenticator" class="extype">StorableAuthenticator</a> with <a href="https://www.scala-lang.org/api/2.13.0/scala/Product.html#scala.Product" name="scala.Product" id="scala.Product" class="extype">Product</a> with <span name="scala.Serializable" class="extype">Serializable</span></span></span><p class="shortcomment cmt">A fake authenticator.</p><div class="fullcomment"><div class="comment cmt"><p>A fake authenticator.
-</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info for an identity.</p></dd><dt class="param">id</dt><dd class="cmt"><p>The ID of the authenticator.</p></dd><dt class="param">isValid</dt><dd class="cmt"><p>True if the authenticator is valid, false otherwise.</p></dd></dl></div></li><li class="indented0 " name="com.mohiva.play.silhouette.test.FakeAuthenticatorRepository" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="FakeAuthenticatorRepository[T&lt;:com.mohiva.play.silhouette.api.StorableAuthenticator]extendsAuthenticatorRepository[T]"></a><a id="FakeAuthenticatorRepository[T&lt;:StorableAuthenticator]:FakeAuthenticatorRepository[T]"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeAuthenticatorRepository[T&lt;:com.mohiva.play.silhouette.api.StorableAuthenticator]extendsAuthenticatorRepository[T]" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">class</span></span> <span class="symbol"><a href="FakeAuthenticatorRepository.html" title="A fake authenticator repository which persists authenticators in memory."><span class="name">FakeAuthenticatorRepository</span></a><span class="tparams">[<span name="T">T &lt;: <a href="../api/StorableAuthenticator.html" name="com.mohiva.play.silhouette.api.StorableAuthenticator" id="com.mohiva.play.silhouette.api.StorableAuthenticator" class="extype">StorableAuthenticator</a></span>]</span><span class="result"> extends <a href="../api/repositories/AuthenticatorRepository.html" name="com.mohiva.play.silhouette.api.repositories.AuthenticatorRepository" id="com.mohiva.play.silhouette.api.repositories.AuthenticatorRepository" class="extype">AuthenticatorRepository</a>[<span name="com.mohiva.play.silhouette.test.FakeAuthenticatorRepository.T" class="extype">T</span>]</span></span><p class="shortcomment cmt">A fake authenticator repository which persists authenticators in memory.</p><div class="fullcomment"><div class="comment cmt"><p>A fake authenticator repository which persists authenticators in memory.
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the authenticator to handle.</p></dd></dl></div></li><li class="indented0 " name="com.mohiva.play.silhouette.test.FakeBearerTokenAuthenticatorService" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="FakeBearerTokenAuthenticatorServiceextendsBearerTokenAuthenticatorServicewithProductwithSerializable"></a><a id="FakeBearerTokenAuthenticatorService:FakeBearerTokenAuthenticatorService"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeBearerTokenAuthenticatorServiceextendsBearerTokenAuthenticatorServicewithProductwithSerializable" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">case class</span></span> <span class="symbol"><a href="FakeBearerTokenAuthenticatorService.html" title="A fake bearer token authenticator service."><span class="name">FakeBearerTokenAuthenticatorService</span></a><span class="params">()</span><span class="result"> extends <a href="../impl/authenticators/BearerTokenAuthenticatorService.html" name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorService" id="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorService" class="extype">BearerTokenAuthenticatorService</a> with <a href="https://www.scala-lang.org/api/2.13.0/scala/Product.html#scala.Product" name="scala.Product" id="scala.Product" class="extype">Product</a> with <span name="scala.Serializable" class="extype">Serializable</span></span></span><p class="shortcomment cmt">A fake bearer token authenticator service.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.test.FakeCookieAuthenticatorService" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="FakeCookieAuthenticatorServiceextendsCookieAuthenticatorServicewithProductwithSerializable"></a><a id="FakeCookieAuthenticatorService:FakeCookieAuthenticatorService"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeCookieAuthenticatorServiceextendsCookieAuthenticatorServicewithProductwithSerializable" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">case class</span></span> <span class="symbol"><a href="FakeCookieAuthenticatorService.html" title="A fake cookie authenticator service."><span class="name">FakeCookieAuthenticatorService</span></a><span class="params">()</span><span class="result"> extends <a href="../impl/authenticators/CookieAuthenticatorService.html" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService" id="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService" class="extype">CookieAuthenticatorService</a> with <a href="https://www.scala-lang.org/api/2.13.0/scala/Product.html#scala.Product" name="scala.Product" id="scala.Product" class="extype">Product</a> with <span name="scala.Serializable" class="extype">Serializable</span></span></span><p class="shortcomment cmt">A fake cookie authenticator service.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.test.FakeDummyAuthenticatorService" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="FakeDummyAuthenticatorServiceextendsDummyAuthenticatorServicewithProductwithSerializable"></a><a id="FakeDummyAuthenticatorService:FakeDummyAuthenticatorService"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeDummyAuthenticatorServiceextendsDummyAuthenticatorServicewithProductwithSerializable" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">case class</span></span> <span class="symbol"><a href="FakeDummyAuthenticatorService.html" title="A fake Dummy authenticator service."><span class="name">FakeDummyAuthenticatorService</span></a><span class="params">()</span><span class="result"> extends <a href="../impl/authenticators/DummyAuthenticatorService.html" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService" id="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService" class="extype">DummyAuthenticatorService</a> with <a href="https://www.scala-lang.org/api/2.13.0/scala/Product.html#scala.Product" name="scala.Product" id="scala.Product" class="extype">Product</a> with <span name="scala.Serializable" class="extype">Serializable</span></span></span><p class="shortcomment cmt">A fake Dummy authenticator service.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.test.FakeEnvironment" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="FakeEnvironment[E&lt;:com.mohiva.play.silhouette.api.Env]extendsEnvironment[E]withProductwithSerializable"></a><a id="FakeEnvironment[E&lt;:Env]:FakeEnvironment[E]"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeEnvironment[E&lt;:com.mohiva.play.silhouette.api.Env]extendsEnvironment[E]withProductwithSerializable" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">case class</span></span> <span class="symbol"><a href="FakeEnvironment.html" title="A fake environment implementation."><span class="name">FakeEnvironment</span></a><span class="tparams">[<span name="E">E &lt;: <a href="../api/Env.html" name="com.mohiva.play.silhouette.api.Env" id="com.mohiva.play.silhouette.api.Env" class="extype">Env</a></span>]</span><span class="params">(<span name="identities">identities: <span name="scala.Seq" class="extype">Seq</span>[(<a href="../api/LoginInfo.html" name="com.mohiva.play.silhouette.api.LoginInfo" id="com.mohiva.play.silhouette.api.LoginInfo" class="extype">LoginInfo</a>, <span name="com.mohiva.play.silhouette.api.Env.I" class="extype">E.I</span>)]</span>, <span name="requestProviders">requestProviders: <span name="scala.Seq" class="extype">Seq</span>[<a href="../api/RequestProvider.html" name="com.mohiva.play.silhouette.api.RequestProvider" id="com.mohiva.play.silhouette.api.RequestProvider" class="extype">RequestProvider</a>] = <span class="symbol">Seq()</span></span>, <span name="eventBus">eventBus: <a href="../api/EventBus.html" name="com.mohiva.play.silhouette.api.EventBus" id="com.mohiva.play.silhouette.api.EventBus" class="extype">EventBus</a> = <span class="symbol"><span class="name"><a href="../../../../index.html">EventBus()</a></span></span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="executionContext">executionContext: <a href="https://www.scala-lang.org/api/2.13.0/scala/concurrent/ExecutionContext.html#scala.concurrent.ExecutionContext" name="scala.concurrent.ExecutionContext" id="scala.concurrent.ExecutionContext" class="extype">ExecutionContext</a></span>, <span name="tt">tt: <span name="scala.reflect.api.TypeTags.TypeTag" class="extype">scala.reflect.api.JavaUniverse.TypeTag</span>[<span name="com.mohiva.play.silhouette.api.Env.A" class="extype">E.A</span>]</span>)</span><span class="result"> extends <a href="../api/Environment.html" name="com.mohiva.play.silhouette.api.Environment" id="com.mohiva.play.silhouette.api.Environment" class="extype">Environment</a>[<span name="com.mohiva.play.silhouette.test.FakeEnvironment.E" class="extype">E</span>] with <a href="https://www.scala-lang.org/api/2.13.0/scala/Product.html#scala.Product" name="scala.Product" id="scala.Product" class="extype">Product</a> with <span name="scala.Serializable" class="extype">Serializable</span></span></span><p class="shortcomment cmt">A fake environment implementation.</p><div class="fullcomment"><div class="comment cmt"><p>A fake environment implementation.
-</p></div><dl class="paramcmts block"><dt class="tparam">E</dt><dd class="cmt"><p>The type of the environment.</p></dd><dt class="param">identities</dt><dd class="cmt"><p>A list of (login info -&gt; identity) pairs to return inside a Silhouette action.</p></dd><dt class="param">requestProviders</dt><dd class="cmt"><p>The list of request providers.</p></dd><dt class="param">eventBus</dt><dd class="cmt"><p>The event bus implementation.</p></dd><dt class="param">executionContext</dt><dd class="cmt"><p>The execution context to handle the asynchronous operations.</p></dd><dt class="param">tt</dt><dd class="cmt"><p>The type tag of the authenticator type.</p></dd></dl></div></li><li class="indented0 " name="com.mohiva.play.silhouette.test.FakeIdentity" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="FakeIdentityextendsIdentitywithProductwithSerializable"></a><a id="FakeIdentity:FakeIdentity"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeIdentityextendsIdentitywithProductwithSerializable" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">case class</span></span> <span class="symbol"><a href="FakeIdentity.html" title="A fake identity."><span class="name">FakeIdentity</span></a><span class="params">(<span name="loginInfo">loginInfo: <a href="../api/LoginInfo.html" name="com.mohiva.play.silhouette.api.LoginInfo" id="com.mohiva.play.silhouette.api.LoginInfo" class="extype">LoginInfo</a></span>)</span><span class="result"> extends <a href="../api/Identity.html" name="com.mohiva.play.silhouette.api.Identity" id="com.mohiva.play.silhouette.api.Identity" class="extype">Identity</a> with <a href="https://www.scala-lang.org/api/2.13.0/scala/Product.html#scala.Product" name="scala.Product" id="scala.Product" class="extype">Product</a> with <span name="scala.Serializable" class="extype">Serializable</span></span></span><p class="shortcomment cmt">A fake identity.</p><div class="fullcomment"><div class="comment cmt"><p>A fake identity.
-</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info for an identity.</p></dd></dl></div></li><li class="indented0 " name="com.mohiva.play.silhouette.test.FakeIdentityService" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="FakeIdentityService[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsIdentityService[I]"></a><a id="FakeIdentityService[I&lt;:Identity]:FakeIdentityService[I]"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeIdentityService[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsIdentityService[I]" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">class</span></span> <span class="symbol"><a href="FakeIdentityService.html" title="A fake identity service implementation which can handle a predefined list of identities."><span class="name">FakeIdentityService</span></a><span class="tparams">[<span name="I">I &lt;: <a href="../api/Identity.html" name="com.mohiva.play.silhouette.api.Identity" id="com.mohiva.play.silhouette.api.Identity" class="extype">Identity</a></span>]</span><span class="result"> extends <a href="../api/services/IdentityService.html" name="com.mohiva.play.silhouette.api.services.IdentityService" id="com.mohiva.play.silhouette.api.services.IdentityService" class="extype">IdentityService</a>[<span name="com.mohiva.play.silhouette.test.FakeIdentityService.I" class="extype">I</span>]</span></span><p class="shortcomment cmt">A fake identity service implementation which can handle a predefined list of identities.</p><div class="fullcomment"><div class="comment cmt"><p>A fake identity service implementation which can handle a predefined list of identities.
-</p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity to handle.</p></dd></dl></div></li><li class="indented0 " name="com.mohiva.play.silhouette.test.FakeJWTAuthenticatorService" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="FakeJWTAuthenticatorServiceextendsJWTAuthenticatorServicewithProductwithSerializable"></a><a id="FakeJWTAuthenticatorService:FakeJWTAuthenticatorService"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeJWTAuthenticatorServiceextendsJWTAuthenticatorServicewithProductwithSerializable" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">case class</span></span> <span class="symbol"><a href="FakeJWTAuthenticatorService.html" title="A fake JWT authenticator service."><span class="name">FakeJWTAuthenticatorService</span></a><span class="params">()</span><span class="result"> extends <a href="../impl/authenticators/JWTAuthenticatorService.html" name="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService" id="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService" class="extype">JWTAuthenticatorService</a> with <a href="https://www.scala-lang.org/api/2.13.0/scala/Product.html#scala.Product" name="scala.Product" id="scala.Product" class="extype">Product</a> with <span name="scala.Serializable" class="extype">Serializable</span></span></span><p class="shortcomment cmt">A fake JWT authenticator service.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.test.FakeRequestWithAuthenticator" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="pub"><a id="FakeRequestWithAuthenticator[A]extendsAnyRef"></a><a id="FakeRequestWithAuthenticator[A]:FakeRequestWithAuthenticator[A]"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeRequestWithAuthenticator[A]extendsAnyRef" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier">implicit </span> <span class="kind">class</span></span> <span class="symbol"><a href="package$$FakeRequestWithAuthenticator.html" title="Provides a method which add an authenticator to a fake request."><span class="name">FakeRequestWithAuthenticator</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="https://www.scala-lang.org/api/2.13.0/scala/AnyRef.html#scala.AnyRef" name="scala.AnyRef" id="scala.AnyRef" class="extype">AnyRef</a></span></span><p class="shortcomment cmt">Provides a method which add an authenticator to a fake request.</p><div class="fullcomment"><div class="comment cmt"><p>Provides a method which add an authenticator to a fake request.
-</p></div><dl class="paramcmts block"><dt class="tparam">A</dt><dd class="cmt"><p>The type of the body.</p></dd></dl></div></li><li class="indented0 " name="com.mohiva.play.silhouette.test.FakeSessionAuthenticatorService" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="FakeSessionAuthenticatorServiceextendsSessionAuthenticatorServicewithProductwithSerializable"></a><a id="FakeSessionAuthenticatorService:FakeSessionAuthenticatorService"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeSessionAuthenticatorServiceextendsSessionAuthenticatorServicewithProductwithSerializable" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">case class</span></span> <span class="symbol"><a href="FakeSessionAuthenticatorService.html" title="A fake session authenticator service."><span class="name">FakeSessionAuthenticatorService</span></a><span class="params">()</span><span class="result"> extends <a href="../impl/authenticators/SessionAuthenticatorService.html" name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService" id="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService" class="extype">SessionAuthenticatorService</a> with <a href="https://www.scala-lang.org/api/2.13.0/scala/Product.html#scala.Product" name="scala.Product" id="scala.Product" class="extype">Product</a> with <span name="scala.Serializable" class="extype">Serializable</span></span></span><p class="shortcomment cmt">A fake session authenticator service.</p></li></ol></div><div class="values members"><h3>Value Members</h3><ol><li class="indented0 " name="com.mohiva.play.silhouette.test#await" group="Ungrouped" fullComment="yes" data-isabs="false" visbl="prt"><a id="await[T](f:scala.concurrent.Future[T]):T"></a><a id="await[T](Future[T]):T"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/test/index.html#await[T](f:scala.concurrent.Future[T]):T" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier">implicit </span> <span class="kind">def</span></span> <span class="symbol"><span class="name">await</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="f">f: <a href="https://www.scala-lang.org/api/2.13.0/scala/concurrent/Future.html#scala.concurrent.Future" name="scala.concurrent.Future" id="scala.concurrent.Future" class="extype">Future</a>[<span name="com.mohiva.play.silhouette.test.await.T" class="extype">T</span>]</span>)</span><span class="result">: <span name="com.mohiva.play.silhouette.test.await.T" class="extype">T</span></span></span><p class="shortcomment cmt">Resolves a future by waiting of the result.</p><div class="fullcomment"><div class="comment cmt"><p>Resolves a future by waiting of the result.
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type contained in the future.</p></dd><dt class="param">f</dt><dd class="cmt"><p>The future to block.</p></dd><dt>returns</dt><dd class="cmt"><p>The value contained in the future.</p></dd></dl><dl class="attributes block"><dt>Attributes</dt><dd>protected </dd></dl></div></li><li class="indented0 " name="com.mohiva.play.silhouette.test.FakeAuthenticator" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="FakeAuthenticator"></a><a id="FakeAuthenticator:FakeAuthenticator"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeAuthenticator" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">object</span></span> <span class="symbol"><a href="FakeAuthenticator$.html" title="A fake authenticator factory."><span class="name">FakeAuthenticator</span></a><span class="result"> extends <span name="java.io.Serializable" class="extype">Serializable</span></span></span><p class="shortcomment cmt">A fake authenticator factory.</p></li><li class="indented0 " name="com.mohiva.play.silhouette.test.FakeAuthenticatorService" group="Ungrouped" fullComment="no" data-isabs="false" visbl="pub"><a id="FakeAuthenticatorService"></a><a id="FakeAuthenticatorService:FakeAuthenticatorService"></a> <span class="permalink"><a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeAuthenticatorService" title="Permalink"><i class="material-icons"></i></a></span> <span class="modifier_kind"><span class="modifier"></span> <span class="kind">object</span></span> <span class="symbol"><a href="FakeAuthenticatorService$.html" title="A fake authenticator service factory."><span class="name">FakeAuthenticatorService</span></a></span><p class="shortcomment cmt">A fake authenticator service factory.</p></li></ol></div></div><div id="inheritedMembers"><div name="scala.AnyRef" class="parent"><h3>Inherited from <a href="https://www.scala-lang.org/api/2.13.0/scala/AnyRef.html#scala.AnyRef" name="scala.AnyRef" id="scala.AnyRef" class="extype">AnyRef</a></h3></div><div name="scala.Any" class="parent"><h3>Inherited from <a href="https://www.scala-lang.org/api/2.13.0/scala/Any.html#scala.Any" name="scala.Any" id="scala.Any" class="extype">Any</a></h3></div></div><div id="groupedMembers"><div name="Ungrouped" class="group"><h3>Ungrouped</h3></div></div></div><div id="tooltip"></div><div id="footer"></div></body></div></div></div></body></html>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="com.mohiva.play">play</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.api" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="api"></a><a id="api:api"></a>
+      <span class="permalink">
+      <a href="../../../../com/mohiva/play/silhouette/index.html#api" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="The collection of traits and utility classes that form the stable API of Silhouette." href="../api/index.html"><span class="name">api</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">The collection of traits and utility classes that form the stable API of Silhouette.</p><div class="fullcomment"><div class="comment cmt"><p>The collection of traits and utility classes that form the stable API of Silhouette.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.crypto" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="crypto"></a><a id="crypto:crypto"></a>
+      <span class="permalink">
+      <a href="../../../../com/mohiva/play/silhouette/index.html#crypto" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../crypto/index.html"><span class="name">crypto</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.impl" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="impl"></a><a id="impl:impl"></a>
+      <span class="permalink">
+      <a href="../../../../com/mohiva/play/silhouette/index.html#impl" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="The reference implementation of Silhouette." href="../impl/index.html"><span class="name">impl</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">The reference implementation of Silhouette.</p><div class="fullcomment"><div class="comment cmt"><p>The reference implementation of Silhouette.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.password" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="password"></a><a id="password:password"></a>
+      <span class="permalink">
+      <a href="../../../../com/mohiva/play/silhouette/index.html#password" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../password/index.html"><span class="name">password</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.persistence" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="persistence"></a><a id="persistence:persistence"></a>
+      <span class="permalink">
+      <a href="../../../../com/mohiva/play/silhouette/index.html#persistence" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../persistence/index.html"><span class="name">persistence</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.test" visbl="pub" class="indented5 current" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="test"></a><a id="test:test"></a>
+      <span class="permalink">
+      <a href="../../../../com/mohiva/play/silhouette/index.html#test" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">test</span>
+      </span>
+      
+      <p class="shortcomment cmt">Test helpers to test a Silhouette application.</p><div class="fullcomment"><div class="comment cmt"><p>Test helpers to test a Silhouette application.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a></dd></dl></div>
+    </li><li class="current-entities indented5">
+                        <a class="object" href="FakeAuthenticator$.html" title="A fake authenticator factory."></a>
+                        <a class="class" href="FakeAuthenticator.html" title="A fake authenticator."></a>
+                        <a href="FakeAuthenticator.html" title="A fake authenticator.">FakeAuthenticator</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="FakeAuthenticatorRepository.html" title="A fake authenticator repository which persists authenticators in memory."></a>
+                        <a href="FakeAuthenticatorRepository.html" title="A fake authenticator repository which persists authenticators in memory.">FakeAuthenticatorRepository</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="object" href="FakeAuthenticatorService$.html" title="A fake authenticator service factory."></a>
+                        <a href="FakeAuthenticatorService$.html" title="A fake authenticator service factory.">FakeAuthenticatorService</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="FakeBearerTokenAuthenticatorService.html" title="A fake bearer token authenticator service."></a>
+                        <a href="FakeBearerTokenAuthenticatorService.html" title="A fake bearer token authenticator service.">FakeBearerTokenAuthenticatorService</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="FakeCookieAuthenticatorService.html" title="A fake cookie authenticator service."></a>
+                        <a href="FakeCookieAuthenticatorService.html" title="A fake cookie authenticator service.">FakeCookieAuthenticatorService</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="FakeDummyAuthenticatorService.html" title="A fake Dummy authenticator service."></a>
+                        <a href="FakeDummyAuthenticatorService.html" title="A fake Dummy authenticator service.">FakeDummyAuthenticatorService</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="FakeEnvironment.html" title="A fake environment implementation."></a>
+                        <a href="FakeEnvironment.html" title="A fake environment implementation.">FakeEnvironment</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="FakeIdentity.html" title="A fake identity."></a>
+                        <a href="FakeIdentity.html" title="A fake identity.">FakeIdentity</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="FakeIdentityService.html" title="A fake identity service implementation which can handle a predefined list of identities."></a>
+                        <a href="FakeIdentityService.html" title="A fake identity service implementation which can handle a predefined list of identities.">FakeIdentityService</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="FakeJWTAuthenticatorService.html" title="A fake JWT authenticator service."></a>
+                        <a href="FakeJWTAuthenticatorService.html" title="A fake JWT authenticator service.">FakeJWTAuthenticatorService</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="package$$FakeRequestWithAuthenticator.html" title="Provides a method which add an authenticator to a fake request."></a>
+                        <a href="package$$FakeRequestWithAuthenticator.html" title="Provides a method which add an authenticator to a fake request.">FakeRequestWithAuthenticator</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="FakeSessionAuthenticatorService.html" title="A fake session authenticator service."></a>
+                        <a href="FakeSessionAuthenticatorService.html" title="A fake session authenticator service.">FakeSessionAuthenticatorService</a>
+                      </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="package value">
+      <div id="definition">
+        <div class="big-circle package">p</div>
+        <p id="owner"><a href="../../../../index.html" class="extype" name="com">com</a>.<a href="../../../index.html" class="extype" name="com.mohiva">mohiva</a>.<a href="../../index.html" class="extype" name="com.mohiva.play">play</a>.<a href="../index.html" class="extype" name="com.mohiva.play.silhouette">silhouette</a></p>
+        <h1>test<span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/test/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">test</span>
+      </span>
+      </h4>
+
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Test helpers to test a Silhouette application.
+</p></div><div class="toggleContainer block">
+          <span class="toggle">
+            Linear Supertypes
+          </span>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div class="toggle"></div>
+        <div id="memberfilter">
+          <i class="material-icons arrow"></i>
+          <span class="input">
+            <input id="mbrsel-input" placeholder="Filter all members" type="text" accesskey="/" />
+          </span>
+          <i class="clear material-icons"></i>
+        </div>
+        <div id="filterby">
+          <div id="order">
+            <span class="filtertype">Ordering</span>
+            <ol>
+              
+              <li class="alpha in"><span>Alphabetic</span></li>
+              <li class="inherit out"><span>By Inheritance</span></li>
+            </ol>
+          </div>
+          <div class="ancestors">
+                  <span class="filtertype">Inherited<br />
+                  </span>
+                  <ol id="linearization">
+                    <li class="in" name="com.mohiva.play.silhouette.test"><span>test</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  </ol>
+                </div><div class="ancestors">
+              <span class="filtertype"></span>
+              <ol>
+                <li class="hideall out"><span>Hide All</span></li>
+                <li class="showall in"><span>Show All</span></li>
+              </ol>
+            </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.mohiva.play.silhouette.test.FakeAuthenticator" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="FakeAuthenticatorextendsStorableAuthenticatorwithProductwithSerializable"></a><a id="FakeAuthenticator:FakeAuthenticator"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeAuthenticatorextendsStorableAuthenticatorwithProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="A fake authenticator." href="FakeAuthenticator.html"><span class="name">FakeAuthenticator</span></a><span class="params">(<span name="loginInfo">loginInfo: <a href="../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>, <span name="id">id: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">UUID.randomUUID().toString</span></span>, <span name="isValid">isValid: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a> = <span class="symbol">true</span></span>)</span><span class="result"> extends <a href="../api/StorableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.api.StorableAuthenticator">StorableAuthenticator</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A fake authenticator.</p><div class="fullcomment"><div class="comment cmt"><p>A fake authenticator.
+</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info for an identity.</p></dd><dt class="param">id</dt><dd class="cmt"><p>The ID of the authenticator.</p></dd><dt class="param">isValid</dt><dd class="cmt"><p>True if the authenticator is valid, false otherwise.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.test.FakeAuthenticatorRepository" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="FakeAuthenticatorRepository[T&lt;:com.mohiva.play.silhouette.api.StorableAuthenticator]extendsAuthenticatorRepository[T]"></a><a id="FakeAuthenticatorRepository[T&lt;:StorableAuthenticator]:FakeAuthenticatorRepository[T]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeAuthenticatorRepository[T&lt;:com.mohiva.play.silhouette.api.StorableAuthenticator]extendsAuthenticatorRepository[T]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="A fake authenticator repository which persists authenticators in memory." href="FakeAuthenticatorRepository.html"><span class="name">FakeAuthenticatorRepository</span></a><span class="tparams">[<span name="T">T &lt;: <a href="../api/StorableAuthenticator.html" class="extype" name="com.mohiva.play.silhouette.api.StorableAuthenticator">StorableAuthenticator</a></span>]</span><span class="result"> extends <a href="../api/repositories/AuthenticatorRepository.html" class="extype" name="com.mohiva.play.silhouette.api.repositories.AuthenticatorRepository">AuthenticatorRepository</a>[<span class="extype" name="com.mohiva.play.silhouette.test.FakeAuthenticatorRepository.T">T</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">A fake authenticator repository which persists authenticators in memory.</p><div class="fullcomment"><div class="comment cmt"><p>A fake authenticator repository which persists authenticators in memory.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type of the authenticator to handle.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.test.FakeBearerTokenAuthenticatorService" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FakeBearerTokenAuthenticatorServiceextendsBearerTokenAuthenticatorServicewithProductwithSerializable"></a><a id="FakeBearerTokenAuthenticatorService:FakeBearerTokenAuthenticatorService"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeBearerTokenAuthenticatorServiceextendsBearerTokenAuthenticatorServicewithProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="A fake bearer token authenticator service." href="FakeBearerTokenAuthenticatorService.html"><span class="name">FakeBearerTokenAuthenticatorService</span></a><span class="params">()</span><span class="result"> extends <a href="../impl/authenticators/BearerTokenAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.BearerTokenAuthenticatorService">BearerTokenAuthenticatorService</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A fake bearer token authenticator service.</p>
+    </li><li name="com.mohiva.play.silhouette.test.FakeCookieAuthenticatorService" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FakeCookieAuthenticatorServiceextendsCookieAuthenticatorServicewithProductwithSerializable"></a><a id="FakeCookieAuthenticatorService:FakeCookieAuthenticatorService"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeCookieAuthenticatorServiceextendsCookieAuthenticatorServicewithProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="A fake cookie authenticator service." href="FakeCookieAuthenticatorService.html"><span class="name">FakeCookieAuthenticatorService</span></a><span class="params">()</span><span class="result"> extends <a href="../impl/authenticators/CookieAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticatorService">CookieAuthenticatorService</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A fake cookie authenticator service.</p>
+    </li><li name="com.mohiva.play.silhouette.test.FakeDummyAuthenticatorService" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FakeDummyAuthenticatorServiceextendsDummyAuthenticatorServicewithProductwithSerializable"></a><a id="FakeDummyAuthenticatorService:FakeDummyAuthenticatorService"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeDummyAuthenticatorServiceextendsDummyAuthenticatorServicewithProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="A fake Dummy authenticator service." href="FakeDummyAuthenticatorService.html"><span class="name">FakeDummyAuthenticatorService</span></a><span class="params">()</span><span class="result"> extends <a href="../impl/authenticators/DummyAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.DummyAuthenticatorService">DummyAuthenticatorService</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A fake Dummy authenticator service.</p>
+    </li><li name="com.mohiva.play.silhouette.test.FakeEnvironment" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="FakeEnvironment[E&lt;:com.mohiva.play.silhouette.api.Env]extendsEnvironment[E]withProductwithSerializable"></a><a id="FakeEnvironment[E&lt;:Env]:FakeEnvironment[E]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeEnvironment[E&lt;:com.mohiva.play.silhouette.api.Env]extendsEnvironment[E]withProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="A fake environment implementation." href="FakeEnvironment.html"><span class="name">FakeEnvironment</span></a><span class="tparams">[<span name="E">E &lt;: <a href="../api/Env.html" class="extype" name="com.mohiva.play.silhouette.api.Env">Env</a></span>]</span><span class="params">(<span name="identities">identities: <span class="extype" name="scala.Seq">Seq</span>[(<a href="../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a>, <span class="extype" name="com.mohiva.play.silhouette.api.Env.I">E.I</span>)]</span>, <span name="requestProviders">requestProviders: <span class="extype" name="scala.Seq">Seq</span>[<a href="../api/RequestProvider.html" class="extype" name="com.mohiva.play.silhouette.api.RequestProvider">RequestProvider</a>] = <span class="symbol">Seq()</span></span>, <span name="eventBus">eventBus: <a href="../api/EventBus.html" class="extype" name="com.mohiva.play.silhouette.api.EventBus">EventBus</a> = <span class="symbol"><span class="name"><a href="../../../../index.html">EventBus()</a></span></span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="executionContext">executionContext: <a href="http://www.scala-lang.org/api/2.12.8/scala/concurrent/ExecutionContext.html#scala.concurrent.ExecutionContext" class="extype" name="scala.concurrent.ExecutionContext">ExecutionContext</a></span>, <span name="tt">tt: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="com.mohiva.play.silhouette.api.Env.A">E.A</span>]</span>)</span><span class="result"> extends <a href="../api/Environment.html" class="extype" name="com.mohiva.play.silhouette.api.Environment">Environment</a>[<span class="extype" name="com.mohiva.play.silhouette.test.FakeEnvironment.E">E</span>] with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A fake environment implementation.</p><div class="fullcomment"><div class="comment cmt"><p>A fake environment implementation.
+</p></div><dl class="paramcmts block"><dt class="tparam">E</dt><dd class="cmt"><p>The type of the environment.</p></dd><dt class="param">identities</dt><dd class="cmt"><p>A list of (login info -&gt; identity) pairs to return inside a Silhouette action.</p></dd><dt class="param">requestProviders</dt><dd class="cmt"><p>The list of request providers.</p></dd><dt class="param">eventBus</dt><dd class="cmt"><p>The event bus implementation.</p></dd><dt class="param">executionContext</dt><dd class="cmt"><p>The execution context to handle the asynchronous operations.</p></dd><dt class="param">tt</dt><dd class="cmt"><p>The type tag of the authenticator type.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.test.FakeIdentity" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="FakeIdentityextendsIdentitywithProductwithSerializable"></a><a id="FakeIdentity:FakeIdentity"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeIdentityextendsIdentitywithProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="A fake identity." href="FakeIdentity.html"><span class="name">FakeIdentity</span></a><span class="params">(<span name="loginInfo">loginInfo: <a href="../api/LoginInfo.html" class="extype" name="com.mohiva.play.silhouette.api.LoginInfo">LoginInfo</a></span>)</span><span class="result"> extends <a href="../api/Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A fake identity.</p><div class="fullcomment"><div class="comment cmt"><p>A fake identity.
+</p></div><dl class="paramcmts block"><dt class="param">loginInfo</dt><dd class="cmt"><p>The linked login info for an identity.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.test.FakeIdentityService" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="FakeIdentityService[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsIdentityService[I]"></a><a id="FakeIdentityService[I&lt;:Identity]:FakeIdentityService[I]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeIdentityService[I&lt;:com.mohiva.play.silhouette.api.Identity]extendsIdentityService[I]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="A fake identity service implementation which can handle a predefined list of identities." href="FakeIdentityService.html"><span class="name">FakeIdentityService</span></a><span class="tparams">[<span name="I">I &lt;: <a href="../api/Identity.html" class="extype" name="com.mohiva.play.silhouette.api.Identity">Identity</a></span>]</span><span class="result"> extends <a href="../api/services/IdentityService.html" class="extype" name="com.mohiva.play.silhouette.api.services.IdentityService">IdentityService</a>[<span class="extype" name="com.mohiva.play.silhouette.test.FakeIdentityService.I">I</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">A fake identity service implementation which can handle a predefined list of identities.</p><div class="fullcomment"><div class="comment cmt"><p>A fake identity service implementation which can handle a predefined list of identities.
+</p></div><dl class="paramcmts block"><dt class="tparam">I</dt><dd class="cmt"><p>The type of the identity to handle.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.test.FakeJWTAuthenticatorService" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FakeJWTAuthenticatorServiceextendsJWTAuthenticatorServicewithProductwithSerializable"></a><a id="FakeJWTAuthenticatorService:FakeJWTAuthenticatorService"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeJWTAuthenticatorServiceextendsJWTAuthenticatorServicewithProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="A fake JWT authenticator service." href="FakeJWTAuthenticatorService.html"><span class="name">FakeJWTAuthenticatorService</span></a><span class="params">()</span><span class="result"> extends <a href="../impl/authenticators/JWTAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticatorService">JWTAuthenticatorService</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A fake JWT authenticator service.</p>
+    </li><li name="com.mohiva.play.silhouette.test.FakeRequestWithAuthenticator" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="FakeRequestWithAuthenticator[A]extendsAnyRef"></a><a id="FakeRequestWithAuthenticator[A]:FakeRequestWithAuthenticator[A]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeRequestWithAuthenticator[A]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Provides a method which add an authenticator to a fake request." href="package$$FakeRequestWithAuthenticator.html"><span class="name">FakeRequestWithAuthenticator</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Provides a method which add an authenticator to a fake request.</p><div class="fullcomment"><div class="comment cmt"><p>Provides a method which add an authenticator to a fake request.
+</p></div><dl class="paramcmts block"><dt class="tparam">A</dt><dd class="cmt"><p>The type of the body.</p></dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.test.FakeSessionAuthenticatorService" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FakeSessionAuthenticatorServiceextendsSessionAuthenticatorServicewithProductwithSerializable"></a><a id="FakeSessionAuthenticatorService:FakeSessionAuthenticatorService"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeSessionAuthenticatorServiceextendsSessionAuthenticatorServicewithProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="A fake session authenticator service." href="FakeSessionAuthenticatorService.html"><span class="name">FakeSessionAuthenticatorService</span></a><span class="params">()</span><span class="result"> extends <a href="../impl/authenticators/SessionAuthenticatorService.html" class="extype" name="com.mohiva.play.silhouette.impl.authenticators.SessionAuthenticatorService">SessionAuthenticatorService</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A fake session authenticator service.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div class="values members">
+              <h3>Value Members</h3>
+              <ol>
+                <li name="com.mohiva.play.silhouette.test#await" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="await[T](f:scala.concurrent.Future[T]):T"></a><a id="await[T](Future[T]):T"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/test/index.html#await[T](f:scala.concurrent.Future[T]):T" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">await</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="f">f: <a href="http://www.scala-lang.org/api/2.12.8/scala/concurrent/Future.html#scala.concurrent.Future" class="extype" name="scala.concurrent.Future">Future</a>[<span class="extype" name="com.mohiva.play.silhouette.test.await.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.mohiva.play.silhouette.test.await.T">T</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Resolves a future by waiting of the result.</p><div class="fullcomment"><div class="comment cmt"><p>Resolves a future by waiting of the result.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The type contained in the future.</p></dd><dt class="param">f</dt><dd class="cmt"><p>The future to block.</p></dd><dt>returns</dt><dd class="cmt"><p>The value contained in the future.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="com.mohiva.play.silhouette.test.FakeAuthenticator" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FakeAuthenticator"></a><a id="FakeAuthenticator:FakeAuthenticator"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeAuthenticator" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="A fake authenticator factory." href="FakeAuthenticator$.html"><span class="name">FakeAuthenticator</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A fake authenticator factory.</p>
+    </li><li name="com.mohiva.play.silhouette.test.FakeAuthenticatorService" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FakeAuthenticatorService"></a><a id="FakeAuthenticatorService:FakeAuthenticatorService"></a>
+      <span class="permalink">
+      <a href="../../../../../com/mohiva/play/silhouette/test/index.html#FakeAuthenticatorService" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="A fake authenticator service factory." href="FakeAuthenticatorService$.html"><span class="name">FakeAuthenticatorService</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">A fake authenticator service factory.</p>
+    </li>
+              </ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+    </body>
+          </div>
+        </div>
+      </div>
+    </body>
+      </html>
