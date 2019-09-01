@@ -122,7 +122,7 @@ class GoogleTotpProvider @Inject() (injectedPasswordHasherRegistry: PasswordHash
   def authenticate(sharedKey: String, verificationCode: String): Future[Option[LoginInfo]] = {
     Future(
       if (isVerificationCodeValid(sharedKey, verificationCode)) {
-        Some(LoginInfo(ID, sharedKey))
+        Some(LoginInfo(id, sharedKey))
       } else {
         logger.debug(VerificationCodeDoesNotMatch)
         None
