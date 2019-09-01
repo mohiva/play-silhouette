@@ -1,5 +1,6 @@
 sudo: false
 language: scala
+dist: trusty # https://travis-ci.community/t/error-installing-oraclejdk8-expected-feature-release-number-in-range-of-9-to-14-but-got-8/3766/7
 scala:
   - 2.11.12
   - 2.12.8
