@@ -20,6 +20,7 @@ package silhouette.play.http
 import javax.inject.Inject
 import play.api.libs.ws.{ WSClient, WSRequest, WSResponse }
 import silhouette.http._
+import silhouette.http.Body._
 import silhouette.http.client.{ Request, Response }
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -61,7 +62,7 @@ case class PlayHttpClient @Inject() (underlying: WSClient)(implicit ec: Executio
      * @return The [[WSRequest]] instance to provide a fluent interface.
      */
     def withSilhouetteBody(body: Option[Body]): WSRequest = {
-      body.map(body => wsRequest.withBody(body.data.array)).getOrElse(wsRequest)
+      body.map(body => wsRequest.withBody(body.data.toArray)).getOrElse(wsRequest)
     }
   }
 
@@ -100,7 +101,7 @@ case class PlayHttpClient @Inject() (underlying: WSClient)(implicit ec: Executio
     new Response(
       status = wsResponse.status,
       body = if (bytes.length == 0) None else Some(Body(wsResponse.contentType, data = bytes)),
-      headers = wsResponse.headers.map { case (name, values) => Header(name, values: _*) }.toList
+      headers = wsResponse.headers.toList.map { case (name, values) => Header(name, values.toList: _*) }
     )
   }
 }

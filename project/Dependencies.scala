@@ -23,7 +23,7 @@ object Dependencies {
   object Versions {
     val silhouette = "1.0.0-SNAPSHOT"
     val play = _root_.play.core.PlayVersion.current
-    val specs2 = "4.3.6"
+    val specs2 = "4.5.1"
   }
 
   object Library {
@@ -49,7 +49,8 @@ object Dependencies {
       val mock = "org.specs2" %% "specs2-mock" % Versions.specs2
     }
 
-    val scalaGuice = "net.codingwell" %% "scala-guice" % "4.2.1"
-    val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % "2.5.19"
+    val scalaGuice = "net.codingwell" %% "scala-guice" % "4.2.6" // Remove that
+    val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % "2.5.23"
+    val collectionCombat = "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.2"
   }
 }

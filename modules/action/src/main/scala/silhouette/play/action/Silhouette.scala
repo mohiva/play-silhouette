@@ -18,7 +18,9 @@
 package silhouette.play.action
 
 import javax.inject.Inject
+import play.api.inject.{ Binding, Module }
 import play.api.mvc.AnyContent
+import play.api.{ Configuration, Environment => PlayEnv }
 import silhouette.Identity
 
 /**
@@ -36,19 +38,29 @@ trait Silhouette[I <: Identity] {
   val env: Environment[I]
 
   /**
-   * The secured action stack.
+   * The secured action.
    */
   protected val securedAction: SecuredAction[AnyContent]
 
   /**
-   * The unsecured action stack.
+   * The unsecured action.
    */
   protected val unsecuredAction: UnsecuredAction[AnyContent]
 
   /**
-   * The user aware action stack.
+   * The user aware action.
    */
   protected val userAwareAction: UserAwareAction[AnyContent]
+
+  /**
+   * The global secured error handler.
+   */
+  protected val securedErrorHandler: SecuredErrorHandler[I]
+
+  /**
+   * The global unsecured error handler.
+   */
+  protected val unsecuredErrorHandler: UnsecuredErrorHandler[I]
 
   // scalastyle:off method.name
   /**
@@ -56,56 +68,103 @@ trait Silhouette[I <: Identity] {
    *
    * @return The secured action implementation.
    */
-  def SecuredAction: SecuredActionBuilder[I, AnyContent] = securedAction(env)
+  def SecuredAction: SecuredActionBuilder[I, AnyContent] =
+    securedAction(env, securedErrorHandler)
 
   /**
    * Provides the secured request handler implementation.
    *
    * @return The secured request handler implementation.
    */
-  def SecuredRequestHandler: SecuredRequestHandlerBuilder[I] = securedAction.requestHandler(env)
+  def SecuredRequestHandler: SecuredRequestHandlerBuilder[I] =
+    securedAction.requestHandler(env, securedErrorHandler)
 
   /**
    * Provides the unsecured action implementation.
    *
    * @return The unsecured action implementation.
    */
-  def UnsecuredAction: UnsecuredActionBuilder[I, AnyContent] = unsecuredAction(env)
+  def UnsecuredAction: UnsecuredActionBuilder[I, AnyContent] =
+    unsecuredAction(env, unsecuredErrorHandler)
 
   /**
    * Provides the unsecured request handler implementation.
    *
    * @return The unsecured request handler implementation.
    */
-  def UnsecuredRequestHandler: UnsecuredRequestHandlerBuilder[I] = unsecuredAction.requestHandler(env)
+  def UnsecuredRequestHandler: UnsecuredRequestHandlerBuilder[I] =
+    unsecuredAction.requestHandler(env, unsecuredErrorHandler)
 
   /**
    * Provides the user-aware action implementation.
    *
    * @return The user-aware action implementation.
    */
-  def UserAwareAction: UserAwareActionBuilder[I, AnyContent] = userAwareAction(env)
+  def UserAwareAction: UserAwareActionBuilder[I, AnyContent] =
+    userAwareAction(env)
 
   /**
    * Provides the user-aware request handler implementation.
    *
    * @return The user-aware request handler implementation.
    */
-  def UserAwareRequestHandler: UserAwareRequestHandlerBuilder[I] = userAwareAction.requestHandler(env)
+  def UserAwareRequestHandler: UserAwareRequestHandlerBuilder[I] =
+    userAwareAction.requestHandler(env)
   // scalastyle:on method.name
 }
 
 /**
- * Provides the Silhouette stack.
+ * Provides the [[Silhouette]] stack.
  *
- * @param env             The Silhouette environment.
- * @param securedAction   The secured action stack.
- * @param userAwareAction The user aware action stack.
+ * @param env                   The Silhouette environment.
+ * @param securedAction         The secured action.
+ * @param unsecuredAction       The unsecured action.
+ * @param userAwareAction       The user aware action.
+ * @param securedErrorHandler   The global secured error handler.
+ * @param unsecuredErrorHandler The global unsecured error handler.
  * @tparam I The type of the identity.
  */
-class SilhouetteProvider[I <: Identity] @Inject() (
-  val env: Environment[I],
-  val securedAction: SecuredAction[AnyContent],
-  val unsecuredAction: UnsecuredAction[AnyContent],
-  val userAwareAction: UserAwareAction[AnyContent]
+case class SilhouetteProvider[I <: Identity] @Inject() (
+  env: Environment[I],
+  securedAction: SecuredAction[AnyContent],
+  unsecuredAction: UnsecuredAction[AnyContent],
+  userAwareAction: UserAwareAction[AnyContent],
+  securedErrorHandler: SecuredErrorHandler[I],
+  unsecuredErrorHandler: UnsecuredErrorHandler[I]
 ) extends Silhouette[I]
+
+/**
+ * Play module to provide the Silhouette stack for the given identity.
+ *
+ * @tparam I The type of the identity.
+ */
+class SilhouetteModule[I <: Identity] extends Module {
+  def bindings(environment: PlayEnv, configuration: Configuration): Seq[Binding[_]] = {
+    Seq(
+      bind[Environment[I]].to[EnvironmentProvider[I]]
+    )
+  }
+}
+
+/**
+ * Injection helper for the Silhouette stack.
+ *
+ * @tparam I The type of the identity.
+ */
+trait SilhouetteComponents[I <: Identity]
+  extends EnvironmentComponents[I]
+  with SecuredActionComponents
+  with UnsecuredActionComponents
+  with UserAwareActionComponents
+  with SecuredErrorHandlerComponents[I]
+  with UnsecuredErrorHandlerComponents[I] {
+
+  lazy val silhouette: Silhouette[I] = SilhouetteProvider(
+    environment,
+    securedAction,
+    unsecuredAction,
+    userAwareAction,
+    securedErrorHandler,
+    unsecuredErrorHandler
+  )
+}

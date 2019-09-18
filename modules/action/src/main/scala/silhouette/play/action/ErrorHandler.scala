@@ -22,39 +22,19 @@ import play.api.http.{ ContentTypes, Status }
 import play.api.i18n.{ I18nSupport, Messages }
 import play.api.libs.json.Json
 import play.api.mvc._
+import silhouette.Identity
 
 import scala.concurrent._
 
 /**
  * Silhouette error handler.
  */
-sealed trait ErrorHandler {
-
-  /**
-   * Calls the error handler methods based on a caught exception.
-   *
-   * @param request The current request.
-   * @tparam B The type of the request body.
-   * @return A partial function which maps an exception to a Play result.
-   */
-  def exceptionHandler[B](implicit request: Request[B]): PartialFunction[Throwable, Future[Result]]
-}
+sealed trait ErrorHandler
 
 /**
  * Handles errors when a user is not authenticated.
  */
 trait NotAuthenticatedErrorHandler extends ErrorHandler {
-
-  /**
-   * Exception handler which translates an [[NotAuthenticatedException]] into a 401 Unauthorized result.
-   *
-   * @param request The current request.
-   * @tparam B The type of the request body.
-   * @return A partial function which maps an exception to a Play result.
-   */
-  def exceptionHandler[B](implicit request: Request[B]): PartialFunction[Throwable, Future[Result]] = {
-    case _: NotAuthenticatedException => onNotAuthenticated
-  }
 
   /**
    * Called when a user is not authenticated.
@@ -70,19 +50,10 @@ trait NotAuthenticatedErrorHandler extends ErrorHandler {
 
 /**
  * Handles errors when a user is authenticated but not authorized.
+ *
+ * @tparam I The type of the identity.
  */
-trait NotAuthorizedErrorHandler extends ErrorHandler {
-
-  /**
-   * Exception handler which translates an [[NotAuthorizedException]] into a 403 Forbidden result.
-   *
-   * @param request The current request.
-   * @tparam B The type of the request body.
-   * @return A partial function which maps an exception to a Play result.
-   */
-  def exceptionHandler[B](implicit request: Request[B]): PartialFunction[Throwable, Future[Result]] = {
-    case _: NotAuthorizedException => onNotAuthorized(request)
-  }
+trait NotAuthorizedErrorHandler[I <: Identity] extends ErrorHandler {
 
   /**
    * Called when a user is authenticated but not authorized.
@@ -93,7 +64,7 @@ trait NotAuthorizedErrorHandler extends ErrorHandler {
    * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
-  def onNotAuthorized[B](implicit request: Request[B]): Future[Result]
+  def onNotAuthorized[B](identity: I)(implicit request: Request[B]): Future[Result]
 }
 
 /**
@@ -110,19 +81,6 @@ trait DefaultNotAuthenticatedErrorHandler
    *
    * @param request The current request.
    * @tparam B The type of the request body.
-   * @return A partial function which maps an exception to a Play result.
-   */
-  override def exceptionHandler[B](implicit request: Request[B]): PartialFunction[Throwable, Future[Result]] = {
-    case e: NotAuthenticatedException =>
-      logger.info(e.getMessage, e)
-      super.exceptionHandler(request)(e)
-  }
-
-  /**
-   * @inheritdoc
-   *
-   * @param request The current request.
-   * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
   override def onNotAuthenticated[B](implicit request: Request[B]): Future[Result] = {
@@ -133,9 +91,11 @@ trait DefaultNotAuthenticatedErrorHandler
 
 /**
  * Handles not authorized requests in a default way.
+ *
+ * @tparam I The type of the identity.
  */
-trait DefaultNotAuthorizedErrorHandler
-  extends NotAuthorizedErrorHandler
+trait DefaultNotAuthorizedErrorHandler[I <: Identity]
+  extends NotAuthorizedErrorHandler[I]
   with DefaultErrorHandler
   with I18nSupport
   with LazyLogging {
@@ -143,24 +103,12 @@ trait DefaultNotAuthorizedErrorHandler
   /**
    * @inheritdoc
    *
-   * @param request The current request.
-   * @tparam B The type of the request body.
-   * @return A partial function which maps an exception to a Play result.
-   */
-  override def exceptionHandler[B](implicit request: Request[B]): PartialFunction[Throwable, Future[Result]] = {
-    case e: NotAuthorizedException =>
-      logger.info(e.getMessage, e)
-      super.exceptionHandler(request)(e)
-  }
-
-  /**
-   * @inheritdoc
-   *
-   * @param request The current request.
+   * @param identity The not authorized identity.
+   * @param request  The current request.
    * @tparam B The type of the request body.
    * @return The result to send to the client.
    */
-  override def onNotAuthorized[B](implicit request: Request[B]): Future[Result] = {
+  override def onNotAuthorized[B](identity: I)(implicit request: Request[B]): Future[Result] = {
     logger.debug("[Silhouette] Unauthorized user trying to access '%s'".format(request.uri))
     produceResponse(Forbidden, Messages("silhouette.not.authorized"))
   }

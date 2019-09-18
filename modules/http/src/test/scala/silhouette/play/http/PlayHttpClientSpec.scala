@@ -74,7 +74,7 @@ class PlayHttpClientSpec(implicit ev: ExecutionEnv) extends Specification with M
     "execute a request with a body" in new Context {
       await(httpClient.execute(request.withBody(body)))
 
-      there was one(wsRequest).withBody(body.data.array)
+      there was one(wsRequest).withBody(body.data.toArray)
     }
 
     "return a response with the correct status" in new Context {
@@ -114,11 +114,15 @@ class PlayHttpClientSpec(implicit ev: ExecutionEnv) extends Specification with M
    * The context.
    */
   trait Context extends Scope {
+    import scala.collection.compat.immutable.ArraySeq
 
     /**
      * A test body.
      */
-    val body = Body(MimeType.`application/json`, data = """{ test: "test" }""".getBytes(Body.DefaultCodec.charSet))
+    val body = Body(
+      contentType = MimeType.`application/json`,
+      data = ArraySeq.unsafeWrapArray("""{ test: "test" }""".getBytes(Body.DefaultCodec.charSet))
+    )
 
     /**
      * A test request.
@@ -130,7 +134,7 @@ class PlayHttpClientSpec(implicit ev: ExecutionEnv) extends Specification with M
      */
     val wsResponse = {
       val m = mock[WSResponse].smart
-      m.bodyAsBytes returns ByteString(body.data.array)
+      m.bodyAsBytes returns ByteString(body.data.toArray)
       m.status returns 200
       m.contentType returns "application/json"
       m.headers returns Map(

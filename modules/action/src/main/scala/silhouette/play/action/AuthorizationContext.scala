@@ -17,19 +17,18 @@
  */
 package silhouette.play.action
 
-import play.api.mvc.Request
+import play.api.mvc.RequestHeader
 import silhouette.{ Credentials, LoginInfo }
 
 /**
  * The authorization context.
  *
- * @param loginInfo   The login info for which the identity was found.
- * @param credentials The found credentials.
- * @param request     The current request.
- * @tparam B The type of the request body.
+ * @param loginInfo     The login info for which the identity was found.
+ * @param credentials   The found credentials.
+ * @param requestHeader The current request header.
  */
-case class AuthorizationContext[B](
+case class AuthorizationContext(
   loginInfo: LoginInfo,
   credentials: Credentials,
-  request: Request[B]
-) extends silhouette.authorization.AuthorizationContext
+  requestHeader: RequestHeader
+)

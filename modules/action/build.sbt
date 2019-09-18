@@ -25,6 +25,9 @@ libraryDependencies ++= Seq(
   Library.Silhouette.provider,
   Library.Silhouette.specs2 % Test,
   Library.Play.core,
-  Library.Play.test % Test
+  Library.Play.test % Test,
+  Library.Play.specs2 % Test,
+  Library.akkaTestkit % Test,
+  Library.scalaGuice % Test
 )
 //enablePlugins(Doc)

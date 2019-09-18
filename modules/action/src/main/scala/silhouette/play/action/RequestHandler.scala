@@ -111,14 +111,17 @@ trait RequestHandlerBuilder[I <: Identity, +R[_]]
    */
   protected def handleAuthentication[B](
     request: PlayRequestPipeline[B]
-  ): Future[Option[Authenticated[I, Credentials]]] = {
-    type Provider = RequestProvider[Request[_], I, Credentials]
-    def auth(providers: List[Provider]): Future[Option[Authenticated[I, Credentials]]] = {
-      def next(remaining: List[Provider]) = if (remaining.isEmpty) Future.successful(None) else auth(remaining)
+  ): Future[Option[(I, Credentials, LoginInfo)]] = {
+    type Provider = RequestProvider[Request[_], I]
+    def next(remaining: List[Provider]) =
+      if (remaining.isEmpty) Future.successful(None) else auth(remaining)
+
+    def auth(providers: List[Provider]): Future[Option[(I, Credentials, LoginInfo)]] = {
       providers match {
         case Nil => Future.successful(None)
         case h :: t => h.authenticate(request).flatMap {
-          case state @ Authenticated(_, _, _) => Future.successful(Some(state))
+          case Authenticated(identity, credentials, loginInfo) =>
+            Future.successful(Some((identity, credentials, loginInfo)))
           case MissingCredentials() =>
             logger.info(s"Couldn't find credentials for provider ${h.id}")
             next(t)
@@ -128,11 +131,10 @@ trait RequestHandlerBuilder[I <: Identity, +R[_]]
           case MissingIdentity(_, loginInfo) =>
             logger.info(s"Couldn't find identity for login info: $loginInfo")
             next(t)
+          case AuthFailure(cause) =>
+            logger.error("Error during authentication process", cause)
+            next(t)
           case _ => next(t)
-        }.recover {
-          case e: Throwable =>
-            logger.error("Error during authentication process", e)
-            None
         }
       }
     }

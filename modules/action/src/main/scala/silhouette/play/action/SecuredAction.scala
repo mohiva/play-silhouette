@@ -24,7 +24,7 @@ import play.api.mvc._
 import play.api.{ Configuration, Environment => PlayEnv }
 import silhouette.authorization.Authorization
 import silhouette.play.http.PlayRequestPipeline.fromPlayRequest
-import silhouette.{ Authenticated, Credentials, Identity, LoginInfo }
+import silhouette.{ Credentials, Identity, LoginInfo }
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -55,8 +55,8 @@ case class SecuredRequest[I <: Identity, B](
  */
 case class SecuredRequestHandlerBuilder[I <: Identity](
   environment: Environment[I],
-  errorHandler: SecuredErrorHandler,
-  authorization: Option[Authorization[I, AuthorizationContext[_]]]
+  errorHandler: SecuredErrorHandler[I],
+  authorization: Option[Authorization[I, AuthorizationContext]]
 ) extends RequestHandlerBuilder[I, ({ type R[P] = SecuredRequest[I, P] })#R] { // scalastyle:ignore structural.type
 
   /**
@@ -65,7 +65,7 @@ case class SecuredRequestHandlerBuilder[I <: Identity](
    * @param errorHandler An error handler instance.
    * @return A secured action handler builder with a new error handler in place.
    */
-  def apply(errorHandler: SecuredErrorHandler): SecuredRequestHandlerBuilder[I] =
+  def apply(errorHandler: SecuredErrorHandler[I]): SecuredRequestHandlerBuilder[I] =
     SecuredRequestHandlerBuilder[I](environment, errorHandler, authorization)
 
   /**
@@ -74,7 +74,7 @@ case class SecuredRequestHandlerBuilder[I <: Identity](
    * @param authorization An authorization object that checks if the user is authorized to invoke the action.
    * @return A secured action handler builder with an authorization in place.
    */
-  def apply(authorization: Authorization[I, AuthorizationContext[_]]): SecuredRequestHandlerBuilder[I] =
+  def apply(authorization: Authorization[I, AuthorizationContext]): SecuredRequestHandlerBuilder[I] =
     SecuredRequestHandlerBuilder[I](environment, errorHandler, Some(authorization))
 
   /**
@@ -85,12 +85,12 @@ case class SecuredRequestHandlerBuilder[I <: Identity](
    * @tparam T The type of the data included in the handler result.
    * @return A handler result.
    */
-  override def invokeBlock[B, T](block: SecuredRequest[I, B] => Future[HandlerResult[T]])(
+  override def invokeBlock[A, T](block: SecuredRequest[I, A] => Future[HandlerResult[T]])(
     implicit
-    request: Request[B]
+    request: Request[A]
   ): Future[HandlerResult[T]] = {
     handleAuthentication(request).flatMap {
-      case Some(Authenticated(identity, credentials, loginInfo)) =>
+      case Some((identity, credentials, loginInfo)) =>
         val context = AuthorizationContext(loginInfo, credentials, request)
         authorization.map(_.isAuthorized(identity, context)).getOrElse(Future.successful(true)).flatMap {
           // A user is both authenticated and authorized. The request will be granted
@@ -100,7 +100,7 @@ case class SecuredRequestHandlerBuilder[I <: Identity](
           // A user is authenticated but not authorized. The request will be forbidden
           case false =>
             environment.eventBus.publish(NotAuthorizedEvent(identity, request))
-            errorHandler.onNotAuthorized(request).map(r => HandlerResult(r))
+            errorHandler.onNotAuthorized(identity)(request).map(r => HandlerResult(r))
         }
 
       // A user isn't authenticated. The request will ask for authentication
@@ -123,36 +123,37 @@ case class SecuredRequestHandlerBuilder[I <: Identity](
 trait SecuredRequestHandler {
 
   /**
-   * The instance of the secured error handler.
-   */
-  val errorHandler: SecuredErrorHandler
-
-  /**
-   * Applies the environment to the request handler stack.
+   * Applies the environment and the error handler to the request handler stack.
    *
-   * @param environment The environment instance to handle the request.
+   * @param environment  The environment instance to handle the request.
+   * @param errorHandler The instance of the secured error handler.
    * @tparam I The type of the identity.
    * @return A secured request handler builder.
    */
-  def apply[I <: Identity](environment: Environment[I]): SecuredRequestHandlerBuilder[I]
+  def apply[I <: Identity, B](
+    environment: Environment[I],
+    errorHandler: SecuredErrorHandler[I]
+  ): SecuredRequestHandlerBuilder[I]
 }
 
 /**
  * Default implementation of the [[SecuredRequestHandler]].
- *
- * @param errorHandler The instance of the secured error handler.
  */
-case class DefaultSecuredRequestHandler @Inject() (errorHandler: SecuredErrorHandler)
+case class DefaultSecuredRequestHandler()
   extends SecuredRequestHandler {
 
   /**
-   * Applies the environment to the request handler stack.
+   * Applies the environment and the error handler to the request handler stack.
    *
-   * @param environment The environment instance to handle the request.
+   * @param environment  The environment instance to handle the request.
+   * @param errorHandler The instance of the secured error handler.
    * @tparam I The type of the identity.
    * @return A secured request handler builder.
    */
-  override def apply[I <: Identity](environment: Environment[I]): SecuredRequestHandlerBuilder[I] =
+  override def apply[I <: Identity, B](
+    environment: Environment[I],
+    errorHandler: SecuredErrorHandler[I]
+  ): SecuredRequestHandlerBuilder[I] =
     SecuredRequestHandlerBuilder[I](environment, errorHandler, None)
 }
 
@@ -162,12 +163,13 @@ case class DefaultSecuredRequestHandler @Inject() (errorHandler: SecuredErrorHan
  * @param requestHandler The request handler instance.
  * @param parser         The body parser.
  * @tparam I The type of the identity.
- * @tparam P The type of the request body.
+ * @tparam B The type of the request body.
  */
-case class SecuredActionBuilder[I <: Identity, P](
+case class SecuredActionBuilder[I <: Identity, B](
   requestHandler: SecuredRequestHandlerBuilder[I],
-  parser: BodyParser[P]
-) extends ActionBuilder[({ type R[B] = SecuredRequest[I, B] })#R, P] { // scalastyle:ignore structural.type
+  parser: BodyParser[B]
+) extends ActionBuilder[({ type R[A] = SecuredRequest[I, A] })#R, B] { // scalastyle:ignore structural.type
+  self =>
 
   /**
    * Creates a secured action builder with a new error handler in place.
@@ -175,8 +177,8 @@ case class SecuredActionBuilder[I <: Identity, P](
    * @param errorHandler An error handler instance.
    * @return A secured action builder.
    */
-  def apply(errorHandler: SecuredErrorHandler): SecuredActionBuilder[I, P] =
-    SecuredActionBuilder[I, P](requestHandler(errorHandler), parser)
+  def apply(errorHandler: SecuredErrorHandler[I]): SecuredActionBuilder[I, B] =
+    SecuredActionBuilder[I, B](requestHandler(errorHandler), parser)
 
   /**
    * Creates a secured action builder with an authorization in place.
@@ -184,22 +186,22 @@ case class SecuredActionBuilder[I <: Identity, P](
    * @param authorization An authorization object that checks if the user is authorized to invoke the action.
    * @return A secured action builder.
    */
-  def apply(authorization: Authorization[I, AuthorizationContext[_]]): SecuredActionBuilder[I, P] =
-    SecuredActionBuilder[I, P](requestHandler(authorization), parser)
+  def apply(authorization: Authorization[I, AuthorizationContext]): SecuredActionBuilder[I, B] =
+    SecuredActionBuilder[I, B](requestHandler(authorization), parser)
 
   /**
    * Invokes the block.
    *
    * @param request The current request.
    * @param block   The block of code to invoke.
-   * @tparam B The type of the request body.
+   * @tparam A The type of the request body.
    * @return A handler result.
    */
-  override def invokeBlock[B](request: Request[B], block: SecuredRequest[I, B] => Future[Result]): Future[Result] = {
+  override def invokeBlock[A](request: Request[A], block: SecuredRequest[I, A] => Future[Result]): Future[Result] = {
     implicit val ec: ExecutionContext = executionContext
-    val b = (r: SecuredRequest[I, B]) => block(r).map(r => HandlerResult(r))
+    val b = (r: SecuredRequest[I, A]) => block(r).map(r => HandlerResult(r))
 
-    requestHandler(request)(b).map(_.result).recoverWith(requestHandler.errorHandler.exceptionHandler(request))
+    requestHandler(request)(b).map(_.result)
   }
 
   /**
@@ -228,13 +230,17 @@ trait SecuredAction[B] {
   val bodyParser: BodyParser[B]
 
   /**
-   * Applies the environment to the action stack.
+   * Applies the environment and the error handler to the action stack.
    *
-   * @param environment The environment instance to handle the request.
+   * @param environment  The environment instance to handle the request.
+   * @param errorHandler The instance of the secured error handler.
    * @tparam I The type of the environment.
    * @return A secured action builder.
    */
-  def apply[I <: Identity](environment: Environment[I]): SecuredActionBuilder[I, B]
+  def apply[I <: Identity](
+    environment: Environment[I],
+    errorHandler: SecuredErrorHandler[I]
+  ): SecuredActionBuilder[I, B]
 }
 
 /**
@@ -251,56 +257,37 @@ case class DefaultSecuredAction @Inject() (
 ) extends SecuredAction[AnyContent] {
 
   /**
-   * Applies the environment to the action stack.
+   * Applies the environment and the error handler to the action stack.
    *
-   * @param environment The environment instance to handle the request.
+   * @param environment  The environment instance to handle the request.
+   * @param errorHandler The instance of the secured error handler.
    * @tparam I The type of the identity.
    * @return A secured action builder.
    */
-  override def apply[I <: Identity](environment: Environment[I]): SecuredActionBuilder[I, AnyContent] =
-    SecuredActionBuilder[I, AnyContent](requestHandler(environment), bodyParser)
+  override def apply[I <: Identity](
+    environment: Environment[I],
+    errorHandler: SecuredErrorHandler[I]
+  ): SecuredActionBuilder[I, AnyContent] =
+    SecuredActionBuilder[I, AnyContent](requestHandler(environment, errorHandler), bodyParser)
 }
 
 /**
  * Error handler for secured actions.
+ *
+ * @tparam I The type of the identity.
  */
-trait SecuredErrorHandler extends NotAuthenticatedErrorHandler with NotAuthorizedErrorHandler {
-
-  /**
-   * Exception handler which chains the exceptions handlers from the sub types.
-   *
-   * @param request The current request.
-   * @tparam B The type of the request body.
-   * @return A partial function which maps an exception to a Play result.
-   */
-  override def exceptionHandler[B](implicit request: Request[B]): PartialFunction[Throwable, Future[Result]] = {
-    super[NotAuthenticatedErrorHandler].exceptionHandler orElse
-      super[NotAuthorizedErrorHandler].exceptionHandler
-  }
-}
+trait SecuredErrorHandler[I <: Identity] extends NotAuthenticatedErrorHandler with NotAuthorizedErrorHandler[I]
 
 /**
  * Default implementation of the [[SecuredErrorHandler]].
  *
  * @param messagesApi The Play messages API.
+ * @tparam I The type of the identity.
  */
-class DefaultSecuredErrorHandler @Inject() (val messagesApi: MessagesApi)
-  extends SecuredErrorHandler
+case class DefaultSecuredErrorHandler[I <: Identity] @Inject() (messagesApi: MessagesApi)
+  extends SecuredErrorHandler[I]
   with DefaultNotAuthenticatedErrorHandler
-  with DefaultNotAuthorizedErrorHandler {
-
-  /**
-   * Exception handler which chains the exceptions handlers from the sub types.
-   *
-   * @param request The current request.
-   * @tparam B The type of the request body.
-   * @return A partial function which maps an exception to a Play result.
-   */
-  override def exceptionHandler[B](implicit request: Request[B]): PartialFunction[Throwable, Future[Result]] = {
-    super[DefaultNotAuthenticatedErrorHandler].exceptionHandler orElse
-      super[DefaultNotAuthorizedErrorHandler].exceptionHandler
-  }
-}
+  with DefaultNotAuthorizedErrorHandler[I]
 
 /**
  * Play module for providing the secured action components.
@@ -319,11 +306,13 @@ class SecuredActionModule extends Module {
  *
  * We provide an extra module so that it can be easily replaced with a custom implementation
  * without to declare bindings for the other secured action module.
+ *
+ * @tparam I The type of the identity.
  */
-class SecuredErrorHandlerModule extends Module {
+class SecuredErrorHandlerModule[I <: Identity] extends Module {
   def bindings(environment: PlayEnv, configuration: Configuration): Seq[Binding[_]] = {
     Seq(
-      bind[SecuredErrorHandler].to[DefaultSecuredErrorHandler]
+      bind[SecuredErrorHandler[I]].to[DefaultSecuredErrorHandler[I]]
     )
   }
 }
@@ -332,10 +321,9 @@ class SecuredErrorHandlerModule extends Module {
  * Injection helper for secured action components.
  */
 trait SecuredActionComponents {
-  def securedErrorHandler: SecuredErrorHandler
   def securedBodyParser: BodyParsers.Default
 
-  lazy val securedRequestHandler: SecuredRequestHandler = DefaultSecuredRequestHandler(securedErrorHandler)
+  lazy val securedRequestHandler: SecuredRequestHandler = DefaultSecuredRequestHandler()
   lazy val securedAction: SecuredAction[AnyContent] = DefaultSecuredAction(securedRequestHandler, securedBodyParser)
 }
 
@@ -344,9 +332,11 @@ trait SecuredActionComponents {
  *
  * We provide an extra component so that it can be easily replaced with a custom implementation
  * without to declare bindings for the other secured action component.
+ *
+ * @tparam I The type of the identity.
  */
-trait SecuredErrorHandlerComponents {
+trait SecuredErrorHandlerComponents[I <: Identity] {
   def messagesApi: MessagesApi
 
-  lazy val securedErrorHandler: SecuredErrorHandler = new DefaultSecuredErrorHandler(messagesApi)
+  lazy val securedErrorHandler: SecuredErrorHandler[I] = DefaultSecuredErrorHandler(messagesApi)
 }

@@ -66,7 +66,7 @@ case class UserAwareRequestHandlerBuilder[I <: Identity](environment: Environmen
     request: Request[B]
   ): Future[HandlerResult[T]] = {
     handleAuthentication(request).flatMap {
-      case Some(Authenticated(identity, credentials, loginInfo)) =>
+      case Some((identity, credentials, loginInfo)) =>
         block(UserAwareRequest(Some(identity), Some(loginInfo), Some(credentials), request))
       case None =>
         block(UserAwareRequest(None, None, None, request))
