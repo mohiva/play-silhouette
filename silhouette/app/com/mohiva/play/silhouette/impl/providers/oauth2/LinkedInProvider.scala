@@ -89,11 +89,11 @@ class LinkedInProfileParser extends SocialProfileParser[JsValue, CommonSocialPro
    */
   override def parse(json: JsValue, authInfo: OAuth2Info) = Future.successful {
     val userID = (json \ "id").as[String]
-    val firstName = (json \ "firstName").asOpt[String]
-    val lastName = (json \ "lastName").asOpt[String]
-    val fullName = (json \ "formattedName").asOpt[String]
-    val avatarURL = (json \ "pictureUrl").asOpt[String]
-    val email = (json \ "emailAddress").asOpt[String]
+    val firstName = (json \ "localizedFirstName").asOpt[String]
+    val lastName = (json \ "localizedLastName").asOpt[String]
+    val fullName = Some(firstName.getOrElse("")+" "+lastName.getOrElse("")).map(_.trim)
+    val avatarURL = None
+    val email = None
 
     CommonSocialProfile(
       loginInfo = LoginInfo(ID, userID),
@@ -151,5 +151,5 @@ object LinkedInProvider {
    * The LinkedIn constants.
    */
   val ID = "linkedin"
-  val API = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,formatted-name,picture-url,email-address)?format=json&oauth2_access_token=%s"
+  val API = "https://api.linkedin.com/v2/me?oauth2_access_token=%s"
 }
