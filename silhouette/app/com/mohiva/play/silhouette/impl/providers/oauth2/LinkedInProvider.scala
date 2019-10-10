@@ -24,7 +24,7 @@ import com.mohiva.play.silhouette.api.util.HTTPLayer
 import com.mohiva.play.silhouette.impl.exceptions.ProfileRetrievalException
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2.LinkedInProvider._
-import play.api.libs.json.JsValue
+import play.api.libs.json.{ JsObject, JsValue }
 
 import scala.concurrent.Future
 
@@ -50,17 +50,15 @@ trait BaseLinkedInProvider extends OAuth2Provider {
   /**
    * Defines the URLs that are needed to retrieve the profile data.
    */
-  override protected val urls = Map("api" -> settings.apiURL.getOrElse(API))
+  override protected val urls = Map(
+    "api" -> settings.apiURL.getOrElse(API),
+    "email" -> settings.customProperties.getOrElse("emailURL", EMAIL),
+    "photo" -> settings.customProperties.getOrElse("photoURL", PHOTO)
+  )
 
-  /**
-   * Builds the social profile.
-   *
-   * @param authInfo The auth info received from the provider.
-   * @return On success the build social profile, otherwise a failure.
-   */
-  override protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
-    httpLayer.url(urls("api").format(authInfo.accessToken)).get().flatMap { response =>
-      val json = response.json
+  private def getPartialProfile(url: String, authInfo: OAuth2Info): Future[JsValue] = {
+    httpLayer.url(url.format(authInfo.accessToken)).get().flatMap { response =>
+      val json: JsValue = response.json
       (json \ "errorCode").asOpt[Int] match {
         case Some(error) =>
           val message = (json \ "message").asOpt[String]
@@ -69,8 +67,21 @@ trait BaseLinkedInProvider extends OAuth2Provider {
           val timestamp = (json \ "timestamp").asOpt[Long]
 
           Future.failed(new ProfileRetrievalException(SpecifiedProfileError.format(id, error, message, requestId, status, timestamp)))
-        case _ => profileParser.parse(json, authInfo)
+        case _ => Future.successful(json)
       }
+    }
+  }
+  /**
+   * Builds the social profile.
+   *
+   * @param authInfo The auth info received from the provider.
+   * @return On success the build social profile, otherwise a failure.
+   */
+  override protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
+    Future.sequence(Seq(getPartialProfile(urls("api"), authInfo), getPartialProfile(urls("email"), authInfo), getPartialProfile(urls("photo"), authInfo))).flatMap {
+      partial =>
+        val array: JsValue = JsObject(Seq("api" -> partial(0), "email" -> partial(1), "photo" -> partial(2)))
+        profileParser.parse(array, authInfo)
     }
   }
 }
@@ -88,12 +99,12 @@ class LinkedInProfileParser extends SocialProfileParser[JsValue, CommonSocialPro
    * @return The social profile from given result.
    */
   override def parse(json: JsValue, authInfo: OAuth2Info) = Future.successful {
-    val userID = (json \ "id").as[String]
-    val firstName = (json \ "firstName").asOpt[String]
-    val lastName = (json \ "lastName").asOpt[String]
-    val fullName = (json \ "formattedName").asOpt[String]
-    val avatarURL = (json \ "pictureUrl").asOpt[String]
-    val email = (json \ "emailAddress").asOpt[String]
+    val userID = (json \ "api" \ "id").as[String]
+    val firstName = (json \ "api" \ "localizedFirstName").asOpt[String]
+    val lastName = (json \ "api" \ "localizedLastName").asOpt[String]
+    val fullName = Some(firstName.getOrElse("") + " " + lastName.getOrElse("")).map(_.trim)
+    val avatarURL = (json \\ "identifier")(0).asOpt[String]
+    val email = (json \\ "emailAddress")(0).asOpt[String]
 
     CommonSocialProfile(
       loginInfo = LoginInfo(ID, userID),
@@ -151,5 +162,7 @@ object LinkedInProvider {
    * The LinkedIn constants.
    */
   val ID = "linkedin"
-  val API = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,formatted-name,picture-url,email-address)?format=json&oauth2_access_token=%s"
+  val API = "https://api.linkedin.com/v2/me?oauth2_access_token=%s"
+  val EMAIL = "https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(primary,type,handle~))&oauth2_access_token=%s"
+  val PHOTO = "https://api.linkedin.com/v2/me?projection=(id,profilePicture(displayImage~:playableStreams))&oauth2_access_token=%s"
 }

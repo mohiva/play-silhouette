@@ -16,7 +16,7 @@
 package com.mohiva.play.silhouette.impl.providers.oauth2
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, MockWSRequest }
+import com.mohiva.play.silhouette.api.util.{ ExtractableRequest, MockHTTPLayer, MockWSRequest }
 import com.mohiva.play.silhouette.impl.exceptions.{ ProfileRetrievalException, UnexpectedResponseException }
 import com.mohiva.play.silhouette.impl.providers.OAuth2Provider._
 import com.mohiva.play.silhouette.impl.providers.SocialProfileBuilder._
@@ -121,7 +121,7 @@ class LinkedInProviderSpec extends OAuth2ProviderSpec {
       wsResponse.json returns Helper.loadJson("providers/oauth2/linkedin.error.json")
       wsRequest.get() returns Future.successful(wsResponse)
       httpLayer.url(API.format("my.access.token")) returns wsRequest
-
+      mockEmailAndPhoto(httpLayer)
       failed[ProfileRetrievalException](provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
         case e => e.getMessage must equalTo(SpecifiedProfileError.format(
           provider.id,
@@ -140,7 +140,7 @@ class LinkedInProviderSpec extends OAuth2ProviderSpec {
       wsResponse.json throws new RuntimeException("")
       wsRequest.get() returns Future.successful(wsResponse)
       httpLayer.url(API.format("my.access.token")) returns wsRequest
-
+      mockEmailAndPhoto(httpLayer)
       failed[ProfileRetrievalException](provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
         case e => e.getMessage must equalTo(UnspecifiedProfileError.format(provider.id))
       }
@@ -155,19 +155,40 @@ class LinkedInProviderSpec extends OAuth2ProviderSpec {
       wsResponse.json returns Helper.loadJson("providers/oauth2/linkedin.success.json")
       wsRequest.get() returns Future.successful(wsResponse)
       httpLayer.url(url.format("my.access.token")) returns wsRequest
-
+      mockEmailAndPhoto(httpLayer)
       await(provider.retrieveProfile(oAuthInfo.as[OAuth2Info]))
 
       there was one(httpLayer).url(url.format("my.access.token"))
     }
 
+    def mockEmailAndPhoto(httpLayer: MockHTTPLayer) = {
+      // Email
+      val wsRequestEmail = mock[MockWSRequest]
+      val wsResponseEmail = mock[MockWSRequest#Response]
+      wsResponseEmail.status returns 200
+      wsResponseEmail.json returns Helper.loadJson("providers/oauth2/linkedin.email.json")
+      wsRequestEmail.get() returns Future.successful(wsResponseEmail)
+      httpLayer.url(EMAIL.format("my.access.token")) returns wsRequestEmail
+      // Photo
+      val wsRequestPhoto = mock[MockWSRequest]
+      val wsResponsePhoto = mock[MockWSRequest#Response]
+      wsResponsePhoto.status returns 200
+      wsResponsePhoto.json returns Helper.loadJson("providers/oauth2/linkedin.photo.json")
+      wsRequestPhoto.get() returns Future.successful(wsResponsePhoto)
+      httpLayer.url(PHOTO.format("my.access.token")) returns wsRequestPhoto
+
+    }
+
     "return the social profile" in new WithApplication with Context {
+      // Basic profile
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
       wsResponse.status returns 200
       wsResponse.json returns Helper.loadJson("providers/oauth2/linkedin.success.json")
       wsRequest.get() returns Future.successful(wsResponse)
       httpLayer.url(API.format("my.access.token")) returns wsRequest
+
+      mockEmailAndPhoto(httpLayer)
 
       profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) { p =>
         p must be equalTo CommonSocialProfile(
@@ -176,7 +197,7 @@ class LinkedInProviderSpec extends OAuth2ProviderSpec {
           lastName = Some("Vanova"),
           fullName = Some("Apollonia Vanova"),
           email = Some("apollonia.vanova@watchmen.com"),
-          avatarURL = Some("http://media.linkedin.com/mpr/mprx/0_fsPnURNRhLhk_Ue2fjKLUZkB2FL6TOe2S4bdUZz61GA9Ysxu_y_sz4THGW5JGJWhaMleN0F61-Dg")
+          avatarURL = Some("https://media.licdn.com/dms/image/C4E03AQFBprjocrF2iA/profile-displayphoto-shrink_100_100/0?e=1576108800&v=beta&t=Tn7mA43w8qmTuzjSdtuYQMi2kI5At9XOp8X--s5hpRU")
         )
       }
     }
