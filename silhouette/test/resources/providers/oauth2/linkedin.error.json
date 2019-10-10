@@ -5,3 +5,228 @@
   "status": 401,
   "timestamp": 1390421660154
 }
+
+{
+  "api": {
+    "id": "NhZXBl_O6f",
+    "localizedFirstName": "Apollonia",
+    "localizedLastName": "Vanova",
+    "lastName": {
+      "localized": {
+        "en_US": "Vanova"
+      },
+      "preferredLocale": {
+        "country": "US",
+        "language": "en"
+      }
+    },
+    "firstName": {
+      "localized": {
+        "en_US": "Apollonia"
+      },
+      "preferredLocale": {
+        "country": "US",
+        "language": "en"
+      }
+    },
+    "profilePicture": {
+      "displayImage": "urn:li:digitalmediaAsset:Ue2fjKLUZkB2FL6TOe2"
+    }
+  },
+  "email": {
+    "elements": [
+      {
+        "handle": "urn:li:emailAddress:30919315",
+        "type": "EMAIL",
+        "handle~": {
+          "emailAddress": "apollonia.vanova@watchmen.com"
+        },
+        "primary": true
+      }
+    ]
+  },
+  "photo": {
+    "profilePicture": {
+      "displayImage": "urn:li:digitalmediaAsset:Ue2fjKLUZkB2FL6TOe2",
+      "displayImage~": {
+        "paging": {
+          "count": 10,
+          "start": 0,
+          "links": []
+        },
+        "elements": [
+          {
+            "artifact": "urn:li:digitalmediaMediaArtifact:(urn:li:digitalmediaAsset:Ue2fjKLUZkB2FL6TOe2,urn:li:digitalmediaMediaArtifactClass:profile-displayphoto-shrink_100_100)",
+            "authorizationMethod": "PUBLIC",
+            "data": {
+              "com.linkedin.digitalmedia.mediaartifact.StillImage": {
+                "storageSize": {
+                  "width": 100,
+                  "height": 100
+                },
+                "storageAspectRatio": {
+                  "widthAspect": 1,
+                  "heightAspect": 1,
+                  "formatted": "1.00:1.00"
+                },
+                "mediaType": "image/jpeg",
+                "rawCodecSpec": {
+                  "name": "jpeg",
+                  "type": "image"
+                },
+                "displaySize": {
+                  "uom": "PX",
+                  "width": 100,
+                  "height": 100
+                },
+                "displayAspectRatio": {
+                  "widthAspect": 1,
+                  "heightAspect": 1,
+                  "formatted": "1.00:1.00"
+                }
+              }
+            },
+            "identifiers": [
+              {
+                "identifier": "https://media.licdn.com/dms/image/C4E03AQFBprjocrF2iA/profile-displayphoto-shrink_100_100/0?e=1576108800&v=beta&t=Tn7mA43w8qmTuzjSdtuYQMi2kI5At9XOp8X--s5hpRU",
+                "file": "urn:li:digitalmediaFile:(urn:li:digitalmediaAsset:Ue2fjKLUZkB2FL6TOe2,urn:li:digitalmediaMediaArtifactClass:profile-displayphoto-shrink_100_100,0)",
+                "index": 0,
+                "mediaType": "image/jpeg",
+                "identifierType": "EXTERNAL_URL",
+                "identifierExpiresInSeconds": 1576108800
+              }
+            ]
+          },
+          {
+            "artifact": "urn:li:digitalmediaMediaArtifact:(urn:li:digitalmediaAsset:Ue2fjKLUZkB2FL6TOe2,urn:li:digitalmediaMediaArtifactClass:profile-displayphoto-shrink_200_200)",
+            "authorizationMethod": "PUBLIC",
+            "data": {
+              "com.linkedin.digitalmedia.mediaartifact.StillImage": {
+                "storageSize": {
+                  "width": 200,
+                  "height": 200
+                },
+                "storageAspectRatio": {
+                  "widthAspect": 1,
+                  "heightAspect": 1,
+                  "formatted": "1.00:1.00"
+                },
+                "mediaType": "image/jpeg",
+                "rawCodecSpec": {
+                  "name": "jpeg",
+                  "type": "image"
+                },
+                "displaySize": {
+                  "uom": "PX",
+                  "width": 200,
+                  "height": 200
+                },
+                "displayAspectRatio": {
+                  "widthAspect": 1,
+                  "heightAspect": 1,
+                  "formatted": "1.00:1.00"
+                }
+              }
+            },
+            "identifiers": [
+              {
+                "identifier": "https://media.licdn.com/dms/image/Ue2fjKLUZkB2FL6TOe2/profile-displayphoto-shrink_200_200/0?e=1576108800&v=beta&t=pU43JjN8-GKpLS6QytYoNjYt1fyYMEPcMOQ0SOzgd7w",
+                "file": "urn:li:digitalmediaFile:(urn:li:digitalmediaAsset:Ue2fjKLUZkB2FL6TOe2,urn:li:digitalmediaMediaArtifactClass:profile-displayphoto-shrink_200_200,0)",
+                "index": 0,
+                "mediaType": "image/jpeg",
+                "identifierType": "EXTERNAL_URL",
+                "identifierExpiresInSeconds": 1576108800
+              }
+            ]
+          },
+          {
+            "artifact": "urn:li:digitalmediaMediaArtifact:(urn:li:digitalmediaAsset:Ue2fjKLUZkB2FL6TOe2,urn:li:digitalmediaMediaArtifactClass:profile-displayphoto-shrink_400_400)",
+            "authorizationMethod": "PUBLIC",
+            "data": {
+              "com.linkedin.digitalmedia.mediaartifact.StillImage": {
+                "storageSize": {
+                  "width": 400,
+                  "height": 400
+                },
+                "storageAspectRatio": {
+                  "widthAspect": 1,
+                  "heightAspect": 1,
+                  "formatted": "1.00:1.00"
+                },
+                "mediaType": "image/jpeg",
+                "rawCodecSpec": {
+                  "name": "jpeg",
+                  "type": "image"
+                },
+                "displaySize": {
+                  "uom": "PX",
+                  "width": 400,
+                  "height": 400
+                },
+                "displayAspectRatio": {
+                  "widthAspect": 1,
+                  "heightAspect": 1,
+                  "formatted": "1.00:1.00"
+                }
+              }
+            },
+            "identifiers": [
+              {
+                "identifier": "https://media.licdn.com/dms/image/Ue2fjKLUZkB2FL6TOe2/profile-displayphoto-shrink_400_400/0?e=1576108800&v=beta&t=AubLKFL_mdAfOaJm2P3cgQh27RjFaUKiw5gX89tks9Y",
+                "file": "urn:li:digitalmediaFile:(urn:li:digitalmediaAsset:C4E03AQFBprjocrF2iA,urn:li:digitalmediaMediaArtifactClass:profile-displayphoto-shrink_400_400,0)",
+                "index": 0,
+                "mediaType": "image/jpeg",
+                "identifierType": "EXTERNAL_URL",
+                "identifierExpiresInSeconds": 1576108800
+              }
+            ]
+          },
+          {
+            "artifact": "urn:li:digitalmediaMediaArtifact:(urn:li:digitalmediaAsset:C4E03AQFBprjocrF2iA,urn:li:digitalmediaMediaArtifactClass:profile-displayphoto-shrink_800_800)",
+            "authorizationMethod": "PUBLIC",
+            "data": {
+              "com.linkedin.digitalmedia.mediaartifact.StillImage": {
+                "storageSize": {
+                  "width": 800,
+                  "height": 800
+                },
+                "storageAspectRatio": {
+                  "widthAspect": 1,
+                  "heightAspect": 1,
+                  "formatted": "1.00:1.00"
+                },
+                "mediaType": "image/jpeg",
+                "rawCodecSpec": {
+                  "name": "jpeg",
+                  "type": "image"
+                },
+                "displaySize": {
+                  "uom": "PX",
+                  "width": 800,
+                  "height": 800
+                },
+                "displayAspectRatio": {
+                  "widthAspect": 1,
+                  "heightAspect": 1,
+                  "formatted": "1.00:1.00"
+                }
+              }
+            },
+            "identifiers": [
+              {
+                "identifier": "https://media.licdn.com/dms/image/C4E03AQFBprjocrF2iA/profile-displayphoto-shrink_800_800/0?e=1576108800&v=beta&t=KGJ0FJfhHLYUw9s-Y_kci0eK8nysnG9iFCPUy0UxVAA",
+                "file": "urn:li:digitalmediaFile:(urn:li:digitalmediaAsset:C4E03AQFBprjocrF2iA,urn:li:digitalmediaMediaArtifactClass:profile-displayphoto-shrink_800_800,0)",
+                "index": 0,
+                "mediaType": "image/jpeg",
+                "identifierType": "EXTERNAL_URL",
+                "identifierExpiresInSeconds": 1576108800
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "id": "NhZXBl_O6f"
+  }
+}
+

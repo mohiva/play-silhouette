@@ -1,0 +1,12 @@
+{
+  "elements": [
+    {
+      "handle": "urn:li:emailAddress:30919315",
+      "type": "EMAIL",
+      "handle~": {
+        "emailAddress": "apollonia.vanova@watchmen.com"
+      },
+      "primary": true
+    }
+  ]
+}
