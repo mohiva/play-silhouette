@@ -47,6 +47,7 @@ object BasicSettings extends AutoPlugin {
     ),
     scalacOptions ++= {
       if(Util.priorTo213(scalaVersion.value)) Seq(
+        "-language:higherKinds",
         "-Ywarn-adapted-args",    // Warn if an argument list is modified to match the receiver.
         "-Ywarn-nullary-override" // Warn when non-nullary overrides nullary, e.g. def foo() over def foo.
       ) else Nil
