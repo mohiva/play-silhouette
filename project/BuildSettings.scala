@@ -21,7 +21,8 @@ import com.typesafe.sbt.SbtSite.SiteKeys._
 import com.typesafe.sbt.SbtSite.site
 import sbt.Keys._
 import sbt._
-import sbtunidoc.Plugin._
+import sbtunidoc.ScalaUnidocPlugin.autoImport._
+
 
 ////*******************************
 //// Basic settings
@@ -149,7 +150,7 @@ object APIDoc {
 
   lazy val files = Seq(file("CNAME"))
 
-  lazy val settings = unidocSettings ++
+  lazy val settings =
     site.settings ++
     ghpages.settings ++
     Seq(
