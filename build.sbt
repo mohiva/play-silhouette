@@ -57,23 +57,22 @@ val silhouetteTestkit = Project(
   dependencies = Seq(silhouette)
 )
 
-val root = Project(
-  id = "root",
-  base = file("."),
-  aggregate = Seq(
-    silhouette,
-    silhouetteCas,
-    silhouetteTotp,
-    silhouetteCryptoJca,
-    silhouettePasswordBcrypt,
-    silhouettePersistence,
-    silhouetteTestkit
-  ),
-  settings = Defaults.coreDefaultSettings ++
-    APIDoc.settings ++
-    Seq(
+val root =
+  project.in(file("."))
+    .enablePlugins(ScalaUnidocPlugin)
+    .settings(
+      Defaults.coreDefaultSettings,
+      APIDoc.settings,
       publishLocal := {},
       publishM2 := {},
       publishArtifact := false
     )
-)
+    .aggregate(
+      silhouette,
+      silhouetteCas,
+      silhouetteTotp,
+      silhouetteCryptoJca,
+      silhouettePasswordBcrypt,
+      silhouettePersistence,
+      silhouetteTestkit
+    )
