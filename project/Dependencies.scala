@@ -18,7 +18,7 @@ import sbt._
 object Dependencies {
 
   object Versions {
-    val crossScala = Seq("2.13.0", "2.12.8", "2.11.12")
+    val crossScala = Seq("2.13.1", "2.12.10", "2.11.12")
     val scalaVersion = crossScala.head
   }
 
