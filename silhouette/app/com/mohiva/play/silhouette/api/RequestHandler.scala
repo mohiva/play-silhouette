@@ -24,7 +24,6 @@ import com.mohiva.play.silhouette.api.util.ExecutionContextProvider
 import play.api.mvc.{ Result, RequestHeader, Request, AnyContent }
 
 import scala.concurrent.Future
-import scala.language.higherKinds
 
 /**
  * A result which can transport a result as also additional data through the request handler process.
