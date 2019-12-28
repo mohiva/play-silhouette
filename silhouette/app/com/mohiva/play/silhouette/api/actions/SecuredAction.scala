@@ -69,7 +69,7 @@ object SecuredRequest {
   }
 }
 
-class DefaultSecuredRequest[E <: Env, B] (
+class DefaultSecuredRequest[E <: Env, B](
   val identity: E#I,
   val authenticator: E#A,
   request: Request[B]

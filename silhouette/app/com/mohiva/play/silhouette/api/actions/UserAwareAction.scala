@@ -67,7 +67,7 @@ object UserAwareRequest {
 
 }
 
-class DefaultUserAwareRequest[E <: Env, B] (
+class DefaultUserAwareRequest[E <: Env, B](
   val identity: Option[E#I],
   val authenticator: Option[E#A],
   request: Request[B]
