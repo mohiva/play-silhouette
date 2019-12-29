@@ -238,6 +238,8 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
@@ -278,29 +280,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
-      <a id="finalize():Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.12/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService@finalize():Unit" title="Permalink" target="_top">
-        <img src="../../../../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[java.lang.Throwable]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -317,7 +296,10 @@
         <img src="../../../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -334,7 +316,10 @@
         <img src="../../../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -385,7 +370,10 @@
         <img src="../../../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
       <a id="notifyAll():Unit"></a>
@@ -402,7 +390,10 @@
         <img src="../../../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@HotSpotIntrinsicCandidate</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService#redirectURL" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="redirectURL(openID:String,resolvedCallbackURL:String)(implicitec:scala.concurrent.ExecutionContext):scala.concurrent.Future[String]"></a>
       <a id="redirectURL(String,String)(ExecutionContext):Future[String]"></a>
@@ -491,29 +482,6 @@
       <p class="shortcomment cmt">From a request corresponding to the callback from the OpenID server, check the identity of the current user.</p><div class="fullcomment"><div class="comment cmt"><p>From a request corresponding to the callback from the OpenID server, check the identity of the current user.
 </p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The type of the request body.</p></dd><dt class="param">request</dt><dd class="cmt"><p>The current request.</p></dd><dt class="param">ec</dt><dd class="cmt"><p>The execution context to handle the asynchronous operations.</p></dd><dt>returns</dt><dd class="cmt"><p>A OpenIDInfo in case of success, Exception otherwise.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService">PlayOpenIDService</a> → <a href="../../OpenIDService.html" class="extype" name="com.mohiva.play.silhouette.impl.providers.OpenIDService">OpenIDService</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
-      <a id="wait():Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.12/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService@wait():Unit" title="Permalink" target="_top">
-        <img src="../../../../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
-    </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a>
       <a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
@@ -559,6 +527,29 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.12/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li><li name="com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService#withSettings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="withSettings(f:com.mohiva.play.silhouette.impl.providers.OpenIDSettings=&gt;com.mohiva.play.silhouette.impl.providers.OpenIDSettings):com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService"></a>
       <a id="withSettings((OpenIDSettings)⇒OpenIDSettings):PlayOpenIDService"></a>
@@ -582,7 +573,37 @@
 
         
 
-        
+        <div id="values" class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.12/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../../index.html#com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@Deprecated</span>
+              
+                <span class="name">@deprecated</span>
+              
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version )</i> see corresponding Javadoc for more information.</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">
