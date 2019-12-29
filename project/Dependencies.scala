@@ -16,12 +16,6 @@
 import sbt._
 
 object Dependencies {
-
-  object Versions {
-    val crossScala = Seq("2.13.1", "2.12.10", "2.11.12")
-    val scalaVersion = crossScala.head
-  }
-
   val resolvers = Seq(
     "Atlassian Releases" at "https://maven.atlassian.com/public/"
   )

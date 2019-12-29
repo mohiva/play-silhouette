@@ -30,28 +30,57 @@ import sbtunidoc.ScalaUnidocPlugin.autoImport._
 object BasicSettings extends AutoPlugin {
   override def trigger = allRequirements
 
+  val `scalacOptions2.11.x` = Seq(
+    "-Ywarn-adapted-args",
+    "-Ywarn-inaccessible",
+    "-Ywarn-infer-any",
+    "-Ywarn-nullary-override",
+    "-Ywarn-dead-code",
+    "-Ywarn-nullary-unit",
+    "-Ywarn-numeric-widen",
+    "-Xmax-classfile-name", "254",
+    "-language:higherKinds"
+  )
+
+  val `scalacOptions2.12.x` = Seq(
+    "-Xlint:adapted-args",
+    "-Ywarn-inaccessible",
+    "-Ywarn-infer-any",
+    "-Xlint:nullary-override",
+    "-Xlint:nullary-unit",
+    "-Xmax-classfile-name", "254",
+    "-language:higherKinds"
+  )
+
+  val `scalacOptions2.13.x` = Seq(
+    "-Xlint:adapted-args",
+    "-Xlint:inaccessible",
+    "-Xlint:infer-any",
+    "-Xlint:nullary-override",
+    "-Xlint:nullary-unit"
+  )
+
+  val scalacOptionsCommon = Seq(
+    "-unchecked",
+    "-deprecation",
+    "-feature",
+    "-encoding", "utf8",
+    "-Xfatal-warnings",
+    "-Xlint"
+  )
+
   override def projectSettings = Seq(
     organization := "com.mohiva",
     version := "6.1.1",
     resolvers ++= Dependencies.resolvers,
-    scalaVersion := Dependencies.Versions.scalaVersion,
-    crossScalaVersions := Dependencies.Versions.crossScala,
-    scalacOptions ++= Seq(
-      "-deprecation",        // Emit warning and location for usages of deprecated APIs.
-      "-feature",            // Emit warning and location for usages of features that should be imported explicitly.
-      "-unchecked",          // Enable additional warnings where generated code depends on assumptions.
-      "-Xfatal-warnings",    // Fail the compilation if there are any warnings.
-      "-Xlint",              // Enable recommended additional warnings.,
-      "-Xlint:inaccessible", // Warn about inaccessible types in method signatures.
-      "-Ywarn-dead-code",    // Warn when dead code is identified.
-      "-Ywarn-numeric-widen" // Warn when numerics are widened.
-    ),
+    scalaVersion := "2.13.1",
+    crossVersion := CrossVersion.full,
     scalacOptions ++= {
-      if(Util.priorTo213(scalaVersion.value)) Seq(
-        "-language:higherKinds",
-        "-Ywarn-adapted-args",    // Warn if an argument list is modified to match the receiver.
-        "-Ywarn-nullary-override" // Warn when non-nullary overrides nullary, e.g. def foo() over def foo.
-      ) else Nil
+      scalacOptionsCommon ++ (scalaBinaryVersion.value match {
+        case "2.11" => `scalacOptions2.11.x`
+        case "2.12" => `scalacOptions2.12.x`
+        case "2.13" => `scalacOptions2.13.x`
+      })
     },
     scalacOptions in Test ~= { options: Seq[String] =>
       options filterNot (_ == "-Ywarn-dead-code") // Allow dead code in tests (to support using mockito).
@@ -214,12 +243,14 @@ object Publish extends AutoPlugin {
   )
 }
 
+////*******************************
+//// Helpers
+////*******************************
 object Util {
-
   def priorTo213(scalaVersion: String): Boolean =
     CrossVersion.partialVersion(scalaVersion) match {
       case Some((2, minor)) if minor < 13 => true
       case _                              => false
     }
-
 }
+

@@ -1,30 +1,31 @@
-sudo: false
 language: scala
-dist: trusty # https://travis-ci.community/t/error-installing-oraclejdk8-expected-feature-release-number-in-range-of-9-to-14-but-got-8/3766/7
 scala:
   - 2.11.12
   - 2.12.10
   - 2.13.1
 jdk:
-  - oraclejdk8
+  - openjdk8
   - openjdk11
+  - openjdk12
 env:
   global:
   - ENCRYPTION_ID: "9eb27d59440e"
 before_script:
   - echo "TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG, TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST, TRAVIS_BRANCH=$TRAVIS_BRANCH"
+# caching scala stuff based on
+# https://www.scala-sbt.org/1.x/docs/Travis-CI-with-sbt.html
+before_cache:
+  # Tricks to avoid unnecessary cache updates
+  - rm -fv $HOME/.ivy2/.sbt.ivy.lock
+  - find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
+  - find $HOME/.sbt        -name "*.lock"               -print -delete
 cache:
   directories:
-    # caching scala stuff based on
-    # http://www.scala-sbt.org/0.13/docs/Travis-CI-with-sbt.html#%28Experimental%29+Reusing+Ivy+cache
+    - $HOME/.cache/coursier
     - $HOME/.ivy2/cache
-    - $HOME/.sbt/boot/
+    - $HOME/.sbt
 script:
   - scripts/ci-build
-  # cleanup travis trick from
-  # http://www.scala-sbt.org/0.13/docs/Travis-CI-with-sbt.html#%28Experimental%29+Reusing+Ivy+cache
-  - find $HOME/.sbt -name "*.lock" -delete
-  - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
 after_success:
   - scripts/api-doc
   - scripts/coveralls
