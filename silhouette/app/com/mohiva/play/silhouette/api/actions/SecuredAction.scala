@@ -67,12 +67,28 @@ object SecuredRequest {
   def apply[E <: Env, B](identity: E#I, authenticator: E#A, request: Request[B]): SecuredRequest[E, B] = {
     new DefaultSecuredRequest(identity, authenticator, request)
   }
+
+  /**
+   * Unapply method for secured request.
+   *
+   * @param securedRequest the secured request.
+   * @tparam E The type of the environment.
+   * @tparam B The type of the request body.
+   */
+  def unapply[E <: Env, B](securedRequest: SecuredRequest[E, B]): Option[(E#I, E#A, Request[B])] = {
+    securedRequest match {
+      case dsr: DefaultSecuredRequest[E, B] =>
+        Some((dsr.identity, dsr.authenticator, dsr.request))
+      case sr: SecuredRequest[E, B] =>
+        Some((sr.identity, sr.authenticator, sr))
+    }
+  }
 }
 
 class DefaultSecuredRequest[E <: Env, B](
   val identity: E#I,
   val authenticator: E#A,
-  request: Request[B]
+  val request: Request[B]
 ) extends WrappedRequest(request) with SecuredRequest[E, B]
 
 /**

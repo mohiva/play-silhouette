@@ -65,12 +65,27 @@ object UserAwareRequest {
     new DefaultUserAwareRequest(identity, authenticator, request)
   }
 
+  /**
+   * Unapply method for user aware request.
+   *
+   * @param userAwareRequest the user aware request.
+   * @tparam E The type of the environment.
+   * @tparam B The type of the request body.
+   */
+  def unapply[E <: Env, B](userAwareRequest: UserAwareRequest[E, B]): Option[(Option[E#I], Option[E#A], Request[B])] = {
+    userAwareRequest match {
+      case duar: DefaultUserAwareRequest[E, B] =>
+        Some((duar.identity, duar.authenticator, duar.request))
+      case uar: UserAwareRequest[E, B] =>
+        Some((uar.identity, uar.authenticator, uar))
+    }
+  }
 }
 
 class DefaultUserAwareRequest[E <: Env, B](
   val identity: Option[E#I],
   val authenticator: Option[E#A],
-  request: Request[B]
+  val request: Request[B]
 ) extends WrappedRequest(request) with UserAwareRequest[E, B]
 
 /**
