@@ -30,16 +30,66 @@ import play.api.{ Configuration, Environment => PlayEnv }
 import scala.concurrent.{ ExecutionContext, Future }
 
 /**
+ * A request header that only allows access if an identity is authenticated and authorized.
+ *
+ * @tparam E The type of the environment.
+ */
+trait SecuredRequestHeader[E <: Env] extends RequestHeader {
+  /**
+   * @return The identity implementation.
+   */
+  def identity: E#I
+
+  /**
+   * @return The authenticator implementation.
+   */
+  def authenticator: E#A
+}
+
+/**
  * A request that only allows access if an identity is authenticated and authorized.
  *
- * @param identity      The identity implementation.
- * @param authenticator The authenticator implementation.
- * @param request The current request.
  * @tparam E The type of the environment.
  * @tparam B The type of the request body.
  */
-case class SecuredRequest[E <: Env, B](identity: E#I, authenticator: E#A, request: Request[B])
-  extends WrappedRequest(request)
+trait SecuredRequest[E <: Env, +B] extends Request[B] with SecuredRequestHeader[E]
+
+object SecuredRequest {
+  /**
+   * A request that only allows access if an identity is authenticated and authorized.
+   *
+   * @param identity      The identity implementation.
+   * @param authenticator The authenticator implementation.
+   * @param request The current request.
+   * @tparam E The type of the environment.
+   * @tparam B The type of the request body.
+   */
+  def apply[E <: Env, B](identity: E#I, authenticator: E#A, request: Request[B]): SecuredRequest[E, B] = {
+    new DefaultSecuredRequest(identity, authenticator, request)
+  }
+
+  /**
+   * Unapply method for secured request.
+   *
+   * @param securedRequest the secured request.
+   * @tparam E The type of the environment.
+   * @tparam B The type of the request body.
+   */
+  def unapply[E <: Env, B](securedRequest: SecuredRequest[E, B]): Option[(E#I, E#A, Request[B])] = {
+    securedRequest match {
+      case dsr: DefaultSecuredRequest[E, B] =>
+        Some((dsr.identity, dsr.authenticator, dsr.request))
+      case sr: SecuredRequest[E, B] =>
+        Some((sr.identity, sr.authenticator, sr))
+    }
+  }
+}
+
+class DefaultSecuredRequest[E <: Env, B](
+  val identity: E#I,
+  val authenticator: E#A,
+  val request: Request[B]
+) extends WrappedRequest(request) with SecuredRequest[E, B]
 
 /**
  * Request handler builder implementation to provide the foundation for secured request handlers.

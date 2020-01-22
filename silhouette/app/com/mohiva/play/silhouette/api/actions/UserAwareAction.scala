@@ -31,14 +31,62 @@ import scala.concurrent.{ ExecutionContext, Future }
 /**
  * A request that adds maybe the identity and maybe the authenticator for the current call.
  *
- * @param identity      Some identity implementation if authentication was successful, None otherwise.
- * @param authenticator Some authenticator implementation if authentication was successful, None otherwise.
- * @param request The current request.
  * @tparam E The type of the environment.
- * @tparam B The type of the request body.
  */
-case class UserAwareRequest[E <: Env, B](identity: Option[E#I], authenticator: Option[E#A], request: Request[B])
-  extends WrappedRequest(request)
+trait UserAwareRequestHeader[E <: Env] extends RequestHeader {
+  /**
+   * @return Some identity implementation if authentication was successful, None otherwise.
+   */
+  def identity: Option[E#I]
+
+  /**
+   * @return Some authenticator implementation if authentication was successful, None otherwise.
+   */
+  def authenticator: Option[E#A]
+}
+
+trait UserAwareRequest[E <: Env, +B] extends Request[B] with UserAwareRequestHeader[E]
+
+object UserAwareRequest {
+
+  /**
+   * A request that adds maybe the identity and maybe the authenticator for the current call.
+   *
+   * @param identity      Some identity implementation if authentication was successful, None otherwise.
+   * @param authenticator Some authenticator implementation if authentication was successful, None otherwise.
+   * @param request The current request.
+   * @tparam E The type of the environment.
+   * @tparam B The type of the request body.
+   */
+  def apply[E <: Env, B](
+    identity: Option[E#I],
+    authenticator: Option[E#A],
+    request: Request[B]): UserAwareRequest[E, B] = {
+    new DefaultUserAwareRequest(identity, authenticator, request)
+  }
+
+  /**
+   * Unapply method for user aware request.
+   *
+   * @param userAwareRequest the user aware request.
+   * @tparam E The type of the environment.
+   * @tparam B The type of the request body.
+   */
+  def unapply[E <: Env, B](userAwareRequest: UserAwareRequest[E, B]): Option[(Option[E#I], Option[E#A], Request[B])] = {
+    userAwareRequest match {
+      case duar: DefaultUserAwareRequest[E, B] =>
+        Some((duar.identity, duar.authenticator, duar.request))
+      case uar: UserAwareRequest[E, B] =>
+        Some((uar.identity, uar.authenticator, uar))
+    }
+  }
+}
+
+class DefaultUserAwareRequest[E <: Env, B](
+  val identity: Option[E#I],
+  val authenticator: Option[E#A],
+  val request: Request[B]
+) extends WrappedRequest(request) with UserAwareRequest[E, B]
 
 /**
  * Request handler builder implementation to provide the foundation for user-aware request handlers.
