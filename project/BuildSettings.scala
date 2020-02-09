@@ -74,6 +74,7 @@ object BasicSettings extends AutoPlugin {
     version := "6.1.1",
     resolvers ++= Dependencies.resolvers,
     scalaVersion := "2.13.1",
+    crossScalaVersions := Seq("2.13.1", "2.12.10"),
     crossVersion := CrossVersion.full,
     scalacOptions ++= {
       scalacOptionsCommon ++ (scalaBinaryVersion.value match {
