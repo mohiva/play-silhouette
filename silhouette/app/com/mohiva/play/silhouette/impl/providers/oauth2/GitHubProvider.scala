@@ -68,16 +68,17 @@ trait BaseGitHubProvider extends OAuth2Provider {
    * @return On success the build social profile, otherwise a failure.
    */
   override protected def buildProfile(authInfo: OAuth2Info): Future[Profile] = {
-    httpLayer.url(urls("api").format(authInfo.accessToken)).get().flatMap { response =>
-      val json = response.json
-      (json \ "message").asOpt[String] match {
-        case Some(msg) =>
-          val docURL = (json \ "documentation_url").asOpt[String]
+    httpLayer.url(urls("api")).withHttpHeaders(HeaderNames.AUTHORIZATION -> s"Bearer ${authInfo.accessToken}").get()
+      .flatMap { response =>
+        val json = response.json
+        (json \ "message").asOpt[String] match {
+          case Some(msg) =>
+            val docURL = (json \ "documentation_url").asOpt[String]
+            throw new ProfileRetrievalException(SpecifiedProfileError.format(id, msg, docURL))
 
-          throw new ProfileRetrievalException(SpecifiedProfileError.format(id, msg, docURL))
-        case _ => profileParser.parse(json, authInfo)
+          case _ => profileParser.parse(json, authInfo)
+        }
       }
-    }
   }
 }
 
@@ -153,5 +154,5 @@ object GitHubProvider {
    * The GitHub constants.
    */
   val ID = "github"
-  val API = "https://api.github.com/user?access_token=%s"
+  val API = "https://api.github.com/user"
 }

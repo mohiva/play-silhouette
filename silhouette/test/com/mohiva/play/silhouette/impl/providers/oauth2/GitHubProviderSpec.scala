@@ -116,14 +116,16 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
 
   "The `retrieveProfile` method" should {
     "fail with ProfileRetrievalException if API returns error" in new WithApplication with Context {
+      val authInfo = oAuthInfo.as[OAuth2Info]
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
       wsResponse.status returns 400
+      wsRequest.withHttpHeaders(AUTHORIZATION -> s"Bearer ${authInfo.accessToken}") returns wsRequest
       wsResponse.json returns Helper.loadJson("providers/oauth2/github.error.json")
       wsRequest.get() returns Future.successful(wsResponse)
-      httpLayer.url(API.format("my.access.token")) returns wsRequest
+      httpLayer.url(API) returns wsRequest
 
-      failed[ProfileRetrievalException](provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
+      failed[ProfileRetrievalException](provider.retrieveProfile(authInfo)) {
         case e => e.getMessage must equalTo(SpecifiedProfileError.format(
           provider.id,
           "Bad credentials",
@@ -132,42 +134,48 @@ class GitHubProviderSpec extends OAuth2ProviderSpec {
     }
 
     "fail with ProfileRetrievalException if an unexpected error occurred" in new WithApplication with Context {
+      val authInfo = oAuthInfo.as[OAuth2Info]
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
       wsResponse.status returns 500
+      wsRequest.withHttpHeaders(AUTHORIZATION -> s"Bearer ${authInfo.accessToken}") returns wsRequest
       wsResponse.json throws new RuntimeException("")
       wsRequest.get() returns Future.successful(wsResponse)
-      httpLayer.url(API.format("my.access.token")) returns wsRequest
+      httpLayer.url(API) returns wsRequest
 
-      failed[ProfileRetrievalException](provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) {
+      failed[ProfileRetrievalException](provider.retrieveProfile(authInfo)) {
         case e => e.getMessage must equalTo(UnspecifiedProfileError.format(provider.id))
       }
     }
 
     "use the overridden API URL" in new WithApplication with Context {
-      val url = "https://custom.api.url?access_token=%s"
+      val url = "https://custom.api.url"
+      val authInfo = oAuthInfo.as[OAuth2Info]
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
       oAuthSettings.apiURL returns Some(url)
       wsResponse.status returns 200
       wsResponse.json returns Helper.loadJson("providers/oauth2/github.success.json")
+      wsRequest.withHttpHeaders(AUTHORIZATION -> s"Bearer ${authInfo.accessToken}") returns wsRequest
       wsRequest.get() returns Future.successful(wsResponse)
-      httpLayer.url(url.format("my.access.token")) returns wsRequest
+      httpLayer.url(url) returns wsRequest
 
-      await(provider.retrieveProfile(oAuthInfo.as[OAuth2Info]))
+      await(provider.retrieveProfile(authInfo))
 
-      there was one(httpLayer).url(url.format("my.access.token"))
+      there was one(httpLayer).url(url)
     }
 
     "return the social profile" in new WithApplication with Context {
+      val authInfo = oAuthInfo.as[OAuth2Info]
       val wsRequest = mock[MockWSRequest]
       val wsResponse = mock[MockWSRequest#Response]
       wsResponse.status returns 200
       wsResponse.json returns Helper.loadJson("providers/oauth2/github.success.json")
+      wsRequest.withHttpHeaders(AUTHORIZATION -> s"Bearer ${authInfo.accessToken}") returns wsRequest
       wsRequest.get() returns Future.successful(wsResponse)
-      httpLayer.url(API.format("my.access.token")) returns wsRequest
+      httpLayer.url(API) returns wsRequest
 
-      profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) { p =>
+      profile(provider.retrieveProfile(authInfo)) { p =>
         p must be equalTo CommonSocialProfile(
           loginInfo = LoginInfo(provider.id, "1"),
           fullName = Some("Apollonia Vanova"),
