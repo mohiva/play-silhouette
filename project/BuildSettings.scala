@@ -30,18 +30,6 @@ import sbtunidoc.ScalaUnidocPlugin.autoImport._
 object BasicSettings extends AutoPlugin {
   override def trigger = allRequirements
 
-  val `scalacOptions2.11.x` = Seq(
-    "-Ywarn-adapted-args",
-    "-Ywarn-inaccessible",
-    "-Ywarn-infer-any",
-    "-Ywarn-nullary-override",
-    "-Ywarn-dead-code",
-    "-Ywarn-nullary-unit",
-    "-Ywarn-numeric-widen",
-    "-Xmax-classfile-name", "254",
-    "-language:higherKinds"
-  )
-
   val `scalacOptions2.12.x` = Seq(
     "-Xlint:adapted-args",
     "-Ywarn-inaccessible",
@@ -71,14 +59,13 @@ object BasicSettings extends AutoPlugin {
 
   override def projectSettings = Seq(
     organization := "com.mohiva",
-    version := "6.1.1",
+    version := "7.0.0-RC1",
     resolvers ++= Dependencies.resolvers,
     scalaVersion := "2.13.1",
     crossScalaVersions := Seq("2.13.1", "2.12.10"),
     crossVersion := CrossVersion.full,
     scalacOptions ++= {
       scalacOptionsCommon ++ (scalaBinaryVersion.value match {
-        case "2.11" => `scalacOptions2.11.x`
         case "2.12" => `scalacOptions2.12.x`
         case "2.13" => `scalacOptions2.13.x`
       })
