@@ -43,7 +43,7 @@ object Dependencies {
     val jwtCore = "com.atlassian.jwt" % "jwt-core" % "2.0.5"
     val jwtApi = "com.atlassian.jwt" % "jwt-api" % "2.0.5"
     val scalaGuice = "net.codingwell" %% "scala-guice" % "4.2.5"
-    val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % "2.5.23"
+    val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % "2.6.3"
     val casClient = "org.jasig.cas.client" % "cas-client-core" % "3.4.1"
     val casClientSupportSAML = "org.jasig.cas.client" % "cas-client-support-saml" % "3.4.1"
     val apacheCommonLang = "org.apache.commons" % "commons-lang3" % "3.8.1"

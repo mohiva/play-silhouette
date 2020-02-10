@@ -185,6 +185,7 @@ trait OAuth1ProviderSpecContext extends Scope with Mockito with ThrownExpectatio
     val s = mock[PlayOAuth1Service]
     s.use10a returns true
     s.withSettings(anyFunction1) returns s
+    s.redirectUrl(anyString) returns "TESTING"
     s
   }
 
