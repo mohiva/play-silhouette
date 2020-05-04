@@ -157,7 +157,8 @@ class Auth0ProviderSpec extends OAuth2ProviderSpec {
 
       profile(provider.retrieveProfile(oAuthInfo.as[OAuth2Info])) { p =>
         p must be equalTo CommonSocialProfile(
-          loginInfo = LoginInfo(provider.id, (userProfile \ "user_id").as[String]),
+          loginInfo = LoginInfo(provider.id, (userProfile \ "sub").as[String]),
+          fullName = (userProfile \ "name").asOpt[String],
           email = (userProfile \ "email").asOpt[String],
           avatarURL = (userProfile \ "picture").asOpt[String]
         )

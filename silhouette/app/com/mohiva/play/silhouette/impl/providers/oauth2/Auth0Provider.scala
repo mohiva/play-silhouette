@@ -42,7 +42,7 @@ import scala.concurrent.Future
  *   auth0.clientSecret=myoauthclientsecret
  *
  *   # Auth0 user's profile information requested
- *   auth0.scope="openid name email picture"
+ *   auth0.scope="openid profile email"
  *
  * See http://auth0.com for more information on the Auth0 Auth 2.0 Provider and Service.
  */
@@ -120,12 +120,14 @@ class Auth0ProfileParser extends SocialProfileParser[JsValue, CommonSocialProfil
    * @return The social profile from given result.
    */
   override def parse(json: JsValue, authInfo: OAuth2Info): Future[CommonSocialProfile] = Future.successful {
-    val userID = (json \ "user_id").as[String]
+    val userID = (json \ "sub").as[String]
+    val fullName = (json \ "name").asOpt[String]
     val avatarURL = (json \ "picture").asOpt[String]
     val email = (json \ "email").asOpt[String]
 
     CommonSocialProfile(
       loginInfo = LoginInfo(ID, userID),
+      fullName = fullName,
       avatarURL = avatarURL,
       email = email)
   }
